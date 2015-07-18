@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.Search.Search"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+			 xmlns:root="clr-namespace:SRNicoNico"
+             d:DataContext="{d:DesignInstance {x:Type vm:SearchViewModel}}"
+             d:DesignHeight="347"
+             d:DesignWidth="211"
+             mc:Ignorable="d"
+			 >
+	
+
+
+
+
+	<Grid>
+		<ComboBox Width="180"
+		          Margin="10,29,0,0"
+		          HorizontalAlignment="Left"
+		          VerticalAlignment="Top"
+		          Background="#FF2D2D2D"
+		          BorderBrush="#FFAAAAAA"
+		          SelectedIndex="{Binding SelectedIndex}">
+			<ComboBoxItem Background="#FF2D2D2D"
+			              BorderBrush="#FF2D2D2D"
+			              Content="投稿日時が新しい順"
+			              Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D"
+			              BorderBrush="#FF2D2D2D"
+			              Content="投稿日時が古い順"
+			              Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D"
+			              BorderBrush="#FF2D2D2D"
+			              Content="再生数が多い順"
+			              Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D"
+			              BorderBrush="#FF2D2D2D"
+			              Content="再生数が少ない順"
+			              Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D"
+			              BorderBrush="#FF2D2D2D"
+			              Content="コメントが新しい順"
+			              Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D"
+			              BorderBrush="#FF2D2D2D"
+			              Content="コメントが古い順"
+			              Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D"
+			              BorderBrush="#FF2D2D2D"
+			              Content="マイリスト数が多い順"
+			              Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D"
+			              BorderBrush="#FF2D2D2D"
+			              Content="マイリスト数が少ない順"
+			              Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D"
+			              BorderBrush="#FF2D2D2D"
+			              Content="再生時間が長い順"
+			              Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D"
+			              BorderBrush="#FF2D2D2D"
+			              Content="再生時間が短い順"
+			              Foreground="#FFAAAAAA" />
+
+		</ComboBox>
+		<TextBox Width="180"
+		         Height="23"
+		         Margin="10,77,0,0"
+		         HorizontalAlignment="Left"
+		         VerticalAlignment="Top"
+		         Text="{Binding searchText}"
+		         TextWrapping="Wrap">
+			<i:Interaction.Behaviors>
+				<Behaviors:TextBoxBehavior />
+			</i:Interaction.Behaviors>
+		</TextBox>
+		<RadioButton Margin="32,4,0,0"
+		             HorizontalAlignment="Left"
+		             VerticalAlignment="Top"
+		             Content="動画"
+		             IsChecked="True" />
+		<RadioButton Margin="102,4,0,0"
+		             HorizontalAlignment="Left"
+		             VerticalAlignment="Top"
+		             Content="生放送" />
+		<Button x:Name="button"
+		        Width="75"
+		        Margin="115,129,0,0"
+		        HorizontalAlignment="Left"
+		        VerticalAlignment="Top"
+		        Content="検索">
+			<i:Interaction.Triggers>
+				<i:EventTrigger EventName="Click">
+					<l:LivetCallMethodAction MethodName="DoSearch" MethodTarget="{Binding}" />
+				</i:EventTrigger>
+			</i:Interaction.Triggers>
+		</Button>
+
+	</Grid>
+</UserControl>
