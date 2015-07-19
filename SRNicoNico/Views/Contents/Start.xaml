@@ -9,25 +9,31 @@
 			 xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
              d:DesignHeight="348"
              d:DesignWidth="585"
+			d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
              mc:Ignorable="d"
 			 >
 
 
 
 	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="200" />
-			<ColumnDefinition Width="559*" />
-		</Grid.ColumnDefinitions>
 	
 
-		<search:Search />
 		
-		<ContentControl Grid.Column="1" Content="{Binding Content}">
+		<ContentControl Content="{Binding Content}">
 			<ContentControl.Resources>
 
-				<DataTemplate DataType="{x:Type vm:StartViewModel}">
-					<Label Grid.Column="1" Content="NicoNico Viewer" FontSize="36"/>
+				<DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
+					<Grid d:DesignWidth="640" d:DesignHeight="546" Width="auto">
+						<TextBlock Grid.Column="1" Text="NicoNico Viewer" FontSize="36"/>
+						<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="10,62,0,0" Height="83.5" Width="auto">
+						このアプリケーションはニコニコ動画をブラウザを起動しなくても見られるようにするアプリケーションです。<LineBreak />
+						権利者からの申し立てなどには速やかに対処します。<LineBreak />
+						このアプリケーションを利用して生じた障害や不利益の責任は一切負いません。自己責任でお使いください。
+						</TextBlock>
+					
+
+					</Grid>
+					
 				</DataTemplate>
 				<DataTemplate DataType="{x:Type vm:SearchResultViewModel}">
 					<search:SearchResult/>

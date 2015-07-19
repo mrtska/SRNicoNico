@@ -69,7 +69,7 @@ namespace SRNicoNico.ViewModels {
 
 			this.Video = new VideoViewModel();
 
-			this.Content = new StartViewModel();
+			this.Content = this;
 		}
 
 
@@ -135,6 +135,22 @@ namespace SRNicoNico.ViewModels {
 			});
 		}
 
+		//終了処理
+		protected override void Dispose(bool disposing) {
+
+			if(disposing) {
+
+				NicoNicoWrapperMain.getSession().HttpHandler.Dispose();
+				NicoNicoWrapperMain.getSession().httpClient.Dispose();
+
+				Video.Dispose();
+				;
+			}
+
+
+
+			base.Dispose(disposing);
+		}
 
 	}
 }

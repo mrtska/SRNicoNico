@@ -124,7 +124,7 @@ namespace SRNicoNico.ViewModels {
 			NicoNicoSearchResult result = NicoNicoSearchResult.deserialize(this.currentSearch.response());
 
 				
-			App.ViewModelRoot.SearchResult.Total = String.Format("{0:#,0}", result.total) + "件";
+			App.ViewModelRoot.SearchResult.Total = String.Format("{0:#,0}", result.total) + "件の動画";
 
 			App.ViewModelRoot.SearchResult.list.Clear();
 			foreach(NicoNicoSearchResultNode node in result.list) {

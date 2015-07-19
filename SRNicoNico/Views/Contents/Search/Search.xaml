@@ -89,7 +89,7 @@
 		<RadioButton Margin="102,4,0,0"
 		             HorizontalAlignment="Left"
 		             VerticalAlignment="Top"
-		             Content="生放送" />
+		             Content="生放送" IsEnabled="False" />
 		<Button x:Name="button"
 		        Width="75"
 		        Margin="115,129,0,0"

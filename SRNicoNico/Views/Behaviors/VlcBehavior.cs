@@ -9,31 +9,18 @@ using System.Windows;
 using System.Windows.Interactivity;
 using System.Reflection;
 
-using Vlc.DotNet.Core.Interops;
-using Vlc.DotNet;
-using Vlc.DotNet.Wpf;
-using Vlc.DotNet.Core;
-
+using xZune.Vlc.Wpf;
 using Livet;
 
 namespace SRNicoNico.Views.Behaviors {
 
-	public class VlcBehavior : Behavior<VlcControl> {
+	public class VlcBehavior : Behavior<VlcPlayer> {
 
 
 		protected override void OnAttached() {
 			base.OnAttached();
 
-			Vlc.DotNet.Forms.VlcControl MediaPlayer = this.AssociatedObject.MediaPlayer;
-
 			this.AssociatedObject.Loaded += Loaded;
-			MediaPlayer.VlcLibDirectoryNeeded += OnVlcControlNeedsLibDirectory;
-			MediaPlayer.EncounteredError += MediaPlayer_EncounteredError;
-			MediaPlayer.Buffering += MediaPlayer_Buffering;
-			MediaPlayer.EndReached += MediaPlayer_EndReached;
-			MediaPlayer.Stopped += MediaPlayer_Stopped;
-
-			
 
 			
 		}
@@ -42,74 +29,29 @@ namespace SRNicoNico.Views.Behaviors {
 		protected override void OnDetaching() {
 			base.OnDetaching();
 
-			Vlc.DotNet.Forms.VlcControl MediaPlayer = this.AssociatedObject.MediaPlayer;
+
 
 			this.AssociatedObject.Loaded -= Loaded;
-			MediaPlayer.EncounteredError -= MediaPlayer_EncounteredError;
-			MediaPlayer.VlcLibDirectoryNeeded -= OnVlcControlNeedsLibDirectory;
-			MediaPlayer.Buffering -= MediaPlayer_Buffering;
-			MediaPlayer.Stopped -= MediaPlayer_Stopped;
-			MediaPlayer.EndReached -= MediaPlayer_EndReached;
-			
-			
-		
-		}
-
-
-		private void MediaPlayer_EndReached(object sender, VlcMediaPlayerEndReachedEventArgs e) {
-
-			
-			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-				this.AssociatedObject.MediaPlayer.Play();
-			}));
-			
-			;
-		}
-
-
-		private void MediaPlayer_EncounteredError(object sender, VlcMediaPlayerEncounteredErrorEventArgs e) {
-			
-			
-			;
-
-
-		}
-
-		private void MediaPlayer_Stopped(object sender, VlcMediaPlayerStoppedEventArgs e) {
-
-
-			;
-		}
-
-		private void MediaPlayer_Buffering(object sender, VlcMediaPlayerBufferingEventArgs e) {
-
-
-			Console.WriteLine("NewCache:" + e.NewCache);
-
 		}
 
 
 		private void Loaded(object sender, EventArgs e) {
 
-			App.ViewModelRoot.Video.control = this.AssociatedObject;
-			Vlc.DotNet.Forms.VlcControl MediaPlayer = this.AssociatedObject.MediaPlayer;
+			App.ViewModelRoot.Video.player = this.AssociatedObject;
 
-			Thread.Sleep(1000);
+			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-			MediaPlayer.Play(new FileInfo(App.ViewModelRoot.Video.path));
-			
+
+				this.AssociatedObject.LoadMedia(App.ViewModelRoot.Video.path);
+				Thread.Sleep(1000);
+				this.AssociatedObject.Play();
+				
+			}));
+
+		
+
 		}
 
-
-
-		private void OnVlcControlNeedsLibDirectory(object sender, Vlc.DotNet.Forms.VlcLibDirectoryNeededEventArgs e) {
-
-
-			var currentAssembly = Assembly.GetEntryAssembly();
-			var currentDirectory = new FileInfo(currentAssembly.Location).DirectoryName;
-			e.VlcLibDirectory = new DirectoryInfo(currentDirectory + @"\lib");
-		}
 
 
 	}

@@ -11,7 +11,7 @@
                   xmlns:v="clr-namespace:SRNicoNico.Views"
                   xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
                   Title="{Binding Title}"
-                  Width="766"
+                  Width="840"
                   Height="723"
                   MinWidth="600"
                   MinHeight="500"
@@ -51,7 +51,13 @@
 	</i:Interaction.Triggers>
 
 	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="200"/>
+			<ColumnDefinition Width="641*"/>
+		</Grid.ColumnDefinitions>
 
-		<contents:Start />
+		<search:Search Grid.Column="0" />
+		
+		<contents:Start Grid.Column="1" />
 	</Grid>
 </mui:ModernWindow>

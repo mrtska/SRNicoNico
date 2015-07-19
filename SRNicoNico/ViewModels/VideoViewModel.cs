@@ -11,8 +11,7 @@ using Livet.Messaging.IO;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
-using Vlc.DotNet.Core;
-using Vlc.DotNet.Wpf;
+using xZune.Vlc.Wpf;
 
 using SRNicoNico.Models;
 
@@ -63,23 +62,19 @@ namespace SRNicoNico.ViewModels {
 		public Uri uri { get; set; }
 		public string path { get; set; }
 
-		public VlcControl control;
+		public VlcPlayer player;
 
 
 		public void Initialize() {
 			
-
+			
 		}
 
+		public void Dispose() {
 
-		~VideoViewModel() {
-
-			if(control != null) {
-
-				control.MediaPlayer.Dispose();
-				control.Dispose();
-			}
+			player.Dispose();
 		}
+
 
 	}
 }

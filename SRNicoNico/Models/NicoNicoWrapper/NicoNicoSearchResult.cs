@@ -13,25 +13,32 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoSearchResultNode {
 
 		//ID sm9みたいな
-		public string cmsid { get; internal set; }
+		public string cmsid { get; private set; }
 
 		//タイトル
-		public string title { get; internal set; }
+		public string title { get; private set; }
 
 		//再生回数
-		public ulong view_counter { get; internal set; }
+		public ulong view_counter { get; private set; }
 
 		//コメント数
-		public ulong comment_counter { get; internal set; }
+		public ulong comment_counter { get; private set; }
 
 		//マイリスト数
-		public ulong mylist_counter { get; internal set; }
+		public ulong mylist_counter { get; private set; }
 
 		//サムネイルURL
-		public string thumbnail_url { get; internal set; }
+		public string thumbnail_url { get; private set; }
+
+		//再生時間
+		public string length { get; private set; }
+
+		//動画投稿時日時
+		public string first_retrieve { get; private set; }
+
 
 		//コンストラクタ
-		internal NicoNicoSearchResultNode(string cmsid, string title, ulong view_counter, ulong comment_counter, ulong mylist_counter, string thumbnail_url) {
+		internal NicoNicoSearchResultNode(string cmsid, string title, ulong view_counter, ulong comment_counter, ulong mylist_counter, string thumbnail_url, string length, string first_retrieve) {
 
 			this.cmsid = cmsid;
 			this.title = title;
@@ -39,7 +46,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			this.comment_counter = comment_counter;
 			this.mylist_counter = mylist_counter;
 			this.thumbnail_url = thumbnail_url;
-
+			this.length = length;
+			this.first_retrieve = first_retrieve;
 		}
 
 	}
@@ -81,7 +89,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			//Jsonからリストを取得、データを格納
 			foreach(var entry in json.list) {
 
-				NicoNicoSearchResultNode node = new NicoNicoSearchResultNode(entry.id, entry.title, (ulong)entry.view_counter, (ulong)entry.num_res, (ulong)entry.mylist_counter, entry.thumbnail_url);
+				NicoNicoSearchResultNode node = new NicoNicoSearchResultNode(entry.id, entry.title, (ulong)entry.view_counter, (ulong)entry.num_res,
+																				(ulong)entry.mylist_counter, entry.thumbnail_url, entry.length, entry.first_retrieve);
 
 				result.list.Add(node);
 			}

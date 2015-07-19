@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
-             xmlns:Wpf="clr-namespace:Vlc.DotNet.Wpf;assembly=Vlc.DotNet.Wpf"
+             xmlns:Wpf="clr-namespace:xZune.Vlc.Wpf;assembly=xZune.VLC.WPF"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -19,11 +19,12 @@
 			<RowDefinition />
 		</Grid.RowDefinitions>
 
-		<Wpf:VlcControl Grid.Row="0" Width="auto" Height="auto" >
+		<Wpf:VlcPlayer Grid.Row="0" Background="Black">
+			
 			<i:Interaction.Behaviors>
 				<Behaviors:VlcBehavior />
 			</i:Interaction.Behaviors>
-		</Wpf:VlcControl>
+		</Wpf:VlcPlayer>
 
 	</Grid>
 
