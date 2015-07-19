@@ -20,8 +20,6 @@ namespace SRNicoNico.Views.Contents.Search {
 	public partial class SearchResultEntry : UserControl {
 		public SearchResultEntry() {
 			InitializeComponent();
-
-			
 		}
 	}
 }

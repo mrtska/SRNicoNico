@@ -29,8 +29,6 @@ namespace SRNicoNico.Views {
 	public partial class SignInDialog : ModernWindow {
 		public SignInDialog() {
 			InitializeComponent();
-
-			this.DataContext = App.ViewModelRoot.signin;
 		}
 
 	}

@@ -52,7 +52,7 @@ namespace SRNicoNico.Views.Behaviors {
 			//一番下までスクロールしたら
 			if(e.ExtentHeight == e.VerticalOffset + e.ViewportHeight) {
 
-				App.ViewModelRoot.search.SearchNext();
+				App.ViewModelRoot.Search.SearchNext();
 				this.scrollViewer.ScrollToVerticalOffset(e.ExtentHeight - e.ViewportHeight);
 
 			}

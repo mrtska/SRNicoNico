@@ -74,13 +74,13 @@ namespace SRNicoNico.ViewModels {
 
 			Directory.CreateDirectory(NicoNicoUtil.currentDirectory.DirectoryName + @"\cache");
 			FileStream stream = new FileStream(NicoNicoUtil.currentDirectory.DirectoryName + @"\cache\" + Node.cmsid, FileMode.Create, FileAccess.Write);
-			App.ViewModelRoot.video.path = stream.Name;
-			App.ViewModelRoot.video.uri = new Uri(data.videoUrl);
+			App.ViewModelRoot.Video.path = stream.Name;
+			App.ViewModelRoot.Video.uri = new Uri(data.videoUrl);
 
 			NicoNicoGetFlv.getFlvStream(Node.cmsid, new Uri(data.videoUrl)).CopyToAsync(stream);
 			
 
-			App.ViewModelRoot.Content = App.ViewModelRoot.video;
+			App.ViewModelRoot.Content = App.ViewModelRoot.Video;
 
 			
 

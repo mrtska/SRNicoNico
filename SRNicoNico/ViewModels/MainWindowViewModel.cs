@@ -20,47 +20,6 @@ using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
-		/* コマンド、プロパティの定義にはそれぞれ 
-		 * 
-		 *  lvcom   : ViewModelCommand
-		 *  lvcomn  : ViewModelCommand(CanExecute無)
-		 *  llcom   : ListenerCommand(パラメータ有のコマンド)
-		 *  llcomn  : ListenerCommand(パラメータ有のコマンド・CanExecute無)
-		 *  lprop   : 変更通知プロパティ(.NET4.5ではlpropn)
-		 *  
-		 * を使用してください。
-		 * 
-		 * Modelが十分にリッチであるならコマンドにこだわる必要はありません。
-		 * View側のコードビハインドを使用しないMVVMパターンの実装を行う場合でも、ViewModelにメソッドを定義し、
-		 * LivetCallMethodActionなどから直接メソッドを呼び出してください。
-		 * 
-		 * ViewModelのコマンドを呼び出せるLivetのすべてのビヘイビア・トリガー・アクションは
-		 * 同様に直接ViewModelのメソッドを呼び出し可能です。
-		 */
-
-		/* ViewModelからViewを操作したい場合は、View側のコードビハインド無で処理を行いたい場合は
-		 * Messengerプロパティからメッセージ(各種InteractionMessage)を発信する事を検討してください。
-		 */
-		
-		/* Modelからの変更通知などの各種イベントを受け取る場合は、PropertyChangedEventListenerや
-		 * CollectionChangedEventListenerを使うと便利です。各種ListenerはViewModelに定義されている
-		 * CompositeDisposableプロパティ(LivetCompositeDisposable型)に格納しておく事でイベント解放を容易に行えます。
-		 * 
-		 * ReactiveExtensionsなどを併用する場合は、ReactiveExtensionsのCompositeDisposableを
-		 * ViewModelのCompositeDisposableプロパティに格納しておくのを推奨します。
-		 * 
-		 * LivetのWindowテンプレートではViewのウィンドウが閉じる際にDataContextDisposeActionが動作するようになっており、
-		 * ViewModelのDisposeが呼ばれCompositeDisposableプロパティに格納されたすべてのIDisposable型のインスタンスが解放されます。
-		 * 
-		 * ViewModelを使いまわしたい時などは、ViewからDataContextDisposeActionを取り除くか、発動のタイミングをずらす事で対応可能です。
-		 */
-
-		/* UIDispatcherを操作する場合は、DispatcherHelperのメソッドを操作してください。
-		 * UIDispatcher自体はApp.xaml.csでインスタンスを確保してあります。
-		 * 
-		 * LivetのViewModelではプロパティ変更通知(RaisePropertyChanged)やDispatcherCollectionを使ったコレクション変更通知は
-		 * 自動的にUIDispatcher上での通知に変換されます。変更通知に際してUIDispatcherを操作する必要はありません。
-		 */
 
 
 		#region Title変更通知プロパティ
@@ -95,23 +54,20 @@ namespace SRNicoNico.ViewModels {
 
 
 
-		public SignInDialogViewModel signin { get; private set; }
-
-		public SearchViewModel search { get; private set; }
-
-		public SearchResultViewModel searchResult { get; private set; }
-
-		public VideoViewModel video { get; private set; }
+		public SignInDialogViewModel SignIn { get; private set; }
+		public SearchViewModel Search { get; private set; }
+		public SearchResultViewModel SearchResult { get; private set; }
+		public VideoViewModel Video { get; private set; }
 
 		public MainWindowViewModel() {
 
-			this.signin = new SignInDialogViewModel();
+			this.SignIn = new SignInDialogViewModel();
 
-			this.search = new SearchViewModel();
+			this.Search = new SearchViewModel();
 
-			this.searchResult = new SearchResultViewModel();
+			this.SearchResult = new SearchResultViewModel();
 
-			this.video = new VideoViewModel();
+			this.Video = new VideoViewModel();
 
 			this.Content = new StartViewModel();
 		}
@@ -140,11 +96,11 @@ namespace SRNicoNico.ViewModels {
 					if(DateTimeOffset.Compare(expire, DateTimeOffset.Now) < 0) {
 
 						//セッションが有効期限切れ
-						this.signin.StateText = "有効期限が切れています。\n再度ログインしてください。";
-						this.signin.AutoLogin = true;
+						this.SignIn.StateText = "有効期限が切れています。\n再度ログインしてください。";
+						this.SignIn.AutoLogin = true;
 
 						//ログインダイアログ表示
-						Messenger.Raise(new TransitionMessage(typeof(Views.SignInDialog), this.signin, TransitionMode.Modal));
+						Messenger.Raise(new TransitionMessage(typeof(Views.SignInDialog), this.SignIn, TransitionMode.Modal));
 						return;
 					}
 
@@ -154,11 +110,11 @@ namespace SRNicoNico.ViewModels {
 					if(NicoNicoWrapperMain.instance.session.SignInInternal() != SigninStatus.Success) {
 
 						//ログイン失敗
-						this.signin.StateText = "ログインに失敗しました。";
-						this.signin.AutoLogin = true;
+						this.SignIn.StateText = "ログインに失敗しました。";
+						this.SignIn.AutoLogin = true;
 
 						//ログインダイアログ表示
-						Messenger.Raise(new TransitionMessage(typeof(Views.SignInDialog), this.signin, TransitionMode.Modal));
+						Messenger.Raise(new TransitionMessage(typeof(Views.SignInDialog), this.SignIn, TransitionMode.Modal));
 						return;
 					}
 
@@ -172,7 +128,7 @@ namespace SRNicoNico.ViewModels {
 
 					//セッションを確立
 					NicoNicoWrapperMain.instance.session = new NicoNicoSession();
-					Messenger.Raise(new TransitionMessage(typeof(Views.SignInDialog), this.signin, TransitionMode.Modal));
+					Messenger.Raise(new TransitionMessage(typeof(Views.SignInDialog), this.SignIn, TransitionMode.Modal));
 					return;
 				}
 

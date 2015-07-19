@@ -13,6 +13,9 @@ using Vlc.DotNet.Core.Interops;
 using Vlc.DotNet;
 using Vlc.DotNet.Wpf;
 using Vlc.DotNet.Core;
+
+using Livet;
+
 namespace SRNicoNico.Views.Behaviors {
 
 	public class VlcBehavior : Behavior<VlcControl> {
@@ -55,7 +58,12 @@ namespace SRNicoNico.Views.Behaviors {
 
 		private void MediaPlayer_EndReached(object sender, VlcMediaPlayerEndReachedEventArgs e) {
 
+			
+			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
+				this.AssociatedObject.MediaPlayer.Play();
+			}));
+			
 			;
 		}
 
@@ -84,12 +92,12 @@ namespace SRNicoNico.Views.Behaviors {
 
 		private void Loaded(object sender, EventArgs e) {
 
-			App.ViewModelRoot.video.control = this.AssociatedObject;
+			App.ViewModelRoot.Video.control = this.AssociatedObject;
 			Vlc.DotNet.Forms.VlcControl MediaPlayer = this.AssociatedObject.MediaPlayer;
 
 			Thread.Sleep(1000);
 
-			MediaPlayer.Play(new FileInfo(App.ViewModelRoot.video.path));
+			MediaPlayer.Play(new FileInfo(App.ViewModelRoot.Video.path));
 			
 		}
 

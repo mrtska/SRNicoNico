@@ -31,9 +31,5 @@ namespace SRNicoNico.Views {
 		public MainWindow() {
 			InitializeComponent();
 		}
-
-
-
-
 	}
 }

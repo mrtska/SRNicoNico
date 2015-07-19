@@ -106,7 +106,7 @@ namespace SRNicoNico.ViewModels {
 		public void DoSearch() {
 
 
-			App.ViewModelRoot.Content = App.ViewModelRoot.searchResult;
+			App.ViewModelRoot.Content = App.ViewModelRoot.SearchResult;
 
 			Console.WriteLine("検索キーワード:" + this.SelectedIndex);
 
@@ -124,14 +124,14 @@ namespace SRNicoNico.ViewModels {
 			NicoNicoSearchResult result = NicoNicoSearchResult.deserialize(this.currentSearch.response());
 
 				
-			App.ViewModelRoot.searchResult.Total = String.Format("{0:#,0}", result.total) + "件";
+			App.ViewModelRoot.SearchResult.Total = String.Format("{0:#,0}", result.total) + "件";
 
-			App.ViewModelRoot.searchResult.list.Clear();
+			App.ViewModelRoot.SearchResult.list.Clear();
 			foreach(NicoNicoSearchResultNode node in result.list) {
 
 				SearchResultEntryViewModel vm = new SearchResultEntryViewModel();
 				vm.Node = node;
-				App.ViewModelRoot.searchResult.list.Add(vm);
+				App.ViewModelRoot.SearchResult.list.Add(vm);
 			}
 
 				
@@ -151,7 +151,7 @@ namespace SRNicoNico.ViewModels {
 
 				SearchResultEntryViewModel vm = new SearchResultEntryViewModel();
 				vm.Node = node;
-				App.ViewModelRoot.searchResult.list.Add(vm);
+				App.ViewModelRoot.SearchResult.list.Add(vm);
 			}
 			
 

@@ -20,8 +20,6 @@ namespace SRNicoNico.Views.Contents.Search {
 	public partial class Search : UserControl {
 		public Search() {
 			InitializeComponent();
-
-			this.DataContext = App.ViewModelRoot.search;
 		}
 	}
 }

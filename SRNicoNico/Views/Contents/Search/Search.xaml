@@ -13,6 +13,7 @@
              d:DesignHeight="347"
              d:DesignWidth="211"
              mc:Ignorable="d"
+			 DataContext="{Binding Search}"
 			 >
 	
 
