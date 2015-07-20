@@ -164,7 +164,7 @@ namespace SRNicoNico.ViewModels {
 				}
 
 
-				NicoNicoWrapperMain.instance.init();
+				NicoNicoWrapperMain.Instance.init();
 				
 
 
@@ -185,7 +185,7 @@ namespace SRNicoNico.ViewModels {
 				//自動的にログインするにチェックが入っていたら
 				if(this.AutoLogin) {
 
-					StreamWriter writer = new StreamWriter(NicoNicoUtil.currentDirectory.DirectoryName + @"\session");
+					StreamWriter writer = new StreamWriter(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
 
 					writer.WriteLine("Key:" + NicoNicoWrapperMain.getSession().Key);
 					writer.WriteLine("Expire:" + NicoNicoWrapperMain.getSession().Expire);

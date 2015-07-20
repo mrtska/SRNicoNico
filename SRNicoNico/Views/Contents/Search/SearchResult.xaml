@@ -33,7 +33,7 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<ListBox Grid.Row="1"  VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding list}" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.RowSpan="2" >
+		<ListBox Grid.Row="1"  VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding List}" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.RowSpan="2" >
 		
 			<ListBox.ItemTemplate>
 				<DataTemplate DataType="vm:SearchResultEntryViewModel">

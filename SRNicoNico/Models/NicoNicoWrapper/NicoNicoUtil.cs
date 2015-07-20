@@ -16,7 +16,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 		//XMLをJsonに変換
-		public static string xmlToJson(string xml) {
+		public static string XmlToJson(string xml) {
 
 			XmlDocument doc = new XmlDocument();
 			doc.LoadXml(xml);
@@ -25,18 +25,18 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 
-		private static FileInfo _currentDirectory;
+		private static FileInfo _CurrentDirectory;
 
-		public static FileInfo currentDirectory {
+		public static FileInfo CurrentDirectory {
 			get {
 
-				if(_currentDirectory == null) {
+				if(_CurrentDirectory == null) {
 
 					var currentAssembly = Assembly.GetEntryAssembly();
-					_currentDirectory = new FileInfo(currentAssembly.Location);
+					_CurrentDirectory = new FileInfo(currentAssembly.Location);
 				}
 
-				return _currentDirectory;
+				return _CurrentDirectory;
 			}
 		}
 

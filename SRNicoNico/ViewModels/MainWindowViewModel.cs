@@ -79,13 +79,13 @@ namespace SRNicoNico.ViewModels {
 			//Modelsを初期化
 			Task.Run(() => {
 
-				NicoNicoWrapperMain.instance = new NicoNicoWrapperMain();
+				NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain();
 
 
-				if(File.Exists(NicoNicoUtil.currentDirectory.DirectoryName + @"\session")) {
+				if(File.Exists(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session")) {
 
 					//セッション情報を取得する
-					StreamReader reader = new StreamReader(NicoNicoUtil.currentDirectory.DirectoryName + @"\session");
+					StreamReader reader = new StreamReader(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
 							
 					string key = reader.ReadLine().Split(':')[1];
 					DateTimeOffset expire = DateTimeOffset.Parse(reader.ReadLine().Replace("Expire:", ""));
@@ -106,8 +106,8 @@ namespace SRNicoNico.ViewModels {
 
 
 					//セッションが有効だった場合
-					NicoNicoWrapperMain.instance.session = new NicoNicoSession(key, expire);
-					if(NicoNicoWrapperMain.instance.session.SignInInternal() != SigninStatus.Success) {
+					NicoNicoWrapperMain.Instance.Session = new NicoNicoSession(key, expire);
+					if(NicoNicoWrapperMain.Instance.Session.SignInInternal() != SigninStatus.Success) {
 
 						//ログイン失敗
 						this.SignIn.StateText = "ログインに失敗しました。";
@@ -119,7 +119,7 @@ namespace SRNicoNico.ViewModels {
 					}
 
 					//ログイン成功
-					NicoNicoWrapperMain.instance.init();
+					NicoNicoWrapperMain.Instance.init();
 
 
 
@@ -127,7 +127,7 @@ namespace SRNicoNico.ViewModels {
 				} else {
 
 					//セッションを確立
-					NicoNicoWrapperMain.instance.session = new NicoNicoSession();
+					NicoNicoWrapperMain.Instance.Session = new NicoNicoSession();
 					Messenger.Raise(new TransitionMessage(typeof(Views.SignInDialog), this.SignIn, TransitionMode.Modal));
 					return;
 				}
@@ -141,7 +141,7 @@ namespace SRNicoNico.ViewModels {
 			if(disposing) {
 
 				NicoNicoWrapperMain.getSession().HttpHandler.Dispose();
-				NicoNicoWrapperMain.getSession().httpClient.Dispose();
+				NicoNicoWrapperMain.getSession().HttpClient.Dispose();
 
 				Video.DisposePlayer();
 				;

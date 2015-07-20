@@ -14,13 +14,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		 */
 
 		//getFlvAPIのURL
-		public const string getflvURL = "http://flapi.nicovideo.jp/api/getflv/";
+		public const string GetFlvURL = "http://flapi.nicovideo.jp/api/getflv/";
 
 		//getFlvAPIからデータを取得
-		public static NicoNicoGetFlvData getFlv(string cmsid) {
+		public static NicoNicoGetFlvData GetFlv(string cmsid) {
 
 
-			return NicoNicoWrapperMain.getSession().httpClient.GetStringAsync(getflvURL + cmsid).ContinueWith<NicoNicoGetFlvData>(task => {
+			return NicoNicoWrapperMain.getSession().HttpClient.GetStringAsync(GetFlvURL + cmsid).ContinueWith<NicoNicoGetFlvData>(task => {
 
 				string response = task.Result;
 				Console.WriteLine(System.Web.HttpUtility.UrlDecode(response));
@@ -35,13 +35,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		}
 
 
-		public const string watchURL = "http://www.nicovideo.jp/watch/";
+		public const string WatchURL = "http://www.nicovideo.jp/watch/";
 
-		public static Stream getFlvStream(string cmsid, Uri videoUrl) {
+		public static Stream GetFlvStream(string cmsid, Uri videoUrl) {
 
-			var a = NicoNicoWrapperMain.getSession().httpClient.GetAsync(watchURL + cmsid).Result;
+			var a = NicoNicoWrapperMain.getSession().HttpClient.GetAsync(WatchURL + cmsid).Result;
 			Console.WriteLine(a);
-			return NicoNicoWrapperMain.getSession().httpClient.GetStreamAsync(videoUrl).Result;
+			return NicoNicoWrapperMain.getSession().HttpClient.GetStreamAsync(videoUrl).Result;
 		}
 	}
 }

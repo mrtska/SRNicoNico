@@ -13,7 +13,7 @@ namespace SRNicoNico.Views.Behaviors {
 
 	public class ListBoxBehavior : Behavior<ListBox> {
 
-		private ScrollViewer scrollViewer;
+		private ScrollViewer ScrollViewer;
 
 
 		protected override void OnAttached() {
@@ -33,9 +33,9 @@ namespace SRNicoNico.Views.Behaviors {
 
 
 				var border = VisualTreeHelper.GetChild(this.AssociatedObject, 0) as Border;
-				scrollViewer = border.Child as ScrollViewer;
+				ScrollViewer = border.Child as ScrollViewer;
 
-				scrollViewer.ScrollChanged += scrollViewer_ScrollChanged;
+				ScrollViewer.ScrollChanged += scrollViewer_ScrollChanged;
 			}
 		}
 
@@ -43,7 +43,7 @@ namespace SRNicoNico.Views.Behaviors {
 		private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
 
 
-			scrollViewer.ScrollChanged -= scrollViewer_ScrollChanged;
+			ScrollViewer.ScrollChanged -= scrollViewer_ScrollChanged;
 		}
 
 		void scrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e) {
@@ -53,7 +53,7 @@ namespace SRNicoNico.Views.Behaviors {
 			if(e.ExtentHeight == e.VerticalOffset + e.ViewportHeight) {
 
 				App.ViewModelRoot.Search.SearchNext();
-				this.scrollViewer.ScrollToVerticalOffset(e.ExtentHeight - e.ViewportHeight);
+				this.ScrollViewer.ScrollToVerticalOffset(e.ExtentHeight - e.ViewportHeight);
 
 			}
 		}

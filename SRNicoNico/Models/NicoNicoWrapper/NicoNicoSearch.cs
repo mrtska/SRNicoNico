@@ -17,48 +17,48 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		 * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
 		 */
 
-		private readonly string searchURL = "http://ext.nicovideo.jp/api/search/";
+		private readonly string SearchURL = "http://ext.nicovideo.jp/api/search/";
 
 		//検索キーワード
-		private string keyword;
+		private string Keyword;
 
 		//ソート
-		private string sort;
+		private string Sort;
 
 		//オーダー
-		private string order;
+		private string Order;
 
 		//取得しているページ
-		private byte currentPage = 1;
+		private byte CurrentPage = 1;
 
 
 
 
 		public NicoNicoSearch(string keyword, string sort) {
 
-			this.keyword = keyword;
+			this.Keyword = keyword;
 
-			this.sort = "&sort=" + sort.Split(':')[0];
-			this.order = "&order=" + sort.Split(':')[1];
+			this.Sort = "&sort=" + sort.Split(':')[0];
+			this.Order = "&order=" + sort.Split(':')[1];
 
 
 		}
 
 		//検索結果 json デシリアライズはこのクラスでは行わない
-		public string response() {
+		public string Response() {
 
 			//URLに検索キーワードを入れる
-			string search = searchURL + "search/" + this.keyword + "?mode=watch" + this.sort + this.order + "&page=" + currentPage++;
+			string search = SearchURL + "search/" + this.Keyword + "?mode=watch" + this.Sort + this.Order + "&page=" + CurrentPage++;
 
-			HttpResponseMessage response = NicoNicoWrapperMain.getSession().httpClient.GetAsync(search).Result;
+			HttpResponseMessage response = NicoNicoWrapperMain.getSession().HttpClient.GetAsync(search).Result;
 			return response.Content.ReadAsStringAsync().Result;
 		}
 
-		public string next() {
+		public string Next() {
 
-			string search = searchURL + "search/" + this.keyword + "?mode=watch" + this.sort + this.order + "&page=" + currentPage++;
+			string search = SearchURL + "search/" + this.Keyword + "?mode=watch" + this.Sort + this.Order + "&page=" + CurrentPage++;
 
-			HttpResponseMessage response = NicoNicoWrapperMain.getSession().httpClient.GetAsync(search).Result;
+			HttpResponseMessage response = NicoNicoWrapperMain.getSession().HttpClient.GetAsync(search).Result;
 			return response.Content.ReadAsStringAsync().Result;
 		}
 

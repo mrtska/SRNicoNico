@@ -51,7 +51,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 		//Http通信用
-		public HttpClient httpClient { get; internal set; }
+		public HttpClient HttpClient { get; internal set; }
 		public HttpClientHandler HttpHandler { get; internal set; }
 
 		//ユーザーID
@@ -72,8 +72,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			this.HttpHandler.UseCookies = true;
 			this.HttpHandler.AllowAutoRedirect = false;
 			this.HttpHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-			this.httpClient = new HttpClient(this.HttpHandler, false);
-			this.httpClient.DefaultRequestHeaders.Add("user-agent", NicoNicoSession.UserAgent);
+			this.HttpClient = new HttpClient(this.HttpHandler, false);
+			this.HttpClient.DefaultRequestHeaders.Add("user-agent", NicoNicoSession.UserAgent);
 		}
 
 		//オートログイン時
@@ -83,8 +83,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			this.HttpHandler.UseCookies = true;
 			this.HttpHandler.AllowAutoRedirect = false;
 			this.HttpHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-			this.httpClient = new HttpClient(this.HttpHandler, false);
-			this.httpClient.DefaultRequestHeaders.Add("user-agent", NicoNicoSession.UserAgent);
+			this.HttpClient = new HttpClient(this.HttpHandler, false);
+			this.HttpClient.DefaultRequestHeaders.Add("user-agent", NicoNicoSession.UserAgent);
 
 			this.Key = key;
 
@@ -103,7 +103,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			request.Add("password", passwd);		//パスワード
 
 			//サインインリクエスト
-			return this.httpClient.PostAsync(SignInURL, new FormUrlEncodedContent(request)).ContinueWith(prevTask => {
+			return this.HttpClient.PostAsync(SignInURL, new FormUrlEncodedContent(request)).ContinueWith(prevTask => {
 
 				return SignInInternal();
 			}).Result;
@@ -118,7 +118,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
 
 
-			HttpResponseMessage response = this.httpClient.SendAsync(message).Result;
+			HttpResponseMessage response = this.HttpClient.SendAsync(message).Result;
 
 			//成功したら
 			if(response.StatusCode == HttpStatusCode.OK) {
@@ -151,13 +151,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			//サインイン失敗
 			return SigninStatus.Failed;
-
-
-
 		}
-
-
-
-
 	}
 }

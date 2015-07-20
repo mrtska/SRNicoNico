@@ -15,30 +15,30 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//getflvAPIで取得できるデータ
 
 		//スレッドID
-		public uint threadID { get; internal set; }
+		public uint ThreadID { get; internal set; }
 
 		//長さ
-		public uint length { get; internal set; }
+		public uint Length { get; internal set; }
 
 		//動画URL
-		public string videoUrl { get; internal set; }
+		public string VideoUrl { get; internal set; }
 
 		//コメントサーバーURL
-		public Uri commentServerUrl { get; internal set; }
+		public Uri CommentServerUrl { get; internal set; }
 
 		//サブコメントサーバーURL
-		public Uri subCommentServerUrl { get; internal set; }
+		public Uri SubCommentServerUrl { get; internal set; }
 
 		//非公開理由
-		public int closedReason { get; internal set; }
+		public int ClosedReason { get; internal set; }
 
 		public NicoNicoGetFlvData(Dictionary<string, string> wwwData) {
 
-			this.threadID = uint.Parse(wwwData["thread_id"]);
-			this.length = uint.Parse(wwwData["l"]);
-			this.videoUrl = wwwData["url"];
-			this.commentServerUrl = new Uri(wwwData["ms"]);
-			this.subCommentServerUrl = new Uri(wwwData["ms_sub"]);
+			this.ThreadID = uint.Parse(wwwData["thread_id"]);
+			this.Length = uint.Parse(wwwData["l"]);
+			this.VideoUrl = wwwData["url"];
+			this.CommentServerUrl = new Uri(wwwData["ms"]);
+			this.SubCommentServerUrl = new Uri(wwwData["ms_sub"]);
 		}
 
 	}

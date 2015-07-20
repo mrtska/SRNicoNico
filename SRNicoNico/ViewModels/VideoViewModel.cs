@@ -59,8 +59,8 @@ namespace SRNicoNico.ViewModels {
 		 * 自動的にUIDispatcher上での通知に変換されます。変更通知に際してUIDispatcherを操作する必要はありません。
 		 */
 
-		public Uri uri { get; set; }
-		public string path { get; set; }
+		public Uri Uri { get; set; }
+		public string Path { get; set; }
 
 		public VlcPlayer Player { get; set; }
 

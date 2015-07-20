@@ -59,18 +59,18 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 		//検索結果の総数
-		public ulong total { get; internal set; }
-		public List<NicoNicoSearchResultNode> list;
+		public ulong Total { get; private set; }
+		public List<NicoNicoSearchResultNode> List { get; private set; }
 
 		//コンストラクタ使用不可
 		private NicoNicoSearchResult() {
 
-			this.list = new List<NicoNicoSearchResultNode>();
+			this.List = new List<NicoNicoSearchResultNode>();
 
 		}
 
 		//NicoNicoSearchで取得したjsonをデシリアライズする
-		public static NicoNicoSearchResult deserialize(string jsonString) {
+		public static NicoNicoSearchResult Deserialize(string jsonString) {
 
 
 
@@ -84,7 +84,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 			//検索結果総数
-			result.total = (ulong) json.count;
+			result.Total = (ulong) json.count;
 
 			//Jsonからリストを取得、データを格納
 			foreach(var entry in json.list) {
@@ -92,7 +92,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 				NicoNicoSearchResultNode node = new NicoNicoSearchResultNode(entry.id, entry.title, (ulong)entry.view_counter, (ulong)entry.num_res,
 																				(ulong)entry.mylist_counter, entry.thumbnail_url, entry.length, entry.first_retrieve);
 
-				result.list.Add(node);
+				result.List.Add(node);
 			}
 
 

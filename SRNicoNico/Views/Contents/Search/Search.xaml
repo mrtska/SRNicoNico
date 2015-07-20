@@ -74,7 +74,7 @@
 		         Margin="10,77,0,0"
 		         HorizontalAlignment="Left"
 		         VerticalAlignment="Top"
-		         Text="{Binding searchText}"
+		         Text="{Binding SearchText}"
 		         TextWrapping="Wrap">
 			<i:Interaction.Behaviors>
 				<Behaviors:TextBoxBehavior />

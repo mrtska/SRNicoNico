@@ -12,29 +12,29 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		 */
 
 
-		public static NicoNicoWrapperMain instance;
+		public static NicoNicoWrapperMain Instance;
 
 
-		public NicoNicoSession session { get; set; }
+		public NicoNicoSession Session { get; set; }
 
-		public NicoNicoUser user { get; internal set; }
+		public NicoNicoUser User { get; internal set; }
 
 		//セッションが確立した後に呼ぶ
 		public void init() {
 
-			this.user = new NicoNicoUser(session.UserId);
-			App.ViewModelRoot.Title += "(user:" + this.user.UserName + ")";
+			this.User = new NicoNicoUser(Session.UserId);
+			App.ViewModelRoot.Title += "(user:" + this.User.UserName + ")";
 		}
 			
 		//現在のセッションを取得
 		public static NicoNicoSession getSession() {
 
-			if(instance == null) {
+			if(Instance == null) {
 
 				throw new SystemException("NicoNicoWrapperMainインスタンスがnullになりました。");
 			}
 
-			return instance.session;
+			return Instance.Session;
 		}
 
 

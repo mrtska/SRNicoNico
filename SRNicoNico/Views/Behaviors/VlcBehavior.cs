@@ -74,7 +74,7 @@ namespace SRNicoNico.Views.Behaviors {
 			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
 
-				this.AssociatedObject.LoadMedia(App.ViewModelRoot.Video.path);
+				this.AssociatedObject.LoadMedia(App.ViewModelRoot.Video.Path);
 				
 				Thread.Sleep(1000);
 				this.AssociatedObject.Play();

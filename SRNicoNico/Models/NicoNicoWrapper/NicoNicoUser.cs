@@ -17,28 +17,28 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 
-		public const string user_lookup_url = "http://seiga.nicovideo.jp/api/user/info?id=";
+		public const string UserLookUpURL = "http://seiga.nicovideo.jp/api/user/info?id=";
 
 		public uint UserId { get; internal set; }
 
 		public string UserName { get; internal set; }
 
-		public NicoNicoUser(uint user_id) {
+		public NicoNicoUser(uint userId) {
 
-			this.UserId = user_id;
+			this.UserId = userId;
 
-			this.UserName = lookupUserName(this.UserId);
+			this.UserName = LookupUserName(this.UserId);
 
 			
 		}
 
-		public static string lookupUserName(uint user_id) {
+		public static string LookupUserName(uint userId) {
 
-			string uri = user_lookup_url + user_id;
+			string uri = UserLookUpURL + userId;
 
-			Task<string> task = NicoNicoWrapperMain.getSession().httpClient.GetStringAsync(uri);
+			Task<string> task = NicoNicoWrapperMain.getSession().HttpClient.GetStringAsync(uri);
 
-			string json = NicoNicoUtil.xmlToJson(task.Result);
+			string json = NicoNicoUtil.XmlToJson(task.Result);
 
 			return DynamicJson.Parse(json).response.user.nickname;
 		}

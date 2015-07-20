@@ -54,18 +54,18 @@
 		           Text="{Binding Node.view_counter, StringFormat={}{0:N0}}"
 		           TextWrapping="Wrap" />
 
-		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="コメント数:" VerticalAlignment="Top" Grid.Column="1" Margin="157,20,0,0"/>
+		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="コメント数:" VerticalAlignment="Top" Grid.Column="1" Margin="170,20,0,0" RenderTransformOrigin="0.496,-0.359"/>
 		<TextBlock Grid.Column="1"
-		           Margin="233,20,0,0"
+		           Margin="246,20,0,0"
 		           HorizontalAlignment="Left"
 		           VerticalAlignment="Top"
 		           Foreground="#FFAAAAAA"
 		           Text="{Binding Node.comment_counter, StringFormat={}{0:N0}}"
 		           TextWrapping="Wrap" />
 
-		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="マイリスト数:" VerticalAlignment="Top" Grid.Column="1" Margin="144,40,0,0"/>
+		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="マイリスト数:" VerticalAlignment="Top" Grid.Column="1" Margin="157,40,0,0"/>
 		<TextBlock Grid.Column="1"
-		           Margin="233,40,0,0"
+		           Margin="246,40,0,0"
 		           HorizontalAlignment="Left"
 		           VerticalAlignment="Top"
 		           Foreground="#FFAAAAAA"
@@ -78,7 +78,7 @@
 		           VerticalAlignment="Top"
 		           Foreground="#FFAAAAAA"
 		           Text="{Binding Node.cmsid, StringFormat={}{0:N0}}"
-		           TextWrapping="Wrap" Width="78" />
+		           TextWrapping="Wrap" Width="92" />
 		<TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Node.length}" VerticalAlignment="Top" Margin="10,54,10,1"/>
 		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="動画ID:" VerticalAlignment="Top" Grid.Column="1" Margin="10,40,0,0"/>
 

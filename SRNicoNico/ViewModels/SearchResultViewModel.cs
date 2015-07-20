@@ -77,14 +77,14 @@ namespace SRNicoNico.ViewModels {
 
 
 		#region searchResult変更通知プロパティ
-		private ObservableCollection<SearchResultEntryViewModel> _list = new ObservableCollection<SearchResultEntryViewModel>();
+		private ObservableCollection<SearchResultEntryViewModel> _List = new ObservableCollection<SearchResultEntryViewModel>();
 
-		public ObservableCollection<SearchResultEntryViewModel> list {
-			get { return _list; }
+		public ObservableCollection<SearchResultEntryViewModel> List {
+			get { return _List; }
 			set { 
-				if(_list == value)
+				if(_List == value)
 					return;
-				_list = value;
+				_List = value;
 				RaisePropertyChanged();
 			}
 		}
