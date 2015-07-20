@@ -6,12 +6,14 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             Width="auto"
+			HorizontalAlignment="Stretch"
              Height="80"
              BorderThickness="1"
-             d:DataContext="{d:DesignInstance vm:SearchResultEntryViewModel}"
+             d:DataContext="{d:DesignInstance {x:Type vm:SearchResultEntryViewModel}}"
              d:DesignWidth="491"
-             mc:Ignorable="d">
+             mc:Ignorable="d"
+			 BorderBrush="#FF333333"
+			 >
 
 
 
@@ -21,11 +23,13 @@
 		</i:EventTrigger>
 	</i:Interaction.Triggers>
 
-	<Grid HorizontalAlignment="Stretch">
+	<Grid >
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="80" />
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
+
+
 		<Image Width="65"
 		       Height="50"
 		       Margin="5,4,0,0"
@@ -57,7 +61,7 @@
 		           VerticalAlignment="Top"
 		           Foreground="#FFAAAAAA"
 		           Text="{Binding Node.comment_counter, StringFormat={}{0:N0}}"
-		           TextWrapping="Wrap" RenderTransformOrigin="0.375,-0.1" />
+		           TextWrapping="Wrap" />
 
 		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="マイリスト数:" VerticalAlignment="Top" Grid.Column="1" Margin="144,40,0,0"/>
 		<TextBlock Grid.Column="1"
@@ -66,7 +70,7 @@
 		           VerticalAlignment="Top"
 		           Foreground="#FFAAAAAA"
 		           Text="{Binding Node.mylist_counter, StringFormat={}{0:N0}}"
-		           TextWrapping="Wrap" RenderTransformOrigin="0.5,-0.125" />
+		           TextWrapping="Wrap" />
 
 		<TextBlock Grid.Column="1"
 		           Margin="60,40,0,0"

@@ -16,8 +16,7 @@
 			 DataContext="{Binding Search}"
 			 >
 	
-
-
+	
 
 
 	<Grid>
@@ -102,6 +101,8 @@
 				</i:EventTrigger>
 			</i:Interaction.Triggers>
 		</Button>
+		
+		<Line X1="195" Y1="0" X2="195" Y2="6000" Stroke="#FF333333"/>
 
 	</Grid>
 </UserControl>

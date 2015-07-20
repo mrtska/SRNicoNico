@@ -143,7 +143,7 @@ namespace SRNicoNico.ViewModels {
 				NicoNicoWrapperMain.getSession().HttpHandler.Dispose();
 				NicoNicoWrapperMain.getSession().httpClient.Dispose();
 
-				Video.Dispose();
+				Video.DisposePlayer();
 				;
 			}
 

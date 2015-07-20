@@ -31,6 +31,8 @@
 						このアプリケーションを利用して生じた障害や不利益の責任は一切負いません。自己責任でお使いください。
 						</TextBlock>
 					
+						<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24"	VerticalAlignment="Top" Margin="0,274,0,0" Text="～更新履歴～" />
+						<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12"	VerticalAlignment="Top" Margin="0,310,0,0" Text="・いろいろあり過ぎて覚えてない。" />
 
 					</Grid>
 					

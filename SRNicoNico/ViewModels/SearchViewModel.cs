@@ -106,36 +106,37 @@ namespace SRNicoNico.ViewModels {
 		public void DoSearch() {
 
 
-			App.ViewModelRoot.Content = App.ViewModelRoot.SearchResult;
+			Task.Run(new Action(() => {
 
-			Console.WriteLine("検索キーワード:" + this.SelectedIndex);
+				App.ViewModelRoot.Content = App.ViewModelRoot.SearchResult;
 
-			if(this.searchText == null || this.searchText.Length == 0) {
+				Console.WriteLine("検索キーワード:" + this.SelectedIndex);
 
-				return;
-			}
+				if(this.searchText == null || this.searchText.Length == 0) {
+
+					return;
+				}
+
+				//検索
+				this.currentSearch = new NicoNicoSearch(this.searchText, this.sort_by[this.SelectedIndex]);
+
+				//検索結果をUIに
+				NicoNicoSearchResult result = NicoNicoSearchResult.deserialize(this.currentSearch.response());
 
 
+				DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-			//検索
-			this.currentSearch = new NicoNicoSearch(this.searchText, this.sort_by[this.SelectedIndex]);
-				
-			//検索結果をUIに
-			NicoNicoSearchResult result = NicoNicoSearchResult.deserialize(this.currentSearch.response());
+					App.ViewModelRoot.SearchResult.Total = String.Format("{0:#,0}", result.total) + "件の動画";
 
-				
-			App.ViewModelRoot.SearchResult.Total = String.Format("{0:#,0}", result.total) + "件の動画";
+					App.ViewModelRoot.SearchResult.list.Clear();
+					foreach(NicoNicoSearchResultNode node in result.list) {
 
-			App.ViewModelRoot.SearchResult.list.Clear();
-			foreach(NicoNicoSearchResultNode node in result.list) {
-
-				SearchResultEntryViewModel vm = new SearchResultEntryViewModel();
-				vm.Node = node;
-				App.ViewModelRoot.SearchResult.list.Add(vm);
-			}
-
-				
-			
+						SearchResultEntryViewModel vm = new SearchResultEntryViewModel();
+						vm.Node = node;
+						App.ViewModelRoot.SearchResult.list.Add(vm);
+					}
+				}));
+			}));
 		}
 
 		public void SearchNext() {

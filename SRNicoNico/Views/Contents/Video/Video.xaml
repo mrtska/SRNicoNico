@@ -11,7 +11,9 @@
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              d:DesignHeight="300"
              d:DesignWidth="300"
-             mc:Ignorable="d">
+			 d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
+             mc:Ignorable="d"
+			 DataContext="{Binding Video}">
 
 	<Grid>
 		<Grid.RowDefinitions>
@@ -19,12 +21,15 @@
 			<RowDefinition />
 		</Grid.RowDefinitions>
 
-		<Wpf:VlcPlayer Grid.Row="0" Background="Black">
+		<Wpf:VlcPlayer x:Name="VlcPlayer" Grid.Row="0" Background="Black">
 			
 			<i:Interaction.Behaviors>
 				<Behaviors:VlcBehavior />
 			</i:Interaction.Behaviors>
 		</Wpf:VlcPlayer>
+		<TextBlock Grid.Row="1" Width="20" Height="20" Text="{Binding Position, ElementName=VlcPlayer}"/>
+		<Slider Grid.Row="1" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Value="{Binding Position, ElementName=VlcPlayer}" Maximum="1" Minimum="0"/>
+
 
 	</Grid>
 

@@ -62,7 +62,7 @@ namespace SRNicoNico.ViewModels {
 		public Uri uri { get; set; }
 		public string path { get; set; }
 
-		public VlcPlayer player;
+		public VlcPlayer Player { get; set; }
 
 
 		public void Initialize() {
@@ -70,9 +70,13 @@ namespace SRNicoNico.ViewModels {
 			
 		}
 
-		public void Dispose() {
+		public void DisposePlayer() {
 
-			player.Dispose();
+			if(Player != null) {
+
+				Player.Dispose();
+			}
+			
 		}
 
 
