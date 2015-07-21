@@ -25,9 +25,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 		public NicoNicoUser(uint userId) {
 
-			this.UserId = userId;
+            UserId = userId;
 
-			this.UserName = LookupUserName(this.UserId);
+            UserName = LookupUserName(UserId);
 
 			
 		}
@@ -39,7 +39,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			Task<string> task = NicoNicoWrapperMain.getSession().HttpClient.GetStringAsync(uri);
 
 			string json = NicoNicoUtil.XmlToJson(task.Result);
-
+            
+            
 			return DynamicJson.Parse(json).response.user.nickname;
 		}
 

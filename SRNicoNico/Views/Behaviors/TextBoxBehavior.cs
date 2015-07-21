@@ -36,7 +36,7 @@ namespace SRNicoNico.Views.Behaviors {
 
 			if(e.Key == Key.Enter) {
 
-				App.ViewModelRoot.Search.searchText = this.AssociatedObject.Text;
+				App.ViewModelRoot.Search.SearchText = this.AssociatedObject.Text;
 				App.ViewModelRoot.Search.DoSearch();
 			}
 		}

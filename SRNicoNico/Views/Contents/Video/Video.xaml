@@ -22,19 +22,19 @@
 		</Grid.RowDefinitions>
 
 		<Wpf:VlcPlayer x:Name="VlcPlayer" Grid.Row="0" Background="Black">
-			
+
 			<i:Interaction.Behaviors>
 				<Behaviors:VlcBehavior />
 			</i:Interaction.Behaviors>
 		</Wpf:VlcPlayer>
 		<TextBlock Grid.Row="1" Width="20" Height="20" Text="{Binding Position, ElementName=VlcPlayer}"/>
-		<Slider Grid.Row="1" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Value="{Binding Position, ElementName=VlcPlayer}" Maximum="1" Minimum="0"/>
+		<Slider Grid.Row="0" Height="30" VerticalAlignment="Bottom" Value="{Binding Position, ElementName=VlcPlayer}" Maximum="1" Minimum="0" SmallChange="0.0000001" LargeChange="0.000001"/>
 
 
 	</Grid>
 
 	<i:Interaction.Triggers>
-		
+
 		<!--  Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます  -->
 		<i:EventTrigger EventName="Unloaded">
 			<l:DataContextDisposeAction />

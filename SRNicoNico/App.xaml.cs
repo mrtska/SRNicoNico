@@ -48,8 +48,8 @@ namespace SRNicoNico {
 		        "エラー",
 		        MessageBoxButton.OK,
 		        MessageBoxImage.Error);
-		
-		    Environment.Exit(1);
+
+			this.Shutdown(-1);
 		}
 	}
 }

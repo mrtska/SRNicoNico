@@ -113,7 +113,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		public SigninStatus SignInInternal() {
 
 
-
 			//ニコニコTOPにレスポンスヘッダを要求する
 			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
 

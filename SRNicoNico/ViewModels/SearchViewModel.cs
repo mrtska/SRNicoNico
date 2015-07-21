@@ -64,15 +64,15 @@ namespace SRNicoNico.ViewModels {
 		private string[] sort_by = { "f:d", "f:a",
 									 "v:d", "v:a" };
 
-		#region searchText変更通知プロパティ
-		private string _searchText;
+		#region SearchText変更通知プロパティ
+		private string _SearchText;
 
-		public string searchText {
-			get { return _searchText; }
+		public string SearchText {
+			get { return _SearchText; }
 			set { 
-				if(_searchText == value)
+				if(_SearchText == value)
 					return;
-				_searchText = value;
+				_SearchText = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -112,13 +112,13 @@ namespace SRNicoNico.ViewModels {
 
 				Console.WriteLine("検索キーワード:" + this.SelectedIndex);
 
-				if(this.searchText == null || this.searchText.Length == 0) {
+				if(this.SearchText == null || this.SearchText.Length == 0) {
 
 					return;
 				}
 
 				//検索
-				this.currentSearch = new NicoNicoSearch(this.searchText, this.sort_by[this.SelectedIndex]);
+				this.currentSearch = new NicoNicoSearch(this.SearchText, this.sort_by[this.SelectedIndex]);
 
 				//検索結果をUIに
 				NicoNicoSearchResult result = NicoNicoSearchResult.Deserialize(this.currentSearch.Response());
@@ -155,23 +155,9 @@ namespace SRNicoNico.ViewModels {
 						vm.Node = node;
 						App.ViewModelRoot.SearchResult.List.Add(vm);
 					}
+
 				}));
-
-
 			}));
-
-			
-			
-
-
-			
-
-			;
-
-			
-
 		}
-
-
 	}
 }

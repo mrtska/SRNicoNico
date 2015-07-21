@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
+using System.Net.Http;
+using System.Net.Http.Headers;
+
 using Livet;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
@@ -37,11 +40,37 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 		public const string WatchURL = "http://www.nicovideo.jp/watch/";
 
-		public static Stream GetFlvStream(string cmsid, Uri videoUrl) {
 
-			var a = NicoNicoWrapperMain.getSession().HttpClient.GetAsync(WatchURL + cmsid).Result;
+		private static void AccessVideoPage(string cmsid) {
+
+			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Head, WatchURL + cmsid);
+			var a = NicoNicoWrapperMain.getSession().HttpClient.SendAsync(message).Result;
 			Console.WriteLine(a);
+
+		}
+
+		public static Stream GetFlvStream(string cmsid, string videoUrl) {
+
+			AccessVideoPage(cmsid);
+
 			return NicoNicoWrapperMain.getSession().HttpClient.GetStreamAsync(videoUrl).Result;
+		}
+
+
+
+
+
+		public static Stream GetFlvStreamRange(string cmsid, string videoUrl, long length) {
+
+			AccessVideoPage(cmsid);
+
+			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, videoUrl);
+			message.Headers.Range = new RangeHeaderValue(length, null);
+			
+			HttpResponseMessage response = NicoNicoWrapperMain.getSession().HttpClient.SendAsync(message).Result;
+			
+
+			return response.Content.ReadAsStreamAsync().Result;
 		}
 	}
 }

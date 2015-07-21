@@ -33,8 +33,6 @@ namespace SRNicoNico.Views.Behaviors {
 		protected override void OnDetaching() {
 			base.OnDetaching();
 
-
-
 			this.AssociatedObject.Loaded -= Loaded;
 			this.Player.Buffering -= Player_Buffering;
 			this.Player.EndReached -= Player_EndReached;
