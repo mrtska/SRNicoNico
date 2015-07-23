@@ -24,15 +24,22 @@ namespace SRNicoNico.ViewModels {
 	
 		public NicoNicoSearchResultNode Node { get; set; }
 
-		public void Play() {
+		public void OpenVideo() {
 
+			//UIスレッドは使わない
 			Task.Run(new Action(() => {
 
+				//ViewをVideoに変える
+				App.ViewModelRoot.Content = App.ViewModelRoot.Video;
+
+				//GetFlvAPIを叩いたてサーバーを取得
 				NicoNicoGetFlvData data = NicoNicoGetFlv.GetFlv(Node.cmsid);
+
+				//cacheディレクトリを無ければ作成
 				Directory.CreateDirectory(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\cache");
 
+				//キャッシュパス
 				string path = NicoNicoUtil.CurrentDirectory.DirectoryName + @"\cache\" + Node.cmsid;
-
 				FileInfo cache = new FileInfo(path);
 
 				//キャッシュが存在したら
@@ -41,28 +48,24 @@ namespace SRNicoNico.ViewModels {
 					long length = cache.Length;
 
 					App.ViewModelRoot.Video.CacheStream = new FileStream(path, FileMode.Open, FileAccess.Write);
-					App.ViewModelRoot.Video.VideoStream = (MemoryStream) NicoNicoGetFlv.GetFlvStreamRange(Node.cmsid, data.VideoUrl, length);
-
+					App.ViewModelRoot.Video.VideoStream = NicoNicoGetFlv.GetFlvStreamRange(Node.cmsid, data.VideoUrl, length);
+					App.ViewModelRoot.Video.CacheExists = true;
 					
-
-					Console.WriteLine(App.ViewModelRoot.Video.VideoStream);
-
-					;
 					
 
 				} else {
 
 					App.ViewModelRoot.Video.CacheStream = new FileStream(path, FileMode.Create, FileAccess.Write);
 					App.ViewModelRoot.Video.VideoStream = NicoNicoGetFlv.GetFlvStream(Node.cmsid, data.VideoUrl);
-
+					App.ViewModelRoot.Video.CacheExists = false;
 				}
 
 				App.ViewModelRoot.Video.Path = path;
 				App.ViewModelRoot.Video.Uri = new Uri(data.VideoUrl);
+				App.ViewModelRoot.Video.StartStreaming();
 
 
 
-				App.ViewModelRoot.Content = App.ViewModelRoot.Video;
 			}));
 
 

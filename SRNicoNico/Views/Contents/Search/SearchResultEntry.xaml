@@ -19,7 +19,7 @@
 
 	<i:Interaction.Triggers>
 		<i:EventTrigger EventName="MouseLeftButtonDown">
-			<l:LivetCallMethodAction MethodName="Play" MethodTarget="{Binding}"/>
+			<l:LivetCallMethodAction MethodName="OpenVideo" MethodTarget="{Binding}"/>
 		</i:EventTrigger>
 	</i:Interaction.Triggers>
 

@@ -45,7 +45,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Head, WatchURL + cmsid);
 			var a = NicoNicoWrapperMain.getSession().HttpClient.SendAsync(message).Result;
-			Console.WriteLine(a);
+			System.Diagnostics.Debug.WriteLine(a);
 
 		}
 
@@ -68,7 +68,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			message.Headers.Range = new RangeHeaderValue(length, null);
 			
 			HttpResponseMessage response = NicoNicoWrapperMain.getSession().HttpClient.SendAsync(message).Result;
-			
+
+			;
 
 			return response.Content.ReadAsStreamAsync().Result;
 		}
