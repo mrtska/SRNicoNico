@@ -34,6 +34,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 
+
 		public NicoNicoSearch(string keyword, string sort) {
 
 			this.Keyword = keyword;

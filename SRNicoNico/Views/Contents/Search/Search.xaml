@@ -49,7 +49,7 @@
 			              Foreground="#FFAAAAAA" />
 			<ComboBoxItem Background="#FF2D2D2D"
 			              BorderBrush="#FF2D2D2D"
-			              Content="コメントが古い順"
+			              Content="コメントが少ない順"
 			              Foreground="#FFAAAAAA" />
 			<ComboBoxItem Background="#FF2D2D2D"
 			              BorderBrush="#FF2D2D2D"

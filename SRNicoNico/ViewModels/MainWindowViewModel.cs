@@ -36,8 +36,8 @@ namespace SRNicoNico.ViewModels {
 		}
 		#endregion
 
-
-
+        
+        
 		#region Content変更通知プロパティ
 		private ViewModel _Content;
 

@@ -29,6 +29,7 @@ namespace SRNicoNico.ViewModels {
 			//UIスレッドは使わない
 			Task.Run(new Action(() => {
 
+				App.ViewModelRoot.Video.cmsid = Node.cmsid;
 				//ViewをVideoに変える
 				App.ViewModelRoot.Content = App.ViewModelRoot.Video;
 
@@ -61,7 +62,6 @@ namespace SRNicoNico.ViewModels {
 				}
 
 				App.ViewModelRoot.Video.Path = path;
-				App.ViewModelRoot.Video.Uri = new Uri(data.VideoUrl);
 				App.ViewModelRoot.Video.StartStreaming();
 
 

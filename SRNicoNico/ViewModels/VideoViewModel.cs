@@ -17,14 +17,14 @@ using Livet.Messaging.Windows;
 using xZune.Vlc.Wpf;
 using xZune.Vlc;
 
-using SRNicoNico.Models;
+using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
 
 	public class VideoViewModel : ViewModel {
 
 
-		public Uri Uri { get; set; }
+		public string cmsid { get; set; }
 		public string Path { get; set; }
 
 		public VlcPlayer Player { get; set; }
@@ -38,11 +38,14 @@ namespace SRNicoNico.ViewModels {
 
 		public void Initialize() {
 
+
 			Media = Player.VlcMediaPlayer;
 			Media.EncounteredError += Media_EncounteredError;
 			Media.SeekableChanged += Media_SeekableChanged;
 			Media.PositionChanged += Media_PositionChanged;
-			
+
+			NicoNicoGetThumbInfo.GetThumbInfo(cmsid);
+
 		}
 
 		private void Media_PositionChanged(object sender, EventArgs e) {
