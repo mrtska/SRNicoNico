@@ -10,19 +10,38 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
              d:DesignHeight="150"
              d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              mc:Ignorable="d">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="MouseEnter">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="MouseOver" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="MouseLeave">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="MouseLeave" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
 
-        <Wpf:VlcPlayer x:Name="VlcPlayer" Background="Black">
+        <Wpf:VlcPlayer x:Name="VlcPlayer" Background="Black" Grid.RowSpan="2" Grid.ColumnSpan="2">
             <i:Interaction.Behaviors>
                 <Behaviors:VlcBehavior />
             </i:Interaction.Behaviors>
         </Wpf:VlcPlayer>
-        <Slider Grid.Row="0" Height="30" VerticalAlignment="Bottom" Value="{Binding Position, ElementName=VlcPlayer}" Maximum="1" Minimum="0" SmallChange="0.001" LargeChange="0.001"/>
-       
+
+        <local:VideoController Grid.Row="1" Visibility="{Binding IsMouseOver}" />
+
+
+
+
+
 
     </Grid>
 

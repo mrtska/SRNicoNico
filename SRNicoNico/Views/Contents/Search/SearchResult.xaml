@@ -33,9 +33,13 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<ListBox Grid.Row="1"  VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding List}" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.RowSpan="2" >
-		
-			<ListBox.ItemTemplate>
+		<ListBox Grid.Row="1"  VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding List}" HorizontalContentAlignment="Stretch" >
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
 				<DataTemplate DataType="vm:SearchResultEntryViewModel">
 					<search:SearchResultEntry/>
 				</DataTemplate>

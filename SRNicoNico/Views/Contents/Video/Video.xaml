@@ -17,22 +17,14 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="*"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <video:VideoInternal Grid.Row="1" />
 
-        <mui:ModernButton Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" IconData="M 10,0 v 20 l 20,-10 Z" >
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <l:LivetCallMethodAction MethodName="Play" MethodTarget="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-
-        </mui:ModernButton>
-        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding }" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="20" Text="{Binding ThumbInfo.Title}" VerticalAlignment="Top"/>
 
 
     </Grid>

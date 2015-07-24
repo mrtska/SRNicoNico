@@ -22,44 +22,42 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 		//
 		public static NicoNicoGetThumbInfoData GetThumbInfo(string cmsid) {
+			
 
-			return Task.Run(new Func<NicoNicoGetThumbInfoData>(() => {
+			string result = GetThumbInfoAsync(cmsid).Result;
 
-				string result = GetThumbInfoAsync(cmsid).Result;
+			//json
+			string jsonString = NicoNicoUtil.XmlToJson(result);
 
-				//json
-				string jsonString = NicoNicoUtil.XmlToJson(result);
+			//dynamic型json
+			var json = DynamicJson.Parse(jsonString);
 
-				//dynamic型json
-				var json = DynamicJson.Parse(jsonString);
+			//レスポンス
+			var response = json.nicovideo_thumb_response;
 
-				//レスポンス
-				var response = json.nicovideo_thumb_response;
+			//本体
+			var thumb = response.thumb;
 
-				//本体
-				var thumb = response.thumb;
+			//データ
+			NicoNicoGetThumbInfoData ret = new NicoNicoGetThumbInfoData() {
 
-				//データ
-				NicoNicoGetThumbInfoData ret = new NicoNicoGetThumbInfoData() {
+				Cmsid = thumb.video_id,
+				Title = thumb.title,
+				Description = thumb.description,
+				ThumbNailUrl = thumb.thumbnail_url,
+				FirstRetrieve = thumb.first_retrieve,
+				Length = thumb.length,
+				MovieType = thumb.movie_type,
+				SizeHigh = thumb.size_high,
+				SizeLow = thumb.size_low,
+				ViewCounter = thumb.view_counter,
+				CommentCounter = thumb.comment_num,
+				MylistCounter = thumb.mylist_counter
 
-					Cmsid = thumb.video_id,
-					Title = thumb.title,
-					Description = thumb.description,
-					ThumbNailUrl = thumb.thumbnail_url,
-					FirstRetrieve = thumb.first_retrieve,
-					Length = thumb.length,
-					MovieType = thumb.movie_type,
-					SizeHigh = thumb.size_high,
-					SizeLow = thumb.size_low,
-					ViewCounter = thumb.view_counter,
-					CommentCounter = thumb.comment_num,
-					MylistCounter = thumb.mylist_counter
-
-				};
+			};
 
 
-				return ret;
-			})).Result;
+			return ret;
 		}
 
 

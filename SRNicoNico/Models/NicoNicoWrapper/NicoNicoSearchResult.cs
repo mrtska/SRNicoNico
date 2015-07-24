@@ -89,7 +89,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			//Jsonからリストを取得、データを格納
 			foreach(var entry in json.list) {
 
-				NicoNicoSearchResultNode node = new NicoNicoSearchResultNode(entry.id, entry.title, (ulong)entry.view_counter, (ulong)entry.num_res,
+				NicoNicoSearchResultNode node = new NicoNicoSearchResultNode(entry.id, entry.title_short, (ulong)entry.view_counter, (ulong)entry.num_res,
 																				(ulong)entry.mylist_counter, entry.thumbnail_url, entry.length, entry.first_retrieve);
 
 				result.List.Add(node);
