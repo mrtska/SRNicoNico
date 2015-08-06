@@ -1,7 +1,6 @@
-<ResourceDictionary
+ <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	
     xmlns:local="clr-namespace:SRNicoNico.Views.Controls">
 
 
@@ -9,12 +8,26 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SeekBar}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}"  
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}" >
+                        <Grid>
+
+                            <!-- background -->
+                            <Rectangle Fill="#FF404040" Opacity="0.5" />
+                            <Rectangle Panel.ZIndex="1" Opacity="0.5" Fill="#FF3C3C3C" HorizontalAlignment="Left" Width="{TemplateBinding BufferedTimeString}" />
+                            <Rectangle Panel.ZIndex="2" Opacity="0.5" Fill="#FF5EA0FF" HorizontalAlignment="Left"  Width="{TemplateBinding CurrentTimeString}"/>
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+
+
+
     </Style>
+    
+    
 </ResourceDictionary>

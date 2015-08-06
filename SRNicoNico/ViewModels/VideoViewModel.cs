@@ -47,6 +47,8 @@ namespace SRNicoNico.ViewModels {
 		//キャッシュが存在するか否か
 		public bool CacheExists { get; set; }
 
+        //動画時間
+        public long Length { get; set; }
 
 
 		#region IsMouseOver変更通知プロパティ
@@ -101,9 +103,9 @@ namespace SRNicoNico.ViewModels {
 
 
 			//動画情報取得
-			Task.Run(new Action(() => {
+			Task.Run(() => {
 				ThumbInfo = NicoNicoGetThumbInfo.GetThumbInfo(cmsid);
-			}));
+			});
 
 			Media = Player.VlcMediaPlayer;
 			Media.EncounteredError += Media_EncounteredError;
@@ -111,7 +113,7 @@ namespace SRNicoNico.ViewModels {
 			Media.PositionChanged += Media_PositionChanged;
 			Media.EndReached += Media_EndReached;
 
-			Console.WriteLine(Process.GetCurrentProcess().Id);
+
 
 
 		}

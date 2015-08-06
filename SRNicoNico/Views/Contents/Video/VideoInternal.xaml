@@ -11,8 +11,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
-             d:DesignHeight="150"
-             d:DesignWidth="300"
+             d:DesignHeight="300"
+             d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              mc:Ignorable="d">
     <i:Interaction.Triggers>
@@ -27,7 +27,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
 
         <Wpf:VlcPlayer x:Name="VlcPlayer" Background="Black" Grid.RowSpan="2" Grid.ColumnSpan="2">

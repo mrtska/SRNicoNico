@@ -7,46 +7,38 @@ using System.Diagnostics;
 using Livet;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
-    public class BPSCounter :  NotificationObject {
-     
-        //通信速度を取得する
-        public static float Bps { get; private set; }
+	public class BPSCounter : NotificationObject {
 
-        //速度取得開始
-        public static void InitAndStart() {
+		//通信速度を取得する
+		public static float Bps { get; private set; }
 
-
-            Task.Run(() => {
-
-                PerformanceCounter counter = new PerformanceCounter();
-                counter.CategoryName = ".NET CLR Networking 4.0.0.0";
-                counter.CounterName = "Bytes Received";
-
-                counter.InstanceName = VersioningHelper.MakeVersionSafeName("SRNicoNico.exe", ResourceScope.Machine, ResourceScope.AppDomain);
-                counter.ReadOnly = true;
-                string str = VersioningHelper.MakeVersionSafeName("SRNicoNico.exe", ResourceScope.Machine, ResourceScope.AppDomain);
+		//速度取得開始
+		public static void InitAndStart() {
 
 
-                float f1 = 0, f2 = 0;
-                ;
-                for (;;) {
+			Task.Run(() => {
+
+				PerformanceCounter counter = new PerformanceCounter();
+				counter.CategoryName = ".NET CLR Networking 4.0.0.0";
+				counter.CounterName = "Bytes Received";
+				counter.InstanceName = VersioningHelper.MakeVersionSafeName("SRNicoNico.exe", ResourceScope.Machine, ResourceScope.AppDomain);
+				counter.ReadOnly = true;
+
+				float f1 = 0, f2 = 0;
+
+				for (;;) {
+
+					f2 = counter.NextValue();
+					float difReceived = f2 - f1;
+					f1 = f2;
 
 
-                    f2 = counter.NextValue();
-                    float difReceived = f2 - f1;
-                    f1 = f2;
+					Bps = difReceived;
+					Thread.Sleep(1000);
+				}
 
 
-                    Console.WriteLine("受信:" + difReceived + "KB/s");
-                    Thread.Sleep(1000);
-                }
-
-
-            });
-
-        }
-
-
-
-    }
+			});
+		}
+	}
 }

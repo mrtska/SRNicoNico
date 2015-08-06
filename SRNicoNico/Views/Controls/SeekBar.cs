@@ -46,10 +46,73 @@ namespace SRNicoNico.Views.Controls {
 	public class SeekBar : Control {
 
 
+		public long VideoTime {
+			get { return (long)GetValue(VideoTimeProperty); }
+			set { SetValue(VideoTimeProperty, value); }
+		}
+
+
+		// Using a DependencyProperty as the backing store for VideoTime.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty VideoTimeProperty =
+			DependencyProperty.Register("VideoTime", typeof(long), typeof(SeekBar), new PropertyMetadata(0L));
+
+
+
+
+		public long CurrentTime {
+			get { return (long)GetValue(CurrentTimeProperty); }
+			set { SetValue(CurrentTimeProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for CurrentTime.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty CurrentTimeProperty =
+			DependencyProperty.Register("CurrentTime", typeof(long), typeof(SeekBar), new PropertyMetadata(0L));
+
+
+
+		public double CurrentTimeString {
+			get { return (double)GetValue(CurrentTimeStringProperty); }
+			set { SetValue(CurrentTimeStringProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for CurrentTimeString.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty CurrentTimeStringProperty =
+			DependencyProperty.Register("CurrentTimeString", typeof(double), typeof(SeekBar), new PropertyMetadata(0.0));
+
+
+
+
+
+		public long BufferedTime {
+			get { return (long)GetValue(BufferedTimeProperty); }
+			set { SetValue(BufferedTimeProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for BufferedTime.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty BufferedTimeProperty =
+			DependencyProperty.Register("BufferedTime", typeof(long), typeof(SeekBar), new PropertyMetadata(0L));
+
+
+
+		public double BufferedTimeString {
+			get { return (double)GetValue(BufferedTimeStringProperty); }
+			set { SetValue(BufferedTimeStringProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for BufferedTimeString.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty BufferedTimeStringProperty =
+			DependencyProperty.Register("BufferedTimeString", typeof(double), typeof(SeekBar), new PropertyMetadata(0.0));
+
+
+
+
+
+
+
 
 		static SeekBar() {
+
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(SeekBar), new FrameworkPropertyMetadata(typeof(SeekBar)));
-			
 		}
 
 

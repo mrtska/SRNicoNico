@@ -9,14 +9,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
+             xmlns:seek="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="25" d:DesignWidth="374.394">
+             d:DesignHeight="43.895" d:DesignWidth="374.394">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="25"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <mui:ModernButton VerticalAlignment="Top" HorizontalAlignment="Left" IconData="m 0,0 L 0,10 L 0,15 L 10,7" Grid.Column="0" >
+        <mui:ModernButton VerticalAlignment="Top" HorizontalAlignment="Left" IconData="m 0,0 L 0,10 L 0,15 L 10,7" Grid.Column="0" Grid.RowSpan="2" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                     <l:LivetCallMethodAction MethodName="Play" MethodTarget="{Binding}" />
@@ -24,7 +29,10 @@
             </i:Interaction.Triggers>
 
         </mui:ModernButton>
-        <Slider Grid.Column="1" Height="24" HorizontalAlignment="Stretch" Width="auto" Value="{Binding Position}" Maximum="1" Minimum="0" SmallChange="0.001" LargeChange="0.001" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
+        <seek:SeekBar Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" />
+
+
+        <!-- <Slider Grid.Column="1" Height="24" HorizontalAlignment="Stretch" Width="auto" Value="{Binding Position}" Maximum="1" Minimum="0" SmallChange="0.001" LargeChange="0.001" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/> -->
 
     </Grid>
 </UserControl>

@@ -18,6 +18,8 @@ using SRNicoNico.Views.Contents.Search;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 
+using SRNicoNico.Models.NicoNicoViewer;
+
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
 
@@ -120,8 +122,10 @@ namespace SRNicoNico.ViewModels {
 
 					//ログイン成功
 					NicoNicoWrapperMain.Instance.init();
-                    NicoNicoNicoRepo.Debug();
 
+					//通信速度監視
+					BPSCounter.InitAndStart();
+					
 
 
 				//手動ログイン
