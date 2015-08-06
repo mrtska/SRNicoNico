@@ -33,8 +33,12 @@ namespace SRNicoNico.ViewModels {
 				//ViewをVideoに変える
 				App.ViewModelRoot.Content = App.ViewModelRoot.Video;
 
-				//GetFlvAPIを叩いたてサーバーを取得
-				NicoNicoGetFlvData data = NicoNicoGetFlv.GetFlv(Node.cmsid);
+
+                NicoNicoGetFlv.AccessVideoPage(Node.cmsid);
+
+
+                //GetFlvAPIを叩いたてサーバーを取得
+                NicoNicoGetFlvData data = NicoNicoGetFlv.GetFlv(Node.cmsid);
 
 				//cacheディレクトリを無ければ作成
 				Directory.CreateDirectory(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\cache");

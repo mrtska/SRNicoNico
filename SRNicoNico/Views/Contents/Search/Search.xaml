@@ -10,7 +10,7 @@
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
 			 xmlns:root="clr-namespace:SRNicoNico"
              d:DataContext="{d:DesignInstance {x:Type vm:SearchViewModel}}"
-             d:DesignHeight="347"
+             d:DesignHeight="500"
              d:DesignWidth="211"
              mc:Ignorable="d"
 			 DataContext="{Binding Search}"

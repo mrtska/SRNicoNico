@@ -6,7 +6,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows;
+using System.Runtime.Versioning;
 
 using Livet;
 using Livet.Commands;
@@ -47,23 +49,23 @@ namespace SRNicoNico.ViewModels {
 
 
 
-        #region IsMouseOver変更通知プロパティ
-        private Visibility _IsMouseOver = Visibility.Hidden;
+		#region IsMouseOver変更通知プロパティ
+		private Visibility _IsMouseOver = Visibility.Hidden;
 
-        public Visibility IsMouseOver {
-            get { return _IsMouseOver; }
-            set { 
-                if (_IsMouseOver == value)
-                    return;
-                _IsMouseOver = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
+		public Visibility IsMouseOver {
+			get { return _IsMouseOver; }
+			set {
+				if (_IsMouseOver == value)
+					return;
+				_IsMouseOver = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
 
 
-        //動画情報
-        private NicoNicoGetThumbInfoData _ThumbInfo;
+		//動画情報
+		private NicoNicoGetThumbInfoData _ThumbInfo;
 		public NicoNicoGetThumbInfoData ThumbInfo {
 
 			get {
@@ -72,7 +74,7 @@ namespace SRNicoNico.ViewModels {
 			}
 			private set {
 
-				if(_ThumbInfo == value) {
+				if (_ThumbInfo == value) {
 
 					return;
 				}
@@ -82,17 +84,21 @@ namespace SRNicoNico.ViewModels {
 		}
 
 
-        public void MouseOver() {
+		public void MouseOver() {
 
-            IsMouseOver = Visibility.Visible;
-        }
+			IsMouseOver = Visibility.Visible;
+		}
 
-        public void  MouseLeave() {
+		public void MouseLeave() {
 
-            IsMouseOver = Visibility.Hidden;
-        }
+			IsMouseOver = Visibility.Hidden;
+		}
 
 		public void Initialize() {
+
+            
+
+
 
 			//動画情報取得
 			Task.Run(new Action(() => {
@@ -103,9 +109,20 @@ namespace SRNicoNico.ViewModels {
 			Media.EncounteredError += Media_EncounteredError;
 			Media.SeekableChanged += Media_SeekableChanged;
 			Media.PositionChanged += Media_PositionChanged;
+			Media.EndReached += Media_EndReached;
 
-			
-            
+			Console.WriteLine(Process.GetCurrentProcess().Id);
+
+
+		}
+
+		private void Media_EndReached(object sender, EventArgs e) {
+
+			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+				Player.Position = 0;
+				Player.Play();
+			}));
 		}
 
 		private void Media_PositionChanged(object sender, EventArgs e) {
@@ -115,7 +132,7 @@ namespace SRNicoNico.ViewModels {
 
 				Console.WriteLine("ポジション:" + Player.Position);
 			}));
-			
+
 		}
 
 
@@ -125,7 +142,7 @@ namespace SRNicoNico.ViewModels {
 
 				FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage("シークが可能になります。", "SeekableChanged", System.Windows.MessageBoxButton.OK);
 			}));
-			
+
 		}
 
 		private void Media_EncounteredError(object sender, EventArgs e) {
@@ -140,7 +157,7 @@ namespace SRNicoNico.ViewModels {
 			Task.Run(new Action(() => {
 
 				//キャッシュが存在したら最後までシークする
-				if(CacheExists) {
+				if (CacheExists) {
 
 					CacheStream.Seek(0, SeekOrigin.End);
 				}
@@ -171,7 +188,7 @@ namespace SRNicoNico.ViewModels {
 				Player.Dispose();
 			}
 
-			if(CacheStream != null) {
+			if (CacheStream != null) {
 
 				CacheStream.Close();
 				CacheStream.Dispose();

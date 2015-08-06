@@ -24,7 +24,7 @@
             </i:Interaction.Triggers>
 
         </mui:ModernButton>
-        <Slider Grid.Column="1" Height="24" HorizontalAlignment="Stretch" Width="auto" Value="{Binding Position, ElementName=VlcPlayer}" Maximum="1" Minimum="0" SmallChange="0.001" LargeChange="0.001" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
+        <Slider Grid.Column="1" Height="24" HorizontalAlignment="Stretch" Width="auto" Value="{Binding Position}" Maximum="1" Minimum="0" SmallChange="0.001" LargeChange="0.001" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
 
     </Grid>
 </UserControl>

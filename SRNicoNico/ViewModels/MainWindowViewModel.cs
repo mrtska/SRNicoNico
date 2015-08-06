@@ -120,6 +120,7 @@ namespace SRNicoNico.ViewModels {
 
 					//ログイン成功
 					NicoNicoWrapperMain.Instance.init();
+                    NicoNicoNicoRepo.Debug();
 
 
 

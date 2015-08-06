@@ -41,7 +41,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		public const string WatchURL = "http://www.nicovideo.jp/watch/";
 
 
-		private static void AccessVideoPage(string cmsid) {
+		public static void AccessVideoPage(string cmsid) {
 
 			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Head, WatchURL + cmsid);
 			var a = NicoNicoWrapperMain.getSession().HttpClient.SendAsync(message).Result;
