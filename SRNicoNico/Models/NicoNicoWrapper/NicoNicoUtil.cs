@@ -40,6 +40,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			}
 		}
 
+        //n:nをnに変換
+        public static long GetTimeOfLong(string s) {
+
+            string[] strings = s.Split(':');
+            string minutes = strings[0];
+            string seconds = strings[1];
+
+            return (long.Parse(minutes) * 60) + long.Parse(seconds);
+        }
+
 
 
 

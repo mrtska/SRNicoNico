@@ -29,7 +29,7 @@ namespace SRNicoNico.ViewModels {
 			//UIスレッドは使わない
 			Task.Run(new Action(() => {
 
-				App.ViewModelRoot.Video.cmsid = Node.cmsid;
+				App.ViewModelRoot.Video.Cmsid = Node.cmsid;
 				//ViewをVideoに変える
 				App.ViewModelRoot.Content = App.ViewModelRoot.Video;
 

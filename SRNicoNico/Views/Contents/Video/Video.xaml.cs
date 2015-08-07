@@ -21,5 +21,8 @@ namespace SRNicoNico.Views.Contents.Video {
 		public Video() {
 			InitializeComponent();
 		}
+
+
+
 	}
 }

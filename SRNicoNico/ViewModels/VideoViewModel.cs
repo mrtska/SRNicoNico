@@ -27,7 +27,7 @@ namespace SRNicoNico.ViewModels {
 	public class VideoViewModel : ViewModel {
 
 		//動画ID
-		public string cmsid { get; set; }
+		public string Cmsid { get; set; }
 
 		//キャッシュパス
 		public string Path { get; set; }
@@ -47,8 +47,24 @@ namespace SRNicoNico.ViewModels {
 		//キャッシュが存在するか否か
 		public bool CacheExists { get; set; }
 
-        //動画時間
+        //動画時間 long型
         public long Length { get; set; }
+
+
+		#region CurrentTime変更通知プロパティ
+		private long _CurrentTime;
+
+		public long CurrentTime {
+			get { return _CurrentTime; }
+			set { 
+				if (_CurrentTime == value)
+					return;
+				_CurrentTime = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
+
 
 
 		#region IsMouseOver変更通知プロパティ
@@ -67,11 +83,11 @@ namespace SRNicoNico.ViewModels {
 
 
 		//動画情報
+		#region ThumInfo変更通知プロパティ
 		private NicoNicoGetThumbInfoData _ThumbInfo;
 		public NicoNicoGetThumbInfoData ThumbInfo {
 
 			get {
-
 				return _ThumbInfo;
 			}
 			private set {
@@ -84,7 +100,7 @@ namespace SRNicoNico.ViewModels {
 				RaisePropertyChanged();
 			}
 		}
-
+		#endregion
 
 		public void MouseOver() {
 
@@ -96,67 +112,27 @@ namespace SRNicoNico.ViewModels {
 			IsMouseOver = Visibility.Hidden;
 		}
 
+
+
 		public void Initialize() {
 
             
-
-
-
 			//動画情報取得
 			Task.Run(() => {
-				ThumbInfo = NicoNicoGetThumbInfo.GetThumbInfo(cmsid);
+				ThumbInfo = NicoNicoGetThumbInfo.GetThumbInfo(Cmsid);
+                Length = NicoNicoUtil.GetTimeOfLong(ThumbInfo.Length);
 			});
 
-			Media = Player.VlcMediaPlayer;
-			Media.EncounteredError += Media_EncounteredError;
-			Media.SeekableChanged += Media_SeekableChanged;
-			Media.PositionChanged += Media_PositionChanged;
-			Media.EndReached += Media_EndReached;
 
 
 
 
 		}
 
-		private void Media_EndReached(object sender, EventArgs e) {
-
-			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-				Player.Position = 0;
-				Player.Play();
-			}));
-		}
-
-		private void Media_PositionChanged(object sender, EventArgs e) {
-
-
-			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-				Console.WriteLine("ポジション:" + Player.Position);
-			}));
-
-		}
-
-
-		private void Media_SeekableChanged(object sender, EventArgs e) {
-
-			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-				FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage("シークが可能になります。", "SeekableChanged", System.Windows.MessageBoxButton.OK);
-			}));
-
-		}
-
-		private void Media_EncounteredError(object sender, EventArgs e) {
-
-
-			FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage("エラーが発生しました。(-1221)", "EncounteredError", System.Windows.MessageBoxButton.OK);
-
-		}
 
 		public void StartStreaming() {
 
-			Task.Run(new Action(() => {
+			Task.Run(() => {
 
 				//キャッシュが存在したら最後までシークする
 				if (CacheExists) {
@@ -165,7 +141,7 @@ namespace SRNicoNico.ViewModels {
 				}
 
 				VideoStream.CopyTo(CacheStream);
-			}));
+			});
 
 			Thread.Sleep(1000);
 			Player.LoadMedia(Path);
