@@ -20,14 +20,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		public NicoNicoUser User { get; internal set; }
 
 		//セッションが確立した後に呼ぶ
-		public void init() {
+		public void PostInit() {
 
 			this.User = new NicoNicoUser(Session.UserId);
 			App.ViewModelRoot.Title += "(user:" + this.User.UserName + ")";
 		}
 			
 		//現在のセッションを取得
-		public static NicoNicoSession getSession() {
+		public static NicoNicoSession GetSession() {
 
 			if(Instance == null) {
 
@@ -36,6 +36,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			return Instance.Session;
 		}
+
+
+
+		
 
 
 			

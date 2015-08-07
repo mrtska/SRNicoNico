@@ -36,7 +36,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			string uri = UserLookUpURL + userId;
 
-			Task<string> task = NicoNicoWrapperMain.getSession().HttpClient.GetStringAsync(uri);
+			Task<string> task = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(uri);
 
 			string json = NicoNicoUtil.XmlToJson(task.Result);
             

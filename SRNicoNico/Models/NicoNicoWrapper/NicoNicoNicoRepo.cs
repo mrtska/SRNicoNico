@@ -20,7 +20,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public static void Debug() {
 
-            string html = NicoNicoWrapperMain.getSession().HttpClient.GetStringAsync(NicoRepoUrl).Result;
+            string html = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(NicoRepoUrl).Result;
 
             string token = "dummy";
 
@@ -45,7 +45,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             
             
 
-            var a = NicoNicoWrapperMain.getSession().HttpClient.SendAsync(request).Result;
+            var a = NicoNicoWrapperMain.GetSession().HttpClient.SendAsync(request).Result;
             Console.WriteLine(a.Content.ReadAsStringAsync().Result);
             ;
 

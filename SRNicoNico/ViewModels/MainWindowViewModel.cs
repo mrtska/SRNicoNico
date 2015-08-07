@@ -121,7 +121,7 @@ namespace SRNicoNico.ViewModels {
 					}
 
 					//ログイン成功
-					NicoNicoWrapperMain.Instance.init();
+					NicoNicoWrapperMain.Instance.PostInit();
 
 					//通信速度監視
 					BPSCounter.InitAndStart();
@@ -145,8 +145,8 @@ namespace SRNicoNico.ViewModels {
 
 			if(disposing) {
 
-				NicoNicoWrapperMain.getSession().HttpHandler.Dispose();
-				NicoNicoWrapperMain.getSession().HttpClient.Dispose();
+				NicoNicoWrapperMain.GetSession().HttpHandler.Dispose();
+				NicoNicoWrapperMain.GetSession().HttpClient.Dispose();
 
 				Video.DisposePlayer();
 				;

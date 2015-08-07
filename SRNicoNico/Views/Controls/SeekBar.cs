@@ -57,11 +57,17 @@ namespace SRNicoNico.Views.Controls {
 			DependencyProperty.Register("VideoTime", typeof(long), typeof(SeekBar), new PropertyMetadata(0L));
 
 
-
+		
 
 		public long CurrentTime {
 			get { return (long)GetValue(CurrentTimeProperty); }
-			set { SetValue(CurrentTimeProperty, value); }
+			set {
+				SetValue(CurrentTimeProperty, value);
+
+				//シークバーの横幅に合わせて指定
+				CurrentTimeString = ActualWidth / VideoTime * value;
+				Console.WriteLine("シークバー:" + CurrentTimeString);
+			}
 		}
 
 		// Using a DependencyProperty as the backing store for CurrentTime.  This enables animation, styling, binding, etc...

@@ -30,11 +30,7 @@
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
 
-        <Wpf:VlcPlayer x:Name="VlcPlayer" Background="Black" Grid.RowSpan="2" Grid.ColumnSpan="2" Initialized="VlcPlayer_Initialized">
-            <i:Interaction.Behaviors>
-                <Behaviors:VlcBehavior />
-            </i:Interaction.Behaviors>
-        </Wpf:VlcPlayer>
+        <Wpf:VlcPlayer x:Name="VlcPlayer" Background="Black" Grid.RowSpan="2" Initialized="VlcPlayer_Initialized" PositionChanged="VlcPlayer_PositionChanged" />
 
         <local:VideoController Grid.Row="1" Visibility="{Binding IsMouseOver}" />
 

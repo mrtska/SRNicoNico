@@ -11,6 +11,8 @@ using System.Web.Script.Serialization;
 
 using Livet;
 
+using SRNicoNico.ViewModels;
+
 namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoSearch : NotificationObject {
 		/*
@@ -46,24 +48,62 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		}
 
 		//検索結果 json デシリアライズはこのクラスでは行わない
-		public string Response() {
+		private string Response() {
 
 			//URLに検索キーワードを入れる
 			string search = SearchURL + "search/" + this.Keyword + "?mode=watch" + this.Sort + this.Order + "&page=" + CurrentPage++;
 
-			HttpResponseMessage response = NicoNicoWrapperMain.getSession().HttpClient.GetAsync(search).Result;
+			HttpResponseMessage response = NicoNicoWrapperMain.GetSession().HttpClient.GetAsync(search).Result;
 			return response.Content.ReadAsStringAsync().Result;
 		}
 
-		public string Next() {
+		public void Search() {
+
+
+			//検索結果をUIに
+			NicoNicoSearchResult result = NicoNicoSearchResult.Deserialize(Response());
+
+
+			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+				App.ViewModelRoot.SearchResult.Total = String.Format("{0:#,0}", result.Total) + "件の動画";
+
+				App.ViewModelRoot.SearchResult.List.Clear();
+				foreach (NicoNicoSearchResultNode node in result.List) {
+
+					SearchResultEntryViewModel vm = new SearchResultEntryViewModel();
+					vm.Node = node;
+					App.ViewModelRoot.SearchResult.List.Add(vm);
+				}
+			}));
+		}
+
+
+		private string Next() {
 
 			string search = SearchURL + "search/" + this.Keyword + "?mode=watch" + this.Sort + this.Order + "&page=" + CurrentPage++;
 
-			HttpResponseMessage response = NicoNicoWrapperMain.getSession().HttpClient.GetAsync(search).Result;
+			HttpResponseMessage response = NicoNicoWrapperMain.GetSession().HttpClient.GetAsync(search).Result;
 			return response.Content.ReadAsStringAsync().Result;
 		}
 
+		public void SearchNext() {
 
+			//検索結果をUIに
+			NicoNicoSearchResult result = NicoNicoSearchResult.Deserialize(Next());
+
+			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+				foreach (NicoNicoSearchResultNode node in result.List) {
+
+					SearchResultEntryViewModel vm = new SearchResultEntryViewModel();
+					vm.Node = node;
+					App.ViewModelRoot.SearchResult.List.Add(vm);
+				}
+
+			}));
+
+		}
 
 
 

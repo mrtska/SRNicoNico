@@ -18,7 +18,7 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using xZune.Vlc.Wpf;
-using xZune.Vlc;
+
 
 using SRNicoNico.Models.NicoNicoWrapper;
 
@@ -35,20 +35,23 @@ namespace SRNicoNico.ViewModels {
 		//プレイヤーインスタンス
 		public VlcPlayer Player { get; set; }
 
-		//メディアプレイヤーインスタンス
-		public VlcMediaPlayer Media { get; set; }
+		public NicoNicoStream Stream { get; set; }
 
-		//キャッシュのストリーム
-		public FileStream CacheStream { get; set; }
-
-		//ストリーミングサーバーからのストリーム
-		public Stream VideoStream { get; set; }
-
-		//キャッシュが存在するか否か
-		public bool CacheExists { get; set; }
 
         //動画時間 long型
-        public long Length { get; set; }
+		#region Length変更通知プロパティ
+		private long _Length;
+
+		public long Length {
+			get { return _Length; }
+			set { 
+				if (_Length == value)
+					return;
+				_Length = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
 
 
 		#region CurrentTime変更通知プロパティ
@@ -64,6 +67,24 @@ namespace SRNicoNico.ViewModels {
 			}
 		}
 		#endregion
+
+
+		
+
+		#region BPS変更通知プロパティ
+		private string _BPS;
+
+		public string BPS {
+			get { return _BPS; }
+			set { 
+				if (_BPS == value)
+					return;
+				_BPS = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
+
 
 
 
@@ -116,47 +137,19 @@ namespace SRNicoNico.ViewModels {
 
 		public void Initialize() {
 
-            
 			//動画情報取得
 			Task.Run(() => {
 				ThumbInfo = NicoNicoGetThumbInfo.GetThumbInfo(Cmsid);
-                Length = NicoNicoUtil.GetTimeOfLong(ThumbInfo.Length);
+				Length = NicoNicoUtil.GetTimeOfLong(ThumbInfo.Length);
 			});
-
-
-
-
-
 		}
-
-
-		public void StartStreaming() {
-
-			Task.Run(() => {
-
-				//キャッシュが存在したら最後までシークする
-				if (CacheExists) {
-
-					CacheStream.Seek(0, SeekOrigin.End);
-				}
-
-				VideoStream.CopyTo(CacheStream);
-			});
-
-			Thread.Sleep(1000);
-			Player.LoadMedia(Path);
-		}
-
-
-
 
 		public void Play() {
 
+			Player.LoadMedia(Path);
 			Player.Play();
 			Player.PauseOrResume();
 		}
-
-
 
 		public void DisposePlayer() {
 
@@ -165,21 +158,6 @@ namespace SRNicoNico.ViewModels {
 
 				Player.Dispose();
 			}
-
-			if (CacheStream != null) {
-
-				CacheStream.Close();
-				CacheStream.Dispose();
-			}
-
-			if (VideoStream != null) {
-
-				VideoStream.Close();
-				VideoStream.Dispose();
-			}
-
 		}
-
-
 	}
 }

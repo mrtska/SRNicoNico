@@ -16,7 +16,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//API叩き 非同期
 		private static async Task<string> GetThumbInfoAsync(string cmsid) {
 
-			return await NicoNicoWrapperMain.getSession().HttpClient.GetStringAsync(GetThumbInfoUrl + cmsid);
+			return await NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(GetThumbInfoUrl + cmsid);
 		}
 
 

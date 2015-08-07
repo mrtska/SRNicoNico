@@ -23,7 +23,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		public static NicoNicoGetFlvData GetFlv(string cmsid) {
 
 
-			return NicoNicoWrapperMain.getSession().HttpClient.GetStringAsync(GetFlvURL + cmsid).ContinueWith<NicoNicoGetFlvData>(task => {
+			return NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(GetFlvURL + cmsid).ContinueWith<NicoNicoGetFlvData>(task => {
 
 				string response = task.Result;
 				Console.WriteLine(System.Web.HttpUtility.UrlDecode(response));
@@ -44,7 +44,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		public static void AccessVideoPage(string cmsid) {
 
 			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Head, WatchURL + cmsid);
-			var a = NicoNicoWrapperMain.getSession().HttpClient.SendAsync(message).Result;
+			var a = NicoNicoWrapperMain.GetSession().HttpClient.SendAsync(message).Result;
 			System.Diagnostics.Debug.WriteLine(a);
 
 		}
@@ -53,7 +53,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			AccessVideoPage(cmsid);
 
-			return NicoNicoWrapperMain.getSession().HttpClient.GetStreamAsync(videoUrl).Result;
+			return NicoNicoWrapperMain.GetSession().HttpClient.GetStreamAsync(videoUrl).Result;
 		}
 
 
@@ -67,7 +67,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, videoUrl);
 			message.Headers.Range = new RangeHeaderValue(length, null);
 			
-			HttpResponseMessage response = NicoNicoWrapperMain.getSession().HttpClient.SendAsync(message).Result;
+			HttpResponseMessage response = NicoNicoWrapperMain.GetSession().HttpClient.SendAsync(message).Result;
 
 			;
 
