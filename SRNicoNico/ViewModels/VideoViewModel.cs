@@ -19,7 +19,7 @@ using Livet.Messaging.Windows;
 
 using xZune.Vlc.Wpf;
 
-
+using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
@@ -54,21 +54,7 @@ namespace SRNicoNico.ViewModels {
 		#endregion
 
 
-		#region CurrentTime変更通知プロパティ
-		private long _CurrentTime;
-
-		public long CurrentTime {
-			get { return _CurrentTime; }
-			set { 
-				if (_CurrentTime == value)
-					return;
-				_CurrentTime = value;
-				RaisePropertyChanged();
-			}
-		}
-		#endregion
-
-
+		public VideoTime Time { get; set; }
 		
 
 		#region BPS変更通知プロパティ
@@ -139,6 +125,7 @@ namespace SRNicoNico.ViewModels {
 
 			//動画情報取得
 			Task.Run(() => {
+				Time = new VideoTime();
 				ThumbInfo = NicoNicoGetThumbInfo.GetThumbInfo(Cmsid);
 				Length = NicoNicoUtil.GetTimeOfLong(ThumbInfo.Length);
 			});

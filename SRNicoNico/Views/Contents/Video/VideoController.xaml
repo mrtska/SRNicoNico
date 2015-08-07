@@ -32,9 +32,9 @@
             </i:Interaction.Triggers>
 
         </mui:ModernButton>
-        <seek:SeekBar Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VideoTime="{Binding Length}" CurrentTime="{Binding CurrentTime}" />
+        <seek:SeekBar x:Name="Seek"  Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VideoTime="{Binding Length}" CurrentTime="{Binding Time.CurrentTime}" CurrentTimeWidth="{Binding Time.CurrentTimeWidth}" />
         <StackPanel Grid.Column="1" Orientation="Horizontal" >
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding CurrentTime}" Height="25" Foreground="#FFAAAAAA" FontSize="16"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Time.CurrentTime}" Height="25" Foreground="#FFAAAAAA" FontSize="16"/>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="/" Foreground="#FFAAAAAA" FontSize="16" Padding="5,0" />
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Length}" Height="25" Foreground="#FFAAAAAA" FontSize="16"/>
 

@@ -16,8 +16,8 @@
 
                             <!-- background -->
                             <Rectangle Fill="#FF404040" Opacity="0.5" />
-                            <Rectangle Panel.ZIndex="1" Opacity="0.5" Fill="#FF3C3C3C" HorizontalAlignment="Left" Width="{TemplateBinding BufferedTimeString}" />
-                            <Rectangle Panel.ZIndex="2" Opacity="0.5" Fill="#FF5EA0FF" HorizontalAlignment="Left"  Width="{TemplateBinding CurrentTimeString}"/>
+                            <Rectangle Panel.ZIndex="1" Opacity="0.5" Fill="#FF3C3C3C" HorizontalAlignment="Left" Width="0" />
+                            <Rectangle Panel.ZIndex="2" Opacity="0.5" Fill="#FF5EA0FF" HorizontalAlignment="Left" Width="{TemplateBinding CurrentTimeWidth}"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>

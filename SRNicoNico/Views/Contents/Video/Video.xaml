@@ -55,8 +55,7 @@
                 <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding ThumbInfo.ViewCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding ThumbInfo.CommentCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding ThumbInfo.MylistCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
-
-
+    
             </StackPanel>
             
         </Grid>

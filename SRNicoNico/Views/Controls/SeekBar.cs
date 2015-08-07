@@ -54,36 +54,30 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for VideoTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty VideoTimeProperty =
-			DependencyProperty.Register("VideoTime", typeof(long), typeof(SeekBar), new PropertyMetadata(0L));
+			DependencyProperty.Register("VideoTime", typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
 
 
 		
 
 		public long CurrentTime {
 			get { return (long)GetValue(CurrentTimeProperty); }
-			set {
-				SetValue(CurrentTimeProperty, value);
-
-				//シークバーの横幅に合わせて指定
-				CurrentTimeString = ActualWidth / VideoTime * value;
-				Console.WriteLine("シークバー:" + CurrentTimeString);
-			}
+			set { SetValue(CurrentTimeProperty, value);	}
 		}
 
 		// Using a DependencyProperty as the backing store for CurrentTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty CurrentTimeProperty =
-			DependencyProperty.Register("CurrentTime", typeof(long), typeof(SeekBar), new PropertyMetadata(0L));
+			DependencyProperty.Register("CurrentTime", typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
 
 
 
-		public double CurrentTimeString {
-			get { return (double)GetValue(CurrentTimeStringProperty); }
-			set { SetValue(CurrentTimeStringProperty, value); }
+		public double CurrentTimeWidth {
+			get { return (double)GetValue(CurrentTimeWidthProperty); }
+			set { SetValue(CurrentTimeWidthProperty, value); }
 		}
 
 		// Using a DependencyProperty as the backing store for CurrentTimeString.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty CurrentTimeStringProperty =
-			DependencyProperty.Register("CurrentTimeString", typeof(double), typeof(SeekBar), new PropertyMetadata(0.0));
+		public static readonly DependencyProperty CurrentTimeWidthProperty =
+			DependencyProperty.Register("CurrentTimeWidth", typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0.0));
 
 
 
@@ -96,7 +90,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for BufferedTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty BufferedTimeProperty =
-			DependencyProperty.Register("BufferedTime", typeof(long), typeof(SeekBar), new PropertyMetadata(0L));
+			DependencyProperty.Register("BufferedTime", typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
 
 
 
@@ -107,7 +101,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for BufferedTimeString.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty BufferedTimeStringProperty =
-			DependencyProperty.Register("BufferedTimeString", typeof(double), typeof(SeekBar), new PropertyMetadata(0.0));
+			DependencyProperty.Register("BufferedTimeString", typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0.0));
 
 
 

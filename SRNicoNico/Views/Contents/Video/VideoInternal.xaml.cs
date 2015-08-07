@@ -8,6 +8,8 @@ using xZune.Vlc;
 using Livet;
 using System.ComponentModel;
 
+using SRNicoNico.Models.NicoNicoViewer;
+
 namespace SRNicoNico.Views.Contents.Video {
 	/// <summary>
 	/// VideoInternal.xaml の相互作用ロジック
@@ -71,16 +73,25 @@ namespace SRNicoNico.Views.Contents.Video {
 
 		private void VlcPlayer_PositionChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
+			VideoTime time = App.ViewModelRoot.Video.Time;
 
 
 			
-			App.ViewModelRoot.Video.CurrentTime = (long)(App.ViewModelRoot.Video.Length * Media.Position);
-			App.ViewModelRoot.Video.BPS = (Models.NicoNicoViewer.BPSCounter.Bps / 1024) + "KiB/秒";
-			Console.WriteLine("ポジション:" + App.ViewModelRoot.Video.CurrentTime);
-			if(App.ViewModelRoot.Video.CurrentTime == App.ViewModelRoot.Video.Length) {
+			time.CurrentTime = (long)(App.ViewModelRoot.Video.Length * Media.Position);
+			Console.WriteLine("ポジション:" + App.ViewModelRoot.Video.Time.CurrentTime);
+			time.CurrentTimeWidth = Controller.Seek.ActualWidth / App.ViewModelRoot.Video.Length * time.CurrentTime;
+			Console.WriteLine("シークバー:" + time.CurrentTimeWidth);
+
+
+
+
+			if(App.ViewModelRoot.Video.Time.CurrentTime == App.ViewModelRoot.Video.Length) {
 
 				Player.Position = 0F;
 			}
+
+
+			App.ViewModelRoot.Video.BPS = (Models.NicoNicoViewer.BPSCounter.Bps / 1024) + "KiB/秒";
 
 		}
 	}
