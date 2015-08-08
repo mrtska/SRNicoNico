@@ -15,14 +15,6 @@
              d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              mc:Ignorable="d">
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="MouseEnter">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="MouseOver" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="MouseLeave">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="MouseLeave" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -31,9 +23,6 @@
         </Grid.RowDefinitions>
 
         <Wpf:VlcPlayer x:Name="VlcPlayer" Background="Black" Grid.RowSpan="2" Initialized="VlcPlayer_Initialized" PositionChanged="VlcPlayer_PositionChanged" />
-
-        <local:VideoController x:Name="Controller"  Grid.Row="1" Visibility="{Binding IsMouseOver}" />
-
 
 
 

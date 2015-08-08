@@ -18,16 +18,21 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
-            <RowDefinition Height="27*"/>
-            <RowDefinition Height="23*"/>
+            <RowDefinition Height="154*"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="113*"/>
         </Grid.RowDefinitions>
         <!-- 動画タイトル -->
-        <TextBlock HorizontalAlignment="Left" Grid.Row="0" TextWrapping="Wrap" FontSize="20" Text="{Binding ThumbInfo.Title}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Grid.Row="0" TextWrapping="NoWrap" FontSize="20" Text="{Binding ThumbInfo.Title}" VerticalAlignment="Top"/>
 
         <!-- プレイヤー -->
         <video:VideoInternal Grid.Row="1" />
 
-        <Grid Grid.Row="2" >
+        
+        <video:VideoController x:Name="Controller"  Grid.Row="2" Visibility="Visible" />
+
+
+        <Grid Grid.Row="3" Grid.RowSpan="2" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="90"/>
@@ -47,7 +52,7 @@
 
                 </StackPanel>
             </Border>
-           
+
 
             <StackPanel Margin="5" Grid.Column="2" Orientation="Vertical">
 
@@ -55,9 +60,9 @@
                 <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding ThumbInfo.ViewCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding ThumbInfo.CommentCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding ThumbInfo.MylistCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
-    
+
             </StackPanel>
-            
+
         </Grid>
 
 

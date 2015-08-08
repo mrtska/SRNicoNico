@@ -56,11 +56,7 @@ namespace SRNicoNico.Views.Contents.Video {
 
 		private void Media_SeekableChanged(object sender, EventArgs e) {
 
-			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-				FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage("シークが可能になります。", "SeekableChanged", MessageBoxButton.OK);
-
-			}));
-			
+			Console.WriteLine("シーク可能");
 
 		}
 
@@ -73,19 +69,28 @@ namespace SRNicoNico.Views.Contents.Video {
 
 		private void VlcPlayer_PositionChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
+			if ((bool)(DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue)) {
+				return;
+			}
+
 			VideoTime time = App.ViewModelRoot.Video.Time;
 
 
 			
 			time.CurrentTime = (long)(App.ViewModelRoot.Video.Length * Media.Position);
 			Console.WriteLine("ポジション:" + App.ViewModelRoot.Video.Time.CurrentTime);
-			time.CurrentTimeWidth = Controller.Seek.ActualWidth / App.ViewModelRoot.Video.Length * time.CurrentTime;
+			time.CurrentTimeWidth = ActualWidth / App.ViewModelRoot.Video.Length * time.CurrentTime;
 			Console.WriteLine("シークバー:" + time.CurrentTimeWidth);
 
+			App.ViewModelRoot.Video.SeekCursor = new Thickness(time.CurrentTimeWidth,0, 0, 0);
 
 
 
-			if(App.ViewModelRoot.Video.Time.CurrentTime == App.ViewModelRoot.Video.Length) {
+
+
+
+
+			if (App.ViewModelRoot.Video.Time.CurrentTime == App.ViewModelRoot.Video.Length) {
 
 				Player.Position = 0F;
 			}

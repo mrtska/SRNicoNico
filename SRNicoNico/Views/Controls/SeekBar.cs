@@ -57,6 +57,7 @@ namespace SRNicoNico.Views.Controls {
 			DependencyProperty.Register("VideoTime", typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
 
 
+
 		
 
 		public long CurrentTime {
@@ -105,8 +106,14 @@ namespace SRNicoNico.Views.Controls {
 
 
 
+		public Thickness SeekCursor {
+			get { return (Thickness)GetValue(SeekCursorProperty); }
+			set { SetValue(SeekCursorProperty, value); }
+		}
 
-
+		// Using a DependencyProperty as the backing store for SeekCursor.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty SeekCursorProperty =
+			DependencyProperty.Register("SeekCursor", typeof(Thickness), typeof(SeekBar), new FrameworkPropertyMetadata(null));
 
 
 
@@ -115,20 +122,24 @@ namespace SRNicoNico.Views.Controls {
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(SeekBar), new FrameworkPropertyMetadata(typeof(SeekBar)));
 		}
 
+		public SeekBar() {
+
+
+			MouseEnter += SeekBar_MouseEnter;
+			MouseDown += SeekBar_MouseDown;
+		}
+
+		private void SeekBar_MouseDown(object sender, MouseButtonEventArgs e) {
 
 
 
+			throw new NotImplementedException();
+		}
+
+		private void SeekBar_MouseEnter(object sender, MouseEventArgs e) {
 
 
-
-
-
-
-
-
-
-
-
-
+			throw new NotImplementedException();
+		}
 	}
 }
