@@ -21,7 +21,7 @@
                             <Rectangle Panel.ZIndex="3" HorizontalAlignment="Left" Width="10" Margin="{TemplateBinding SeekCursor}" Fill="#FF8B8B8B" />
 
 
-                            <Popup AllowsTransparency="True" IsOpen="{TemplateBinding IsPopupOpen}" PlacementRectangle="{TemplateBinding PopupImageRect}" PopupAnimation="Slide">
+                            <Popup AllowsTransparency="True" IsOpen="{TemplateBinding IsPopupImageOpen}" PlacementRectangle="{TemplateBinding PopupImageRect}" PopupAnimation="Slide" Placement="Top" >
                                 <Border BorderThickness="1" BorderBrush="#FFAAAAAA">
 
                                     <Image Source="{TemplateBinding PopupImage}" />

@@ -159,10 +159,19 @@ namespace SRNicoNico.ViewModels {
 
 				LoadStatus = "ストーリーボード取得中";
 				VideoData.StoryBoardData = new NicoNicoStoryBoard(VideoData.GetFlvData.VideoUrl).GetStoryBoardData();
-				
 
+
+				//準備できてない
+				if(Path == null) {
+
+					return;
+				}
+				Player.LoadMedia(Path);
 
 				LoadStatus = "";
+
+				IconData = Pause;
+				Player.Play();
 			});
 		}
 
@@ -198,17 +207,11 @@ namespace SRNicoNico.ViewModels {
 				return;
 			}
 
-			//準備できてない
-			if(Path == null) {
-
-				return;
-			}
 
 
 			IconData = Pause;
 
 
-			Player.LoadMedia(Path);
 			Player.Play();
 		}
 

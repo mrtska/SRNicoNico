@@ -28,6 +28,22 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 		#endregion
 
 
+		#region CurrentTimeString変更通知プロパティ
+		private string _CurrentTimeString = "0:00";
+
+		public string CurrentTimeString {
+			get { return _CurrentTimeString; }
+			set { 
+				if(_CurrentTimeString == value)
+					return;
+				_CurrentTimeString = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
+
+
+
 		#region CurrentTimeWidth変更通知プロパティ
 		private double _CurrentTimeWidth;
 

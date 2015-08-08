@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 using System.Drawing;
 
+using SRNicoNico.Models.NicoNicoWrapper;
+
+
+
 namespace SRNicoNico.Views.Contents.Video {
-    /// <summary>
-    /// VideoController.xaml の相互作用ロジック
-    /// </summary>
-    public partial class VideoController : UserControl {
+	/// <summary>
+	/// VideoController.xaml の相互作用ロジック
+	/// </summary>
+	public partial class VideoController : UserControl {
         public VideoController() {
             InitializeComponent();
         }
@@ -27,11 +22,7 @@ namespace SRNicoNico.Views.Contents.Video {
 		[System.Runtime.InteropServices.DllImport("gdi32.dll")]
 		public static extern bool DeleteObject(IntPtr hObject);
 
-		private void Seek_MouseDown(object sender, MouseButtonEventArgs e) {
 
-			Console.WriteLine("MouseDown:" + ActualWidth / e.GetPosition(this).X);
-			
-		}
 
 		private void Seek_MouseMove(object sender, MouseEventArgs e) {
 
@@ -41,34 +32,58 @@ namespace SRNicoNico.Views.Contents.Video {
 			
 			//シーク中の動画時間
 			int ans = (int) (x / ActualWidth * Seek.VideoTime);
+			ans = Math.Abs(ans);
 
-			Seek.PopupText = ans.ToString();
+			Seek.PopupText = NicoNicoUtil.GetTimeFromLong(ans);
 			Seek.PopupRect = new Rect(x - 5, 0, 20, 20);
 
 
-			Seek.PopupImageRect = new Rect(x + 25, -90, 20, 20);
+			if(Seek.IsPopupImageOpen) {
 
+				NicoNicoStoryBoardData Story = App.ViewModelRoot.CurrentVideo.VideoData.StoryBoardData;
 
-			Bitmap test = App.ViewModelRoot.CurrentVideo.VideoData.StoryBoardData.BitmapCollection[ans & 0x7FFFFFFE];
-			IntPtr hBitMap = test.GetHbitmap();
-			try {
+				Seek.PopupImageRect = new Rect(x - Story.Width / 2, -10, Story.Width, Story.Height);
 
-				Seek.PopupImage = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitMap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-			} finally {
+				Bitmap test = Story.BitmapCollection[ans - ans % Story.Interval];
+				IntPtr hBitMap = test.GetHbitmap();
+				try {
 
-				DeleteObject(hBitMap);
+					Seek.PopupImage = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitMap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+				} finally {
+
+					DeleteObject(hBitMap);
+				}
 			}
+			
 
 		}
 
 		private void Seek_MouseLeave(object sender, MouseEventArgs e) {
 
+
+
+			Seek.IsPopupImageOpen = false;
 			Seek.IsPopupOpen = false;
 		}
 
 		private void Seek_MouseEnter(object sender, MouseEventArgs e) {
 
+
+			if(App.ViewModelRoot.CurrentVideo.VideoData.StoryBoardData != null) {
+
+				Seek.IsPopupImageOpen = true;
+			}
+
 			Seek.IsPopupOpen = true;
+		}
+
+		private void Seek_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+
+
+			//マウスカーソルX座標
+			double x = e.GetPosition(this).X;
+
+			App.ViewModelRoot.CurrentVideo.Player.Position = (float)(x / ActualWidth);
 		}
 	}
 }

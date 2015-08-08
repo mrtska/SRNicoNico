@@ -129,6 +129,18 @@ namespace SRNicoNico.Views.Controls {
 
 
 
+		public bool IsPopupImageOpen {
+			get { return (bool)GetValue(IsPopupImageOpenProperty); }
+			set { SetValue(IsPopupImageOpenProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for IsPopupImageOpen.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty IsPopupImageOpenProperty =
+			DependencyProperty.Register("IsPopupImageOpen", typeof(bool), typeof(SeekBar), new FrameworkPropertyMetadata(false));
+
+
+
+
 
 		public Rect PopupRect {
 			get { return (Rect)GetValue(PopupRectProperty); }

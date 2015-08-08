@@ -88,11 +88,30 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			var root = DynamicJson.Parse(json);
 
-			foreach(var entry in root.smile.storyboard) {
+			if(root.smile.storyboard.IsArray) {
+
+
+				foreach(var entry in root.smile.storyboard) {
+					
+					return new NicoNicoStoryBoardData() {
+
+						Id = entry.IsDefined("id") ? entry.id : 1,
+						Cols = int.Parse(entry.board_cols),
+						Rows = int.Parse(entry.board_rows),
+						Count = int.Parse(entry.board_number),
+						Width = int.Parse(entry.thumbnail_width),
+						Height = int.Parse(entry.thumbnail_height),
+						Interval = int.Parse(entry.thumbnail_interval),
+						Number = int.Parse(entry.thumbnail_number)
+					};
+					
+				}
+			} else {
+				var entry = root.smile.storyboard;
 
 				return new NicoNicoStoryBoardData() {
 
-					Id = entry.id,
+					Id = entry.IsDefined("id") ? entry.id : "1",
 					Cols = int.Parse(entry.board_cols),
 					Rows = int.Parse(entry.board_rows),
 					Count = int.Parse(entry.board_number),
@@ -102,7 +121,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 					Number = int.Parse(entry.thumbnail_number)
 				};
 			}
-
 
 			return null;
 		}

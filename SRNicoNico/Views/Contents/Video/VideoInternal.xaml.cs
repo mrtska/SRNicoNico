@@ -10,6 +10,7 @@ using System.ComponentModel;
 
 using SRNicoNico.ViewModels;
 using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.Views.Contents.Video {
 	/// <summary>
@@ -82,22 +83,15 @@ namespace SRNicoNico.Views.Contents.Video {
 
 			VideoTime time = App.ViewModelRoot.CurrentVideo.Time;
 
+			long length = App.ViewModelRoot.CurrentVideo.Length;
 
-			
-			time.CurrentTime = (long)(App.ViewModelRoot.CurrentVideo.Length * Media.Position);
-			Console.WriteLine("ポジション:" + App.ViewModelRoot.CurrentVideo.Time.CurrentTime);
-			time.CurrentTimeWidth = ActualWidth / App.ViewModelRoot.CurrentVideo.Length * time.CurrentTime;
-			Console.WriteLine("シークバー:" + time.CurrentTimeWidth);
+			time.CurrentTime = (long)(length * Player.Position);
+			time.CurrentTimeString = NicoNicoUtil.GetTimeFromLong(time.CurrentTime);
+			time.CurrentTimeWidth = ActualWidth / length * time.CurrentTime;
 
 			App.ViewModelRoot.CurrentVideo.SeekCursor = new Thickness(time.CurrentTimeWidth,0, 0, 0);
 
-
-
-
-
-
-
-			if (App.ViewModelRoot.CurrentVideo.Time.CurrentTime == App.ViewModelRoot.CurrentVideo.Length) {
+			if (time.CurrentTime == length) {
 
 				Player.Position = 0F;
 			}

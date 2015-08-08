@@ -53,7 +53,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//nをn:nに変換
 		public static string GetTimeFromLong(long time) {
 
+			long munites = time / 60;
+			long seconds = time % 60;
 
+			if(seconds < 10) {
+
+				return munites + ":0" + seconds;
+			}
+
+			return munites + ":" + seconds;
 		}
 
 
