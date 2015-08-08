@@ -40,6 +40,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			//APIURL
 			string uri = StoryBoardApiBaseUrl + "&sb=" + data.Id + "&board=";
 
+
+			int bitmapindex = 0;
 			for(int i = 1; i <= data.Count; i++) {
 
 
@@ -55,7 +57,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 						Rectangle rect = new Rectangle(data.Width * k, data.Height * j, data.Width, data.Height);
 						
-						data.BitmapCollection.Add(bitmap.Clone(rect, bitmap.PixelFormat));
+						data.BitmapCollection[bitmapindex] = bitmap.Clone(rect, bitmap.PixelFormat);
+						bitmapindex += data.Interval;
 					}
 				}
 			}
@@ -145,7 +148,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		public int Count { get; set; }
 
 
-		public ObservableSynchronizedCollection<Bitmap> BitmapCollection = new ObservableSynchronizedCollection<Bitmap>();
+		public Dictionary<int,Bitmap> BitmapCollection = new Dictionary<int, Bitmap>();
 
 	}
 }

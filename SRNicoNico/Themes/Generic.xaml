@@ -19,6 +19,23 @@
                             <Rectangle Panel.ZIndex="1" Fill="#FF3C3C3C" HorizontalAlignment="Left" Width="0" />
                             <Rectangle Panel.ZIndex="2" HorizontalAlignment="Left" Width="{TemplateBinding CurrentTimeWidth}" Fill="#FF007AFF"/>
                             <Rectangle Panel.ZIndex="3" HorizontalAlignment="Left" Width="10" Margin="{TemplateBinding SeekCursor}" Fill="#FF8B8B8B" />
+
+
+                            <Popup AllowsTransparency="True" IsOpen="{TemplateBinding IsPopupOpen}" PlacementRectangle="{TemplateBinding PopupImageRect}" PopupAnimation="Slide">
+                                <Border BorderThickness="1" BorderBrush="#FFAAAAAA">
+
+                                    <Image Source="{TemplateBinding PopupImage}" />
+                                </Border>
+
+                            </Popup>
+
+                            <Popup AllowsTransparency="True" IsOpen="{TemplateBinding IsPopupOpen}" PlacementRectangle="{TemplateBinding PopupRect}" PopupAnimation="Slide">
+                                <Border BorderThickness="1" BorderBrush="#FFAAAAAA">
+
+                                    <TextBlock Text="{TemplateBinding PopupText}" />
+                                </Border>
+                               
+                            </Popup>
                         </Grid>
                     </Border>
                 </ControlTemplate>

@@ -50,6 +50,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             return (long.Parse(minutes) * 60) + long.Parse(seconds);
         }
 
+		//nをn:nに変換
+		public static string GetTimeFromLong(long time) {
+
+
+		}
+
 
 
 

@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SRNicoNico.Views.Controls {
 	/// <summary>
@@ -117,28 +106,67 @@ namespace SRNicoNico.Views.Controls {
 
 
 
+
+		public string PopupText {
+			get { return (string)GetValue(PopupTextProperty); }
+			set { SetValue(PopupTextProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for PopupText.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty PopupTextProperty =
+			DependencyProperty.Register("PopupText", typeof(string), typeof(SeekBar), new FrameworkPropertyMetadata(""));
+
+
+
+		public bool IsPopupOpen {
+			get { return (bool)GetValue(IsPopupOpenProperty); }
+			set { SetValue(IsPopupOpenProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for IsPopupOpen.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty IsPopupOpenProperty =
+			DependencyProperty.Register("IsPopupOpen", typeof(bool), typeof(SeekBar), new FrameworkPropertyMetadata(false));
+
+
+
+
+		public Rect PopupRect {
+			get { return (Rect)GetValue(PopupRectProperty); }
+			set { SetValue(PopupRectProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for PopupRect.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty PopupRectProperty =
+			DependencyProperty.Register("PopupRect", typeof(Rect), typeof(SeekBar), new FrameworkPropertyMetadata(null));
+
+
+
+		public Rect PopupImageRect {
+			get { return (Rect)GetValue(PopupImageRectProperty); }
+			set { SetValue(PopupImageRectProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for PopupImageRect.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty PopupImageRectProperty =
+			DependencyProperty.Register("PopupImageRect", typeof(Rect), typeof(SeekBar), new FrameworkPropertyMetadata(null));
+
+
+
+		public BitmapSource PopupImage {
+			get { return (BitmapSource)GetValue(PopupImageProperty); }
+			set { SetValue(PopupImageProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for PopupImage.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty PopupImageProperty =
+			DependencyProperty.Register("PopupImage", typeof(BitmapSource), typeof(SeekBar), new FrameworkPropertyMetadata(null));
+
+
+
+
 		static SeekBar() {
 
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(SeekBar), new FrameworkPropertyMetadata(typeof(SeekBar)));
-		}
-
-		public SeekBar() {
-
-
-			MouseMove += SeekBar_MouseMove;
-			MouseDown += SeekBar_MouseDown;
-		}
-
-		private void SeekBar_MouseDown(object sender, MouseButtonEventArgs e) {
-
-
-
-		}
-
-		private void SeekBar_MouseMove(object sender, MouseEventArgs e) {
-
-			Console.WriteLine("MouseEnter:" + CurrentTime);
-
 		}
 	}
 }
