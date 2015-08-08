@@ -34,7 +34,7 @@
             </i:Interaction.Triggers>
 
         </mui:ModernButton>
-        <seek:SeekBar x:Name="Seek"  Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VideoTime="{Binding Length}" CurrentTime="{Binding Time.CurrentTime}" CurrentTimeWidth="{Binding Time.CurrentTimeWidth}" SeekCursor="{Binding SeekCursor}" MouseEnter="Seek_MouseEnter" />
+        <seek:SeekBar x:Name="Seek"  Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VideoTime="{Binding Length}" CurrentTime="{Binding Time.CurrentTime}" CurrentTimeWidth="{Binding Time.CurrentTimeWidth}" SeekCursor="{Binding SeekCursor}" />
         <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" >
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Time.CurrentTime}" Height="25" Foreground="#FFAAAAAA" FontSize="16"/>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="/" Foreground="#FFAAAAAA" FontSize="16" Padding="5,0" />

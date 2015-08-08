@@ -32,9 +32,12 @@ namespace SRNicoNico.Views.Contents.Video {
 
 		private void VlcPlayer_Initialized(object sender, EventArgs e) {
 
+			//デザイナはここで止まる
+#if DEBUG
 			if ((bool)(DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue)) {
 				return;
 			}
+#endif
 
 			Player = VlcPlayer;
 			Media = Player.VlcMediaPlayer;

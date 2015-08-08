@@ -49,7 +49,14 @@ namespace SRNicoNico.ViewModels {
 		//プレイヤーインスタンス
 		public VlcPlayer Player { get; set; }
 
+		//ストリーミング
 		public NicoNicoStream Stream { get; set; }
+
+		//インラインシークバー画像プレビュー
+		public NicoNicoStoryBoard StoryBoard { get; set; }
+
+		//API結果
+		public VideoData VideoData { get; set; }
 
 
         //動画時間 long型
@@ -139,6 +146,20 @@ namespace SRNicoNico.ViewModels {
 		#endregion
 
 
+		#region LoadStatus変更通知プロパティ
+		private string _LoadStatus;
+
+		public string LoadStatus {
+			get { return _LoadStatus; }
+			set { 
+				if (_LoadStatus == value)
+					return;
+				_LoadStatus = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
+
 
 
 
@@ -147,8 +168,11 @@ namespace SRNicoNico.ViewModels {
 			//動画情報取得
 			Task.Run(() => {
 
+				
+
 				SeekCursor = new Thickness();
 				Time = new VideoTime();
+				App.ViewModelRoot.Video.LoadStatus = "動画情報取得中";
 				ThumbInfo = NicoNicoGetThumbInfo.GetThumbInfo(Cmsid);
 				Length = NicoNicoUtil.GetTimeOfLong(ThumbInfo.Length);
 			});
@@ -156,7 +180,10 @@ namespace SRNicoNico.ViewModels {
 
 		public void Play() {
 
-			if(Player.State == MediaState.Playing) {
+			App.ViewModelRoot.Video.LoadStatus = "";
+
+
+			if (Player.State == MediaState.Playing) {
 
 				IconData = Playing;
 				Player.PauseOrResume();

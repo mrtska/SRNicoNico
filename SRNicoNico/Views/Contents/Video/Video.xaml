@@ -64,6 +64,7 @@
             </StackPanel>
 
         </Grid>
+        <TextBlock Grid.Row="1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding LoadStatus}" VerticalAlignment="Top" Margin="30,24,0,0" FontSize="10"/>
 
 
 

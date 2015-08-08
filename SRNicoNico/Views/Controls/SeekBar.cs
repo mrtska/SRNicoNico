@@ -125,7 +125,7 @@ namespace SRNicoNico.Views.Controls {
 		public SeekBar() {
 
 
-			MouseEnter += SeekBar_MouseEnter;
+			MouseMove += SeekBar_MouseMove;
 			MouseDown += SeekBar_MouseDown;
 		}
 
@@ -133,13 +133,12 @@ namespace SRNicoNico.Views.Controls {
 
 
 
-			throw new NotImplementedException();
 		}
 
-		private void SeekBar_MouseEnter(object sender, MouseEventArgs e) {
+		private void SeekBar_MouseMove(object sender, MouseEventArgs e) {
 
+			Console.WriteLine("MouseEnter:" + CurrentTime);
 
-			throw new NotImplementedException();
 		}
 	}
 }

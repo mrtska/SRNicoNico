@@ -12,11 +12,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
          */
 
 		//APIのURL 動画によって変わってくる
-		public string StoryBoardApiUrl { get; set; }
+		public string StoryBoardApiBaseUrl { get; set; }
 
 		//ストリーミングサーバーのURL
 		public NicoNicoStoryBoard(string url) {
 
+			StoryBoardApiBaseUrl = url;
 
 		}
 

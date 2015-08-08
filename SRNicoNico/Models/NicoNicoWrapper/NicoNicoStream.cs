@@ -34,7 +34,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 				//ViewをVideoに変える
 				App.ViewModelRoot.Content = App.ViewModelRoot.Video;
 
-
+				App.ViewModelRoot.Video.LoadStatus = "動画ページにアクセス中";
 				NicoNicoGetFlv.AccessVideoPage(Node.cmsid);
 
 				//GetFlvAPIを叩いてサーバーを取得
@@ -53,15 +53,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 					long length = cache.Length;
 
 					CacheStream = new FileStream(path, FileMode.Open, FileAccess.Write);
+					App.ViewModelRoot.Video.LoadStatus = "ストリーミング開始（キャッシュ有）";
 					VideoStream = NicoNicoGetFlv.GetFlvStreamRange(Node.cmsid, data.VideoUrl, length);
 					CacheExists = true;
 
 				} else {
 
 					CacheStream = new FileStream(path, FileMode.Create, FileAccess.Write);
+					App.ViewModelRoot.Video.LoadStatus = "ストリーミング開始（キャッシュ無）";
 					VideoStream = NicoNicoGetFlv.GetFlvStream(Node.cmsid, data.VideoUrl);
+
 					CacheExists = false;
 				}
+
+				
 
 				App.ViewModelRoot.Video.Path = path;
 
