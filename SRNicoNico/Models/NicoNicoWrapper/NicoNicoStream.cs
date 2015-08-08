@@ -37,53 +37,52 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 		public void OpenVideo(NicoNicoSearchResultNode Node) {
 
+			
+			Video.Cmsid = Node.cmsid;
+			//ViewをVideoに変える
+			App.ViewModelRoot.Content = Video;
 
-			//UIスレッドは使わない
-			Task.Run(() => {
+			Video.LoadStatus = "動画ページにアクセス中";
+			NicoNicoGetFlv.AccessVideoPage(Node.cmsid);
 
-				Video.Cmsid = Node.cmsid;
-				//ViewをVideoに変える
-				App.ViewModelRoot.Content = Video;
+			//GetFlvAPIを叩いてサーバーを取得
+			NicoNicoGetFlvData data = NicoNicoGetFlv.GetFlv(Node.cmsid);
 
-				Video.LoadStatus = "動画ページにアクセス中";
-				NicoNicoGetFlv.AccessVideoPage(Node.cmsid);
+			Video.VideoData.GetFlvData = data;
 
-				//GetFlvAPIを叩いてサーバーを取得
-				NicoNicoGetFlvData data = NicoNicoGetFlv.GetFlv(Node.cmsid);
+			//cacheディレクトリを無ければ作成
+			Directory.CreateDirectory(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\cache");
 
-				//cacheディレクトリを無ければ作成
-				Directory.CreateDirectory(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\cache");
+			//キャッシュパス
+			string path = NicoNicoUtil.CurrentDirectory.DirectoryName + @"\cache\" + Node.cmsid;
+			FileInfo cache = new FileInfo(path);
 
-				//キャッシュパス
-				string path = NicoNicoUtil.CurrentDirectory.DirectoryName + @"\cache\" + Node.cmsid;
-				FileInfo cache = new FileInfo(path);
+			//キャッシュが存在したら
+			if (cache.Exists) {
 
-				//キャッシュが存在したら
-				if (cache.Exists) {
+				long length = cache.Length;
 
-					long length = cache.Length;
+				CacheStream = new FileStream(path, FileMode.Open, FileAccess.Write);
+				Video.LoadStatus = "ストリーミング開始（キャッシュ有）";
+				VideoStream = NicoNicoGetFlv.GetFlvStreamRange(Node.cmsid, data.VideoUrl, length);
+				CacheExists = true;
 
-					CacheStream = new FileStream(path, FileMode.Open, FileAccess.Write);
-					Video.LoadStatus = "ストリーミング開始（キャッシュ有）";
-					VideoStream = NicoNicoGetFlv.GetFlvStreamRange(Node.cmsid, data.VideoUrl, length);
-					CacheExists = true;
+			} else {
 
-				} else {
+				CacheStream = new FileStream(path, FileMode.Create, FileAccess.Write);
+				Video.LoadStatus = "ストリーミング開始（キャッシュ無）";
+				VideoStream = NicoNicoGetFlv.GetFlvStream(Node.cmsid, data.VideoUrl);
 
-					CacheStream = new FileStream(path, FileMode.Create, FileAccess.Write);
-					Video.LoadStatus = "ストリーミング開始（キャッシュ無）";
-					VideoStream = NicoNicoGetFlv.GetFlvStream(Node.cmsid, data.VideoUrl);
-
-					CacheExists = false;
-				}
+				CacheExists = false;
+			}
 
 				
 
-				Video.Path = path;
+			Video.Path = path;
 
-				//ストリーミング開始
-				StartStreaming();
-			});
+			//ストリーミング開始
+			StartStreaming();
+			
 		}
 
 		public void StartStreaming() {

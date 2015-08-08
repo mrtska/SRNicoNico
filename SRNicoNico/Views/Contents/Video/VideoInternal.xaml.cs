@@ -48,6 +48,7 @@ namespace SRNicoNico.Views.Contents.Video {
 			Media.EncounteredError += Media_EncounteredError;
 			Media.SeekableChanged += Media_SeekableChanged;
 			Media.EndReached += Media_EndReached;
+
 			App.ViewModelRoot.CurrentVideo.Player = Player;
 			App.ViewModelRoot.CurrentVideo.Initialize();
 		}

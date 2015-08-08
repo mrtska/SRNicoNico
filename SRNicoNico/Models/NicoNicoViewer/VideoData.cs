@@ -14,7 +14,23 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 		public NicoNicoGetFlvData GetFlvData { get; set; }
 
 		//動画情報取得API結果
-		public NicoNicoGetThumbInfoData ThumbInfoData { get; set; }
+		#region ThumbInfoData変更通知プロパティ
+		private NicoNicoGetThumbInfoData _ThumbInfoData;
+
+		public NicoNicoGetThumbInfoData ThumbInfoData {
+			get { return _ThumbInfoData; }
+			set { 
+				if(_ThumbInfoData == value)
+					return;
+				_ThumbInfoData = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
+
+		//ストーリーボードデータ
+		public NicoNicoStoryBoardData StoryBoardData { get; set; }
+
 
 
 	}

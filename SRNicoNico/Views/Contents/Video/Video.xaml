@@ -23,7 +23,7 @@
             <RowDefinition Height="113*"/>
         </Grid.RowDefinitions>
         <!-- 動画タイトル -->
-        <TextBlock HorizontalAlignment="Left" Grid.Row="0" TextWrapping="NoWrap" FontSize="20" Text="{Binding ThumbInfo.Title}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Grid.Row="0" TextWrapping="NoWrap" FontSize="20" Text="{Binding VideoData.ThumbInfoData.Title}" VerticalAlignment="Top"/>
 
         <!-- プレイヤー -->
         <video:VideoInternal Grid.Row="1" />
@@ -39,7 +39,7 @@
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock HorizontalAlignment="Left" Padding="5" TextWrapping="Wrap" Text="{Binding ThumbInfo.Description}" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Padding="5" TextWrapping="Wrap" Text="{Binding VideoData.ThumbInfoData.Description}" VerticalAlignment="Top"/>
 
             <Border Grid.Column="1">
                 <StackPanel Margin="5" Grid.Column="1" Orientation="Vertical" >
@@ -56,10 +56,10 @@
 
             <StackPanel Margin="5" Grid.Column="2" Orientation="Vertical">
 
-                <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding ThumbInfo.Cmsid}" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding ThumbInfo.ViewCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding ThumbInfo.CommentCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding ThumbInfo.MylistCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding VideoData.ThumbInfoData.Cmsid}" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding VideoData.ThumbInfoData.ViewCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding VideoData.ThumbInfoData.CommentCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding VideoData.ThumbInfoData.MylistCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
 
             </StackPanel>
 

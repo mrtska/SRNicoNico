@@ -13,11 +13,7 @@ namespace SRNicoNico.ViewModels {
 		//動画を開く
 		public void OpenVideo() {
 
-			VideoViewModel Video = new VideoViewModel();
-
-
-			Video.OpenVideo(Node);
-
+			new VideoViewModel(Node);
 		}
 	}
 }

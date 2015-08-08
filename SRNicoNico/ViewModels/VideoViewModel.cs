@@ -18,6 +18,7 @@ namespace SRNicoNico.ViewModels {
 		private static GeometryGroup Pause;
 		private static GeometryGroup Playing;
 
+		//パスで書いた一時停止ボタンと再生ボタン もっといい方法があるはず・・・
 		static VideoViewModel() {
 
 			RectangleGeometry rect1 = new RectangleGeometry();
@@ -36,15 +37,6 @@ namespace SRNicoNico.ViewModels {
 			Playing.Children.Add(tri);
 
 		}
-
-		public VideoViewModel() {
-
-			App.ViewModelRoot.CurrentVideo = this;
-			Stream = new NicoNicoStream(this);
-		}
-
-
-
 
 		//動画ID
 		public string Cmsid { get; set; }
@@ -65,14 +57,14 @@ namespace SRNicoNico.ViewModels {
 		public VideoData VideoData { get; set; }
 
 
-        //動画時間 long型
+		//動画時間 long型
 		#region Length変更通知プロパティ
 		private long _Length;
 
 		public long Length {
 			get { return _Length; }
-			set { 
-				if (_Length == value)
+			set {
+				if(_Length == value)
 					return;
 				_Length = value;
 				RaisePropertyChanged();
@@ -80,9 +72,9 @@ namespace SRNicoNico.ViewModels {
 		}
 		#endregion
 
-        //各種シークバー関連の時間管理
+		//各種シークバー関連の時間管理
 		public VideoTime Time { get; set; }
-		
+
 
 
 		#region BPS変更通知プロパティ
@@ -90,31 +82,10 @@ namespace SRNicoNico.ViewModels {
 
 		public string BPS {
 			get { return _BPS; }
-			set { 
-				if (_BPS == value)
+			set {
+				if(_BPS == value)
 					return;
 				_BPS = value;
-				RaisePropertyChanged();
-			}
-		}
-		#endregion
-
-
-		//動画情報
-		#region ThumInfo変更通知プロパティ
-		private NicoNicoGetThumbInfoData _ThumbInfo;
-		public NicoNicoGetThumbInfoData ThumbInfo {
-
-			get {
-				return _ThumbInfo;
-			}
-			private set {
-
-				if (_ThumbInfo == value) {
-
-					return;
-				}
-				_ThumbInfo = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -127,8 +98,8 @@ namespace SRNicoNico.ViewModels {
 
 		public GeometryGroup IconData {
 			get { return _IconData; }
-			set { 
-				if (_IconData == value)
+			set {
+				if(_IconData == value)
 					return;
 				_IconData = value;
 				RaisePropertyChanged();
@@ -142,8 +113,8 @@ namespace SRNicoNico.ViewModels {
 
 		public Thickness SeekCursor {
 			get { return _SeekCursor; }
-			set { 
-				if (_SeekCursor == value)
+			set {
+				if(_SeekCursor == value)
 					return;
 				_SeekCursor = value;
 				RaisePropertyChanged();
@@ -157,8 +128,8 @@ namespace SRNicoNico.ViewModels {
 
 		public string LoadStatus {
 			get { return _LoadStatus; }
-			set { 
-				if (_LoadStatus == value)
+			set {
+				if(_LoadStatus == value)
 					return;
 				_LoadStatus = value;
 				RaisePropertyChanged();
@@ -167,24 +138,43 @@ namespace SRNicoNico.ViewModels {
 		#endregion
 
 
+		public VideoViewModel(NicoNicoSearchResultNode Node) {
+
+			App.ViewModelRoot.CurrentVideo = this;
+			VideoData = new VideoData();
+			Stream = new NicoNicoStream(this);
+			SeekCursor = new Thickness();
+			Time = new VideoTime();
+
+			//バックグラウンドでいろいろと処理をする
+			Task.Run(() => {
+
+				//ストリーミングサーバーオープン
+				OpenVideo(Node);
+				LoadStatus = "動画情報取得中";
+
+				//動画説明文などを取得
+				VideoData.ThumbInfoData = NicoNicoGetThumbInfo.GetThumbInfo(Node.cmsid);
+				Length = NicoNicoUtil.GetTimeOfLong(VideoData.ThumbInfoData.Length);
+
+				LoadStatus = "ストーリーボード取得中";
+				VideoData.StoryBoardData = new NicoNicoStoryBoard(VideoData.GetFlvData.VideoUrl).GetStoryBoardData();
+				
+
+
+				LoadStatus = "";
+			});
+		}
+
+
 
 
 		public void Initialize() {
 
-			//動画情報取得
-			Task.Run(() => {
 
-				
-
-				SeekCursor = new Thickness();
-				Time = new VideoTime();
-				LoadStatus = "動画情報取得中";
-				ThumbInfo = NicoNicoGetThumbInfo.GetThumbInfo(Cmsid);
-				Length = NicoNicoUtil.GetTimeOfLong(ThumbInfo.Length);
-			});
 		}
 
-		public void OpenVideo(NicoNicoSearchResultNode Node) {
+		private void OpenVideo(NicoNicoSearchResultNode Node) {
 
 			Stream.OpenVideo(Node);
 		}
@@ -194,13 +184,13 @@ namespace SRNicoNico.ViewModels {
 			LoadStatus = "";
 
 
-			if (Player.State == MediaState.Playing) {
+			if(Player.State == MediaState.Playing) {
 
 				IconData = Playing;
 				Player.PauseOrResume();
 				return;
 			}
-			if (Player.State == MediaState.Paused) {
+			if(Player.State == MediaState.Paused) {
 
 				IconData = Pause;
 
@@ -225,7 +215,7 @@ namespace SRNicoNico.ViewModels {
 		public void DisposePlayer() {
 
 			Stream.Dispose();
-			if (Player != null) {
+			if(Player != null) {
 
 				Player.Dispose();
 			}
