@@ -5,7 +5,7 @@ using System.IO;
 
 using Livet;
 
-
+using SRNicoNico.ViewModels;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoStream : NotificationObject {
@@ -13,6 +13,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
          * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
          */
 
+
+		public VideoViewModel Video;
 
 		//キャッシュのストリーム
 		public FileStream CacheStream { get; set; }
@@ -24,17 +26,26 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//キャッシュが存在するか否か
 		public bool CacheExists { get; set; }
 
+
+
+
+		public NicoNicoStream(VideoViewModel Video) {
+
+			this.Video = Video;
+		}
+
+
 		public void OpenVideo(NicoNicoSearchResultNode Node) {
 
 
 			//UIスレッドは使わない
 			Task.Run(() => {
 
-				App.ViewModelRoot.Video.Cmsid = Node.cmsid;
+				Video.Cmsid = Node.cmsid;
 				//ViewをVideoに変える
-				App.ViewModelRoot.Content = App.ViewModelRoot.Video;
+				App.ViewModelRoot.Content = Video;
 
-				App.ViewModelRoot.Video.LoadStatus = "動画ページにアクセス中";
+				Video.LoadStatus = "動画ページにアクセス中";
 				NicoNicoGetFlv.AccessVideoPage(Node.cmsid);
 
 				//GetFlvAPIを叩いてサーバーを取得
@@ -53,14 +64,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 					long length = cache.Length;
 
 					CacheStream = new FileStream(path, FileMode.Open, FileAccess.Write);
-					App.ViewModelRoot.Video.LoadStatus = "ストリーミング開始（キャッシュ有）";
+					Video.LoadStatus = "ストリーミング開始（キャッシュ有）";
 					VideoStream = NicoNicoGetFlv.GetFlvStreamRange(Node.cmsid, data.VideoUrl, length);
 					CacheExists = true;
 
 				} else {
 
 					CacheStream = new FileStream(path, FileMode.Create, FileAccess.Write);
-					App.ViewModelRoot.Video.LoadStatus = "ストリーミング開始（キャッシュ無）";
+					Video.LoadStatus = "ストリーミング開始（キャッシュ無）";
 					VideoStream = NicoNicoGetFlv.GetFlvStream(Node.cmsid, data.VideoUrl);
 
 					CacheExists = false;
@@ -68,7 +79,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 				
 
-				App.ViewModelRoot.Video.Path = path;
+				Video.Path = path;
 
 				//ストリーミング開始
 				StartStreaming();

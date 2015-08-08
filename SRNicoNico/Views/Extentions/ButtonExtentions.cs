@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 
-namespace SRNicoNico.Views.Controls {
+namespace SRNicoNico.Views.Extentions {
 	public static class ButtonExtentions {
 
 		public static void PerformClick(this Button button) {

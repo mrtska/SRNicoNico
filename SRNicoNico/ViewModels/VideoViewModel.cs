@@ -37,6 +37,12 @@ namespace SRNicoNico.ViewModels {
 
 		}
 
+		public VideoViewModel() {
+
+			App.ViewModelRoot.CurrentVideo = this;
+			Stream = new NicoNicoStream(this);
+		}
+
 
 
 
@@ -172,15 +178,20 @@ namespace SRNicoNico.ViewModels {
 
 				SeekCursor = new Thickness();
 				Time = new VideoTime();
-				App.ViewModelRoot.Video.LoadStatus = "動画情報取得中";
+				LoadStatus = "動画情報取得中";
 				ThumbInfo = NicoNicoGetThumbInfo.GetThumbInfo(Cmsid);
 				Length = NicoNicoUtil.GetTimeOfLong(ThumbInfo.Length);
 			});
 		}
 
+		public void OpenVideo(NicoNicoSearchResultNode Node) {
+
+			Stream.OpenVideo(Node);
+		}
+
 		public void Play() {
 
-			App.ViewModelRoot.Video.LoadStatus = "";
+			LoadStatus = "";
 
 
 			if (Player.State == MediaState.Playing) {

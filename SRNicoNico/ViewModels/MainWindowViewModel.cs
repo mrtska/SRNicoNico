@@ -59,19 +59,22 @@ namespace SRNicoNico.ViewModels {
 		public SignInDialogViewModel SignIn { get; private set; }
 		public SearchViewModel Search { get; private set; }
 		public SearchResultViewModel SearchResult { get; private set; }
-		public VideoViewModel Video { get; private set; }
+
+		public Dictionary<string, VideoViewModel> VideoMap { get; private set; }
+
+		public VideoViewModel CurrentVideo { get; set; }
 
 		public MainWindowViewModel() {
 
-			this.SignIn = new SignInDialogViewModel();
+			SignIn = new SignInDialogViewModel();
 
-			this.Search = new SearchViewModel();
+			Search = new SearchViewModel();
 
-			this.SearchResult = new SearchResultViewModel();
+			SearchResult = new SearchResultViewModel();
 
-			this.Video = new VideoViewModel();
+			VideoMap = new Dictionary<string, VideoViewModel>();
 
-			this.Content = this;
+			Content = this;
 		}
 
 
@@ -148,7 +151,7 @@ namespace SRNicoNico.ViewModels {
 				NicoNicoWrapperMain.GetSession().HttpHandler.Dispose();
 				NicoNicoWrapperMain.GetSession().HttpClient.Dispose();
 
-				Video.DisposePlayer();
+				CurrentVideo.DisposePlayer();
 				;
 			}
 
