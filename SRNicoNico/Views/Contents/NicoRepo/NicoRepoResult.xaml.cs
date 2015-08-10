@@ -13,18 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using Livet;
-
-namespace SRNicoNico.Views.Contents.Search {
-	/// <summary>
-	/// SearchResult.xaml の相互作用ロジック
-	/// </summary>
-	public partial class SearchResult : UserControl {
-
-        
-
-        public SearchResult() {
-			InitializeComponent();
-		}
-	}
+namespace SRNicoNico.Views.Contents.NicoRepo {
+    /// <summary>
+    /// NicoRepoResult.xaml の相互作用ロジック
+    /// </summary>
+    public partial class NicoRepoResult : UserControl {
+        public NicoRepoResult() {
+            InitializeComponent();
+        }
+    }
 }

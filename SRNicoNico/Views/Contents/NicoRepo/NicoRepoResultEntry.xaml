@@ -8,6 +8,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="260"
              d:DataContext="{d:DesignInstance { x:Type vm:NicoRepoResultEntryViewModel}}"
+             BorderThickness="1"
+             BorderBrush="#FF333333"
              >
     <Grid>
         <Grid.ColumnDefinitions>
@@ -16,8 +18,8 @@
         </Grid.ColumnDefinitions>
         
         <Image Grid.Column="0" Source="{Binding Entry.ImageUrl}"/>
-        <TextBlock Grid.Column="1" Text="{Binding Entry.Title}" VerticalAlignment="Top" Height="20" Width="200" HorizontalAlignment="Left" />
-        <TextBlock Grid.Column="1" Text="{Binding Entry.Description}" VerticalAlignment="Top" Height="20" Width="200" HorizontalAlignment="Left" Margin="0,20,0,0" />
+        <TextBlock Grid.Column="1" Text="{Binding Entry.Title}" VerticalAlignment="Top" Height="20" Foreground="#FFAAAAAA"  HorizontalAlignment="Left" RenderTransformOrigin="2.545,1.35" Margin="10,5,0,0" />
+        <TextBlock Grid.Column="1" Text="{Binding Entry.Description}" VerticalAlignment="Top" Height="20" Foreground="#FFAAAAAA" HorizontalAlignment="Left" Margin="5,25,0,0" />
 
     </Grid>
 </UserControl>

@@ -3,10 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:contents="clr-namespace:SRNicoNico.Views.Contents"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:root="clr-namespace:SRNicoNico"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:search="clr-namespace:SRNicoNico.Views.Contents.Search"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
 			 xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
+             xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
              d:DesignHeight="348"
              d:DesignWidth="585"
 			d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
@@ -43,6 +45,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:VideoViewModel}">
                     <video:Video/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:NicoRepoResultViewModel}">
+                    <nicorepo:NicoRepoResult/>
                 </DataTemplate>
             </ContentControl.Resources>
 

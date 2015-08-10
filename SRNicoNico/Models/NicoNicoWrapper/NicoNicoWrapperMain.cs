@@ -30,7 +30,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             App.ViewModelRoot.NicoRepo.InitNicoRepo();
             new NicoNicoNicoRepoList().GetNicoRepoList();
-            new NicoNicoNicoRepo(NicoNicoNicoRepoType.All).GetNicoRepo();
         }
 
         //現在のセッションを取得

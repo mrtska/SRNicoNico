@@ -5,54 +5,57 @@
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:root="clr-namespace:SRNicoNico"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
 			 xmlns:search="clr-namespace:SRNicoNico.Views.Contents.Search"
              xmlns:Behaviors="clr-namespace:SRNicoNico.Views.Behaviors" x:Class="SRNicoNico.Views.Contents.Search.SearchResult"
-             d:DesignHeight="300"
-             d:DesignWidth="300"
-             mc:Ignorable="d">
-	<UserControl.Resources>
-		<ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
-			<StackPanel>
-				<i:Interaction.Behaviors>
-					<ei:FluidMoveBehavior Duration="0:0:5">
-						<ei:FluidMoveBehavior.EaseX>
-							<CircleEase EasingMode="EaseOut"/>
-						</ei:FluidMoveBehavior.EaseX>
-					</ei:FluidMoveBehavior>
-				</i:Interaction.Behaviors>
-			</StackPanel>
-		</ItemsPanelTemplate>
-	</UserControl.Resources>
+             d:DesignHeight="352"
+             d:DesignWidth="494"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance {x:Type vm:SearchResultViewModel}}"
+    >
+    <UserControl.Resources>
+        <ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
+            <StackPanel>
+                <i:Interaction.Behaviors>
+                    <ei:FluidMoveBehavior Duration="0:0:5">
+                        <ei:FluidMoveBehavior.EaseX>
+                            <CircleEase EasingMode="EaseOut"/>
+                        </ei:FluidMoveBehavior.EaseX>
+                    </ei:FluidMoveBehavior>
+                </i:Interaction.Behaviors>
+            </StackPanel>
+        </ItemsPanelTemplate>
+    </UserControl.Resources>
 
 
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="25"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-		<ListBox Grid.Row="1"  VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding List}" HorizontalContentAlignment="Stretch" >
+        <ListBox Grid.Row="1"  VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding List}" HorizontalContentAlignment="Stretch" >
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
-				<DataTemplate DataType="vm:SearchResultEntryViewModel">
-					<search:SearchResultEntry/>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-			<i:Interaction.Behaviors>
-				<Behaviors:ListBoxBehavior/>
-				<ei:FluidMoveBehavior AppliesTo="Children"/>
-			</i:Interaction.Behaviors>
-		</ListBox>
-		<TextBlock TextWrapping="Wrap" Text="{Binding Total}" FontSize="20"/>
+                <DataTemplate DataType="vm:SearchResultEntryViewModel">
+                    <search:SearchResultEntry/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <i:Interaction.Behaviors>
+                <Behaviors:ListBoxBehavior ViewModel="{Binding OwnerViewModel}" MethodName="SearchNext" />
+                <ei:FluidMoveBehavior AppliesTo="Children"/>
+            </i:Interaction.Behaviors>
+        </ListBox>
+        <TextBlock TextWrapping="Wrap" Text="{Binding Total}" FontSize="20"/>
 
-	</Grid>
-	
+    </Grid>
+
 
 
 </UserControl>

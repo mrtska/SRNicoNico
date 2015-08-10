@@ -10,9 +10,17 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="32.984" d:DesignWidth="239.529"
+             d:DesignHeight="15.984" d:DesignWidth="97.529"
              d:DataContext="{d:DesignInstance {x:Type vm:NicoRepoListViewModel}}"
              >
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="PreviewMouseLeftButtonDown" >
+            <l:LivetCallMethodAction MethodName="OpenNicoRepoList" MethodTarget="{Binding}"/>
+        </i:EventTrigger>
+
+
+    </i:Interaction.Triggers>
     <Grid>
         <TextBlock Text="{Binding Title}" Foreground="#FFAAAAAA" />
     </Grid>

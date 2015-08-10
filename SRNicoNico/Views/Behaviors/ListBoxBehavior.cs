@@ -3,17 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows.Interactivity;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Diagnostics;
 
+using Livet;
+
 namespace SRNicoNico.Views.Behaviors {
 
 	public class ListBoxBehavior : Behavior<ListBox> {
 
-		private ScrollViewer ScrollViewer;
+
+
+
+
+
+
+
+
+
+        public ViewModel ViewModel {
+            get { return (ViewModel)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(ViewModel), typeof(ListBoxBehavior), new PropertyMetadata(null));
+
+
+
+
+        public string MethodName {
+            get { return (string)GetValue(MethodNameProperty); }
+            set { SetValue(MethodNameProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MethodName.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MethodNameProperty =
+            DependencyProperty.Register("MethodName", typeof(string), typeof(ListBoxBehavior), new PropertyMetadata(""));
+
+
+
+
+        private ScrollViewer ScrollViewer;
 
 
 		protected override void OnAttached() {
@@ -52,7 +88,9 @@ namespace SRNicoNico.Views.Behaviors {
 			//一番下までスクロールしたら
 			if(e.ExtentHeight == e.VerticalOffset + e.ViewportHeight) {
 
-				App.ViewModelRoot.Search.SearchNext();
+                Type type = ViewModel.GetType();
+                MethodInfo method = type.GetMethod(MethodName);
+                method.Invoke(ViewModel, null);
 				this.ScrollViewer.ScrollToVerticalOffset(e.ExtentHeight - e.ViewportHeight);
 
 			}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 using Livet;
 using Livet.Commands;
@@ -46,6 +47,40 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+
+        public void OpenNicoRepoList() {
+
+            NicoRepoResultViewModel result = new NicoRepoResultViewModel();
+
+            result.IsActive = true;
+            App.ViewModelRoot.Content = result;
+
+
+            Task.Run(() => {
+
+            NicoNicoNicoRepoData data = new NicoNicoNicoRepo(Id).GetNicoRepo();
+
+            foreach(NicoNicoNicoRepoDataEntry entry in data.DataCollection) {
+
+                NicoRepoResultEntryViewModel ventry = new NicoRepoResultEntryViewModel();
+                ventry.Entry = entry;
+
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+                    result.NicoRepo.Add(ventry);
+                }));
+                }
+
+                result.IsActive = false;
+
+
+
+            });
+           
+
+
+            ;
+        }
 
 
     }

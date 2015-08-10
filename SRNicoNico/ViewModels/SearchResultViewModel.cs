@@ -48,9 +48,25 @@ namespace SRNicoNico.ViewModels {
 				
 			}
 		}
-		#endregion
+        #endregion
 
 
 
-	}
+        #region OwnerViewModel変更通知プロパティ
+        private ViewModel _OwnerViewModel;
+
+        public ViewModel OwnerViewModel {
+            get { return _OwnerViewModel; }
+            set { 
+                if(_OwnerViewModel == value)
+                    return;
+                _OwnerViewModel = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
+    }
 }

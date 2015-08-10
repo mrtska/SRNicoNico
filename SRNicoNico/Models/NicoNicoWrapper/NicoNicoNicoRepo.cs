@@ -9,17 +9,6 @@ using HtmlAgilityPack;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
-    //二コレポタイプ
-    public enum NicoNicoNicoRepoType {
-
-        All,
-        Myself,
-        User,
-        ChCom,
-        Mylist,
-        Other
-    }
-
 
     public class NicoNicoNicoRepo : NotificationObject {
 
@@ -51,67 +40,53 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 
-        //二コレポタイプ
-        private readonly NicoNicoNicoRepoType Type;
+
 
         //Otherタイプ ユーザー定義二コレポリストID
-        private string OtherId;
+        private string Id;
 
         //過去ページへのURL
         private string NextUrl;
 
 
 
-        public NicoNicoNicoRepo(NicoNicoNicoRepoType type) {
 
-            Type = type;
-        }
 
         public NicoNicoNicoRepo(string id) {
 
-            Type = NicoNicoNicoRepoType.Other;
-            OtherId = id;
+
+            Id = id;
         }
 
 
         public NicoNicoNicoRepoData GetNicoRepo() {
 
 
-            var api = "about:blanks";
-            switch(Type) {
-                case NicoNicoNicoRepoType.All:
-                    api = NicoRepoAllAPI;
-                    break;
-                case NicoNicoNicoRepoType.Myself:
-                    api = NicoRepoMyselfAPI;
-                    break;
-                case NicoNicoNicoRepoType.User:
-                    api = NicoRepoUserAPI;
-                    break;
-                case NicoNicoNicoRepoType.ChCom:
-                    api = NicoRepoChComAPI;
-                    break;
-                case NicoNicoNicoRepoType.Mylist:
-                    api = NicoRepoMylistAPI;
-                    break;
-                default:
-                    //Other ユーザー定義
-                    api = @"http://www.nicovideo.jp/my/top/" + OtherId + @"?innerPage=1&mode=next_page";
-                    break;
-            }
+            var api = @"http://www.nicovideo.jp/my/top/" + Id + @"?innerPage=1&mode=next_page";
+           
+
 
             var all = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(api).Result;
+
+            NicoNicoNicoRepoData data = new NicoNicoNicoRepoData();
+
 
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(all);
 
+            if(doc.DocumentNode.SelectSingleNode("/div[@class='nicorepo']/div[@class='nicorepo-page']/div").Attributes["class"].Value.Equals("empty")) {
 
-            //過去二コレポのURL
-            string attr = HttpUtility.HtmlDecode(doc.DocumentNode.SelectSingleNode("/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='next-page']/a").Attributes["href"].Value);
-            NextUrl = @"http://www.nicovideo.jp" + attr;
+                NicoNicoNicoRepoDataEntry entry = new NicoNicoNicoRepoDataEntry();
+
+                entry.Description = "二コレポが存在しません。";
+                data.DataCollection.Add(entry);
+
+                return data;
+            }
+            ;
 
 
-            NicoNicoNicoRepoData data = new NicoNicoNicoRepoData();
+
 
             //アイコンURL取得
             var iconUrls = doc.DocumentNode.SelectNodes("/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='timeline']/div/div[@class='log-author ']/a/img");
@@ -148,6 +123,24 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 data.DataCollection.Add(entry);
             }
+
+            if(doc.DocumentNode.SelectSingleNode("/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='no-next-page']") != null) {
+
+
+                NicoNicoNicoRepoDataEntry entry = new NicoNicoNicoRepoDataEntry();
+
+                entry.Description = "これより過去の二コレポは存在しません。";
+                data.DataCollection.Add(entry);
+
+
+            } else {
+
+                //過去二コレポのURL
+                string attr = HttpUtility.HtmlDecode(doc.DocumentNode.SelectSingleNode("/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='next-page']/a").Attributes["href"].Value);
+                NextUrl = @"http://www.nicovideo.jp" + attr;
+            }
+
+
 
             return data;
 

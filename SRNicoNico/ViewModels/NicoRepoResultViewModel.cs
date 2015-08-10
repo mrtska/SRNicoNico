@@ -15,11 +15,38 @@ using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
     public class NicoRepoResultViewModel : ViewModel {
-        
 
 
 
+        #region IsActive変更通知プロパティ
+        private bool _IsActive;
 
-        public ObservableSynchronizedCollection<NicoRepoResultEntryViewModel> NicoRepo { get; set; }
+        public bool IsActive {
+            get { return _IsActive; }
+            set { 
+                if(_IsActive == value)
+                    return;
+                _IsActive = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region NicoRepo変更通知プロパティ
+        private ObservableSynchronizedCollection<NicoRepoResultEntryViewModel> _NicoRepo = new ObservableSynchronizedCollection<NicoRepoResultEntryViewModel>();
+
+        public ObservableSynchronizedCollection<NicoRepoResultEntryViewModel> NicoRepo {
+            get { return _NicoRepo; }
+            set { 
+                if(_NicoRepo == value)
+                    return;
+                _NicoRepo = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
     }
 }

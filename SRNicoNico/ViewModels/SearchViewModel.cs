@@ -14,7 +14,7 @@ using Livet.Messaging.Windows;
 
 using System.Windows.Controls;
 
-using SRNicoNico.Models;
+
 using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
@@ -69,7 +69,8 @@ namespace SRNicoNico.ViewModels {
 				return;
 			}
 
-			App.ViewModelRoot.Content = App.ViewModelRoot.SearchResult;
+            App.ViewModelRoot.SearchResult.OwnerViewModel = this;
+            App.ViewModelRoot.Content = App.ViewModelRoot.SearchResult;
 			
 			//検索
 			this.currentSearch = new NicoNicoSearch(this.SearchText, this.sort_by[this.SelectedIndex]);
