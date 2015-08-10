@@ -151,8 +151,10 @@ namespace SRNicoNico.ViewModels {
 				NicoNicoWrapperMain.GetSession().HttpHandler.Dispose();
 				NicoNicoWrapperMain.GetSession().HttpClient.Dispose();
 
-				CurrentVideo.DisposePlayer();
-				;
+				if(CurrentVideo != null) {
+
+					CurrentVideo.DisposePlayer();
+				}
 			}
 
 

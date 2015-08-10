@@ -4,48 +4,10 @@
     xmlns:local="clr-namespace:SRNicoNico.Views.Controls">
 
 
-    <Style TargetType="{x:Type local:SeekBar}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:SeekBar}">
-                    <Border Background="{TemplateBinding Background}" 
-                            BorderBrush="{TemplateBinding BorderBrush}"  
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}" >
-                        <Grid>
-
-                            <!-- background -->
-                            <Rectangle Fill="#FF404040" />
-                            <Rectangle Panel.ZIndex="1" Fill="#FF3C3C3C" HorizontalAlignment="Left" Width="0" />
-                            <Rectangle Panel.ZIndex="2" HorizontalAlignment="Left" Width="{TemplateBinding CurrentTimeWidth}" Fill="#FF007AFF"/>
-                            <Rectangle Panel.ZIndex="3" HorizontalAlignment="Left" Width="10" Margin="{TemplateBinding SeekCursor}" Fill="#FF8B8B8B" />
-
-
-                            <Popup AllowsTransparency="True" IsOpen="{TemplateBinding IsPopupImageOpen}" PlacementRectangle="{TemplateBinding PopupImageRect}" PopupAnimation="Slide" Placement="Top" >
-                                <Border BorderThickness="1" BorderBrush="#FFAAAAAA">
-
-                                    <Image Source="{TemplateBinding PopupImage}" />
-                                </Border>
-
-                            </Popup>
-
-                            <Popup AllowsTransparency="True" IsOpen="{TemplateBinding IsPopupOpen}" PlacementRectangle="{TemplateBinding PopupRect}" PopupAnimation="Slide">
-                                <Border BorderThickness="1" BorderBrush="#FFAAAAAA">
-
-                                    <TextBlock Text="{TemplateBinding PopupText}" />
-                                </Border>
-                               
-                            </Popup>
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-
-
-
-
-    </Style>
-
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.SeekBar.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.TabControlEx.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.TabItemEx.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

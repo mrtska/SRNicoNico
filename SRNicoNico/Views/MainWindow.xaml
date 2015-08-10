@@ -10,6 +10,7 @@
                   xmlns:search="clr-namespace:SRNicoNico.Views.Contents.Search"
                   xmlns:v="clr-namespace:SRNicoNico.Views"
                   xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+				  xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
                   Title="{Binding Title}"
                   Width="870"
                   Height="723"
@@ -52,11 +53,32 @@
 
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="200"/>
+			<ColumnDefinition Width="215"/>
 			<ColumnDefinition Width="641*"/>
 		</Grid.ColumnDefinitions>
 
-		<search:Search Grid.Column="0" />
+
+        <Line X1="20" Y1="0" X2="20" Y2="6000" Stroke="#FF333333"/>
+
+		
+        <local:TabControlEx Grid.Column="0" Background="Transparent" BorderThickness="0" TabStripPlacement="Left" >
+
+
+            <local:TabItemEx Text="検索">
+                
+                
+                <search:Search />
+			</local:TabItemEx>
+
+            <local:TabItemEx Text="二コレポ">
+                
+
+                ほげ
+				
+			</local:TabItemEx>
+			
+			
+		</local:TabControlEx>
 		
 		<contents:Start Grid.Column="1" />
 	</Grid>
