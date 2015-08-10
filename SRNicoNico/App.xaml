@@ -8,6 +8,30 @@
 				<ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.Dark.xaml"/>
                 <ResourceDictionary Source="Dictionary1.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
+
+            <Style x:Key="ZuruiShapeStyle" TargetType="{x:Type Shape}">
+                <Setter Property="Stroke" Value="#33000000" />
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="0"
+                                      Direction="315"
+                                      ShadowDepth="1"
+                                      Color="#4CFFFFFF" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="ZuruiShapeFillStyle" TargetType="{x:Type Shape}">
+                <Setter Property="Stroke" Value="{x:Null}" />
+                <Setter Property="Fill" Value="#33000000" />
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="0"
+                                      Direction="315"
+                                      ShadowDepth="1"
+                                      Color="#4CFFFFFF" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
 	</Application.Resources>
 </Application>

@@ -39,7 +39,7 @@
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock HorizontalAlignment="Left" Padding="5" TextWrapping="Wrap" Text="{Binding VideoData.ThumbInfoData.Description}" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Padding="5" TextWrapping="Wrap" Text="{Binding VideoData.ThumbInfoData.Description}" VerticalAlignment="Top" Style="{DynamicResource TextBlockStyle1}"/>
 
             <Border Grid.Column="1">
                 <StackPanel Margin="5" Grid.Column="1" Orientation="Vertical" >

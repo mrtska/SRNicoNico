@@ -11,9 +11,10 @@
 			 xmlns:root="clr-namespace:SRNicoNico"
              d:DataContext="{d:DesignInstance {x:Type vm:SearchViewModel}}"
              d:DesignHeight="500"
-             d:DesignWidth="211"
+             d:DesignWidth="200"
              mc:Ignorable="d"
 			 DataContext="{Binding Search}"
+             x:Name="SearchControl"
 			 >
 	
 	
@@ -21,7 +22,7 @@
 
 	<Grid>
 		<ComboBox Width="180"
-		          Margin="10,29,0,0"
+		          Margin="5,26,0,0"
 		          HorizontalAlignment="Left"
 		          VerticalAlignment="Top"
 		          Background="#FF2D2D2D"
@@ -71,7 +72,7 @@
 		</ComboBox>
 		<TextBox Width="180"
 		         Height="23"
-		         Margin="10,77,0,0"
+		         Margin="5,77,0,0"
 		         HorizontalAlignment="Left"
 		         VerticalAlignment="Top"
 		         Text="{Binding SearchText}"
@@ -89,9 +90,8 @@
 		             HorizontalAlignment="Left"
 		             VerticalAlignment="Top"
 		             Content="生放送" IsEnabled="False" />
-		<Button x:Name="button"
-		        Width="75"
-		        Margin="115,129,0,0"
+		<Button Width="75"
+		        Margin="110,129,0,0"
 		        HorizontalAlignment="Left"
 		        VerticalAlignment="Top"
 		        Content="検索">
@@ -102,7 +102,5 @@
 			</i:Interaction.Triggers>
 		</Button>
 		
-		<Line X1="195" Y1="0" X2="195" Y2="6000" Stroke="#FF333333"/>
-
 	</Grid>
 </UserControl>

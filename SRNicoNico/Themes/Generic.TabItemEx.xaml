@@ -30,13 +30,14 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:TabItemEx}">
 
-                    <Border BorderBrush="#FF000000" BorderThickness="0,1,0,0" >
+                    <Border>
 
-                        <Grid>
+                        <StackPanel>
                             
                             <TextBlock x:Name="Header" Width="14" TextWrapping="Wrap" Foreground="#FFAAAAAA" Text="{TemplateBinding Text}" />
-                        </Grid>
-                          </Border>
+                            <Line Y1="5"  X2="10" Stroke="Gray" Style="{DynamicResource ZuruiShapeStyle}" />
+                        </StackPanel>
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Panel.ZIndex" Value="1"/>
