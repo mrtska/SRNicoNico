@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.NicoRepo.NicoRepoResultEntry"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="260"
+             d:DataContext="{d:DesignInstance { x:Type vm:NicoRepoResultEntryViewModel}}"
+             >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="54*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Image Grid.Column="0" Source="{Binding Entry.ImageUrl}"/>
+        <TextBlock Grid.Column="1" Text="{Binding Entry.Title}" VerticalAlignment="Top" Height="20" Width="200" HorizontalAlignment="Left" />
+        <TextBlock Grid.Column="1" Text="{Binding Entry.Description}" VerticalAlignment="Top" Height="20" Width="200" HorizontalAlignment="Left" Margin="0,20,0,0" />
+
+    </Grid>
+</UserControl>

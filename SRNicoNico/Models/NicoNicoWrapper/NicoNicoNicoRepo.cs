@@ -74,7 +74,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
 
-        public void GetNicoRepo() {
+        public NicoNicoNicoRepoData GetNicoRepo() {
 
 
             var api = "about:blanks";
@@ -126,7 +126,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             var descriptions = doc.DocumentNode.SelectNodes("/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='timeline']/div/div[@class='log-content']/div[2]/div[@class='log-target-info']/a");
 
             //時間取得
-            var nicorepoTimes = doc.DocumentNode.SelectNodes(@"/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='timeline']/div/div[@class='log-content']/div[2]/div[@class='log-footer']/div/a[@class='log-footer-date ']/time|a[@class='log-footer-date hot']/time");
+            var nicorepoTimes = doc.DocumentNode.SelectNodes(@"/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='timeline']/div/div[@class='log-content']/div[2]/div[@class='log-footer']/div/a[@class='log-footer-date ']/time|/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='timeline']/div/div[@class='log-content']/div[2]/div[@class='log-footer']/div/a[@class='log-footer-date hot']/time");
 
 
 
@@ -146,28 +146,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 entry.Time = nicorepoTimes[i].InnerText.Trim();
 
-                Console.WriteLine(entry.Title);
-                Console.WriteLine(entry.Description);
-                Console.WriteLine(entry.IconUrl);
-                Console.WriteLine(entry.ImageUrl);
-                Console.WriteLine(entry.VideoUrl);
-                Console.WriteLine(entry.Time);
-
                 data.DataCollection.Add(entry);
             }
-            
 
-
-
-
-
-
-                    
-            
-
-            ;
-
-
+            return data;
 
         }
 

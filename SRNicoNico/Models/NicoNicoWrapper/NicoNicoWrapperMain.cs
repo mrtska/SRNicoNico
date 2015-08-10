@@ -28,6 +28,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //通信速度監視
             BPSCounter.InitAndStart();
 
+            App.ViewModelRoot.NicoRepo.InitNicoRepo();
+            new NicoNicoNicoRepoList().GetNicoRepoList();
             new NicoNicoNicoRepo(NicoNicoNicoRepoType.All).GetNicoRepo();
         }
 

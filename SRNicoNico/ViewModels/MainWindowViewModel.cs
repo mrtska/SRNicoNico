@@ -62,6 +62,8 @@ namespace SRNicoNico.ViewModels {
 
 		public Dictionary<string, VideoViewModel> VideoMap { get; private set; }
 
+        public NicoRepoViewModel NicoRepo { get; private set; }
+
 		public VideoViewModel CurrentVideo { get; set; }
 
 		public MainWindowViewModel() {
@@ -72,7 +74,10 @@ namespace SRNicoNico.ViewModels {
 
 			SearchResult = new SearchResultViewModel();
 
+            NicoRepo = new NicoRepoViewModel();
+
 			VideoMap = new Dictionary<string, VideoViewModel>();
+
 
 			Content = this;
 		}
