@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Livet;
 
+using SRNicoNico.Models.NicoNicoViewer;
+
 namespace SRNicoNico.Models.NicoNicoWrapper {
-	public class NicoNicoWrapperMain : NotificationObject {
+    public class NicoNicoWrapperMain : NotificationObject {
 		/*
 		 * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
 		 */
@@ -17,17 +16,23 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 		public NicoNicoSession Session { get; set; }
 
-		public NicoNicoUser User { get; internal set; }
+        public NicoNicoUser User { get; internal set; }
 
-		//セッションが確立した後に呼ぶ
-		public void PostInit() {
+        //セッションが確立した後に呼ぶ
+        public void PostInit() {
 
 			this.User = new NicoNicoUser(Session.UserId);
 			App.ViewModelRoot.Title += "(user:" + this.User.UserName + ")";
-		}
-			
-		//現在のセッションを取得
-		public static NicoNicoSession GetSession() {
+
+
+            //通信速度監視
+            BPSCounter.InitAndStart();
+
+            new NicoNicoNicoRepo(NicoNicoNicoRepoType.All).GetNicoRepo();
+        }
+
+        //現在のセッションを取得
+        public static NicoNicoSession GetSession() {
 
 			if(Instance == null) {
 

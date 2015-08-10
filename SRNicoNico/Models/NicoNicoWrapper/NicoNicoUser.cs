@@ -32,7 +32,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			
 		}
 
-		public static string LookupUserName(uint userId) {
+        public NicoNicoUser(uint userId, string userName) {
+
+            UserId = userId;
+            UserName = userName;
+        }
+
+        public static string LookupUserName(uint userId) {
 
 			string uri = UserLookUpURL + userId;
 

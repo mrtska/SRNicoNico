@@ -126,9 +126,6 @@ namespace SRNicoNico.ViewModels {
 					//ログイン成功
 					NicoNicoWrapperMain.Instance.PostInit();
 
-					//通信速度監視
-					BPSCounter.InitAndStart();
-					
 
 
 				//手動ログイン
