@@ -29,7 +29,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             BPSCounter.InitAndStart();
 
             App.ViewModelRoot.NicoRepo.InitNicoRepo();
-            new NicoNicoNicoRepoList().GetNicoRepoList();
+            new NicoNicoHistory().GetHistroyData();
         }
 
         //現在のセッションを取得

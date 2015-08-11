@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.History.HistoryResultEntry"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.History"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="80" d:DesignWidth="367.54"
+             d:DataContext="{d:DesignInstance {vm:}}"
+             >
+    <Grid>
+
+    </Grid>
+</UserControl>

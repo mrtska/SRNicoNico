@@ -79,7 +79,10 @@
                 
                 
             </local:TabItemEx>
-
+            <local:TabItemEx Text="その他">
+                
+                
+            </local:TabItemEx>
 
         </local:TabControlEx>
 
