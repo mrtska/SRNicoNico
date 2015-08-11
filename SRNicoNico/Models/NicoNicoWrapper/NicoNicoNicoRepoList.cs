@@ -18,7 +18,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private const string NicoRepoListApiUrl = @"http://www.nicovideo.jp/api/nicorepolist?token=";
 
 
-
+        //すべてのニコレポリストを取得
         public ObservableSynchronizedCollection<NicoRepoListViewModel> GetNicoRepoList() {
 
             ObservableSynchronizedCollection<NicoRepoListViewModel> ret = new ObservableSynchronizedCollection<NicoRepoListViewModel>();

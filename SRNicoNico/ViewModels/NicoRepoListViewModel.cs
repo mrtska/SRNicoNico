@@ -48,40 +48,89 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+
+        #region Result変更通知プロパティ
+        private NicoRepoResultViewModel _Result = new NicoRepoResultViewModel();
+
+        public NicoRepoResultViewModel Result {
+            get { return _Result; }
+            set { 
+                if(_Result == value)
+                    return;
+                _Result = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        private NicoNicoNicoRepo NicoRepo;
+
+
+        //ニコレポリストを開く
         public void OpenNicoRepoList() {
 
-            NicoRepoResultViewModel result = new NicoRepoResultViewModel();
 
-            result.IsActive = true;
-            App.ViewModelRoot.Content = result;
-
+            Result.IsActive = true;
+            Result.OwnerViewModel = this;
+            App.ViewModelRoot.Content = Result;
+            Result.NicoRepo.Clear();
 
             Task.Run(() => {
 
-            NicoNicoNicoRepoData data = new NicoNicoNicoRepo(Id).GetNicoRepo();
+                NicoRepo = new NicoNicoNicoRepo(Id);
 
-            foreach(NicoNicoNicoRepoDataEntry entry in data.DataCollection) {
+                NicoNicoNicoRepoData data = NicoRepo.GetNicoRepo();
 
-                NicoRepoResultEntryViewModel ventry = new NicoRepoResultEntryViewModel();
-                ventry.Entry = entry;
+                foreach(NicoNicoNicoRepoDataEntry entry in data.DataCollection) {
 
-                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+                    NicoRepoResultEntryViewModel ventry = new NicoRepoResultEntryViewModel();
+                    ventry.Entry = entry;
 
-                    result.NicoRepo.Add(ventry);
-                }));
+                    DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+                        Result.NicoRepo.Add(ventry);
+                    }));
                 }
 
-                result.IsActive = false;
-
-
-
+                Result.IsActive = false;
             });
-           
-
-
-            ;
         }
 
+        public void NextNicoRepoList() {
+
+            Result.IsActive = true;
+
+            Task.Run(() => {
+
+                NicoNicoNicoRepoData data = NicoRepo.NextNicoRepo();
+
+                if(data == null) {
+
+                    Result.IsActive = false;
+                    return;
+                }
+
+
+                foreach(NicoNicoNicoRepoDataEntry entry in data.DataCollection) {
+
+                    NicoRepoResultEntryViewModel ventry = new NicoRepoResultEntryViewModel();
+                    ventry.Entry = entry;
+
+                    DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+                        Result.NicoRepo.Add(ventry);
+                    }));
+                }
+
+                Result.IsActive = false;
+            });
+
+
+
+
+
+
+        }
 
     }
 }

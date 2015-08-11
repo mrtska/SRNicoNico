@@ -64,29 +64,34 @@ namespace SRNicoNico.ViewModels {
         public void DoSearch() {
 
 
-			if (this.SearchText == null || this.SearchText.Length == 0) {
+			if (SearchText == null || SearchText.Length == 0) {
 
 				return;
 			}
 
             App.ViewModelRoot.SearchResult.OwnerViewModel = this;
+
+            App.ViewModelRoot.SearchResult.IsActive = true;
             App.ViewModelRoot.Content = App.ViewModelRoot.SearchResult;
-			
-			//検索
-			this.currentSearch = new NicoNicoSearch(this.SearchText, this.sort_by[this.SelectedIndex]);
+
+            //検索
+            currentSearch = new NicoNicoSearch(SearchText, sort_by[SelectedIndex]);
 
 			Task.Run(() => {
 
-				this.currentSearch.Search();
-			});
+                currentSearch.Search();
+                App.ViewModelRoot.SearchResult.IsActive = false;
+            });
 		}
 
 		public void SearchNext() {
 
-			Task.Run(() => {
+            App.ViewModelRoot.SearchResult.IsActive = true;
+            Task.Run(() => {
 
 				currentSearch.SearchNext();
-			});
+                App.ViewModelRoot.SearchResult.IsActive = false;
+            });
         }
     }
 }

@@ -58,15 +58,6 @@ namespace SRNicoNico.ViewModels {
         public NicoNicoNicoRepoData Data { get; set; }
         
 
-        public void NicoRepo() {
-
-
-
-
-
-
-
-        }
 
         public void Reflesh() {
 
