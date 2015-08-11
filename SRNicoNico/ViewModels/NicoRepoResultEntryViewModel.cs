@@ -26,5 +26,32 @@ namespace SRNicoNico.ViewModels {
             Entry = entry;
 
         }
+
+
+        public void Open() {
+
+            if(Entry.VideoUrl.StartsWith("http://www.nicovideo.jp/watch/")) {
+
+                OpenVideo();
+                return;
+            }
+
+            
+
+        }
+
+
+        private void OpenVideo() {
+
+
+
+            new VideoViewModel(Entry.VideoUrl.Substring(30));
+
+        }
+
+
+
+
+
     }
 }

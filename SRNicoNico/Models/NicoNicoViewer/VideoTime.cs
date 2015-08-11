@@ -56,10 +56,25 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 				RaisePropertyChanged();
 			}
 		}
-		#endregion
+        #endregion
+
+
+        #region VideoTimeString変更通知プロパティ
+        private string _VideoTimeString;
+
+        public string VideoTimeString {
+            get { return _VideoTimeString; }
+            set { 
+                if(_VideoTimeString == value)
+                    return;
+                _VideoTimeString = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
 
 
 
-	}
+    }
 }

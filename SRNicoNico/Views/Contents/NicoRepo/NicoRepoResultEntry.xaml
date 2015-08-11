@@ -5,12 +5,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="361"
              d:DataContext="{d:DesignInstance { x:Type vm:NicoRepoResultEntryViewModel}}"
              BorderThickness="1"
              BorderBrush="#FF333333"
              >
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>

@@ -38,8 +38,6 @@ namespace SRNicoNico.ViewModels {
 
 		}
 
-		//動画ID
-		public string Cmsid { get; set; }
 
 		//キャッシュパス
 		public string Path { get; set; }
@@ -56,21 +54,6 @@ namespace SRNicoNico.ViewModels {
 		//API結果
 		public VideoData VideoData { get; set; }
 
-
-		//動画時間 long型
-		#region Length変更通知プロパティ
-		private long _Length;
-
-		public long Length {
-			get { return _Length; }
-			set {
-				if(_Length == value)
-					return;
-				_Length = value;
-				RaisePropertyChanged();
-			}
-		}
-		#endregion
 
 		//各種シークバー関連の時間管理
 		public VideoTime Time { get; set; }
@@ -138,27 +121,38 @@ namespace SRNicoNico.ViewModels {
 		#endregion
 
 
-		public VideoViewModel(NicoNicoSearchResultNode Node) {
+		public VideoViewModel(string videoUrl) {
+
+            if(App.ViewModelRoot.CurrentVideo != null) {
+
+                App.ViewModelRoot.CurrentVideo.DisposePlayer();
+            }
 
 			App.ViewModelRoot.CurrentVideo = this;
-			VideoData = new VideoData();
+
+
+            VideoData = new VideoData();
+            VideoData.ApiData = new WatchApi().GetWatchApiData(videoUrl);
+            
 			Stream = new NicoNicoStream(this);
 			SeekCursor = new Thickness();
 			Time = new VideoTime();
+
+            Time.VideoTimeString = NicoNicoUtil.GetTimeFromLong(VideoData.ApiData.Length);
 
 			//バックグラウンドでいろいろと処理をする
 			Task.Run(() => {
 
 				//ストリーミングサーバーオープン
-				OpenVideo(Node);
+				Stream.OpenVideo();
 				LoadStatus = "動画情報取得中";
 
-				//動画説明文などを取得
-				VideoData.ThumbInfoData = NicoNicoGetThumbInfo.GetThumbInfo(Node.cmsid);
-				Length = NicoNicoUtil.GetTimeOfLong(VideoData.ThumbInfoData.Length);
+
+                new WatchApi().GetWatchApiData(videoUrl);
+
 
 				LoadStatus = "ストーリーボード取得中";
-				VideoData.StoryBoardData = new NicoNicoStoryBoard(VideoData.GetFlvData.VideoUrl).GetStoryBoardData();
+				VideoData.StoryBoardData = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl).GetStoryBoardData();
 
 
 				//準備できてない
@@ -182,11 +176,7 @@ namespace SRNicoNico.ViewModels {
 
 
 		}
-
-		private void OpenVideo(NicoNicoSearchResultNode Node) {
-
-			Stream.OpenVideo(Node);
-		}
+        
 
 		public void Play() {
 

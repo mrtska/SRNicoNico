@@ -12,6 +12,7 @@
                   xmlns:v="clr-namespace:SRNicoNico.Views"
                   xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
 				  xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
+                  xmlns:root="clr-namespace:SRNicoNico.Views.Contents"
                   Title="{Binding Title}"
                   Width="870"
                   Height="723"
@@ -76,8 +77,7 @@
             </local:TabItemEx>
             <local:TabItemEx Text="マイリスト">
                 
-                まいりすとー
-
+                
             </local:TabItemEx>
 
 

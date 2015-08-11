@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 using Livet;
 
@@ -35,26 +37,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		}
 
 
-		public void OpenVideo(NicoNicoSearchResultNode Node) {
+		public void OpenVideo() {
 
 			
-			Video.Cmsid = Node.cmsid;
 			//ViewをVideoに変える
 			App.ViewModelRoot.Content = Video;
-
-			Video.LoadStatus = "動画ページにアクセス中";
-			NicoNicoGetFlv.AccessVideoPage(Node.cmsid);
+            
 
 			//GetFlvAPIを叩いてサーバーを取得
-			NicoNicoGetFlvData data = NicoNicoGetFlv.GetFlv(Node.cmsid);
-
-			Video.VideoData.GetFlvData = data;
-
+			NicoNicoGetFlvData data = Video.VideoData.ApiData.GetFlv;
+            
 			//cacheディレクトリを無ければ作成
 			Directory.CreateDirectory(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\cache");
 
 			//キャッシュパス
-			string path = NicoNicoUtil.CurrentDirectory.DirectoryName + @"\cache\" + Node.cmsid;
+			string path = NicoNicoUtil.CurrentDirectory.DirectoryName + @"\cache\" + Video.VideoData.ApiData.Cmsid;
 			FileInfo cache = new FileInfo(path);
 
 			//キャッシュが存在したら
@@ -64,14 +61,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 				CacheStream = new FileStream(path, FileMode.Open, FileAccess.Write);
 				Video.LoadStatus = "ストリーミング開始（キャッシュ有）";
-				VideoStream = NicoNicoGetFlv.GetFlvStreamRange(Node.cmsid, data.VideoUrl, length);
+				VideoStream = GetFlvStreamRange(length);
 				CacheExists = true;
 
 			} else {
 
 				CacheStream = new FileStream(path, FileMode.Create, FileAccess.Write);
 				Video.LoadStatus = "ストリーミング開始（キャッシュ無）";
-				VideoStream = NicoNicoGetFlv.GetFlvStream(Node.cmsid, data.VideoUrl);
+				VideoStream = GetFlvStream();
 
 				CacheExists = false;
 			}
@@ -114,5 +111,22 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 				VideoStream.Dispose();
 			}
 		}
-	}
+
+        //動画本体のストリームを返す
+        public Stream GetFlvStream() {
+
+            return NicoNicoWrapperMain.GetSession().HttpClient.GetStreamAsync(Video.VideoData.ApiData.GetFlv.VideoUrl).Result;
+        }
+
+        //指定した場所からストリームを返す
+        public Stream GetFlvStreamRange(long length) {
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, Video.VideoData.ApiData.GetFlv.VideoUrl);
+            request.Headers.Range = new RangeHeaderValue(length, null);
+
+            HttpResponseMessage response = NicoNicoWrapperMain.GetSession().HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).Result;
+
+            return response.Content.ReadAsStreamAsync().Result;
+        }
+    }
 }

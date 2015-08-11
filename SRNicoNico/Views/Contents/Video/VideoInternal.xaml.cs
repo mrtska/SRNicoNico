@@ -83,7 +83,7 @@ namespace SRNicoNico.Views.Contents.Video {
 
 			VideoTime time = App.ViewModelRoot.CurrentVideo.Time;
 
-			long length = App.ViewModelRoot.CurrentVideo.Length;
+			long length = App.ViewModelRoot.CurrentVideo.VideoData.ApiData.Length;
 
 			time.CurrentTime = (long)(length * Player.Position);
 			time.CurrentTimeString = NicoNicoUtil.GetTimeFromLong(time.CurrentTime);

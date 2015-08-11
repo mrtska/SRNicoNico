@@ -13,7 +13,7 @@ namespace SRNicoNico.ViewModels {
 		//動画を開く
 		public void OpenVideo() {
 
-			new VideoViewModel(Node);
+			new VideoViewModel("http://www.nicovideo.jp/watch/" + Node.cmsid);
 		}
 	}
 }
