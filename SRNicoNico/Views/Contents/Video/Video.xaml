@@ -10,6 +10,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
+             xmlns:bc="http://www.quickzip.org/BaseControls"
+             xmlns:behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
              d:DesignHeight="600"
              d:DesignWidth="600"
 			 d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
@@ -39,8 +41,11 @@
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock HorizontalAlignment="Left" Padding="5" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.Description}" VerticalAlignment="Top" Style="{DynamicResource TextBlockStyle1}"/>
+            <ScrollViewer>
+                <TextBlock HorizontalAlignment="Stretch" Padding="5" TextWrapping="Wrap" behaviors:HtmlTextBoxProperties.HtmlText="{Binding VideoData.ApiData.Description}" />
 
+            </ScrollViewer>
+           
             <Border Grid.Column="1">
                 <StackPanel Margin="5" Grid.Column="1" Orientation="Vertical" >
 

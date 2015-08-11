@@ -45,7 +45,7 @@ namespace SRNicoNico.ViewModels {
 
 
 
-            new VideoViewModel(Entry.VideoUrl.Substring(30));
+            new VideoViewModel(Entry.VideoUrl);
 
         }
 

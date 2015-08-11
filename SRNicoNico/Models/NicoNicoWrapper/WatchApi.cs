@@ -72,6 +72,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.YesterdayRank = videoDetail.yesterday_rank;
             ret.HighestRank = videoDetail.highest_rank;
 
+            //ret.Description = ret.Description.Replace("<", "[").Replace(">", "]");
+            Console.WriteLine(ret.Description);
+
             foreach(var tag in videoDetail.tagList) {
 
                 NicoNicoTag entry = new NicoNicoTag() {
