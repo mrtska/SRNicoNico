@@ -13,6 +13,7 @@
                   xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
 				  xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
                   xmlns:root="clr-namespace:SRNicoNico.Views.Contents"
+                  xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
                   Title="{Binding Title}"
                   Width="870"
                   Height="723"
@@ -80,8 +81,7 @@
                 
             </local:TabItemEx>
             <local:TabItemEx Text="その他">
-                
-                
+                <misc:Other />
             </local:TabItemEx>
 
         </local:TabControlEx>

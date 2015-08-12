@@ -14,9 +14,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //視聴履歴を返すAPI
         private const string HistroyApiUrl = "http://www.nicovideo.jp/api/videoviewhistory/list";
 
-
+        //たまに失敗するから注意
         public List<NicoNicoHistoryData> GetHistroyData() {
 
+            //このAPIだけでは再生数やコメント数などが取得できないので
             string result = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(HistroyApiUrl).Result;
 
             List<NicoNicoHistoryData> ret = new List<NicoNicoHistoryData>();
@@ -34,6 +35,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     WatchCount = (int) entry.watch_count,
                     WatchDate = (long) entry.watch_date
                 };
+
+
+
+
+
+
+
+
+
                 ret.Add(data);
             }
 
@@ -60,6 +70,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //視聴回数
         public int WatchCount { get; set; }
+
+        //再生数
+        public int ViewCounter { get; set; }
+
+        //コメント数
+        public int CommentCounter { get; set; }
+
+        //マイリスト数
+        public int MylistCounter { get; set; }
     }
 
 }

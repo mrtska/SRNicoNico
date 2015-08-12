@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Threading;
 
 using Livet;
 
@@ -121,7 +122,25 @@ namespace SRNicoNico.ViewModels {
 		#endregion
 
 
-		public VideoViewModel(string videoUrl) {
+        public VideoViewModel(WatchApiData apiData) {
+
+            if(App.ViewModelRoot.CurrentVideo != null) {
+
+                App.ViewModelRoot.CurrentVideo.DisposePlayer();
+            }
+
+            App.ViewModelRoot.CurrentVideo = this;
+
+
+            VideoData = new VideoData();
+            VideoData.ApiData = apiData;
+
+            Initialize();
+        }
+
+
+
+        public VideoViewModel(string videoUrl) {
 
             if(App.ViewModelRoot.CurrentVideo != null) {
 
@@ -132,50 +151,54 @@ namespace SRNicoNico.ViewModels {
 
 
             VideoData = new VideoData();
-            VideoData.ApiData = new WatchApi().GetWatchApiData(videoUrl);
+            VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
+
+            Initialize();
             
-			Stream = new NicoNicoStream(this);
-			SeekCursor = new Thickness();
-			Time = new VideoTime();
+		}
+
+
+
+
+		private void Initialize() {
+
+            Stream = new NicoNicoStream(this);
+            SeekCursor = new Thickness();
+            Time = new VideoTime();
 
             Time.VideoTimeString = NicoNicoUtil.GetTimeFromLong(VideoData.ApiData.Length);
 
-			//バックグラウンドでいろいろと処理をする
-			Task.Run(() => {
+            //バックグラウンドでいろいろと処理をする
+            Task.Run(() => {
 
-				//ストリーミングサーバーオープン
-				Stream.OpenVideo();
-				LoadStatus = "動画情報取得中";
-
-
-                new WatchApi().GetWatchApiData(videoUrl);
+                //ストリーミングサーバーオープン
+                Stream.OpenVideo();
+                LoadStatus = "動画情報取得中";
 
 
-				LoadStatus = "ストーリーボード取得中";
-				VideoData.StoryBoardData = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl).GetStoryBoardData();
+                LoadStatus = "ストーリーボード取得中";
+                VideoData.StoryBoardData = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl).GetStoryBoardData();
 
 
-				//準備できてない
-				if(Path == null) {
+                //準備できてない
+                if(Path == null) {
 
-					return;
-				}
-				Player.LoadMedia(Path);
+                    return;
+                }
 
-				LoadStatus = "";
+                while(Player == null) {
 
-				IconData = Pause;
-				Player.Play();
-			});
-		}
+                    Thread.Sleep(50);
+                }
 
+                Player.LoadMedia(Path);
 
+                LoadStatus = "";
 
-
-		public void Initialize() {
-
-
-		}
+                IconData = Pause;
+                Player.Play();
+            });
+        }
         
 
 		public void Play() {

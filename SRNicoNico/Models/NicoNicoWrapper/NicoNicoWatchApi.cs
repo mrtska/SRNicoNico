@@ -17,12 +17,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
     //動画を見るうえで必要な情報をこのAPIだけで全て取得できるヤバいAPI
-    public class WatchApi : NotificationObject {
+    public sealed class NicoNicoWatchApi : NotificationObject {
 
 
 
         //動画ページを指定
-        public WatchApiData GetWatchApiData(string videoPage) {
+        public static WatchApiData GetWatchApiData(string videoPage) {
 
             //動画ページのhtml取得
             string html = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(videoPage).Result;

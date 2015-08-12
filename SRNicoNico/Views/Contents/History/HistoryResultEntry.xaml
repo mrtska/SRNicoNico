@@ -9,9 +9,21 @@
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="367.54"
-             d:DataContext="{d:DesignInstance {vm:}}"
+             d:DataContext="{d:DesignInstance {x:Type vm:HistoryResultEntryViewModel}}"
+             BorderThickness="1"
+             BorderBrush="#FF333333"
              >
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="155*"/>
+        </Grid.ColumnDefinitions>
+        <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,19" Source="{Binding Data.ThumbnailUrl,TargetNullValue={x:Null}}" />
+        <TextBlock HorizontalAlignment="Left" Foreground="#FFAAAAAA" TextWrapping="Wrap" Text="{Binding Data.Title}" VerticalAlignment="Top" Grid.Column="1" Margin="10,5,0,0" Height="22" />
+        <TextBlock HorizontalAlignment="Right" Foreground="#FFAAAAAA" TextWrapping="Wrap" Text="{Binding Data.Length}" VerticalAlignment="Top" Margin="0,59,5,0"/>
+
+        
+
 
     </Grid>
 </UserControl>

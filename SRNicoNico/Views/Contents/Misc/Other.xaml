@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.Misc.Other"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Misc"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="316.492" d:DesignWidth="170.419"
+             d:DataContext="{d:DesignInstance {x:Type vm:OtherViewModel}}"
+             DataContext="{Binding Other}"
+             >
+    <Grid>
+        <Button Content="視聴履歴" HorizontalAlignment="Left" VerticalAlignment="Top" Width="117" Margin="23,20,0,0">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenHistory" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        
+        </Button>
+
+    </Grid>
+</UserControl>

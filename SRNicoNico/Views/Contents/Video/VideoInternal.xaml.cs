@@ -51,7 +51,6 @@ namespace SRNicoNico.Views.Contents.Video {
 			Media.EndReached += Media_EndReached;
 
 			App.ViewModelRoot.CurrentVideo.Player = Player;
-			App.ViewModelRoot.CurrentVideo.Initialize();
 		}
 
 
@@ -96,8 +95,19 @@ namespace SRNicoNico.Views.Contents.Video {
 				Player.Position = 0F;
 			}
 
+            int kBps = BPSCounter.Bps / 1024;
 
-			App.ViewModelRoot.CurrentVideo.BPS = (Models.NicoNicoViewer.BPSCounter.Bps / 1024) + "KiB/秒";
+            //数字がデカかったら単位を変えましょう
+            if(kBps > 1024) {
+
+                
+                App.ViewModelRoot.CurrentVideo.BPS = (Math.Truncate((float)kBps / 1024 * 100) / 100) + "MiB/秒";
+            } else {
+
+
+                App.ViewModelRoot.CurrentVideo.BPS = (kBps) + "KiB/秒";
+            }
+
 
 		}
 	}

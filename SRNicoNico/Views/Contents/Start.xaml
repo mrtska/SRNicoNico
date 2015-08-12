@@ -9,6 +9,7 @@
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
 			 xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
              xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
+             xmlns:history="clr-namespace:SRNicoNico.Views.Contents.History"
              d:DesignHeight="348"
              d:DesignWidth="585"
 			d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
@@ -48,6 +49,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:NicoRepoResultViewModel}">
                     <nicorepo:NicoRepoResult/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:HistoryResultViewModel}">
+                    <history:HistoryResult/>
                 </DataTemplate>
             </ContentControl.Resources>
 

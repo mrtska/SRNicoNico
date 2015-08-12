@@ -10,7 +10,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 	public class BPSCounter : NotificationObject {
 
 		//通信速度を取得する
-		public static float Bps { get; private set; }
+		public static int Bps { get; private set; }
 
 		//速度取得開始
 		public static void InitAndStart() {
@@ -33,7 +33,8 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 					f1 = f2;
 
 
-					Bps = difReceived;
+					Bps = (int) difReceived;
+                    
 					Thread.Sleep(1000);
 				}
 

@@ -13,12 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SRNicoNico.Views.Contents {
+namespace SRNicoNico.Views.Contents.History {
     /// <summary>
-    /// Debug.xaml の相互作用ロジック
+    /// HistoryResult.xaml の相互作用ロジック
     /// </summary>
-    public partial class Debug : UserControl {
-        public Debug() {
+    public partial class HistoryResult : UserControl {
+        public HistoryResult() {
             InitializeComponent();
         }
     }

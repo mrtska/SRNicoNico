@@ -66,6 +66,8 @@ namespace SRNicoNico.ViewModels {
 
 		public VideoViewModel CurrentVideo { get; set; }
 
+        public OtherViewModel Other { get; set; }
+
 		public MainWindowViewModel() {
 
 			SignIn = new SignInDialogViewModel();
@@ -75,6 +77,8 @@ namespace SRNicoNico.ViewModels {
 			SearchResult = new SearchResultViewModel();
 
             NicoRepo = new NicoRepoViewModel();
+
+            Other = new OtherViewModel();
 
 			VideoMap = new Dictionary<string, VideoViewModel>();
 
