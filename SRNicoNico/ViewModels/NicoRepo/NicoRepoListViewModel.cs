@@ -72,7 +72,7 @@ namespace SRNicoNico.ViewModels {
 
             Result.IsActive = true;
             Result.OwnerViewModel = this;
-            App.ViewModelRoot.Content = Result;
+            App.ViewModelRoot.RightContent = Result;
             Result.NicoRepo.Clear();
 
             Task.Run(() => {

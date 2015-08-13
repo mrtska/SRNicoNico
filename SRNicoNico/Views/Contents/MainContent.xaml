@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.MainContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents"
+             xmlns:search="clr-namespace:SRNicoNico.Views.Contents.Search"
+			 xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
+             xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
+             xmlns:history="clr-namespace:SRNicoNico.Views.Contents.History"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
+             >
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="215"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <ContentControl Content="{Binding LeftContent}">
+
+
+
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
+                    <local:EtcContent />
+                </DataTemplate>
+            </ContentControl.Resources>
+            
+            
+            
+        </ContentControl>
+        <ContentControl Grid.Column="2" Content="{Binding RightContent}">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Setter Property="Content" Value="{Binding HurfView.EditedPart}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Content}" Value="{x:Null}">
+                            <Setter Property="ContentControl.Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                            <local:Start />
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+            <ContentControl.Resources>
+                
+                
+                <DataTemplate DataType="{x:Type vm:SearchResultViewModel}">
+                    <search:SearchResult/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:VideoViewModel}">
+                    <video:Video/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:NicoRepoResultViewModel}">
+                    <nicorepo:NicoRepoResult/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:HistoryResultViewModel}">
+                    <history:HistoryResult/>
+                </DataTemplate>
+            </ContentControl.Resources>
+            
+            
+        </ContentControl>
+    </Grid>
+</UserControl>

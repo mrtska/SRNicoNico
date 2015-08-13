@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:Behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
-             xmlns:Wpf="clr-namespace:xZune.Vlc.Wpf;assembly=xZune.VLC.WPF"
+             xmlns:Wpf="clr-namespace:xZune.Vlc.Wpf;assembly=xZune.Vlc.Wpf"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"

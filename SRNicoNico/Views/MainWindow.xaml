@@ -3,7 +3,7 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:contents="clr-namespace:SRNicoNico.Views.Contents"
                   xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-				  	   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                   xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
@@ -56,38 +56,15 @@
     </i:Interaction.Triggers>
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="215"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+
+        <ContentControl Content="{Binding AllContent}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
+                    <contents:MainContent/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
 
 
-        <local:TabControlEx Grid.Column="0" Background="Transparent" BorderThickness="0" TabStripPlacement="Left" >
-
-
-            <local:TabItemEx Text="検索">
-
-                <search:Search />
-            </local:TabItemEx>
-
-            <local:TabItemEx Text="二コレポ">
-
-                <nicorepo:NicoRepo />
-                
-            </local:TabItemEx>
-            <local:TabItemEx Text="マイリスト">
-                
-                
-            </local:TabItemEx>
-            <local:TabItemEx Text="その他">
-                <misc:Other />
-            </local:TabItemEx>
-
-        </local:TabControlEx>
-
-        <Line X1="3" X2="3" Grid.Column="1" Y1="0" Y2="{Binding ElementName=Root,Path=ActualHeight}" Stroke="#FF333333"/>
-
-        <contents:Start Grid.Column="2" Grid.ColumnSpan="2" />
     </Grid>
 </mui:ModernWindow>

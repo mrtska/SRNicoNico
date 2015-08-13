@@ -23,7 +23,7 @@ namespace SRNicoNico.ViewModels {
             HistoryResultViewModel History = new HistoryResultViewModel();
 
             History.IsActive = true;
-            App.ViewModelRoot.Content = History;
+            App.ViewModelRoot.RightContent = History;
 
             Task.Run(() => {
 

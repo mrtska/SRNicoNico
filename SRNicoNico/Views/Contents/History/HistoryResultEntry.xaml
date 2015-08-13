@@ -13,7 +13,16 @@
              BorderThickness="1"
              BorderBrush="#FF333333"
              >
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+            <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
+
+        
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
             <ColumnDefinition Width="155*"/>

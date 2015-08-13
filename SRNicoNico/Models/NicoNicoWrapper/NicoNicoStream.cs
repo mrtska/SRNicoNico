@@ -40,8 +40,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		public void OpenVideo() {
 
 			
-			//ViewをVideoに変える
-			App.ViewModelRoot.Content = Video;
             
 
 			//GetFlvAPIを叩いてサーバーを取得

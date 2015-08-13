@@ -72,7 +72,7 @@ namespace SRNicoNico.ViewModels {
             App.ViewModelRoot.SearchResult.OwnerViewModel = this;
 
             App.ViewModelRoot.SearchResult.IsActive = true;
-            App.ViewModelRoot.Content = App.ViewModelRoot.SearchResult;
+            App.ViewModelRoot.RightContent = App.ViewModelRoot.SearchResult;
 
             //検索
             currentSearch = new NicoNicoSearch(SearchText, sort_by[SelectedIndex]);

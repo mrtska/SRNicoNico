@@ -18,50 +18,25 @@
 
 
 
-    <Grid>
+
+                    
+        <Grid d:DesignWidth="640" d:DesignHeight="546" Width="auto">
+            <TextBlock Grid.Column="1" Text="NicoNico Viewer" FontSize="36"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="10,62,0,0" Height="83.5" Width="auto">
+			このアプリケーションはニコニコ動画をブラウザを起動しなくても見られるようにするアプリケーションです。<LineBreak />
+			権利者からの申し立てなどには速やかに対処します。<LineBreak />
+			このアプリケーションを利用して生じた障害や不利益の責任は一切負いません。自己責任でお使いください。
+            </TextBlock>
+
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24"	VerticalAlignment="Top" Margin="0,274,0,0" Text="～更新履歴～" />
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12"	VerticalAlignment="Top" Margin="0,310,0,0" Text="・いろいろあり過ぎて覚えてない。" />
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="0,328,0,0" Text="・ライブラリ、開発環境を変更" />
+
+        </Grid>
+
+        
 
 
 
-        <ContentControl Content="{Binding Content}">
-            <ContentControl.Resources>
-
-                <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
-                    <Grid d:DesignWidth="640" d:DesignHeight="546" Width="auto">
-                        <TextBlock Grid.Column="1" Text="NicoNico Viewer" FontSize="36"/>
-                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="10,62,0,0" Height="83.5" Width="auto">
-						このアプリケーションはニコニコ動画をブラウザを起動しなくても見られるようにするアプリケーションです。<LineBreak />
-						権利者からの申し立てなどには速やかに対処します。<LineBreak />
-						このアプリケーションを利用して生じた障害や不利益の責任は一切負いません。自己責任でお使いください。
-                        </TextBlock>
-
-                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24"	VerticalAlignment="Top" Margin="0,274,0,0" Text="～更新履歴～" />
-                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12"	VerticalAlignment="Top" Margin="0,310,0,0" Text="・いろいろあり過ぎて覚えてない。" />
-                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="0,328,0,0" Text="・ライブラリ、開発環境を変更" />
-
-                    </Grid>
-
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:SearchResultViewModel}">
-                    <search:SearchResult/>
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:VideoViewModel}">
-                    <video:Video/>
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:NicoRepoResultViewModel}">
-                    <nicorepo:NicoRepoResult/>
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:HistoryResultViewModel}">
-                    <history:HistoryResult/>
-                </DataTemplate>
-            </ContentControl.Resources>
-
-        </ContentControl>
-
-
-
-
-
-
-    </Grid>
 
 </UserControl>

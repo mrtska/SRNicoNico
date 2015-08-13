@@ -41,22 +41,51 @@ namespace SRNicoNico.ViewModels {
         
         
 		#region Content変更通知プロパティ
-		private ViewModel _Content;
+		private ViewModel _AllContent;
 
-		public ViewModel Content {
-			get { return _Content; }
+		public ViewModel AllContent {
+			get { return _AllContent; }
 			set {
-				if(_Content == value)
+				if(_AllContent == value)
 					return;
-				_Content = value;
+				_AllContent = value;
 				RaisePropertyChanged();
 			}
 		}
-		#endregion
+        #endregion
 
 
+        #region LeftContent変更通知プロパティ
+        private ViewModel _LeftContent;
 
-		public SignInDialogViewModel SignIn { get; private set; }
+        public ViewModel LeftContent {
+            get { return _LeftContent; }
+            set { 
+                if(_LeftContent == value)
+                    return;
+                _LeftContent = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region RightContent変更通知プロパティ
+        private ViewModel _RightContent;
+
+        public ViewModel RightContent {
+            get { return _RightContent; }
+            set { 
+                if(_RightContent == value)
+                    return;
+                _RightContent = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        public SignInDialogViewModel SignIn { get; private set; }
 		public SearchViewModel Search { get; private set; }
 		public SearchResultViewModel SearchResult { get; private set; }
 
@@ -83,7 +112,7 @@ namespace SRNicoNico.ViewModels {
 			VideoMap = new Dictionary<string, VideoViewModel>();
 
 
-			Content = this;
+			AllContent = LeftContent = this;
 		}
 
 

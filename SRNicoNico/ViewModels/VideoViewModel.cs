@@ -129,6 +129,8 @@ namespace SRNicoNico.ViewModels {
                 App.ViewModelRoot.CurrentVideo.DisposePlayer();
             }
 
+            //ViewをVideoに変える
+            App.ViewModelRoot.RightContent = this;
             App.ViewModelRoot.CurrentVideo = this;
 
 
@@ -142,12 +144,15 @@ namespace SRNicoNico.ViewModels {
 
         public VideoViewModel(string videoUrl) {
 
+
             if(App.ViewModelRoot.CurrentVideo != null) {
 
                 App.ViewModelRoot.CurrentVideo.DisposePlayer();
             }
 
-			App.ViewModelRoot.CurrentVideo = this;
+            //ViewをVideoに変える
+            App.ViewModelRoot.RightContent = this;
+            App.ViewModelRoot.CurrentVideo = this;
 
 
             VideoData = new VideoData();
@@ -161,6 +166,8 @@ namespace SRNicoNico.ViewModels {
 
 
 		private void Initialize() {
+
+
 
             Stream = new NicoNicoStream(this);
             SeekCursor = new Thickness();
