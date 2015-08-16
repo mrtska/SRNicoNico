@@ -14,6 +14,7 @@
 				  xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
                   xmlns:root="clr-namespace:SRNicoNico.Views.Contents"
                   xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
+                  xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
                   Title="{Binding Title}"
                   Width="870"
                   Height="723"
@@ -28,6 +29,9 @@
                   WindowStyle="None"
                   x:Name="Root"
 				  >
+
+
+
 
 
 
@@ -64,7 +68,6 @@
                 </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
-
 
     </Grid>
 </mui:ModernWindow>

@@ -118,7 +118,7 @@ namespace SRNicoNico.ViewModels {
 
 		public void Initialize() {
 
-
+            
 			//Modelsを初期化
 			Task.Run(() => {
 
@@ -176,6 +176,7 @@ namespace SRNicoNico.ViewModels {
 				}
 
 			});
+            
 		}
 
 		//終了処理
@@ -186,10 +187,8 @@ namespace SRNicoNico.ViewModels {
 				NicoNicoWrapperMain.GetSession().HttpHandler.Dispose();
 				NicoNicoWrapperMain.GetSession().HttpClient.Dispose();
 
-				if(CurrentVideo != null) {
 
-					CurrentVideo.DisposePlayer();
-				}
+
 			}
 
 

@@ -4,6 +4,7 @@ using Livet;
 
 using SRNicoNico.Models.NicoNicoViewer;
 
+
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoWrapperMain : NotificationObject {
 		/*
@@ -21,6 +22,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //セッションが確立した後に呼ぶ
         public void PostInit() {
 
+            
 			this.User = new NicoNicoUser(Session.UserId);
 			App.ViewModelRoot.Title += "(user:" + this.User.UserName + ")";
 

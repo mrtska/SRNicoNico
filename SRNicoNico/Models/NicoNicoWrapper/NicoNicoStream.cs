@@ -9,6 +9,7 @@ using Livet;
 
 using SRNicoNico.ViewModels;
 
+
 namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoStream : NotificationObject {
 		/*
@@ -38,7 +39,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 		public void OpenVideo() {
-
 			
             
 
@@ -70,7 +70,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 				CacheExists = false;
 			}
-
+            
 				
 
 			Video.Path = path;
@@ -90,8 +90,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 					CacheStream.Seek(0, SeekOrigin.End);
 				}
 
-				VideoStream.CopyTo(CacheStream);
-			});
+                VideoStream.CopyTo(CacheStream);
+
+            });
 		}
 
 

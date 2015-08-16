@@ -73,7 +73,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			this.HttpHandler.AllowAutoRedirect = false;
 			this.HttpHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
 			this.HttpClient = new HttpClient(this.HttpHandler, false);
-			this.HttpClient.DefaultRequestHeaders.Add("user-agent", NicoNicoSession.UserAgent);
+			this.HttpClient.DefaultRequestHeaders.Add("user-agent", UserAgent);
 		}
 
 		//オートログイン時
@@ -84,7 +84,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			this.HttpHandler.AllowAutoRedirect = false;
 			this.HttpHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
 			this.HttpClient = new HttpClient(this.HttpHandler, false);
-			this.HttpClient.DefaultRequestHeaders.Add("user-agent", NicoNicoSession.UserAgent);
+			this.HttpClient.DefaultRequestHeaders.Add("user-agent", UserAgent);
 
 			this.Key = key;
 
@@ -129,11 +129,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 					return SigninStatus.Failed;
 				}
-				//ユーザーIDを取得
-				this.UserId = uint.Parse(response.Headers.GetValues("x-niconico-id").Single());
+                //ユーザーIDを取得
+                UserId = uint.Parse(response.Headers.GetValues("x-niconico-id").Single());
 
-				//アカウント権限
-				this.Authority = (NiconicoAccountAuthority)int.Parse(response.Headers.GetValues("x-niconico-authflag").Single());
+                //アカウント権限
+                Authority = (NiconicoAccountAuthority)int.Parse(response.Headers.GetValues("x-niconico-authflag").Single());
 
 				//cookieを取得
 				var cookie = HttpHandler.CookieContainer.GetCookies(new Uri("http://nicovideo.jp/")).Cast<Cookie>()
@@ -141,11 +141,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 				if(cookie != null && cookie.Expires != null) {
 
-					//cookieをもとにキーと有効期限を取得
-					this.Key = cookie.Value;
-					this.Expire = cookie.Expires;
+                    //cookieをもとにキーと有効期限を取得
+                    Key = cookie.Value;
+                    Expire = cookie.Expires;
 
-
+                    App.SetCookie(new Uri("http://nicovideo.jp/"), "user_session=" + Key);
 					return SigninStatus.Success;
 				}
 			}

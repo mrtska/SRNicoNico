@@ -4,11 +4,14 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
+using System.Threading.Tasks;
 
 using SRNicoNico.ViewModels;
 using SRNicoNico.Views;
+using SRNicoNico.Models.NicoNicoViewer;
 
 using Livet;
+
 
 namespace SRNicoNico {
 	/// <summary>
@@ -21,7 +24,7 @@ namespace SRNicoNico {
 
 
 		private void Application_Startup(object sender, StartupEventArgs e) {
-
+            
 
 		}
 
@@ -35,12 +38,11 @@ namespace SRNicoNico {
 			ViewModelRoot = new MainWindowViewModel();
 			this.MainWindow = new MainWindow { DataContext = ViewModelRoot };
 			this.MainWindow.Show();
-		}
 
+        }
 
-
-		//集約エラーハンドラ
-		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        //集約エラーハンドラ
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 		    //TODO:ロギング処理など
 		    MessageBox.Show(

@@ -5,8 +5,7 @@ using System.Threading;
 
 using Livet;
 
-using xZune.Vlc.Wpf;
-using xZune.Vlc.Interop.Media;
+
 
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Models.NicoNicoWrapper;
@@ -43,8 +42,7 @@ namespace SRNicoNico.ViewModels {
 		//キャッシュパス
 		public string Path { get; set; }
 
-		//プレイヤーインスタンス
-		public VlcPlayer Player { get; set; }
+
 
 		//ストリーミング
 		public NicoNicoStream Stream { get; set; }
@@ -123,12 +121,7 @@ namespace SRNicoNico.ViewModels {
 
 
         public VideoViewModel(WatchApiData apiData) {
-
-            if(App.ViewModelRoot.CurrentVideo != null) {
-
-                App.ViewModelRoot.CurrentVideo.DisposePlayer();
-            }
-
+            
             //ViewをVideoに変える
             App.ViewModelRoot.RightContent = this;
             App.ViewModelRoot.CurrentVideo = this;
@@ -137,18 +130,12 @@ namespace SRNicoNico.ViewModels {
             VideoData = new VideoData();
             VideoData.ApiData = apiData;
 
-            Initialize();
         }
 
 
 
         public VideoViewModel(string videoUrl) {
 
-
-            if(App.ViewModelRoot.CurrentVideo != null) {
-
-                App.ViewModelRoot.CurrentVideo.DisposePlayer();
-            }
 
             //ViewをVideoに変える
             App.ViewModelRoot.RightContent = this;
@@ -158,90 +145,15 @@ namespace SRNicoNico.ViewModels {
             VideoData = new VideoData();
             VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
 
-            Initialize();
             
 		}
 
 
 
 
-		private void Initialize() {
 
-
-
-            Stream = new NicoNicoStream(this);
-            SeekCursor = new Thickness();
-            Time = new VideoTime();
-
-            Time.VideoTimeString = NicoNicoUtil.GetTimeFromLong(VideoData.ApiData.Length);
-
-            //バックグラウンドでいろいろと処理をする
-            Task.Run(() => {
-
-                //ストリーミングサーバーオープン
-                Stream.OpenVideo();
-                LoadStatus = "動画情報取得中";
-
-
-                LoadStatus = "ストーリーボード取得中";
-                VideoData.StoryBoardData = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl).GetStoryBoardData();
-
-
-                //準備できてない
-                if(Path == null) {
-
-                    return;
-                }
-
-                while(Player == null) {
-
-                    Thread.Sleep(50);
-                }
-
-                Player.LoadMedia(Path);
-
-                LoadStatus = "";
-
-                IconData = Pause;
-                Player.Play();
-            });
-        }
         
 
-		public void Play() {
 
-			LoadStatus = "";
-
-
-			if(Player.State == MediaState.Playing) {
-
-				IconData = Playing;
-				Player.PauseOrResume();
-				return;
-			}
-			if(Player.State == MediaState.Paused) {
-
-				IconData = Pause;
-
-				Player.PauseOrResume();
-				return;
-			}
-
-
-
-			IconData = Pause;
-
-
-			Player.Play();
-		}
-
-		public void DisposePlayer() {
-
-			Stream.Dispose();
-			if(Player != null) {
-
-				Player.Dispose();
-			}
-		}
 	}
 }

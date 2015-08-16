@@ -29,10 +29,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private const string NicoRepoMylistAPI = @"http://www.nicovideo.jp/my/top?innerPage=1&mode=next_page";
 
         //htmlからいろいろ持ってくるXPath
-        private const string IconUrlXPath = "/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='timeline']/div/div[@class='log-author ']/a/img";
-        private const string TitleXPath = "/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='timeline']/div/div[@class='log-content']/div[@class='log-body']";
-        private const string ThumbnailXPath = "/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='timeline']/div/div[@class='log-content']/div[2]/div[@class='log-target-thumbnail']/a/img";
+        private const string IconUrlXPath = "//a[parent::div[@class='log-author ']]/img";
+        private const string TitleXPath = "//div[parent::div[@class='log-content']][@class='log-body']";
+        private const string ThumbnailXPath = "//namespace::a[parent::div[@class='log-target-thumbnail']]/img|//a[parent::div[@class='log-author ']]/img";
+
+
+
         private const string DescriptionXPath = "/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='timeline']/div/div[@class='log-content']/div[2]/div[@class='log-target-info']/a";
+       // private const string DescriptionXPath = "//namespace::a[parent::div[@class='log-target-info']]|/div";
+
         private const string TimeXPath = "/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='timeline']/div/div[@class='log-content']/div[2]/div[@class='log-footer']/div/a[@class='log-footer-date ']/time|/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='timeline']/div/div[@class='log-content']/div[2]/div[@class='log-footer']/div/a[@class='log-footer-date hot']/time";
         //ID ユーザー定義ニコレポリストID
         private string Id;
@@ -178,9 +183,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 entry.ImageUrl = thumbNails[i].Attributes["data-original"].Value;
 
+                entry.Description = descriptions[i].InnerText.Trim();
+
                 entry.VideoUrl = descriptions[i].Attributes["href"].Value;
 
-                entry.Description = descriptions[i].InnerText.Trim();
 
                 entry.Time = nicorepoTimes[i].InnerText.Trim();
 

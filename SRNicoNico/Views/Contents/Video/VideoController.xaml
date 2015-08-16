@@ -2,7 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:Wpf="clr-namespace:xZune.Vlc.Wpf;assembly=xZune.VLC.WPF"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
@@ -34,7 +33,7 @@
             </i:Interaction.Triggers>
 
         </mui:ModernButton>
-        <seek:SeekBar x:Name="Seek"  Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VideoTime="{Binding VideoData.ApiData.Length}" CurrentTime="{Binding Time.CurrentTime}" CurrentTimeWidth="{Binding Time.CurrentTimeWidth}" SeekCursor="{Binding SeekCursor}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter" MouseLeftButtonUp="Seek_MouseLeftButtonUp" />
+        <seek:SeekBar x:Name="Seek"  Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VideoTime="{Binding VideoData.ApiData.Length}" CurrentTime="{Binding Time.CurrentTime}" CurrentTimeWidth="{Binding Time.CurrentTimeWidth}" SeekCursor="{Binding SeekCursor}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter"  />
         <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" >
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Time.CurrentTimeString}" Height="25" Foreground="#FFAAAAAA" FontSize="16"/>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="/" Foreground="#FFAAAAAA" FontSize="16" Padding="5,0" />

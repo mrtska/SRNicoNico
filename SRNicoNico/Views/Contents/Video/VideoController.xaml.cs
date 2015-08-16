@@ -77,13 +77,8 @@ namespace SRNicoNico.Views.Contents.Video {
 			Seek.IsPopupOpen = true;
 		}
 
-		private void Seek_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
 
 
-			//マウスカーソルX座標
-			double x = e.GetPosition(this).X;
 
-			App.ViewModelRoot.CurrentVideo.Player.Position = (float)(x / ActualWidth);
-		}
 	}
 }

@@ -38,8 +38,6 @@
 
         </tab:TabControlEx>
 
-        <Line X1="3" X2="3" Grid.Column="1" Y1="0" Y2="{Binding ElementName=Root,Path=ActualHeight}" Stroke="#FF333333"/>
-
         
     </Grid>
 </UserControl>
