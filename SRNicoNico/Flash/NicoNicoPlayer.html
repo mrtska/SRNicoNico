@@ -9,16 +9,33 @@
 		</style>
 	</head>
 	<body>
-		<object type="application/x-shockwave-flash"" width="100%" height="100%" id="NicoNicoPlayer">
+		<object type="application/x-shockwave-flash" width="100%" height="100%" id="NicoNicoPlayer">
 			<param name="movie" value="NicoNicoPlayer.swf" />
 			<param name="quality" value="high" />
 			<param name="bgcolor" value="#000000" />
-			<param name="play" value="true" />
-			<param name="loop" value="true" />
+			<param name="play" value="false" />
+			<param name="loop" value="false" />
 			<param name="wmode" value="direct" />
-			<param name="menu" value="true" />
+			<param name="menu" value="false" />
 			<param name="devicefont" value="false" />
 			<param name="allowScriptAccess" value="sameDomain" />
 		</object>
+		
+		<script>
+			var flash = document.NicoNicoPlayer;
+			
+			//指定したURLの動画をストリーミング再生する
+			function CsOpenVideo(url) {
+				
+				
+				flash.JsOpenVideo(url);
+			}
+			
+			
+		</script>
+		
+		
+		
+		
 	</body>
 </html>

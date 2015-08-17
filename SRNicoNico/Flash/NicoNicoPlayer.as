@@ -40,26 +40,25 @@
 
 			stage.scaleMode = StageScaleMode.EXACT_FIT;
 			
+			
+			
+			
 			var format:TextFormat = new TextFormat();
 			format.color = 0xFFFFFF;
 			debugText.defaultTextFormat = format;
 			debugText.text = "スタート";
 			
 			//addChild(debugText);
-			
-			if(ExternalInterface.available) {
+				
+				if(ExternalInterface.available) {
 				
 				//コールバック登録
-				ExternalInterface.addCallback("CsOpenVideo", OpenVideo);
-				
+				ExternalInterface.addCallback("JsOpenVideo", OpenVideo);
 				
 				
 
 			}
 			
-			
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
-			OpenVideo("file:///Z:/smile.mp4");
 						
 		}
 		

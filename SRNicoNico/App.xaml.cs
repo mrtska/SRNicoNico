@@ -31,7 +31,6 @@ namespace SRNicoNico {
 		protected override void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
 
-
             DispatcherHelper.UIDispatcher = Dispatcher;
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 

@@ -25,5 +25,16 @@ namespace SRNicoNico.Views.Contents.Video {
         }
 
 
+
+
+        private void browser_LoadCompleted(object sender, NavigationEventArgs e) {
+
+
+            //インスタンスを設定
+            App.ViewModelRoot.CurrentVideo.WebBrowser = browser;
+
+            //動画オープン
+            App.ViewModelRoot.CurrentVideo.OpenVideo();
+        }
     }
 }

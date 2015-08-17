@@ -6,16 +6,15 @@
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="208" d:DesignWidth="401"
              d:DataContext="{d:DesignInstance vm:VideoViewModel}"
              Background="#00000000"
              >
-    <Grid>
+    <Grid Background="Black">
         <WebBrowser x:Name="browser" Source="E:\Development\MVVM\WPF\SRNicoNico\SRNicoNico\Flash\NicoNicoPlayer.html" 
-                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                >
-            
-        </WebBrowser>
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LoadCompleted="browser_LoadCompleted"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                />
 
     </Grid>
 </UserControl>

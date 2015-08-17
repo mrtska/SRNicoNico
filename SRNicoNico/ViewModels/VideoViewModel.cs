@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using System.Threading;
+using System.Windows.Controls;
 
 using Livet;
 
@@ -16,30 +16,6 @@ namespace SRNicoNico.ViewModels {
 	public class VideoViewModel : ViewModel {
 
         
-		private static GeometryGroup Pause;
-		private static GeometryGroup Playing;
-
-		//パスで書いた一時停止ボタンと再生ボタン もっといい方法があるはず・・・
-		static VideoViewModel() {
-
-			RectangleGeometry rect1 = new RectangleGeometry();
-			rect1.Rect = new Rect(-5, 0, 5, 20);
-
-			RectangleGeometry rect2 = new RectangleGeometry();
-			rect2.Rect = new Rect(5, 0, 5, 20);
-
-			Pause = new GeometryGroup();
-			Pause.Children.Add(rect1);
-			Pause.Children.Add(rect2);
-
-			Geometry tri = Geometry.Parse("M 5,0 l 0,10 L 11,5");
-
-			Playing = new GeometryGroup();
-			Playing.Children.Add(tri);
-
-		}
-
-
 		//キャッシュパス
 		public string Path { get; set; }
 
@@ -121,6 +97,35 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region WebBrowser変更通知プロパティ
+        private WebBrowser _WebBrowser;
+
+        public WebBrowser WebBrowser {
+            get { return _WebBrowser; }
+            set { 
+                if(_WebBrowser == value)
+                    return;
+                _WebBrowser = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
+        #region IsPlaying変更通知プロパティ
+        private bool _IsPlaying;
+
+        public bool IsPlaying {
+            get { return _IsPlaying; }
+            set { 
+                if(_IsPlaying == value)
+                    return;
+                _IsPlaying = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
 
 
@@ -162,10 +167,22 @@ namespace SRNicoNico.ViewModels {
         }
 
 
+        //このメソッド以降はWebBrowserプロパティはnullではない
+        public void OpenVideo() {
+
+            InvokeScript("CsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
 
 
-        
+        }
 
 
+
+        //JSを呼ぶ
+        private void InvokeScript(string func, params string[] args) {
+
+
+
+            WebBrowser.InvokeScript(func, args);
+        }
 	}
 }
