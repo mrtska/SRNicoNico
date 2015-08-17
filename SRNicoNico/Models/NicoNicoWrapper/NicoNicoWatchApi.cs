@@ -25,7 +25,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public static WatchApiData GetWatchApiData(string videoPage) {
 
             //動画ページのhtml取得
-            string html = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(videoPage).Result;
+            HttpResponseMessage response = NicoNicoWrapperMain.GetSession().HttpClient.GetAsync(videoPage).Result;
+
+            var cookie = response.Headers.GetValues("Set-Cookie");
+            foreach(string s in cookie) {
+
+                foreach(string ss in s.Split(';')) {
+
+                    App.SetCookie(new Uri("http://nicovideo.jp/"), ss);
+                }
+
+            }
+
+
+
+            string html = response.Content.ReadAsStringAsync().Result;
 
 
             HtmlDocument doc = new HtmlDocument();

@@ -15,7 +15,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 		//速度取得開始
 		public static void InitAndStart() {
 
-
+/**
 			Task.Run(() => {
 
 				PerformanceCounter counter = new PerformanceCounter();
@@ -39,7 +39,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 				}
 
 
-			});
+			});*/
 		}
 	}
 }

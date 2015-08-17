@@ -91,9 +91,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			//Cookieを設定する
 			Cookie cookieKey = new Cookie("user_session", key, "/", ".nicovideo.jp");
 			cookieKey.Expires = expire.DateTime;
-            Cookie spCookieKey = new Cookie("SP_SESSION_KEY", key, "/", ".nicovideo.jp");
 			this.HttpHandler.CookieContainer.Add(cookieKey);
-            this.HttpHandler.CookieContainer.Add(spCookieKey);
 		}
 
 		//サインイン

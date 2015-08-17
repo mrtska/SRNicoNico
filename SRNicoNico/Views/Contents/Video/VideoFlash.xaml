@@ -4,10 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance vm:VideoViewModel}"
+             Background="#00000000"
+             >
     <Grid>
-        <WindowsFormsHost x:Name="host" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="Visible"/>
+        <WebBrowser x:Name="browser" Source="E:\Development\MVVM\WPF\SRNicoNico\SRNicoNico\Flash\NicoNicoPlayer.html" 
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                >
+            
+        </WebBrowser>
 
     </Grid>
 </UserControl>

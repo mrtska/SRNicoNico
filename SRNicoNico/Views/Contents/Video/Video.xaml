@@ -27,9 +27,10 @@
         <TextBlock HorizontalAlignment="Left" Grid.Row="0" TextWrapping="NoWrap" FontSize="20" Text="{Binding VideoData.ApiData.Title}" VerticalAlignment="Top"/>
 
         <!-- プレイヤー -->
-        <video:VideoInternal Grid.Row="1" />
 
-        
+        <video:VideoFlash x:Name="flashControl" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+
         <video:VideoController x:Name="Controller"  Grid.Row="2" Visibility="Visible" />
 
 

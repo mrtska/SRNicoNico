@@ -10,11 +10,12 @@ using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Models.NicoNicoWrapper;
 
+
 namespace SRNicoNico.ViewModels {
 
 	public class VideoViewModel : ViewModel {
 
-
+        
 		private static GeometryGroup Pause;
 		private static GeometryGroup Playing;
 
@@ -117,7 +118,12 @@ namespace SRNicoNico.ViewModels {
 				RaisePropertyChanged();
 			}
 		}
-		#endregion
+        #endregion
+
+
+
+
+
 
 
         public VideoViewModel(WatchApiData apiData) {
@@ -145,9 +151,15 @@ namespace SRNicoNico.ViewModels {
             VideoData = new VideoData();
             VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
 
-            
 		}
 
+        public void Initialize() {
+
+            
+           
+
+
+        }
 
 
 

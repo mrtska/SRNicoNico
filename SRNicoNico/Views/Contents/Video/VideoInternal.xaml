@@ -21,8 +21,6 @@
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
 
-        <local:VideoFlash Grid.RowSpan="2" Panel.ZIndex="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-
 
 
 

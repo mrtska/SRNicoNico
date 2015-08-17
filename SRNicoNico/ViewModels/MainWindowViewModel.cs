@@ -18,7 +18,6 @@ using SRNicoNico.Views.Contents.Search;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 
-using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
@@ -97,7 +96,9 @@ namespace SRNicoNico.ViewModels {
 
         public OtherViewModel Other { get; set; }
 
-		public MainWindowViewModel() {
+
+
+        public MainWindowViewModel() {
 
 			SignIn = new SignInDialogViewModel();
 

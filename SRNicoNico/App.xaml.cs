@@ -31,13 +31,15 @@ namespace SRNicoNico {
 		protected override void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
 
-			DispatcherHelper.UIDispatcher = Dispatcher;
+
+            DispatcherHelper.UIDispatcher = Dispatcher;
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
 
 			ViewModelRoot = new MainWindowViewModel();
 			this.MainWindow = new MainWindow { DataContext = ViewModelRoot };
 			this.MainWindow.Show();
+
 
         }
 
