@@ -18,7 +18,7 @@
 
         <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60"  IsActive="{Binding IsActive}"/>
 
-        <ListBox Grid.Row="1"  VirtualizingPanel.ScrollUnit="Pixel" HorizontalAlignment="Stretch" ItemsSource="{Binding NicoRepo}" HorizontalContentAlignment="Stretch" >
+        <ListBox x:Name="list" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" HorizontalAlignment="Stretch" ItemsSource="{Binding NicoRepo}" HorizontalContentAlignment="Stretch" >
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
 
@@ -26,8 +26,9 @@
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
+
                 <DataTemplate DataType="vm:NicoRepoResultEntryViewModel">
-                    <local:NicoRepoResultEntry/>
+                    <local:NicoRepoResultEntry />
                 </DataTemplate>
             </ListBox.ItemTemplate>
 

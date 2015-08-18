@@ -20,7 +20,7 @@
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
@@ -28,9 +28,9 @@
         </Grid.ColumnDefinitions>
 
         <Image Grid.Column="0" Source="{Binding Entry.ImageUrl,TargetNullValue={x:Null}}" Height="60" Margin="5"/>
-        <TextBlock Grid.Column="1" Text="{Binding Entry.Title}" VerticalAlignment="Top" Height="20" Foreground="#FFAAAAAA"  HorizontalAlignment="Left"  Margin="48,10,0,0" />
-        <TextBlock Grid.Column="1" Text="{Binding Entry.Description}" VerticalAlignment="Top" Height="20" Foreground="#FFAAAAAA" HorizontalAlignment="Left" Margin="10,35,0,0"  />
-        <Image Grid.Column="1" Source="{Binding Entry.IconUrl, TargetNullValue={x:Null}}" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="30" Margin="10,6,0,0"/>
+        <TextBlock Grid.Column="1" Text="{Binding Entry.Title}" TextWrapping="NoWrap" VerticalAlignment="Top" Height="20" Foreground="#FFAAAAAA"  HorizontalAlignment="Left"  Margin="64,6,0,0" />
+        <TextBlock Grid.Column="1" Text="{Binding Entry.Description}" TextWrapping="NoWrap" VerticalAlignment="Top" Height="20" Foreground="#FFAAAAAA" HorizontalAlignment="Left" Margin="64,30,0,0"  />
+        <Image Grid.Column="1" Source="{Binding Entry.IconUrl, TargetNullValue={x:Null}}" HorizontalAlignment="Left" Height="44" VerticalAlignment="Top" Width="42" Margin="10,6,0,0"/>
         <TextBlock Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFAAAAAA" Text="{Binding Entry.Time}" VerticalAlignment="Top" Margin="14,55,0,0" />
 
     </Grid>

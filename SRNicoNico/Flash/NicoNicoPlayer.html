@@ -1,32 +1,20 @@
 ﻿<!-- saved from url=(0013)about:internet -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 	
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>NicoNicoPlayer</title>
 		
-		<style>
-			html, body {
-				
-				height: 100%;
-				background-color: #000000;
-			}
-			body {
-				
-				margin: 0;
-				padding: 0;
-				overflow: hidden;
-			}
-		</style>
+		<link href="./style.css" rel="stylesheet" type="text/css" />
 	</head>
 	
 	<body>
+		
 
 		<!--ムービーで使用されている URL-->
 		<!--ムービーで使用されているテキスト-->
-		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=28,0,0,0"
-		id="NicoNicoPlayer" width="550" height="400" align="middle">
+		<object	id="NicoNicoPlayer" width="100%" height="100%" align="middle">
 			<param name="allowScriptAccess" value="sameDomain" />
 			<param name="movie" value="NicoNicoPlayer.swf" />
 			<param name="quality" value="high" />
@@ -36,47 +24,7 @@
 			id="NicoNicoPlayer" name="NicoNicoPlayer" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash"
 			pluginspage="http://www.adobe.com/go/getflashplayer_jp" />
 		</object>
-		
-		
-		<script language="JavaScript">	
-			
-			// Flash コマンドですべての FSCommand メッセージを処理する
-			function NicoNicoPlayer_DoFSCommand(command, args) {
-				//
-				// コードをここに配置します。
-				//
-				window.external.InvokeFromJavaScript(command, args);
-			}
-			
-			var flash = document.NicoNicoPlayer;
-			
-			
-			function JsOpenVideo(url) {
-						
-						
-				flash.AsOpenVideo(url);
-			}
-			
-			function JsPause() {
-				
-				flash.AsPause();
-			}
-			
-			function JsResume() {
-				
-				flash.AsResume();
-			}
-			function JsSeek(pos) {
-				
-				flash.AsSeek(pos);
-			}
-			
-
-	//-->
-	
-		</script>
-		
-		
+		<script type="text/javascript" src="./func.js" ></script>
 	</body>
 
 </html>
