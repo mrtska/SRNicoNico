@@ -123,6 +123,7 @@
 			//インスタンス作成
 			stream = new NetStream(connection);
 			
+			
 			//イベントリスナ登録
 			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			stream.addEventListener(AsyncErrorEvent.ASYNC_ERROR, onAsyncError);

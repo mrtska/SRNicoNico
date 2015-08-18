@@ -11,7 +11,7 @@
              Background="#00000000"
              >
     <Grid Background="Black">
-        <WebBrowser x:Name="browser" Source="E:\Development\MVVM\WPF\SRNicoNico\SRNicoNico\Flash\NicoNicoPlayer.html" 
+        <WebBrowser x:Name="browser"
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LoadCompleted="browser_LoadCompleted"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                 />

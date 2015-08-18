@@ -31,7 +31,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //htmlからいろいろ持ってくるXPath
         private const string IconUrlXPath = "//a[parent::div[@class='log-author ']]/img";
         private const string TitleXPath = "//div[parent::div[@class='log-content']][@class='log-body']";
-        private const string ThumbnailXPath = "//namespace::a[parent::div[@class='log-target-thumbnail']]/img|//a[parent::div[@class='log-author ']]/img";
+        private const string ThumbnailXPath = "//a[parent::div[@class='log-target-thumbnail']]/img|//div[parent::div[@class='log-details log-target-none']]";
         private const string DescriptionXPath = "//a[parent::div[@class='log-target-info']]|//div[parent::div[@class='log-details log-target-none']]";
         private const string TimeXPath = "//time[parent::a[@class='log-footer-date ']]|//time[parent::a[@class='log-footer-date hot']]";
 
@@ -76,7 +76,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 return data;
             }
-            ;
+            
 
             //アイコンURL取得
             var iconUrls = doc.DocumentNode.SelectNodes(IconUrlXPath);
@@ -103,13 +103,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 entry.Title = titles[i].InnerText.Trim();
 
-                entry.ImageUrl = thumbNails[i].Attributes["data-original"].Value;
+                entry.ImageUrl = thumbNails[i].Attributes.Contains("data-original") ? thumbNails[i].Attributes["data-original"].Value : entry.IconUrl;
 
                
 
                 entry.VideoUrl = descriptions[i].Name == "a" ? descriptions[i].Attributes["href"].Value : "";
 
-                entry.Description = descriptions[i].Name == "a" ? descriptions[i].InnerText.Trim() : "";
+                entry.Description = descriptions[i].Name == "a" ? descriptions[i].InnerText.Trim() : null;
 
                 entry.Time = nicorepoTimes[i].InnerText.Trim();
 
@@ -139,7 +139,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public NicoNicoNicoRepoData NextNicoRepo() {
 
             //もう過去の二コレポは存在しない
-            if(NextUrl.Equals("end")) {
+            if(NextUrl == null || NextUrl.Equals("end")) {
 
                 return null;
             }

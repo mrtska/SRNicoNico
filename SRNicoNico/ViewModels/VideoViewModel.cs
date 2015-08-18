@@ -106,6 +106,15 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        public string Address {
+
+            get {
+
+                var cur = System.IO.Directory.GetCurrentDirectory();
+                return cur + "./Flash/NicoNicoPlayer.html";
+            }
+        }
+
 
 
         public VideoViewModel(WatchApiData apiData) {
@@ -164,7 +173,7 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        //40FPSくらいで1フレーム毎に呼ばれる
+        //1フレーム毎に呼ばれる
         public void CsFrame(int time, float buffer) {
 
            // Console.WriteLine(VideoData.ApiData.Cmsid + " " + time + ":" + buffer);
@@ -186,11 +195,15 @@ namespace SRNicoNico.ViewModels {
                 BPS = kBps + "KiB/秒";
             }
 
+            if(VideoData.ApiData.Length == time) {
+
+                Seek(0);
+            }
+
         }
 
         //このメソッド以降はWebBrowserプロパティはnullではない
         public void OpenVideo() {
-
 
             WebBrowser.ObjectForScripting = new ObjectForScriptingHelper(this);
             IsPlaying = true;

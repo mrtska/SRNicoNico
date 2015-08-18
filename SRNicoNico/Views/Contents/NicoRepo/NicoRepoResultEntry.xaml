@@ -9,7 +9,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="80" d:DesignWidth="361"
+             d:DesignHeight="59" d:DesignWidth="361"
              d:DataContext="{d:DesignInstance { x:Type vm:NicoRepoResultEntryViewModel}}"
              BorderThickness="1"
              BorderBrush="#FF333333"
@@ -22,16 +22,24 @@
     </i:Interaction.Triggers>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="37*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="54*"/>
+            <ColumnDefinition Width="68"/>
+            <ColumnDefinition Width="43"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Image Grid.Column="0" Source="{Binding Entry.ImageUrl,TargetNullValue={x:Null}}" Height="60" Margin="5"/>
-        <TextBlock Grid.Column="1" Text="{Binding Entry.Title}" TextWrapping="NoWrap" VerticalAlignment="Top" Height="20" Foreground="#FFAAAAAA"  HorizontalAlignment="Left"  Margin="64,6,0,0" />
-        <TextBlock Grid.Column="1" Text="{Binding Entry.Description}" TextWrapping="NoWrap" VerticalAlignment="Top" Height="20" Foreground="#FFAAAAAA" HorizontalAlignment="Left" Margin="64,30,0,0"  />
-        <Image Grid.Column="1" Source="{Binding Entry.IconUrl, TargetNullValue={x:Null}}" HorizontalAlignment="Left" Height="44" VerticalAlignment="Top" Width="42" Margin="10,6,0,0"/>
-        <TextBlock Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFAAAAAA" Text="{Binding Entry.Time}" VerticalAlignment="Top" Margin="14,55,0,0" />
+        <Image Grid.Column="0" Source="{Binding Entry.ImageUrl,TargetNullValue={x:Null}}" Margin="7,5,0,7" HorizontalAlignment="Left" Width="51" Grid.RowSpan="2"/>
+        <Image Grid.Column="1" Grid.Row="0" Source="{Binding Entry.IconUrl, TargetNullValue={x:Null}}" HorizontalAlignment="Center" Height="30" VerticalAlignment="Center" Width="30" />
+        <TextBlock Grid.Column="1" TextWrapping="Wrap" Foreground="#FFAAAAAA" Text="{Binding Entry.Time}" VerticalAlignment="Stretch" Height="20" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Left" />
+        <StackPanel Grid.Column="2" >
 
+            <TextBlock Text="{Binding Entry.Title}" TextWrapping="Wrap" Foreground="#FFAAAAAA" />
+            <TextBlock Text="{Binding Entry.Description, TargetNullValue={x:Null}}" TextWrapping="Wrap" Foreground="#FFAAAAAA" />
+
+        </StackPanel>
     </Grid>
 </UserControl>

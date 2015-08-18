@@ -22,6 +22,10 @@ namespace SRNicoNico.Views.Contents.Video {
         
         public VideoFlash() {
             InitializeComponent();
+
+
+
+            browser.Source = new Uri(App.ViewModelRoot.CurrentVideo.Address);
         }
 
 
