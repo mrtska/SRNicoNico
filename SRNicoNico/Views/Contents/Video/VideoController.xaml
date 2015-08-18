@@ -23,11 +23,14 @@
             <ColumnDefinition Width="25"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <mui:ModernButton VerticalAlignment="Top" HorizontalAlignment="Left" IconData="F1 M 26.9167,23.75L 33.25,23.75L 33.25,52.25L 26.9167,52.25L 26.9167,23.75 Z M 42.75,23.75L 49.0833,23.75L 49.0833,52.25L 42.75,52.25L 42.75,23.75 Z" Grid.Column="0" Grid.Row="1" Focusable="False">
+        <mui:ModernButton VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="1" Focusable="False">
             <mui:ModernButton.Style>
                 <Style TargetType="mui:ModernButton">
                     <Style.Triggers>
                         <DataTrigger  Binding="{Binding IsPlaying}" Value="true" >
+                            <Setter Property="IconData" Value="F1 M 26.9167,23.75L 33.25,23.75L 33.25,52.25L 26.9167,52.25L 26.9167,23.75 Z M 42.75,23.75L 49.0833,23.75L 49.0833,52.25L 42.75,52.25L 42.75,23.75 Z" />
+                        </DataTrigger>
+                        <DataTrigger  Binding="{Binding IsPlaying}" Value="false" >
                             <Setter Property="IconData" Value="F1 M 30.0833,22.1667L 50.6665,37.6043L 50.6665,38.7918L 30.0833,53.8333L 30.0833,22.1667 Z" />
                         </DataTrigger>
                     </Style.Triggers>
@@ -41,12 +44,12 @@
             
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
-                    <l:LivetCallMethodAction MethodName="Play" MethodTarget="{Binding}" />
+                    <l:LivetCallMethodAction MethodName="PlayOrPauseOrResume" MethodTarget="{Binding}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
 
         </mui:ModernButton>
-        <seek:SeekBar x:Name="Seek"  Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VideoTime="{Binding VideoData.ApiData.Length}" CurrentTime="{Binding Time.CurrentTime}" CurrentTimeWidth="{Binding Time.CurrentTimeWidth}" SeekCursor="{Binding SeekCursor}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter"  />
+        <seek:SeekBar x:Name="Seek"  Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VideoTime="{Binding VideoData.ApiData.Length}" CurrentTime="{Binding Time.CurrentTime}" CurrentTimeWidth="{Binding Time.CurrentTimeWidth}" SeekCursor="{Binding SeekCursor}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter" MouseLeftButtonUp="Seek_MouseLeftButtonUp"  />
         <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" >
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Time.CurrentTimeString}" Height="25" Foreground="#FFAAAAAA" FontSize="16"/>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="/" Foreground="#FFAAAAAA" FontSize="16" Padding="5,0" />

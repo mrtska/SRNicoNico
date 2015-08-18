@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System;
 
 using Livet;
 
@@ -18,11 +19,7 @@ namespace SRNicoNico.ViewModels {
         
 		//キャッシュパス
 		public string Path { get; set; }
-
-
-
-		//ストリーミング
-		public NicoNicoStream Stream { get; set; }
+        
 
 		//インラインシークバー画像プレビュー
 		public NicoNicoStoryBoard StoryBoard { get; set; }
@@ -45,22 +42,6 @@ namespace SRNicoNico.ViewModels {
 				if(_BPS == value)
 					return;
 				_BPS = value;
-				RaisePropertyChanged();
-			}
-		}
-		#endregion
-
-
-
-		#region IconData変更通知プロパティ
-		private GeometryGroup _IconData = Playing;
-
-		public GeometryGroup IconData {
-			get { return _IconData; }
-			set {
-				if(_IconData == value)
-					return;
-				_IconData = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -96,6 +77,20 @@ namespace SRNicoNico.ViewModels {
 		}
         #endregion
 
+        #region IsPlaying変更通知プロパティ
+        private bool _IsPlaying;
+
+        public bool IsPlaying {
+            get { return _IsPlaying; }
+            set { 
+                if(_IsPlaying == value)
+                    return;
+                _IsPlaying = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         #region WebBrowser変更通知プロパティ
         private WebBrowser _WebBrowser;
@@ -113,24 +108,6 @@ namespace SRNicoNico.ViewModels {
 
 
 
-        #region IsPlaying変更通知プロパティ
-        private bool _IsPlaying;
-
-        public bool IsPlaying {
-            get { return _IsPlaying; }
-            set { 
-                if(_IsPlaying == value)
-                    return;
-                _IsPlaying = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-
-
-
         public VideoViewModel(WatchApiData apiData) {
             
             //ViewをVideoに変える
@@ -141,6 +118,8 @@ namespace SRNicoNico.ViewModels {
             VideoData = new VideoData();
             VideoData.ApiData = apiData;
 
+            Initialize();
+            
         }
 
 
@@ -156,26 +135,86 @@ namespace SRNicoNico.ViewModels {
             VideoData = new VideoData();
             VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
 
+            Initialize();
 		}
 
         public void Initialize() {
 
-            
-           
+            NicoNicoStoryBoard sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
+            VideoData.StoryBoardData = sb.GetStoryBoardData();
 
+            Time = new VideoTime();
+            Time.VideoTimeString = NicoNicoUtil.GetTimeFromLong(VideoData.ApiData.Length);
+
+            
+        }
+
+
+        public void PlayOrPauseOrResume() {
+
+            if(IsPlaying) {
+
+                IsPlaying = false;
+                Pause();
+            } else {
+
+                IsPlaying = true;
+                Resume();
+            }
 
         }
 
+        //40FPSくらいで1フレーム毎に呼ばれる
+        public void CsFrame(int time, float buffer) {
+
+           // Console.WriteLine(VideoData.ApiData.Cmsid + " " + time + ":" + buffer);
+
+            Time.CurrentTime = time;
+            Time.CurrentTimeString = NicoNicoUtil.GetTimeFromLong(Time.CurrentTime);
+            Time.CurrentTimeWidth = WebBrowser.ActualWidth / VideoData.ApiData.Length * Time.CurrentTime;
+            SeekCursor = new Thickness(Time.CurrentTimeWidth, 0, 0, 0);
+
+
+
+            int kBps = BPSCounter.Bps / 1024;
+            //数字がデカかったら単位を変えましょう
+            if(kBps > 1024) {
+
+                BPS = (Math.Truncate((float)kBps / 1024 * 100) / 100) + "MiB/秒";
+            } else {
+
+                BPS = kBps + "KiB/秒";
+            }
+
+        }
 
         //このメソッド以降はWebBrowserプロパティはnullではない
         public void OpenVideo() {
 
-            InvokeScript("CsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
 
+            WebBrowser.ObjectForScripting = new ObjectForScriptingHelper(this);
+            IsPlaying = true;
+            InvokeScript("JsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
+            
 
         }
 
 
+
+        public void Pause() {
+
+            InvokeScript("JsPause");
+        }
+
+        public void Resume() {
+
+            InvokeScript("JsResume");
+        }
+
+        public void Seek(float pos) {
+
+            InvokeScript("JsSeek", pos.ToString());
+        }
 
         //JSを呼ぶ
         private void InvokeScript(string func, params string[] args) {
@@ -184,5 +223,13 @@ namespace SRNicoNico.ViewModels {
 
             WebBrowser.InvokeScript(func, args);
         }
-	}
+
+
+
+
+
+
+
+
+    }
 }

@@ -19,6 +19,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		public string StoryBoardApiBaseUrl { get; set; }
 
 
+        //ビデオURLを指定
 		public NicoNicoStoryBoard(string url) {
 
 			StoryBoardApiBaseUrl = url;
@@ -140,6 +141,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 	public class NicoNicoStoryBoardData {
+
+        //コンストラクタ使用不可
+        internal NicoNicoStoryBoardData() { }
 
 		//ストーリーボードID
 		public string Id { get; set; }

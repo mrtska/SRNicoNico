@@ -1,41 +1,82 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+﻿<!-- saved from url=(0013)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+	
 	<head>
-		<title>NicoNicoPlayer</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<style type="text/css" media="screen">
-		html, body { height:100%; background-color: #000000;}
-		body { margin:0; padding:0; overflow:hidden; }
+		<title>NicoNicoPlayer</title>
+		
+		<style>
+			html, body {
+				
+				height: 100%;
+				background-color: #000000;
+			}
+			body {
+				
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
 		</style>
 	</head>
+	
 	<body>
-		<object type="application/x-shockwave-flash" width="100%" height="100%" id="NicoNicoPlayer">
+
+		<!--ムービーで使用されている URL-->
+		<!--ムービーで使用されているテキスト-->
+		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=28,0,0,0"
+		id="NicoNicoPlayer" width="550" height="400" align="middle">
+			<param name="allowScriptAccess" value="sameDomain" />
 			<param name="movie" value="NicoNicoPlayer.swf" />
 			<param name="quality" value="high" />
-			<param name="bgcolor" value="#000000" />
-			<param name="play" value="false" />
-			<param name="loop" value="false" />
 			<param name="wmode" value="direct" />
-			<param name="menu" value="false" />
-			<param name="devicefont" value="false" />
-			<param name="allowScriptAccess" value="sameDomain" />
+			<param name="bgcolor" value="#000000" />
+			<embed src="NicoNicoPlayer.swf" quality="high" wmode="direct" bgcolor="#000000" width="100%" height="100%" swLiveConnect=true
+			id="NicoNicoPlayer" name="NicoNicoPlayer" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash"
+			pluginspage="http://www.adobe.com/go/getflashplayer_jp" />
 		</object>
 		
-		<script>
-			var flash = document.NicoNicoPlayer;
+		
+		<script language="JavaScript">	
 			
-			//指定したURLの動画をストリーミング再生する
-			function CsOpenVideo(url) {
-				
-				
-				flash.JsOpenVideo(url);
+			// Flash コマンドですべての FSCommand メッセージを処理する
+			function NicoNicoPlayer_DoFSCommand(command, args) {
+				//
+				// コードをここに配置します。
+				//
+				window.external.InvokeFromJavaScript(command, args);
 			}
 			
+			var flash = document.NicoNicoPlayer;
 			
+			
+			function JsOpenVideo(url) {
+						
+						
+				flash.AsOpenVideo(url);
+			}
+			
+			function JsPause() {
+				
+				flash.AsPause();
+			}
+			
+			function JsResume() {
+				
+				flash.AsResume();
+			}
+			function JsSeek(pos) {
+				
+				flash.AsSeek(pos);
+			}
+			
+
+	//-->
+	
 		</script>
 		
 		
-		
-		
 	</body>
+
 </html>
