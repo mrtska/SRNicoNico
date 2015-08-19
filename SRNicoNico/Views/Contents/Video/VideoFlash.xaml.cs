@@ -19,10 +19,13 @@ namespace SRNicoNico.Views.Contents.Video {
     /// VideoFlash.xaml の相互作用ロジック
     /// </summary>
     public partial class VideoFlash : UserControl {
-        
+
+
+
+
         public VideoFlash() {
             InitializeComponent();
-
+			
 
 
             browser.Source = new Uri(App.ViewModelRoot.CurrentVideo.Address);

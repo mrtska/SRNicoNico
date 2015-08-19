@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
+using System.Threading;
 using System.Windows.Controls;
 using System;
 
@@ -25,11 +25,36 @@ namespace SRNicoNico.ViewModels {
 		public NicoNicoStoryBoard StoryBoard { get; set; }
 
 		//API結果
-		public VideoData VideoData { get; set; }
+		#region VideoData変更通知プロパティ
+		private VideoData _VideoData;
+
+		public VideoData VideoData {
+			get { return _VideoData; }
+			set { 
+				if(_VideoData == value)
+					return;
+				_VideoData = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
+
 
 
 		//各種シークバー関連の時間管理
-		public VideoTime Time { get; set; }
+		#region Time変更通知プロパティ
+		private VideoTime _Time;
+
+		public VideoTime Time {
+			get { return _Time; }
+			set { 
+				if(_Time == value)
+					return;
+				_Time = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
 
 
 
@@ -114,23 +139,7 @@ namespace SRNicoNico.ViewModels {
                 return cur + "./Flash/NicoNicoPlayer.html";
             }
         }
-
-
-
-        public VideoViewModel(WatchApiData apiData) {
-            
-            //ViewをVideoに変える
-            App.ViewModelRoot.RightContent = this;
-            App.ViewModelRoot.CurrentVideo = this;
-
-
-            VideoData = new VideoData();
-            VideoData.ApiData = apiData;
-
-            Initialize();
-            
-        }
-
+		
 
 
         public VideoViewModel(string videoUrl) {
@@ -140,20 +149,27 @@ namespace SRNicoNico.ViewModels {
             App.ViewModelRoot.RightContent = this;
             App.ViewModelRoot.CurrentVideo = this;
 
-
-            VideoData = new VideoData();
-            VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
-
-            Initialize();
+            Initialize(videoUrl);
 		}
 
-        public void Initialize() {
+        public void Initialize(string videoUrl) {
 
-            NicoNicoStoryBoard sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
-            VideoData.StoryBoardData = sb.GetStoryBoardData();
+			Task.Run(() => {
 
-            Time = new VideoTime();
-            Time.VideoTimeString = NicoNicoUtil.GetTimeFromLong(VideoData.ApiData.Length);
+				VideoData = new VideoData();
+				VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
+
+				Time = new VideoTime();
+				Time.VideoTimeString = NicoNicoUtil.GetTimeFromLong(VideoData.ApiData.Length);
+
+				NicoNicoStoryBoard sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
+				VideoData.StoryBoardData = sb.GetStoryBoardData();
+
+				NicoNicoComment comment = new NicoNicoComment(VideoData.ApiData.GetFlv);
+				VideoData.CommentData = comment.GetComment();
+
+			});
+
 
             
         }
@@ -204,6 +220,11 @@ namespace SRNicoNico.ViewModels {
 
         //このメソッド以降はWebBrowserプロパティはnullではない
         public void OpenVideo() {
+
+			while(VideoData.ApiData == null) {
+
+				Thread.Sleep(50);
+			}
 
             WebBrowser.ObjectForScripting = new ObjectForScriptingHelper(this);
             IsPlaying = true;

@@ -34,10 +34,12 @@ namespace SRNicoNico {
             DispatcherHelper.UIDispatcher = Dispatcher;
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
+            Microsoft.Win32.RegistryKey reg = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", true);
+			reg.SetValue("SRNicoNico.exe", 0x00002AF9, Microsoft.Win32.RegistryValueKind.DWord);
 
 			ViewModelRoot = new MainWindowViewModel();
-			this.MainWindow = new MainWindow { DataContext = ViewModelRoot };
-			this.MainWindow.Show();
+			MainWindow = new MainWindow { DataContext = ViewModelRoot };
+			MainWindow.Show();
 
 
         }

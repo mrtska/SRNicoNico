@@ -105,7 +105,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 entry.ImageUrl = thumbNails[i].Attributes.Contains("data-original") ? thumbNails[i].Attributes["data-original"].Value : entry.IconUrl;
 
-               
+                
 
                 entry.VideoUrl = descriptions[i].Name == "a" ? descriptions[i].Attributes["href"].Value : "";
 
@@ -219,7 +219,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
     }
 
-    public class NicoNicoNicoRepoData : NotificationObject {
+    public class NicoNicoNicoRepoData {
 
 
 
@@ -229,7 +229,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     }
 
 
-    public class NicoNicoNicoRepoDataEntry : NotificationObject {
+    public class NicoNicoNicoRepoDataEntry {
 
 
         //ニコレポタイトル
@@ -249,11 +249,5 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //ニコレポ日時
         public string Time { get; set; }
-
-
-
-
-
-
     }
 }

@@ -183,7 +183,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //getflvAPIで取得できるデータ
 
         //スレッドID
-        public uint ThreadID { get; internal set; }
+        public string ThreadID { get; internal set; }
 
         //長さ
         public uint Length { get; internal set; }
@@ -197,16 +197,24 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //サブコメントサーバーURL
         public Uri SubCommentServerUrl { get; internal set; }
 
+		//ユーザーID
+		public string UserId { get; internal set; }
+
+		//プレミアムか否か
+		public bool IsPremium { get; internal set; }
+
         //非公開理由
         public int ClosedReason { get; internal set; }
 
         public NicoNicoGetFlvData(Dictionary<string, string> wwwData) {
 
-            this.ThreadID = uint.Parse(wwwData["thread_id"]);
-            this.Length = uint.Parse(wwwData["l"]);
-            this.VideoUrl = wwwData["url"];
-            this.CommentServerUrl = new Uri(wwwData["ms"]);
-            this.SubCommentServerUrl = new Uri(wwwData["ms_sub"]);
+            ThreadID = wwwData["thread_id"];
+            Length = uint.Parse(wwwData["l"]);
+            VideoUrl = wwwData["url"];
+            CommentServerUrl = new Uri(wwwData["ms"]);
+            SubCommentServerUrl = new Uri(wwwData["ms_sub"]);
+			UserId = wwwData["user_id"];
+			IsPremium = wwwData["is_premium"] == "1" ? true : false;
         }
 
     }

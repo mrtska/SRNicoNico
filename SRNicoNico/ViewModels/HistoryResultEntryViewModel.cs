@@ -27,8 +27,6 @@ namespace SRNicoNico.ViewModels {
         public void Open() {
 
             new VideoViewModel("http://www.nicovideo.jp/watch/" + Data.Id);
-
-            ;
         }
 
 

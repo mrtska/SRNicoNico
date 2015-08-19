@@ -13,13 +13,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using SRNicoNico.ViewModels;
+
 namespace SRNicoNico.Views.Contents.History {
     /// <summary>
     /// HistoryResultEntry.xaml の相互作用ロジック
     /// </summary>
     public partial class HistoryResultEntry : UserControl {
+
+
         public HistoryResultEntry() {
             InitializeComponent();
+
         }
     }
 }

@@ -7,32 +7,41 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+			 
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="367.54"
              d:DataContext="{d:DesignInstance {x:Type vm:HistoryResultEntryViewModel}}"
              BorderThickness="1"
              BorderBrush="#FF333333"
+			 x:Name="entry"
+			 HorizontalAlignment="Stretch"
+			 VerticalAlignment="Stretch"
              >
+	
+
 
     <i:Interaction.Triggers>
-        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-            <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+        <i:EventTrigger EventName="MouseLeftButtonDown">
+            <l:LivetCallMethodAction  MethodName="Open" MethodTarget="{Binding}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Grid>
-
-        
-        
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="155*"/>
-        </Grid.ColumnDefinitions>
-        <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,19" Source="{Binding Data.ThumbnailUrl,TargetNullValue={x:Null}}" />
-        <TextBlock HorizontalAlignment="Left" Foreground="#FFAAAAAA" TextWrapping="Wrap" Text="{Binding Data.Title}" VerticalAlignment="Top" Grid.Column="1" Margin="10,5,0,0" Height="22" />
-        <TextBlock HorizontalAlignment="Right" Foreground="#FFAAAAAA" TextWrapping="Wrap" Text="{Binding Data.Length}" VerticalAlignment="Top" Margin="0,59,5,0"/>
-
-        
 
 
-    </Grid>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="155*"/>
+            </Grid.ColumnDefinitions>
+			
+			
+            <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,19" Source="{Binding Data.ThumbnailUrl,TargetNullValue={x:Null}}" />
+            <TextBlock HorizontalAlignment="Left" Foreground="#FFAAAAAA" TextWrapping="Wrap" Text="{Binding Data.Title}" VerticalAlignment="Top" Grid.Column="1" Margin="10,5,0,0" Height="22" />
+            <TextBlock HorizontalAlignment="Right" Foreground="#FFAAAAAA" TextWrapping="Wrap" Text="{Binding Data.Length}" VerticalAlignment="Top" Margin="0,59,5,0"/>
+
+
+
+
+        </Grid>
+    
 </UserControl>

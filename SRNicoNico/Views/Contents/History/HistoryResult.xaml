@@ -29,6 +29,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="vm:HistoryResultEntryViewModel">
                     <local:HistoryResultEntry/>
+					
                 </DataTemplate>
             </ListBox.ItemTemplate>
 
