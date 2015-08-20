@@ -79,9 +79,31 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+		#endregion
+
+
+		#region SelectedItem変更通知プロパティ
+		private SearchResultEntryViewModel _SelectedItem;
+
+		public SearchResultEntryViewModel SelectedItem {
+			get { return _SelectedItem; }
+			set { 
+				if(_SelectedItem == value)
+					return;
+				_SelectedItem = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
 
 
 
-    }
+
+		//動画を開く
+		public void OpenVideo() {
+
+			new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Node.cmsid);
+		}
+
+	}
 }

@@ -16,30 +16,10 @@ using SRNicoNico.Models.NicoNicoWrapper;
 namespace SRNicoNico.ViewModels {
     public class HistoryResultEntryViewModel : ViewModel {
 
-
+		//これをViewModelと呼んでいいのか謎だがとても重要なもの
 
 
 
         public NicoNicoHistoryData Data { get; set; }
-
-
-
-        public void Open() {
-
-            new VideoViewModel("http://www.nicovideo.jp/watch/" + Data.Id);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

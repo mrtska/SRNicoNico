@@ -19,16 +19,23 @@
         </Grid.RowDefinitions>
         <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60"  IsActive="{Binding IsActive}" Margin="120,97.225,120,120" Grid.Row="1"/>
 
-        <ListBox Grid.Row="1" VirtualizingPanel.ScrollUnit="Pixel" HorizontalAlignment="Stretch" ItemsSource="{Binding List}" HorizontalContentAlignment="Stretch" Grid.RowSpan="2" >
-            <ListBox.ItemContainerStyle>
+        <ListBox Grid.Row="1" SelectedItem="{Binding SelectedItem}" VirtualizingPanel.ScrollUnit="Pixel" HorizontalAlignment="Stretch" ItemsSource="{Binding List}" HorizontalContentAlignment="Stretch" Grid.RowSpan="2" >
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                    <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+				</i:EventTrigger>
+			</i:Interaction.Triggers>
+			
+			<ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
 
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="vm:HistoryResultEntryViewModel">
-                    <local:HistoryResultEntry/>
+                <DataTemplate  DataType="vm:HistoryResultEntryViewModel">
+                    <local:HistoryResultEntry />
 					
                 </DataTemplate>
             </ListBox.ItemTemplate>

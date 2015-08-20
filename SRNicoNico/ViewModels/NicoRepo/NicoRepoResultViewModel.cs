@@ -49,9 +49,9 @@ namespace SRNicoNico.ViewModels {
 
 
         #region NicoRepo変更通知プロパティ
-        private ObservableSynchronizedCollection<NicoRepoResultEntryViewModel> _NicoRepo = new ObservableSynchronizedCollection<NicoRepoResultEntryViewModel>();
+        private DispatcherCollection<NicoRepoResultEntryViewModel> _NicoRepo = new DispatcherCollection<NicoRepoResultEntryViewModel>(DispatcherHelper.UIDispatcher);
 
-        public ObservableSynchronizedCollection<NicoRepoResultEntryViewModel> NicoRepo {
+        public DispatcherCollection<NicoRepoResultEntryViewModel> NicoRepo {
             get { return _NicoRepo; }
             set { 
                 if(_NicoRepo == value)
@@ -60,7 +60,46 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+		#endregion
+
+
+		#region SelectedItem変更通知プロパティ
+		private NicoRepoResultEntryViewModel _SelectedItem;
+
+		public NicoRepoResultEntryViewModel SelectedItem {
+			get { return _SelectedItem; }
+			set { 
+				if(_SelectedItem == value)
+					return;
+				_SelectedItem = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
+
+
+
+
+		public void Open() {
+
+			//ニコレポが動画だったら動画を開く
+            if(SelectedItem.Entry.VideoUrl.StartsWith("http://www.nicovideo.jp/watch/")) {
+
+                OpenVideo();
+                return;
+            }
+
+            
+
+        }
+
+
+        private void OpenVideo() {
+
+            new VideoViewModel(SelectedItem.Entry.VideoUrl);
+
+        }
+
 
 
     }

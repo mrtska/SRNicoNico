@@ -17,41 +17,13 @@ namespace SRNicoNico.ViewModels {
     public class NicoRepoResultEntryViewModel : ViewModel {
 
 
-        public NicoNicoNicoRepoDataEntry Entry { get; set; }
+        public NicoNicoNicoRepoDataEntry Entry { get; private set; }
 
-        public NicoRepoResultEntryViewModel() { }
         
         public NicoRepoResultEntryViewModel(NicoNicoNicoRepoDataEntry entry) {
 
             Entry = entry;
 
         }
-
-
-        public void Open() {
-
-            if(Entry.VideoUrl.StartsWith("http://www.nicovideo.jp/watch/")) {
-
-                OpenVideo();
-                return;
-            }
-
-            
-
-        }
-
-
-        private void OpenVideo() {
-
-
-
-            new VideoViewModel(Entry.VideoUrl);
-
-        }
-
-
-
-
-
     }
 }

@@ -48,23 +48,32 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+		#endregion
 
 
+		#region SelectedItem変更通知プロパティ
+		private HistoryResultEntryViewModel _SelectedItem;
 
-        public void OpenHistory() {
+		public HistoryResultEntryViewModel SelectedItem {
+			get { return _SelectedItem; }
+			set { 
+				if(_SelectedItem == value)
+					return;
+				_SelectedItem = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
 
 
+		
 
 
-            ;
-        }
+		//選択された動画を開く
+		public void Open() {
 
-
-
-
-
-
+			new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Data.Id);
+		}
 
     }
 }

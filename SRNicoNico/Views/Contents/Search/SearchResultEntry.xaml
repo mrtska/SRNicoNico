@@ -6,8 +6,6 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-			HorizontalAlignment="Stretch"
-             Height="80"
              BorderThickness="1"
              d:DataContext="{d:DesignInstance {x:Type vm:SearchResultEntryViewModel}}"
              d:DesignWidth="491"
@@ -17,11 +15,6 @@
 
 
 
-	<i:Interaction.Triggers>
-		<i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-			<l:LivetCallMethodAction MethodName="OpenVideo" MethodTarget="{Binding}"/>
-		</i:EventTrigger>
-	</i:Interaction.Triggers>
 
 	<Grid>
 		<Grid.ColumnDefinitions>

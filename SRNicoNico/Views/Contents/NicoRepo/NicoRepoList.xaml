@@ -15,7 +15,7 @@
              >
 
     <i:Interaction.Triggers>
-        <i:EventTrigger EventName="PreviewMouseLeftButtonDown" >
+        <i:EventTrigger EventName="PreviewMouseLeftButtonUp" >
             <l:LivetCallMethodAction MethodName="OpenNicoRepoList" MethodTarget="{Binding}"/>
         </i:EventTrigger>
 

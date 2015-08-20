@@ -83,13 +83,7 @@ namespace SRNicoNico.ViewModels {
 
                 foreach(NicoNicoNicoRepoDataEntry entry in data.DataCollection) {
 
-                    NicoRepoResultEntryViewModel ventry = new NicoRepoResultEntryViewModel();
-                    ventry.Entry = entry;
-
-                    DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-                        Result.NicoRepo.Add(ventry);
-                    }));
+					Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry));
                 }
 
                 Result.IsActive = false;
@@ -113,13 +107,7 @@ namespace SRNicoNico.ViewModels {
 
                 foreach(NicoNicoNicoRepoDataEntry entry in data.DataCollection) {
 
-                    NicoRepoResultEntryViewModel ventry = new NicoRepoResultEntryViewModel();
-                    ventry.Entry = entry;
-
-                    DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-                        Result.NicoRepo.Add(ventry);
-                    }));
+                    Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry));
                 }
 
                 Result.IsActive = false;

@@ -86,7 +86,7 @@ namespace SRNicoNico.Views.Behaviors {
 
 				
 			//一番下までスクロールしたら
-			if(e.ExtentHeight == e.VerticalOffset + e.ViewportHeight) {
+			if(e.ExtentHeight != 1 && e.ExtentHeight == (e.VerticalOffset + e.ViewportHeight)) {
 
                 Type type = ViewModel.GetType();
                 MethodInfo method = type.GetMethod(MethodName);

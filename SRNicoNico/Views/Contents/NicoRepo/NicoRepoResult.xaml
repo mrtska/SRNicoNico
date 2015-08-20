@@ -16,9 +16,16 @@
              >
     <Grid>
 
-        <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60"  IsActive="{Binding IsActive}"/>
+        <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding IsActive}"/>
 
-        <ListBox x:Name="list" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" HorizontalAlignment="Stretch" ItemsSource="{Binding NicoRepo}" HorizontalContentAlignment="Stretch" >
+        <ListBox SelectedItem="{Binding SelectedItem}" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" HorizontalAlignment="Stretch" ItemsSource="{Binding NicoRepo}" HorizontalContentAlignment="Stretch" >
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                    <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
 

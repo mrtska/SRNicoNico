@@ -105,8 +105,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 entry.ImageUrl = thumbNails[i].Attributes.Contains("data-original") ? thumbNails[i].Attributes["data-original"].Value : entry.IconUrl;
 
-                
-
                 entry.VideoUrl = descriptions[i].Name == "a" ? descriptions[i].Attributes["href"].Value : "";
 
                 entry.Description = descriptions[i].Name == "a" ? descriptions[i].InnerText.Trim() : null;
@@ -181,13 +179,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 entry.Title = titles[i].InnerText.Trim();
 
-                entry.ImageUrl = thumbNails[i].Attributes["data-original"].Value;
+				entry.ImageUrl = thumbNails[i].Attributes.Contains("data-original") ? thumbNails[i].Attributes["data-original"].Value : entry.IconUrl;
 
-                entry.VideoUrl = descriptions[i].Name == "a" ? descriptions[i].Attributes["href"].Value : "";
+				entry.VideoUrl = descriptions[i].Name == "a" ? descriptions[i].Attributes["href"].Value : "";
 
-                entry.Description = descriptions[i].Name == "a" ? descriptions[i].InnerText.Trim() : "";
+				entry.Description = descriptions[i].Name == "a" ? descriptions[i].InnerText.Trim() : null;
 
-                entry.Time = nicorepoTimes[i].InnerText.Trim();
+				entry.Time = nicorepoTimes[i].InnerText.Trim();
 
                 data.DataCollection.Add(entry);
             }
