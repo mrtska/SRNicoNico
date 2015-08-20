@@ -113,6 +113,11 @@
 			stream.seek(pos);
 		}
 		
+		
+		private function 
+		
+		
+		
 		//ビデオコントロールにストリームを繋ぐ
 		private function ConnectStream() {
 			

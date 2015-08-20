@@ -6,11 +6,8 @@ using System;
 
 using Livet;
 
-
-
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Models.NicoNicoWrapper;
-
 
 namespace SRNicoNico.ViewModels {
 
@@ -139,10 +136,25 @@ namespace SRNicoNico.ViewModels {
                 return cur + "./Flash/NicoNicoPlayer.html";
             }
         }
-		
 
 
-        public VideoViewModel(string videoUrl) {
+		#region CommentEnable変更通知プロパティ
+		private bool _CommentEnable = false;
+
+		public bool CommentEnable {
+			get { return _CommentEnable; }
+			set {
+				if(_CommentEnable == value)
+					return;
+				_CommentEnable = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
+
+
+
+		public VideoViewModel(string videoUrl) {
 
 
             //ViewをVideoに変える
@@ -166,8 +178,13 @@ namespace SRNicoNico.ViewModels {
 				VideoData.StoryBoardData = sb.GetStoryBoardData();
 
 				NicoNicoComment comment = new NicoNicoComment(VideoData.ApiData.GetFlv);
-				VideoData.CommentData = comment.GetComment();
 
+				foreach(NicoNicoCommentEntry entry in comment.GetComment()) {
+
+					VideoData.CommentData.Add(new CommentEntryViewModel(entry));
+				}
+
+				CommentEnable = true;
 			});
 
 
