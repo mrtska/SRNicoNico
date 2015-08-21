@@ -31,7 +31,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             switch(func) {
                 case "CsFrame":
                     
-                    Video.CsFrame(int.Parse(arg[0]), float.Parse(arg[1]));
+                    Video.CsFrame(float.Parse(arg[0]), float.Parse(arg[1]));
                     break;
 
                 default:

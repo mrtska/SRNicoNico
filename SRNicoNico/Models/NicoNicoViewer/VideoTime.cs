@@ -25,11 +25,27 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 				RaisePropertyChanged();
 			}
 		}
-		#endregion
+        #endregion
 
 
-		#region CurrentTimeString変更通知プロパティ
-		private string _CurrentTimeString = "0:00";
+        #region CurrentTimeMilis変更通知プロパティ
+        private long _CurrentTimeMilis;
+
+        public long CurrentTimeMilis {
+            get { return _CurrentTimeMilis; }
+            set {   
+                if(_CurrentTimeMilis == value)
+                    return;
+                _CurrentTimeMilis = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
+        #region CurrentTimeString変更通知プロパティ
+        private string _CurrentTimeString = "0:00";
 
 		public string CurrentTimeString {
 			get { return _CurrentTimeString; }

@@ -19,9 +19,15 @@ namespace SRNicoNico.Views.Contents.Video {
 	/// Comment.xaml の相互作用ロジック
 	/// </summary>
 	public partial class Comment : UserControl {
+
+
 		public Comment() {
 			InitializeComponent();
 		}
+
+
+
+		
 	}
 
 

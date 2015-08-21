@@ -138,23 +138,24 @@ namespace SRNicoNico.ViewModels {
         }
 
 
-		#region CommentEnable変更通知プロパティ
-		private bool _CommentEnable = false;
+        #region CommentVisibility変更通知プロパティ
+        private bool _CommentVisibility = false;
 
-		public bool CommentEnable {
-			get { return _CommentEnable; }
-			set {
-				if(_CommentEnable == value)
-					return;
-				_CommentEnable = value;
-				RaisePropertyChanged();
-			}
-		}
-		#endregion
+        public bool CommentVisibility {
+            get { return _CommentVisibility; }
+            set { 
+                if(_CommentVisibility == value)
+                    return;
+                _CommentVisibility = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
 
 
-		public VideoViewModel(string videoUrl) {
+
+        public VideoViewModel(string videoUrl) {
 
 
             //ViewをVideoに変える
@@ -166,27 +167,29 @@ namespace SRNicoNico.ViewModels {
 
         public void Initialize(string videoUrl) {
 
-			Task.Run(() => {
+            Task.Run(() => {
 
-				VideoData = new VideoData();
-				VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
+                VideoData = new VideoData();
+                VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
 
-				Time = new VideoTime();
-				Time.VideoTimeString = NicoNicoUtil.GetTimeFromLong(VideoData.ApiData.Length);
+                Time = new VideoTime();
+                Time.VideoTimeString = NicoNicoUtil.GetTimeFromLong(VideoData.ApiData.Length);
 
-				NicoNicoStoryBoard sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
-				VideoData.StoryBoardData = sb.GetStoryBoardData();
+                NicoNicoStoryBoard sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
+                VideoData.StoryBoardData = sb.GetStoryBoardData();
 
-				NicoNicoComment comment = new NicoNicoComment(VideoData.ApiData.GetFlv);
+                NicoNicoComment comment = new NicoNicoComment(VideoData.ApiData.GetFlv);
 
-				foreach(NicoNicoCommentEntry entry in comment.GetComment()) {
+                foreach(NicoNicoCommentEntry entry in comment.GetComment()) {
 
-					VideoData.CommentData.Add(new CommentEntryViewModel(entry));
-				}
+                    VideoData.CommentData.Add(new CommentEntryViewModel(entry));
+                }
+                ;
 
-				CommentEnable = true;
-			});
+            }).ContinueWith(new Action<Task>(res => {
 
+                CommentVisibility = true;
+            }));
 
             
         }
@@ -207,11 +210,12 @@ namespace SRNicoNico.ViewModels {
         }
 
         //1フレーム毎に呼ばれる
-        public void CsFrame(int time, float buffer) {
+        public void CsFrame(float time, float buffer) {
 
            // Console.WriteLine(VideoData.ApiData.Cmsid + " " + time + ":" + buffer);
 
-            Time.CurrentTime = time;
+            Time.CurrentTime = (int) time;
+            Time.CurrentTimeMilis = (int) (time * 100);
             Time.CurrentTimeString = NicoNicoUtil.GetTimeFromLong(Time.CurrentTime);
             Time.CurrentTimeWidth = WebBrowser.ActualWidth / VideoData.ApiData.Length * Time.CurrentTime;
             SeekCursor = new Thickness(Time.CurrentTimeWidth, 0, 0, 0);

@@ -11,13 +11,12 @@
 			 d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
 			 >
 
-    <Grid>
-        <comment:CommentView CommentList="{Binding VideoData.CommentData}" >
+    <Grid x:Name="view">
+        <comment:CommentView CommentList="{Binding VideoData.CommentData}" DrawingGrid="{Binding ElementName=view}" CurrentTime="{Binding Time.CurrentTimeMilis}" IsPlaying="{Binding IsPlaying}" />
+		
 			
 			
 			
-			
-        </comment:CommentView>
     </Grid>
 
 </UserControl>

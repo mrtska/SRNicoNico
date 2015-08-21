@@ -114,7 +114,7 @@
 		}
 		
 		
-		private function 
+		
 		
 		
 		
@@ -207,20 +207,20 @@
 		private function onFrame(e:Event):void {
 				
 			// 再生時間を取得
-			var value:int = int(stream.time);
+			var value:Number = stream.time;
 			  
 			// バッファの計算
 			var buffer:Number = (stream.bytesLoaded) / (stream.bytesTotal);
 			
 				
 				
+			trace("Time:" + stream.time);
 			
 			
-				stream.step(1000);
 			
 			
-			fscommand("CsFrame", value.toString() + ":" + buffer.toString());
-			trace("value:" + value + " diff:" + this.diff);
+			fscommand("CsFrame", value + ":" + buffer.toString());
+			//trace("value:" + value + " diff:" + this.diff);
 			
 			if(this.diff != 0) {
 				
