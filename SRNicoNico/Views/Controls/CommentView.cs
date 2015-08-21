@@ -80,7 +80,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for CurrentTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty CurrentTimeProperty =
-			DependencyProperty.Register("CurrentTime", typeof(int), typeof(CommentView), new PropertyMetadata(0));
+			DependencyProperty.Register("CurrentTime", typeof(int), typeof(CommentView), new FrameworkPropertyMetadata(0));
 
 
 
@@ -91,7 +91,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for DrawingGrid.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty DrawingGridProperty =
-			DependencyProperty.Register("DrawingGrid", typeof(Grid), typeof(CommentView), new PropertyMetadata(null));
+			DependencyProperty.Register("DrawingGrid", typeof(Grid), typeof(CommentView), new FrameworkPropertyMetadata(null));
 
 
 
@@ -103,7 +103,7 @@ namespace SRNicoNico.Views.Controls {
 
         // Using a DependencyProperty as the backing store for IsPause.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsPlayingProperty =
-            DependencyProperty.Register("IsPlaying", typeof(bool), typeof(CommentView), new PropertyMetadata(false));
+            DependencyProperty.Register("IsPlaying", typeof(bool), typeof(CommentView), new FrameworkPropertyMetadata(false));
 
 
 
@@ -126,6 +126,8 @@ namespace SRNicoNico.Views.Controls {
         public CommentView() {
 
             CompositionTarget.Rendering += CompositionTarget_Rendering;
+
+            //テキストエフェクト いろいろ
             effect.ShadowDepth = 3;
             effect.Direction = 315;
             effect.Color = Colors.BlueViolet;
@@ -134,14 +136,17 @@ namespace SRNicoNico.Views.Controls {
         }
         
 
+        //1フレーム置きに呼ばれる
         private void CompositionTarget_Rendering(object sender, EventArgs e) {
 
 
-
+            //条件に合わなかったらコメントを描画しない
             if(CommentList == null || CommentList.Count == 0 || PrevTime == CurrentTime) {
                 
+                //一時停止中は上のif文の三つ目の評価がtrueになるのでここに書く
                 if(!IsPlaying) {
 
+                    //一番最初に一回呼ばれるが、DrawingCommentの要素数が0なので問題なし
                     foreach(KeyValuePair<int, Entry> pair in DrawingComment) {
 
                         pair.Value.Story.Pause();
@@ -158,16 +163,19 @@ namespace SRNicoNico.Views.Controls {
                 return;
 			}
             
+            //2回実行されてもCurrentTimeが変わらない時があるので変わらなかったときは上記のとおり新しく描画しない
             PrevTime = CurrentTime;
 
     
             //Console.WriteLine("Time:" + CurrentTime);
 
+            //コメントリストから持ってくる
             foreach(CommentEntryViewModel vmentry in CommentList) {
 
 
 				NicoNicoCommentEntry entry = vmentry.Entry;
 
+                //CommentListは再生位置でソートされているので、まだ描画時間になっていないコメントが出てきたらその後は全部無視
                 if(entry.Vpos > CurrentTime) {
 
                     return;
@@ -181,7 +189,7 @@ namespace SRNicoNico.Views.Controls {
                     text.Name = "No" + entry.No.ToString();
                     text.Text = entry.Content;
                     text.FontSize = 20;
-                    text.Foreground = new SolidColorBrush(Colors.Black);
+                    text.Foreground = new SolidColorBrush(Colors.White);
 
                     text.Effect = effect;
 
@@ -191,14 +199,14 @@ namespace SRNicoNico.Views.Controls {
                     var translationName = "myTranslation" + trans.GetHashCode();
                     RegisterName(translationName, trans);
 
-                   
-                    
+                    //アニメーションを設定
                     text.RenderTransform = trans;
 
                     //アニメーション 最終位置は画面外左
                     DoubleAnimation anim = new DoubleAnimation(-(text.Text.Length * text.FontSize), duration);
                     anim.Name = text.Name;
 
+                    //一時停止とかのやつ thanks Stackoverflow (http://stackoverflow.com/questions/2841124/wpf-animating-translatetransform-from-code)
                     Storyboard story = new Storyboard();
 
                     Storyboard.SetTargetName(story, translationName);
@@ -209,18 +217,22 @@ namespace SRNicoNico.Views.Controls {
 
 
                     story.Children.Add(anim);
-                    text.BeginAnimation(TranslateTransform.XProperty, anim);
 
+                    //描画が終わったらリソース開放
                     story.Completed +=
                     (sndr, evtArgs) => {
                         Resources.Remove(storyboardName);
                         UnregisterName(translationName);
                         Anim_Completed(sndr, anim.Name);
                     };
+
+                    //アニメーション開始
                     story.Begin();
 
+                    //Gridに配置
                     DrawingGrid.Children.Add(text);
                         
+                    //現在描画中のリストに追加
                     DrawingComment.Add(entry.No, new Entry() { Text = text, Anime = anim, Story = story} );
 
 
@@ -228,29 +240,22 @@ namespace SRNicoNico.Views.Controls {
                     Console.WriteLine("Allocate:" + text.Text);
                 }
             }
-
-
-			;
-
-
-
 		}
 
+        //アニメーションが終わったコメント（画面外に出た）
         private void Anim_Completed(object sender, string name) {
 
-
-            
-            
+            //無いはずだがまあ、ね
             if(name == null) {
 
-                Console.WriteLine("CommentView");
-                return;
+                throw new SystemException("Name はnullになりました");
             }
 
+            //キーを取得
             int no = int.Parse(name.Substring(2));
 
 
-            //役目を終えたコメント
+            //役目を終えたコメント リソース開放
             if(DrawingComment.ContainsKey(no)) {
 
                 Entry entry = DrawingComment[no];
@@ -261,17 +266,11 @@ namespace SRNicoNico.Views.Controls {
                 text.Visibility = Visibility.Collapsed;
                 //Console.WriteLine("Free:" + text.Text);
             }
-
-
-
-            ;
-
-
-
         }
     }
 
-    public class Entry {
+    //便利な奴
+    internal class Entry {
 
         public Storyboard Story { get; set; }
         public TextBlock Text { get; set; }
