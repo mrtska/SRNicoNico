@@ -16,11 +16,13 @@ using System.Windows.Shapes;
 
 using SRNicoNico.ViewModels;
 using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.Models.NicoNicoViewer;
 
 using Livet;
 using System.Collections.Generic;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Animation;
+using System.ComponentModel;
 
 namespace SRNicoNico.Views.Controls {
 	/// <summary>
@@ -108,11 +110,33 @@ namespace SRNicoNico.Views.Controls {
 
 
 
+        public bool IsSeekBarChanged {
+            get { return (bool)GetValue(IsSeekBarChangedProperty); }
+            set { SetValue(IsSeekBarChangedProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsSeekBarChanged.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsSeekBarChangedProperty =
+            DependencyProperty.Register("IsSeekBarChanged", typeof(bool), typeof(CommentView), new FrameworkPropertyMetadata(false));
+
+
+
+        public bool CommentVisibility {
+            get { return (bool)GetValue(CommentVisibilityProperty); }
+            set { SetValue(CommentVisibilityProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CommentVisibility.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CommentVisibilityProperty =
+            DependencyProperty.Register("CommentVisibility", typeof(bool), typeof(CommentView), new FrameworkPropertyMetadata(false));
+
+
+
         //描画中のコメント コメントID:TextBlock
         private Dictionary<int, Entry> DrawingComment = new Dictionary<int, Entry>();
 
         //描画出来るコメントの段を管理 
-        private Dictionary<int, int> CommentRow = new Dictionary<int, int>();
+        private Dictionary<int, bool> DrawingRows = new Dictionary<int, bool>();
 
         private int PrevTime = 0;
 
@@ -122,6 +146,12 @@ namespace SRNicoNico.Views.Controls {
        
         //4秒かけてアニメーションする
         private Duration duration = new Duration(TimeSpan.FromSeconds(4));
+
+        private int CurrentRow = 0;
+
+
+        private CommentRasterizer Builder;
+
 
         public CommentView() {
 
@@ -133,114 +163,158 @@ namespace SRNicoNico.Views.Controls {
             effect.Color = Colors.BlueViolet;
             effect.Opacity = 0.5;
 
+
         }
         
 
         //1フレーム置きに呼ばれる
         private void CompositionTarget_Rendering(object sender, EventArgs e) {
 
+            //これをしとかないとデザイナがエラー吐くからね しかたないね
+#if DEBUG
+            if((bool)(DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue)) {
+                return;
+            }
+#endif
 
+
+
+            //コメントが非表示ならなにもしない
+            if(!CommentVisibility) {
+
+                return;
+            }
+
+
+            if(IsSeekBarChanged) {
+
+                IsSeekBarChanged = false;
+
+                foreach(KeyValuePair<int, Entry> pair in DrawingComment) {
+
+                    CurrentRow = 0;
+                    pair.Value.Story.SkipToFill();
+
+                }
+
+                Builder.Seek(CurrentTime);
+
+                DrawingComment.Clear();
+
+            }
+
+            
             //条件に合わなかったらコメントを描画しない
             if(CommentList == null || CommentList.Count == 0 || PrevTime == CurrentTime) {
                 
+
                 //一時停止中は上のif文の三つ目の評価がtrueになるのでここに書く
                 if(!IsPlaying) {
 
                     //一番最初に一回呼ばれるが、DrawingCommentの要素数が0なので問題なし
                     foreach(KeyValuePair<int, Entry> pair in DrawingComment) {
 
+                        Builder.Pause();
                         pair.Value.Story.Pause();
                     }
                 } else {
 
                     foreach(KeyValuePair<int, Entry> pair in DrawingComment) {
 
+                        Builder.Resume();
                         pair.Value.Story.Resume();
                     }
                 }
               
                 
-                return;
 			}
+
             
             //2回実行されてもCurrentTimeが変わらない時があるので変わらなかったときは上記のとおり新しく描画しない
             PrevTime = CurrentTime;
 
-    
+
+
             //Console.WriteLine("Time:" + CurrentTime);
 
-            //コメントリストから持ってくる
-            foreach(CommentEntryViewModel vmentry in CommentList) {
+            if(Builder == null) {
+
+                Builder = new CommentRasterizer(this, CommentList);
+            }
 
 
-				NicoNicoCommentEntry entry = vmentry.Entry;
+            if(!IsPlaying) {
 
-                //CommentListは再生位置でソートされているので、まだ描画時間になっていないコメントが出てきたらその後は全部無視
-                if(entry.Vpos > CurrentTime) {
+                Builder.Pause();
 
-                    return;
-                }
+            } else {
 
-                //コメント描画時間になった
-                if(entry.Vpos <= CurrentTime && entry.Vpos + 400 >= CurrentTime && !DrawingComment.ContainsKey(entry.No)) {
-
-                    TextBlock text = new TextBlock();
-
-                    text.Name = "No" + entry.No.ToString();
-                    text.Text = entry.Content;
-                    text.FontSize = 20;
-                    text.Foreground = new SolidColorBrush(Colors.White);
-
-                    text.Effect = effect;
-
-                    
-                    //アニメーションする ActualWidthは初期値 つまり右端
-                    TranslateTransform trans = new TranslateTransform(ActualWidth, 0);
-                    var translationName = "myTranslation" + trans.GetHashCode();
-                    RegisterName(translationName, trans);
-
-                    //アニメーションを設定
-                    text.RenderTransform = trans;
-
-                    //アニメーション 最終位置は画面外左
-                    DoubleAnimation anim = new DoubleAnimation(-(text.Text.Length * text.FontSize), duration);
-                    anim.Name = text.Name;
-
-                    //一時停止とかのやつ thanks Stackoverflow (http://stackoverflow.com/questions/2841124/wpf-animating-translatetransform-from-code)
-                    Storyboard story = new Storyboard();
-
-                    Storyboard.SetTargetName(story, translationName);
-                    Storyboard.SetTargetProperty(story, new PropertyPath(TranslateTransform.XProperty));
-
-                    var storyboardName = "s" + story.GetHashCode();
-                    Resources.Add(storyboardName, story);
-
-
-                    story.Children.Add(anim);
-
-                    //描画が終わったらリソース開放
-                    story.Completed +=
-                    (sndr, evtArgs) => {
-                        Resources.Remove(storyboardName);
-                        UnregisterName(translationName);
-                        Anim_Completed(sndr, anim.Name);
-                    };
-
-                    //アニメーション開始
-                    story.Begin();
-
-                    //Gridに配置
-                    DrawingGrid.Children.Add(text);
-                        
-                    //現在描画中のリストに追加
-                    DrawingComment.Add(entry.No, new Entry() { Text = text, Anime = anim, Story = story} );
-
-
-                    
-                    Console.WriteLine("Allocate:" + text.Text);
-                }
+                Builder.Resume();
             }
 		}
+
+
+        public void DrawComment(NicoNicoCommentEntry entry) {
+
+
+            TextBlock text = new TextBlock();
+
+            text.Name = "No" + entry.No.ToString();
+            text.Text = entry.Content;
+            text.FontSize = 20;
+            text.Foreground = new SolidColorBrush(Colors.White);
+
+            text.Effect = effect;
+
+
+
+            //アニメーションする ActualWidthは初期値 つまり右端
+            TranslateTransform trans = new TranslateTransform(ActualWidth, CurrentRow);
+            var translationName = "myTranslation" + trans.GetHashCode();
+            RegisterName(translationName, trans);
+
+            CurrentRow += 20;
+
+            //アニメーションを設定
+            text.RenderTransform = trans;
+
+            //アニメーション 最終位置は画面外左
+            DoubleAnimation anim = new DoubleAnimation(-(text.Text.Length * text.FontSize), duration);
+            anim.Name = text.Name;
+
+            //一時停止とかのやつ thanks Stackoverflow (http://stackoverflow.com/questions/2841124/wpf-animating-translatetransform-from-code)
+            Storyboard story = new Storyboard();
+
+            Storyboard.SetTargetName(story, translationName);
+            Storyboard.SetTargetProperty(story, new PropertyPath(TranslateTransform.XProperty));
+
+            var storyboardName = "s" + story.GetHashCode();
+            Resources.Add(storyboardName, story);
+
+
+            story.Children.Add(anim);
+
+            //描画が終わったらリソース開放
+            story.Completed +=
+            (sndr, evtArgs) => {
+                Resources.Remove(storyboardName);
+                UnregisterName(translationName);
+                Anim_Completed(sndr, anim.Name);
+            };
+
+            //アニメーション開始
+            story.Begin();
+
+            //Gridに配置
+            DrawingGrid.Children.Add(text);
+
+            //現在描画中のリストに追加
+            DrawingComment.Add(entry.No, new Entry() { Text = text, Anime = anim, Story = story });
+        }
+
+
+
+
 
         //アニメーションが終わったコメント（画面外に出た）
         private void Anim_Completed(object sender, string name) {
@@ -258,6 +332,7 @@ namespace SRNicoNico.Views.Controls {
             //役目を終えたコメント リソース開放
             if(DrawingComment.ContainsKey(no)) {
 
+                CurrentRow -= 20;
                 Entry entry = DrawingComment[no];
                 TextBlock text = entry.Text;
                 DrawingComment.Remove(no);

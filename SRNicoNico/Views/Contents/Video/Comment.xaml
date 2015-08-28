@@ -12,7 +12,7 @@
 			 >
 
     <Grid x:Name="view">
-        <comment:CommentView CommentList="{Binding VideoData.CommentData}" DrawingGrid="{Binding ElementName=view}" CurrentTime="{Binding Time.CurrentTimeMilis}" IsPlaying="{Binding IsPlaying}" />
+        <comment:CommentView CommentList="{Binding VideoData.CommentData}" DrawingGrid="{Binding ElementName=view}" CurrentTime="{Binding Time.CurrentTimeMilis}" IsPlaying="{Binding IsPlaying}" IsSeekBarChanged="{Binding IsSeekChanged, Mode=TwoWay}" CommentVisibility="{Binding CommentVisibility}" />
 		
 			
 			

@@ -114,6 +114,22 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region IsSeekChanged変更通知プロパティ
+        private bool _IsSeekChanged;
+
+        public bool IsSeekChanged {
+            get { return _IsSeekChanged; }
+            set { 
+                if(_IsSeekChanged == value)
+                    return;
+                _IsSeekChanged = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
         #region WebBrowser変更通知プロパティ
         private WebBrowser _WebBrowser;
 
@@ -184,7 +200,6 @@ namespace SRNicoNico.ViewModels {
 
                     VideoData.CommentData.Add(new CommentEntryViewModel(entry));
                 }
-                ;
 
             }).ContinueWith(new Action<Task>(res => {
 
@@ -212,7 +227,7 @@ namespace SRNicoNico.ViewModels {
         //1フレーム毎に呼ばれる
         public void CsFrame(float time, float buffer) {
 
-           // Console.WriteLine(VideoData.ApiData.Cmsid + " " + time + ":" + buffer);
+            //Console.WriteLine(VideoData.ApiData.Cmsid + " " + time + ":" + buffer);
 
             Time.CurrentTime = (int) time;
             Time.CurrentTimeMilis = (int) (time * 100);
@@ -269,6 +284,8 @@ namespace SRNicoNico.ViewModels {
         public void Seek(float pos) {
 
             InvokeScript("JsSeek", pos.ToString());
+            IsSeekChanged = true;
+
         }
 
         //JSを呼ぶ

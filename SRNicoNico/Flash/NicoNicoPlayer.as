@@ -85,7 +85,7 @@
 			//var now:Date = new Date();
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
+			OpenVideo("http://mrtska.net/SRNicoNico/sm9");
 		}
 		
 		//指定したURLをストリーミング再生する
@@ -214,7 +214,7 @@
 			
 				
 				
-			trace("Time:" + stream.time);
+			//trace("Time:" + stream.time);
 			
 			
 			
@@ -255,7 +255,8 @@
 					diff = wantSeekPos - stream.time;
 				}
 				this.diff = diff;
-				trace("Diff:" + diff);
+				
+				trace("Seek:" + stream.time);
 			
 				break;
 			case "NetStream.Seek.Complete":
@@ -269,7 +270,7 @@
 				break;
 			case "NetStream.Buffer.Full":
 				
-				trace("Buffer.Full");
+				trace("Buffer.Full:");
 				break;
 			default:
 				
