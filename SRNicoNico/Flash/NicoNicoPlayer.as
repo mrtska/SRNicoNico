@@ -47,7 +47,7 @@
 		private function onClick(e:MouseEvent):void {
 			
 			
-			Seek(30);
+			//Seek(30);
 			trace("onClick");
 		}
 		
@@ -81,11 +81,12 @@
 				
 			}
 			
+			//OpenVideo("Z:/smile.flv");
 			//OpenVideo("Z:/smile.mp4");
 			//var now:Date = new Date();
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
-			OpenVideo("http://mrtska.net/SRNicoNico/sm9");
+			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
 		}
 		
 		//指定したURLをストリーミング再生する
@@ -204,6 +205,8 @@
 			
 		}
 		
+		var prev:int = 0;
+		
 		private function onFrame(e:Event):void {
 				
 			// 再生時間を取得
@@ -217,9 +220,17 @@
 			//trace("Time:" + stream.time);
 			
 			
+			var current:int = value;
+			if(prev != current) {
+				
+				fscommand("CsFrame", value + ":" + buffer.toString());
+				trace("prev:" + prev + " current:" + value);
+			}
+			prev = value;
 			
 			
-			fscommand("CsFrame", value + ":" + buffer.toString());
+			
+			
 			//trace("value:" + value + " diff:" + this.diff);
 			
 			if(this.diff != 0) {

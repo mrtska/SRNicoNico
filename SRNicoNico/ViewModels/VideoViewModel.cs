@@ -224,10 +224,11 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        //1フレーム毎に呼ばれる
+        //1秒毎に呼ばれる
         public void CsFrame(float time, float buffer) {
 
-            //Console.WriteLine(VideoData.ApiData.Cmsid + " " + time + ":" + buffer);
+            Console.WriteLine(VideoData.ApiData.Cmsid + " " + time + ":" + buffer);
+           
 
             Time.CurrentTime = (int) time;
             Time.CurrentTimeMilis = (int) (time * 100);
@@ -252,6 +253,8 @@ namespace SRNicoNico.ViewModels {
                 Seek(0);
             }
 
+            //スリープを入れないと全力でループしてしまう
+           // Thread.Sleep(1);
         }
 
         //このメソッド以降はWebBrowserプロパティはnullではない

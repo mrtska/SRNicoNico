@@ -145,7 +145,9 @@ namespace SRNicoNico.Views.Controls {
         private  DropShadowEffect effect = new DropShadowEffect();
        
         //4秒かけてアニメーションする
-        private Duration duration = new Duration(TimeSpan.FromSeconds(4));
+        private Duration Duration = new Duration(TimeSpan.FromSeconds(4));
+        private Duration FixedDuration = new Duration(TimeSpan.FromSeconds(3));
+
 
         private int CurrentRow = 0;
 
@@ -155,7 +157,7 @@ namespace SRNicoNico.Views.Controls {
 
         public CommentView() {
 
-            CompositionTarget.Rendering += CompositionTarget_Rendering;
+           // CompositionTarget.Rendering += CompositionTarget_Rendering;
 
             //テキストエフェクト いろいろ
             effect.ShadowDepth = 3;
@@ -165,7 +167,7 @@ namespace SRNicoNico.Views.Controls {
 
 
         }
-        
+
 
         //1フレーム置きに呼ばれる
         private void CompositionTarget_Rendering(object sender, EventArgs e) {
@@ -194,19 +196,17 @@ namespace SRNicoNico.Views.Controls {
 
                     CurrentRow = 0;
                     pair.Value.Story.SkipToFill();
-
                 }
 
                 Builder.Seek(CurrentTime);
 
                 DrawingComment.Clear();
-
             }
 
-            
+
             //条件に合わなかったらコメントを描画しない
-            if(CommentList == null || CommentList.Count == 0 || PrevTime == CurrentTime) {
-                
+            if(PrevTime == CurrentTime) {
+
 
                 //一時停止中は上のif文の三つ目の評価がtrueになるのでここに書く
                 if(!IsPlaying) {
@@ -225,11 +225,11 @@ namespace SRNicoNico.Views.Controls {
                         pair.Value.Story.Resume();
                     }
                 }
-              
-                
-			}
 
-            
+
+            }
+
+
             //2回実行されてもCurrentTimeが変わらない時があるので変わらなかったときは上記のとおり新しく描画しない
             PrevTime = CurrentTime;
 
@@ -251,35 +251,67 @@ namespace SRNicoNico.Views.Controls {
 
                 Builder.Resume();
             }
-		}
+        }
 
 
-        public void DrawComment(NicoNicoCommentEntry entry) {
+        //no:コメントナンバー
+        //content:コメント
+        //color:コメントカラー
+        //size:コメントサイズ
+        public void DrawComment(int no, string content, Brush color, double size, double length, CommentPosition pos) {
 
-
+            //テキストブロック クリックイベントとかも実装する可能性ある
             TextBlock text = new TextBlock();
 
-            text.Name = "No" + entry.No.ToString();
-            text.Text = entry.Content;
-            text.FontSize = 20;
-            text.Foreground = new SolidColorBrush(Colors.White);
+            text.Name = "No" + no.ToString();
+            text.Text = content;
+            text.FontSize = size;
+            text.Foreground = color;
+            
 
             text.Effect = effect;
 
+            TranslateTransform trans = null;
 
+            //流れるコメントは右端から 固定コメントは中央固定
+            if(pos == CommentPosition.Naka) {
 
-            //アニメーションする ActualWidthは初期値 つまり右端
-            TranslateTransform trans = new TranslateTransform(ActualWidth, CurrentRow);
+                trans = new TranslateTransform(ActualWidth, CurrentRow);
+                CurrentRow += (int)text.FontSize;
+            } else if(pos == CommentPosition.Ue) {
+
+                text.TextAlignment = TextAlignment.Center;
+                trans = new TranslateTransform();
+            } else if(pos == CommentPosition.Shita) {
+
+                text.TextAlignment = TextAlignment.Center;
+                trans = new TranslateTransform();
+                trans.Y = ActualHeight - text.FontSize;
+            }
+
+            //名前を設定
             var translationName = "myTranslation" + trans.GetHashCode();
             RegisterName(translationName, trans);
 
-            CurrentRow += 20;
 
             //アニメーションを設定
             text.RenderTransform = trans;
 
+
             //アニメーション 最終位置は画面外左
-            DoubleAnimation anim = new DoubleAnimation(-(text.Text.Length * text.FontSize), duration);
+            DoubleAnimation anim = null;    
+
+            //流れるコメントは4秒 それ以外は3秒
+            if(pos == CommentPosition.Naka) {
+
+                anim = new DoubleAnimation(length, Duration);
+            } else {
+                
+                anim = new DoubleAnimation(0, FixedDuration);
+            }
+
+
+
             anim.Name = text.Name;
 
             //一時停止とかのやつ thanks Stackoverflow (http://stackoverflow.com/questions/2841124/wpf-animating-translatetransform-from-code)
@@ -300,6 +332,10 @@ namespace SRNicoNico.Views.Controls {
                 Resources.Remove(storyboardName);
                 UnregisterName(translationName);
                 Anim_Completed(sndr, anim.Name);
+                if(pos == CommentPosition.Naka) {
+
+                    CurrentRow -= (int)text.FontSize;
+                }
             };
 
             //アニメーション開始
@@ -309,7 +345,14 @@ namespace SRNicoNico.Views.Controls {
             DrawingGrid.Children.Add(text);
 
             //現在描画中のリストに追加
-            DrawingComment.Add(entry.No, new Entry() { Text = text, Anime = anim, Story = story });
+            if(!DrawingComment.Keys.Contains(no)) {
+
+                DrawingComment.Add(no, new Entry() { Text = text, Anime = anim, Story = story });
+            }
+       
+        
+
+            
         }
 
 
@@ -332,9 +375,9 @@ namespace SRNicoNico.Views.Controls {
             //役目を終えたコメント リソース開放
             if(DrawingComment.ContainsKey(no)) {
 
-                CurrentRow -= 20;
                 Entry entry = DrawingComment[no];
                 TextBlock text = entry.Text;
+
                 DrawingComment.Remove(no);
                 DrawingGrid.Children.Remove(text);
                 entry.Story.Children.Remove(entry.Anime);
@@ -342,6 +385,13 @@ namespace SRNicoNico.Views.Controls {
                 //Console.WriteLine("Free:" + text.Text);
             }
         }
+    }
+
+    public enum CommentPosition {
+
+        Ue,
+        Shita,
+        Naka
     }
 
     //便利な奴
