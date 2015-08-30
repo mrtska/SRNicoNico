@@ -44,7 +44,7 @@ package  {
 		
 		private var debugText:TextField = new TextField();
 		
-		private var rasterizer:CommentRasterizer = new CommentRasterizer();
+		private var rasterizer:CommentRasterizer;
 		
 		private function onClick(e:MouseEvent):void {
 			
@@ -65,6 +65,7 @@ package  {
 			stage.scaleMode = StageScaleMode.EXACT_FIT;
 			
 			
+			
 			var format:TextFormat = new TextFormat();
 			format.color = 0xFFFFFF;
 			debugText.defaultTextFormat = format;
@@ -80,6 +81,7 @@ package  {
 				ExternalInterface.addCallback("AsPause", Pause);
 				ExternalInterface.addCallback("AsResume", Resume);
 				ExternalInterface.addCallback("AsSeek", Seek);
+				ExternalInterface.addCallback("AsInjectComment", InjectComment);
 				
 			}
 			
@@ -116,7 +118,17 @@ package  {
 			stream.seek(pos);
 		}
 		
+		private function InjectComment(list:String):void {
+			
+			rasterizer = new CommentRasterizer(stream);
+			
+			addChild(rasterizer);
+		}
 		
+		private function InjectContributorComment(list:String):void {
+			
+			
+		}
 		
 		
 		
@@ -204,7 +216,6 @@ package  {
 			
 			
 			stream.play(videoUrl);
-			
 		}
 		
 		

@@ -156,7 +156,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			return Vpos.CompareTo(obj.Vpos);
 		}
-	}
+
+    }
 
 
 }
