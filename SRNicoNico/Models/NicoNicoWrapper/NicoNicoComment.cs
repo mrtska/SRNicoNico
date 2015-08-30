@@ -98,6 +98,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             doc.LoadHtml2(response);
 
             var nodes = doc.DocumentNode.SelectNodes("/packet/chat");
+
+            if(nodes == null) {
+
+                return;
+            }
+
             foreach(HtmlNode node in nodes) {
 
                 var attr = node.Attributes;

@@ -8,6 +8,7 @@ using Livet;
 using SRNicoNico.Models.NicoNicoWrapper;
 
 using SRNicoNico.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
 	public class VideoData : NotificationObject {
@@ -34,9 +35,9 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 		//コメントデータ
 
 		#region CommentData変更通知プロパティ
-		private DispatcherCollection<CommentEntryViewModel> _CommentData = new DispatcherCollection<CommentEntryViewModel>(DispatcherHelper.UIDispatcher);
+		private ObservableCollection<CommentEntryViewModel> _CommentData = new ObservableCollection<CommentEntryViewModel>();
 
-		public DispatcherCollection<CommentEntryViewModel> CommentData {
+		public ObservableCollection<CommentEntryViewModel> CommentData {
 			get { return _CommentData; }
 			set { 
 				if(_CommentData == value)

@@ -1,28 +1,29 @@
-﻿package {
+package  {
 	
 	
 	import flash.display.Sprite;
+	import flash.display.StageScaleMode;
+	import flash.events.AsyncErrorEvent;
+	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
+	import flash.events.MouseEvent;
+	import flash.events.NetStatusEvent;
 	import flash.external.ExternalInterface;
+	import flash.geom.Rectangle;
+	import flash.media.SoundTransform;
+	import flash.media.StageVideo;
+	import flash.media.Video;
+	import flash.net.NetConnection;
+	import flash.net.NetStream;
+	import flash.net.NetStreamPlayOptions;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	import flash.net.URLRequestMethod;
 	import flash.net.URLRequestHeader;
+	import flash.net.URLRequestMethod;
+	import flash.system.fscommand;
 	import flash.text.TextField;
-	import flash.events.Event;
 	import flash.text.TextFieldAutoSize;
-	import flash.display.StageScaleMode;
-	import flash.net.NetStream;
-	import flash.net.NetConnection;
-	import flash.events.NetStatusEvent;
-	import flash.media.Video;
 	import flash.text.TextFormat;
-	import flash.media.StageVideo;
-	 import flash.geom.Rectangle;
-	 import flash.net.NetStreamPlayOptions;
-	 import flash.system.fscommand;
-	 import flash.events.AsyncErrorEvent;
-	 import flash.events.MouseEvent;
 	
 	
 	public class NicoNicoPlayer extends Sprite {
@@ -43,6 +44,7 @@
 		
 		private var debugText:TextField = new TextField();
 		
+		private var rasterizer:CommentRasterizer = new CommentRasterizer();
 		
 		private function onClick(e:MouseEvent):void {
 			
@@ -69,7 +71,7 @@
 			debugText.text = "スタート";
 			
 			//addChild(debugText);
-				
+			
 			//JSコールバック登録
 			if(ExternalInterface.available) {
 				
@@ -120,15 +122,15 @@
 		
 		
 		//ビデオコントロールにストリームを繋ぐ
-		private function ConnectStream() {
+		private function ConnectStream():void {
 			
-	
+			
 			
 			debugText.text = "動画再生:" + videoUrl;
-
+			
 			//インスタンス作成
 			stream = new NetStream(connection);
-			
+			stream.soundTransform = new SoundTransform(0.1);
 			
 			//イベントリスナ登録
 			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
@@ -160,7 +162,7 @@
 				}
 				
 			}
-
+			
 			obj.onSeekPoint = function(param:Object):void {
 				
 				trace("onSeekPoint");
@@ -175,16 +177,16 @@
 			
 			
 			
-				
+			
 			var vec:Vector.<StageVideo> = stage.stageVideos;
 			if(vec.length >= 1) {
 				;
-			var stageVideo:StageVideo = vec[0];
+				var stageVideo:StageVideo = vec[0];
 				
 				stageVideo.viewPort = new  Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
-			
+				
 				stageVideo.attachNetStream(stream);
-			
+				
 			} else {
 				
 				var video:Video = new Video(stage.stageWidth, stage.stageHeight);
@@ -196,7 +198,7 @@
 			
 			
 			
-				
+			
 			addEventListener(Event.ENTER_FRAME, onFrame);
 			
 			
@@ -205,28 +207,22 @@
 			
 		}
 		
-		var prev:int = 0;
 		
 		private function onFrame(e:Event):void {
-				
+			
 			// 再生時間を取得
 			var value:Number = stream.time;
-			  
+			
 			// バッファの計算
 			var buffer:Number = (stream.bytesLoaded) / (stream.bytesTotal);
 			
-				
-				
+			
+			
 			//trace("Time:" + stream.time);
 			
 			
-			var current:int = value;
-			if(prev != current) {
-				
-				fscommand("CsFrame", value + ":" + buffer.toString());
-				trace("prev:" + prev + " current:" + value);
-			}
-			prev = value;
+			fscommand("CsFrame", value + ":" + buffer.toString());
+			
 			
 			
 			
@@ -244,7 +240,7 @@
 		private function onAsyncError(e:AsyncErrorEvent):void {
 			
 			trace("onAsyncError");
-
+			
 			trace(e.text);
 		}
 		
@@ -253,29 +249,29 @@
 			trace("onNetStatus");
 			switch(e.info.code) {
 			case "NetStream.Seek.Notify":				
-			
+				
 				trace("Seek.Notify");
-			
+				
 				var diff:Number;
-			
+				
 				if(stream.time < wantSeekPos) {
 					
 					diff = stream.time - wantSeekPos;
- 				} else {
+				} else {
 					
 					diff = wantSeekPos - stream.time;
 				}
 				this.diff = diff;
 				
 				trace("Seek:" + stream.time);
-			
+				
 				break;
 			case "NetStream.Seek.Complete":
 				
 				trace("Seek.Complete");
-			
+				
 				//stream.step(diff * stage.frameRate);
-			
+				
 				
 				
 				break;
@@ -288,18 +284,19 @@
 				trace("default:" + e.info.code);
 				break;
 			}
+			
 		}
 		
 		
 		private function onConnect(e:NetStatusEvent):void {
 			
 			switch(e.info.code) {
-            case "NetConnection.Connect.Success":
-               ConnectStream();
-               break;
-            // その他
-            default:
-               trace(e.info.code);
+			case "NetConnection.Connect.Success":
+				ConnectStream();
+				break;
+			// その他
+			default:
+				trace(e.info.code);
 			}
 		}
 		

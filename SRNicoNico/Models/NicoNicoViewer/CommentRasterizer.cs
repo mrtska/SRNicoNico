@@ -11,6 +11,8 @@ using SRNicoNico.ViewModels;
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Views.Controls;
 using System.Windows.Media;
+using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
 
@@ -70,6 +72,10 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
 
 
+        //4秒かけてアニメーションする
+        private Duration Duration = new Duration(TimeSpan.FromSeconds(4));
+        private Duration FixedDuration = new Duration(TimeSpan.FromSeconds(3));
+
 
 
         //タイマー これでコメント描画タイミングを取得する
@@ -78,13 +84,13 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         //現在の時間 10ミリ秒 単位
         private int CurrentTime;
 
-        private DispatcherCollection<CommentEntryViewModel> CommentList;
+        private ObservableCollection<CommentEntryViewModel> CommentList;
 
         private readonly CommentView View;
 
     
 
-        public CommentRasterizer(CommentView view, DispatcherCollection<CommentEntryViewModel> list) {
+        public CommentRasterizer(CommentView view, ObservableCollection<CommentEntryViewModel> list) {
 
             View = view;
             CommentList = list;
@@ -99,9 +105,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         //Tick毎の処理
         private void Timer_Tick(object sender, ElapsedEventArgs e) {
 
-
-
-
+            //指定の時間になったコメントを描画する
             foreach(CommentEntryViewModel vm in CommentList) {
 
                 NicoNicoCommentEntry entry = vm.Entry;
@@ -111,14 +115,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                     TriggerComment(entry);
                 }
             }
-
-
-            
-
-
-
-
-
 
             //時間計測
             CurrentTime++;
@@ -143,6 +139,15 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                     }
                 }
 
+                if(entry.Mail.Contains('#')) {
+
+                    string col = entry.Mail.Substring(entry.Mail.IndexOf('#'));
+
+                    //Convert.ToInt32();
+                }
+
+
+
                 //コメントサイズ
                 double size = 20;
                 if(entry.Mail.Contains("big")) {
@@ -162,9 +167,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 //複数行コメントだったら
                 if(entry.Content.Contains("\n")) {
 
-                    string[] contents = entry.Content.Split('\n');
-
-                    foreach(string text in contents) {
+                    foreach(string text in entry.Content.Split('\n')) {
 
                         length = Math.Max(length, text.Length * size);
                     }
@@ -174,15 +177,26 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 }
 
 
-                CommentPosition pos = CommentPosition.Naka;
+                CommentPosition pos = new CommentPosition() {
+
+                    EnumPos = EnumCommentPosition.Naka
+                };
+
+                
+                
                 if(entry.Mail.Contains("ue")) {
 
-                    pos = CommentPosition.Ue;
+                    pos.EnumPos = EnumCommentPosition.Ue;
+                    pos.Duration = FixedDuration;
+                    length = 0;
                 } else if(entry.Mail.Contains("shita")) {
 
-                    pos = CommentPosition.Shita;
+                    pos.EnumPos = EnumCommentPosition.Shita;
+                    pos.Duration = FixedDuration;
+                    length = 0;
                 } else {
 
+                    pos.Duration = Duration;
                     length = -length;
                 }
 

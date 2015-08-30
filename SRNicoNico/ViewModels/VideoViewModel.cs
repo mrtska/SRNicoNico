@@ -14,9 +14,6 @@ namespace SRNicoNico.ViewModels {
 	public class VideoViewModel : ViewModel {
 
         
-		//キャッシュパス
-		public string Path { get; set; }
-        
 
 		//インラインシークバー画像プレビュー
 		public NicoNicoStoryBoard StoryBoard { get; set; }
@@ -195,6 +192,7 @@ namespace SRNicoNico.ViewModels {
                 VideoData.StoryBoardData = sb.GetStoryBoardData();
 
                 NicoNicoComment comment = new NicoNicoComment(VideoData.ApiData.GetFlv);
+                
 
                 foreach(NicoNicoCommentEntry entry in comment.GetComment()) {
 
@@ -286,8 +284,8 @@ namespace SRNicoNico.ViewModels {
 
         public void Seek(float pos) {
 
-            InvokeScript("JsSeek", pos.ToString());
             IsSeekChanged = true;
+            InvokeScript("JsSeek", pos.ToString());
 
         }
 
