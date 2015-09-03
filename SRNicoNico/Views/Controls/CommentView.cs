@@ -56,38 +56,10 @@ namespace SRNicoNico.Views.Controls {
 	/// </summary>
 	public class CommentView : Control {
 
-
 		static CommentView() {
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(CommentView), new FrameworkPropertyMetadata(typeof(CommentView)));
-			
-			
 		}
-
-
-		public ObservableCollection<CommentEntryViewModel> CommentList {
-			get { return (ObservableCollection<CommentEntryViewModel>)GetValue(CommentListProperty); }
-			set {
-                SetValue(CommentListProperty, value);
-            }
-		}
-
-		// Using a DependencyProperty as the backing store for CommentList.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty CommentListProperty =
-			DependencyProperty.Register("CommentList", typeof(ObservableCollection<CommentEntryViewModel>), typeof(CommentView), new FrameworkPropertyMetadata(null));
-
-
-
-		public int CurrentTime {
-			get { return (int)GetValue(CurrentTimeProperty); }
-			set { SetValue(CurrentTimeProperty, value); }
-		}
-
-		// Using a DependencyProperty as the backing store for CurrentTime.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty CurrentTimeProperty =
-			DependencyProperty.Register("CurrentTime", typeof(int), typeof(CommentView), new FrameworkPropertyMetadata(0));
-
-
-
+        
 		public Grid DrawingGrid {
 			get { return (Grid)GetValue(DrawingGridProperty); }
 			set { SetValue(DrawingGridProperty, value); }
@@ -99,53 +71,13 @@ namespace SRNicoNico.Views.Controls {
 
 
 
-
-        public bool IsPlaying {
-            get { return (bool)GetValue(IsPlayingProperty); }
-            set { SetValue(IsPlayingProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for IsPause.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IsPlayingProperty =
-            DependencyProperty.Register("IsPlaying", typeof(bool), typeof(CommentView), new FrameworkPropertyMetadata(false));
-
-
-
-
-        public bool IsSeekBarChanged {
-            get { return (bool)GetValue(IsSeekBarChangedProperty); }
-            set {
-                SetValue(IsSeekBarChangedProperty, value);
-            }
-        }
-
-        // Using a DependencyProperty as the backing store for IsSeekBarChanged.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IsSeekBarChangedProperty =
-            DependencyProperty.Register("IsSeekBarChanged", typeof(bool), typeof(CommentView), new FrameworkPropertyMetadata(false));
-
-
-
-        public bool CommentVisibility {
-            get { return (bool)GetValue(CommentVisibilityProperty); }
-            set {
-                SetValue(CommentVisibilityProperty, value);
-            }
-        }
-
-        // Using a DependencyProperty as the backing store for CommentVisibility.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CommentVisibilityProperty =
-            DependencyProperty.Register("CommentVisibility", typeof(bool), typeof(CommentView), new FrameworkPropertyMetadata(false));
-
         
-
 
         //描画中のコメント コメントID:TextBlock
-        private Dictionary<int, Entry> DrawingComment = new Dictionary<int, Entry>();
+        private Dictionary<int, CommentEntry> DrawingComment = new Dictionary<int, CommentEntry>();
         
 
 
-        //影をつける
-        private  DropShadowEffect effect = new DropShadowEffect();
        
 
 
@@ -155,25 +87,41 @@ namespace SRNicoNico.Views.Controls {
 
         public CommentView() {
 
-            
 
-            CompositionTarget.Rendering += CompositionTarget_Rendering;
-
-            //テキストエフェクト いろいろ
-            effect.ShadowDepth = 3;
-            effect.Direction = 315;
-            effect.Color = Colors.BlueViolet;
-            effect.Opacity = 0.5;
+            DataContextChanged += CommentView_DataContextChanged;
+            SizeChanged += CommentView_SizeChanged;
 
 
         }
 
+        private void CommentView_SizeChanged(object sender, SizeChangedEventArgs e) {
+
+            if(Builder != null) {
+
+                Builder.UpdateSize(ActualWidth, ActualHeight);
+            }
+        }
+
+        //データコンテキスト(ViewModel)にViewのインスタンスを入れる
+        private void CommentView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
 
+            //ViewModelからViewのメソッドを呼べるようにする これが一番楽だった
+            if(DataContext is VideoViewModel) {
 
+                VideoViewModel video = (VideoViewModel) DataContext;
+                video.Comment.View = this;
+            }
+        }
+
+        //ViewModelから呼ばれる
+        public void Initialize(ObservableCollection<CommentEntryViewModel> list) {
+
+            Builder = new CommentRasterizer(this, list, DrawingComment);
+        }
 
         //1フレーム置きに呼ばれる
-        private void CompositionTarget_Rendering(object sender, EventArgs e) {
+        public void RenderComment(double vpos, bool forceReset) {
 
             //これをしとかないとデザイナがエラー吐くからね しかたないね
 #if DEBUG
@@ -181,52 +129,20 @@ namespace SRNicoNico.Views.Controls {
                 return;
             }
 #endif
-
-
-
-            //コメントが非表示ならなにもしない
-            if(!CommentVisibility) {
-
-                return;
-            }
             
-            if(IsSeekBarChanged) {
+            if(forceReset) {
 
-                IsSeekBarChanged = false;
-
-                foreach(KeyValuePair<int, Entry> pair in DrawingComment) {
-
-                    Builder.Seek(CurrentTime);
-                    pair.Value.Story.SkipToFill();
-                }
-
-            }
-
-            //Console.WriteLine("Time:" + CurrentTime);
-
-            if(Builder == null) {
-
-                Builder = new CommentRasterizer(this, CommentList);
-            }
-
-
-            //一時停止中は上のif文の三つ目の評価がtrueになるのでここに書く
-            if(!IsPlaying) {
-
-                //一番最初に一回呼ばれるが、DrawingCommentの要素数が0なので問題なし
-                foreach(KeyValuePair<int, Entry> pair in DrawingComment) {
-
-                    Builder.Pause();
-                    pair.Value.Story.Pause();
-                }
+                
             } else {
 
-                foreach(KeyValuePair<int, Entry> pair in DrawingComment) {
 
-                    Builder.Resume();
-                    pair.Value.Story.Resume();
-                }
+
+
             }
+            //DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => Builder.RenderComment(vpos)));
+            Builder.RenderComment(vpos, forceReset);
+
+
         }
 
         //引数に応じた位置、色、時間でコメントを描画する
@@ -238,36 +154,26 @@ namespace SRNicoNico.Views.Controls {
         //length:横幅 複数行コメントの時は一番長い行の幅
         //pos:位置
         //dur:表示時間
-        public void DrawComment(int no, string content, Brush color, double size, double length, CommentPosition pos) {
+        public void DrawComment(CommentEntry entry) {
 
-            //テキストブロック クリックイベントとかも実装する可能性ある
-            TextBlock text = new TextBlock();
+            TranslateTransform trans = new TranslateTransform(entry.Pos.XPos, entry.Pos.YPos);
+            DoubleAnimation anim = null;
 
-            text.Name = "No" + no.ToString();
-            text.Text = content;
-            text.FontSize = size;
-            text.Foreground = color;
             
-            
-            text.Effect = effect;
+            entry.Text.RenderTransform = trans;
 
-            TranslateTransform trans = null;
+            //アニメーション 最終位置は画面外左
+            if(entry.Pos.EnumPos == EnumCommentPosition.Naka) {
 
-            //流れるコメントは右端から 固定コメントは中央固定
-            if(pos.EnumPos == EnumCommentPosition.Naka) {
+                anim = new DoubleAnimation(-entry.Text.Width, entry.Raw.Duration);
+            } else {
 
-                trans = new TranslateTransform(ActualWidth, pos.Pos);
-            } else if(pos.EnumPos == EnumCommentPosition.Ue) {
-
-                text.TextAlignment = TextAlignment.Center;
-                text.VerticalAlignment = VerticalAlignment.Top;
-                trans = new TranslateTransform();
-            } else if(pos.EnumPos == EnumCommentPosition.Shita) {
-
-                text.TextAlignment = TextAlignment.Center;
-                text.VerticalAlignment = VerticalAlignment.Bottom;
-                trans = new TranslateTransform();
+                anim = new DoubleAnimation(entry.Pos.XPos, entry.Raw.Duration);
             }
+                
+
+
+           // }
 
             //名前を設定
             var translationName = "myTranslation" + trans.GetHashCode();
@@ -275,22 +181,19 @@ namespace SRNicoNico.Views.Controls {
 
 
             //アニメーションを設定
-            text.RenderTransform = trans;
 
 
-            //アニメーション 最終位置は画面外左
-            DoubleAnimation anim = new DoubleAnimation(length, pos.Duration);
-
+           
             //一時停止とかのやつ thanks Stackoverflow (http://stackoverflow.com/questions/2841124/wpf-animating-translatetransform-from-code)
-            Storyboard story = new Storyboard();
-
+            Storyboard story = new Storyboard() { RepeatBehavior = new RepeatBehavior(1) };
             Storyboard.SetTargetName(story, translationName);
             Storyboard.SetTargetProperty(story, new PropertyPath(TranslateTransform.XProperty));
+            story.FillBehavior = FillBehavior.HoldEnd;
 
             var storyboardName = "s" + story.GetHashCode();
             Resources.Add(storyboardName, story);
 
-
+            
             story.Children.Add(anim);
 
             //描画が終わったらリソース開放
@@ -298,38 +201,61 @@ namespace SRNicoNico.Views.Controls {
             (sndr, evtArgs) => {
                 Resources.Remove(storyboardName);
                 UnregisterName(translationName);
-                Anim_Completed(sndr, text.Name);
+                Anim_Completed(sndr, entry.Text.Name);
             };
-
             //アニメーション開始
             story.Begin();
+            entry.Story = story;
 
-            if(pos.EnumPos != EnumCommentPosition.Naka) {
+            if(entry.Pos.EnumPos != EnumCommentPosition.Naka) {
 
                 Viewbox box = new Viewbox();
                 box.VerticalAlignment = VerticalAlignment.Bottom;
                 //box.Child = text;
                 
-                DrawingGrid.Children.Add(text);
+                DrawingGrid.Children.Add(entry.Text);
 
             } else {
 
                 //Gridに配置
-                DrawingGrid.Children.Add(text);
+                DrawingGrid.Children.Add(entry.Text);
             }
 
 
             //現在描画中のリストに追加
-            if(!DrawingComment.Keys.Contains(no)) {
+            if(!DrawingComment.Keys.Contains(entry.Raw.No)) {
 
-                DrawingComment.Add(no, new Entry() { Text = text, Anime = anim, Story = story });
+                DrawingComment.Add(entry.Raw.No, entry);
             }
-       
-        
-
-            
         }
 
+        public void Pause() {
+
+            foreach(KeyValuePair<int, CommentEntry> pair in DrawingComment) {
+
+                pair.Value.Story.Pause();
+            }
+        }
+
+        public void Resume() {
+
+            foreach(KeyValuePair<int, CommentEntry> pair in DrawingComment) {
+
+                pair.Value.Story.Resume();
+            }
+
+        }
+
+        public void Seek() {
+
+            foreach(KeyValuePair<int, CommentEntry> pair in DrawingComment) {
+
+                pair.Value.Story.SkipToFill();
+
+            }
+            DrawingComment.Clear();
+
+        }
 
 
 
@@ -350,41 +276,19 @@ namespace SRNicoNico.Views.Controls {
             //役目を終えたコメント リソース開放
             if(DrawingComment.ContainsKey(no)) {
 
-                Entry entry = DrawingComment[no];
+                CommentEntry entry = DrawingComment[no];
                 TextBlock text = entry.Text;
 
                 DrawingComment.Remove(no);
                 DrawingGrid.Children.Remove(text);
                 entry.Story.Children.Remove(entry.Anime);
+                
                 text.Visibility = Visibility.Collapsed;
                 //Console.WriteLine("Free:" + text.Text);
             }
         }
     }
 
-    public class CommentPosition {
 
 
-        public EnumCommentPosition EnumPos { get; set; }
-        
-        public double Pos { get; set; }
-
-        public Duration Duration { get; set; }
-
-    }
-
-    public enum EnumCommentPosition {
-
-        Ue,
-        Shita,
-        Naka
-    }
-
-    //便利な奴
-    internal class Entry {
-
-        public Storyboard Story { get; set; }
-        public TextBlock Text { get; set; }
-        public DoubleAnimation Anime { get; set; }
-    }
 }

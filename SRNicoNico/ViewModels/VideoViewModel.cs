@@ -14,9 +14,16 @@ namespace SRNicoNico.ViewModels {
 	public class VideoViewModel : ViewModel {
 
         
+		//キャッシュパス
+		public string Path { get; set; }
+        
 
 		//インラインシークバー画像プレビュー
 		public NicoNicoStoryBoard StoryBoard { get; set; }
+
+
+        public CommentViewModel Comment { get; set; }
+
 
 		//API結果
 		#region VideoData変更通知プロパティ
@@ -170,10 +177,11 @@ namespace SRNicoNico.ViewModels {
 
         public VideoViewModel(string videoUrl) {
 
-
             //ViewをVideoに変える
             App.ViewModelRoot.RightContent = this;
             App.ViewModelRoot.CurrentVideo = this;
+
+            Comment = new CommentViewModel(this);
 
             Initialize(videoUrl);
 		}
@@ -192,17 +200,25 @@ namespace SRNicoNico.ViewModels {
                 VideoData.StoryBoardData = sb.GetStoryBoardData();
 
                 NicoNicoComment comment = new NicoNicoComment(VideoData.ApiData.GetFlv);
-                
 
                 foreach(NicoNicoCommentEntry entry in comment.GetComment()) {
 
                     VideoData.CommentData.Add(new CommentEntryViewModel(entry));
                 }
 
-            }).ContinueWith(new Action<Task>(res => {
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                CommentVisibility = true;
-            }));
+                    if(Comment.View != null) {
+
+                        //コメントのViewを初期化する
+                        Comment.View.Initialize(VideoData.CommentData);
+                        CommentVisibility = true;
+
+                    }
+                }));
+               
+
+            });
 
             
         }
@@ -222,11 +238,17 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        //1秒毎に呼ばれる
+        private double PrevVpos = 0;
+
+        //1フレーム毎に呼ばれる
         public void CsFrame(float time, float buffer) {
 
-            Console.WriteLine(VideoData.ApiData.Cmsid + " " + time + ":" + buffer);
-           
+
+            double vpos = time * 100;
+            vpos = Math.Floor(vpos);
+
+            //Console.WriteLine(VideoData.ApiData.Cmsid + " " + time + ":" + buffer + " vpos:" + vpos);
+
 
             Time.CurrentTime = (int) time;
             Time.CurrentTimeMilis = (int) (time * 100);
@@ -235,6 +257,7 @@ namespace SRNicoNico.ViewModels {
             SeekCursor = new Thickness(Time.CurrentTimeWidth, 0, 0, 0);
 
 
+            
 
             int kBps = BPSCounter.Bps / 1024;
             //数字がデカかったら単位を変えましょう
@@ -251,14 +274,26 @@ namespace SRNicoNico.ViewModels {
                 Seek(0);
             }
 
-            //スリープを入れないと全力でループしてしまう
-           // Thread.Sleep(1);
+            if(PrevVpos == vpos) {
+                Thread.Sleep(1);
+                return;
+            }
+            PrevVpos = vpos;
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+                if(CommentVisibility && Comment.View != null) {
+
+                    Comment.View.RenderComment(vpos, false);
+                }
+            }));
+
+
         }
 
         //このメソッド以降はWebBrowserプロパティはnullではない
         public void OpenVideo() {
 
-			while(VideoData.ApiData == null) {
+			while(VideoData.ApiData == null && !CommentVisibility) {
 
 				Thread.Sleep(50);
 			}
@@ -274,18 +309,21 @@ namespace SRNicoNico.ViewModels {
 
         public void Pause() {
 
+            Comment.View.Pause();
             InvokeScript("JsPause");
         }
 
         public void Resume() {
 
+            Comment.View.Resume();
             InvokeScript("JsResume");
         }
 
         public void Seek(float pos) {
 
-            IsSeekChanged = true;
+            Comment.View.Seek();
             InvokeScript("JsSeek", pos.ToString());
+            IsSeekChanged = true;
 
         }
 

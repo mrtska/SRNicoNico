@@ -12,7 +12,7 @@
     <Grid>
         <WebBrowser x:Name="browser" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LoadCompleted="browser_LoadCompleted" />
 
-        <local:ManagedPopup AllowsTransparency="True" Placement="Center" IsOpen="{Binding CommentVisibility}" StaysOpen="True" PlacementTarget="{Binding ElementName=browser}">
+        <local:ManagedPopup AllowsTransparency="True" Placement="Center" IsOpen="True" StaysOpen="True" PlacementTarget="{Binding ElementName=browser}">
 			<local:Comment Width="{Binding ElementName=browser, Path=ActualWidth}" Height="{Binding ElementName=browser, Path=ActualHeight}" />
 		</local:ManagedPopup>
 		

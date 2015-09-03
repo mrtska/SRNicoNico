@@ -13,6 +13,8 @@ using SRNicoNico.Views.Controls;
 using System.Windows.Media;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Effects;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
 
@@ -78,152 +80,194 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
 
 
-        //タイマー これでコメント描画タイミングを取得する
-        private Timer Timer;
-
-        //現在の時間 10ミリ秒 単位
-        private int CurrentTime;
 
         private ObservableCollection<CommentEntryViewModel> CommentList;
 
         private readonly CommentView View;
 
-    
+        private CommentPositioner Positioner;
 
-        public CommentRasterizer(CommentView view, ObservableCollection<CommentEntryViewModel> list) {
+        private Dictionary<int, CommentEntry> Drawing;
+
+        private int NextIndex = 0;
+
+        public CommentRasterizer(CommentView view, ObservableCollection<CommentEntryViewModel> list, Dictionary<int, CommentEntry> drawing) {
 
             View = view;
             CommentList = list;
 
-            Timer = new Timer(10);
+            Drawing = drawing;
+            Positioner = new CommentPositioner(view.ActualWidth, view.ActualHeight, drawing);
+            
 
-            Timer.Elapsed += Timer_Tick;
-            Timer.Start();
+        }
+
+        //ウィンドウサイズ変更時
+        public void UpdateSize(double width, double height) {
+
+            Positioner.UpdateSize(width, height);
         }
 
 
-        //Tick毎の処理
-        private void Timer_Tick(object sender, ElapsedEventArgs e) {
 
-            //指定の時間になったコメントを描画する
-            foreach(CommentEntryViewModel vm in CommentList) {
 
-                NicoNicoCommentEntry entry = vm.Entry;
+        public void RenderComment(double vpos, bool forceReset) {
 
-                if(entry.Vpos == CurrentTime) {
+            
 
-                    TriggerComment(entry);
+            for(int i = NextIndex; i < CommentList.Count; i++) {
+
+                CommentEntryViewModel vm = CommentList[i];
+
+                CommentEntry entry = new CommentEntry(vm.Entry);
+
+                
+
+                //コメントの位置、表示時間を決定する
+                if(entry.Raw.Mail.Contains("ue")) {
+
+                    entry.Pos.EnumPos = EnumCommentPosition.Ue;
+                    entry.Raw.Duration = FixedDuration;
+
+                } else if(entry.Raw.Mail.Contains("shita")) {
+
+                    entry.Pos.EnumPos = EnumCommentPosition.Shita;
+                    entry.Raw.Duration = FixedDuration;
+
+                } else {
+
+                    entry.Pos.EnumPos = EnumCommentPosition.Naka;
+                    entry.Raw.Duration = Duration;
+                }
+
+                entry.Raw.Vend = entry.Raw.Vpos + entry.Raw.Duration.TimeSpan.Seconds * 100;
+                
+                if(vpos < entry.Raw.Vpos) {
+
+                    NextIndex = i;
+                    return;
+                }
+
+                if(vpos >= entry.Raw.Vpos && vpos < entry.Raw.Vend) {
+
+                    if(!Drawing.Keys.Contains(entry.Raw.No)) {
+
+                        TriggerComment(entry, vpos);
+                    }
+                   
+                }
+
+
+
+
+
+
+
+            }
+
+        }
+
+        
+
+        //コメントを描画する
+        public void TriggerComment(CommentEntry entry, double vpos) {
+
+
+
+
+
+            //コメントカラー
+            entry.Decoration.Color = new SolidColorBrush(Colors.White);
+            foreach(KeyValuePair<string, Brush> pair in NicoNicoColorMap) {
+
+                if(entry.Raw.Mail.Contains(pair.Key)) {
+
+                    entry.Decoration.Color = pair.Value;
+                    break;
                 }
             }
 
-            //時間計測
-            CurrentTime++;
-        }
+            if(entry.Raw.Mail.Contains('#')) {
 
-        //コメントを描画する
-        public void TriggerComment(NicoNicoCommentEntry entry) {
+                string col = entry.Raw.Mail.Substring(entry.Raw.Mail.IndexOf('#'));
 
-            Console.WriteLine("たいまーてすと " + "No:" + entry.No + " Mail:" + entry.Mail + " Time:" + CurrentTime + "テキスト:" + entry.Content);
+                //Convert.ToInt32(); :TODO
+            }
 
 
-            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                //コメントカラー
-                Brush color = new SolidColorBrush(Colors.White);
-                foreach(KeyValuePair<string, Brush> pair in NicoNicoColorMap) {
+            //コメントサイズ
+            entry.Decoration.FontSize = 24;
+            if(entry.Raw.Mail.Contains("big")) {
 
-                    if(entry.Mail.Contains(pair.Key)) {
+                //複数行コメントはbigが指定してあっても大きくしない
+                if(!entry.Raw.Content.Contains("\n")) {
 
-                        color = pair.Value;
-                        break;
-                    }
+                    entry.Decoration.FontSize = 39;
                 }
 
-                if(entry.Mail.Contains('#')) {
+            } else if(entry.Raw.Mail.Contains("small")) {
 
-                    string col = entry.Mail.Substring(entry.Mail.IndexOf('#'));
+                entry.Decoration.FontSize = 15;
+            }
 
-                    //Convert.ToInt32();
+            double length = 0;
+            //複数行コメントだったら
+            if(entry.Raw.Content.Contains("\n")) {
+
+                foreach(string co in entry.Raw.Content.Split('\n')) {
+
+                    length = Math.Max(length, co.Length * entry.Decoration.FontSize);
                 }
+            } else {
+
+                length = entry.Raw.Content.Length * entry.Decoration.FontSize;
+            }
 
 
 
-                //コメントサイズ
-                double size = 20;
-                if(entry.Mail.Contains("big")) {
+            TextBlock text = new TextBlock();
+            text.Name = "No" + entry.Raw.No.ToString();
+            text.Text = entry.Raw.Content;
+            text.FontFamily = new FontFamily("Arial");
+            text.FontWeight = FontWeights.Bold;
+            text.FontSize = entry.Decoration.FontSize;
+            text.Foreground = entry.Decoration.Color;
+            text.Height = text.FontSize;
+            text.Width = length;
+            text.VerticalAlignment = VerticalAlignment.Top;
+            text.HorizontalAlignment = HorizontalAlignment.Left;
 
-                    //複数行コメントはbigが指定してあっても大きくしない
-                    if(!entry.Content.Contains("\n")) {
-
-                        size = 40;
-                    }
-
-                } else if(entry.Mail.Contains("small")) {
-
-                    size = 10;
-                }
-
-                double length = 0;
-                //複数行コメントだったら
-                if(entry.Content.Contains("\n")) {
-
-                    foreach(string text in entry.Content.Split('\n')) {
-
-                        length = Math.Max(length, text.Length * size);
-                    }
-                } else {
-
-                    length = entry.Content.Length * size;
-                }
-
-
-                CommentPosition pos = new CommentPosition() {
-
-                    EnumPos = EnumCommentPosition.Naka
-                };
-
-                
-                
-                if(entry.Mail.Contains("ue")) {
-
-                    pos.EnumPos = EnumCommentPosition.Ue;
-                    pos.Duration = FixedDuration;
-                    length = 0;
-                } else if(entry.Mail.Contains("shita")) {
-
-                    pos.EnumPos = EnumCommentPosition.Shita;
-                    pos.Duration = FixedDuration;
-                    length = 0;
-                } else {
-
-                    pos.Duration = Duration;
-                    length = -length;
-                }
-
-
-                View.DrawComment(entry.No, entry.Content, color, size, length, pos);
-            }));
-        }
-
-
-
-
-
-        //シーク 単位は同じ
-        public void Seek(int millis) {
-
-            CurrentTime = millis;
-        }
-        public void Pause() {
+            //テキストエフェクト いろいろ
+            DropShadowEffect effect = new DropShadowEffect();
+            effect.ShadowDepth = 3;
+            effect.Direction = 315;
+            effect.Color = Colors.BlueViolet;
+            effect.Opacity = 0.5;
+            effect.Freeze();
+            text.Effect = effect;
             
-            Timer.Enabled = false;
+
+
+            entry.Text = text;
+
+
+            if(entry.Pos.EnumPos == EnumCommentPosition.Naka) {
+
+                entry.Pos.XPos = View.ActualWidth;
+            } else {
+
+                entry.Pos.XPos = Positioner.GetX(entry, vpos);
+            }
+
+            entry.Pos.YPos = Positioner.GetY(entry);
+
+
+           // Console.WriteLine();
+
+            //DispatcherHelper.UIDispatcher.BeginInvoke(new Action(()  =>  View.DrawComment(entry)));
+            View.DrawComment(entry);
+            
         }
-        public void Resume() {
-
-            Timer.Enabled = true;
-        }
-
-
-
     }
 }

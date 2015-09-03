@@ -29,6 +29,9 @@
                   WindowStyle="None"
                   x:Name="Root"
 				  >
+    <WindowChrome.WindowChrome>
+		<WindowChrome ResizeBorderThickness="1"  />
+	</WindowChrome.WindowChrome>
 
 
 

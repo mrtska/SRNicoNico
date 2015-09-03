@@ -8,6 +8,11 @@ using Livet;
 using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
 
+using Codeplex.Data;
+
+using SRNicoNico.Models.NicoNicoViewer;
+using System.Windows;
+
 namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoComment : NotificationObject {
 
@@ -69,10 +74,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             //---ユーザーコメント取得---
             //コメント取得APIに渡すGETパラメーター
-            string leaves = "thread_leaves?thread=" + ThreadId + "&body=0-" + Length / 60 + 1 + ":100";
+            string leaves = "thread_leaves?thread=" + ThreadId + "&body=0-" + Length / 60 + 1 + ":100,1000&scores=1";
 
 			string response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + leaves).Result;
 
+            //Console.WriteLine("コメント結果:" + response);
             StoreEntry(response, list);
             //------
 
@@ -150,12 +156,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//投稿日時 Unixタイム
 		public long Date { get; set; }
 
+        public Duration Duration { get; set; }
+
+        public int Vend { get; set; }
+
 		//Vposでソートする
 		public int CompareTo(NicoNicoCommentEntry obj) {
 
 
 			return Vpos.CompareTo(obj.Vpos);
 		}
+
+        public string ToJson() {
+
+            return DynamicJson.Serialize(this);
+        }
 
     }
 

@@ -5,24 +5,17 @@ package  {
 	import flash.display.StageScaleMode;
 	import flash.events.AsyncErrorEvent;
 	import flash.events.Event;
-	import flash.events.HTTPStatusEvent;
 	import flash.events.MouseEvent;
 	import flash.events.NetStatusEvent;
 	import flash.external.ExternalInterface;
 	import flash.geom.Rectangle;
-	import flash.media.SoundTransform;
 	import flash.media.StageVideo;
 	import flash.media.Video;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
-	import flash.net.NetStreamPlayOptions;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	import flash.net.URLRequestHeader;
-	import flash.net.URLRequestMethod;
 	import flash.system.fscommand;
-	import flash.text.TextField;
-	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	
 	
@@ -42,9 +35,9 @@ package  {
 		
 		private var diff:Number = 0;
 		
-		private var debugText:TextField = new TextField();
+		//動画メタデータ
+		private var metadata:Object;
 		
-		private var rasterizer:CommentRasterizer;
 		
 		private function onClick(e:MouseEvent):void {
 			
@@ -62,16 +55,13 @@ package  {
 			
 			
 			//枠に合わせてスケールする
-			stage.scaleMode = StageScaleMode.EXACT_FIT;
+			stage.scaleMode = StageScaleMode.SHOW_ALL;
 			
 			
 			
 			var format:TextFormat = new TextFormat();
 			format.color = 0xFFFFFF;
-			debugText.defaultTextFormat = format;
-			debugText.text = "スタート";
 			
-			//addChild(debugText);
 			
 			//JSコールバック登録
 			if(ExternalInterface.available) {
@@ -85,8 +75,9 @@ package  {
 				
 			}
 			
-			//OpenVideo("Z:/smile.flv");
-			OpenVideo("Z:/smile.mp4");
+			OpenVideo("Z:/smile.flv");
+			//OpenVideo("Z:/smile.mp4");
+
 			//var now:Date = new Date();
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
@@ -118,11 +109,8 @@ package  {
 			stream.seek(pos);
 		}
 		
-		private function InjectComment(list:String):void {
+		private function InjectComment(json:String):void {
 			
-			rasterizer = new CommentRasterizer(stream);
-			
-			addChild(rasterizer);
 		}
 		
 		private function InjectContributorComment(list:String):void {
@@ -138,11 +126,10 @@ package  {
 			
 			
 			
-			debugText.text = "動画再生:" + videoUrl;
 			
 			//インスタンス作成
 			stream = new NetStream(connection);
-			stream.soundTransform = new SoundTransform(0.1);
+			//stream.soundTransform = new SoundTransform(0.1);
 			
 			//イベントリスナ登録
 			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
@@ -153,7 +140,7 @@ package  {
 			var obj:Object = new Object();
 			obj.onMetaData = function(param:Object):void {
 				
-				
+				metadata = param;
 				
 				for(var propName:String in param){
 					trace(propName + "=" + param[propName]);
@@ -164,6 +151,8 @@ package  {
 					
 					stage.frameRate = param.framerate;
 				}
+				
+				
 			}
 			
 			obj.onCuePoint = function(param:Object):void {
@@ -229,7 +218,7 @@ package  {
 			
 			
 			
-			//trace("Time:" + stream.time);
+			trace("Time:" + stream.time);
 			
 			
 			fscommand("CsFrame", value + ":" + buffer.toString());
@@ -259,6 +248,12 @@ package  {
 			
 			trace("onNetStatus");
 			switch(e.info.code) {
+			case "NetStream.Play.Start":
+
+				
+				
+				break;
+			
 			case "NetStream.Seek.Notify":				
 				
 				trace("Seek.Notify");

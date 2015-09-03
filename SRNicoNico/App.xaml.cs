@@ -32,7 +32,7 @@ namespace SRNicoNico {
 			base.OnStartup(e);
 
             DispatcherHelper.UIDispatcher = Dispatcher;
-			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+			//AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
             Microsoft.Win32.RegistryKey reg = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", true);
 			reg.SetValue("SRNicoNico.exe", 0x00002AF9, Microsoft.Win32.RegistryValueKind.DWord);

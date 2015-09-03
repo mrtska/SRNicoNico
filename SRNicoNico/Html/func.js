@@ -28,3 +28,12 @@ function JsSeek(pos) {
 	
 	flash.AsSeek(pos);
 }
+
+function JsInjectComment(xml) {
+	
+	flash.AsInjectComment(xml);
+}
+function JsInjectContributorComment(xml) {
+	
+	flash.AsInjectContributorComment(xml);
+}
