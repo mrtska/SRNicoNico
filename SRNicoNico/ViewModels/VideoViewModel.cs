@@ -11,6 +11,9 @@ using SRNicoNico.Models.NicoNicoWrapper;
 using Livet.Messaging;
 using SRNicoNico.Views.Contents.Video;
 
+using Codeplex.Data;
+using System.Collections.Generic;
+
 namespace SRNicoNico.ViewModels {
 
 	public class VideoViewModel : ViewModel {
@@ -24,7 +27,6 @@ namespace SRNicoNico.ViewModels {
 		public NicoNicoStoryBoard StoryBoard { get; set; }
 
 
-        public CommentViewModel Comment { get; set; }
 
 
 		//API結果
@@ -214,12 +216,11 @@ namespace SRNicoNico.ViewModels {
             App.ViewModelRoot.RightContent = this;
             App.ViewModelRoot.CurrentVideo = this;
 
-            Comment = new CommentViewModel(this);
 
             Initialize(videoUrl);
 		}
 
-        public void Initialize(string videoUrl) {
+        private void Initialize(string videoUrl) {
 
             Task.Run(() => {
 
@@ -234,23 +235,20 @@ namespace SRNicoNico.ViewModels {
 
                 NicoNicoComment comment = new NicoNicoComment(VideoData.ApiData.GetFlv);
 
-                foreach(NicoNicoCommentEntry entry in comment.GetComment()) {
+                List<NicoNicoCommentEntry> list = comment.GetComment();
+
+                
+                dynamic json = DynamicJson.Serialize(list.ToArray());
+                
+
+                Console.WriteLine(json.ToString());
+
+                foreach(NicoNicoCommentEntry entry in list) {
 
                     VideoData.CommentData.Add(new CommentEntryViewModel(entry));
                 }
 
-                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-                    if(Comment.View != null) {
-
-                        //コメントのViewを初期化する
-                        Comment.View.Initialize(VideoData.CommentData);
-                        CommentVisibility = true;
-
-                    }
-                }));
-               
-
+                ;
             });
 
             
@@ -282,7 +280,6 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        private double PrevVpos = 0;
 
         //1フレーム毎に呼ばれる
         public void CsFrame(float time, float buffer) {
@@ -317,20 +314,7 @@ namespace SRNicoNico.ViewModels {
 
                 Seek(0);
             }
-
-            if(PrevVpos == vpos) {
-                Thread.Sleep(1);
-                return;
-            }
-            PrevVpos = vpos;
-            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-                if(CommentVisibility && Comment.View != null) {
-
-                    Comment.View.RenderComment(vpos);
-                }
-            }));
-
+            
 
         }
 
@@ -353,21 +337,17 @@ namespace SRNicoNico.ViewModels {
 
         public void Pause() {
 
-            Comment.View.Pause();
             InvokeScript("JsPause");
         }
 
         public void Resume() {
 
-            Comment.View.Resume();
             InvokeScript("JsResume");
         }
 
         public void Seek(float pos) {
 
-            Comment.View.Seek();
             InvokeScript("JsSeek", pos.ToString());
-            IsSeekChanged = true;
 
         }
 

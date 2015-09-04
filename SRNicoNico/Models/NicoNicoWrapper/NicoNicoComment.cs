@@ -156,10 +156,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//投稿日時 Unixタイム
 		public long Date { get; set; }
 
-        public Duration Duration { get; set; }
-
-        public int Vend { get; set; }
-
+        
 		//Vposでソートする
 		public int CompareTo(NicoNicoCommentEntry obj) {
 
