@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Livet;
-using System.Windows;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
 
+    [Obsolete]
     public class CommentPosition : NotificationObject {
 
 

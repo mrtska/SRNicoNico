@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Controls;
-using System.Text;
 
 using Livet;
 using System.Windows.Media.Animation;
@@ -9,6 +7,8 @@ using System.Windows.Media.Animation;
 using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
+
+    [Obsolete]
     public class CommentEntry : NotificationObject {
 
 

@@ -54,6 +54,8 @@ namespace SRNicoNico.Views.Controls {
 	///     <MyNamespace:CommentView/>
 	///
 	/// </summary>
+    /// 
+    [Obsolete]
 	public class CommentView : Control {
 
 		static CommentView() {

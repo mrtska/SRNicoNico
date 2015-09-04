@@ -10,6 +10,7 @@ using SRNicoNico.Models.NicoNicoWrapper;
 namespace SRNicoNico.Models.NicoNicoViewer {
 
     //コメントの位置を決定するクラス
+    [Obsolete]
     public class CommentPositioner : NotificationObject {
 
         //コメント描画領域の横幅

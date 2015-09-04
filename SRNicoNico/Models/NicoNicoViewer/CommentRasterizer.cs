@@ -19,6 +19,7 @@ using System.Windows.Media.Effects;
 namespace SRNicoNico.Models.NicoNicoViewer {
 
     //コメント描画位置など
+    [Obsolete]
     public class CommentRasterizer : NotificationObject {
 
 
