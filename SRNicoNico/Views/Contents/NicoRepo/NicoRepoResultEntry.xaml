@@ -15,12 +15,6 @@
              BorderBrush="#FF333333"
              >
 
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="37*"/>

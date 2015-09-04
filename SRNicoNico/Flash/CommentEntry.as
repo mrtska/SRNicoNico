@@ -9,7 +9,7 @@ package {
 		
 		
 		//べベルフィルター
-		private static const DEFAULT_FILTERS:Array = [new BevelFilter(1,45,0,1,0,1,2,2,1,1,"outer")];
+		private static const DEFAULT_FILTERS:Array = [new BevelFilter(1, 45, 0, 1, 0, 1, 2, 2, 1, 1, "outer")];
 		
 		//コメントナンバー
 		public var no:uint;
@@ -32,10 +32,10 @@ package {
 			this.no = no;									//コメントナンバー
 			this.content = content;							//コメント
 			this.command = new CommentCommand(mail);		//コメントコマンド
+			this.vpos = vpos;// - (command.pos == CommentCommand.PLACE_NAKA ? 1000 : 0);			//コメント表示開始時間
 			this.vend = this.vpos + this.command.duration;	//コメント表示時間
 			
 			
-			this.vpos = vpos - (command.pos == CommentCommand.PLACE_MIDDLE ? 1000 : 0);			//コメント表示開始時間
 			super();
 			
 			//テキストフィールドの設定
