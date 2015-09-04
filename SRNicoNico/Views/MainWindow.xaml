@@ -1,42 +1,35 @@
-﻿<mui:ModernWindow x:Class="SRNicoNico.Views.MainWindow"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:contents="clr-namespace:SRNicoNico.Views.Contents"
-                  xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-				  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                  xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-                  xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-                  xmlns:search="clr-namespace:SRNicoNico.Views.Contents.Search"
-                  xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
-                  xmlns:v="clr-namespace:SRNicoNico.Views"
-                  xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-				  xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
-                  xmlns:root="clr-namespace:SRNicoNico.Views.Contents"
-                  xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
-                  xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
-                  Title="{Binding Title}"
-                  Width="870"
-                  Height="723"
-                  MinWidth="600"
-                  MinHeight="500"
-                  HorizontalAlignment="Stretch"
-                  Background="#FF2D2D2D"
-                  FontFamily="Meiryo"
-                  FontStyle="Normal"
-                  FontWeight="Normal"
-                  Style="{StaticResource BlankWindow}"
-                  WindowStyle="None"
-                  x:Name="Root"
+﻿<metro:MetroWindow x:Class="SRNicoNico.Views.MainWindow"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:contents="clr-namespace:SRNicoNico.Views.Contents"
+                   xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+			 	   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+				   xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                   xmlns:search="clr-namespace:SRNicoNico.Views.Contents.Search"
+                   xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
+                   xmlns:v="clr-namespace:SRNicoNico.Views"
+                   xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+	 		       xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
+                   xmlns:root="clr-namespace:SRNicoNico.Views"
+                   xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
+                   xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
+                   Width="870"
+                   Height="723"
+                   MinWidth="600"
+                   MinHeight="500"
+		           Background="{DynamicResource ThemeBrushKey}"
+		  	       Foreground="{DynamicResource ActiveForegroundBrushKey}"
+				   FontFamily="Yu Gothic UI"
+	               IsRestoringWindowPlacement="True"
+		           UseLayoutRounding="True"
+			       TextOptions.TextFormattingMode="Display"
+	       	       WindowState="{Binding WindowState}"
+		           SnapsToDevicePixels="True"
+                   x:Name="Root"
 				  >
-    <WindowChrome.WindowChrome>
-		<WindowChrome ResizeBorderThickness="1"  />
-	</WindowChrome.WindowChrome>
-
-
-
-
-
 
     <i:Interaction.Triggers>
         <l:InteractionMessageTrigger Messenger="{Binding Messenger}">
@@ -61,17 +54,19 @@
         <!--  WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください  -->
 
     </i:Interaction.Triggers>
+	
+	
 
-    <Grid>
+    <ContentControl Content="{Binding RootContent}">
 
-        <ContentControl Content="{Binding AllContent}">
-            <ContentControl.Resources>
-                <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
-                    <contents:MainContent/>
-                </DataTemplate>
-            </ContentControl.Resources>
-        </ContentControl>
+        <ContentControl.Resources>
+            <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
+                <root:RootContent HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            </DataTemplate>
+        </ContentControl.Resources>
+		
+	
+	</ContentControl>
 
-    </Grid>
-    
-</mui:ModernWindow>
+
+</metro:MetroWindow>

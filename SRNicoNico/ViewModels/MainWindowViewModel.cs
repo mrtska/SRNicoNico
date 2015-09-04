@@ -17,7 +17,7 @@ using SRNicoNico.Views.Contents;
 using SRNicoNico.Views.Contents.Search;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
-
+using System.Windows;
 
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
@@ -35,12 +35,28 @@ namespace SRNicoNico.ViewModels {
 				RaisePropertyChanged();
 			}
 		}
-		#endregion
+        #endregion
 
-        
-        
-		#region Content変更通知プロパティ
-		private ViewModel _AllContent;
+
+
+        #region RootContent変更通知プロパティ
+        private ViewModel _RootContent;
+
+        public ViewModel RootContent {
+            get { return _RootContent; }
+            set { 
+                if(_RootContent == value)
+                    return;
+                _RootContent = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
+        #region Content変更通知プロパティ
+        private ViewModel _AllContent;
 
 		public ViewModel AllContent {
 			get { return _AllContent; }
@@ -84,6 +100,21 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region WindowState変更通知プロパティ
+        private WindowState _WindowState;
+
+        public WindowState WindowState {
+            get { return _WindowState; }
+            set { 
+                if(_WindowState == value)
+                    return;
+                _WindowState = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         public SignInDialogViewModel SignIn { get; private set; }
 		public SearchViewModel Search { get; private set; }
 		public SearchResultViewModel SearchResult { get; private set; }
@@ -96,6 +127,7 @@ namespace SRNicoNico.ViewModels {
 
         public OtherViewModel Other { get; set; }
 
+        public StatusBarViewModel StatusBar { get; set; }
 
 
         public MainWindowViewModel() {
@@ -112,8 +144,10 @@ namespace SRNicoNico.ViewModels {
 
 			VideoMap = new Dictionary<string, VideoViewModel>();
 
+            StatusBar = new StatusBarViewModel();
 
-			AllContent = LeftContent = this;
+			RootContent = AllContent = LeftContent = this;
+            
 		}
 
 
@@ -127,6 +161,8 @@ namespace SRNicoNico.ViewModels {
 
 
 				if(File.Exists(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session")) {
+
+                    StatusBar.Status = "自動ログイン中";
 
 					//セッション情報を取得する
 					StreamReader reader = new StreamReader(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
@@ -162,6 +198,7 @@ namespace SRNicoNico.ViewModels {
 						return;
 					}
 
+                    StatusBar.Status = "ログイン完了";
 					//ログイン成功
 					NicoNicoWrapperMain.Instance.PostInit();
 

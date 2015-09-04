@@ -6,7 +6,11 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.xaml" />
 				<ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.Dark.xaml"/>
-                <ResourceDictionary Source="Dictionary1.xaml"/>
+
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Themes/Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Themes/Accents/Blue.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
 
             <Style x:Key="ZuruiShapeStyle" TargetType="{x:Type Shape}">

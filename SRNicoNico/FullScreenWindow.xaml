@@ -1,0 +1,36 @@
+﻿<Window x:Class="SRNicoNico.FullScreenWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+        xmlns:v="clr-namespace:SRNicoNico.Views"
+        xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+		xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+        Title="FullScreenWindow" 
+        WindowState="Maximized"
+        WindowStyle="None"
+        Topmost="True"
+        >
+
+    
+
+    <i:Interaction.Triggers>
+
+
+        <!--Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます-->
+        <i:EventTrigger EventName="Closed">
+            <l:DataContextDisposeAction/>
+        </i:EventTrigger>
+
+        <!--WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください-->
+
+    </i:Interaction.Triggers>
+
+    <Grid>
+        <ContentControl>
+            <DynamicResource ResourceKey="VideoFlashKey" />
+        </ContentControl>
+        
+    </Grid>
+</Window>

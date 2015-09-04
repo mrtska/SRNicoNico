@@ -121,7 +121,7 @@ namespace SRNicoNico.Views.Controls {
         }
 
         //1フレーム置きに呼ばれる
-        public void RenderComment(double vpos, bool forceReset) {
+        public void RenderComment(double vpos) {
 
             //これをしとかないとデザイナがエラー吐くからね しかたないね
 #if DEBUG
@@ -130,17 +130,12 @@ namespace SRNicoNico.Views.Controls {
             }
 #endif
             
-            if(forceReset) {
 
-                
-            } else {
-
-
-
-
-            }
             //DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => Builder.RenderComment(vpos)));
-            Builder.RenderComment(vpos, forceReset);
+            if(Builder != null) {
+
+                Builder.RenderComment(vpos);
+            }
 
 
         }
@@ -168,7 +163,7 @@ namespace SRNicoNico.Views.Controls {
                 anim = new DoubleAnimation(-entry.Text.Width, entry.Raw.Duration);
             } else {
 
-                anim = new DoubleAnimation(entry.Pos.XPos, entry.Raw.Duration);
+                anim = new DoubleAnimation(entry.Pos.XPos + 1, entry.Raw.Duration);
             }
                 
 
@@ -188,8 +183,8 @@ namespace SRNicoNico.Views.Controls {
             Storyboard story = new Storyboard() { RepeatBehavior = new RepeatBehavior(1) };
             Storyboard.SetTargetName(story, translationName);
             Storyboard.SetTargetProperty(story, new PropertyPath(TranslateTransform.XProperty));
-            story.FillBehavior = FillBehavior.HoldEnd;
 
+            story.FillBehavior = FillBehavior.Stop;
             var storyboardName = "s" + story.GetHashCode();
             Resources.Add(storyboardName, story);
 
@@ -206,27 +201,21 @@ namespace SRNicoNico.Views.Controls {
             //アニメーション開始
             story.Begin();
             entry.Story = story;
-
-            if(entry.Pos.EnumPos != EnumCommentPosition.Naka) {
-
-                Viewbox box = new Viewbox();
-                box.VerticalAlignment = VerticalAlignment.Bottom;
-                //box.Child = text;
-                
-                DrawingGrid.Children.Add(entry.Text);
-
-            } else {
-
-                //Gridに配置
-                DrawingGrid.Children.Add(entry.Text);
-            }
+            
 
 
             //現在描画中のリストに追加
-            if(!DrawingComment.Keys.Contains(entry.Raw.No)) {
+            //if(!DrawingComment.Keys.Contains(entry.Raw.No)) {
 
                 DrawingComment.Add(entry.Raw.No, entry);
-            }
+            // }
+
+
+
+            //Gridに配置
+            DrawingGrid.Children.Add(entry.Text);
+
+
         }
 
         public void Pause() {
@@ -250,11 +239,18 @@ namespace SRNicoNico.Views.Controls {
 
             foreach(KeyValuePair<int, CommentEntry> pair in DrawingComment) {
 
-                pair.Value.Story.SkipToFill();
+                
 
             }
+            Builder.ForceReset = true;
             DrawingComment.Clear();
 
+            for(int i = 1; i < DrawingGrid.Children.Count; i++) {
+
+                DrawingGrid.Children.RemoveAt(i);
+            }
+
+            
         }
 
 
@@ -284,7 +280,7 @@ namespace SRNicoNico.Views.Controls {
                 entry.Story.Children.Remove(entry.Anime);
                 
                 text.Visibility = Visibility.Collapsed;
-                //Console.WriteLine("Free:" + text.Text);
+                Console.WriteLine("Free:" + entry);
             }
         }
     }

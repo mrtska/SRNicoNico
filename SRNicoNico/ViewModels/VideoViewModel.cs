@@ -8,6 +8,8 @@ using Livet;
 
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Models.NicoNicoWrapper;
+using Livet.Messaging;
+using SRNicoNico.Views.Contents.Video;
 
 namespace SRNicoNico.ViewModels {
 
@@ -174,6 +176,37 @@ namespace SRNicoNico.ViewModels {
 
 
 
+        #region VideoFlash変更通知プロパティ UI要素だけどこればっかりは仕方ない
+        private VideoFlash _VideoFlash;
+
+        public VideoFlash VideoFlash {
+            get { return _VideoFlash; }
+            set { 
+                if(_VideoFlash == value)
+                    return;
+                _VideoFlash = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region Video変更通知プロパティ UI要素 仕方ないんや・・・
+        private Video _Video;
+
+        public Video Video {
+            get { return _Video; }
+            set { 
+                if(_Video == value)
+                    return;
+                _Video = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
 
         public VideoViewModel(string videoUrl) {
 
@@ -223,6 +256,17 @@ namespace SRNicoNico.ViewModels {
             
         }
 
+        public void GoToFullScreen() {
+
+            
+            Application.Current.Resources["VideoFlashKey"] = VideoFlash;
+            var message = new TransitionMessage(typeof(FullScreenWindow), this, TransitionMode.Modal);
+
+            Video.Grid.Children.Remove(VideoFlash);
+            Messenger.Raise(message);
+
+
+        }
 
         public void PlayOrPauseOrResume() {
 
@@ -283,7 +327,7 @@ namespace SRNicoNico.ViewModels {
 
                 if(CommentVisibility && Comment.View != null) {
 
-                    Comment.View.RenderComment(vpos, false);
+                    Comment.View.RenderComment(vpos);
                 }
             }));
 

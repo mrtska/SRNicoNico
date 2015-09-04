@@ -13,12 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SRNicoNico.Views.Contents.Video {
+namespace SRNicoNico.Views {
     /// <summary>
-    /// VideoFullScreen.xaml の相互作用ロジック
+    /// MainContent.xaml の相互作用ロジック
     /// </summary>
-    public partial class VideoFullScreen : UserControl {
-        public VideoFullScreen() {
+    public partial class RootContent : UserControl {
+        public RootContent() {
             InitializeComponent();
         }
     }

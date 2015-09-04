@@ -14,9 +14,26 @@
              d:DesignHeight="600"
              d:DesignWidth="600"
 			 d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
-             mc:Ignorable="d">
+             mc:Ignorable="d" DataContextChanged="UserControl_DataContextChanged">
 
-    <Grid>
+    <i:Interaction.Triggers>
+
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger}">
+            <l:TransitionInteractionMessageAction/>
+        </l:InteractionMessageTrigger>
+        <!--  Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます  -->
+        <i:EventTrigger EventName="Unloaded">
+            <l:DataContextDisposeAction />
+        </i:EventTrigger>
+
+        <ei:KeyTrigger FiredOn="KeyDown" Key="F">
+			<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="GoToFullScreen" />
+		</ei:KeyTrigger>
+	</i:Interaction.Triggers>
+
+	
+	
+    <Grid x:Name="Grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="154*"/>
@@ -27,8 +44,7 @@
         <TextBlock HorizontalAlignment="Left" Grid.Row="0" TextWrapping="NoWrap" FontSize="20" Text="{Binding VideoData.ApiData.Title}" VerticalAlignment="Top"/>
 
         <!-- プレイヤー -->
-
-        <video:VideoFlash x:Name="flashControl" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+		<video:VideoFlash Grid.Row="1" />
 
 
         <video:VideoController x:Name="Controller"  Grid.Row="2" Visibility="Visible" />
@@ -69,20 +85,12 @@
             </StackPanel>
 
         </Grid>
-        <TextBlock Grid.Row="1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding LoadStatus}" VerticalAlignment="Top" Margin="30,24,0,0" FontSize="10"/>
 
 
 
 
     </Grid>
 
-    <i:Interaction.Triggers>
-
-        <!--  Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます  -->
-        <i:EventTrigger EventName="Unloaded">
-            <l:DataContextDisposeAction />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
-
+    
 
 </UserControl>

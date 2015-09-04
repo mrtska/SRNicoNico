@@ -1,7 +1,6 @@
-﻿using System;
+﻿using MetroRadiance.Controls;
+using System;
 using System.Collections.Generic;
-
-
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -13,10 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MetroRadiance.Controls;
 
-namespace SRNicoNico.Views {
-	/* 
+namespace SRNicoNico {
+    /* 
 	 * ViewModelからの変更通知などの各種イベントを受け取る場合は、PropertyChangedWeakEventListenerや
      * CollectionChangedWeakEventListenerを使うと便利です。独自イベントの場合はLivetWeakEventListenerが使用できます。
      * クローズ時などに、LivetCompositeDisposableに格納した各種イベントリスナをDisposeする事でイベントハンドラの開放が容易に行えます。
@@ -24,12 +22,12 @@ namespace SRNicoNico.Views {
      * WeakEventListenerなので明示的に開放せずともメモリリークは起こしませんが、できる限り明示的に開放するようにしましょう。
      */
 
-	/// <summary>
-	/// MainWindow.xaml の相互作用ロジック
-	/// </summary>
-	public partial class MainWindow : MetroWindow {
-		public MainWindow() {
-			InitializeComponent();
-		}
-	}
+    /// <summary>
+    /// FullScreenWindow.xaml の相互作用ロジック
+    /// </summary>
+    public partial class FullScreenWindow : Window {
+        public FullScreenWindow() {
+            InitializeComponent();
+        }
+    }
 }

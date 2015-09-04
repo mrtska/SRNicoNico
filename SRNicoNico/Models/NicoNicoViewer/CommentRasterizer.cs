@@ -91,6 +91,8 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         private int NextIndex = 0;
 
+        public bool ForceReset { get; set; }
+
         public CommentRasterizer(CommentView view, ObservableCollection<CommentEntryViewModel> list, Dictionary<int, CommentEntry> drawing) {
 
             View = view;
@@ -111,8 +113,12 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
 
 
-        public void RenderComment(double vpos, bool forceReset) {
+        public void RenderComment(double vpos) {
 
+            if(ForceReset) {
+
+                NextIndex = 0;
+            }
             
 
             for(int i = NextIndex; i < CommentList.Count; i++) {

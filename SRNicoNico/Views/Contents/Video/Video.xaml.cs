@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SRNicoNico.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,10 +21,16 @@ namespace SRNicoNico.Views.Contents.Video {
 	public partial class Video : UserControl {
 		public Video() {
 			InitializeComponent();
+            
 		}
 
+        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
+            if(DataContext is VideoViewModel) {
 
-
-	}
+                VideoViewModel vm = (VideoViewModel)DataContext;
+                vm.Video = this;
+            }
+        }
+    }
 }

@@ -43,7 +43,6 @@
         <ContentControl Grid.Column="2" Content="{Binding RightContent}">
             <ContentControl.Style>
                 <Style TargetType="ContentControl">
-                    <Setter Property="Content" Value="{Binding HurfView.EditedPart}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Content}" Value="{x:Null}">
                             <Setter Property="ContentControl.Template">

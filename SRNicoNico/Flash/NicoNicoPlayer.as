@@ -18,7 +18,7 @@ package  {
 	import flash.system.fscommand;
 	import flash.text.TextFormat;
 	
-	
+	[SWF(width="1280", height="720")]
 	public class NicoNicoPlayer extends Sprite {
 		
 		//ストリーミングURL そのまんま
@@ -53,7 +53,7 @@ package  {
 			
 			//stage.addEventListener(MouseEvent.CLICK, onClick);
 			
-			
+			stage.color = 0x000000;
 			//枠に合わせてスケールする
 			stage.scaleMode = StageScaleMode.SHOW_ALL;
 			
@@ -77,7 +77,7 @@ package  {
 			
 			OpenVideo("Z:/smile.flv");
 			//OpenVideo("Z:/smile.mp4");
-
+			//OpenVideo("Z:/smile (1).mp4");
 			//var now:Date = new Date();
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
@@ -153,6 +153,36 @@ package  {
 				}
 				
 				
+				this.width = param.width;
+				this.height = param.height;
+				
+				
+				
+				var vec:Vector.<StageVideo> = stage.stageVideos;
+				if(vec.length >= 1) {
+					;
+					var stageVideo:StageVideo = vec[0];
+					
+					stageVideo.viewPort = new  Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
+					
+					stageVideo.attachNetStream(stream);
+					
+				} else {
+					
+					var video:Video = new Video(stage.stageWidth, param.height);
+					video.smoothing = true;
+					
+					video.attachNetStream(stream);
+					addChild(video);
+				}
+				
+				
+				
+				
+				addEventListener(Event.ENTER_FRAME, onFrame);
+				
+				
+				
 			}
 			
 			obj.onCuePoint = function(param:Object):void {
@@ -176,35 +206,9 @@ package  {
 			
 			stream.client = obj;
 			
-			
-			
-			
-			var vec:Vector.<StageVideo> = stage.stageVideos;
-			if(vec.length >= 1) {
-				;
-				var stageVideo:StageVideo = vec[0];
-				
-				stageVideo.viewPort = new  Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
-				
-				stageVideo.attachNetStream(stream);
-				
-			} else {
-				
-				var video:Video = new Video(stage.stageWidth, stage.stageHeight);
-				video.smoothing = true;
-				
-				video.attachNetStream(stream);
-				addChild(video);
-			}
-			
-			
-			
-			
-			addEventListener(Event.ENTER_FRAME, onFrame);
-			
-			
-			
 			stream.play(videoUrl);
+			
+			
 		}
 		
 		
