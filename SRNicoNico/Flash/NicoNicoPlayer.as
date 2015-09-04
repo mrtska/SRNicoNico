@@ -38,30 +38,15 @@ package  {
 		//動画メタデータ
 		private var metadata:Object;
 		
-		
-		private function onClick(e:MouseEvent):void {
-			
-			
-			//Seek(30);
-			trace("onClick");
-		}
-		
+		//コメントラスタライザ
+		private var rastarizer:CommentRasterizer;
 		
 		//コンストラクタ
 		public function NicoNicoPlayer() {
 			
-			
-			//stage.addEventListener(MouseEvent.CLICK, onClick);
-			
 			stage.color = 0x000000;
 			//枠に合わせてスケールする
 			stage.scaleMode = StageScaleMode.SHOW_ALL;
-			
-			
-			
-			var format:TextFormat = new TextFormat();
-			format.color = 0xFFFFFF;
-			
 			
 			//JSコールバック登録
 			if(ExternalInterface.available) {
@@ -72,16 +57,26 @@ package  {
 				ExternalInterface.addCallback("AsResume", Resume);
 				ExternalInterface.addCallback("AsSeek", Seek);
 				ExternalInterface.addCallback("AsInjectComment", InjectComment);
-				
 			}
 			
-			OpenVideo("Z:/smile.flv");
+			rastarizer = new CommentRasterizer();
+			
+			//OpenVideo("Z:/smile.flv");
 			//OpenVideo("Z:/smile.mp4");
 			//OpenVideo("Z:/smile (1).mp4");
 			//var now:Date = new Date();
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
+			
+			/*var loader:URLLoader = new URLLoader();
+			var req:URLRequest = new URLRequest("Z:/msg.txt");
+			
+			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
+				
+				InjectComment(loader.data);
+			});
+			loader.load(req);*/
 		}
 		
 		//指定したURLをストリーミング再生する
@@ -91,7 +86,6 @@ package  {
 			connection = new NetConnection();
 			connection.addEventListener(NetStatusEvent.NET_STATUS, onConnect);
 			connection.connect(null);
-			
 		}
 		
 		//そのまんま
@@ -108,24 +102,16 @@ package  {
 			wantSeekPos = pos;
 			stream.seek(pos);
 		}
-		
 		private function InjectComment(json:String):void {
 			
+			rastarizer.load(json);
 		}
-		
 		private function InjectContributorComment(list:String):void {
 			
 			
 		}
-		
-		
-		
-		
 		//ビデオコントロールにストリームを繋ぐ
 		private function ConnectStream():void {
-			
-			
-			
 			
 			//インスタンス作成
 			stream = new NetStream(connection);
@@ -141,7 +127,6 @@ package  {
 			obj.onMetaData = function(param:Object):void {
 				
 				metadata = param;
-				
 				for(var propName:String in param){
 					trace(propName + "=" + param[propName]);
 				}
@@ -151,13 +136,7 @@ package  {
 					
 					stage.frameRate = param.framerate;
 				}
-				
-				
-				this.width = param.width;
-				this.height = param.height;
-				
-				
-				
+
 				var vec:Vector.<StageVideo> = stage.stageVideos;
 				if(vec.length >= 1) {
 					;
@@ -176,39 +155,13 @@ package  {
 					addChild(video);
 				}
 				
-				
-				
-				
+				rastarizer.updateBounds(stage.stageWidth, stage.stageHeight, stream);
+				addChild(rastarizer);
 				addEventListener(Event.ENTER_FRAME, onFrame);
-				
-				
-				
 			}
-			
-			obj.onCuePoint = function(param:Object):void {
-				
-				trace("onCuePoint");
-				for(var propName:String in param){
-					trace(propName + "=" + param[propName]);
-				}
-				
-			}
-			
-			obj.onSeekPoint = function(param:Object):void {
-				
-				trace("onSeekPoint");
-				for(var propName:String in param){
-					trace(propName + "=" + param[propName]);
-				}
-				
-			}
-			
-			
 			stream.client = obj;
 			
 			stream.play(videoUrl);
-			
-			
 		}
 		
 		
@@ -220,25 +173,14 @@ package  {
 			// バッファの計算
 			var buffer:Number = (stream.bytesLoaded) / (stream.bytesTotal);
 			
-			
-			
-			trace("Time:" + stream.time);
-			
+			//trace("Time:" + stream.time);
 			
 			fscommand("CsFrame", value + ":" + buffer.toString());
 			
+			var vpos:Number = Math.floor(value * 100);
 			
-			
-			
-			
+			rastarizer.render(vpos);
 			//trace("value:" + value + " diff:" + this.diff);
-			
-			if(this.diff != 0) {
-				
-				stream.step(1000);
-				this.diff = 0;
-			}
-			
 		}
 		
 		private function onAsyncError(e:AsyncErrorEvent):void {
@@ -309,13 +251,5 @@ package  {
 				trace(e.info.code);
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
-		
 	}
 }
