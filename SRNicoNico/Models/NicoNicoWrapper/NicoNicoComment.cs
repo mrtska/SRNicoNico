@@ -69,6 +69,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			}*/
 
+            App.ViewModelRoot.StatusBar.Status = "ユーザーコメント取得中";
             List<NicoNicoCommentEntry> list = new List<NicoNicoCommentEntry>();
 
 
@@ -78,8 +79,32 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			string response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + leaves).Result;
 
+            //thread_leavesが失敗したら（コメント数が少ないと失敗しやすいっぽい？）
+            if(response.IndexOf("resultcode=\"11\"") >= 0) {
+
+                App.ViewModelRoot.StatusBar.Status = "ユーザーコメント取得失敗（リカバリー中）";
+
+                string recv = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000";
+                response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + recv).Result;
+            }
+
+            //公式動画
+            if(response.IndexOf("resultcode=\"9\"") >= 0) {
+
+                App.ViewModelRoot.StatusBar.Status = "ユーザーコメント取得失敗（公式動画）リカバリー中";
+                string threadKey = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(GetThreadKeyApiUrl + ThreadId).Result;
+
+                string recv = leaves + "&" + threadKey + "&user_id=" + UserId;
+                response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + recv).Result;
+            }
+
+
+
+
             StoreEntry(response, list);
             //------
+
+            App.ViewModelRoot.StatusBar.Status = "投稿者コメント取得中";
 
             //---投稿者コメント取得---
             string thread = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000&fork=1";
@@ -89,8 +114,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             //------
 
+            if(list.Count == 0) {
 
+                App.ViewModelRoot.StatusBar.Status = "コメント取得失敗";
+                return null;
+            }
             list.Sort();
+
+            App.ViewModelRoot.StatusBar.Status = "コメント取得完了";
 
             return list;
 		}

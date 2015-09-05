@@ -231,6 +231,9 @@ namespace SRNicoNico.ViewModels {
         public VideoViewModel(string videoUrl) {
 
             //ViewをVideoに変える
+            //こうしないとViewのインスタンスを再生成してくれない
+            App.ViewModelRoot.RightContent = null;
+            App.ViewModelRoot.CurrentVideo = null;
             App.ViewModelRoot.RightContent = this;
             App.ViewModelRoot.CurrentVideo = this;
 
@@ -256,17 +259,21 @@ namespace SRNicoNico.ViewModels {
                 List<NicoNicoCommentEntry> list = comment.GetComment();
 
 
+                if(list != null) {
 
-                foreach(NicoNicoCommentEntry entry in list) {
+                    foreach(NicoNicoCommentEntry entry in list) {
 
-                    VideoData.CommentData.Add(new CommentEntryViewModel(entry));
+                        VideoData.CommentData.Add(new CommentEntryViewModel(entry));
+                    }
+
+                    dynamic json = new DynamicJson();
+                    json.array = list;
+
+                    DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => InjectComment(json.ToString())));
                 }
+                
 
 
-                dynamic json = new DynamicJson();
-                json.array = list;
-
-                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => InjectComment(json.ToString())));
                 
             });
 
@@ -275,10 +282,17 @@ namespace SRNicoNico.ViewModels {
 
         public void OpenLink(Uri uri) {
 
+            //ウェブブラウザ開放
+            WebBrowser.IsEnabled = false;
+            WebBrowser.Dispose();
 
+            string cmsid = uri.OriginalString;
 
-            ;
+            if(cmsid.Contains("sm")) {
 
+                new VideoViewModel("http://www.nicovideo.jp/watch/" + cmsid);
+                Dispose();
+            }
         }
 
 
@@ -438,9 +452,12 @@ namespace SRNicoNico.ViewModels {
         //JSを呼ぶ
         private void InvokeScript(string func, params string[] args) {
 
+            
+            if(WebBrowser != null && WebBrowser.IsEnabled) {
 
-
-            WebBrowser.InvokeScript(func, args);
+                WebBrowser.InvokeScript(func, args);
+            }
+            
         }
 
 
