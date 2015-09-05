@@ -29,7 +29,13 @@
         <ei:KeyTrigger FiredOn="KeyDown" Key="F">
 			<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="GoToFullScreen" />
 		</ei:KeyTrigger>
-	</i:Interaction.Triggers>
+        <ei:KeyTrigger FiredOn="KeyDown" Key="Space">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="PlayOrPauseOrResume" />
+        </ei:KeyTrigger>
+        <ei:KeyTrigger FiredOn="KeyDown" Key="Left">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Restart" />
+        </ei:KeyTrigger>
+    </i:Interaction.Triggers>
 
 	
 	
@@ -37,7 +43,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="154*"/>
-            <RowDefinition Height="45"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="113*"/>
         </Grid.RowDefinitions>
         <!-- 動画タイトル -->
@@ -47,10 +53,11 @@
 		<video:VideoFlash Grid.Row="1" />
 
 
-        <video:VideoController x:Name="Controller"  Grid.Row="2" Visibility="Visible" />
-
+        <video:VideoController x:Name="Controller"  Grid.Row="2" />
 
         <Grid Grid.Row="3" Grid.RowSpan="2" >
+            
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="90"/>
@@ -58,7 +65,10 @@
             </Grid.ColumnDefinitions>
 
             <ScrollViewer>
-                <TextBlock HorizontalAlignment="Stretch" Padding="5" TextWrapping="Wrap" behaviors:HtmlTextBoxProperties.HtmlText="{Binding VideoData.ApiData.Description}" />
+                <TextBlock HorizontalAlignment="Stretch" Padding="5" TextWrapping="Wrap" behaviors:HtmlTextBoxProperties.TriggerRequest="TextBlock_TriggerRequest"  behaviors:HtmlTextBoxProperties.HtmlText="{Binding VideoData.ApiData.Description}" >
+                    
+                    
+                </TextBlock>
 
             </ScrollViewer>
            

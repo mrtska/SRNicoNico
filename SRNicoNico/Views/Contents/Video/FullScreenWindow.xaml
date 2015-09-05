@@ -3,13 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:v="clr-namespace:SRNicoNico.Views"
         xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+        xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
 		xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-        Title="FullScreenWindow" 
+        Title="{Binding VideoData.ApiData.Title}" 
         WindowState="Maximized"
         WindowStyle="None" DataContextChanged="Window_DataContextChanged"
+        x:Name="screen"
         >
 
     
@@ -19,7 +22,7 @@
 
         <!--Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます-->
         <i:EventTrigger EventName="Closed">
-            <l:DataContextDisposeAction/>
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ReturnFromFullScreen" />
         </i:EventTrigger>
 
         <!--WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください-->
@@ -27,12 +30,20 @@
         <ei:KeyTrigger Key="Esc" FiredOn="KeyDown">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ReturnFromFullScreen" />
         </ei:KeyTrigger>
+        <ei:KeyTrigger FiredOn="KeyDown" Key="Space">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="PlayOrPauseOrResume" />
+        </ei:KeyTrigger>
     </i:Interaction.Triggers>
 
     <Grid x:Name="Grid">
-        <ContentControl x:Name="Content">
+        <ContentControl x:Name="ContentControl">
             <DynamicResource ResourceKey="VideoFlashKey" />
         </ContentControl>
+
+        <Popup IsOpen="True" StaysOpen="True" AllowsTransparency="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" Width="{Binding ElementName=screen, Path=ActualWidth}">
+            
+            <video:VideoController  Opacity="1"/>
+        </Popup>
         
     </Grid>
 </Window>

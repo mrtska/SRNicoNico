@@ -78,7 +78,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			string response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + leaves).Result;
 
-            //Console.WriteLine("コメント結果:" + response);
             StoreEntry(response, list);
             //------
 

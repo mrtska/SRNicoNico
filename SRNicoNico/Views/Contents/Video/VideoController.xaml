@@ -12,51 +12,70 @@
              xmlns:seek="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
-             d:DesignHeight="38.895" d:DesignWidth="374.394"
+             d:DesignHeight="54.974" d:DesignWidth="680"
              >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="12"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="25"/>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <mui:ModernButton VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="1" Focusable="False">
-            <mui:ModernButton.Style>
-                <Style TargetType="mui:ModernButton">
-                    <Style.Triggers>
-                        <DataTrigger  Binding="{Binding IsPlaying}" Value="true" >
-                            <Setter Property="IconData" Value="F1 M 26.9167,23.75L 33.25,23.75L 33.25,52.25L 26.9167,52.25L 26.9167,23.75 Z M 42.75,23.75L 49.0833,23.75L 49.0833,52.25L 42.75,52.25L 42.75,23.75 Z" />
-                        </DataTrigger>
-                        <DataTrigger  Binding="{Binding IsPlaying}" Value="false" >
-                            <Setter Property="IconData" Value="F1 M 30.0833,22.1667L 50.6665,37.6043L 50.6665,38.7918L 30.0833,53.8333L 30.0833,22.1667 Z" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                    
-                    
-                </Style>
-                
-                
-            </mui:ModernButton.Style>
-           
-            
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <l:LivetCallMethodAction MethodName="PlayOrPauseOrResume" MethodTarget="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-
-        </mui:ModernButton>
+        
         <seek:SeekBar x:Name="Seek"  Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VideoTime="{Binding VideoData.ApiData.Length}" CurrentTime="{Binding Time.CurrentTime}" CurrentTimeWidth="{Binding Time.CurrentTimeWidth}" SeekCursor="{Binding SeekCursor}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter" MouseLeftButtonUp="Seek_MouseLeftButtonUp"  />
-        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" >
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Time.CurrentTimeString}" Height="25" Foreground="#FFAAAAAA" FontSize="16"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="/" Foreground="#FFAAAAAA" FontSize="16" Padding="5,0" />
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Time.VideoTimeString}" Height="25" Foreground="#FFAAAAAA" FontSize="16"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" >
+            <mui:ModernButton Margin="10,0,0,0" VerticalAlignment="Stretch" EllipseDiameter="36" IconWidth="20" IconHeight="20" HorizontalAlignment="Stretch" Focusable="False">
+                <mui:ModernButton.Style>
+                    <Style TargetType="mui:ModernButton">
+                        <Style.Triggers>
+                            <DataTrigger  Binding="{Binding IsPlaying}" Value="true" >
+                                <Setter Property="IconData" Value="F1 M 26.9167,23.75L 33.25,23.75L 33.25,52.25L 26.9167,52.25L 26.9167,23.75 Z M 42.75,23.75L 49.0833,23.75L 49.0833,52.25L 42.75,52.25L 42.75,23.75 Z" />
+                            </DataTrigger>
+                            <DataTrigger  Binding="{Binding IsPlaying}" Value="false" >
+                                <Setter Property="IconData" Value="F1 M 30.0833,22.1667L 50.6665,37.6043L 50.6665,38.7918L 30.0833,53.8333L 30.0833,22.1667 Z" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </mui:ModernButton.Style>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodName="PlayOrPauseOrResume" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </mui:ModernButton>
+
+            <mui:ModernButton Margin="2,0,0,0" Focusable="False" EllipseDiameter="36" IconWidth="20" IconHeight="20" IconData="F1 M 57,27.7083L 57,48.2917L 43.5417,38L 57,27.7083 Z M 39.5833,27.7083L 39.5833,48.2917L 26.125,38L 39.5833,27.7083 Z M 23.75,28.5L 23.75,47.5L 19,47.5L 19,28.5L 23.75,28.5 Z">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodName="Restart" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </mui:ModernButton>
+            
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Height="25" Foreground="#FFAAAAAA" FontSize="16" Margin="10,0,0,0">
+                <Run Text="{Binding Time.CurrentTimeString}" /><Run Text="/" /><Run Text="{Binding Time.VideoTimeString}" />
+            </TextBlock>
 
         </StackPanel>
-        <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding BPS}" Height="25" Foreground="#FFAAAAAA" FontSize="16"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <mui:ModernButton Margin="0,0,15,0" Focusable="False" EllipseDiameter="36" IconWidth="20" IconHeight="20" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodName="ToggleFullScreen" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <mui:ModernButton.Style>
+                    <Style TargetType="mui:ModernButton">
+                        <Style.Triggers>
+                            <DataTrigger  Binding="{Binding IsFullScreen}" Value="true" >
+                                <Setter Property="IconData" Value="F1 M 54.2499,34L 42,34L 42,21.7501L 45.9999,17.7501L 45.9999,26.7501L 53.9999,18.7501L 57.2499,22.0001L 49.2499,30.0001L 58.2499,30.0001L 54.2499,34 Z M 34,21.7501L 34,34L 21.75,34L 17.75,30.0001L 26.75,30.0001L 18.75,22.0001L 22,18.7501L 30,26.7501L 30,17.7501L 34,21.7501 Z M 21.75,42L 34,42L 34,54.25L 30,58.25L 30,49.25L 22,57.25L 18.75,54L 26.75,46L 17.75,46L 21.75,42 Z M 42,54.25L 42,42L 54.2499,42L 58.2499,46L 49.2499,46.0001L 57.2499,54L 53.9999,57.25L 45.9999,49.25L 45.9999,58.25L 42,54.25 Z" />
+                            </DataTrigger>
+                            <DataTrigger  Binding="{Binding IsFullScreen}" Value="false" >
+                                <Setter Property="IconData" Value="F1 M 30.25,58L 18,58L 18,45.75L 22,41.75L 22,50.75L 30,42.75L 33.25,46L 25.25,54L 34.25,54L 30.25,58 Z M 58,45.75L 58,58L 45.75,58L 41.75,54L 50.75,54L 42.75,46L 46,42.75L 54,50.75L 54,41.75L 58,45.75 Z M 45.75,18L 58,18L 58,30.25L 54,34.25L 54,25.25L 46,33.25L 42.75,30L 50.75,22L 41.75,22L 45.75,18 Z M 18,30.25L 18,18L 30.25,18L 34.25,22L 25.25,22L 33.25,30L 30,33.25L 22,25.25L 22,34.25L 18,30.25 Z" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </mui:ModernButton.Style>
+            </mui:ModernButton>
+        </StackPanel>
 
 
 

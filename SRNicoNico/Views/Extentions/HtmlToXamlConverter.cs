@@ -9,8 +9,7 @@ using System.Windows;
 using System.Diagnostics;
 using System.Windows.Documents;
 
-namespace SRNicoNico.Views.Extentions
-{
+namespace SRNicoNico.Views.Extentions {
     // This code was taken from MSDN as an example of converting HTML to XAML.
     //
     // I've combined all the classes together and made some spelling corrections.
@@ -22,8 +21,7 @@ namespace SRNicoNico.Views.Extentions
     /// <summary>
     /// types of lexical tokens for html-to-xaml converter
     /// </summary>
-    internal enum HtmlTokenType
-    {
+    internal enum HtmlTokenType {
         OpeningTagStart,
         ClosingTagStart,
         TagEnd,
@@ -36,16 +34,14 @@ namespace SRNicoNico.Views.Extentions
         EOF,
     }
 
-    internal static class HtmlCssParser
-    {
+    internal static class HtmlCssParser {
         // .................................................................
         //
         // Processing CSS Attributes
         //
         // .................................................................
 
-        internal static void GetElementPropertiesFromCssAttributes(XmlElement htmlElement, string elementName, CssStylesheet stylesheet, Hashtable localProperties, List<XmlElement> sourceContext)
-        {
+        internal static void GetElementPropertiesFromCssAttributes(XmlElement htmlElement, string elementName, CssStylesheet stylesheet, Hashtable localProperties, List<XmlElement> sourceContext) {
             string styleFromStylesheet = stylesheet.GetStyle(elementName, sourceContext);
 
             string styleInline = HtmlToXamlConverter.GetAttribute(htmlElement, "style");
@@ -53,28 +49,23 @@ namespace SRNicoNico.Views.Extentions
             // Combine styles from stylesheet and from inline attribute.
             // The order is important - the latter styles will override the former.
             string style = styleFromStylesheet != null ? styleFromStylesheet : null;
-            if (styleInline != null)
-            {
+            if(styleInline != null) {
                 style = style == null ? styleInline : (style + ";" + styleInline);
             }
 
             // Apply local style to current formatting properties
-            if (style != null)
-            {
+            if(style != null) {
                 string[] styleValues = style.Split(';');
-                for (int i = 0; i < styleValues.Length; i++)
-                {
+                for(int i = 0; i < styleValues.Length; i++) {
                     string[] styleNameValue;
 
                     styleNameValue = styleValues[i].Split(':');
-                    if (styleNameValue.Length == 2)
-                    {
+                    if(styleNameValue.Length == 2) {
                         string styleName = styleNameValue[0].Trim().ToLower();
                         string styleValue = HtmlToXamlConverter.UnQuote(styleNameValue[1].Trim()).ToLower();
                         int nextIndex = 0;
 
-                        switch (styleName)
-                        {
+                        switch(styleName) {
                             case "font":
                                 ParseCssFont(styleValue, localProperties);
                                 break;
@@ -215,10 +206,8 @@ namespace SRNicoNico.Views.Extentions
         // .................................................................
 
         // Skips whitespaces in style values
-        private static void ParseWhiteSpace(string styleValue, ref int nextIndex)
-        {
-            while (nextIndex < styleValue.Length && Char.IsWhiteSpace(styleValue[nextIndex]))
-            {
+        private static void ParseWhiteSpace(string styleValue, ref int nextIndex) {
+            while(nextIndex < styleValue.Length && Char.IsWhiteSpace(styleValue[nextIndex])) {
                 nextIndex++;
             }
         }
@@ -227,20 +216,16 @@ namespace SRNicoNico.Views.Extentions
         // by the word's length in case of success.
         // Otherwise leaves nextIndex in place (except for possible whitespaces).
         // Returns true or false depending on success or failure of matching.
-        private static bool ParseWord(string word, string styleValue, ref int nextIndex)
-        {
+        private static bool ParseWord(string word, string styleValue, ref int nextIndex) {
             ParseWhiteSpace(styleValue, ref nextIndex);
 
-            for (int i = 0; i < word.Length; i++)
-            {
-                if (!(nextIndex + i < styleValue.Length && word[i] == styleValue[nextIndex + i]))
-                {
+            for(int i = 0; i < word.Length; i++) {
+                if(!(nextIndex + i < styleValue.Length && word[i] == styleValue[nextIndex + i])) {
                     return false;
                 }
             }
 
-            if (nextIndex + word.Length < styleValue.Length && Char.IsLetterOrDigit(styleValue[nextIndex + word.Length]))
-            {
+            if(nextIndex + word.Length < styleValue.Length && Char.IsLetterOrDigit(styleValue[nextIndex + word.Length])) {
                 return false;
             }
 
@@ -251,12 +236,9 @@ namespace SRNicoNico.Views.Extentions
         // CHecks whether the following character sequence matches to one of the given words,
         // and advances the nextIndex to matched word length.
         // Returns null in case if there is no match or the word matched.
-        private static string ParseWordEnumeration(string[] words, string styleValue, ref int nextIndex)
-        {
-            for (int i = 0; i < words.Length; i++)
-            {
-                if (ParseWord(words[i], styleValue, ref nextIndex))
-                {
+        private static string ParseWordEnumeration(string[] words, string styleValue, ref int nextIndex) {
+            for(int i = 0; i < words.Length; i++) {
+                if(ParseWord(words[i], styleValue, ref nextIndex)) {
                     return words[i];
                 }
             }
@@ -264,48 +246,38 @@ namespace SRNicoNico.Views.Extentions
             return null;
         }
 
-        private static void ParseWordEnumeration(string[] words, string styleValue, ref int nextIndex, Hashtable localProperties, string attributeName)
-        {
+        private static void ParseWordEnumeration(string[] words, string styleValue, ref int nextIndex, Hashtable localProperties, string attributeName) {
             string attributeValue = ParseWordEnumeration(words, styleValue, ref nextIndex);
-            if (attributeValue != null)
-            {
+            if(attributeValue != null) {
                 localProperties[attributeName] = attributeValue;
             }
         }
 
-        private static string ParseCssSize(string styleValue, ref int nextIndex, bool mustBeNonNegative)
-        {
+        private static string ParseCssSize(string styleValue, ref int nextIndex, bool mustBeNonNegative) {
             ParseWhiteSpace(styleValue, ref nextIndex);
 
             int startIndex = nextIndex;
 
             // Parse optional munis sign
-            if (nextIndex < styleValue.Length && styleValue[nextIndex] == '-')
-            {
+            if(nextIndex < styleValue.Length && styleValue[nextIndex] == '-') {
                 nextIndex++;
             }
 
-            if (nextIndex < styleValue.Length && Char.IsDigit(styleValue[nextIndex]))
-            {
-                while (nextIndex < styleValue.Length && (Char.IsDigit(styleValue[nextIndex]) || styleValue[nextIndex] == '.'))
-                {
+            if(nextIndex < styleValue.Length && Char.IsDigit(styleValue[nextIndex])) {
+                while(nextIndex < styleValue.Length && (Char.IsDigit(styleValue[nextIndex]) || styleValue[nextIndex] == '.')) {
                     nextIndex++;
                 }
 
                 string number = styleValue.Substring(startIndex, nextIndex - startIndex);
 
                 string unit = ParseWordEnumeration(_fontSizeUnits, styleValue, ref nextIndex);
-                if (unit == null)
-                {
+                if(unit == null) {
                     unit = "px"; // Assuming pixels by default
                 }
 
-                if (mustBeNonNegative && styleValue[startIndex] == '-')
-                {
+                if(mustBeNonNegative && styleValue[startIndex] == '-') {
                     return "0";
-                }
-                else
-                {
+                } else {
                     return number + unit;
                 }
             }
@@ -313,11 +285,9 @@ namespace SRNicoNico.Views.Extentions
             return null;
         }
 
-        private static void ParseCssSize(string styleValue, ref int nextIndex, Hashtable localValues, string propertyName, bool mustBeNonNegative)
-        {
+        private static void ParseCssSize(string styleValue, ref int nextIndex, Hashtable localValues, string propertyName, bool mustBeNonNegative) {
             string length = ParseCssSize(styleValue, ref nextIndex, mustBeNonNegative);
-            if (length != null)
-            {
+            if(length != null) {
                 localValues[propertyName] = length;
             }
         }
@@ -351,8 +321,7 @@ namespace SRNicoNico.Views.Extentions
                 "threedface", "threedhighlight", "threedlightshadow", "threedshadow", "window", "windowframe", "windowtext",
             };
 
-        private static string ParseCssColor(string styleValue, ref int nextIndex)
-        {
+        private static string ParseCssColor(string styleValue, ref int nextIndex) {
             //  Implement color parsing
             // rgb(100%,53.5%,10%)
             // rgb(255,91,26)
@@ -363,49 +332,36 @@ namespace SRNicoNico.Views.Extentions
 
             string color = null;
 
-            if (nextIndex < styleValue.Length)
-            {
+            if(nextIndex < styleValue.Length) {
                 int startIndex = nextIndex;
                 char character = styleValue[nextIndex];
 
-                if (character == '#')
-                {
+                if(character == '#') {
                     nextIndex++;
-                    while (nextIndex < styleValue.Length)
-                    {
+                    while(nextIndex < styleValue.Length) {
                         character = Char.ToUpper(styleValue[nextIndex]);
-                        if (!('0' <= character && character <= '9' || 'A' <= character && character <= 'F'))
-                        {
+                        if(!('0' <= character && character <= '9' || 'A' <= character && character <= 'F')) {
                             break;
                         }
                         nextIndex++;
                     }
-                    if (nextIndex > startIndex + 1)
-                    {
+                    if(nextIndex > startIndex + 1) {
                         color = styleValue.Substring(startIndex, nextIndex - startIndex);
                     }
-                }
-                else if (styleValue.Substring(nextIndex, 3).ToLower() == "rbg")
-                {
+                } else if(styleValue.Substring(nextIndex, 3).ToLower() == "rbg") {
                     //  Implement real rgb() color parsing
-                    while (nextIndex < styleValue.Length && styleValue[nextIndex] != ')')
-                    {
+                    while(nextIndex < styleValue.Length && styleValue[nextIndex] != ')') {
                         nextIndex++;
                     }
-                    if (nextIndex < styleValue.Length)
-                    {
+                    if(nextIndex < styleValue.Length) {
                         nextIndex++; // to skip ')'
                     }
                     color = "gray"; // return bogus color
-                }
-                else if (Char.IsLetter(character))
-                {
+                } else if(Char.IsLetter(character)) {
                     color = ParseWordEnumeration(_colors, styleValue, ref nextIndex);
-                    if (color == null)
-                    {
+                    if(color == null) {
                         color = ParseWordEnumeration(_systemColors, styleValue, ref nextIndex);
-                        if (color != null)
-                        {
+                        if(color != null) {
                             //  Implement smarter system color converions into real colors
                             color = "black";
                         }
@@ -416,11 +372,9 @@ namespace SRNicoNico.Views.Extentions
             return color;
         }
 
-        private static void ParseCssColor(string styleValue, ref int nextIndex, Hashtable localValues, string propertyName)
-        {
+        private static void ParseCssColor(string styleValue, ref int nextIndex, Hashtable localValues, string propertyName) {
             string color = ParseCssColor(styleValue, ref nextIndex);
-            if (color != null)
-            {
+            if(color != null) {
                 localValues[propertyName] = color;
             }
         }
@@ -459,8 +413,7 @@ namespace SRNicoNico.Views.Extentions
         private static readonly string[] _fontSizeUnits = new string[] { "px", "mm", "cm", "in", "pt", "pc", "em", "ex", "%" };
 
         // Parses CSS string fontStyle representing a value for css font attribute
-        private static void ParseCssFont(string styleValue, Hashtable localProperties)
-        {
+        private static void ParseCssFont(string styleValue, Hashtable localProperties) {
             int nextIndex = 0;
 
             ParseCssFontStyle(styleValue, ref nextIndex, localProperties);
@@ -470,8 +423,7 @@ namespace SRNicoNico.Views.Extentions
             ParseCssSize(styleValue, ref nextIndex, localProperties, "font-size", /*mustBeNonNegative:*/true);
 
             ParseWhiteSpace(styleValue, ref nextIndex);
-            if (nextIndex < styleValue.Length && styleValue[nextIndex] == '/')
-            {
+            if(nextIndex < styleValue.Length && styleValue[nextIndex] == '/') {
                 nextIndex++;
                 ParseCssSize(styleValue, ref nextIndex, localProperties, "line-height", /*mustBeNonNegative:*/true);
             }
@@ -479,63 +431,51 @@ namespace SRNicoNico.Views.Extentions
             ParseCssFontFamily(styleValue, ref nextIndex, localProperties);
         }
 
-        private static void ParseCssFontStyle(string styleValue, ref int nextIndex, Hashtable localProperties)
-        {
+        private static void ParseCssFontStyle(string styleValue, ref int nextIndex, Hashtable localProperties) {
             ParseWordEnumeration(_fontStyles, styleValue, ref nextIndex, localProperties, "font-style");
         }
 
-        private static void ParseCssFontVariant(string styleValue, ref int nextIndex, Hashtable localProperties)
-        {
+        private static void ParseCssFontVariant(string styleValue, ref int nextIndex, Hashtable localProperties) {
             ParseWordEnumeration(_fontVariants, styleValue, ref nextIndex, localProperties, "font-variant");
         }
 
-        private static void ParseCssFontWeight(string styleValue, ref int nextIndex, Hashtable localProperties)
-        {
+        private static void ParseCssFontWeight(string styleValue, ref int nextIndex, Hashtable localProperties) {
             ParseWordEnumeration(_fontWeights, styleValue, ref nextIndex, localProperties, "font-weight");
         }
 
-        private static void ParseCssFontFamily(string styleValue, ref int nextIndex, Hashtable localProperties)
-        {
+        private static void ParseCssFontFamily(string styleValue, ref int nextIndex, Hashtable localProperties) {
             string fontFamilyList = null;
 
-            while (nextIndex < styleValue.Length)
-            {
+            while(nextIndex < styleValue.Length) {
                 // Try generic-family
                 string fontFamily = ParseWordEnumeration(_fontGenericFamilies, styleValue, ref nextIndex);
 
-                if (fontFamily == null)
-                {
+                if(fontFamily == null) {
                     // Try quoted font family name
-                    if (nextIndex < styleValue.Length && (styleValue[nextIndex] == '"' || styleValue[nextIndex] == '\''))
-                    {
+                    if(nextIndex < styleValue.Length && (styleValue[nextIndex] == '"' || styleValue[nextIndex] == '\'')) {
                         char quote = styleValue[nextIndex];
 
                         nextIndex++;
 
                         int startIndex = nextIndex;
 
-                        while (nextIndex < styleValue.Length && styleValue[nextIndex] != quote)
-                        {
+                        while(nextIndex < styleValue.Length && styleValue[nextIndex] != quote) {
                             nextIndex++;
                         }
 
                         fontFamily = '"' + styleValue.Substring(startIndex, nextIndex - startIndex) + '"';
                     }
 
-                    if (fontFamily == null)
-                    {
+                    if(fontFamily == null) {
                         // Try unquoted font family name
                         int startIndex = nextIndex;
-                        while (nextIndex < styleValue.Length && styleValue[nextIndex] != ',' && styleValue[nextIndex] != ';')
-                        {
+                        while(nextIndex < styleValue.Length && styleValue[nextIndex] != ',' && styleValue[nextIndex] != ';') {
                             nextIndex++;
                         }
 
-                        if (nextIndex > startIndex)
-                        {
+                        if(nextIndex > startIndex) {
                             fontFamily = styleValue.Substring(startIndex, nextIndex - startIndex).Trim();
-                            if (fontFamily.Length == 0)
-                            {
+                            if(fontFamily.Length == 0) {
                                 fontFamily = null;
                             }
                         }
@@ -543,37 +483,28 @@ namespace SRNicoNico.Views.Extentions
                 }
 
                 ParseWhiteSpace(styleValue, ref nextIndex);
-                if (nextIndex < styleValue.Length && styleValue[nextIndex] == ',')
-                {
+                if(nextIndex < styleValue.Length && styleValue[nextIndex] == ',') {
                     nextIndex++;
                 }
 
-                if (fontFamily != null)
-                {
+                if(fontFamily != null) {
                     //  css font-family can contein a list of names. We only consider the first name from the list. Need a decision what to do with remaining names
                     // fontFamilyList = (fontFamilyList == null) ? fontFamily : fontFamilyList + "," + fontFamily;
-                    if (fontFamilyList == null && fontFamily.Length > 0)
-                    {
-                        if (fontFamily[0] == '"' || fontFamily[0] == '\'')
-                        {
+                    if(fontFamilyList == null && fontFamily.Length > 0) {
+                        if(fontFamily[0] == '"' || fontFamily[0] == '\'') {
                             // Unquote the font family name
                             fontFamily = fontFamily.Substring(1, fontFamily.Length - 2);
-                        }
-                        else
-                        {
+                        } else {
                             // Convert generic css family name
                         }
                         fontFamilyList = fontFamily;
                     }
-                }
-                else
-                {
+                } else {
                     break;
                 }
             }
 
-            if (fontFamilyList != null)
-            {
+            if(fontFamilyList != null) {
                 localProperties["font-family"] = fontFamilyList;
             }
         }
@@ -589,33 +520,22 @@ namespace SRNicoNico.Views.Extentions
         private static readonly string[] _listStyleTypes = new string[] { "disc", "circle", "square", "decimal", "lower-roman", "upper-roman", "lower-alpha", "upper-alpha", "none" };
         private static readonly string[] _listStylePositions = new string[] { "inside", "outside" };
 
-        private static void ParseCssListStyle(string styleValue, Hashtable localProperties)
-        {
+        private static void ParseCssListStyle(string styleValue, Hashtable localProperties) {
             int nextIndex = 0;
 
-            while (nextIndex < styleValue.Length)
-            {
+            while(nextIndex < styleValue.Length) {
                 string listStyleType = ParseCssListStyleType(styleValue, ref nextIndex);
-                if (listStyleType != null)
-                {
+                if(listStyleType != null) {
                     localProperties["list-style-type"] = listStyleType;
-                }
-                else
-                {
+                } else {
                     string listStylePosition = ParseCssListStylePosition(styleValue, ref nextIndex);
-                    if (listStylePosition != null)
-                    {
+                    if(listStylePosition != null) {
                         localProperties["list-style-position"] = listStylePosition;
-                    }
-                    else
-                    {
+                    } else {
                         string listStyleImage = ParseCssListStyleImage(styleValue, ref nextIndex);
-                        if (listStyleImage != null)
-                        {
+                        if(listStyleImage != null) {
                             localProperties["list-style-image"] = listStyleImage;
-                        }
-                        else
-                        {
+                        } else {
                             // TODO: Process unrecognized list style value
                             break;
                         }
@@ -624,18 +544,15 @@ namespace SRNicoNico.Views.Extentions
             }
         }
 
-        private static string ParseCssListStyleType(string styleValue, ref int nextIndex)
-        {
+        private static string ParseCssListStyleType(string styleValue, ref int nextIndex) {
             return ParseWordEnumeration(_listStyleTypes, styleValue, ref nextIndex);
         }
 
-        private static string ParseCssListStylePosition(string styleValue, ref int nextIndex)
-        {
+        private static string ParseCssListStylePosition(string styleValue, ref int nextIndex) {
             return ParseWordEnumeration(_listStylePositions, styleValue, ref nextIndex);
         }
 
-        private static string ParseCssListStyleImage(string styleValue, ref int nextIndex)
-        {
+        private static string ParseCssListStyleImage(string styleValue, ref int nextIndex) {
             // TODO: Implement URL parsing for images
             return null;
         }
@@ -648,20 +565,16 @@ namespace SRNicoNico.Views.Extentions
 
         private static readonly string[] _textDecorations = new string[] { "none", "underline", "overline", "line-through", "blink" };
 
-        private static void ParseCssTextDecoration(string styleValue, ref int nextIndex, Hashtable localProperties)
-        {
+        private static void ParseCssTextDecoration(string styleValue, ref int nextIndex, Hashtable localProperties) {
             // Set default text-decorations:none;
-            for (int i = 1; i < _textDecorations.Length; i++)
-            {
+            for(int i = 1; i < _textDecorations.Length; i++) {
                 localProperties["text-decoration-" + _textDecorations[i]] = "false";
             }
 
             // Parse list of decorations values
-            while (nextIndex < styleValue.Length)
-            {
+            while(nextIndex < styleValue.Length) {
                 string decoration = ParseWordEnumeration(_textDecorations, styleValue, ref nextIndex);
-                if (decoration == null || decoration == "none")
-                {
+                if(decoration == null || decoration == "none") {
                     break;
                 }
                 localProperties["text-decoration-" + decoration] = "true";
@@ -676,8 +589,7 @@ namespace SRNicoNico.Views.Extentions
 
         private static readonly string[] _textTransforms = new string[] { "none", "capitalize", "uppercase", "lowercase" };
 
-        private static void ParseCssTextTransform(string styleValue, ref int nextIndex, Hashtable localProperties)
-        {
+        private static void ParseCssTextTransform(string styleValue, ref int nextIndex, Hashtable localProperties) {
             ParseWordEnumeration(_textTransforms, styleValue, ref nextIndex, localProperties, "text-transform");
         }
 
@@ -689,8 +601,7 @@ namespace SRNicoNico.Views.Extentions
 
         private static readonly string[] _textAligns = new string[] { "left", "right", "center", "justify" };
 
-        private static void ParseCssTextAlign(string styleValue, ref int nextIndex, Hashtable localProperties)
-        {
+        private static void ParseCssTextAlign(string styleValue, ref int nextIndex, Hashtable localProperties) {
             ParseWordEnumeration(_textAligns, styleValue, ref nextIndex, localProperties, "text-align");
         }
 
@@ -702,8 +613,7 @@ namespace SRNicoNico.Views.Extentions
 
         private static readonly string[] _verticalAligns = new string[] { "baseline", "sub", "super", "top", "text-top", "middle", "bottom", "text-bottom" };
 
-        private static void ParseCssVerticalAlign(string styleValue, ref int nextIndex, Hashtable localProperties)
-        {
+        private static void ParseCssVerticalAlign(string styleValue, ref int nextIndex, Hashtable localProperties) {
             //  Parse percentage value for vertical-align style
             ParseWordEnumeration(_verticalAligns, styleValue, ref nextIndex, localProperties, "vertical-align");
         }
@@ -716,8 +626,7 @@ namespace SRNicoNico.Views.Extentions
 
         private static readonly string[] _floats = new string[] { "left", "right", "none" };
 
-        private static void ParseCssFloat(string styleValue, ref int nextIndex, Hashtable localProperties)
-        {
+        private static void ParseCssFloat(string styleValue, ref int nextIndex, Hashtable localProperties) {
             ParseWordEnumeration(_floats, styleValue, ref nextIndex, localProperties, "float");
         }
 
@@ -729,8 +638,7 @@ namespace SRNicoNico.Views.Extentions
 
         private static readonly string[] _clears = new string[] { "none", "left", "right", "both" };
 
-        private static void ParseCssClear(string styleValue, ref int nextIndex, Hashtable localProperties)
-        {
+        private static void ParseCssClear(string styleValue, ref int nextIndex, Hashtable localProperties) {
             ParseWordEnumeration(_clears, styleValue, ref nextIndex, localProperties, "clear");
         }
 
@@ -741,8 +649,7 @@ namespace SRNicoNico.Views.Extentions
         // .................................................................
 
         // Generic method for parsing any of four-values properties, such as margin, padding, border-width, border-style, border-color
-        private static bool ParseCssRectangleProperty(string styleValue, ref int nextIndex, Hashtable localProperties, string propertyName)
-        {
+        private static bool ParseCssRectangleProperty(string styleValue, ref int nextIndex, Hashtable localProperties, string propertyName) {
             // CSS Spec:
             // If only one value is set, then the value applies to all four sides;
             // If two or three values are set, then missinng value(s) are taken fromm the opposite side(s).
@@ -751,24 +658,20 @@ namespace SRNicoNico.Views.Extentions
             Debug.Assert(propertyName == "margin" || propertyName == "padding" || propertyName == "border-width" || propertyName == "border-style" || propertyName == "border-color");
 
             string value = propertyName == "border-color" ? ParseCssColor(styleValue, ref nextIndex) : propertyName == "border-style" ? ParseCssBorderStyle(styleValue, ref nextIndex) : ParseCssSize(styleValue, ref nextIndex, /*mustBeNonNegative:*/true);
-            if (value != null)
-            {
+            if(value != null) {
                 localProperties[propertyName + "-top"] = value;
                 localProperties[propertyName + "-bottom"] = value;
                 localProperties[propertyName + "-right"] = value;
                 localProperties[propertyName + "-left"] = value;
                 value = propertyName == "border-color" ? ParseCssColor(styleValue, ref nextIndex) : propertyName == "border-style" ? ParseCssBorderStyle(styleValue, ref nextIndex) : ParseCssSize(styleValue, ref nextIndex, /*mustBeNonNegative:*/true);
-                if (value != null)
-                {
+                if(value != null) {
                     localProperties[propertyName + "-right"] = value;
                     localProperties[propertyName + "-left"] = value;
                     value = propertyName == "border-color" ? ParseCssColor(styleValue, ref nextIndex) : propertyName == "border-style" ? ParseCssBorderStyle(styleValue, ref nextIndex) : ParseCssSize(styleValue, ref nextIndex, /*mustBeNonNegative:*/true);
-                    if (value != null)
-                    {
+                    if(value != null) {
                         localProperties[propertyName + "-bottom"] = value;
                         value = propertyName == "border-color" ? ParseCssColor(styleValue, ref nextIndex) : propertyName == "border-style" ? ParseCssBorderStyle(styleValue, ref nextIndex) : ParseCssSize(styleValue, ref nextIndex, /*mustBeNonNegative:*/true);
-                        if (value != null)
-                        {
+                        if(value != null) {
                             localProperties[propertyName + "-left"] = value;
                         }
                     }
@@ -788,13 +691,11 @@ namespace SRNicoNico.Views.Extentions
 
         // border: [ <border-width> || <border-style> || <border-color> ]
 
-        private static void ParseCssBorder(string styleValue, ref int nextIndex, Hashtable localProperties)
-        {
-            while (
+        private static void ParseCssBorder(string styleValue, ref int nextIndex, Hashtable localProperties) {
+            while(
                 ParseCssRectangleProperty(styleValue, ref nextIndex, localProperties, "border-width") ||
                 ParseCssRectangleProperty(styleValue, ref nextIndex, localProperties, "border-style") ||
-                ParseCssRectangleProperty(styleValue, ref nextIndex, localProperties, "border-color"))
-            {
+                ParseCssRectangleProperty(styleValue, ref nextIndex, localProperties, "border-color")) {
             }
         }
 
@@ -806,8 +707,7 @@ namespace SRNicoNico.Views.Extentions
 
         private static readonly string[] _borderStyles = new string[] { "none", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset" };
 
-        private static string ParseCssBorderStyle(string styleValue, ref int nextIndex)
-        {
+        private static string ParseCssBorderStyle(string styleValue, ref int nextIndex) {
             return ParseWordEnumeration(_borderStyles, styleValue, ref nextIndex);
         }
 
@@ -826,40 +726,31 @@ namespace SRNicoNico.Views.Extentions
         //
         // .................................................................
 
-        private static void ParseCssBackground(string styleValue, ref int nextIndex, Hashtable localValues)
-        {
+        private static void ParseCssBackground(string styleValue, ref int nextIndex, Hashtable localValues) {
             //  Implement parsing background attribute
         }
     }
-    internal class CssStylesheet
-    {
+    internal class CssStylesheet {
         // Constructor
-        public CssStylesheet(XmlElement htmlElement)
-        {
-            if (htmlElement != null)
-            {
+        public CssStylesheet(XmlElement htmlElement) {
+            if(htmlElement != null) {
                 this.DiscoverStyleDefinitions(htmlElement);
             }
         }
 
         // Recursively traverses an html tree, discovers STYLE elements and creates a style definition table
         // for further cascading style application
-        public void DiscoverStyleDefinitions(XmlElement htmlElement)
-        {
-            if (htmlElement.LocalName.ToLower() == "link")
-            {
+        public void DiscoverStyleDefinitions(XmlElement htmlElement) {
+            if(htmlElement.LocalName.ToLower() == "link") {
                 return;
                 //  Add LINK elements processing for included stylesheets
                 // <LINK href="http://sc.msn.com/global/css/ptnr/orange.css" type=text/css \r\nrel=stylesheet>
             }
 
-            if (htmlElement.LocalName.ToLower() != "style")
-            {
+            if(htmlElement.LocalName.ToLower() != "style") {
                 // This is not a STYLE element. Recurse into it
-                for (XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling)
-                {
-                    if (htmlChildNode is XmlElement)
-                    {
+                for(XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling) {
+                    if(htmlChildNode is XmlElement) {
                         this.DiscoverStyleDefinitions((XmlElement)htmlChildNode);
                     }
                 }
@@ -871,10 +762,8 @@ namespace SRNicoNico.Views.Extentions
             // Collect all text from this style definition
             StringBuilder stylesheetBuffer = new StringBuilder();
 
-            for (XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling)
-            {
-                if (htmlChildNode is XmlText || htmlChildNode is XmlComment)
-                {
+            for(XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling) {
+                if(htmlChildNode is XmlText || htmlChildNode is XmlComment) {
                     stylesheetBuffer.Append(RemoveComments(htmlChildNode.Value));
                 }
             }
@@ -886,17 +775,13 @@ namespace SRNicoNico.Views.Extentions
             // It can contain comments in the following form: /*...*/
 
             int nextCharacterIndex = 0;
-            while (nextCharacterIndex < stylesheetBuffer.Length)
-            {
+            while(nextCharacterIndex < stylesheetBuffer.Length) {
                 // Extract selector
                 int selectorStart = nextCharacterIndex;
-                while (nextCharacterIndex < stylesheetBuffer.Length && stylesheetBuffer[nextCharacterIndex] != '{')
-                {
+                while(nextCharacterIndex < stylesheetBuffer.Length && stylesheetBuffer[nextCharacterIndex] != '{') {
                     // Skip declaration directive starting from @
-                    if (stylesheetBuffer[nextCharacterIndex] == '@')
-                    {
-                        while (nextCharacterIndex < stylesheetBuffer.Length && stylesheetBuffer[nextCharacterIndex] != ';')
-                        {
+                    if(stylesheetBuffer[nextCharacterIndex] == '@') {
+                        while(nextCharacterIndex < stylesheetBuffer.Length && stylesheetBuffer[nextCharacterIndex] != ';') {
                             nextCharacterIndex++;
                         }
                         selectorStart = nextCharacterIndex + 1;
@@ -904,26 +789,22 @@ namespace SRNicoNico.Views.Extentions
                     nextCharacterIndex++;
                 }
 
-                if (nextCharacterIndex < stylesheetBuffer.Length)
-                {
+                if(nextCharacterIndex < stylesheetBuffer.Length) {
                     // Extract definition
                     int definitionStart = nextCharacterIndex;
-                    while (nextCharacterIndex < stylesheetBuffer.Length && stylesheetBuffer[nextCharacterIndex] != '}')
-                    {
+                    while(nextCharacterIndex < stylesheetBuffer.Length && stylesheetBuffer[nextCharacterIndex] != '}') {
                         nextCharacterIndex++;
                     }
 
                     // Define a style
-                    if (nextCharacterIndex - definitionStart > 2)
-                    {
+                    if(nextCharacterIndex - definitionStart > 2) {
                         this.AddStyleDefinition(
                             stylesheetBuffer.ToString(selectorStart, definitionStart - selectorStart),
                             stylesheetBuffer.ToString(definitionStart + 1, nextCharacterIndex - definitionStart - 2));
                     }
 
                     // Skip closing brace
-                    if (nextCharacterIndex < stylesheetBuffer.Length)
-                    {
+                    if(nextCharacterIndex < stylesheetBuffer.Length) {
                         Debug.Assert(stylesheetBuffer[nextCharacterIndex] == '}');
                         nextCharacterIndex++;
                     }
@@ -932,17 +813,14 @@ namespace SRNicoNico.Views.Extentions
         }
 
         // Returns a string with all c-style comments replaced by spaces
-        private string RemoveComments(string text)
-        {
+        private string RemoveComments(string text) {
             int commentStart = text.IndexOf("/*");
-            if (commentStart < 0)
-            {
+            if(commentStart < 0) {
                 return text;
             }
 
             int commentEnd = text.IndexOf("*/", commentStart + 2);
-            if (commentEnd < 0)
-            {
+            if(commentEnd < 0) {
                 return text.Substring(0, commentStart);
             }
 
@@ -950,43 +828,35 @@ namespace SRNicoNico.Views.Extentions
         }
 
 
-        public void AddStyleDefinition(string selector, string definition)
-        {
+        public void AddStyleDefinition(string selector, string definition) {
             // Notrmalize parameter values
             selector = selector.Trim().ToLower();
             definition = definition.Trim().ToLower();
-            if (selector.Length == 0 || definition.Length == 0)
-            {
+            if(selector.Length == 0 || definition.Length == 0) {
                 return;
             }
 
-            if (_styleDefinitions == null)
-            {
+            if(_styleDefinitions == null) {
                 _styleDefinitions = new List<StyleDefinition>();
             }
 
             string[] simpleSelectors = selector.Split(',');
 
-            for (int i = 0; i < simpleSelectors.Length; i++)
-            {
+            for(int i = 0; i < simpleSelectors.Length; i++) {
                 string simpleSelector = simpleSelectors[i].Trim();
-                if (simpleSelector.Length > 0)
-                {
+                if(simpleSelector.Length > 0) {
                     _styleDefinitions.Add(new StyleDefinition(simpleSelector, definition));
                 }
             }
         }
 
-        public string GetStyle(string elementName, List<XmlElement> sourceContext)
-        {
+        public string GetStyle(string elementName, List<XmlElement> sourceContext) {
             Debug.Assert(sourceContext.Count > 0);
             Debug.Assert(elementName == sourceContext[sourceContext.Count - 1].LocalName);
 
             //  Add id processing for style selectors
-            if (_styleDefinitions != null)
-            {
-                for (int i = _styleDefinitions.Count - 1; i >= 0; i--)
-                {
+            if(_styleDefinitions != null) {
+                for(int i = _styleDefinitions.Count - 1; i >= 0; i--) {
                     string selector = _styleDefinitions[i].Selector;
 
                     string[] selectorLevels = selector.Split(' ');
@@ -995,8 +865,7 @@ namespace SRNicoNico.Views.Extentions
                     int indexInContext = sourceContext.Count - 1;
                     string selectorLevel = selectorLevels[indexInSelector].Trim();
 
-                    if (MatchSelectorLevel(selectorLevel, sourceContext[sourceContext.Count - 1]))
-                    {
+                    if(MatchSelectorLevel(selectorLevel, sourceContext[sourceContext.Count - 1])) {
                         return _styleDefinitions[i].Definition;
                     }
                 }
@@ -1005,10 +874,8 @@ namespace SRNicoNico.Views.Extentions
             return null;
         }
 
-        private bool MatchSelectorLevel(string selectorLevel, XmlElement xmlElement)
-        {
-            if (selectorLevel.Length == 0)
-            {
+        private bool MatchSelectorLevel(string selectorLevel, XmlElement xmlElement) {
+            if(selectorLevel.Length == 0) {
                 return false;
             }
 
@@ -1018,49 +885,37 @@ namespace SRNicoNico.Views.Extentions
             string selectorClass = null;
             string selectorId = null;
             string selectorTag = null;
-            if (indexOfDot >= 0)
-            {
-                if (indexOfDot > 0)
-                {
+            if(indexOfDot >= 0) {
+                if(indexOfDot > 0) {
                     selectorTag = selectorLevel.Substring(0, indexOfDot);
                 }
                 selectorClass = selectorLevel.Substring(indexOfDot + 1);
-            }
-            else if (indexOfPound >= 0)
-            {
-                if (indexOfPound > 0)
-                {
+            } else if(indexOfPound >= 0) {
+                if(indexOfPound > 0) {
                     selectorTag = selectorLevel.Substring(0, indexOfPound);
                 }
                 selectorId = selectorLevel.Substring(indexOfPound + 1);
-            }
-            else
-            {
+            } else {
                 selectorTag = selectorLevel;
             }
 
-            if (selectorTag != null && selectorTag != xmlElement.LocalName)
-            {
+            if(selectorTag != null && selectorTag != xmlElement.LocalName) {
                 return false;
             }
 
-            if (selectorId != null && HtmlToXamlConverter.GetAttribute(xmlElement, "id") != selectorId)
-            {
+            if(selectorId != null && HtmlToXamlConverter.GetAttribute(xmlElement, "id") != selectorId) {
                 return false;
             }
 
-            if (selectorClass != null && HtmlToXamlConverter.GetAttribute(xmlElement, "class") != selectorClass)
-            {
+            if(selectorClass != null && HtmlToXamlConverter.GetAttribute(xmlElement, "class") != selectorClass) {
                 return false;
             }
 
             return true;
         }
 
-        private class StyleDefinition
-        {
-            public StyleDefinition(string selector, string definition)
-            {
+        private class StyleDefinition {
+            public StyleDefinition(string selector, string definition) {
                 this.Selector = selector;
                 this.Definition = definition;
             }
@@ -1078,8 +933,7 @@ namespace SRNicoNico.Views.Extentions
     /// recognizes tokens as groups of characters separated by arbitrary amounts of whitespace
     /// also classifies tokens according to type
     /// </summary>
-    internal class HtmlLexicalAnalyzer
-    {
+    internal class HtmlLexicalAnalyzer {
         // ---------------------------------------------------------------------
         //
         // Constructors
@@ -1095,8 +949,7 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="inputTextString">
         /// text string to be parsed for xml content
         /// </param>
-        internal HtmlLexicalAnalyzer(string inputTextString)
-        {
+        internal HtmlLexicalAnalyzer(string inputTextString) {
             _inputStringReader = new StringReader(inputTextString);
             _nextCharacterCode = 0;
             _nextCharacter = ' ';
@@ -1127,85 +980,60 @@ namespace SRNicoNico.Views.Extentions
         /// if end of stream is reached without matching any token, token type
         /// paramter is set to EOF
         /// </summary>
-        internal void GetNextContentToken()
-        {
+        internal void GetNextContentToken() {
             Debug.Assert(_nextTokenType != HtmlTokenType.EOF);
             _nextToken.Length = 0;
-            if (this.IsAtEndOfStream)
-            {
+            if(this.IsAtEndOfStream) {
                 _nextTokenType = HtmlTokenType.EOF;
                 return;
             }
 
-            if (this.IsAtTagStart)
-            {
+            if(this.IsAtTagStart) {
                 this.GetNextCharacter();
 
-                if (this.NextCharacter == '/')
-                {
+                if(this.NextCharacter == '/') {
                     _nextToken.Append("</");
                     _nextTokenType = HtmlTokenType.ClosingTagStart;
 
                     // advance
                     this.GetNextCharacter();
                     _ignoreNextWhitespace = false; // Whitespaces after closing tags are significant
-                }
-                else
-                {
+                } else {
                     _nextTokenType = HtmlTokenType.OpeningTagStart;
                     _nextToken.Append("<");
                     _ignoreNextWhitespace = true; // Whitespaces after opening tags are insignificant
                 }
-            }
-            else if (this.IsAtDirectiveStart)
-            {
+            } else if(this.IsAtDirectiveStart) {
                 // either a comment or CDATA
                 this.GetNextCharacter();
-                if (_lookAheadCharacter == '[')
-                {
+                if(_lookAheadCharacter == '[') {
                     // cdata
                     this.ReadDynamicContent();
-                }
-                else if (_lookAheadCharacter == '-')
-                {
+                } else if(_lookAheadCharacter == '-') {
                     this.ReadComment();
-                }
-                else
-                {
+                } else {
                     // neither a comment nor cdata, should be something like DOCTYPE
                     // skip till the next tag ender
                     this.ReadUnknownDirective();
                 }
-            }
-            else
-            {
+            } else {
                 // read text content, unless you encounter a tag
                 _nextTokenType = HtmlTokenType.Text;
-                while (!this.IsAtTagStart && !this.IsAtEndOfStream && !this.IsAtDirectiveStart)
-                {
-                    if (this.NextCharacter == '<' && !this.IsNextCharacterEntity && _lookAheadCharacter == '?')
-                    {
+                while(!this.IsAtTagStart && !this.IsAtEndOfStream && !this.IsAtDirectiveStart) {
+                    if(this.NextCharacter == '<' && !this.IsNextCharacterEntity && _lookAheadCharacter == '?') {
                         // ignore processing directive
                         this.SkipProcessingDirective();
-                    }
-                    else
-                    {
-                        if (this.NextCharacter <= ' ')
-                        {
+                    } else {
+                        if(this.NextCharacter <= ' ') {
                             //  Respect xml:preserve or its equivalents for whitespace processing
-                            if (_ignoreNextWhitespace)
-                            {
+                            if(_ignoreNextWhitespace) {
                                 // Ignore repeated whitespaces
-                            }
-                            else
-                            {
+                            } else {
                                 // Treat any control character sequence as one whitespace
                                 _nextToken.Append(' ');
                             }
                             _ignoreNextWhitespace = true; // and keep ignoring the following whitespaces
-                        }
-                        else
-                        {
+                        } else {
                             _nextToken.Append(this.NextCharacter);
                             _ignoreNextWhitespace = false;
                         }
@@ -1219,36 +1047,29 @@ namespace SRNicoNico.Views.Extentions
         /// Unconditionally returns a token which is one of: TagEnd, EmptyTagEnd, Name, Atom or EndOfStream
         /// Does not guarantee token reader advancing.
         /// </summary>
-        internal void GetNextTagToken()
-        {
+        internal void GetNextTagToken() {
             _nextToken.Length = 0;
-            if (this.IsAtEndOfStream)
-            {
+            if(this.IsAtEndOfStream) {
                 _nextTokenType = HtmlTokenType.EOF;
                 return;
             }
 
             this.SkipWhiteSpace();
 
-            if (this.NextCharacter == '>' && !this.IsNextCharacterEntity)
-            {
+            if(this.NextCharacter == '>' && !this.IsNextCharacterEntity) {
                 // &gt; should not end a tag, so make sure it's not an entity
                 _nextTokenType = HtmlTokenType.TagEnd;
                 _nextToken.Append('>');
                 this.GetNextCharacter();
                 // Note: _ignoreNextWhitespace must be set appropriately on tag start processing
-            }
-            else if (this.NextCharacter == '/' && _lookAheadCharacter == '>')
-            {
+            } else if(this.NextCharacter == '/' && _lookAheadCharacter == '>') {
                 // could be start of closing of empty tag
                 _nextTokenType = HtmlTokenType.EmptyTagEnd;
                 _nextToken.Append("/>");
                 this.GetNextCharacter();
                 this.GetNextCharacter();
                 _ignoreNextWhitespace = false; // Whitespace after no-scope tags are sifnificant
-            }
-            else if (IsGoodForNameStart(this.NextCharacter))
-            {
+            } else if(IsGoodForNameStart(this.NextCharacter)) {
                 _nextTokenType = HtmlTokenType.Name;
 
                 // starts a name
@@ -1257,14 +1078,11 @@ namespace SRNicoNico.Views.Extentions
                 // just stop and return whatever is in the token
                 // if the parser is not expecting end of file after this it will call
                 // the get next token function and throw an exception
-                while (IsGoodForName(this.NextCharacter) && !this.IsAtEndOfStream)
-                {
+                while(IsGoodForName(this.NextCharacter) && !this.IsAtEndOfStream) {
                     _nextToken.Append(this.NextCharacter);
                     this.GetNextCharacter();
                 }
-            }
-            else
-            {
+            } else {
                 // Unexpected type of token for a tag. Reprot one character as Atom, expecting that HtmlParser will ignore it.
                 _nextTokenType = HtmlTokenType.Atom;
                 _nextToken.Append(this.NextCharacter);
@@ -1277,8 +1095,7 @@ namespace SRNicoNico.Views.Extentions
         /// real equal sign in the stream, it behaves as if it were there.
         /// Does not guarantee token reader advancing.
         /// </summary>
-        internal void GetNextEqualSignToken()
-        {
+        internal void GetNextEqualSignToken() {
             Debug.Assert(_nextTokenType != HtmlTokenType.EOF);
             _nextToken.Length = 0;
 
@@ -1287,8 +1104,7 @@ namespace SRNicoNico.Views.Extentions
 
             this.SkipWhiteSpace();
 
-            if (this.NextCharacter == '=')
-            {
+            if(this.NextCharacter == '=') {
                 // '=' is not in the list of entities, so no need to check for entities here
                 this.GetNextCharacter();
             }
@@ -1299,8 +1115,7 @@ namespace SRNicoNico.Views.Extentions
         /// Even if there is no appropriate token it returns Atom value
         /// Does not guarantee token reader advancing.
         /// </summary>
-        internal void GetNextAtomToken()
-        {
+        internal void GetNextAtomToken() {
             Debug.Assert(_nextTokenType != HtmlTokenType.EOF);
             _nextToken.Length = 0;
 
@@ -1308,19 +1123,16 @@ namespace SRNicoNico.Views.Extentions
 
             _nextTokenType = HtmlTokenType.Atom;
 
-            if ((this.NextCharacter == '\'' || this.NextCharacter == '"') && !this.IsNextCharacterEntity)
-            {
+            if((this.NextCharacter == '\'' || this.NextCharacter == '"') && !this.IsNextCharacterEntity) {
                 char startingQuote = this.NextCharacter;
                 this.GetNextCharacter();
 
                 // Consume all characters between quotes
-                while (!(this.NextCharacter == startingQuote && !this.IsNextCharacterEntity) && !this.IsAtEndOfStream)
-                {
+                while(!(this.NextCharacter == startingQuote && !this.IsNextCharacterEntity) && !this.IsAtEndOfStream) {
                     _nextToken.Append(this.NextCharacter);
                     this.GetNextCharacter();
                 }
-                if (this.NextCharacter == startingQuote)
-                {
+                if(this.NextCharacter == startingQuote) {
                     this.GetNextCharacter();
                 }
 
@@ -1333,11 +1145,8 @@ namespace SRNicoNico.Views.Extentions
                 // however, we could stop when we encounter end of file or an angle bracket of any kind
                 // and assume there was a quote there
                 // so the attribute value may be meaningless but it is never treated as text
-            }
-            else
-            {
-                while (!this.IsAtEndOfStream && !Char.IsWhiteSpace(this.NextCharacter) && this.NextCharacter != '>')
-                {
+            } else {
+                while(!this.IsAtEndOfStream && !Char.IsWhiteSpace(this.NextCharacter) && this.NextCharacter != '>') {
                     _nextToken.Append(this.NextCharacter);
                     this.GetNextCharacter();
                 }
@@ -1354,18 +1163,14 @@ namespace SRNicoNico.Views.Extentions
 
         #region Internal Properties
 
-        internal HtmlTokenType NextTokenType
-        {
-            get
-            {
+        internal HtmlTokenType NextTokenType {
+            get {
                 return _nextTokenType;
             }
         }
 
-        internal string NextToken
-        {
-            get
-            {
+        internal string NextToken {
+            get {
                 return _nextToken.ToString();
             }
         }
@@ -1389,10 +1194,8 @@ namespace SRNicoNico.Views.Extentions
         /// Throws InvalidOperationException if attempted to be called on EndOfStream
         /// condition.
         /// </remarks>
-        private void GetNextCharacter()
-        {
-            if (_nextCharacterCode == -1)
-            {
+        private void GetNextCharacter() {
+            if(_nextCharacterCode == -1) {
                 throw new InvalidOperationException("GetNextCharacter method called at the end of a stream");
             }
 
@@ -1405,23 +1208,19 @@ namespace SRNicoNico.Views.Extentions
 
             this.ReadLookAheadCharacter();
 
-            if (_nextCharacter == '&')
-            {
-                if (_lookAheadCharacter == '#')
-                {
+            if(_nextCharacter == '&') {
+                if(_lookAheadCharacter == '#') {
                     // numeric entity - parse digits - &#DDDDD;
                     int entityCode;
                     entityCode = 0;
                     this.ReadLookAheadCharacter();
 
                     // largest numeric entity is 7 characters
-                    for (int i = 0; i < 7 && Char.IsDigit(_lookAheadCharacter); i++)
-                    {
+                    for(int i = 0; i < 7 && Char.IsDigit(_lookAheadCharacter); i++) {
                         entityCode = 10 * entityCode + (_lookAheadCharacterCode - (int)'0');
                         this.ReadLookAheadCharacter();
                     }
-                    if (_lookAheadCharacter == ';')
-                    {
+                    if(_lookAheadCharacter == ';') {
                         // correct format - advance
                         this.ReadLookAheadCharacter();
                         _nextCharacterCode = entityCode;
@@ -1431,9 +1230,7 @@ namespace SRNicoNico.Views.Extentions
 
                         // as far as we are concerned, this is an entity
                         _isNextCharacterEntity = true;
-                    }
-                    else
-                    {
+                    } else {
                         // not an entity, set next character to the current lookahread character
                         // we would have eaten up some digits
                         _nextCharacter = _lookAheadCharacter;
@@ -1441,31 +1238,24 @@ namespace SRNicoNico.Views.Extentions
                         this.ReadLookAheadCharacter();
                         _isNextCharacterEntity = false;
                     }
-                }
-                else if (Char.IsLetter(_lookAheadCharacter))
-                {
+                } else if(Char.IsLetter(_lookAheadCharacter)) {
                     // entity is written as a string
                     string entity = "";
 
                     // maximum length of string entities is 10 characters
-                    for (int i = 0; i < 10 && (Char.IsLetter(_lookAheadCharacter) || Char.IsDigit(_lookAheadCharacter)); i++)
-                    {
+                    for(int i = 0; i < 10 && (Char.IsLetter(_lookAheadCharacter) || Char.IsDigit(_lookAheadCharacter)); i++) {
                         entity += _lookAheadCharacter;
                         this.ReadLookAheadCharacter();
                     }
-                    if (_lookAheadCharacter == ';')
-                    {
+                    if(_lookAheadCharacter == ';') {
                         // advance
                         this.ReadLookAheadCharacter();
 
-                        if (HtmlSchema.IsEntity(entity))
-                        {
+                        if(HtmlSchema.IsEntity(entity)) {
                             _nextCharacter = HtmlSchema.EntityCharacterValue(entity);
                             _nextCharacterCode = (int)_nextCharacter;
                             _isNextCharacterEntity = true;
-                        }
-                        else
-                        {
+                        } else {
                             // just skip the whole thing - invalid entity
                             // move on to the next character
                             _nextCharacter = _lookAheadCharacter;
@@ -1475,9 +1265,7 @@ namespace SRNicoNico.Views.Extentions
                             // not an entity
                             _isNextCharacterEntity = false;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         // skip whatever we read after the ampersand
                         // set next character and move on
                         _nextCharacter = _lookAheadCharacter;
@@ -1488,10 +1276,8 @@ namespace SRNicoNico.Views.Extentions
             }
         }
 
-        private void ReadLookAheadCharacter()
-        {
-            if (_lookAheadCharacterCode != -1)
-            {
+        private void ReadLookAheadCharacter() {
+            if(_lookAheadCharacterCode != -1) {
                 _lookAheadCharacterCode = _inputStringReader.Read();
                 _lookAheadCharacter = (char)_lookAheadCharacterCode;
             }
@@ -1502,45 +1288,34 @@ namespace SRNicoNico.Views.Extentions
         /// leaves the first non-whitespace character available in the NextCharacter property
         /// this may be the end-of-file character, it performs no checking
         /// </summary>
-        private void SkipWhiteSpace()
-        {
+        private void SkipWhiteSpace() {
             // TODO: handle character entities while processing comments, cdata, and directives
             // TODO: SUGGESTION: we could check if lookahead and previous characters are entities also
-            while (true)
-            {
-                if (_nextCharacter == '<' && (_lookAheadCharacter == '?' || _lookAheadCharacter == '!'))
-                {
+            while(true) {
+                if(_nextCharacter == '<' && (_lookAheadCharacter == '?' || _lookAheadCharacter == '!')) {
                     this.GetNextCharacter();
 
-                    if (_lookAheadCharacter == '[')
-                    {
+                    if(_lookAheadCharacter == '[') {
                         // Skip CDATA block and DTDs(?)
-                        while (!this.IsAtEndOfStream && !(_previousCharacter == ']' && _nextCharacter == ']' && _lookAheadCharacter == '>'))
-                        {
+                        while(!this.IsAtEndOfStream && !(_previousCharacter == ']' && _nextCharacter == ']' && _lookAheadCharacter == '>')) {
                             this.GetNextCharacter();
                         }
-                        if (_nextCharacter == '>')
-                        {
+                        if(_nextCharacter == '>') {
                             this.GetNextCharacter();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         // Skip processing instruction, comments
-                        while (!this.IsAtEndOfStream && _nextCharacter != '>')
-                        {
+                        while(!this.IsAtEndOfStream && _nextCharacter != '>') {
                             this.GetNextCharacter();
                         }
-                        if (_nextCharacter == '>')
-                        {
+                        if(_nextCharacter == '>') {
                             this.GetNextCharacter();
                         }
                     }
                 }
 
 
-                if (!Char.IsWhiteSpace(this.NextCharacter))
-                {
+                if(!Char.IsWhiteSpace(this.NextCharacter)) {
                     break;
                 }
 
@@ -1559,8 +1334,7 @@ namespace SRNicoNico.Views.Extentions
         /// true if the character can be the first character in a name
         /// false otherwise
         /// </returns>
-        private bool IsGoodForNameStart(char character)
-        {
+        private bool IsGoodForNameStart(char character) {
             return character == '_' || Char.IsLetter(character);
         }
 
@@ -1575,8 +1349,7 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// true if the character can be a valid part of a name
         /// </returns>
-        private bool IsGoodForName(char character)
-        {
+        private bool IsGoodForName(char character) {
             // we are not concerned with escaped characters in names
             // we assume that character entities are allowed as part of a name
             return
@@ -1600,8 +1373,7 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// true if the character is a combining character, false otherwise
         /// </returns>
-        private bool IsCombiningCharacter(char character)
-        {
+        private bool IsCombiningCharacter(char character) {
             // TODO: put actual code with checks against all combining characters here
             return false;
         }
@@ -1617,8 +1389,7 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// true if the character is an extender, false otherwise
         /// </returns>
-        private bool IsExtender(char character)
-        {
+        private bool IsExtender(char character) {
             // TODO: put actual code with checks against all extenders here
             return false;
         }
@@ -1626,8 +1397,7 @@ namespace SRNicoNico.Views.Extentions
         /// <summary>
         /// skips dynamic content starting with '<![' and ending with ']>'
         /// </summary>
-        private void ReadDynamicContent()
-        {
+        private void ReadDynamicContent() {
             // verify that we are at dynamic content, which may include CDATA
             Debug.Assert(_previousCharacter == '<' && _nextCharacter == '!' && _lookAheadCharacter == '[');
 
@@ -1645,14 +1415,12 @@ namespace SRNicoNico.Views.Extentions
             // this means that CDATA and anything else expressed in their own set of [] within the <! [...]>
             // directive cannot contain a ]> sequence. However it is doubtful that cdata could contain such
             // sequence anyway, it probably stops at the first ]
-            while (!(_nextCharacter == ']' && _lookAheadCharacter == '>') && !this.IsAtEndOfStream)
-            {
+            while(!(_nextCharacter == ']' && _lookAheadCharacter == '>') && !this.IsAtEndOfStream) {
                 // advance
                 this.GetNextCharacter();
             }
 
-            if (!this.IsAtEndOfStream)
-            {
+            if(!this.IsAtEndOfStream) {
                 // advance, first to the last >
                 this.GetNextCharacter();
 
@@ -1667,8 +1435,7 @@ namespace SRNicoNico.Views.Extentions
         /// the "<!-"  sequence and ending in "!>" or "->", because in practice many html pages do not
         /// use the full comment specifying conventions
         /// </summary>
-        private void ReadComment()
-        {
+        private void ReadComment() {
             // verify that we are at a comment
             Debug.Assert(_previousCharacter == '<' && _nextCharacter == '!' && _lookAheadCharacter == '-');
 
@@ -1681,31 +1448,24 @@ namespace SRNicoNico.Views.Extentions
             this.GetNextCharacter(); // get second '-'
             this.GetNextCharacter(); // get first character of comment content
 
-            while (true)
-            {
+            while(true) {
                 // Read text until end of comment
                 // Note that in many actual html pages comments end with "!>" (while xml standard is "-->")
-                while (!this.IsAtEndOfStream && !(_nextCharacter == '-' && _lookAheadCharacter == '-' || _nextCharacter == '!' && _lookAheadCharacter == '>'))
-                {
+                while(!this.IsAtEndOfStream && !(_nextCharacter == '-' && _lookAheadCharacter == '-' || _nextCharacter == '!' && _lookAheadCharacter == '>')) {
                     _nextToken.Append(this.NextCharacter);
                     this.GetNextCharacter();
                 }
 
                 // Finish comment reading
                 this.GetNextCharacter();
-                if (_previousCharacter == '-' && _nextCharacter == '-' && _lookAheadCharacter == '>')
-                {
+                if(_previousCharacter == '-' && _nextCharacter == '-' && _lookAheadCharacter == '>') {
                     // Standard comment end. Eat it and exit the loop
                     this.GetNextCharacter(); // get '>'
                     break;
-                }
-                else if (_previousCharacter == '!' && _nextCharacter == '>')
-                {
+                } else if(_previousCharacter == '!' && _nextCharacter == '>') {
                     // Nonstandard but possible comment end - '!>'. Exit the loop
                     break;
-                }
-                else
-                {
+                } else {
                     // Not an end. Save character and continue continue reading
                     _nextToken.Append(_previousCharacter);
                     continue;
@@ -1713,8 +1473,7 @@ namespace SRNicoNico.Views.Extentions
             }
 
             // Read end of comment combination
-            if (_nextCharacter == '>')
-            {
+            if(_nextCharacter == '>') {
                 this.GetNextCharacter();
             }
         }
@@ -1724,8 +1483,7 @@ namespace SRNicoNico.Views.Extentions
         /// ignores content of such directives until the next ">" character
         /// applies to directives such as DOCTYPE, etc that we do not presently support
         /// </summary>
-        private void ReadUnknownDirective()
-        {
+        private void ReadUnknownDirective() {
             // verify that we are at an unknown directive
             Debug.Assert(_previousCharacter == '<' && _nextCharacter == '!' && !(_lookAheadCharacter == '-' || _lookAheadCharacter == '['));
 
@@ -1737,13 +1495,11 @@ namespace SRNicoNico.Views.Extentions
             this.GetNextCharacter();
 
             // skip to the first tag end we find
-            while (!(_nextCharacter == '>' && !IsNextCharacterEntity) && !this.IsAtEndOfStream)
-            {
+            while(!(_nextCharacter == '>' && !IsNextCharacterEntity) && !this.IsAtEndOfStream) {
                 this.GetNextCharacter();
             }
 
-            if (!this.IsAtEndOfStream)
-            {
+            if(!this.IsAtEndOfStream) {
                 // advance past the tag end
                 this.GetNextCharacter();
             }
@@ -1754,8 +1510,7 @@ namespace SRNicoNico.Views.Extentions
         /// NOTE: 10/14/2004: IE also ends processing directives with a />, so this function is
         /// being modified to recognize that condition as well
         /// </summary>
-        private void SkipProcessingDirective()
-        {
+        private void SkipProcessingDirective() {
             // verify that we are at a processing directive
             Debug.Assert(_nextCharacter == '<' && _lookAheadCharacter == '?');
 
@@ -1763,16 +1518,14 @@ namespace SRNicoNico.Views.Extentions
             this.GetNextCharacter();
             this.GetNextCharacter();
 
-            while (!((_nextCharacter == '?' || _nextCharacter == '/') && _lookAheadCharacter == '>') && !this.IsAtEndOfStream)
-            {
+            while(!((_nextCharacter == '?' || _nextCharacter == '/') && _lookAheadCharacter == '>') && !this.IsAtEndOfStream) {
                 // advance
                 // we don't need to check for entities here because '?' is not an entity
                 // and even though > is an entity there is no entity processing when reading lookahead character
                 this.GetNextCharacter();
             }
 
-            if (!this.IsAtEndOfStream)
-            {
+            if(!this.IsAtEndOfStream) {
                 // advance, first to the last >
                 this.GetNextCharacter();
 
@@ -1791,52 +1544,40 @@ namespace SRNicoNico.Views.Extentions
 
         #region Private Properties
 
-        private char NextCharacter
-        {
-            get
-            {
+        private char NextCharacter {
+            get {
                 return _nextCharacter;
             }
         }
 
-        private bool IsAtEndOfStream
-        {
-            get
-            {
+        private bool IsAtEndOfStream {
+            get {
                 return _nextCharacterCode == -1;
             }
         }
 
-        private bool IsAtTagStart
-        {
-            get
-            {
+        private bool IsAtTagStart {
+            get {
                 return _nextCharacter == '<' && (_lookAheadCharacter == '/' || IsGoodForNameStart(_lookAheadCharacter)) && !_isNextCharacterEntity;
             }
         }
 
-        private bool IsAtTagEnd
-        {
+        private bool IsAtTagEnd {
             // check if at end of empty tag or regular tag
-            get
-            {
+            get {
                 return (_nextCharacter == '>' || (_nextCharacter == '/' && _lookAheadCharacter == '>')) && !_isNextCharacterEntity;
             }
         }
 
-        private bool IsAtDirectiveStart
-        {
-            get
-            {
+        private bool IsAtDirectiveStart {
+            get {
                 return (_nextCharacter == '<' && _lookAheadCharacter == '!' && !this.IsNextCharacterEntity);
             }
         }
 
-        private bool IsNextCharacterEntity
-        {
+        private bool IsNextCharacterEntity {
             // check if next character is an entity
-            get
-            {
+            get {
                 return _isNextCharacterEntity;
             }
         }
@@ -1875,8 +1616,7 @@ namespace SRNicoNico.Views.Extentions
     /// maintains static information about HTML structure
     /// can be used by HtmlParser to check conditions under which an element starts or ends, etc.
     /// </summary>
-    internal class HtmlSchema
-    {
+    internal class HtmlSchema {
         // ---------------------------------------------------------------------
         //
         // Constructors
@@ -1890,8 +1630,7 @@ namespace SRNicoNico.Views.Extentions
         /// that hold the elements in various sub-components of the schema
         /// e.g _htmlEmptyElements, etc.
         /// </summary>
-        static HtmlSchema()
-        {
+        static HtmlSchema() {
             // initializes the list of all html elements
             InitializeInlineElements();
 
@@ -1928,8 +1667,7 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="xmlElementName">
         /// string representing name to test
         /// </param>
-        internal static bool IsEmptyElement(string xmlElementName)
-        {
+        internal static bool IsEmptyElement(string xmlElementName) {
             // convert to lowercase before we check
             // because element names are not case sensitive
             return _htmlEmptyElements.Contains(xmlElementName.ToLower());
@@ -1942,8 +1680,7 @@ namespace SRNicoNico.Views.Extentions
         /// </summary>
         /// <param name="xmlElementName"></param>
         /// <returns></returns>
-        internal static bool IsBlockElement(string xmlElementName)
-        {
+        internal static bool IsBlockElement(string xmlElementName) {
             return _htmlBlockElements.Contains(xmlElementName);
         }
 
@@ -1952,8 +1689,7 @@ namespace SRNicoNico.Views.Extentions
         /// </summary>
         /// <param name="xmlElementName"></param>
         /// <returns></returns>
-        internal static bool IsInlineElement(string xmlElementName)
-        {
+        internal static bool IsInlineElement(string xmlElementName) {
             return _htmlInlineElements.Contains(xmlElementName);
         }
 
@@ -1965,8 +1701,7 @@ namespace SRNicoNico.Views.Extentions
         /// elements during html parsing, and adding the
         /// to a tree produced by html parser.
         /// </summary>
-        internal static bool IsKnownOpenableElement(string xmlElementName)
-        {
+        internal static bool IsKnownOpenableElement(string xmlElementName) {
             return _htmlOtherOpenableElements.Contains(xmlElementName);
         }
 
@@ -1977,8 +1712,7 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="xmlElementName">
         /// string representing name to test
         /// </param>
-        internal static bool ClosesOnParentElementEnd(string xmlElementName)
-        {
+        internal static bool ClosesOnParentElementEnd(string xmlElementName) {
             // convert to lowercase when testing
             return _htmlElementsClosingOnParentElementEnd.Contains(xmlElementName.ToLower());
         }
@@ -1991,11 +1725,9 @@ namespace SRNicoNico.Views.Extentions
         /// </param>
         /// <param name="elementName"></param>
         /// string representing name of the next element that will start
-        internal static bool ClosesOnNextElementStart(string currentElementName, string nextElementName)
-        {
+        internal static bool ClosesOnNextElementStart(string currentElementName, string nextElementName) {
             Debug.Assert(currentElementName == currentElementName.ToLower());
-            switch (currentElementName)
-            {
+            switch(currentElementName) {
                 case "colgroup":
                     return _htmlElementsClosingColgroup.Contains(nextElementName) && HtmlSchema.IsBlockElement(nextElementName);
                 case "dd":
@@ -2028,15 +1760,11 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="entityName">
         /// string to be tested for Html entity name
         /// </param>
-        internal static bool IsEntity(string entityName)
-        {
+        internal static bool IsEntity(string entityName) {
             // we do not convert entity strings to lowercase because these names are case-sensitive
-            if (_htmlCharacterEntities.Contains(entityName))
-            {
+            if(_htmlCharacterEntities.Contains(entityName)) {
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
@@ -2048,14 +1776,10 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="entityName">
         /// string representing entity name whose character value is desired
         /// </param>
-        internal static char EntityCharacterValue(string entityName)
-        {
-            if (_htmlCharacterEntities.Contains(entityName))
-            {
+        internal static char EntityCharacterValue(string entityName) {
+            if(_htmlCharacterEntities.Contains(entityName)) {
                 return (char)_htmlCharacterEntities[entityName];
-            }
-            else
-            {
+            } else {
                 return (char)0;
             }
         }
@@ -2083,8 +1807,7 @@ namespace SRNicoNico.Views.Extentions
 
         #region Private Methods
 
-        private static void InitializeInlineElements()
-        {
+        private static void InitializeInlineElements() {
             _htmlInlineElements = new ArrayList();
             _htmlInlineElements.Add("a");
             _htmlInlineElements.Add("abbr");
@@ -2117,8 +1840,7 @@ namespace SRNicoNico.Views.Extentions
             _htmlInlineElements.Add("var"); // indicates an instance of a program variable
         }
 
-        private static void InitializeBlockElements()
-        {
+        private static void InitializeBlockElements() {
             _htmlBlockElements = new ArrayList();
 
             _htmlBlockElements.Add("blockquote");
@@ -2160,8 +1882,7 @@ namespace SRNicoNico.Views.Extentions
         /// initializes _htmlEmptyElements with empty elements in HTML 4 spec at
         /// http://www.w3.org/TR/REC-html40/index/elements.html
         /// </summary>
-        private static void InitializeEmptyElements()
-        {
+        private static void InitializeEmptyElements() {
             // Build a list of empty (no-scope) elements
             // (element not requiring closing tags, and not accepting any content)
             _htmlEmptyElements = new ArrayList();
@@ -2180,8 +1901,7 @@ namespace SRNicoNico.Views.Extentions
             _htmlEmptyElements.Add("param");
         }
 
-        private static void InitializeOtherOpenableElements()
-        {
+        private static void InitializeOtherOpenableElements() {
             // It is a list of known html elements which we
             // want to allow to produce bt HTML parser,
             // but don'tt want to act as inline, block or no-scope.
@@ -2215,8 +1935,7 @@ namespace SRNicoNico.Views.Extentions
         /// we assume that for any element for which closing tags are optional, the element closes when it's outer element
         /// (in which it is nested) does
         /// </summary>
-        private static void InitializeElementsClosingOnParentElementEnd()
-        {
+        private static void InitializeElementsClosingOnParentElementEnd() {
             _htmlElementsClosingOnParentElementEnd = new ArrayList();
             _htmlElementsClosingOnParentElementEnd.Add("body");
             _htmlElementsClosingOnParentElementEnd.Add("colgroup");
@@ -2234,8 +1953,7 @@ namespace SRNicoNico.Views.Extentions
             _htmlElementsClosingOnParentElementEnd.Add("tr");
         }
 
-        private static void InitializeElementsClosingOnNewElementStart()
-        {
+        private static void InitializeElementsClosingOnNewElementStart() {
             _htmlElementsClosingColgroup = new ArrayList();
             _htmlElementsClosingColgroup.Add("colgroup");
             _htmlElementsClosingColgroup.Add("tr");
@@ -2311,8 +2029,7 @@ namespace SRNicoNico.Views.Extentions
         /// <summary>
         /// initializes _htmlCharacterEntities hashtable with the character corresponding to entity names
         /// </summary>
-        private static void InitializeHtmlCharacterEntities()
-        {
+        private static void InitializeHtmlCharacterEntities() {
             _htmlCharacterEntities = new Hashtable();
             _htmlCharacterEntities["Aacute"] = (char)193;
             _htmlCharacterEntities["aacute"] = (char)225;
@@ -2630,8 +2347,7 @@ namespace SRNicoNico.Views.Extentions
     /// HtmlParser class accepts a string of possibly badly formed Html, parses it and returns a string
     /// of well-formed Html that is as close to the original string in content as possible
     /// </summary>
-    internal class HtmlParser
-    {
+    internal class HtmlParser {
         // ---------------------------------------------------------------------
         //
         // Constructors
@@ -2646,8 +2362,7 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="inputString">
         /// string to parsed into well-formed Html
         /// </param>
-        private HtmlParser(string inputString)
-        {
+        private HtmlParser(string inputString) {
             // Create an output xml document
             _document = new XmlDocument();
 
@@ -2682,8 +2397,7 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// XmlElement rep
         /// </returns>
-        internal static XmlElement ParseHtml(string htmlString)
-        {
+        internal static XmlElement ParseHtml(string htmlString) {
             HtmlParser htmlParser = new HtmlParser(htmlString);
 
             XmlElement htmlRootElement = htmlParser.ParseHtmlContent();
@@ -2718,31 +2432,26 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// String containing only the Html data part of htmlDataString, without header
         /// </returns>
-        internal static string ExtractHtmlFromClipboardData(string htmlDataString)
-        {
+        internal static string ExtractHtmlFromClipboardData(string htmlDataString) {
             int startHtmlIndex = htmlDataString.IndexOf("StartHTML:");
-            if (startHtmlIndex < 0)
-            {
+            if(startHtmlIndex < 0) {
                 return "ERROR: Urecognized html header";
             }
             // TODO: We assume that indices represented by strictly 10 zeros ("0123456789".Length),
             // which could be wrong assumption. We need to implement more flrxible parsing here
             startHtmlIndex = Int32.Parse(htmlDataString.Substring(startHtmlIndex + "StartHTML:".Length, "0123456789".Length));
-            if (startHtmlIndex < 0 || startHtmlIndex > htmlDataString.Length)
-            {
+            if(startHtmlIndex < 0 || startHtmlIndex > htmlDataString.Length) {
                 return "ERROR: Urecognized html header";
             }
 
             int endHtmlIndex = htmlDataString.IndexOf("EndHTML:");
-            if (endHtmlIndex < 0)
-            {
+            if(endHtmlIndex < 0) {
                 return "ERROR: Urecognized html header";
             }
             // TODO: We assume that indices represented by strictly 10 zeros ("0123456789".Length),
             // which could be wrong assumption. We need to implement more flrxible parsing here
             endHtmlIndex = Int32.Parse(htmlDataString.Substring(endHtmlIndex + "EndHTML:".Length, "0123456789".Length));
-            if (endHtmlIndex > htmlDataString.Length)
-            {
+            if(endHtmlIndex > htmlDataString.Length) {
                 endHtmlIndex = htmlDataString.Length;
             }
 
@@ -2758,8 +2467,7 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// String wrapping htmlString with appropriate Html header
         /// </returns>
-        internal static string AddHtmlClipboardHeader(string htmlString)
-        {
+        internal static string AddHtmlClipboardHeader(string htmlString) {
             StringBuilder stringBuilder = new StringBuilder();
 
             // each of 6 numbers is represented by "{0:D10}" in the format string
@@ -2767,21 +2475,15 @@ namespace SRNicoNico.Views.Extentions
             int startHTML = HtmlHeader.Length + 6 * ("0123456789".Length - "{0:D10}".Length);
             int endHTML = startHTML + htmlString.Length;
             int startFragment = htmlString.IndexOf(HtmlStartFragmentComment, 0);
-            if (startFragment >= 0)
-            {
+            if(startFragment >= 0) {
                 startFragment = startHTML + startFragment + HtmlStartFragmentComment.Length;
-            }
-            else
-            {
+            } else {
                 startFragment = startHTML;
             }
             int endFragment = htmlString.IndexOf(HtmlEndFragmentComment, 0);
-            if (endFragment >= 0)
-            {
+            if(endFragment >= 0) {
                 endFragment = startHTML + endFragment;
-            }
-            else
-            {
+            } else {
                 endFragment = endHTML;
             }
 
@@ -2804,10 +2506,8 @@ namespace SRNicoNico.Views.Extentions
 
         #region Private Methods
 
-        private void InvariantAssert(bool condition, string message)
-        {
-            if (!condition)
-            {
+        private void InvariantAssert(bool condition, string message) {
+            if(!condition) {
                 throw new Exception("Assertion error: " + message);
             }
         }
@@ -2818,20 +2518,16 @@ namespace SRNicoNico.Views.Extentions
         /// Returns XmlElement representing the top-level
         /// html element
         /// </summary>
-        private XmlElement ParseHtmlContent()
-        {
+        private XmlElement ParseHtmlContent() {
             // Create artificial root elelemt to be able to group multiple top-level elements
             // We create "html" element which may be a duplicate of real HTML element, which is ok, as HtmlConverter will swallow it painlessly..
             XmlElement htmlRootElement = _document.CreateElement("html", XhtmlNamespace);
             OpenStructuringElement(htmlRootElement);
 
-            while (_htmlLexicalAnalyzer.NextTokenType != HtmlTokenType.EOF)
-            {
-                if (_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.OpeningTagStart)
-                {
+            while(_htmlLexicalAnalyzer.NextTokenType != HtmlTokenType.EOF) {
+                if(_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.OpeningTagStart) {
                     _htmlLexicalAnalyzer.GetNextTagToken();
-                    if (_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.Name)
-                    {
+                    if(_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.Name) {
                         string htmlElementName = _htmlLexicalAnalyzer.NextToken.ToLower();
                         _htmlLexicalAnalyzer.GetNextTagToken();
 
@@ -2841,45 +2537,33 @@ namespace SRNicoNico.Views.Extentions
                         // Parse element attributes
                         ParseAttributes(htmlElement);
 
-                        if (_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.EmptyTagEnd || HtmlSchema.IsEmptyElement(htmlElementName))
-                        {
+                        if(_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.EmptyTagEnd || HtmlSchema.IsEmptyElement(htmlElementName)) {
                             // It is an element without content (because of explicit slash or based on implicit knowledge aboout html)
                             AddEmptyElement(htmlElement);
-                        }
-                        else if (HtmlSchema.IsInlineElement(htmlElementName))
-                        {
+                        } else if(HtmlSchema.IsInlineElement(htmlElementName)) {
                             // Elements known as formatting are pushed to some special
                             // pending stack, which allows them to be transferred
                             // over block tags - by doing this we convert
                             // overlapping tags into normal heirarchical element structure.
                             OpenInlineElement(htmlElement);
-                        }
-                        else if (HtmlSchema.IsBlockElement(htmlElementName) || HtmlSchema.IsKnownOpenableElement(htmlElementName))
-                        {
+                        } else if(HtmlSchema.IsBlockElement(htmlElementName) || HtmlSchema.IsKnownOpenableElement(htmlElementName)) {
                             // This includes no-scope elements
                             OpenStructuringElement(htmlElement);
-                        }
-                        else
-                        {
+                        } else {
                             // Do nothing. Skip the whole opening tag.
                             // Ignoring all unknown elements on their start tags.
                             // Thus we will ignore them on closinng tag as well.
                             // Anyway we don't know what to do withthem on conversion to Xaml.
                         }
-                    }
-                    else
-                    {
+                    } else {
                         // Note that the token following opening angle bracket must be a name - lexical analyzer must guarantee that.
                         // Otherwise - we skip the angle bracket and continue parsing the content as if it is just text.
                         //  Add the following asserion here, right? or output "<" as a text run instead?:
                         // InvariantAssert(false, "Angle bracket without a following name is not expected");
                     }
-                }
-                else if (_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.ClosingTagStart)
-                {
+                } else if(_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.ClosingTagStart) {
                     _htmlLexicalAnalyzer.GetNextTagToken();
-                    if (_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.Name)
-                    {
+                    if(_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.Name) {
                         string htmlElementName = _htmlLexicalAnalyzer.NextToken.ToLower();
 
                         // Skip the name token. Assume that the following token is end of tag,
@@ -2889,13 +2573,9 @@ namespace SRNicoNico.Views.Extentions
 
                         CloseElement(htmlElementName);
                     }
-                }
-                else if (_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.Text)
-                {
+                } else if(_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.Text) {
                     AddTextContent(_htmlLexicalAnalyzer.NextToken);
-                }
-                else if (_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.Comment)
-                {
+                } else if(_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.Comment) {
                     AddComment(_htmlLexicalAnalyzer.NextToken);
                 }
 
@@ -2903,51 +2583,43 @@ namespace SRNicoNico.Views.Extentions
             }
 
             // Get rid of the artificial root element
-            if (htmlRootElement.FirstChild is XmlElement &&
+            if(htmlRootElement.FirstChild is XmlElement &&
                 htmlRootElement.FirstChild == htmlRootElement.LastChild &&
-                htmlRootElement.FirstChild.LocalName.ToLower() == "html")
-            {
+                htmlRootElement.FirstChild.LocalName.ToLower() == "html") {
                 htmlRootElement = (XmlElement)htmlRootElement.FirstChild;
             }
 
             return htmlRootElement;
         }
 
-        private XmlElement CreateElementCopy(XmlElement htmlElement)
-        {
+        private XmlElement CreateElementCopy(XmlElement htmlElement) {
             XmlElement htmlElementCopy = _document.CreateElement(htmlElement.LocalName, XhtmlNamespace);
-            for (int i = 0; i < htmlElement.Attributes.Count; i++)
-            {
+            for(int i = 0; i < htmlElement.Attributes.Count; i++) {
                 XmlAttribute attribute = htmlElement.Attributes[i];
                 htmlElementCopy.SetAttribute(attribute.Name, attribute.Value);
             }
             return htmlElementCopy;
         }
 
-        private void AddEmptyElement(XmlElement htmlEmptyElement)
-        {
+        private void AddEmptyElement(XmlElement htmlEmptyElement) {
             InvariantAssert(_openedElements.Count > 0, "AddEmptyElement: Stack of opened elements cannot be empty, as we have at least one artificial root element");
             XmlElement htmlParent = _openedElements.Peek();
             htmlParent.AppendChild(htmlEmptyElement);
         }
 
-        private void OpenInlineElement(XmlElement htmlInlineElement)
-        {
+        private void OpenInlineElement(XmlElement htmlInlineElement) {
             _pendingInlineElements.Push(htmlInlineElement);
         }
 
         // Opens structurig element such as Div or Table etc.
-        private void OpenStructuringElement(XmlElement htmlElement)
-        {
+        private void OpenStructuringElement(XmlElement htmlElement) {
             // Close all pending inline elements
             // All block elements are considered as delimiters for inline elements
             // which forces all inline elements to be closed and re-opened in the following
             // structural element (if any).
             // By doing that we guarantee that all inline elements appear only within most nested blocks
-            if (HtmlSchema.IsBlockElement(htmlElement.LocalName))
-            {
-                while (_openedElements.Count > 0 && HtmlSchema.IsInlineElement(_openedElements.Peek().LocalName))
-                {
+            if(HtmlSchema.IsBlockElement(htmlElement.LocalName)) {
+                while(_openedElements.Count > 0 && HtmlSchema.IsInlineElement(_openedElements.Peek().LocalName)) {
                     XmlElement htmlInlineElement = _openedElements.Pop();
                     InvariantAssert(_openedElements.Count > 0, "OpenStructuringElement: stack of opened elements cannot become empty here");
 
@@ -2956,19 +2628,16 @@ namespace SRNicoNico.Views.Extentions
             }
 
             // Add this block element to its parent
-            if (_openedElements.Count > 0)
-            {
+            if(_openedElements.Count > 0) {
                 XmlElement htmlParent = _openedElements.Peek();
 
                 // Check some known block elements for auto-closing (LI and P)
-                if (HtmlSchema.ClosesOnNextElementStart(htmlParent.LocalName, htmlElement.LocalName))
-                {
+                if(HtmlSchema.ClosesOnNextElementStart(htmlParent.LocalName, htmlElement.LocalName)) {
                     _openedElements.Pop();
                     htmlParent = _openedElements.Count > 0 ? _openedElements.Peek() : null;
                 }
 
-                if (htmlParent != null)
-                {
+                if(htmlParent != null) {
                     // NOTE:
                     // Actually we never expect null - it would mean two top-level P or LI (without a parent).
                     // In such weird case we will loose all paragraphs except the first one...
@@ -2980,26 +2649,21 @@ namespace SRNicoNico.Views.Extentions
             _openedElements.Push(htmlElement);
         }
 
-        private bool IsElementOpened(string htmlElementName)
-        {
-            foreach (XmlElement openedElement in _openedElements)
-            {
-                if (openedElement.LocalName == htmlElementName)
-                {
+        private bool IsElementOpened(string htmlElementName) {
+            foreach(XmlElement openedElement in _openedElements) {
+                if(openedElement.LocalName == htmlElementName) {
                     return true;
                 }
             }
             return false;
         }
 
-        private void CloseElement(string htmlElementName)
-        {
+        private void CloseElement(string htmlElementName) {
             // Check if the element is opened and already added to the parent
             InvariantAssert(_openedElements.Count > 0, "CloseElement: Stack of opened elements cannot be empty, as we have at least one artificial root element");
 
             // Check if the element is opened and still waiting to be added to the parent
-            if (_pendingInlineElements.Count > 0 && _pendingInlineElements.Peek().LocalName == htmlElementName)
-            {
+            if(_pendingInlineElements.Count > 0 && _pendingInlineElements.Peek().LocalName == htmlElementName) {
                 // Closing an empty inline element.
                 // Note that HtmlConverter will skip empty inlines, but for completeness we keep them here on parser level.
                 XmlElement htmlInlineElement = _pendingInlineElements.Pop();
@@ -3007,21 +2671,17 @@ namespace SRNicoNico.Views.Extentions
                 XmlElement htmlParent = _openedElements.Peek();
                 htmlParent.AppendChild(htmlInlineElement);
                 return;
-            }
-            else if (IsElementOpened(htmlElementName))
-            {
-                while (_openedElements.Count > 1) // we never pop the last element - the artificial root
+            } else if(IsElementOpened(htmlElementName)) {
+                while(_openedElements.Count > 1) // we never pop the last element - the artificial root
                 {
                     // Close all unbalanced elements.
                     XmlElement htmlOpenedElement = _openedElements.Pop();
 
-                    if (htmlOpenedElement.LocalName == htmlElementName)
-                    {
+                    if(htmlOpenedElement.LocalName == htmlElementName) {
                         return;
                     }
 
-                    if (HtmlSchema.IsInlineElement(htmlOpenedElement.LocalName))
-                    {
+                    if(HtmlSchema.IsInlineElement(htmlOpenedElement.LocalName)) {
                         // Unbalances Inlines will be transfered to the next element content
                         _pendingInlineElements.Push(CreateElementCopy(htmlOpenedElement));
                     }
@@ -3032,8 +2692,7 @@ namespace SRNicoNico.Views.Extentions
             return;
         }
 
-        private void AddTextContent(string textContent)
-        {
+        private void AddTextContent(string textContent) {
             OpenPendingInlineElements();
 
             InvariantAssert(_openedElements.Count > 0, "AddTextContent: Stack of opened elements cannot be empty, as we have at least one artificial root element");
@@ -3043,8 +2702,7 @@ namespace SRNicoNico.Views.Extentions
             htmlParent.AppendChild(textNode);
         }
 
-        private void AddComment(string comment)
-        {
+        private void AddComment(string comment) {
             OpenPendingInlineElements();
 
             InvariantAssert(_openedElements.Count > 0, "AddComment: Stack of opened elements cannot be empty, as we have at least one artificial root element");
@@ -3056,10 +2714,8 @@ namespace SRNicoNico.Views.Extentions
 
         // Moves all inline elements pending for opening to actual document
         // and adds them to current open stack.
-        private void OpenPendingInlineElements()
-        {
-            if (_pendingInlineElements.Count > 0)
-            {
+        private void OpenPendingInlineElements() {
+            if(_pendingInlineElements.Count > 0) {
                 XmlElement htmlInlineElement = _pendingInlineElements.Pop();
 
                 OpenPendingInlineElements();
@@ -3072,15 +2728,12 @@ namespace SRNicoNico.Views.Extentions
             }
         }
 
-        private void ParseAttributes(XmlElement xmlElement)
-        {
-            while (_htmlLexicalAnalyzer.NextTokenType != HtmlTokenType.EOF && //
+        private void ParseAttributes(XmlElement xmlElement) {
+            while(_htmlLexicalAnalyzer.NextTokenType != HtmlTokenType.EOF && //
                 _htmlLexicalAnalyzer.NextTokenType != HtmlTokenType.TagEnd && //
-                _htmlLexicalAnalyzer.NextTokenType != HtmlTokenType.EmptyTagEnd)
-            {
+                _htmlLexicalAnalyzer.NextTokenType != HtmlTokenType.EmptyTagEnd) {
                 // read next attribute (name=value)
-                if (_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.Name)
-                {
+                if(_htmlLexicalAnalyzer.NextTokenType == HtmlTokenType.Name) {
                     string attributeName = _htmlLexicalAnalyzer.NextToken;
                     _htmlLexicalAnalyzer.GetNextEqualSignToken();
 
@@ -3122,8 +2775,7 @@ namespace SRNicoNico.Views.Extentions
     /// HtmlToXamlConverter is a static class that takes an HTML string
     /// and converts it into XAML
     /// </summary>
-    public static class HtmlToXamlConverter
-    {
+    public static class HtmlToXamlConverter {
         // ---------------------------------------------------------------------
         //
         // Internal Methods
@@ -3146,13 +2798,12 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// Well-formed xml representing XAML equivalent for the input html string.
         /// </returns>
-        public static string ConvertHtmlToXaml(string htmlString, bool asFlowDocument)
-        {
+        public static string ConvertHtmlToXaml(string htmlString, bool asFlowDocument) {
             // Create well-formed Xml from Html string
             XmlElement htmlElement = HtmlParser.ParseHtml(htmlString);
 
             // Decide what name to use as a root
-            string rootElementName = asFlowDocument ? HtmlToXamlConverter.Xaml_FlowDocument : HtmlToXamlConverter.Xaml_Section;
+            string rootElementName = asFlowDocument ? Xaml_FlowDocument : Xaml_Section;
 
             // Create an XmlDocument for generated xaml
             XmlDocument xamlTree = new XmlDocument();
@@ -3171,8 +2822,7 @@ namespace SRNicoNico.Views.Extentions
             AddBlock(xamlFlowDocumentElement, htmlElement, new Hashtable(), stylesheet, sourceContext);
 
             // In case if the selected fragment is inline, extract it into a separate Span wrapper
-            if (!asFlowDocument)
-            {
+            if(!asFlowDocument) {
                 xamlFlowDocumentElement = ExtractInlineFragment(xamlFlowDocumentElement);
             }
 
@@ -3193,14 +2843,11 @@ namespace SRNicoNico.Views.Extentions
         /// String representing the attribute name to be searched for
         /// </param>
         /// <returns></returns>
-        public static string GetAttribute(XmlElement element, string attributeName)
-        {
+        public static string GetAttribute(XmlElement element, string attributeName) {
             attributeName = attributeName.ToLower();
 
-            for (int i = 0; i < element.Attributes.Count; i++)
-            {
-                if (element.Attributes[i].Name.ToLower() == attributeName)
-                {
+            for(int i = 0; i < element.Attributes.Count; i++) {
+                if(element.Attributes[i].Name.ToLower() == attributeName) {
                     return element.Attributes[i].Value;
                 }
             }
@@ -3214,10 +2861,8 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="value">
         /// String representing value enclosed in quotation marks
         /// </param>
-        internal static string UnQuote(string value)
-        {
-            if (value.StartsWith("\"") && value.EndsWith("\"") || value.StartsWith("'") && value.EndsWith("'"))
-            {
+        internal static string UnQuote(string value) {
+            if(value.StartsWith("\"") && value.EndsWith("\"") || value.StartsWith("'") && value.EndsWith("'")) {
                 value = value.Substring(1, value.Length - 2).Trim();
             }
             return value;
@@ -3261,26 +2906,19 @@ namespace SRNicoNico.Views.Extentions
         /// it could one of its following siblings.
         /// The caller must use this node to get to next sibling from it.
         /// </returns>
-        private static XmlNode AddBlock(XmlElement xamlParentElement, XmlNode htmlNode, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
-            if (htmlNode is XmlComment)
-            {
+        private static XmlNode AddBlock(XmlElement xamlParentElement, XmlNode htmlNode, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
+            if(htmlNode is XmlComment) {
                 DefineInlineFragmentParent((XmlComment)htmlNode, /*xamlParentElement:*/null);
-            }
-            else if (htmlNode is XmlText)
-            {
+            } else if(htmlNode is XmlText) {
                 htmlNode = AddImplicitParagraph(xamlParentElement, htmlNode, inheritedProperties, stylesheet, sourceContext);
-            }
-            else if (htmlNode is XmlElement)
-            {
+            } else if(htmlNode is XmlElement) {
                 // Identify element name
                 XmlElement htmlElement = (XmlElement)htmlNode;
 
                 string htmlElementName = htmlElement.LocalName; // Keep the name case-sensitive to check xml names
                 string htmlElementNamespace = htmlElement.NamespaceURI;
 
-                if (htmlElementNamespace != HtmlParser.XhtmlNamespace)
-                {
+                if(htmlElementNamespace != HtmlParser.XhtmlNamespace) {
                     // Non-html element. skip it
                     // Isn't it too agressive? What if this is just an error in html tag name?
                     // TODO: Consider skipping just a wparrer in recursing into the element tree,
@@ -3295,8 +2933,7 @@ namespace SRNicoNico.Views.Extentions
                 htmlElementName = htmlElementName.ToLower();
 
                 // Switch to an appropriate kind of processing depending on html element name
-                switch (htmlElementName)
-                {
+                switch(htmlElementName) {
                     // Sections:
                     case "html":
                     case "body":
@@ -3391,13 +3028,11 @@ namespace SRNicoNico.Views.Extentions
         //
         // .............................................................
 
-        private static void AddBreak(XmlElement xamlParentElement, string htmlElementName)
-        {
+        private static void AddBreak(XmlElement xamlParentElement, string htmlElementName) {
             // Create new xaml element corresponding to this html element
             XmlElement xamlLineBreak = xamlParentElement.OwnerDocument.CreateElement(/*prefix:*/null, /*localName:*/HtmlToXamlConverter.Xaml_LineBreak, _xamlNamespace);
             xamlParentElement.AppendChild(xamlLineBreak);
-            if (htmlElementName == "hr")
-            {
+            if(htmlElementName == "hr") {
                 XmlText xamlHorizontalLine = xamlParentElement.OwnerDocument.CreateTextNode("----------------------");
                 xamlParentElement.AppendChild(xamlHorizontalLine);
                 xamlLineBreak = xamlParentElement.OwnerDocument.CreateElement(/*prefix:*/null, /*localName:*/HtmlToXamlConverter.Xaml_LineBreak, _xamlNamespace);
@@ -3427,31 +3062,24 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="sourceContext"></param>
         /// true indicates that a content added by this call contains at least one block element
         /// </param>
-        private static void AddSection(XmlElement xamlParentElement, XmlElement htmlElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static void AddSection(XmlElement xamlParentElement, XmlElement htmlElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             // Analyze the content of htmlElement to decide what xaml element to choose - Section or Paragraph.
             // If this Div has at least one block child then we need to use Section, otherwise use Paragraph
             bool htmlElementContainsBlocks = false;
-            for (XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling)
-            {
-                if (htmlChildNode is XmlElement)
-                {
+            for(XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling) {
+                if(htmlChildNode is XmlElement) {
                     string htmlChildName = ((XmlElement)htmlChildNode).LocalName.ToLower();
-                    if (HtmlSchema.IsBlockElement(htmlChildName))
-                    {
+                    if(HtmlSchema.IsBlockElement(htmlChildName)) {
                         htmlElementContainsBlocks = true;
                         break;
                     }
                 }
             }
 
-            if (!htmlElementContainsBlocks)
-            {
+            if(!htmlElementContainsBlocks) {
                 // The Div does not contain any block elements, so we can treat it as a Paragraph
                 AddParagraph(xamlParentElement, htmlElement, inheritedProperties, stylesheet, sourceContext);
-            }
-            else
-            {
+            } else {
                 // The Div has some nested blocks, so we treat it as a Section
 
                 // Create currentProperties as a compilation of local and inheritedProperties, set localProperties
@@ -3463,8 +3091,7 @@ namespace SRNicoNico.Views.Extentions
                 ApplyLocalProperties(xamlElement, localProperties, /*isBlock:*/true);
 
                 // Decide whether we can unwrap this element as not having any formatting significance.
-                if (!xamlElement.HasAttributes)
-                {
+                if(!xamlElement.HasAttributes) {
                     // This elements is a group of block elements whitout any additional formatting.
                     // We can add blocks directly to xamlParentElement and avoid
                     // creating unnecessary Sections nesting.
@@ -3472,14 +3099,12 @@ namespace SRNicoNico.Views.Extentions
                 }
 
                 // Recurse into element subtree
-                for (XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode != null ? htmlChildNode.NextSibling : null)
-                {
+                for(XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode != null ? htmlChildNode.NextSibling : null) {
                     htmlChildNode = AddBlock(xamlElement, htmlChildNode, currentProperties, stylesheet, sourceContext);
                 }
 
                 // Add the new element to the parent.
-                if (xamlElement != xamlParentElement)
-                {
+                if(xamlElement != xamlParentElement) {
                     xamlParentElement.AppendChild(xamlElement);
                 }
             }
@@ -3501,8 +3126,7 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="sourceContext"></param>
         /// true indicates that a content added by this call contains at least one block element
         /// </param>
-        private static void AddParagraph(XmlElement xamlParentElement, XmlElement htmlElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static void AddParagraph(XmlElement xamlParentElement, XmlElement htmlElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             // Create currentProperties as a compilation of local and inheritedProperties, set localProperties
             Hashtable localProperties;
             Hashtable currentProperties = GetElementProperties(htmlElement, inheritedProperties, out localProperties, stylesheet, sourceContext);
@@ -3512,8 +3136,7 @@ namespace SRNicoNico.Views.Extentions
             ApplyLocalProperties(xamlElement, localProperties, /*isBlock:*/true);
 
             // Recurse into element subtree
-            for (XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling)
-            {
+            for(XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling) {
                 AddInline(xamlElement, htmlChildNode, currentProperties, stylesheet, sourceContext);
             }
 
@@ -3541,34 +3164,23 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// The last htmlNode added to the implicit paragraph
         /// </returns>
-        private static XmlNode AddImplicitParagraph(XmlElement xamlParentElement, XmlNode htmlNode, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static XmlNode AddImplicitParagraph(XmlElement xamlParentElement, XmlNode htmlNode, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             // Collect all non-block elements and wrap them into implicit Paragraph
             XmlElement xamlParagraph = xamlParentElement.OwnerDocument.CreateElement(/*prefix:*/null, /*localName:*/HtmlToXamlConverter.Xaml_Paragraph, _xamlNamespace);
             XmlNode lastNodeProcessed = null;
-            while (htmlNode != null)
-            {
-                if (htmlNode is XmlComment)
-                {
+            while(htmlNode != null) {
+                if(htmlNode is XmlComment) {
                     DefineInlineFragmentParent((XmlComment)htmlNode, /*xamlParentElement:*/null);
-                }
-                else if (htmlNode is XmlText)
-                {
-                    if (htmlNode.Value.Trim().Length > 0)
-                    {
+                } else if(htmlNode is XmlText) {
+                    if(htmlNode.Value.Trim().Length > 0) {
                         AddTextRun(xamlParagraph, htmlNode.Value);
                     }
-                }
-                else if (htmlNode is XmlElement)
-                {
+                } else if(htmlNode is XmlElement) {
                     string htmlChildName = ((XmlElement)htmlNode).LocalName.ToLower();
-                    if (HtmlSchema.IsBlockElement(htmlChildName))
-                    {
+                    if(HtmlSchema.IsBlockElement(htmlChildName)) {
                         // The sequence of non-blocked inlines ended. Stop implicit loop here.
                         break;
-                    }
-                    else
-                    {
+                    } else {
                         AddInline(xamlParagraph, (XmlElement)htmlNode, inheritedProperties, stylesheet, sourceContext);
                     }
                 }
@@ -3581,8 +3193,7 @@ namespace SRNicoNico.Views.Extentions
             // Add the Paragraph to the parent
             // If only whitespaces and commens have been encountered,
             // then we have nothing to add in implicit paragraph; forget it.
-            if (xamlParagraph.FirstChild != null)
-            {
+            if(xamlParagraph.FirstChild != null) {
                 xamlParentElement.AppendChild(xamlParagraph);
             }
 
@@ -3596,23 +3207,16 @@ namespace SRNicoNico.Views.Extentions
         //
         // .............................................................
 
-        private static void AddInline(XmlElement xamlParentElement, XmlNode htmlNode, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
-            if (htmlNode is XmlComment)
-            {
+        private static void AddInline(XmlElement xamlParentElement, XmlNode htmlNode, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
+            if(htmlNode is XmlComment) {
                 DefineInlineFragmentParent((XmlComment)htmlNode, xamlParentElement);
-            }
-            else if (htmlNode is XmlText)
-            {
+            } else if(htmlNode is XmlText) {
                 AddTextRun(xamlParentElement, htmlNode.Value);
-            }
-            else if (htmlNode is XmlElement)
-            {
+            } else if(htmlNode is XmlElement) {
                 XmlElement htmlElement = (XmlElement)htmlNode;
 
                 // Check whether this is an html element
-                if (htmlElement.NamespaceURI != HtmlParser.XhtmlNamespace)
-                {
+                if(htmlElement.NamespaceURI != HtmlParser.XhtmlNamespace) {
                     return; // Skip non-html elements
                 }
 
@@ -3622,8 +3226,7 @@ namespace SRNicoNico.Views.Extentions
                 // Put source element to the stack
                 sourceContext.Add(htmlElement);
 
-                switch (htmlElementName)
-                {
+                switch(htmlElementName) {
                     case "a":
                         AddHyperlink(xamlParentElement, htmlElement, inheritedProperties, stylesheet, sourceContext);
                         break;
@@ -3635,8 +3238,7 @@ namespace SRNicoNico.Views.Extentions
                         AddBreak(xamlParentElement, htmlElementName);
                         break;
                     default:
-                        if (HtmlSchema.IsInlineElement(htmlElementName) || HtmlSchema.IsBlockElement(htmlElementName))
-                        {
+                        if(HtmlSchema.IsInlineElement(htmlElementName) || HtmlSchema.IsBlockElement(htmlElementName)) {
                             // Note: actually we do not expect block elements here,
                             // but if it happens to be here, we will treat it as a Span.
 
@@ -3652,19 +3254,15 @@ namespace SRNicoNico.Views.Extentions
             }
         }
 
-        private static void AddSpanOrRun(XmlElement xamlParentElement, XmlElement htmlElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static void AddSpanOrRun(XmlElement xamlParentElement, XmlElement htmlElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             // Decide what XAML element to use for this inline element.
             // Check whether it contains any nested inlines
             bool elementHasChildren = false;
-            for (XmlNode htmlNode = htmlElement.FirstChild; htmlNode != null; htmlNode = htmlNode.NextSibling)
-            {
-                if (htmlNode is XmlElement)
-                {
+            for(XmlNode htmlNode = htmlElement.FirstChild; htmlNode != null; htmlNode = htmlNode.NextSibling) {
+                if(htmlNode is XmlElement) {
                     string htmlChildName = ((XmlElement)htmlNode).LocalName.ToLower();
-                    if (HtmlSchema.IsInlineElement(htmlChildName) || HtmlSchema.IsBlockElement(htmlChildName) ||
-                        htmlChildName == "img" || htmlChildName == "br" || htmlChildName == "hr")
-                    {
+                    if(HtmlSchema.IsInlineElement(htmlChildName) || HtmlSchema.IsBlockElement(htmlChildName) ||
+                        htmlChildName == "img" || htmlChildName == "br" || htmlChildName == "hr") {
                         elementHasChildren = true;
                         break;
                     }
@@ -3682,8 +3280,7 @@ namespace SRNicoNico.Views.Extentions
             ApplyLocalProperties(xamlElement, localProperties, /*isBlock:*/false);
 
             // Recurse into element subtree
-            for (XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling)
-            {
+            for(XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling) {
                 AddInline(xamlElement, htmlChildNode, currentProperties, stylesheet, sourceContext);
             }
 
@@ -3692,13 +3289,10 @@ namespace SRNicoNico.Views.Extentions
         }
 
         // Adds a text run to a xaml tree
-        private static void AddTextRun(XmlElement xamlElement, string textData)
-        {
+        private static void AddTextRun(XmlElement xamlElement, string textData) {
             // Remove control characters
-            for (int i = 0; i < textData.Length; i++)
-            {
-                if (Char.IsControl(textData[i]))
-                {
+            for(int i = 0; i < textData.Length; i++) {
+                if(Char.IsControl(textData[i])) {
                     textData = textData.Remove(i--, 1);  // decrement i to compensate for character removal
                 }
             }
@@ -3707,23 +3301,18 @@ namespace SRNicoNico.Views.Extentions
             //  This is a work around since WPF/XAML does not support &nbsp.
             textData = textData.Replace((char)160, ' ');
 
-            if (textData.Length > 0)
-            {
+            if(textData.Length > 0) {
                 xamlElement.AppendChild(xamlElement.OwnerDocument.CreateTextNode(textData));
             }
         }
 
-        private static void AddHyperlink(XmlElement xamlParentElement, XmlElement htmlElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static void AddHyperlink(XmlElement xamlParentElement, XmlElement htmlElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             // Convert href attribute into NavigateUri and TargetName
             string href = GetAttribute(htmlElement, "href");
-            if (href == null)
-            {
+            if(href == null) {
                 // When href attribute is missing - ignore the hyperlink
                 AddSpanOrRun(xamlParentElement, htmlElement, inheritedProperties, stylesheet, sourceContext);
-            }
-            else
-            {
+            } else {
                 // Create currentProperties as a compilation of local and inheritedProperties, set localProperties
                 Hashtable localProperties;
                 Hashtable currentProperties = GetElementProperties(htmlElement, inheritedProperties, out localProperties, stylesheet, sourceContext);
@@ -3733,18 +3322,15 @@ namespace SRNicoNico.Views.Extentions
                 ApplyLocalProperties(xamlElement, localProperties, /*isBlock:*/false);
 
                 string[] hrefParts = href.Split(new char[] { '#' });
-                if (hrefParts.Length > 0 && hrefParts[0].Trim().Length > 0)
-                {
+                if(hrefParts.Length > 0 && hrefParts[0].Trim().Length > 0) {
                     xamlElement.SetAttribute(HtmlToXamlConverter.Xaml_Hyperlink_NavigateUri, hrefParts[0].Trim());
                 }
-                if (hrefParts.Length == 2 && hrefParts[1].Trim().Length > 0)
-                {
+                if(hrefParts.Length == 2 && hrefParts[1].Trim().Length > 0) {
                     xamlElement.SetAttribute(HtmlToXamlConverter.Xaml_Hyperlink_TargetName, hrefParts[1].Trim());
                 }
 
                 // Recurse into element subtree
-                for (XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling)
-                {
+                for(XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling) {
                     AddInline(xamlElement, htmlChildNode, currentProperties, stylesheet, sourceContext);
                 }
 
@@ -3759,16 +3345,11 @@ namespace SRNicoNico.Views.Extentions
         // Called when html comment is encountered to store a parent element
         // for the case when the fragment is inline - to extract it to a separate
         // Span wrapper after the conversion.
-        private static void DefineInlineFragmentParent(XmlComment htmlComment, XmlElement xamlParentElement)
-        {
-            if (htmlComment.Value == "StartFragment")
-            {
+        private static void DefineInlineFragmentParent(XmlComment htmlComment, XmlElement xamlParentElement) {
+            if(htmlComment.Value == "StartFragment") {
                 InlineFragmentParentElement = xamlParentElement;
-            }
-            else if (htmlComment.Value == "EndFragment")
-            {
-                if (InlineFragmentParentElement == null && xamlParentElement != null)
-                {
+            } else if(htmlComment.Value == "EndFragment") {
+                if(InlineFragmentParentElement == null && xamlParentElement != null) {
                     // Normally this cannot happen if comments produced by correct copying code
                     // in Word or IE, but when it is produced manually then fragment boundary
                     // markers can be inconsistent. In this case StartFragment takes precedence,
@@ -3782,19 +3363,13 @@ namespace SRNicoNico.Views.Extentions
         // into a separate Span wrapper.
         // Note: when selected content does not cross paragraph boundaries,
         // the fragment is marked within
-        private static XmlElement ExtractInlineFragment(XmlElement xamlFlowDocumentElement)
-        {
-            if (InlineFragmentParentElement != null)
-            {
-                if (InlineFragmentParentElement.LocalName == HtmlToXamlConverter.Xaml_Span)
-                {
+        private static XmlElement ExtractInlineFragment(XmlElement xamlFlowDocumentElement) {
+            if(InlineFragmentParentElement != null) {
+                if(InlineFragmentParentElement.LocalName == HtmlToXamlConverter.Xaml_Span) {
                     xamlFlowDocumentElement = InlineFragmentParentElement;
-                }
-                else
-                {
+                } else {
                     xamlFlowDocumentElement = xamlFlowDocumentElement.OwnerDocument.CreateElement(/*prefix:*/null, /*localName:*/HtmlToXamlConverter.Xaml_Span, _xamlNamespace);
-                    while (InlineFragmentParentElement.FirstChild != null)
-                    {
+                    while(InlineFragmentParentElement.FirstChild != null) {
                         XmlNode copyNode = InlineFragmentParentElement.FirstChild;
                         InlineFragmentParentElement.RemoveChild(copyNode);
                         xamlFlowDocumentElement.AppendChild(copyNode);
@@ -3811,8 +3386,7 @@ namespace SRNicoNico.Views.Extentions
         //
         // .............................................................
 
-        private static void AddImage(XmlElement xamlParentElement, XmlElement htmlElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static void AddImage(XmlElement xamlParentElement, XmlElement htmlElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             //  Implement images
         }
 
@@ -3837,8 +3411,7 @@ namespace SRNicoNico.Views.Extentions
         /// </param>
         /// <param name="stylesheet"></param>
         /// <param name="sourceContext"></param>
-        private static void AddList(XmlElement xamlParentElement, XmlElement htmlListElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static void AddList(XmlElement xamlParentElement, XmlElement htmlListElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             string htmlListElementName = htmlListElement.LocalName.ToLower();
 
             Hashtable localProperties;
@@ -3848,13 +3421,10 @@ namespace SRNicoNico.Views.Extentions
             XmlElement xamlListElement = xamlParentElement.OwnerDocument.CreateElement(null, Xaml_List, _xamlNamespace);
 
             // Set default list markers
-            if (htmlListElementName == "ol")
-            {
+            if(htmlListElementName == "ol") {
                 // Ordered list
                 xamlListElement.SetAttribute(HtmlToXamlConverter.Xaml_List_MarkerStyle, Xaml_List_MarkerStyle_Decimal);
-            }
-            else
-            {
+            } else {
                 // Unordered list - all elements other than OL treated as unordered lists
                 xamlListElement.SetAttribute(HtmlToXamlConverter.Xaml_List_MarkerStyle, Xaml_List_MarkerStyle_Disc);
             }
@@ -3864,17 +3434,13 @@ namespace SRNicoNico.Views.Extentions
             ApplyLocalProperties(xamlListElement, localProperties, /*isBlock:*/true);
 
             // Recurse into list subtree
-            for (XmlNode htmlChildNode = htmlListElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling)
-            {
-                if (htmlChildNode is XmlElement && htmlChildNode.LocalName.ToLower() == "li")
-                {
+            for(XmlNode htmlChildNode = htmlListElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling) {
+                if(htmlChildNode is XmlElement && htmlChildNode.LocalName.ToLower() == "li") {
                     sourceContext.Add((XmlElement)htmlChildNode);
                     AddListItem(xamlListElement, (XmlElement)htmlChildNode, currentProperties, stylesheet, sourceContext);
                     Debug.Assert(sourceContext.Count > 0 && sourceContext[sourceContext.Count - 1] == htmlChildNode);
                     sourceContext.RemoveAt(sourceContext.Count - 1);
-                }
-                else
-                {
+                } else {
                     // Not an li element. Add it to previous ListBoxItem
                     //  We need to append the content to the end
                     // of a previous list item.
@@ -3882,8 +3448,7 @@ namespace SRNicoNico.Views.Extentions
             }
 
             // Add the List element to xaml tree - if it is not empty
-            if (xamlListElement.HasChildNodes)
-            {
+            if(xamlListElement.HasChildNodes) {
                 xamlParentElement.AppendChild(xamlListElement);
             }
         }
@@ -3906,8 +3471,7 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// XmlNode representing the first non-li node in the input after one or more li's have been processed.
         /// </returns>
-        private static XmlElement AddOrphanListItems(XmlElement xamlParentElement, XmlElement htmlLIElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static XmlElement AddOrphanListItems(XmlElement xamlParentElement, XmlElement htmlLIElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             Debug.Assert(htmlLIElement.LocalName.ToLower() == "li");
 
             XmlElement lastProcessedListItemElement = null;
@@ -3915,13 +3479,10 @@ namespace SRNicoNico.Views.Extentions
             // Find out the last element attached to the xamlParentElement, which is the previous sibling of this node
             XmlNode xamlListItemElementPreviousSibling = xamlParentElement.LastChild;
             XmlElement xamlListElement;
-            if (xamlListItemElementPreviousSibling != null && xamlListItemElementPreviousSibling.LocalName == Xaml_List)
-            {
+            if(xamlListItemElementPreviousSibling != null && xamlListItemElementPreviousSibling.LocalName == Xaml_List) {
                 // Previously added Xaml element was a list. We will add the new li to it
                 xamlListElement = (XmlElement)xamlListItemElementPreviousSibling;
-            }
-            else
-            {
+            } else {
                 // No list element near. Create our own.
                 xamlListElement = xamlParentElement.OwnerDocument.CreateElement(null, Xaml_List, _xamlNamespace);
                 xamlParentElement.AppendChild(xamlListElement);
@@ -3935,8 +3496,7 @@ namespace SRNicoNico.Views.Extentions
 
             // Add li elements to the parent xamlListElement we created as long as they appear sequentially
             // Use properties inherited from xamlParentElement for context
-            while (htmlChildNode != null && htmlChildNodeName == "li")
-            {
+            while(htmlChildNode != null && htmlChildNodeName == "li") {
                 AddListItem(xamlListElement, (XmlElement)htmlChildNode, inheritedProperties, stylesheet, sourceContext);
                 lastProcessedListItemElement = (XmlElement)htmlChildNode;
                 htmlChildNode = htmlChildNode.NextSibling;
@@ -3958,8 +3518,7 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="inheritedProperties">
         /// Properties inherited from parent context
         /// </param>
-        private static void AddListItem(XmlElement xamlListElement, XmlElement htmlLIElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static void AddListItem(XmlElement xamlListElement, XmlElement htmlLIElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             // Parameter validation
             Debug.Assert(xamlListElement != null);
             Debug.Assert(xamlListElement.LocalName == Xaml_List);
@@ -3975,8 +3534,7 @@ namespace SRNicoNico.Views.Extentions
             // TODO: process local properties for li element
 
             // Process children of the ListItem
-            for (XmlNode htmlChildNode = htmlLIElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode != null ? htmlChildNode.NextSibling : null)
-            {
+            for(XmlNode htmlChildNode = htmlLIElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode != null ? htmlChildNode.NextSibling : null) {
                 htmlChildNode = AddBlock(xamlListItemElement, htmlChildNode, currentProperties, stylesheet, sourceContext);
             }
 
@@ -4003,8 +3561,7 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="inheritedProperties">
         /// Hashtable representing properties inherited from parent context.
         /// </param>
-        private static void AddTable(XmlElement xamlParentElement, XmlElement htmlTableElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static void AddTable(XmlElement xamlParentElement, XmlElement htmlTableElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             // Parameter validation
             Debug.Assert(htmlTableElement.LocalName.ToLower() == "table");
             Debug.Assert(xamlParentElement != null);
@@ -4019,22 +3576,18 @@ namespace SRNicoNico.Views.Extentions
             // Check if the table contains only one cell - we want to take only its content
             XmlElement singleCell = GetCellFromSingleCellTable(htmlTableElement);
 
-            if (singleCell != null)
-            {
+            if(singleCell != null) {
                 //  Need to push skipped table elements onto sourceContext
                 sourceContext.Add(singleCell);
 
                 // Add the cell's content directly to parent
-                for (XmlNode htmlChildNode = singleCell.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode != null ? htmlChildNode.NextSibling : null)
-                {
+                for(XmlNode htmlChildNode = singleCell.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode != null ? htmlChildNode.NextSibling : null) {
                     htmlChildNode = AddBlock(xamlParentElement, htmlChildNode, currentProperties, stylesheet, sourceContext);
                 }
 
                 Debug.Assert(sourceContext.Count > 0 && sourceContext[sourceContext.Count - 1] == singleCell);
                 sourceContext.RemoveAt(sourceContext.Count - 1);
-            }
-            else
-            {
+            } else {
                 // Create xamlTableElement
                 XmlElement xamlTableElement = xamlParentElement.OwnerDocument.CreateElement(null, Xaml_Table, _xamlNamespace);
 
@@ -4047,13 +3600,11 @@ namespace SRNicoNico.Views.Extentions
                 // Process table body - TBODY and TR elements
                 XmlNode htmlChildNode = htmlTableElement.FirstChild;
 
-                while (htmlChildNode != null)
-                {
+                while(htmlChildNode != null) {
                     string htmlChildName = htmlChildNode.LocalName.ToLower();
 
                     // Process the element
-                    if (htmlChildName == "tbody" || htmlChildName == "thead" || htmlChildName == "tfoot")
-                    {
+                    if(htmlChildName == "tbody" || htmlChildName == "thead" || htmlChildName == "tfoot") {
                         //  Add more special processing for TableHeader and TableFooter
                         XmlElement xamlTableBodyElement = xamlTableElement.OwnerDocument.CreateElement(null, Xaml_TableRowGroup, _xamlNamespace);
                         xamlTableElement.AppendChild(xamlTableBodyElement);
@@ -4067,8 +3618,7 @@ namespace SRNicoNico.Views.Extentions
 
                         // Process children of htmlChildNode, which is tbody, for tr elements
                         AddTableRowsToTableBody(xamlTableBodyElement, htmlChildNode.FirstChild, tbodyElementCurrentProperties, columnStarts, stylesheet, sourceContext);
-                        if (xamlTableBodyElement.HasChildNodes)
-                        {
+                        if(xamlTableBodyElement.HasChildNodes) {
                             xamlTableElement.AppendChild(xamlTableBodyElement);
                             // else: if there is no TRs in this TBody, we simply ignore it
                         }
@@ -4077,9 +3627,7 @@ namespace SRNicoNico.Views.Extentions
                         sourceContext.RemoveAt(sourceContext.Count - 1);
 
                         htmlChildNode = htmlChildNode.NextSibling;
-                    }
-                    else if (htmlChildName == "tr")
-                    {
+                    } else if(htmlChildName == "tr") {
                         // Tbody is not present, but tr element is present. Tr is wrapped in tbody
                         XmlElement xamlTableBodyElement = xamlTableElement.OwnerDocument.CreateElement(null, Xaml_TableRowGroup, _xamlNamespace);
 
@@ -4087,54 +3635,40 @@ namespace SRNicoNico.Views.Extentions
                         // no properties of its own
 
                         htmlChildNode = AddTableRowsToTableBody(xamlTableBodyElement, htmlChildNode, currentProperties, columnStarts, stylesheet, sourceContext);
-                        if (xamlTableBodyElement.HasChildNodes)
-                        {
+                        if(xamlTableBodyElement.HasChildNodes) {
                             xamlTableElement.AppendChild(xamlTableBodyElement);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         // Element is not tbody or tr. Ignore it.
                         // TODO: add processing for thead, tfoot elements and recovery for td elements
                         htmlChildNode = htmlChildNode.NextSibling;
                     }
                 }
 
-                if (xamlTableElement.HasChildNodes)
-                {
+                if(xamlTableElement.HasChildNodes) {
                     xamlParentElement.AppendChild(xamlTableElement);
                 }
             }
         }
 
-        private static XmlElement GetCellFromSingleCellTable(XmlElement htmlTableElement)
-        {
+        private static XmlElement GetCellFromSingleCellTable(XmlElement htmlTableElement) {
             XmlElement singleCell = null;
 
-            for (XmlNode tableChild = htmlTableElement.FirstChild; tableChild != null; tableChild = tableChild.NextSibling)
-            {
+            for(XmlNode tableChild = htmlTableElement.FirstChild; tableChild != null; tableChild = tableChild.NextSibling) {
                 string elementName = tableChild.LocalName.ToLower();
-                if (elementName == "tbody" || elementName == "thead" || elementName == "tfoot")
-                {
-                    if (singleCell != null)
-                    {
+                if(elementName == "tbody" || elementName == "thead" || elementName == "tfoot") {
+                    if(singleCell != null) {
                         return null;
                     }
-                    for (XmlNode tbodyChild = tableChild.FirstChild; tbodyChild != null; tbodyChild = tbodyChild.NextSibling)
-                    {
-                        if (tbodyChild.LocalName.ToLower() == "tr")
-                        {
-                            if (singleCell != null)
-                            {
+                    for(XmlNode tbodyChild = tableChild.FirstChild; tbodyChild != null; tbodyChild = tbodyChild.NextSibling) {
+                        if(tbodyChild.LocalName.ToLower() == "tr") {
+                            if(singleCell != null) {
                                 return null;
                             }
-                            for (XmlNode trChild = tbodyChild.FirstChild; trChild != null; trChild = trChild.NextSibling)
-                            {
+                            for(XmlNode trChild = tbodyChild.FirstChild; trChild != null; trChild = trChild.NextSibling) {
                                 string cellName = trChild.LocalName.ToLower();
-                                if (cellName == "td" || cellName == "th")
-                                {
-                                    if (singleCell != null)
-                                    {
+                                if(cellName == "td" || cellName == "th") {
+                                    if(singleCell != null) {
                                         return null;
                                     }
                                     singleCell = (XmlElement)trChild;
@@ -4142,20 +3676,14 @@ namespace SRNicoNico.Views.Extentions
                             }
                         }
                     }
-                }
-                else if (tableChild.LocalName.ToLower() == "tr")
-                {
-                    if (singleCell != null)
-                    {
+                } else if(tableChild.LocalName.ToLower() == "tr") {
+                    if(singleCell != null) {
                         return null;
                     }
-                    for (XmlNode trChild = tableChild.FirstChild; trChild != null; trChild = trChild.NextSibling)
-                    {
+                    for(XmlNode trChild = tableChild.FirstChild; trChild != null; trChild = trChild.NextSibling) {
                         string cellName = trChild.LocalName.ToLower();
-                        if (cellName == "td" || cellName == "th")
-                        {
-                            if (singleCell != null)
-                            {
+                        if(cellName == "td" || cellName == "th") {
+                            if(singleCell != null) {
                                 return null;
                             }
                             singleCell = (XmlElement)trChild;
@@ -4185,39 +3713,28 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="currentProperties"></param>
         /// <param name="stylesheet"></param>
         /// <param name="sourceContext"></param>
-        private static void AddColumnInformation(XmlElement htmlTableElement, XmlElement xamlTableElement, ArrayList columnStartsAllRows, Hashtable currentProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static void AddColumnInformation(XmlElement htmlTableElement, XmlElement xamlTableElement, ArrayList columnStartsAllRows, Hashtable currentProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             // Add column information
-            if (columnStartsAllRows != null)
-            {
+            if(columnStartsAllRows != null) {
                 // We have consistent information derived from table cells; use it
                 // The last element in columnStarts represents the end of the table
-                for (int columnIndex = 0; columnIndex < columnStartsAllRows.Count - 1; columnIndex++)
-                {
+                for(int columnIndex = 0; columnIndex < columnStartsAllRows.Count - 1; columnIndex++) {
                     XmlElement xamlColumnElement;
 
                     xamlColumnElement = xamlTableElement.OwnerDocument.CreateElement(null, Xaml_TableColumn, _xamlNamespace);
                     xamlColumnElement.SetAttribute(Xaml_Width, ((double)columnStartsAllRows[columnIndex + 1] - (double)columnStartsAllRows[columnIndex]).ToString());
                     xamlTableElement.AppendChild(xamlColumnElement);
                 }
-            }
-            else
-            {
+            } else {
                 // We do not have consistent information from table cells;
                 // Translate blindly colgroups from html.
-                for (XmlNode htmlChildNode = htmlTableElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling)
-                {
-                    if (htmlChildNode.LocalName.ToLower() == "colgroup")
-                    {
+                for(XmlNode htmlChildNode = htmlTableElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling) {
+                    if(htmlChildNode.LocalName.ToLower() == "colgroup") {
                         // TODO: add column width information to this function as a parameter and process it
                         AddTableColumnGroup(xamlTableElement, (XmlElement)htmlChildNode, currentProperties, stylesheet, sourceContext);
-                    }
-                    else if (htmlChildNode.LocalName.ToLower() == "col")
-                    {
+                    } else if(htmlChildNode.LocalName.ToLower() == "col") {
                         AddTableColumn(xamlTableElement, (XmlElement)htmlChildNode, currentProperties, stylesheet, sourceContext);
-                    }
-                    else if (htmlChildNode is XmlElement)
-                    {
+                    } else if(htmlChildNode is XmlElement) {
                         // Some element which belongs to table body. Stop column loop.
                         break;
                     }
@@ -4237,18 +3754,15 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="inheritedProperties">
         /// Properties inherited from parent context
         /// </param>
-        private static void AddTableColumnGroup(XmlElement xamlTableElement, XmlElement htmlColgroupElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static void AddTableColumnGroup(XmlElement xamlTableElement, XmlElement htmlColgroupElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             Hashtable localProperties;
             Hashtable currentProperties = GetElementProperties(htmlColgroupElement, inheritedProperties, out localProperties, stylesheet, sourceContext);
 
             // TODO: process local properties for colgroup
 
             // Process children of colgroup. Colgroup may contain only col elements.
-            for (XmlNode htmlNode = htmlColgroupElement.FirstChild; htmlNode != null; htmlNode = htmlNode.NextSibling)
-            {
-                if (htmlNode is XmlElement && htmlNode.LocalName.ToLower() == "col")
-                {
+            for(XmlNode htmlNode = htmlColgroupElement.FirstChild; htmlNode != null; htmlNode = htmlNode.NextSibling) {
+                if(htmlNode is XmlElement && htmlNode.LocalName.ToLower() == "col") {
                     AddTableColumn(xamlTableElement, (XmlElement)htmlNode, currentProperties, stylesheet, sourceContext);
                 }
             }
@@ -4267,8 +3781,7 @@ namespace SRNicoNico.Views.Extentions
         /// </param>
         /// <param name="stylesheet"></param>
         /// <param name="sourceContext"></param>
-        private static void AddTableColumn(XmlElement xamlTableElement, XmlElement htmlColElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static void AddTableColumn(XmlElement xamlTableElement, XmlElement htmlColElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             Hashtable localProperties;
             Hashtable currentProperties = GetElementProperties(htmlColElement, inheritedProperties, out localProperties, stylesheet, sourceContext);
 
@@ -4300,8 +3813,7 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// XmlNode representing the current position of the iterator among tr elements
         /// </returns>
-        private static XmlNode AddTableRowsToTableBody(XmlElement xamlTableBodyElement, XmlNode htmlTRStartNode, Hashtable currentProperties, ArrayList columnStarts, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static XmlNode AddTableRowsToTableBody(XmlElement xamlTableBodyElement, XmlNode htmlTRStartNode, Hashtable currentProperties, ArrayList columnStarts, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             // Parameter validation
             Debug.Assert(xamlTableBodyElement.LocalName == Xaml_TableRowGroup);
             Debug.Assert(currentProperties != null);
@@ -4309,16 +3821,13 @@ namespace SRNicoNico.Views.Extentions
             // Initialize child node for iteratimg through children to the first tr element
             XmlNode htmlChildNode = htmlTRStartNode;
             ArrayList activeRowSpans = null;
-            if (columnStarts != null)
-            {
+            if(columnStarts != null) {
                 activeRowSpans = new ArrayList();
                 InitializeActiveRowSpans(activeRowSpans, columnStarts.Count);
             }
 
-            while (htmlChildNode != null && htmlChildNode.LocalName.ToLower() != "tbody")
-            {
-                if (htmlChildNode.LocalName.ToLower() == "tr")
-                {
+            while(htmlChildNode != null && htmlChildNode.LocalName.ToLower() != "tbody") {
+                if(htmlChildNode.LocalName.ToLower() == "tr") {
                     XmlElement xamlTableRowElement = xamlTableBodyElement.OwnerDocument.CreateElement(null, Xaml_TableRow, _xamlNamespace);
 
                     sourceContext.Add((XmlElement)htmlChildNode);
@@ -4329,8 +3838,7 @@ namespace SRNicoNico.Views.Extentions
                     // TODO: apply local properties to tr element
 
                     AddTableCellsToTableRow(xamlTableRowElement, htmlChildNode.FirstChild, trElementCurrentProperties, columnStarts, activeRowSpans, stylesheet, sourceContext);
-                    if (xamlTableRowElement.HasChildNodes)
-                    {
+                    if(xamlTableRowElement.HasChildNodes) {
                         xamlTableBodyElement.AppendChild(xamlTableRowElement);
                     }
 
@@ -4340,9 +3848,7 @@ namespace SRNicoNico.Views.Extentions
                     // Advance
                     htmlChildNode = htmlChildNode.NextSibling;
 
-                }
-                else if (htmlChildNode.LocalName.ToLower() == "td")
-                {
+                } else if(htmlChildNode.LocalName.ToLower() == "td") {
                     // Tr element is not present. We create one and add td elements to it
                     XmlElement xamlTableRowElement = xamlTableBodyElement.OwnerDocument.CreateElement(null, Xaml_TableRow, _xamlNamespace);
 
@@ -4350,13 +3856,10 @@ namespace SRNicoNico.Views.Extentions
                     Debug.Assert(columnStarts == null);
 
                     htmlChildNode = AddTableCellsToTableRow(xamlTableRowElement, htmlChildNode, currentProperties, columnStarts, activeRowSpans, stylesheet, sourceContext);
-                    if (xamlTableRowElement.HasChildNodes)
-                    {
+                    if(xamlTableRowElement.HasChildNodes) {
                         xamlTableBodyElement.AppendChild(xamlTableRowElement);
                     }
-                }
-                else
-                {
+                } else {
                     // Not a tr or td  element. Ignore it.
                     // TODO: consider better recovery here
                     htmlChildNode = htmlChildNode.NextSibling;
@@ -4380,13 +3883,11 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// XmlElement representing the current position of the iterator among the children of the parent Html tbody/tr element
         /// </returns>
-        private static XmlNode AddTableCellsToTableRow(XmlElement xamlTableRowElement, XmlNode htmlTDStartNode, Hashtable currentProperties, ArrayList columnStarts, ArrayList activeRowSpans, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static XmlNode AddTableCellsToTableRow(XmlElement xamlTableRowElement, XmlNode htmlTDStartNode, Hashtable currentProperties, ArrayList columnStarts, ArrayList activeRowSpans, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             // parameter validation
             Debug.Assert(xamlTableRowElement.LocalName == Xaml_TableRow);
             Debug.Assert(currentProperties != null);
-            if (columnStarts != null)
-            {
+            if(columnStarts != null) {
                 Debug.Assert(activeRowSpans.Count == columnStarts.Count);
             }
 
@@ -4396,10 +3897,8 @@ namespace SRNicoNico.Views.Extentions
             int columnIndex = 0;
             int columnSpan = 0;
 
-            while (htmlChildNode != null && htmlChildNode.LocalName.ToLower() != "tr" && htmlChildNode.LocalName.ToLower() != "tbody" && htmlChildNode.LocalName.ToLower() != "thead" && htmlChildNode.LocalName.ToLower() != "tfoot")
-            {
-                if (htmlChildNode.LocalName.ToLower() == "td" || htmlChildNode.LocalName.ToLower() == "th")
-                {
+            while(htmlChildNode != null && htmlChildNode.LocalName.ToLower() != "tr" && htmlChildNode.LocalName.ToLower() != "tbody" && htmlChildNode.LocalName.ToLower() != "thead" && htmlChildNode.LocalName.ToLower() != "tfoot") {
+                if(htmlChildNode.LocalName.ToLower() == "td" || htmlChildNode.LocalName.ToLower() == "th") {
                     XmlElement xamlTableCellElement = xamlTableRowElement.OwnerDocument.CreateElement(null, Xaml_TableCell, _xamlNamespace);
 
                     sourceContext.Add((XmlElement)htmlChildNode);
@@ -4411,11 +3910,9 @@ namespace SRNicoNico.Views.Extentions
                     // make necessary changes and use them instead.
                     ApplyPropertiesToTableCellElement((XmlElement)htmlChildNode, xamlTableCellElement);
 
-                    if (columnStarts != null)
-                    {
+                    if(columnStarts != null) {
                         Debug.Assert(columnIndex < columnStarts.Count - 1);
-                        while (columnIndex < activeRowSpans.Count && (int)activeRowSpans[columnIndex] > 0)
-                        {
+                        while(columnIndex < activeRowSpans.Count && (int)activeRowSpans[columnIndex] > 0) {
                             activeRowSpans[columnIndex] = (int)activeRowSpans[columnIndex] - 1;
                             Debug.Assert((int)activeRowSpans[columnIndex] >= 0);
                             columnIndex++;
@@ -4433,8 +3930,7 @@ namespace SRNicoNico.Views.Extentions
                         xamlTableCellElement.SetAttribute(Xaml_TableCell_ColumnSpan, columnSpan.ToString());
 
                         // Apply row span
-                        for (int spannedColumnIndex = columnIndex; spannedColumnIndex < columnIndex + columnSpan; spannedColumnIndex++)
-                        {
+                        for(int spannedColumnIndex = columnIndex; spannedColumnIndex < columnIndex + columnSpan; spannedColumnIndex++) {
                             Debug.Assert(spannedColumnIndex < activeRowSpans.Count);
                             activeRowSpans[spannedColumnIndex] = (rowSpan - 1);
                             Debug.Assert((int)activeRowSpans[spannedColumnIndex] >= 0);
@@ -4444,8 +3940,7 @@ namespace SRNicoNico.Views.Extentions
                     }
 
                     AddDataToTableCell(xamlTableCellElement, htmlChildNode.FirstChild, tdElementCurrentProperties, stylesheet, sourceContext);
-                    if (xamlTableCellElement.HasChildNodes)
-                    {
+                    if(xamlTableCellElement.HasChildNodes) {
                         xamlTableRowElement.AppendChild(xamlTableCellElement);
                     }
 
@@ -4453,9 +3948,7 @@ namespace SRNicoNico.Views.Extentions
                     sourceContext.RemoveAt(sourceContext.Count - 1);
 
                     htmlChildNode = htmlChildNode.NextSibling;
-                }
-                else
-                {
+                } else {
                     // Not td element. Ignore it.
                     // TODO: Consider better recovery
                     htmlChildNode = htmlChildNode.NextSibling;
@@ -4476,14 +3969,12 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="currentProperties">
         /// Current properties for the html td/th element corresponding to xamlTableCellElement
         /// </param>
-        private static void AddDataToTableCell(XmlElement xamlTableCellElement, XmlNode htmlDataStartNode, Hashtable currentProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static void AddDataToTableCell(XmlElement xamlTableCellElement, XmlNode htmlDataStartNode, Hashtable currentProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             // Parameter validation
             Debug.Assert(xamlTableCellElement.LocalName == Xaml_TableCell);
             Debug.Assert(currentProperties != null);
 
-            for (XmlNode htmlChildNode = htmlDataStartNode; htmlChildNode != null; htmlChildNode = htmlChildNode != null ? htmlChildNode.NextSibling : null)
-            {
+            for(XmlNode htmlChildNode = htmlDataStartNode; htmlChildNode != null; htmlChildNode = htmlChildNode != null ? htmlChildNode.NextSibling : null) {
                 // Process a new html element and add it to the td element
                 htmlChildNode = AddBlock(xamlTableCellElement, htmlChildNode, currentProperties, stylesheet, sourceContext);
             }
@@ -4501,12 +3992,10 @@ namespace SRNicoNico.Views.Extentions
         /// all the points which are the starting position of any column in the table, ordered from left to right.
         /// In case if analisys was impossible we return null.
         /// </returns>
-        private static ArrayList AnalyzeTableStructure(XmlElement htmlTableElement, CssStylesheet stylesheet)
-        {
+        private static ArrayList AnalyzeTableStructure(XmlElement htmlTableElement, CssStylesheet stylesheet) {
             // Parameter validation
             Debug.Assert(htmlTableElement.LocalName.ToLower() == "table");
-            if (!htmlTableElement.HasChildNodes)
-            {
+            if(!htmlTableElement.HasChildNodes) {
                 return null;
             }
 
@@ -4520,22 +4009,17 @@ namespace SRNicoNico.Views.Extentions
             double tableWidth = 0;  // Keep track of table width which is the width of its widest row
 
             // Analyze tbody and tr elements
-            while (htmlChildNode != null && columnWidthsAvailable)
-            {
+            while(htmlChildNode != null && columnWidthsAvailable) {
                 Debug.Assert(columnStarts.Count == activeRowSpans.Count);
 
-                switch (htmlChildNode.LocalName.ToLower())
-                {
+                switch(htmlChildNode.LocalName.ToLower()) {
                     case "tbody":
                         // Tbody element, we should analyze its children for trows
                         double tbodyWidth = AnalyzeTbodyStructure((XmlElement)htmlChildNode, columnStarts, activeRowSpans, tableWidth, stylesheet);
-                        if (tbodyWidth > tableWidth)
-                        {
+                        if(tbodyWidth > tableWidth) {
                             // Table width must be increased to supported newly added wide row
                             tableWidth = tbodyWidth;
-                        }
-                        else if (tbodyWidth == 0)
-                        {
+                        } else if(tbodyWidth == 0) {
                             // Tbody analysis may return 0, probably due to unprocessable format.
                             // We should also fail.
                             columnWidthsAvailable = false; // interrupt the analisys
@@ -4544,12 +4028,9 @@ namespace SRNicoNico.Views.Extentions
                     case "tr":
                         // Table row. Analyze column structure within row directly
                         double trWidth = AnalyzeTRStructure((XmlElement)htmlChildNode, columnStarts, activeRowSpans, tableWidth, stylesheet);
-                        if (trWidth > tableWidth)
-                        {
+                        if(trWidth > tableWidth) {
                             tableWidth = trWidth;
-                        }
-                        else if (trWidth == 0)
-                        {
+                        } else if(trWidth == 0) {
                             columnWidthsAvailable = false; // interrupt the analisys
                         }
                         break;
@@ -4566,14 +4047,11 @@ namespace SRNicoNico.Views.Extentions
                 htmlChildNode = htmlChildNode.NextSibling;
             }
 
-            if (columnWidthsAvailable)
-            {
+            if(columnWidthsAvailable) {
                 // Add an item for whole table width
                 columnStarts.Add(tableWidth);
                 VerifyColumnStartsAscendingOrder(columnStarts);
-            }
-            else
-            {
+            } else {
                 columnStarts = null;
             }
 
@@ -4601,8 +4079,7 @@ namespace SRNicoNico.Views.Extentions
         /// Calculated width of a tbody.
         /// In case of non-analizable column width structure return 0;
         /// </returns>
-        private static double AnalyzeTbodyStructure(XmlElement htmlTbodyElement, ArrayList columnStarts, ArrayList activeRowSpans, double tableWidth, CssStylesheet stylesheet)
-        {
+        private static double AnalyzeTbodyStructure(XmlElement htmlTbodyElement, ArrayList columnStarts, ArrayList activeRowSpans, double tableWidth, CssStylesheet stylesheet) {
             // Parameter validation
             Debug.Assert(htmlTbodyElement.LocalName.ToLower() == "tbody");
             Debug.Assert(columnStarts != null);
@@ -4610,8 +4087,7 @@ namespace SRNicoNico.Views.Extentions
             double tbodyWidth = 0;
             bool columnWidthsAvailable = true;
 
-            if (!htmlTbodyElement.HasChildNodes)
-            {
+            if(!htmlTbodyElement.HasChildNodes) {
                 return tbodyWidth;
             }
 
@@ -4621,14 +4097,11 @@ namespace SRNicoNico.Views.Extentions
             XmlNode htmlChildNode = htmlTbodyElement.FirstChild;
 
             // Analyze tr elements
-            while (htmlChildNode != null && columnWidthsAvailable)
-            {
-                switch (htmlChildNode.LocalName.ToLower())
-                {
+            while(htmlChildNode != null && columnWidthsAvailable) {
+                switch(htmlChildNode.LocalName.ToLower()) {
                     case "tr":
                         double trWidth = AnalyzeTRStructure((XmlElement)htmlChildNode, columnStarts, activeRowSpans, tbodyWidth, stylesheet);
-                        if (trWidth > tbodyWidth)
-                        {
+                        if(trWidth > tbodyWidth) {
                             tbodyWidth = trWidth;
                         }
                         break;
@@ -4667,8 +4140,7 @@ namespace SRNicoNico.Views.Extentions
         /// Double value representing the current width of the table.
         /// Return 0 if analisys was insuccessful.
         /// </param>
-        private static double AnalyzeTRStructure(XmlElement htmlTRElement, ArrayList columnStarts, ArrayList activeRowSpans, double tableWidth, CssStylesheet stylesheet)
-        {
+        private static double AnalyzeTRStructure(XmlElement htmlTRElement, ArrayList columnStarts, ArrayList activeRowSpans, double tableWidth, CssStylesheet stylesheet) {
             double columnWidth;
 
             // Parameter validation
@@ -4677,8 +4149,7 @@ namespace SRNicoNico.Views.Extentions
             Debug.Assert(activeRowSpans != null);
             Debug.Assert(columnStarts.Count == activeRowSpans.Count);
 
-            if (!htmlTRElement.HasChildNodes)
-            {
+            if(!htmlTRElement.HasChildNodes) {
                 return 0;
             }
 
@@ -4690,14 +4161,11 @@ namespace SRNicoNico.Views.Extentions
             double trWidth = 0;
 
             // Skip spanned columns to get to real column start
-            if (columnIndex < activeRowSpans.Count)
-            {
+            if(columnIndex < activeRowSpans.Count) {
                 Debug.Assert((double)columnStarts[columnIndex] >= columnStart);
-                if ((double)columnStarts[columnIndex] == columnStart)
-                {
+                if((double)columnStarts[columnIndex] == columnStart) {
                     // The new column may be in a spanned area
-                    while (columnIndex < activeRowSpans.Count && (int)activeRowSpans[columnIndex] > 0)
-                    {
+                    while(columnIndex < activeRowSpans.Count && (int)activeRowSpans[columnIndex] > 0) {
                         activeRowSpans[columnIndex] = (int)activeRowSpans[columnIndex] - 1;
                         Debug.Assert((int)activeRowSpans[columnIndex] >= 0);
                         columnIndex++;
@@ -4706,29 +4174,23 @@ namespace SRNicoNico.Views.Extentions
                 }
             }
 
-            while (htmlChildNode != null && columnWidthsAvailable)
-            {
+            while(htmlChildNode != null && columnWidthsAvailable) {
                 Debug.Assert(columnStarts.Count == activeRowSpans.Count);
 
                 VerifyColumnStartsAscendingOrder(columnStarts);
 
-                switch (htmlChildNode.LocalName.ToLower())
-                {
+                switch(htmlChildNode.LocalName.ToLower()) {
                     case "td":
                         Debug.Assert(columnIndex <= columnStarts.Count);
-                        if (columnIndex < columnStarts.Count)
-                        {
+                        if(columnIndex < columnStarts.Count) {
                             Debug.Assert(columnStart <= (double)columnStarts[columnIndex]);
-                            if (columnStart < (double)columnStarts[columnIndex])
-                            {
+                            if(columnStart < (double)columnStarts[columnIndex]) {
                                 columnStarts.Insert(columnIndex, columnStart);
                                 // There can be no row spans now - the column data will appear here
                                 // Row spans may appear only during the column analysis
                                 activeRowSpans.Insert(columnIndex, 0);
                             }
-                        }
-                        else
-                        {
+                        } else {
                             // Column start is greater than all previous starts. Row span must still be 0 because
                             // we are either adding after another column of the same row, in which case it should not inherit
                             // the previous column's span. Otherwise we are adding after the last column of some previous
@@ -4739,21 +4201,18 @@ namespace SRNicoNico.Views.Extentions
                             activeRowSpans.Add(0);
                         }
                         columnWidth = GetColumnWidth((XmlElement)htmlChildNode);
-                        if (columnWidth != -1)
-                        {
+                        if(columnWidth != -1) {
                             int nextColumnIndex;
                             int rowSpan = GetRowSpan((XmlElement)htmlChildNode);
 
                             nextColumnIndex = GetNextColumnIndex(columnIndex, columnWidth, columnStarts, activeRowSpans);
-                            if (nextColumnIndex != -1)
-                            {
+                            if(nextColumnIndex != -1) {
                                 // Entire column width can be processed without hitting conflicting row span. This means that
                                 // column widths line up and we can process them
                                 Debug.Assert(nextColumnIndex <= columnStarts.Count);
 
                                 // Apply row span to affected columns
-                                for (int spannedColumnIndex = columnIndex; spannedColumnIndex < nextColumnIndex; spannedColumnIndex++)
-                                {
+                                for(int spannedColumnIndex = columnIndex; spannedColumnIndex < nextColumnIndex; spannedColumnIndex++) {
                                     activeRowSpans[spannedColumnIndex] = rowSpan - 1;
                                     Debug.Assert((int)activeRowSpans[spannedColumnIndex] >= 0);
                                 }
@@ -4763,14 +4222,11 @@ namespace SRNicoNico.Views.Extentions
                                 // Calculate columnsStart for the next cell
                                 columnStart = columnStart + columnWidth;
 
-                                if (columnIndex < activeRowSpans.Count)
-                                {
+                                if(columnIndex < activeRowSpans.Count) {
                                     Debug.Assert((double)columnStarts[columnIndex] >= columnStart);
-                                    if ((double)columnStarts[columnIndex] == columnStart)
-                                    {
+                                    if((double)columnStarts[columnIndex] == columnStart) {
                                         // The new column may be in a spanned area
-                                        while (columnIndex < activeRowSpans.Count && (int)activeRowSpans[columnIndex] > 0)
-                                        {
+                                        while(columnIndex < activeRowSpans.Count && (int)activeRowSpans[columnIndex] > 0) {
                                             activeRowSpans[columnIndex] = (int)activeRowSpans[columnIndex] - 1;
                                             Debug.Assert((int)activeRowSpans[columnIndex] >= 0);
                                             columnIndex++;
@@ -4781,16 +4237,12 @@ namespace SRNicoNico.Views.Extentions
                                     // so we don't have to check it for active row spans, it starts in the middle
                                     // of another column which has been checked already by the GetNextColumnIndex function
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 // Full column width cannot be processed without a pre existing row span.
                                 // We cannot analyze widths
                                 columnWidthsAvailable = false;
                             }
-                        }
-                        else
-                        {
+                        } else {
                             // Incorrect column width, stop processing
                             columnWidthsAvailable = false;
                         }
@@ -4804,12 +4256,9 @@ namespace SRNicoNico.Views.Extentions
 
             // The width of the tr element is the position at which it's last td element ends, which is calculated in
             // the columnStart value after each td element is processed
-            if (columnWidthsAvailable)
-            {
+            if(columnWidthsAvailable) {
                 trWidth = columnStart;
-            }
-            else
-            {
+            } else {
                 trWidth = 0;
             }
 
@@ -4823,22 +4272,17 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="htmlTDElement">
         /// Html td element to be searched for rowspan attribute
         /// </param>
-        private static int GetRowSpan(XmlElement htmlTDElement)
-        {
+        private static int GetRowSpan(XmlElement htmlTDElement) {
             string rowSpanAsString;
             int rowSpan;
 
             rowSpanAsString = GetAttribute((XmlElement)htmlTDElement, "rowspan");
-            if (rowSpanAsString != null)
-            {
-                if (!Int32.TryParse(rowSpanAsString, out rowSpan))
-                {
+            if(rowSpanAsString != null) {
+                if(!Int32.TryParse(rowSpanAsString, out rowSpan)) {
                     // Ignore invalid value of rowspan; treat it as 1
                     rowSpan = 1;
                 }
-            }
-            else
-            {
+            } else {
                 // No row span, default is 1
                 rowSpan = 1;
             }
@@ -4862,8 +4306,7 @@ namespace SRNicoNico.Views.Extentions
         /// in the array and we can jsut return columnIndex.
         /// </param>
         /// <returns></returns>
-        private static int GetNextColumnIndex(int columnIndex, double columnWidth, ArrayList columnStarts, ArrayList activeRowSpans)
-        {
+        private static int GetNextColumnIndex(int columnIndex, double columnWidth, ArrayList columnStarts, ArrayList activeRowSpans) {
             double columnStart;
             int spannedColumnIndex;
 
@@ -4875,16 +4318,12 @@ namespace SRNicoNico.Views.Extentions
             columnStart = (double)columnStarts[columnIndex];
             spannedColumnIndex = columnIndex + 1;
 
-            while (spannedColumnIndex < columnStarts.Count && (double)columnStarts[spannedColumnIndex] < columnStart + columnWidth && spannedColumnIndex != -1)
-            {
-                if ((int)activeRowSpans[spannedColumnIndex] > 0)
-                {
+            while(spannedColumnIndex < columnStarts.Count && (double)columnStarts[spannedColumnIndex] < columnStart + columnWidth && spannedColumnIndex != -1) {
+                if((int)activeRowSpans[spannedColumnIndex] > 0) {
                     // The current column should span this area, but something else is already spanning it
                     // Not analyzable
                     spannedColumnIndex = -1;
-                }
-                else
-                {
+                } else {
                     spannedColumnIndex++;
                 }
             }
@@ -4899,10 +4338,8 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="activeRowSpans">
         /// ArrayList representing currently active row spans
         /// </param>
-        private static void ClearActiveRowSpans(ArrayList activeRowSpans)
-        {
-            for (int columnIndex = 0; columnIndex < activeRowSpans.Count; columnIndex++)
-            {
+        private static void ClearActiveRowSpans(ArrayList activeRowSpans) {
+            for(int columnIndex = 0; columnIndex < activeRowSpans.Count; columnIndex++) {
                 activeRowSpans[columnIndex] = 0;
             }
         }
@@ -4916,10 +4353,8 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="count">
         /// Size to be give to array list
         /// </param>
-        private static void InitializeActiveRowSpans(ArrayList activeRowSpans, int count)
-        {
-            for (int columnIndex = 0; columnIndex < count; columnIndex++)
-            {
+        private static void InitializeActiveRowSpans(ArrayList activeRowSpans, int count) {
+            for(int columnIndex = 0; columnIndex < count; columnIndex++) {
                 activeRowSpans.Add(0);
             }
         }
@@ -4935,8 +4370,7 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="columnStart">
         /// Starting position of current column
         /// </param>
-        private static double GetNextColumnStart(XmlElement htmlTDElement, double columnStart)
-        {
+        private static double GetNextColumnStart(XmlElement htmlTDElement, double columnStart) {
             double columnWidth;
             double nextColumnStart;
 
@@ -4948,12 +4382,9 @@ namespace SRNicoNico.Views.Extentions
 
             columnWidth = GetColumnWidth(htmlTDElement);
 
-            if (columnWidth == -1)
-            {
+            if(columnWidth == -1) {
                 nextColumnStart = -1;
-            }
-            else
-            {
+            } else {
                 nextColumnStart = columnStart + columnWidth;
             }
 
@@ -4961,8 +4392,7 @@ namespace SRNicoNico.Views.Extentions
         }
 
 
-        private static double GetColumnWidth(XmlElement htmlTDElement)
-        {
+        private static double GetColumnWidth(XmlElement htmlTDElement) {
             string columnWidthAsString;
             double columnWidth;
 
@@ -4971,14 +4401,12 @@ namespace SRNicoNico.Views.Extentions
 
             // Get string valkue for the width
             columnWidthAsString = GetAttribute(htmlTDElement, "width");
-            if (columnWidthAsString == null)
-            {
+            if(columnWidthAsString == null) {
                 columnWidthAsString = GetCssAttribute(GetAttribute(htmlTDElement, "style"), "width");
             }
 
             // We do not allow column width to be 0, if specified as 0 we will fail to record it
-            if (!TryGetLengthValue(columnWidthAsString, out columnWidth) || columnWidth == 0)
-            {
+            if(!TryGetLengthValue(columnWidthAsString, out columnWidth) || columnWidth == 0) {
                 columnWidth = -1;
             }
             return columnWidth;
@@ -4997,8 +4425,7 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="columnStarts">
         /// ArrayList repsenting starting coordinates of all columns
         /// </param>
-        private static int CalculateColumnSpan(int columnIndex, double columnWidth, ArrayList columnStarts)
-        {
+        private static int CalculateColumnSpan(int columnIndex, double columnWidth, ArrayList columnStarts) {
             // Current status of column width. Indicates the amount of width that has been scanned already
             double columnSpanningValue;
             int columnSpanningIndex;
@@ -5015,8 +4442,7 @@ namespace SRNicoNico.Views.Extentions
             columnSpan = 0;
             subColumnWidth = 0;
 
-            while (columnSpanningValue < columnWidth && columnSpanningIndex < columnStarts.Count - 1)
-            {
+            while(columnSpanningValue < columnWidth && columnSpanningIndex < columnStarts.Count - 1) {
                 subColumnWidth = (double)columnStarts[columnSpanningIndex + 1] - (double)columnStarts[columnSpanningIndex];
                 Debug.Assert(subColumnWidth > 0);
                 columnSpanningValue += subColumnWidth;
@@ -5038,16 +4464,14 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="columnStarts">
         /// ArrayList representing starting coordinates of all columns
         /// </param>
-        private static void VerifyColumnStartsAscendingOrder(ArrayList columnStarts)
-        {
+        private static void VerifyColumnStartsAscendingOrder(ArrayList columnStarts) {
             Debug.Assert(columnStarts != null);
 
             double columnStart;
 
             columnStart = -0.01;
 
-            for (int columnIndex = 0; columnIndex < columnStarts.Count; columnIndex++)
-            {
+            for(int columnIndex = 0; columnIndex < columnStarts.Count; columnIndex++) {
                 Debug.Assert(columnStart < (double)columnStarts[columnIndex]);
                 columnStart = (double)columnStarts[columnIndex];
             }
@@ -5068,8 +4492,7 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="localProperties">
         /// Hashtable representing local properties of Html element that is converted into xamlElement
         /// </param>
-        private static void ApplyLocalProperties(XmlElement xamlElement, Hashtable localProperties, bool isBlock)
-        {
+        private static void ApplyLocalProperties(XmlElement xamlElement, Hashtable localProperties, bool isBlock) {
             bool marginSet = false;
             string marginTop = "0";
             string marginBottom = "0";
@@ -5091,10 +4514,8 @@ namespace SRNicoNico.Views.Extentions
             string borderThicknessRight = "0";
 
             IDictionaryEnumerator propertyEnumerator = localProperties.GetEnumerator();
-            while (propertyEnumerator.MoveNext())
-            {
-                switch ((string)propertyEnumerator.Key)
-                {
+            while(propertyEnumerator.MoveNext()) {
+                switch((string)propertyEnumerator.Key) {
                     case "font-family":
                         //  Convert from font-family value list into xaml FontFamily value
                         xamlElement.SetAttribute(Xaml_FontFamily, (string)propertyEnumerator.Value);
@@ -5119,10 +4540,8 @@ namespace SRNicoNico.Views.Extentions
                         SetPropertyValue(xamlElement, TextElement.BackgroundProperty, (string)propertyEnumerator.Value);
                         break;
                     case "text-decoration-underline":
-                        if (!isBlock)
-                        {
-                            if ((string)propertyEnumerator.Value == "true")
-                            {
+                        if(!isBlock) {
+                            if((string)propertyEnumerator.Value == "true") {
                                 xamlElement.SetAttribute(Xaml_TextDecorations, Xaml_TextDecorations_Underline);
                             }
                         }
@@ -5132,8 +4551,7 @@ namespace SRNicoNico.Views.Extentions
                     case "text-decoration-line-through":
                     case "text-decoration-blink":
                         //  Convert from all other text-decorations values
-                        if (!isBlock)
-                        {
+                        if(!isBlock) {
                         }
                         break;
                     case "text-transform":
@@ -5141,15 +4559,13 @@ namespace SRNicoNico.Views.Extentions
                         break;
 
                     case "text-indent":
-                        if (isBlock)
-                        {
+                        if(isBlock) {
                             xamlElement.SetAttribute(Xaml_TextIndent, (string)propertyEnumerator.Value);
                         }
                         break;
 
                     case "text-align":
-                        if (isBlock)
-                        {
+                        if(isBlock) {
                             xamlElement.SetAttribute(Xaml_TextAlignment, (string)propertyEnumerator.Value);
                         }
                         break;
@@ -5231,11 +4647,9 @@ namespace SRNicoNico.Views.Extentions
                         break;
 
                     case "list-style-type":
-                        if (xamlElement.LocalName == Xaml_List)
-                        {
+                        if(xamlElement.LocalName == Xaml_List) {
                             string markerStyle;
-                            switch (((string)propertyEnumerator.Value).ToLower())
-                            {
+                            switch(((string)propertyEnumerator.Value).ToLower()) {
                                 case "disc":
                                     markerStyle = HtmlToXamlConverter.Xaml_List_MarkerStyle_Disc;
                                     break;
@@ -5276,8 +4690,7 @@ namespace SRNicoNico.Views.Extentions
 
                     case "float":
                     case "clear":
-                        if (isBlock)
-                        {
+                        if(isBlock) {
                             //  Convert float and clear properties
                         }
                         break;
@@ -5287,34 +4700,28 @@ namespace SRNicoNico.Views.Extentions
                 }
             }
 
-            if (isBlock)
-            {
-                if (marginSet)
-                {
+            if(isBlock) {
+                if(marginSet) {
                     ComposeThicknessProperty(xamlElement, Xaml_Margin, marginLeft, marginRight, marginTop, marginBottom);
                 }
 
-                if (paddingSet)
-                {
+                if(paddingSet) {
                     ComposeThicknessProperty(xamlElement, Xaml_Padding, paddingLeft, paddingRight, paddingTop, paddingBottom);
                 }
 
-                if (borderColor != null)
-                {
+                if(borderColor != null) {
                     //  We currently ignore possible difference in brush colors on different border sides. Use the last colored side mentioned
                     xamlElement.SetAttribute(Xaml_BorderBrush, borderColor);
                 }
 
-                if (borderThicknessSet)
-                {
+                if(borderThicknessSet) {
                     ComposeThicknessProperty(xamlElement, Xaml_BorderThickness, borderThicknessLeft, borderThicknessRight, borderThicknessTop, borderThicknessBottom);
                 }
             }
         }
 
         // Create syntactically optimized four-value Thickness
-        private static void ComposeThicknessProperty(XmlElement xamlElement, string propertyName, string left, string right, string top, string bottom)
-        {
+        private static void ComposeThicknessProperty(XmlElement xamlElement, string propertyName, string left, string right, string top, string bottom) {
             // Xaml syntax:
             // We have a reasonable interpreation for one value (all four edges), two values (horizontal, vertical),
             // and four values (left, top, right, bottom).
@@ -5326,24 +4733,18 @@ namespace SRNicoNico.Views.Extentions
             string thickness;
 
             // We do not accept negative margins
-            if (left[0] == '0' || left[0] == '-') left = "0";
-            if (right[0] == '0' || right[0] == '-') right = "0";
-            if (top[0] == '0' || top[0] == '-') top = "0";
-            if (bottom[0] == '0' || bottom[0] == '-') bottom = "0";
+            if(left[0] == '0' || left[0] == '-') left = "0";
+            if(right[0] == '0' || right[0] == '-') right = "0";
+            if(top[0] == '0' || top[0] == '-') top = "0";
+            if(bottom[0] == '0' || bottom[0] == '-') bottom = "0";
 
-            if (left == right && top == bottom)
-            {
-                if (left == top)
-                {
+            if(left == right && top == bottom) {
+                if(left == top) {
                     thickness = left;
-                }
-                else
-                {
+                } else {
                     thickness = left + "," + top;
                 }
-            }
-            else
-            {
+            } else {
                 thickness = left + "," + top + "," + right + "," + bottom;
             }
 
@@ -5351,19 +4752,14 @@ namespace SRNicoNico.Views.Extentions
             xamlElement.SetAttribute(propertyName, thickness);
         }
 
-        private static void SetPropertyValue(XmlElement xamlElement, DependencyProperty property, string stringValue)
-        {
+        private static void SetPropertyValue(XmlElement xamlElement, DependencyProperty property, string stringValue) {
             System.ComponentModel.TypeConverter typeConverter = System.ComponentModel.TypeDescriptor.GetConverter(property.PropertyType);
-            try
-            {
+            try {
                 object convertedValue = typeConverter.ConvertFromInvariantString(stringValue);
-                if (convertedValue != null)
-                {
+                if(convertedValue != null) {
                     xamlElement.SetAttribute(property.Name, stringValue);
                 }
-            }
-            catch (Exception)
-            {
+            } catch(Exception) {
             }
         }
 
@@ -5386,13 +4782,11 @@ namespace SRNicoNico.Views.Extentions
         /// returns a combination of previous context with local set of properties.
         /// This value is not used in the current code - inntended for the future development.
         /// </returns>
-        private static Hashtable GetElementProperties(XmlElement htmlElement, Hashtable inheritedProperties, out Hashtable localProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext)
-        {
+        private static Hashtable GetElementProperties(XmlElement htmlElement, Hashtable inheritedProperties, out Hashtable localProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
             // Start with context formatting properties
             Hashtable currentProperties = new Hashtable();
             IDictionaryEnumerator propertyEnumerator = inheritedProperties.GetEnumerator();
-            while (propertyEnumerator.MoveNext())
-            {
+            while(propertyEnumerator.MoveNext()) {
                 currentProperties[propertyEnumerator.Key] = propertyEnumerator.Value;
             }
 
@@ -5403,8 +4797,7 @@ namespace SRNicoNico.Views.Extentions
             // update current formatting properties depending on element tag
 
             localProperties = new Hashtable();
-            switch (elementName)
-            {
+            switch(elementName) {
                 // Character formatting
                 case "i":
                 case "italic":
@@ -5423,27 +4816,21 @@ namespace SRNicoNico.Views.Extentions
                     break;
                 case "font":
                     string attributeValue = GetAttribute(htmlElement, "face");
-                    if (attributeValue != null)
-                    {
+                    if(attributeValue != null) {
                         localProperties["font-family"] = attributeValue;
                     }
                     attributeValue = GetAttribute(htmlElement, "size");
-                    if (attributeValue != null)
-                    {
+                    if(attributeValue != null) {
                         double fontSize = double.Parse(attributeValue) * (12.0 / 3.0);
-                        if (fontSize < 1.0)
-                        {
+                        if(fontSize < 1.0) {
                             fontSize = 1.0;
-                        }
-                        else if (fontSize > 1000.0)
-                        {
+                        } else if(fontSize > 1000.0) {
                             fontSize = 1000.0;
                         }
                         localProperties["font-size"] = fontSize.ToString();
                     }
                     attributeValue = GetAttribute(htmlElement, "color");
-                    if (attributeValue != null)
-                    {
+                    if(attributeValue != null) {
                         localProperties["color"] = attributeValue;
                     }
                     break;
@@ -5517,8 +4904,7 @@ namespace SRNicoNico.Views.Extentions
 
             // Combine local properties with context to create new current properties
             propertyEnumerator = localProperties.GetEnumerator();
-            while (propertyEnumerator.MoveNext())
-            {
+            while(propertyEnumerator.MoveNext()) {
                 currentProperties[propertyEnumerator.Key] = propertyEnumerator.Value;
             }
 
@@ -5538,11 +4924,9 @@ namespace SRNicoNico.Views.Extentions
         /// A string rrepresentation of an attribute value if found;
         /// null if there is no such attribute in a given string.
         /// </returns>
-        private static string GetCssAttribute(string cssStyle, string attributeName)
-        {
+        private static string GetCssAttribute(string cssStyle, string attributeName) {
             //  This is poor man's attribute parsing. Replace it by real css parsing
-            if (cssStyle != null)
-            {
+            if(cssStyle != null) {
                 string[] styleValues;
 
                 attributeName = attributeName.ToLower();
@@ -5550,15 +4934,12 @@ namespace SRNicoNico.Views.Extentions
                 // Check for width specification in style string
                 styleValues = cssStyle.Split(';');
 
-                for (int styleValueIndex = 0; styleValueIndex < styleValues.Length; styleValueIndex++)
-                {
+                for(int styleValueIndex = 0; styleValueIndex < styleValues.Length; styleValueIndex++) {
                     string[] styleNameValue;
 
                     styleNameValue = styleValues[styleValueIndex].Split(':');
-                    if (styleNameValue.Length == 2)
-                    {
-                        if (styleNameValue[0].Trim().ToLower() == attributeName)
-                        {
+                    if(styleNameValue.Length == 2) {
+                        if(styleNameValue[0].Trim().ToLower() == attributeName) {
                             return styleNameValue[1].Trim();
                         }
                     }
@@ -5576,38 +4957,27 @@ namespace SRNicoNico.Views.Extentions
         /// </param>
         /// <param name="length"></param>
         /// <returns></returns>
-        private static bool TryGetLengthValue(string lengthAsString, out double length)
-        {
+        private static bool TryGetLengthValue(string lengthAsString, out double length) {
             length = Double.NaN;
 
-            if (lengthAsString != null)
-            {
+            if(lengthAsString != null) {
                 lengthAsString = lengthAsString.Trim().ToLower();
 
                 // We try to convert currentColumnWidthAsString into a double. This will eliminate widths of type "50%", etc.
-                if (lengthAsString.EndsWith("pt"))
-                {
+                if(lengthAsString.EndsWith("pt")) {
                     lengthAsString = lengthAsString.Substring(0, lengthAsString.Length - 2);
-                    if (Double.TryParse(lengthAsString, out length))
-                    {
+                    if(Double.TryParse(lengthAsString, out length)) {
                         length = (length * 96.0) / 72.0; // convert from points to pixels
-                    }
-                    else
-                    {
+                    } else {
                         length = Double.NaN;
                     }
-                }
-                else if (lengthAsString.EndsWith("px"))
-                {
+                } else if(lengthAsString.EndsWith("px")) {
                     lengthAsString = lengthAsString.Substring(0, lengthAsString.Length - 2);
-                    if (!Double.TryParse(lengthAsString, out length))
-                    {
+                    if(!Double.TryParse(lengthAsString, out length)) {
                         length = Double.NaN;
                     }
-                }
-                else
-                {
-                    if (!Double.TryParse(lengthAsString, out length)) // Assuming pixels
+                } else {
+                    if(!Double.TryParse(lengthAsString, out length)) // Assuming pixels
                     {
                         length = Double.NaN;
                     }
@@ -5623,8 +4993,7 @@ namespace SRNicoNico.Views.Extentions
         //
         // .................................................................
 
-        private static string GetColorValue(string colorValue)
-        {
+        private static string GetColorValue(string colorValue) {
             // TODO: Implement color conversion
             return colorValue;
         }
@@ -5641,8 +5010,7 @@ namespace SRNicoNico.Views.Extentions
         /// <remarks>
         /// TODO: Use the processed properties for htmlChildNode instead of using the node itself
         /// </remarks>
-        private static void ApplyPropertiesToTableCellElement(XmlElement htmlChildNode, XmlElement xamlTableCellElement)
-        {
+        private static void ApplyPropertiesToTableCellElement(XmlElement htmlChildNode, XmlElement xamlTableCellElement) {
             // Parameter validation
             Debug.Assert(htmlChildNode.LocalName.ToLower() == "td" || htmlChildNode.LocalName.ToLower() == "th");
             Debug.Assert(xamlTableCellElement.LocalName == Xaml_TableCell);
@@ -5651,8 +5019,7 @@ namespace SRNicoNico.Views.Extentions
             xamlTableCellElement.SetAttribute(Xaml_TableCell_BorderThickness, "1,1,1,1");
             xamlTableCellElement.SetAttribute(Xaml_TableCell_BorderBrush, Xaml_Brushes_Black);
             string rowSpanString = GetAttribute((XmlElement)htmlChildNode, "rowspan");
-            if (rowSpanString != null)
-            {
+            if(rowSpanString != null) {
                 xamlTableCellElement.SetAttribute(Xaml_TableCell_RowSpan, rowSpanString);
             }
         }
@@ -5757,8 +5124,7 @@ namespace SRNicoNico.Views.Extentions
     /// HtmlFromXamlConverter is a static class that takes an XAML string
     /// and converts it into HTML
     /// </summary>
-    public static class HtmlFromXamlConverter
-    {
+    public static class HtmlFromXamlConverter {
         // ---------------------------------------------------------------------
         //
         // Internal Methods
@@ -5777,8 +5143,7 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// Html string produced from a source xaml.
         /// </returns>
-        internal static string ConvertXamlToHtml(string xamlString)
-        {
+        internal static string ConvertXamlToHtml(string xamlString) {
             XmlTextReader xamlReader;
             StringBuilder htmlStringBuilder;
             XmlTextWriter htmlWriter;
@@ -5788,8 +5153,7 @@ namespace SRNicoNico.Views.Extentions
             htmlStringBuilder = new StringBuilder(100);
             htmlWriter = new XmlTextWriter(new StringWriter(htmlStringBuilder));
 
-            if (!WriteFlowDocument(xamlReader, htmlWriter))
-            {
+            if(!WriteFlowDocument(xamlReader, htmlWriter)) {
                 return "";
             }
 
@@ -5816,16 +5180,13 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="htmlWriter">
         /// XmlTextWriter producing resulting html
         /// </param>
-        private static bool WriteFlowDocument(XmlTextReader xamlReader, XmlTextWriter htmlWriter)
-        {
-            if (!ReadNextToken(xamlReader))
-            {
+        private static bool WriteFlowDocument(XmlTextReader xamlReader, XmlTextWriter htmlWriter) {
+            if(!ReadNextToken(xamlReader)) {
                 // Xaml content is empty - nothing to convert
                 return false;
             }
 
-            if (xamlReader.NodeType != XmlNodeType.Element || xamlReader.Name != "FlowDocument")
-            {
+            if(xamlReader.NodeType != XmlNodeType.Element || xamlReader.Name != "FlowDocument") {
                 // Root FlowDocument elemet is missing
                 return false;
             }
@@ -5863,26 +5224,22 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="inlineStyle">
         /// String builder for collecting css properties for inline STYLE attribute.
         /// </param>
-        private static void WriteFormattingProperties(XmlTextReader xamlReader, XmlTextWriter htmlWriter, StringBuilder inlineStyle)
-        {
+        private static void WriteFormattingProperties(XmlTextReader xamlReader, XmlTextWriter htmlWriter, StringBuilder inlineStyle) {
             Debug.Assert(xamlReader.NodeType == XmlNodeType.Element);
 
             // Clear string builder for the inline style
             inlineStyle.Remove(0, inlineStyle.Length);
 
-            if (!xamlReader.HasAttributes)
-            {
+            if(!xamlReader.HasAttributes) {
                 return;
             }
 
             bool borderSet = false;
 
-            while (xamlReader.MoveToNextAttribute())
-            {
+            while(xamlReader.MoveToNextAttribute()) {
                 string css = null;
 
-                switch (xamlReader.Name)
-                {
+                switch(xamlReader.Name) {
                     // Character fomatting properties
                     // ------------------------------
                     case "Background":
@@ -5969,14 +5326,12 @@ namespace SRNicoNico.Views.Extentions
                         break;
                 }
 
-                if (css != null)
-                {
+                if(css != null) {
                     inlineStyle.Append(css);
                 }
             }
 
-            if (borderSet)
-            {
+            if(borderSet) {
                 inlineStyle.Append("border-style:solid;mso-element:para-border-div;");
             }
 
@@ -5985,36 +5340,28 @@ namespace SRNicoNico.Views.Extentions
             Debug.Assert(xamlReader.NodeType == XmlNodeType.Element);
         }
 
-        private static string ParseXamlColor(string color)
-        {
-            if (color.StartsWith("#"))
-            {
+        private static string ParseXamlColor(string color) {
+            if(color.StartsWith("#")) {
                 // Remove transparancy value
                 color = "#" + color.Substring(3);
             }
             return color;
         }
 
-        private static string ParseXamlThickness(string thickness)
-        {
+        private static string ParseXamlThickness(string thickness) {
             string[] values = thickness.Split(',');
 
-            for (int i = 0; i < values.Length; i++)
-            {
+            for(int i = 0; i < values.Length; i++) {
                 double value;
-                if (double.TryParse(values[i], out value))
-                {
+                if(double.TryParse(values[i], out value)) {
                     values[i] = Math.Ceiling(value).ToString();
-                }
-                else
-                {
+                } else {
                     values[i] = "1";
                 }
             }
 
             string cssThickness;
-            switch (values.Length)
-            {
+            switch(values.Length) {
                 case 1:
                     cssThickness = thickness;
                     break;
@@ -6046,37 +5393,26 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="inlineStyle">
         /// StringBuilder used for collecting css properties for inline STYLE attribute.
         /// </param>
-        private static void WriteElementContent(XmlTextReader xamlReader, XmlTextWriter htmlWriter, StringBuilder inlineStyle)
-        {
+        private static void WriteElementContent(XmlTextReader xamlReader, XmlTextWriter htmlWriter, StringBuilder inlineStyle) {
             Debug.Assert(xamlReader.NodeType == XmlNodeType.Element);
 
             bool elementContentStarted = false;
 
-            if (xamlReader.IsEmptyElement)
-            {
-                if (htmlWriter != null && !elementContentStarted && inlineStyle.Length > 0)
-                {
+            if(xamlReader.IsEmptyElement) {
+                if(htmlWriter != null && !elementContentStarted && inlineStyle.Length > 0) {
                     // Output STYLE attribute and clear inlineStyle buffer.
                     htmlWriter.WriteAttributeString("STYLE", inlineStyle.ToString());
                     inlineStyle.Remove(0, inlineStyle.Length);
                 }
                 elementContentStarted = true;
-            }
-            else
-            {
-                while (ReadNextToken(xamlReader) && xamlReader.NodeType != XmlNodeType.EndElement)
-                {
-                    switch (xamlReader.NodeType)
-                    {
+            } else {
+                while(ReadNextToken(xamlReader) && xamlReader.NodeType != XmlNodeType.EndElement) {
+                    switch(xamlReader.NodeType) {
                         case XmlNodeType.Element:
-                            if (xamlReader.Name.Contains("."))
-                            {
+                            if(xamlReader.Name.Contains(".")) {
                                 AddComplexProperty(xamlReader, inlineStyle);
-                            }
-                            else
-                            {
-                                if (htmlWriter != null && !elementContentStarted && inlineStyle.Length > 0)
-                                {
+                            } else {
+                                if(htmlWriter != null && !elementContentStarted && inlineStyle.Length > 0) {
                                     // Output STYLE attribute and clear inlineStyle buffer.
                                     htmlWriter.WriteAttributeString("STYLE", inlineStyle.ToString());
                                     inlineStyle.Remove(0, inlineStyle.Length);
@@ -6087,10 +5423,8 @@ namespace SRNicoNico.Views.Extentions
                             Debug.Assert(xamlReader.NodeType == XmlNodeType.EndElement || xamlReader.NodeType == XmlNodeType.Element && xamlReader.IsEmptyElement);
                             break;
                         case XmlNodeType.Comment:
-                            if (htmlWriter != null)
-                            {
-                                if (!elementContentStarted && inlineStyle.Length > 0)
-                                {
+                            if(htmlWriter != null) {
+                                if(!elementContentStarted && inlineStyle.Length > 0) {
                                     htmlWriter.WriteAttributeString("STYLE", inlineStyle.ToString());
                                 }
                                 htmlWriter.WriteComment(xamlReader.Value);
@@ -6100,10 +5434,8 @@ namespace SRNicoNico.Views.Extentions
                         case XmlNodeType.CDATA:
                         case XmlNodeType.Text:
                         case XmlNodeType.SignificantWhitespace:
-                            if (htmlWriter != null)
-                            {
-                                if (!elementContentStarted && inlineStyle.Length > 0)
-                                {
+                            if(htmlWriter != null) {
+                                if(!elementContentStarted && inlineStyle.Length > 0) {
                                     htmlWriter.WriteAttributeString("STYLE", inlineStyle.ToString());
                                 }
                                 htmlWriter.WriteString(xamlReader.Value);
@@ -6127,12 +5459,10 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="inlineStyle">
         /// StringBuilder containing a value for STYLE attribute.
         /// </param>
-        private static void AddComplexProperty(XmlTextReader xamlReader, StringBuilder inlineStyle)
-        {
+        private static void AddComplexProperty(XmlTextReader xamlReader, StringBuilder inlineStyle) {
             Debug.Assert(xamlReader.NodeType == XmlNodeType.Element);
 
-            if (inlineStyle != null && xamlReader.Name.EndsWith(".TextDecorations"))
-            {
+            if(inlineStyle != null && xamlReader.Name.EndsWith(".TextDecorations")) {
                 inlineStyle.Append("text-decoration:underline;");
             }
 
@@ -6154,21 +5484,16 @@ namespace SRNicoNico.Views.Extentions
         /// <param name="inlineStyle">
         /// StringBuilder used for collecting css properties for inline STYLE attributes on every level.
         /// </param>
-        private static void WriteElement(XmlTextReader xamlReader, XmlTextWriter htmlWriter, StringBuilder inlineStyle)
-        {
+        private static void WriteElement(XmlTextReader xamlReader, XmlTextWriter htmlWriter, StringBuilder inlineStyle) {
             Debug.Assert(xamlReader.NodeType == XmlNodeType.Element);
 
-            if (htmlWriter == null)
-            {
+            if(htmlWriter == null) {
                 // Skipping mode; recurse into the xaml element without any output
                 WriteElementContent(xamlReader, /*htmlWriter:*/null, null);
-            }
-            else
-            {
+            } else {
                 string htmlElementName = null;
 
-                switch (xamlReader.Name)
-                {
+                switch(xamlReader.Name) {
                     case "Run":
                     case "Span":
                         htmlElementName = "SPAN";
@@ -6208,12 +5533,9 @@ namespace SRNicoNico.Views.Extentions
                         break;
                     case "List":
                         string marker = xamlReader.GetAttribute("MarkerStyle");
-                        if (marker == null || marker == "None" || marker == "Disc" || marker == "Circle" || marker == "Square" || marker == "Box")
-                        {
+                        if(marker == null || marker == "None" || marker == "Disc" || marker == "Circle" || marker == "Square" || marker == "Box") {
                             htmlElementName = "UL";
-                        }
-                        else
-                        {
+                        } else {
                             htmlElementName = "OL";
                         }
                         break;
@@ -6225,8 +5547,7 @@ namespace SRNicoNico.Views.Extentions
                         break;
                 }
 
-                if (htmlWriter != null && htmlElementName != null)
-                {
+                if(htmlWriter != null && htmlElementName != null) {
                     htmlWriter.WriteStartElement(htmlElementName);
 
                     WriteFormattingProperties(xamlReader, htmlWriter, inlineStyle);
@@ -6234,9 +5555,7 @@ namespace SRNicoNico.Views.Extentions
                     WriteElementContent(xamlReader, htmlWriter, inlineStyle);
 
                     htmlWriter.WriteEndElement();
-                }
-                else
-                {
+                } else {
                     // Skip this unrecognized xaml element
                     WriteElementContent(xamlReader, /*htmlWriter:*/null, null);
                 }
@@ -6255,13 +5574,10 @@ namespace SRNicoNico.Views.Extentions
         /// <returns>
         /// True if new token is available; false if end of stream reached.
         /// </returns>
-        private static bool ReadNextToken(XmlReader xamlReader)
-        {
-            while (xamlReader.Read())
-            {
+        private static bool ReadNextToken(XmlReader xamlReader) {
+            while(xamlReader.Read()) {
                 Debug.Assert(xamlReader.ReadState == ReadState.Interactive, "Reader is expected to be in Interactive state (" + xamlReader.ReadState + ")");
-                switch (xamlReader.NodeType)
-                {
+                switch(xamlReader.NodeType) {
                     case XmlNodeType.Element:
                     case XmlNodeType.EndElement:
                     case XmlNodeType.None:
@@ -6271,8 +5587,7 @@ namespace SRNicoNico.Views.Extentions
                         return true;
 
                     case XmlNodeType.Whitespace:
-                        if (xamlReader.XmlSpace == XmlSpace.Preserve)
-                        {
+                        if(xamlReader.XmlSpace == XmlSpace.Preserve) {
                             return true;
                         }
                         // ignore insignificant whitespace

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using System.Net;
 using System.Net.Http;
 
 using Livet;
@@ -12,6 +13,7 @@ using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
 
 using Codeplex.Data;
+using System.Text.RegularExpressions;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
@@ -26,6 +28,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             //動画ページのhtml取得
             HttpResponseMessage response = NicoNicoWrapperMain.GetSession().HttpClient.GetAsync(videoPage).Result;
+
+            //チャンネル、公式動画
+            if(response.StatusCode == HttpStatusCode.MovedPermanently) {
+
+                
+                response = NicoNicoWrapperMain.GetSession().HttpClient.GetAsync(response.Headers.Location).Result;
+            }
 
             var cookie = response.Headers.GetValues("Set-Cookie");
             foreach(string s in cookie) {
@@ -86,8 +95,19 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.YesterdayRank = videoDetail.yesterday_rank;
             ret.HighestRank = videoDetail.highest_rank;
 
-            //ret.Description = ret.Description.Replace("<", "[").Replace(">", "]");
+
             Console.WriteLine(ret.Description);
+            //ret.Description = ret.Description.Replace("<", "[").Replace(">", "]");
+            Regex regex = new Regex(@"sm\d*");
+            ret.Description = regex.Replace(ret.Description, new MatchEvaluator(m => {
+
+                Match match = m;
+                
+                return "<a href=\"" + match.Value + "\">" + match.Value + "</a>";
+            }));
+            Console.WriteLine(ret.Description);
+
+
 
             foreach(var tag in videoDetail.tagList) {
 

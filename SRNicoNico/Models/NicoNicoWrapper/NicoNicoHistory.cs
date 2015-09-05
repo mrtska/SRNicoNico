@@ -17,15 +17,29 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //たまに失敗するから注意
         public List<NicoNicoHistoryData> GetHistroyData() {
 
+            int retry = 1;
 
             App.ViewModelRoot.StatusBar.Status = "視聴履歴取得中";
-
+start:
             //このAPIだけでは再生数やコメント数などが取得できないので
             string result = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(HistroyApiUrl).Result;
 
             List<NicoNicoHistoryData> ret = new List<NicoNicoHistoryData>();
 
             var json = DynamicJson.Parse(result);
+
+            //取得失敗
+            if(json.code() && json.code == "internal_error") {
+
+                if(retry == 5) {
+
+                    App.ViewModelRoot.StatusBar.Status = "視聴履歴の取得に失敗しました。";
+                    return null;
+                }
+                App.ViewModelRoot.StatusBar.Status = "視聴履歴取得失敗(" + retry++ + "回)";
+                goto start;
+            }
+            App.ViewModelRoot.StatusBar.Status = "視聴履歴取得中";
 
             foreach(var entry in json.history) {
 

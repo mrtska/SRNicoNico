@@ -139,6 +139,7 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        //NicoNicoPlayerへのパス
         public string Address {
 
             get {
@@ -158,6 +159,22 @@ namespace SRNicoNico.ViewModels {
                 if(_CommentVisibility == value)
                     return;
                 _CommentVisibility = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        //フルスクリーンかどうか
+        #region IsFullScreen変更通知プロパティ
+        private bool _IsFullScreen;
+
+        public bool IsFullScreen {
+            get { return _IsFullScreen; }
+            set { 
+                if(_IsFullScreen == value)
+                    return;
+                _IsFullScreen = value;
                 RaisePropertyChanged();
             }
         }
@@ -256,14 +273,34 @@ namespace SRNicoNico.ViewModels {
             
         }
 
+        public void OpenLink(Uri uri) {
+
+
+
+            ;
+
+        }
+
+
+
+
         //フルスクリーンにする
         public void GoToFullScreen() {
 
-            
+            if(IsFullScreen) {
+
+                return;
+            }
+            IsFullScreen = true;
+
+            //リソースに登録
             Application.Current.Resources["VideoFlashKey"] = VideoFlash;
             var message = new TransitionMessage(typeof(FullScreenWindow), this, TransitionMode.Modal);
 
+            //ウィンドウからFlash部分を消去
             Video.Grid.Children.Remove(VideoFlash);
+
+            //フルスクリーンウィンドウ表示
             Messenger.Raise(message);
 
 
@@ -272,19 +309,38 @@ namespace SRNicoNico.ViewModels {
         //ウィンドウモードに戻す
         public void ReturnFromFullScreen() {
 
-            FullScreenWindow.Content.Content = null;
-            FullScreenWindow.Grid.Children.Clear();
+            if(!IsFullScreen) {
+                
+                return;
+            }
+
+            IsFullScreen = false;
+
+            //Flash部分をフルスクリーンウィンドウから消去
+            FullScreenWindow.ContentControl.Content = null;
+
+            //ウィンドウを閉じる
             FullScreenWindow.Close();
 
-            Application.Current.Resources["VideoFlashKey"] = null;
 
-            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+            //ウィンドウにFlash部分を追加
+            Video.Grid.Children.Add(VideoFlash);
 
-                Video.Grid.Children.Add(VideoFlash);
-                Video.Focus();
-            }));
-            
+            //フォーカス
+            Video.Focus();
 
+        }
+
+        //フルスクリーン切り替え
+        public void ToggleFullScreen() {
+
+            if(IsFullScreen) {
+
+                ReturnFromFullScreen();
+            } else {
+
+                GoToFullScreen();
+            }
         }
 
         //一時停止切り替え
@@ -302,6 +358,12 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+        //最初から
+        public void Restart() {
+
+            Seek(0);
+            //DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => SetSeekCursor(0)));
+        }
 
         //1フレーム毎に呼ばれる
         public void CsFrame(float time, float buffer) {
@@ -312,14 +374,10 @@ namespace SRNicoNico.ViewModels {
 
             //Console.WriteLine(VideoData.ApiData.Cmsid + " " + time + ":" + buffer + " vpos:" + vpos);
 
+            
 
-            Time.CurrentTime = (int) time;
-            Time.CurrentTimeMilis = (int) (time * 100);
-            Time.CurrentTimeString = NicoNicoUtil.GetTimeFromLong(Time.CurrentTime);
-            Time.CurrentTimeWidth = WebBrowser.ActualWidth / VideoData.ApiData.Length * Time.CurrentTime;
-            SeekCursor = new Thickness(Time.CurrentTimeWidth, 0, 0, 0);
-
-
+            SetSeekCursor(time);
+            
             
             
             if(VideoData.ApiData.Length == time) {
@@ -327,6 +385,16 @@ namespace SRNicoNico.ViewModels {
                 Seek(0);
             }
             
+
+        }
+
+        private void SetSeekCursor(float time) {
+
+            Time.CurrentTime = (int)time;
+            Time.CurrentTimeMilis = (int)(time * 100);
+            Time.CurrentTimeString = NicoNicoUtil.GetTimeFromLong(Time.CurrentTime);
+            Time.CurrentTimeWidth = WebBrowser.ActualWidth / VideoData.ApiData.Length * Time.CurrentTime;
+            SeekCursor = new Thickness(Time.CurrentTimeWidth, 0, 0, 0);
 
         }
 
@@ -360,7 +428,6 @@ namespace SRNicoNico.ViewModels {
         public void Seek(float pos) {
 
             InvokeScript("JsSeek", pos.ToString());
-
         }
         
         public void InjectComment(string json) {

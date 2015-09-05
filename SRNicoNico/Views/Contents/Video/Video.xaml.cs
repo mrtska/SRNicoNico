@@ -32,5 +32,19 @@ namespace SRNicoNico.Views.Contents.Video {
                 vm.Video = this;
             }
         }
+
+        private void TextBlock_TriggerRequest(object sender, RoutedEventArgs e) {
+
+            if(DataContext is VideoViewModel) {
+
+                VideoViewModel vm = (VideoViewModel)DataContext;
+                if(e.OriginalSource is Hyperlink) {
+
+                    Hyperlink link = (Hyperlink) e.OriginalSource;
+
+                    vm.OpenLink(link.NavigateUri);
+                }
+            }
+        }
     }
 }

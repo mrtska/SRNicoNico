@@ -180,7 +180,7 @@ package  {
 				
 				fscommand("CsFrame", value + ":" + buffer.toString());
 			}
-			
+			prevTime = (int) (value);
 			
 			var vpos:Number = Math.floor(value * 100);
 			
