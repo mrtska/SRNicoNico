@@ -19,16 +19,6 @@ namespace SRNicoNico.ViewModels {
 	public class VideoViewModel : ViewModel {
 
         
-		//キャッシュパス
-		public string Path { get; set; }
-        
-
-		//インラインシークバー画像プレビュー
-		public NicoNicoStoryBoard StoryBoard { get; set; }
-
-
-
-
 		//API結果
 		#region VideoData変更通知プロパティ
 		private VideoData _VideoData;
@@ -44,8 +34,6 @@ namespace SRNicoNico.ViewModels {
 		}
 		#endregion
 
-
-
 		//各種シークバー関連の時間管理
 		#region Time変更通知プロパティ
 		private VideoTime _Time;
@@ -60,7 +48,6 @@ namespace SRNicoNico.ViewModels {
 			}
 		}
 		#endregion
-
 
 
 		#region BPS変更通知プロパティ
@@ -208,6 +195,20 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region FullScreenWindow変更通知プロパティ UI要素 仕方ないんです
+        private FullScreenWindow _FullScreenWindow;
+
+        public FullScreenWindow FullScreenWindow {
+            get { return _FullScreenWindow; }
+            set { 
+                if(_FullScreenWindow == value)
+                    return;
+                _FullScreenWindow = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
 
         public VideoViewModel(string videoUrl) {
@@ -237,23 +238,25 @@ namespace SRNicoNico.ViewModels {
 
                 List<NicoNicoCommentEntry> list = comment.GetComment();
 
-                
-                dynamic json = DynamicJson.Serialize(list.ToArray());
-                
 
-                Console.WriteLine(json.ToString());
 
                 foreach(NicoNicoCommentEntry entry in list) {
 
                     VideoData.CommentData.Add(new CommentEntryViewModel(entry));
                 }
 
-                ;
+
+                dynamic json = new DynamicJson();
+                json.array = list;
+
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => InjectComment(json.ToString())));
+                
             });
 
             
         }
 
+        //フルスクリーンにする
         public void GoToFullScreen() {
 
             
@@ -266,6 +269,25 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+        //ウィンドウモードに戻す
+        public void ReturnFromFullScreen() {
+
+            FullScreenWindow.Content.Content = null;
+            FullScreenWindow.Grid.Children.Clear();
+            FullScreenWindow.Close();
+
+            Application.Current.Resources["VideoFlashKey"] = null;
+
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+                Video.Grid.Children.Add(VideoFlash);
+                Video.Focus();
+            }));
+            
+
+        }
+
+        //一時停止切り替え
         public void PlayOrPauseOrResume() {
 
             if(IsPlaying) {
@@ -299,17 +321,7 @@ namespace SRNicoNico.ViewModels {
 
 
             
-
-            int kBps = BPSCounter.Bps / 1024;
-            //数字がデカかったら単位を変えましょう
-            if(kBps > 1024) {
-
-                BPS = (Math.Truncate((float)kBps / 1024 * 100) / 100) + "MiB/秒";
-            } else {
-
-                BPS = kBps + "KiB/秒";
-            }
-
+            
             if(VideoData.ApiData.Length == time) {
 
                 Seek(0);
@@ -321,7 +333,7 @@ namespace SRNicoNico.ViewModels {
         //このメソッド以降はWebBrowserプロパティはnullではない
         public void OpenVideo() {
 
-			while(VideoData.ApiData == null && !CommentVisibility) {
+			while(VideoData.ApiData == null) {
 
 				Thread.Sleep(50);
 			}
@@ -330,7 +342,7 @@ namespace SRNicoNico.ViewModels {
             IsPlaying = true;
             InvokeScript("JsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
             
-
+            
         }
 
 
@@ -349,6 +361,11 @@ namespace SRNicoNico.ViewModels {
 
             InvokeScript("JsSeek", pos.ToString());
 
+        }
+        
+        public void InjectComment(string json) {
+            
+           InvokeScript("JsInjectComment", json);
         }
 
         //JSを呼ぶ

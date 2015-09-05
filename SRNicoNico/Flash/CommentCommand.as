@@ -9,9 +9,9 @@ package {
 		public static const PLACE_SHITA:String = "shita";
 		
 		//フォントサイズ
-		private static const BIG_FONT_SIZE:Number = 39;
-		private static const MEDIUM_FONT_SIZE:Number = 24;
-		private static const SMALL_FONT_SIZE:Number = 15;
+		public static const BIG_FONT_SIZE:Number = 39;
+		public static const MEDIUM_FONT_SIZE:Number = 24;
+		public static const SMALL_FONT_SIZE:Number = 15;
 		
 		
 		//ニコニコ上で使える一般的なカラーマップ（#指定除く）
@@ -91,6 +91,9 @@ package {
 		//コメント表示時間
 		private var _duration:uint;
 		
+		//
+		private var _full:Boolean = false;
+		
 		public function CommentCommand(mail:String) {
 		
 			
@@ -130,7 +133,10 @@ package {
 				_duration = 400;
 			}
 			
-			
+			if(mail.indexOf("full") >= 0) {
+				
+				_full = true;
+			}
 		}
 		
 		public function get color():uint {
@@ -153,5 +159,9 @@ package {
 			return _duration;
 		}
 		
+		public function get full():Boolean {
+			
+			return _full;
+		}
 	}
 }

@@ -5,6 +5,7 @@ using System.Runtime.Versioning;
 using System.Diagnostics;
 
 using Livet;
+using System.Net.NetworkInformation;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
 	public class BPSCounter : NotificationObject {
@@ -14,14 +15,19 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
 		//速度取得開始
 		public static void InitAndStart() {
+            PerformanceCounterCategory category = new PerformanceCounterCategory(".NET CLR Networking 4.0.0.0");
+            string[] instancename = category.GetInstanceNames();
 
+            foreach(string name in instancename) {
+                Console.WriteLine(name);
+            }
 
-			Task.Run(() => {
+            Task.Run(() => {
 
 				PerformanceCounter counter = new PerformanceCounter();
 				counter.CategoryName = ".NET CLR Networking 4.0.0.0";
 				counter.CounterName = "Bytes Received";
-				counter.InstanceName = VersioningHelper.MakeVersionSafeName("SRNicoNico.exe", ResourceScope.Machine, ResourceScope.AppDomain);
+                counter.InstanceName = "_global_";//VersioningHelper.MakeVersionSafeName("SRNicoNico.exe", ResourceScope.Machine, ResourceScope.AppDomain);
 				counter.ReadOnly = true;
 
 				float f1 = 0, f2 = 0;

@@ -1,4 +1,5 @@
 ﻿using MetroRadiance.Controls;
+using SRNicoNico.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SRNicoNico {
+namespace SRNicoNico.Views.Contents.Video {
     /* 
 	 * ViewModelからの変更通知などの各種イベントを受け取る場合は、PropertyChangedWeakEventListenerや
      * CollectionChangedWeakEventListenerを使うと便利です。独自イベントの場合はLivetWeakEventListenerが使用できます。
@@ -28,6 +29,16 @@ namespace SRNicoNico {
     public partial class FullScreenWindow : Window {
         public FullScreenWindow() {
             InitializeComponent();
+        }
+
+        private void Window_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+
+            if(DataContext is VideoViewModel) {
+
+                VideoViewModel vm = (VideoViewModel) DataContext;
+                vm.FullScreenWindow = this;
+            }
+
         }
     }
 }

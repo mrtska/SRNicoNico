@@ -5,7 +5,6 @@ package  {
 	import flash.display.StageScaleMode;
 	import flash.events.AsyncErrorEvent;
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	import flash.events.NetStatusEvent;
 	import flash.external.ExternalInterface;
 	import flash.geom.Rectangle;
@@ -18,7 +17,7 @@ package  {
 	import flash.system.fscommand;
 	import flash.text.TextFormat;
 	
-	[SWF(width="1280", height="720")]
+	[SWF(width="672", height="384")]
 	public class NicoNicoPlayer extends Sprite {
 		
 		//ストリーミングURL そのまんま
@@ -61,7 +60,7 @@ package  {
 			
 			rastarizer = new CommentRasterizer();
 			
-			//OpenVideo("Z:/smile.flv");
+			/*OpenVideo("Z:/smile.flv");
 			//OpenVideo("Z:/smile.mp4");
 			//OpenVideo("Z:/smile (1).mp4");
 			//var now:Date = new Date();
@@ -69,7 +68,7 @@ package  {
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
 			
-			/*var loader:URLLoader = new URLLoader();
+			var loader:URLLoader = new URLLoader();
 			var req:URLRequest = new URLRequest("Z:/msg.txt");
 			
 			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
@@ -165,6 +164,8 @@ package  {
 		}
 		
 		
+		private var prevTime:int = 0;
+		
 		private function onFrame(e:Event):void {
 			
 			// 再生時間を取得
@@ -175,7 +176,11 @@ package  {
 			
 			//trace("Time:" + stream.time);
 			
-			fscommand("CsFrame", value + ":" + buffer.toString());
+			if(prevTime != (int)(value)) {
+				
+				fscommand("CsFrame", value + ":" + buffer.toString());
+			}
+			
 			
 			var vpos:Number = Math.floor(value * 100);
 			

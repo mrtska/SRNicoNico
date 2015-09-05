@@ -47,6 +47,8 @@ package {
 			this.autoSize = TextFieldAutoSize.CENTER;
 			this.filters = DEFAULT_FILTERS;
 			this.text = content;
+			
+			CommentSizeCalculator.calcScale(this, this.numLines);
 		}
 	}
 }

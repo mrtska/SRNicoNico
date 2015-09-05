@@ -1,4 +1,4 @@
-﻿<Window x:Class="SRNicoNico.FullScreenWindow"
+﻿<Window x:Class="SRNicoNico.Views.Contents.Video.FullScreenWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -9,8 +9,7 @@
 		xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
         Title="FullScreenWindow" 
         WindowState="Maximized"
-        WindowStyle="None"
-        Topmost="True"
+        WindowStyle="None" DataContextChanged="Window_DataContextChanged"
         >
 
     
@@ -25,10 +24,13 @@
 
         <!--WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください-->
 
+        <ei:KeyTrigger Key="Esc" FiredOn="KeyDown">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ReturnFromFullScreen" />
+        </ei:KeyTrigger>
     </i:Interaction.Triggers>
 
-    <Grid>
-        <ContentControl>
+    <Grid x:Name="Grid">
+        <ContentControl x:Name="Content">
             <DynamicResource ResourceKey="VideoFlashKey" />
         </ContentControl>
         
