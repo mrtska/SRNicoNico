@@ -13,6 +13,8 @@
         WindowState="Maximized"
         WindowStyle="None" DataContextChanged="Window_DataContextChanged"
         x:Name="screen"
+		Background="{DynamicResource ThemeBrushKey}"
+        Foreground="{DynamicResource ActiveForegroundBrushKey}"
         >
 
     

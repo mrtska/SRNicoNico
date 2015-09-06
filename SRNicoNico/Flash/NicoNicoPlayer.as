@@ -60,7 +60,7 @@ package  {
 			
 			rastarizer = new CommentRasterizer();
 			
-			/*OpenVideo("Z:/smile.flv");
+			//OpenVideo("Z:/smile.flv");
 			//OpenVideo("Z:/smile.mp4");
 			//OpenVideo("Z:/smile (1).mp4");
 			//var now:Date = new Date();
@@ -68,7 +68,7 @@ package  {
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
 			
-			var loader:URLLoader = new URLLoader();
+			/*var loader:URLLoader = new URLLoader();
 			var req:URLRequest = new URLRequest("Z:/msg.txt");
 			
 			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
@@ -165,6 +165,7 @@ package  {
 		
 		
 		private var prevTime:int = 0;
+		private var prevLoaded:uint = 0;
 		
 		private function onFrame(e:Event):void {
 			
@@ -178,7 +179,8 @@ package  {
 			
 			if(prevTime != (int)(value)) {
 				
-				fscommand("CsFrame", value + ":" + buffer.toString());
+				fscommand("CsFrame", value + ":" + buffer.toString() + ":" + (stream.bytesLoaded - prevLoaded).toString());
+				prevLoaded = stream.bytesLoaded;
 			}
 			prevTime = (int) (value);
 			

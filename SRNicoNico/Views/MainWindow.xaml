@@ -54,19 +54,58 @@
         <!--  WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください  -->
 
     </i:Interaction.Triggers>
-	
-	
 
-    <ContentControl Content="{Binding RootContent}">
 
-        <ContentControl.Resources>
-            <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
-                <root:RootContent HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            </DataTemplate>
-        </ContentControl.Resources>
-		
-	
-	</ContentControl>
 
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="23" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+				metro:MetroWindow.IsCaptionBar="True">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1"
+						   Text="{Binding Title}"
+						   TextTrimming="CharacterEllipsis"
+						   Foreground="{DynamicResource ForegroundBrushKey}"
+						   FontFamily="Segoe UI Light"
+						   FontSize="18"
+						   Margin="3,0,0,0"
+						   VerticalAlignment="Center" />
+                <metro:SystemButtons Grid.Column="2"
+										VerticalAlignment="Top" />
+            </Grid>
+        </Border>
+
+        <contents:MainContent Grid.Row="1"/>
+
+        <DockPanel x:Name="statusBar"
+				   x:FieldModifier="private"
+				   Grid.Row="2"
+				   Height="23"
+				   Background="{DynamicResource AccentBrushKey}"
+				   >
+            <Border DockPanel.Dock="Right" Width="{Binding ActualWidth, ElementName=resizeGrip}" />
+            <v:StatusBar DataContext="{Binding StatusBar}"/>
+        </DockPanel>
+
+        <metro:ResizeGrip Grid.Row="1"
+						  Grid.RowSpan="2"
+						  x:Name="resizeGrip"
+						  x:FieldModifier="private"
+						  HorizontalAlignment="Right"
+						  VerticalAlignment="Bottom"
+						  WindowChrome.ResizeGripDirection="BottomRight" />
+
+    </Grid>
 
 </metro:MetroWindow>

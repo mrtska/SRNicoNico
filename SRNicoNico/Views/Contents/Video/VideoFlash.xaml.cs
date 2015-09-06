@@ -29,13 +29,6 @@ namespace SRNicoNico.Views.Contents.Video {
 
         public VideoFlash() {
             InitializeComponent();
-
-
-            if((bool)(DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue)) {
-                return;
-            }
-
-            browser.Source = new Uri(App.ViewModelRoot.CurrentVideo.Address);
         }
 
 
@@ -46,11 +39,16 @@ namespace SRNicoNico.Views.Contents.Video {
             if((bool)(DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue)) {
                 return;
             }
-            //インスタンスを設定
-            App.ViewModelRoot.CurrentVideo.WebBrowser = browser;
+            if(DataContext is VideoViewModel) {
 
-            //動画オープン
-            App.ViewModelRoot.CurrentVideo.OpenVideo();
+                VideoViewModel vm = (VideoViewModel)DataContext;
+                //インスタンスを設定
+                vm.WebBrowser = browser;
+
+                //動画オープン
+                vm.OpenVideo();
+            }
+            
         }
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -59,6 +57,8 @@ namespace SRNicoNico.Views.Contents.Video {
 
                 VideoViewModel vm = (VideoViewModel) DataContext;
                 vm.VideoFlash = this;
+                browser.Source = new Uri(vm.Address);
+
             }
         }
     }

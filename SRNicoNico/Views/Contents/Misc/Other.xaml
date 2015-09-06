@@ -8,11 +8,14 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="316.492" d:DesignWidth="170.419"
+             d:DesignHeight="316.492" d:DesignWidth="505"
              d:DataContext="{d:DesignInstance {x:Type vm:OtherViewModel}}"
-             DataContext="{Binding Other}"
              >
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="69*"/>
+        </Grid.ColumnDefinitions>
         <Button Content="視聴履歴" HorizontalAlignment="Left" VerticalAlignment="Top" Width="117" Margin="23,20,0,0">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="PreviewMouseLeftButtonDown">

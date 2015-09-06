@@ -20,7 +20,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         
-        <seek:SeekBar x:Name="Seek"  Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VideoTime="{Binding VideoData.ApiData.Length}" CurrentTime="{Binding Time.CurrentTime}" CurrentTimeWidth="{Binding Time.CurrentTimeWidth}" SeekCursor="{Binding SeekCursor}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter" MouseLeftButtonUp="Seek_MouseLeftButtonUp"  />
+        <seek:SeekBar x:Name="Seek" BufferedTimeWidth="{Binding Time.BufferedTimeWidth}" HorizontalAlignment="Stretch" VideoTime="{Binding VideoData.ApiData.Length}" CurrentTime="{Binding Time.CurrentTime}" CurrentTimeWidth="{Binding Time.CurrentTimeWidth}" SeekCursor="{Binding SeekCursor}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter" MouseLeftButtonUp="Seek_MouseLeftButtonUp"  />
         <StackPanel Grid.Row="1" Orientation="Horizontal" >
             <mui:ModernButton Margin="10,0,0,0" VerticalAlignment="Stretch" EllipseDiameter="36" IconWidth="20" IconHeight="20" HorizontalAlignment="Stretch" Focusable="False">
                 <mui:ModernButton.Style>
@@ -50,18 +50,22 @@
                 </i:Interaction.Triggers>
             </mui:ModernButton>
             
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Height="25" Foreground="#FFAAAAAA" FontSize="16" Margin="10,0,0,0">
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Height="25"  FontSize="16" Margin="10,0,0,0">
                 <Run Text="{Binding Time.CurrentTimeString}" /><Run Text="/" /><Run Text="{Binding Time.VideoTimeString}" />
             </TextBlock>
 
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+
+            <TextBlock Margin="0,0,15,0" Text="{Binding BPS}" Focusable="False" VerticalAlignment="Center" />
+
             <mui:ModernButton Margin="0,0,15,0" Focusable="False" EllipseDiameter="36" IconWidth="20" IconHeight="20" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <l:LivetCallMethodAction MethodName="ToggleFullScreen" MethodTarget="{Binding}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
+                
                 <mui:ModernButton.Style>
                     <Style TargetType="mui:ModernButton">
                         <Style.Triggers>

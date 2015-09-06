@@ -7,8 +7,7 @@ using System.Windows.Media.Imaging;
 using System.Drawing;
 
 using SRNicoNico.Models.NicoNicoWrapper;
-
-
+using SRNicoNico.ViewModels;
 
 namespace SRNicoNico.Views.Contents.Video {
 	/// <summary>
@@ -26,6 +25,12 @@ namespace SRNicoNico.Views.Contents.Video {
 
 		private void Seek_MouseMove(object sender, MouseEventArgs e) {
 
+            if(!(DataContext is VideoViewModel)) {
+
+                return;
+            }
+            VideoViewModel vm = (VideoViewModel) DataContext;
+
 			//マウスカーソルX座標
 			double x = e.GetPosition(this).X;
 
@@ -40,7 +45,7 @@ namespace SRNicoNico.Views.Contents.Video {
 
 			if(Seek.IsPopupImageOpen) {
 
-				NicoNicoStoryBoardData Story = App.ViewModelRoot.CurrentVideo.VideoData.StoryBoardData;
+				NicoNicoStoryBoardData Story = vm.VideoData.StoryBoardData;
 
 				Seek.PopupImageRect = new Rect(x - Story.Width / 2, -10, Story.Width, Story.Height);
 
@@ -68,8 +73,14 @@ namespace SRNicoNico.Views.Contents.Video {
 
 		private void Seek_MouseEnter(object sender, MouseEventArgs e) {
 
+            if(!(DataContext is VideoViewModel)) {
 
-			if(App.ViewModelRoot.CurrentVideo.VideoData.StoryBoardData != null) {
+                return;
+            }
+            VideoViewModel vm = (VideoViewModel)DataContext;
+
+
+            if(vm.VideoData.StoryBoardData != null) {
 
 				Seek.IsPopupImageOpen = true;
 			}
@@ -79,10 +90,16 @@ namespace SRNicoNico.Views.Contents.Video {
 
         private void Seek_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
 
+            if(!(DataContext is VideoViewModel)) {
+
+                return;
+            }
+            VideoViewModel vm = (VideoViewModel)DataContext;
+
             double x = e.GetPosition(this).X;
             int ans = (int)(x / ActualWidth * Seek.VideoTime);
             ans = Math.Abs(ans);
-            App.ViewModelRoot.CurrentVideo.Seek(ans);
+            vm.Seek(ans);
         }
     }
 }

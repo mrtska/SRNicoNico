@@ -19,30 +19,29 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
         //すべてのニコレポリストを取得
-        public ObservableSynchronizedCollection<NicoRepoListViewModel> GetNicoRepoList() {
+        public List<NicoRepoListViewModel> GetNicoRepoList() {
 
-            ObservableSynchronizedCollection<NicoRepoListViewModel> ret = new ObservableSynchronizedCollection<NicoRepoListViewModel>();
+            List<NicoRepoListViewModel> ret = new List<NicoRepoListViewModel>();
 
 
-            NicoRepoListViewModel all = new NicoRepoListViewModel() { Id = "all", Title = "すべて" };
-            NicoRepoListViewModel myself = new NicoRepoListViewModel() { Id = "myself", Title = "自分" };
-            NicoRepoListViewModel user = new NicoRepoListViewModel() { Id = "user", Title = "お気に入りユーザー" };
-            NicoRepoListViewModel chcom = new NicoRepoListViewModel() { Id = "chcom", Title = "チャンネル＆コミュニティ" };
-            NicoRepoListViewModel mylist = new NicoRepoListViewModel() { Id = "mylist", Title = "マイリスト" };
+            NicoRepoListViewModel all = new NicoRepoListViewModel("すべて") { Id = "all" };
+            NicoRepoListViewModel myself = new NicoRepoListViewModel("自分") { Id = "myself" };
+            NicoRepoListViewModel user = new NicoRepoListViewModel("お気に入りユーザー") { Id = "user" };
+            NicoRepoListViewModel chcom = new NicoRepoListViewModel("チャンネル&コミュニティ") { Id = "chcom" };
+            NicoRepoListViewModel mylist = new NicoRepoListViewModel("マイリスト") { Id = "mylist" };
 
             ret.Add(all);
             ret.Add(myself);
             ret.Add(user);
             ret.Add(chcom);
             ret.Add(mylist);
-            ret = new ObservableSynchronizedCollection<NicoRepoListViewModel>(ret.Concat(GetUserDefinitionsNicoRepoList()));
+            ret = new List<NicoRepoListViewModel>(ret.Concat(GetUserDefinitionsNicoRepoList()));
             
             return ret;
-
         }
 
         //ユーザー定義の二コレポリストを取得
-        private ObservableSynchronizedCollection<NicoRepoListViewModel> GetUserDefinitionsNicoRepoList() {
+        private List<NicoRepoListViewModel> GetUserDefinitionsNicoRepoList() {
 
             //htmlからCSRFトークンを抜き出す
             string html = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(NicoRepoWebUrl).Result;
@@ -55,12 +54,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             var json = DynamicJson.Parse(response);
 
 
-            ObservableSynchronizedCollection<NicoRepoListViewModel> ret = new ObservableSynchronizedCollection<NicoRepoListViewModel>();
+            List<NicoRepoListViewModel> ret = new List<NicoRepoListViewModel>();
 
             foreach(var entry in json.nicorepolists) {
 
-                NicoRepoListViewModel list = new NicoRepoListViewModel();
-                list.Title = entry.title;
+                NicoRepoListViewModel list = new NicoRepoListViewModel(entry.title);
                 list.Id = entry.id;
 
                 ret.Add(list);

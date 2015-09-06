@@ -26,13 +26,13 @@
             <l:DataContextDisposeAction />
         </i:EventTrigger>
 
-        <ei:KeyTrigger FiredOn="KeyDown" Key="F">
+        <ei:KeyTrigger FiredOn="KeyDown" ActiveOnFocus="True" Key="F">
 			<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="GoToFullScreen" />
 		</ei:KeyTrigger>
-        <ei:KeyTrigger FiredOn="KeyDown" Key="Space">
+        <ei:KeyTrigger FiredOn="KeyDown" ActiveOnFocus="True" Key="Space">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="PlayOrPauseOrResume" />
         </ei:KeyTrigger>
-        <ei:KeyTrigger FiredOn="KeyDown" Key="Left">
+        <ei:KeyTrigger FiredOn="KeyDown" ActiveOnFocus="True" Key="Left">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Restart" />
         </ei:KeyTrigger>
     </i:Interaction.Triggers>
@@ -65,7 +65,7 @@
             </Grid.ColumnDefinitions>
 
             <ScrollViewer>
-                <TextBlock HorizontalAlignment="Stretch" Padding="5" TextWrapping="Wrap" behaviors:HtmlTextBoxProperties.TriggerRequest="TextBlock_TriggerRequest"  behaviors:HtmlTextBoxProperties.HtmlText="{Binding VideoData.ApiData.Description}" >
+                <TextBlock HorizontalAlignment="Stretch"  Padding="5" TextWrapping="Wrap" behaviors:HtmlTextBoxProperties.TriggerRequest="TextBlock_TriggerRequest"  behaviors:HtmlTextBoxProperties.HtmlText="{Binding VideoData.ApiData.Description, Mode=OneWay}" >
                     
                     
                 </TextBlock>

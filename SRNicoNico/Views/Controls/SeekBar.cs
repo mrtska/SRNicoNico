@@ -84,14 +84,14 @@ namespace SRNicoNico.Views.Controls {
 
 
 
-		public double BufferedTimeString {
-			get { return (double)GetValue(BufferedTimeStringProperty); }
-			set { SetValue(BufferedTimeStringProperty, value); }
+		public double BufferedTimeWidth {
+			get { return (double)GetValue(BufferedTimeWidthProperty); }
+			set { SetValue(BufferedTimeWidthProperty, value); }
 		}
 
 		// Using a DependencyProperty as the backing store for BufferedTimeString.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty BufferedTimeStringProperty =
-			DependencyProperty.Register("BufferedTimeString", typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0.0));
+		public static readonly DependencyProperty BufferedTimeWidthProperty =
+			DependencyProperty.Register("BufferedTimeWidth", typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0.0));
 
 
 

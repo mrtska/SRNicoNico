@@ -16,7 +16,7 @@ using System.Collections.Generic;
 
 namespace SRNicoNico.ViewModels {
 
-	public class VideoViewModel : ViewModel {
+	public class VideoViewModel : TabItemViewModel {
 
         
 		//API結果
@@ -228,15 +228,9 @@ namespace SRNicoNico.ViewModels {
 
 
 
-        public VideoViewModel(string videoUrl) {
+        public VideoViewModel(string videoUrl) : base("動画") {
 
-            //ViewをVideoに変える
-            //こうしないとViewのインスタンスを再生成してくれない
-            App.ViewModelRoot.RightContent = null;
-            App.ViewModelRoot.CurrentVideo = null;
-            App.ViewModelRoot.RightContent = this;
-            App.ViewModelRoot.CurrentVideo = this;
-
+            App.ViewModelRoot.TabItems.Add(this);
 
             Initialize(videoUrl);
 		}
@@ -246,10 +240,18 @@ namespace SRNicoNico.ViewModels {
             Task.Run(() => {
 
                 VideoData = new VideoData();
+
+
+                App.ViewModelRoot.StatusBar.Status = "動画情報取得中";
+                //動画情報取得
                 VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
 
                 Time = new VideoTime();
+
+                //動画時間
                 Time.VideoTimeString = NicoNicoUtil.GetTimeFromLong(VideoData.ApiData.Length);
+
+                App.ViewModelRoot.StatusBar.Status = "ストーリーボード取得中";
 
                 NicoNicoStoryBoard sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
                 VideoData.StoryBoardData = sb.GetStoryBoardData();
@@ -271,13 +273,9 @@ namespace SRNicoNico.ViewModels {
 
                     DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => InjectComment(json.ToString())));
                 }
-                
 
-
-                
+                //App.ViewModelRoot.StatusBar.Status = "動画取得完了";
             });
-
-            
         }
 
         public void OpenLink(Uri uri) {
@@ -376,39 +374,33 @@ namespace SRNicoNico.ViewModels {
         public void Restart() {
 
             Seek(0);
-            //DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => SetSeekCursor(0)));
         }
 
         //1フレーム毎に呼ばれる
-        public void CsFrame(float time, float buffer) {
+        public void CsFrame(float time, float buffer, long bps) {
 
 
             double vpos = time * 100;
             vpos = Math.Floor(vpos);
 
-            //Console.WriteLine(VideoData.ApiData.Cmsid + " " + time + ":" + buffer + " vpos:" + vpos);
-
             
+            BPS = (bps / 1024).ToString() + "KiB/秒";
+
+            Time.BufferedTimeWidth = buffer * WebBrowser.ActualWidth;
+
+            Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + buffer + " bps:" + bps);
 
             SetSeekCursor(time);
-            
-            
-            
-            if(VideoData.ApiData.Length == time) {
-
-                Seek(0);
-            }
-            
-
         }
 
+        //指定した時間でシークバーを移動する
         private void SetSeekCursor(float time) {
 
             Time.CurrentTime = (int)time;
             Time.CurrentTimeMilis = (int)(time * 100);
             Time.CurrentTimeString = NicoNicoUtil.GetTimeFromLong(Time.CurrentTime);
             Time.CurrentTimeWidth = WebBrowser.ActualWidth / VideoData.ApiData.Length * Time.CurrentTime;
-            SeekCursor = new Thickness(Time.CurrentTimeWidth, 0, 0, 0);
+            SeekCursor = new Thickness(Time.CurrentTimeWidth - 10, 0, 0, 0);
 
         }
 
@@ -428,22 +420,25 @@ namespace SRNicoNico.ViewModels {
         }
 
 
-
+        //Flashに一時停止命令を送る
         public void Pause() {
 
             InvokeScript("JsPause");
         }
 
+        //Flashに再生再開命令を送る
         public void Resume() {
 
             InvokeScript("JsResume");
         }
 
+        //Flashにシーク命令を送る
         public void Seek(float pos) {
 
             InvokeScript("JsSeek", pos.ToString());
         }
-        
+
+        //Flashにコメントリストを送る
         public void InjectComment(string json) {
             
            InvokeScript("JsInjectComment", json);

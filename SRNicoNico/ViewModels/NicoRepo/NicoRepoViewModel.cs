@@ -15,8 +15,12 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 
+using FirstFloor.ModernUI.Presentation;
+using SRNicoNico.Models.NicoNicoViewer;
+using System.Collections.ObjectModel;
+
 namespace SRNicoNico.ViewModels {
-    public class NicoRepoViewModel : ViewModel {
+    public class NicoRepoViewModel : TabItemViewModel {
 
 
 
@@ -37,9 +41,9 @@ namespace SRNicoNico.ViewModels {
 
 
         #region NicoRepoListCollection変更通知プロパティ
-        private ObservableSynchronizedCollection<NicoRepoListViewModel> _NicoRepoListCollection = new ObservableSynchronizedCollection<NicoRepoListViewModel>();
+        private ObservableCollection<NicoRepoListViewModel> _NicoRepoListCollection = new ObservableCollection<NicoRepoListViewModel>();
 
-        public ObservableSynchronizedCollection<NicoRepoListViewModel> NicoRepoListCollection {
+        public ObservableCollection<NicoRepoListViewModel> NicoRepoListCollection {
             get { return _NicoRepoListCollection; }
             set { 
                 if(_NicoRepoListCollection == value)
@@ -51,22 +55,45 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region SelectedList変更通知プロパティ
+        private NicoRepoListViewModel _SelectedList;
+
+        public NicoRepoListViewModel SelectedList {
+            get { return _SelectedList; }
+            set { 
+                if(_SelectedList == value)
+                    return;
+                _SelectedList = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
 
         public NicoNicoNicoRepoList NicoRepoList = new NicoNicoNicoRepoList();
 
         public NicoNicoNicoRepoData Data { get; set; }
         
+        public NicoRepoViewModel() : base("ニコレポ") {}
 
+        
 
         public void Reflesh() {
 
             IsActive = true;
-            NicoRepoListCollection.Clear();
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoRepoListCollection.Clear()));
+            
 
             Task.Run(() => {
 
-                NicoRepoListCollection = NicoRepoList.GetNicoRepoList();
+
+                IList<NicoRepoListViewModel> result = NicoRepoList.GetNicoRepoList();
+                NicoRepoListCollection = new ObservableCollection<NicoRepoListViewModel>(result);
+
+                
+
+
 
                 IsActive = false;
 

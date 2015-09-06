@@ -18,6 +18,7 @@ using SRNicoNico.Views.Contents.Search;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Windows;
+using System.Collections.ObjectModel;
 
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
@@ -39,67 +40,6 @@ namespace SRNicoNico.ViewModels {
 
 
 
-        #region RootContent変更通知プロパティ
-        private ViewModel _RootContent;
-
-        public ViewModel RootContent {
-            get { return _RootContent; }
-            set { 
-                if(_RootContent == value)
-                    return;
-                _RootContent = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-
-        #region Content変更通知プロパティ
-        private ViewModel _AllContent;
-
-		public ViewModel AllContent {
-			get { return _AllContent; }
-			set {
-				if(_AllContent == value)
-					return;
-				_AllContent = value;
-				RaisePropertyChanged();
-			}
-		}
-        #endregion
-
-
-        #region LeftContent変更通知プロパティ
-        private ViewModel _LeftContent;
-
-        public ViewModel LeftContent {
-            get { return _LeftContent; }
-            set { 
-                if(_LeftContent == value)
-                    return;
-                _LeftContent = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region RightContent変更通知プロパティ
-        private ViewModel _RightContent;
-
-        public ViewModel RightContent {
-            get { return _RightContent; }
-            set { 
-                if(_RightContent == value)
-                    return;
-                _RightContent = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
         #region WindowState変更通知プロパティ
         private WindowState _WindowState;
 
@@ -117,37 +57,53 @@ namespace SRNicoNico.ViewModels {
 
         public SignInDialogViewModel SignIn { get; private set; }
 		public SearchViewModel Search { get; private set; }
-		public SearchResultViewModel SearchResult { get; private set; }
 
 		public Dictionary<string, VideoViewModel> VideoMap { get; private set; }
 
         public NicoRepoViewModel NicoRepo { get; private set; }
 
-		public VideoViewModel CurrentVideo { get; set; }
 
         public OtherViewModel Other { get; set; }
 
         public StatusBarViewModel StatusBar { get; set; }
+
+        public ObservableCollection<ViewModel> TabItems { get; set; }
+
+
+        #region SelectedTab変更通知プロパティ
+        private ViewModel _SelectedTab;
+
+        public ViewModel SelectedTab {
+            get { return _SelectedTab; }
+            set { 
+                if(_SelectedTab == value)
+                    return;
+                _SelectedTab = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
 
         public MainWindowViewModel() {
 
 			SignIn = new SignInDialogViewModel();
 
-			Search = new SearchViewModel();
+            TabItems = new ObservableCollection<ViewModel> {
 
-			SearchResult = new SearchResultViewModel();
+                (SelectedTab = new StartViewModel()),
+                (Search = new SearchViewModel()),
+                (NicoRepo = new NicoRepoViewModel()),
+                (new HistoryViewModel()),
+                (Other = new OtherViewModel())
+            };
 
-            NicoRepo = new NicoRepoViewModel();
-
-            Other = new OtherViewModel();
 
 			VideoMap = new Dictionary<string, VideoViewModel>();
 
             StatusBar = new StatusBarViewModel();
 
-			RootContent = AllContent = LeftContent = this;
-            
+            StatusBar.TimerStart();
 		}
 
 

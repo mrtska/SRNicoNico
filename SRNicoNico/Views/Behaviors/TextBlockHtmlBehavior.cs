@@ -12,6 +12,8 @@ using System.Windows.Navigation;
 
 using SRNicoNico.Views.Extentions;
 
+
+
 namespace SRNicoNico.Views.Behaviors {
 
 
@@ -65,20 +67,37 @@ namespace SRNicoNico.Views.Behaviors {
             Inline[] newLines = new Inline[xamLines.Count];
             xamLines.CopyTo(newLines, 0);
 
+            //ハイパーリンクにイベントを設定する
             foreach(Inline inline in newLines) {
 
+                //Spanの中のハイパーリンクにも設定する
+                if(inline is Span) {
+
+                    Span span = (Span) inline;
+                    foreach(Inline spanInline in span.Inlines) {
+
+                        if(spanInline is Hyperlink) {
+
+                            Hyperlink spanLink = (Hyperlink)spanInline;
+                            spanLink.RequestNavigate += ((sender, o) => {
+
+                                spanLink.RaiseEvent(new RoutedEventArgs(TriggerRequestEvent));
+                            });
+                        }
+                    }
+                }
+                //イベント設定
                 if(inline is Hyperlink) {
 
                     Hyperlink link = (Hyperlink) inline;
                     link.RequestNavigate += ((sender, o) => {
 
                         link.RaiseEvent(new RoutedEventArgs(TriggerRequestEvent));
-                        Console.WriteLine(link.NavigateUri);
                     });
                 }
 
             }
-            
+
             txtBox.Inlines.Clear();
             foreach(var l in newLines) {
                 txtBox.Inlines.Add(l);

@@ -27,8 +27,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			App.ViewModelRoot.Title += "(user:" + this.User.UserName + ")";
 
 
-            //通信速度監視
-            BPSCounter.InitAndStart();
 
             App.ViewModelRoot.NicoRepo.InitNicoRepo();
         }

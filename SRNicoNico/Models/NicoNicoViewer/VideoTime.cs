@@ -90,6 +90,36 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         #endregion
 
 
+        #region BufferedTime変更通知プロパティ
+        private long _BufferedTime;
+
+        public long BufferedTime {
+            get { return _BufferedTime; }
+            set { 
+                if(_BufferedTime == value)
+                    return;
+                _BufferedTime = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region BufferedTimeWidth変更通知プロパティ
+        private double _BufferedTimeWidth;
+
+        public double BufferedTimeWidth {
+            get { return _BufferedTimeWidth; }
+            set { 
+                if(_BufferedTimeWidth == value)
+                    return;
+                _BufferedTimeWidth = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
 
 
     }

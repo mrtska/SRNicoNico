@@ -33,12 +33,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//取得しているページ
 		private byte CurrentPage = 1;
 
+        private SearchResultViewModel SearchResult;
 
 
 
+		public NicoNicoSearch(SearchResultViewModel vm, string keyword, string sort) {
 
-		public NicoNicoSearch(string keyword, string sort) {
-
+            SearchResult = vm;
 			this.Keyword = keyword;
 
 			this.Sort = "&sort=" + sort.Split(':')[0];
@@ -57,7 +58,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			return response.Content.ReadAsStringAsync().Result;
 		}
 
-		public void Search() {
+		public void DoSearch() {
 
 
 			//検索結果をUIに
@@ -66,14 +67,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-				App.ViewModelRoot.SearchResult.Total = String.Format("{0:#,0}", result.Total) + "件の動画";
+				SearchResult.Total = String.Format("{0:#,0}", result.Total) + "件の動画";
 
-				App.ViewModelRoot.SearchResult.List.Clear();
+				SearchResult.List.Clear();
 				foreach (NicoNicoSearchResultNode node in result.List) {
 
 					SearchResultEntryViewModel vm = new SearchResultEntryViewModel();
 					vm.Node = node;
-					App.ViewModelRoot.SearchResult.List.Add(vm);
+				    SearchResult.List.Add(vm);
 				}
 			}));
 		}
@@ -98,7 +99,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 					SearchResultEntryViewModel vm = new SearchResultEntryViewModel();
 					vm.Node = node;
-					App.ViewModelRoot.SearchResult.List.Add(vm);
+					SearchResult.List.Add(vm);
 				}
 
 			}));

@@ -10,20 +10,27 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance {x:Type vm:HistoryResultViewModel}}"
+             d:DataContext="{d:DesignInstance {x:Type vm:HistoryViewModel}}"
              >
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenHistory" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="277*"/>
         </Grid.RowDefinitions>
-        <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60"  IsActive="{Binding IsActive}" Margin="120,97.225,120,120" Grid.Row="1"/>
+        <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60"  IsActive="{Binding HistoryResult.IsActive}" Margin="120,97.225,120,120" Grid.Row="1"/>
 
-        <ListBox Grid.Row="1" SelectedItem="{Binding SelectedItem}" VirtualizingPanel.ScrollUnit="Pixel" HorizontalAlignment="Stretch" ItemsSource="{Binding List}" HorizontalContentAlignment="Stretch" Grid.RowSpan="2" >
+        <ListBox Grid.Row="1" SelectedItem="{Binding HistoryResult.SelectedItem}" VirtualizingPanel.ScrollUnit="Pixel" HorizontalAlignment="Stretch" ItemsSource="{Binding HistoryResult.List}" HorizontalContentAlignment="Stretch" >
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                    <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+                    <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding HistoryResult}" />
 				</i:EventTrigger>
 			</i:Interaction.Triggers>
 			
@@ -43,6 +50,6 @@
 
 
         </ListBox>
-        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="視聴履歴" FontSize="14" VerticalAlignment="Stretch"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="視聴履歴" FontSize="20" VerticalAlignment="Stretch" Margin="10,0,0,0"/>
     </Grid>
 </UserControl>

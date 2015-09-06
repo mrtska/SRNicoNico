@@ -18,7 +18,7 @@ using System.Windows.Controls;
 using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
-    public class SearchViewModel : ViewModel {
+    public class SearchViewModel : TabItemViewModel {
 
         //ソート方法
         private string[] sort_by = { "f:d", "f:a",
@@ -60,6 +60,25 @@ namespace SRNicoNico.ViewModels {
 
         private NicoNicoSearch currentSearch;
 
+
+        #region SearchResult変更通知プロパティ
+        private SearchResultViewModel _SearchResult;
+
+        public SearchResultViewModel SearchResult {
+            get { return _SearchResult; }
+            set { 
+                if(_SearchResult == value)
+                    return;
+                _SearchResult = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
+        public SearchViewModel() : base("検索") { }
+
         //検索ボタン押下
         public void DoSearch() {
 
@@ -69,28 +88,29 @@ namespace SRNicoNico.ViewModels {
 				return;
 			}
 
-            App.ViewModelRoot.SearchResult.OwnerViewModel = this;
+            SearchResult = new SearchResultViewModel();
 
-            App.ViewModelRoot.SearchResult.IsActive = true;
-            App.ViewModelRoot.RightContent = App.ViewModelRoot.SearchResult;
+            SearchResult.OwnerViewModel = this;
+
+            SearchResult.IsActive = true;
 
             //検索
-            currentSearch = new NicoNicoSearch(SearchText, sort_by[SelectedIndex]);
+            currentSearch = new NicoNicoSearch(SearchResult, SearchText, sort_by[SelectedIndex]);
 
 			Task.Run(() => {
 
-                currentSearch.Search();
-                App.ViewModelRoot.SearchResult.IsActive = false;
+                currentSearch.DoSearch();
+                SearchResult.IsActive = false;
             });
 		}
 
 		public void SearchNext() {
 
-            App.ViewModelRoot.SearchResult.IsActive = true;
+            SearchResult.IsActive = true;
             Task.Run(() => {
 
 				currentSearch.SearchNext();
-                App.ViewModelRoot.SearchResult.IsActive = false;
+                SearchResult.IsActive = false;
             });
         }
     }

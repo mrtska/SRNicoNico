@@ -15,7 +15,7 @@ using Livet.Messaging.Windows;
 using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
-    public class NicoRepoListViewModel : ViewModel {
+    public class NicoRepoListViewModel : TabItemViewModel {
 
 
         #region Title変更通知プロパティ
@@ -65,6 +65,12 @@ namespace SRNicoNico.ViewModels {
 
         private NicoNicoNicoRepo NicoRepo;
 
+        public NicoRepoListViewModel(string title) : base(title) {
+
+            Title = title;
+            OpenNicoRepoList();
+        }
+
 
         //ニコレポリストを開く
         public void OpenNicoRepoList() {
@@ -72,7 +78,6 @@ namespace SRNicoNico.ViewModels {
 
             Result.IsActive = true;
             Result.OwnerViewModel = this;
-            App.ViewModelRoot.RightContent = Result;
             Result.NicoRepo.Clear();
 
             Task.Run(() => {

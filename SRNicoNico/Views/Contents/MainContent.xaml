@@ -4,9 +4,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:search="clr-namespace:SRNicoNico.Views.Contents.Search"
 			 xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
+             xmlns:tab="clr-namespace:SRNicoNico.Views.Controls"
+             xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
              xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
              xmlns:history="clr-namespace:SRNicoNico.Views.Contents.History"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
@@ -15,67 +19,84 @@
              d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
              >
     <Grid>
-
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="215"/>
-            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <metro:TabView Grid.Column="0" Background="{DynamicResource ActiveBackgroundBrushKey}" ItemsSource="{Binding TabItems}" SelectedValue="{Binding SelectedTab}" Margin="0,0,0,0" />
 
-        <ContentControl Content="{Binding LeftContent}">
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding TabItems}">
 
-
-
-            <ContentControl.Resources>
-                <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
-                    <local:EtcContent />
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type vm:StartViewModel}">
+                    <local:Start />
                 </DataTemplate>
-            </ContentControl.Resources>
-            
-            
-            
-        </ContentControl>
-
-
-        <Line X1="3" X2="3" Grid.Column="1" Y1="0" Y2="{Binding ElementName=Root,Path=ActualHeight}" Stroke="#FF333333"/>
-
-
-        <ContentControl Grid.Column="2" Content="{Binding RightContent}">
-            <ContentControl.Style>
-                <Style TargetType="ContentControl">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Content}" Value="{x:Null}">
-                            <Setter Property="ContentControl.Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                            <local:Start />
-                                        </Grid>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-            <ContentControl.Resources>
                 
-                
-                <DataTemplate DataType="{x:Type vm:SearchResultViewModel}">
-                    <search:SearchResult/>
+                <DataTemplate DataType="{x:Type vm:SearchViewModel}">
+                    <search:Search />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:NicoRepoViewModel}">
+                    <nicorepo:NicoRepo />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:OtherViewModel}">
+                    <misc:Other />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
+                    <history:HistoryResult />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:VideoViewModel}">
-                    <video:Video/>
+                    <video:Video />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:NicoRepoResultViewModel}">
+            </ItemsControl.Resources>
+            
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                    <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <!--<tab:TabControlEx Grid.Column="1" Background="Transparent" BorderThickness="0" TabStripPlacement="Left" Grid.ColumnSpan="2" >
+
+            <tab:TabItemEx Text="スタート">
+                <local:Start />
+            </tab:TabItemEx>
+            <tab:TabItemEx Text="検索">
+
+                <Grid>
+                    <search:Search />
+                    <search:SearchResult/>
+                </Grid>
+
+            </tab:TabItemEx>
+
+            <tab:TabItemEx Text="二コレポ">
+
+                <Grid>
+                    <nicorepo:NicoRepo />
                     <nicorepo:NicoRepoResult/>
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:HistoryResultViewModel}">
+                    <Line X1="3" X2="3" Grid.Column="1" Y1="0" Y2="{Binding ElementName=Root,Path=ActualHeight}" Stroke="#FF333333"/>
+
+                </Grid>
+
+            </tab:TabItemEx>
+            <tab:TabItemEx Text="マイリスト">
+                <video:Video/>
+
+            </tab:TabItemEx>
+            <tab:TabItemEx Text="その他">
+                <Grid>
+                    <misc:Other />
                     <history:HistoryResult/>
-                </DataTemplate>
-            </ContentControl.Resources>
-            
-            
-        </ContentControl>
+                </Grid>
+
+            </tab:TabItemEx>
+
+        </tab:TabControlEx>-->
+
     </Grid>
 </UserControl>

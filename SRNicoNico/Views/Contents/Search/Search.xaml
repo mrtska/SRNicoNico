@@ -9,11 +9,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
 			 xmlns:root="clr-namespace:SRNicoNico"
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Search"
              d:DataContext="{d:DesignInstance {x:Type vm:SearchViewModel}}"
              d:DesignHeight="500"
-             d:DesignWidth="200"
+             d:DesignWidth="695"
              mc:Ignorable="d"
-			 DataContext="{Binding Search}"
              x:Name="SearchControl"
 			 >
 	
@@ -21,53 +21,27 @@
 
 
 	<Grid>
-		<ComboBox Width="180"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ComboBox Width="180"
 		          Margin="5,26,0,0"
 		          HorizontalAlignment="Left"
 		          VerticalAlignment="Top"
 		          Background="#FF2D2D2D"
 		          BorderBrush="#FFAAAAAA"
 		          SelectedIndex="{Binding SelectedIndex}">
-			<ComboBoxItem Background="#FF2D2D2D"
-			              BorderBrush="#FF2D2D2D"
-			              Content="投稿日時が新しい順"
-			              Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D"
-			              BorderBrush="#FF2D2D2D"
-			              Content="投稿日時が古い順"
-			              Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D"
-			              BorderBrush="#FF2D2D2D"
-			              Content="再生数が多い順"
-			              Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D"
-			              BorderBrush="#FF2D2D2D"
-			              Content="再生数が少ない順"
-			              Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D"
-			              BorderBrush="#FF2D2D2D"
-			              Content="コメントが新しい順"
-			              Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D"
-			              BorderBrush="#FF2D2D2D"
-			              Content="コメントが少ない順"
-			              Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D"
-			              BorderBrush="#FF2D2D2D"
-			              Content="マイリスト数が多い順"
-			              Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D"
-			              BorderBrush="#FF2D2D2D"
-			              Content="マイリスト数が少ない順"
-			              Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D"
-			              BorderBrush="#FF2D2D2D"
-			              Content="再生時間が長い順"
-			              Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D"
-			              BorderBrush="#FF2D2D2D"
-			              Content="再生時間が短い順"
-			              Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="投稿日時が新しい順" Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="投稿日時が古い順" Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生数が多い順" Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生数が少ない順" Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="コメントが新しい順" Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="コメントが少ない順" Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="マイリスト数が多い順" Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="マイリスト数が少ない順" Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生時間が長い順" Foreground="#FFAAAAAA" />
+			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生時間が短い順" Foreground="#FFAAAAAA" />
 
 		</ComboBox>
 		<TextBox Width="180"
@@ -102,5 +76,6 @@
 			</i:Interaction.Triggers>
 		</Button>
 		
+        <local:SearchResult Grid.Column="1" DataContext="{Binding SearchResult}"/>
 	</Grid>
 </UserControl>

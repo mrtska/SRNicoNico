@@ -14,7 +14,7 @@
 
                             <!-- background -->
                             <Rectangle Fill="#FF404040" />
-                            <Rectangle Panel.ZIndex="1" Fill="#FF3C3C3C" HorizontalAlignment="Left" Width="0" />
+                            <Rectangle Panel.ZIndex="1"  HorizontalAlignment="Left" Width="{TemplateBinding BufferedTimeWidth}" Fill="#FF555555" />
                             <Rectangle Panel.ZIndex="2" HorizontalAlignment="Left" Width="{TemplateBinding CurrentTimeWidth}" Fill="#FF007AFF"/>
                             <Rectangle Panel.ZIndex="3" HorizontalAlignment="Left" Width="10" Margin="{TemplateBinding SeekCursor}" Fill="#FF8B8B8B" />
 
@@ -27,8 +27,9 @@
 
                             </Popup>
 
-                            <Popup AllowsTransparency="True" IsOpen="{TemplateBinding IsPopupOpen}" PlacementRectangle="{TemplateBinding PopupRect}" PopupAnimation="Slide">
-                                <Border BorderThickness="1" BorderBrush="#FFAAAAAA">
+                           
+                            <Popup AllowsTransparency="False" IsOpen="{TemplateBinding IsPopupOpen}"  PlacementRectangle="{TemplateBinding PopupRect}" PopupAnimation="Slide">
+                                <Border BorderThickness="1" Background="{DynamicResource ThemeBrushKey}" BorderBrush="#FFAAAAAA">
 
                                     <TextBlock Text="{TemplateBinding PopupText}" />
                                 </Border>
