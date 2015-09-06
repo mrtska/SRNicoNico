@@ -62,7 +62,7 @@ namespace SRNicoNico.Views.Contents.Video {
                 }
                 vm.VideoFlash = this;
                 browser.Source = new Uri(vm.Address);
-
+                Focus();
             }
         }
     }

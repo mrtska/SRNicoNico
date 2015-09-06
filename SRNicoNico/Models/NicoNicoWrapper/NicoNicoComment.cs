@@ -190,6 +190,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//Vposでソートする
 		public int CompareTo(NicoNicoCommentEntry obj) {
 
+            if(Vpos == obj.Vpos) {
+
+                return No.CompareTo(obj.No);
+            }
 
 			return Vpos.CompareTo(obj.Vpos);
 		}
