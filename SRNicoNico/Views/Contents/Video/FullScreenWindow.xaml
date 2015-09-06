@@ -29,10 +29,10 @@
 
         <!--WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください-->
 
-        <ei:KeyTrigger Key="Esc" FiredOn="KeyDown">
+        <ei:KeyTrigger Key="Esc" ActiveOnFocus="True" FiredOn="KeyDown">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ReturnFromFullScreen" />
         </ei:KeyTrigger>
-        <ei:KeyTrigger FiredOn="KeyDown" Key="Space">
+        <ei:KeyTrigger FiredOn="KeyDown" ActiveOnFocus="True" Key="Space">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="PlayOrPauseOrResume" />
         </ei:KeyTrigger>
     </i:Interaction.Triggers>

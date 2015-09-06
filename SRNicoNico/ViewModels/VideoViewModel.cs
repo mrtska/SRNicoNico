@@ -180,6 +180,21 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        //リピートするかどうか
+        #region IsRepeat変更通知プロパティ
+        private bool _IsRepeat;
+
+        public bool IsRepeat {
+            get { return _IsRepeat; }
+            set { 
+                if(_IsRepeat == value)
+                    return;
+                _IsRepeat = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
 
         #region VideoFlash変更通知プロパティ UI要素だけどこればっかりは仕方ない
@@ -231,7 +246,7 @@ namespace SRNicoNico.ViewModels {
         public VideoViewModel(string videoUrl) : base("動画") {
 
             App.ViewModelRoot.TabItems.Add(this);
-
+            App.ViewModelRoot.SelectedTab = this;
             Initialize(videoUrl);
 		}
 
@@ -280,19 +295,27 @@ namespace SRNicoNico.ViewModels {
 
         public void OpenLink(Uri uri) {
 
-            //ウェブブラウザ開放
-            WebBrowser.IsEnabled = false;
-            WebBrowser.Dispose();
-
+            
             string cmsid = uri.OriginalString;
+
+            if(cmsid.StartsWith("http")) {
+
+                System.Diagnostics.Process.Start(cmsid);
+            }
 
             if(cmsid.Contains("sm")) {
 
                 new VideoViewModel("http://www.nicovideo.jp/watch/" + cmsid);
-                Dispose();
+                DisposeViewModel();
             }
+
+
         }
 
+        public void ToggleRepeat() {
+
+            IsRepeat = IsRepeat ^ true;
+        }
 
 
 
@@ -339,7 +362,6 @@ namespace SRNicoNico.ViewModels {
             Video.Grid.Children.Add(VideoFlash);
 
             //フォーカス
-            Video.Focus();
 
         }
 
@@ -391,6 +413,22 @@ namespace SRNicoNico.ViewModels {
             Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + buffer + " bps:" + bps);
 
             SetSeekCursor(time);
+
+            if((int)time == VideoData.ApiData.Length - 1) {
+
+                if(IsRepeat) {
+
+                    Seek(0);
+                }
+            }
+
+            if((int)time == VideoData.ApiData.Length) {
+
+                if(IsFullScreen) {
+
+                    ReturnFromFullScreen();
+                }
+            }
         }
 
         //指定した時間でシークバーを移動する
@@ -457,7 +495,17 @@ namespace SRNicoNico.ViewModels {
 
 
 
+        public void DisposeViewModel() {
 
+
+            //ウェブブラウザ開放
+            WebBrowser.IsEnabled = false;
+            WebBrowser.Dispose();
+
+            App.ViewModelRoot.TabItems.Remove(this);
+
+            Dispose();
+        }
 
 
 

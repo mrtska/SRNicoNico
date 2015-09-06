@@ -14,25 +14,22 @@
              d:DesignHeight="600"
              d:DesignWidth="600"
 			 d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
-             mc:Ignorable="d" DataContextChanged="UserControl_DataContextChanged">
+             mc:Ignorable="d" DataContextChanged="UserControl_DataContextChanged" Focusable="True">
 
     <i:Interaction.Triggers>
 
         <l:InteractionMessageTrigger Messenger="{Binding Messenger}">
             <l:TransitionInteractionMessageAction/>
         </l:InteractionMessageTrigger>
-        <!--  Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます  -->
-        <i:EventTrigger EventName="Unloaded">
-            <l:DataContextDisposeAction />
-        </i:EventTrigger>
+        
 
-        <ei:KeyTrigger FiredOn="KeyDown" ActiveOnFocus="True" Key="F">
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="F">
 			<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="GoToFullScreen" />
 		</ei:KeyTrigger>
-        <ei:KeyTrigger FiredOn="KeyDown" ActiveOnFocus="True" Key="Space">
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Space">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="PlayOrPauseOrResume" />
         </ei:KeyTrigger>
-        <ei:KeyTrigger FiredOn="KeyDown" ActiveOnFocus="True" Key="Left">
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Left">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Restart" />
         </ei:KeyTrigger>
     </i:Interaction.Triggers>
@@ -46,13 +43,21 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="113*"/>
         </Grid.RowDefinitions>
-        <!-- 動画タイトル -->
+
         <TextBlock HorizontalAlignment="Left" Grid.Row="0" TextWrapping="NoWrap" FontSize="20" Text="{Binding VideoData.ApiData.Title}" VerticalAlignment="Top"/>
 
-        <!-- プレイヤー -->
-		<video:VideoFlash Grid.Row="1" />
+        <mui:ModernButton Focusable="False" HorizontalAlignment="Right" IconData="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z" >
 
-
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="DisposeViewModel" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            
+        
+        
+        </mui:ModernButton>
+        <video:VideoFlash Grid.Row="1" />
         <video:VideoController x:Name="Controller"  Grid.Row="2" />
 
         <Grid Grid.Row="3" Grid.RowSpan="2" >

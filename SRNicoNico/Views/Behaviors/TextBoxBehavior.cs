@@ -8,6 +8,9 @@ using System.Windows.Interactivity;
 using System.Windows.Controls;
 using System.Windows.Input;
 
+using Livet;
+
+using SRNicoNico.ViewModels;
 
 namespace SRNicoNico.Views.Behaviors {
 
@@ -17,8 +20,19 @@ namespace SRNicoNico.Views.Behaviors {
 
 
 
+        public ViewModel Owner {
+            get { return (ViewModel)GetValue(OwnerProperty); }
+            set { SetValue(OwnerProperty, value); }
+        }
 
-		protected override void OnAttached() {
+        // Using a DependencyProperty as the backing store for Owner.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty OwnerProperty =
+            DependencyProperty.Register("Owner", typeof(ViewModel), typeof(TextBoxBehavior), new PropertyMetadata(null));
+
+
+
+
+        protected override void OnAttached() {
 			base.OnAttached();
 
 			this.AssociatedObject.KeyDown += TextBox_KeyDown;
@@ -36,8 +50,14 @@ namespace SRNicoNico.Views.Behaviors {
 
 			if(e.Key == Key.Enter) {
 
-				App.ViewModelRoot.Search.SearchText = this.AssociatedObject.Text;
-				App.ViewModelRoot.Search.DoSearch();
+                if(Owner is SearchViewModel) {
+
+                    SearchViewModel vm = (SearchViewModel) Owner;
+
+                    vm.SearchText = this.AssociatedObject.Text;
+                    vm.DoSearch();
+                }
+				
 			}
 		}
 

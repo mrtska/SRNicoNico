@@ -56,6 +56,10 @@ namespace SRNicoNico.Views.Contents.Video {
             if(DataContext is VideoViewModel) {
 
                 VideoViewModel vm = (VideoViewModel) DataContext;
+                if(vm.VideoFlash == this) {
+
+                    return;
+                }
                 vm.VideoFlash = this;
                 browser.Source = new Uri(vm.Address);
 

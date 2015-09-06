@@ -36,6 +36,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 response = NicoNicoWrapperMain.GetSession().HttpClient.GetAsync(response.Headers.Location).Result;
             }
 
+            //削除された動画
+            if(response.StatusCode == HttpStatusCode.NotFound) {
+
+
+                return null;
+            }
+
             var cookie = response.Headers.GetValues("Set-Cookie");
             foreach(string s in cookie) {
 
@@ -99,14 +106,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             Console.WriteLine(ret.Description);
             //ret.Description = ret.Description.Replace("<", "[").Replace(">", "]");
             Regex regex = new Regex(@"sm\d*");
-            ret.Description = regex.Replace(ret.Description, new MatchEvaluator(m => {
+            ret.Description = regex.Replace(ret.Description, new MatchEvaluator(Match));
 
-                Match match = m;
-                
-                return "<a href=\"" + match.Value + "\">" + match.Value + "</a>";
-            }));
+            Regex url = new Regex(@"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+");
+            ret.Description = url.Replace(ret.Description, new MatchEvaluator(Match));
+
             Console.WriteLine(ret.Description);
-
+           
 
 
             foreach(var tag in videoDetail.tagList) {
@@ -129,7 +135,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
 
+        private static string Match(Match match) {
 
+
+            return "<a href=\"" + match.Value + "\">" + match.Value + "</a>";
+
+        }
 
 
 

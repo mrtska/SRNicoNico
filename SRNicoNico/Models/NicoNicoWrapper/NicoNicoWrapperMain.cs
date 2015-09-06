@@ -22,13 +22,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //セッションが確立した後に呼ぶ
         public void PostInit() {
 
-            
-			this.User = new NicoNicoUser(Session.UserId);
-			App.ViewModelRoot.Title += "(user:" + this.User.UserName + ")";
 
-
-
-            App.ViewModelRoot.NicoRepo.InitNicoRepo();
+            User = new NicoNicoUser(Session.UserId);
+			App.ViewModelRoot.Title += "(user:" + User.UserName + ")";
         }
 
         //現在のセッションを取得

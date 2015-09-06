@@ -52,7 +52,7 @@
 		         Text="{Binding SearchText}"
 		         TextWrapping="Wrap">
 			<i:Interaction.Behaviors>
-				<Behaviors:TextBoxBehavior />
+				<Behaviors:TextBoxBehavior Owner="{Binding}" />
 			</i:Interaction.Behaviors>
 		</TextBox>
 		<RadioButton Margin="32,4,0,0"

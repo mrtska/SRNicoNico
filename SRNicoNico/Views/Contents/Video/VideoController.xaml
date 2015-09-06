@@ -54,6 +54,26 @@
                 <Run Text="{Binding Time.CurrentTimeString}" /><Run Text="/" /><Run Text="{Binding Time.VideoTimeString}" />
             </TextBlock>
 
+            <mui:ModernButton Margin="10,0,0,0" VerticalAlignment="Stretch" EllipseDiameter="36" IconWidth="20" IconHeight="20" HorizontalAlignment="Stretch" Focusable="False">
+                <mui:ModernButton.Style>
+                    <Style TargetType="mui:ModernButton">
+                        <Style.Triggers>
+                            <DataTrigger  Binding="{Binding IsRepeat}" Value="true" >
+                                <Setter Property="IconData" Value="F1 M 22,52.0001L 22,44.0001L 46.75,44.0001L 38.75,36L 49.25,36L 61.25,48.0001L 49.25,60L 38.75,60L 46.75,52.0001L 22,52.0001 Z M 54,23.9999L 54,31.9999L 29.25,31.9999L 37.25,40L 26.75,40L 14.75,27.9999L 26.75,16L 37.25,16L 29.25,23.9999L 54,23.9999 Z" />
+                            </DataTrigger>
+                            <DataTrigger  Binding="{Binding IsRepeat}" Value="false" >
+                                <Setter Property="IconData" Value="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </mui:ModernButton.Style>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodName="ToggleRepeat" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </mui:ModernButton>
+            
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
 

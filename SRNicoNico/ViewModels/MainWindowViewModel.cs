@@ -56,14 +56,10 @@ namespace SRNicoNico.ViewModels {
 
 
         public SignInDialogViewModel SignIn { get; private set; }
-		public SearchViewModel Search { get; private set; }
-
-		public Dictionary<string, VideoViewModel> VideoMap { get; private set; }
-
-        public NicoRepoViewModel NicoRepo { get; private set; }
 
 
-        public OtherViewModel Other { get; set; }
+
+
 
         public StatusBarViewModel StatusBar { get; set; }
 
@@ -92,14 +88,13 @@ namespace SRNicoNico.ViewModels {
             TabItems = new ObservableCollection<ViewModel> {
 
                 (SelectedTab = new StartViewModel()),
-                (Search = new SearchViewModel()),
-                (NicoRepo = new NicoRepoViewModel()),
+                (new SearchViewModel()),
+                (new NicoRepoViewModel()),
                 (new HistoryViewModel()),
-                (Other = new OtherViewModel())
+                (new OtherViewModel())
             };
 
 
-			VideoMap = new Dictionary<string, VideoViewModel>();
 
             StatusBar = new StatusBarViewModel();
 
