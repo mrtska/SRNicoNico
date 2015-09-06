@@ -85,6 +85,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             source => Uri.UnescapeDataString(source.Substring(source.IndexOf('=') + 1)));
 
             ret.GetFlv = new NicoNicoGetFlvData(getFlv);
+            
 
             //動画情報
             var videoDetail = json.videoDetail;
@@ -101,6 +102,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.MylistCounter = (int) videoDetail.mylistCount;
             ret.YesterdayRank = videoDetail.yesterday_rank;
             ret.HighestRank = videoDetail.highest_rank;
+
+           
 
 
             Console.WriteLine(ret.Description);

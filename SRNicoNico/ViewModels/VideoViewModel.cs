@@ -139,15 +139,8 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        //NicoNicoPlayerへのパス
-        public string Address {
+       
 
-            get {
-
-                var cur = System.IO.Directory.GetCurrentDirectory();
-                return cur + "./Flash/NicoNicoPlayer.html";
-            }
-        }
 
 
         #region CommentVisibility変更通知プロパティ
@@ -260,6 +253,19 @@ namespace SRNicoNico.ViewModels {
                 App.ViewModelRoot.StatusBar.Status = "動画情報取得中";
                 //動画情報取得
                 VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
+
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+                    if(VideoData.ApiData.Cmsid.Contains("nm")) {
+
+
+                        VideoFlash.browser.Source = new Uri(GetNMPlayerPath());
+
+                    } else {
+
+                        VideoFlash.browser.Source = new Uri(GetPlayerPath());
+
+                    }
+                }));
 
                 Time = new VideoTime();
 
@@ -481,7 +487,7 @@ namespace SRNicoNico.ViewModels {
             
            InvokeScript("JsInjectComment", json);
         }
-
+        
         //JSを呼ぶ
         private void InvokeScript(string func, params string[] args) {
 
@@ -493,6 +499,18 @@ namespace SRNicoNico.ViewModels {
             
         }
 
+        public string GetPlayerPath() {
+
+            var cur = System.IO.Directory.GetCurrentDirectory();
+            return cur + "./Flash/NicoNicoPlayer.html";
+
+        }
+
+        public string GetNMPlayerPath() {
+
+            var cur = System.IO.Directory.GetCurrentDirectory();
+            return cur + "./Flash/NicoNicoNMPlayer.html";
+        }
 
 
         public void DisposeViewModel() {

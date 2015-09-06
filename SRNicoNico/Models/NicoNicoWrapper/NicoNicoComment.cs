@@ -87,7 +87,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 string recv = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000";
                 response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + recv).Result;
             }
-
+            
             //公式動画
             if(response.IndexOf("resultcode=\"9\"") >= 0) {
 

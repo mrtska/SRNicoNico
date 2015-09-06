@@ -1,6 +1,5 @@
 package {
 	import flash.display.Sprite;
-	import flash.net.NetStream;
 	
 
 	public class CommentRasterizer extends Sprite {
@@ -9,8 +8,6 @@ package {
 		//コメントの位置を決定する
 		private var positioner:CommentPositioner;
 		
-		//動画
-		private var stream:NetStream;
 		
 		//コメントリスト
 		private var commentList:Vector.<CommentEntry>;
@@ -28,10 +25,9 @@ package {
 		}
 		
 		//フィールド初期化
-		public function updateBounds(width:int, height:int, stream:NetStream):void {
+		public function updateBounds(width:int, height:int):void {
 			
 			positioner = new CommentPositioner(width, height, drawingList);
-			this.stream = stream;
 		}
 		
 		//コメントリストをC#からもらう

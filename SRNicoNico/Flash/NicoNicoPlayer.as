@@ -59,7 +59,7 @@ package  {
 			}
 			
 			rastarizer = new CommentRasterizer();
-			
+		
 			//OpenVideo("Z:/smile.flv");
 			//OpenVideo("Z:/smile.mp4");
 			//OpenVideo("Z:/smile (1).mp4");
@@ -154,7 +154,7 @@ package  {
 					addChild(video);
 				}
 				
-				rastarizer.updateBounds(stage.stageWidth, stage.stageHeight, stream);
+				rastarizer.updateBounds(stage.stageWidth, stage.stageHeight);
 				addChild(rastarizer);
 				addEventListener(Event.ENTER_FRAME, onFrame);
 			}
