@@ -1,24 +1,18 @@
 package  {
 	
 	
-	import flash.display.Sprite;
-	import flash.display.StageScaleMode;
 	import flash.events.AsyncErrorEvent;
 	import flash.events.Event;
 	import flash.events.NetStatusEvent;
-	import flash.external.ExternalInterface;
 	import flash.geom.Rectangle;
 	import flash.media.StageVideo;
 	import flash.media.Video;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
 	import flash.system.fscommand;
-	import flash.text.TextFormat;
 	
 	[SWF(width="672", height="384")]
-	public class NicoNicoPlayer extends Sprite {
+	public class NicoNicoPlayer extends NicoNicoPlayerBase {
 		
 		//ストリーミングURL そのまんま
 		private var videoUrl:String;
@@ -37,49 +31,32 @@ package  {
 		//動画メタデータ
 		private var metadata:Object;
 		
-		//コメントラスタライザ
-		private var rastarizer:CommentRasterizer;
 		
 		//コンストラクタ
 		public function NicoNicoPlayer() {
 			
-			stage.color = 0x000000;
-			//枠に合わせてスケールする
-			stage.scaleMode = StageScaleMode.SHOW_ALL;
-			
-			//JSコールバック登録
-			if(ExternalInterface.available) {
-				
-				//コールバック登録
-				ExternalInterface.addCallback("AsOpenVideo", OpenVideo);
-				ExternalInterface.addCallback("AsPause", Pause);
-				ExternalInterface.addCallback("AsResume", Resume);
-				ExternalInterface.addCallback("AsSeek", Seek);
-				ExternalInterface.addCallback("AsInjectComment", InjectComment);
-			}
-			
-			rastarizer = new CommentRasterizer();
-		
+			super();
 			//OpenVideo("Z:/smile.flv");
+			//OpenVideo("Z:/smile.swf");
 			//OpenVideo("Z:/smile.mp4");
 			//OpenVideo("Z:/smile (1).mp4");
 			//var now:Date = new Date();
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
-			
 			/*var loader:URLLoader = new URLLoader();
 			var req:URLRequest = new URLRequest("Z:/msg.txt");
 			
 			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
-				
-				InjectComment(loader.data);
+			
+			InjectComment(loader.data);
 			});
 			loader.load(req);*/
+			
 		}
 		
 		//指定したURLをストリーミング再生する
-		private function OpenVideo(videoUrl:String):void {
+		public override function OpenVideo(videoUrl:String):void {
 			
 			this.videoUrl = videoUrl;
 			connection = new NetConnection();
@@ -88,27 +65,22 @@ package  {
 		}
 		
 		//そのまんま
-		private function Pause():void {
+		public override function Pause():void {
 			
 			stream.pause();
 		}
-		private function Resume():void {
+		public override function Resume():void {
 			
 			stream.resume();
 		}
-		private function Seek(pos:Number):void {
+		public override function Seek(pos:Number):void {
 			
 			wantSeekPos = pos;
 			stream.seek(pos);
 		}
-		private function InjectComment(json:String):void {
-			
-			rastarizer.load(json);
-		}
-		private function InjectContributorComment(list:String):void {
-			
-			
-		}
+		
+
+		
 		//ビデオコントロールにストリームを繋ぐ
 		private function ConnectStream():void {
 			
@@ -154,8 +126,6 @@ package  {
 					addChild(video);
 				}
 				
-				rastarizer.updateBounds(stage.stageWidth, stage.stageHeight);
-				addChild(rastarizer);
 				addEventListener(Event.ENTER_FRAME, onFrame);
 			}
 			stream.client = obj;

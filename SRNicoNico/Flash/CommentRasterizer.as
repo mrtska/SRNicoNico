@@ -1,13 +1,10 @@
 package {
 	import flash.display.Sprite;
 	
-
 	public class CommentRasterizer extends Sprite {
-		
 		
 		//コメントの位置を決定する
 		private var positioner:CommentPositioner;
-		
 		
 		//コメントリスト
 		private var commentList:Vector.<CommentEntry>;
@@ -30,6 +27,8 @@ package {
 			positioner = new CommentPositioner(width, height, drawingList);
 		}
 		
+		
+		
 		//コメントリストをC#からもらう
 		public function load(string:String):void {
 			
@@ -41,16 +40,11 @@ package {
 			}
 		}
 
-		
 		public function render(vpos:Number):void {
-			
 			
 			for(var i:int = nextIndex; i < commentList.length; i++) {
 				
 				var target:CommentEntry = commentList[i];
-				
-				
-				
 				
 				//描画時間になったら
 				if(vpos >= target.vpos && vpos < target.vend) {

@@ -81,26 +81,19 @@ namespace SRNicoNico.ViewModels {
 
         public void Reflesh() {
 
+            App.ViewModelRoot.StatusBar.Status = "ニコレポ取得中";
             IsActive = true;
             DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoRepoListCollection.Clear()));
             
-
             Task.Run(() => {
-
 
                 IList<NicoRepoListViewModel> result = NicoRepoList.GetNicoRepoList();
                 NicoRepoListCollection = new ObservableCollection<NicoRepoListViewModel>(result);
-
-                
-
-
-
                 IsActive = false;
 
-            });
-            
+                App.ViewModelRoot.StatusBar.Status = "ニコレポ取得完了";
 
-           
+            });
         }
 
         public void InitNicoRepo() {

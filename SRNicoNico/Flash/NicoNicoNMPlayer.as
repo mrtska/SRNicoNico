@@ -3,63 +3,27 @@ package  {
 	
 	import flash.display.Loader;
 	import flash.display.MovieClip;
-	import flash.display.Sprite;
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
-	import flash.events.AsyncErrorEvent;
 	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.events.NetStatusEvent;
-	import flash.external.ExternalInterface;
-	import flash.geom.Rectangle;
-	import flash.media.StageVideo;
-	import flash.media.Video;
-	import flash.net.NetConnection;
-	import flash.net.NetStream;
-	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.system.fscommand;
-	import flash.text.TextFormat;
 	
 	import org.libspark.utils.ForcibleLoader;
 	
 	[SWF(width="672", height="384")]
-	public class NicoNicoNMPlayer extends Sprite {
+	public class NicoNicoNMPlayer extends NicoNicoPlayerBase {
 		
 		//ストリーミングURL そのまんま
 		private var videoUrl:String;
 		
-		//ストリーミングするためのやつ こんな感じのやつがC#とかでも使えればいいのにな
-		
-
 		
 		private var loader:Loader = new Loader();
 
 		private var movie:MovieClip;
 		
-		//コメントラスタライザ
-		private var rastarizer:CommentRasterizer;
-		
 		//コンストラクタ
 		public function NicoNicoNMPlayer() {
 			
-			stage.color = 0x000000;
-			//枠に合わせてスケールする
-			stage.scaleMode = StageScaleMode.SHOW_ALL;
-			stage.align = StageAlign.TOP;
-			
-			//JSコールバック登録
-			if(ExternalInterface.available) {
-				
-				//コールバック登録
-				ExternalInterface.addCallback("AsOpenVideo", OpenVideo);
-				ExternalInterface.addCallback("AsPause", Pause);
-				ExternalInterface.addCallback("AsResume", Resume);
-				ExternalInterface.addCallback("AsSeek", Seek);
-				ExternalInterface.addCallback("AsInjectComment", InjectComment);
-			}
-			
-			rastarizer = new CommentRasterizer();
+			super();
 			
 			//OpenVideo("Z:/smile.swf");
 			//OpenVideo("Z:/smile.mp4");
@@ -81,7 +45,7 @@ package  {
 		}
 		
 		//指定したURLをストリーミング再生する
-		private function OpenVideo(videoUrl:String):void {
+		public override function OpenVideo(videoUrl:String):void {
 			
 			var req:URLRequest = new URLRequest(videoUrl);
 			
@@ -92,22 +56,19 @@ package  {
 		}
 		
 		//そのまんま
-		private function Pause():void {
+		public override function Pause():void {
 			
 			movie.stop();
 		}
-		private function Resume():void {
+		public override function Resume():void {
 			
 			movie.play();
 		}
-		private function Seek(pos:Number):void {
+		public override function Seek(pos:Number):void {
 			
-			movie.gotoAndPlay(pos);
+			movie.gotoAndPlay(pos * movie.loaderInfo.frameRate);
 		}
-		private function InjectComment(json:String):void {
-			
-			rastarizer.load(json);
-		}
+		
 
 		
 		private function onInit(e:Event):void {

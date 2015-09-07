@@ -255,6 +255,12 @@ namespace SRNicoNico.ViewModels {
                 VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
 
                 DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+                    while(VideoFlash == null) {
+
+                        Thread.Sleep(1);
+                    }
+
                     if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
 
@@ -294,6 +300,7 @@ namespace SRNicoNico.ViewModels {
 
                     DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => InjectComment(json.ToString())));
                 }
+                CommentVisibility = true;
 
                 //App.ViewModelRoot.StatusBar.Status = "動画取得完了";
             });
@@ -320,9 +327,14 @@ namespace SRNicoNico.ViewModels {
 
         public void ToggleRepeat() {
 
-            IsRepeat = IsRepeat ^ true;
+            IsRepeat ^= true;
         }
 
+        public void ToggleComment() {
+
+            CommentVisibility ^= true;
+            InvokeScript("JsToggleComment");
+        }
 
 
         //フルスクリーンにする
@@ -367,7 +379,7 @@ namespace SRNicoNico.ViewModels {
             //ウィンドウにFlash部分を追加
             Video.Grid.Children.Add(VideoFlash);
 
-            //フォーカス
+            App.Current.MainWindow.Focus();
 
         }
 
@@ -415,7 +427,7 @@ namespace SRNicoNico.ViewModels {
             BPS = (bps / 1024).ToString() + "KiB/秒";
 
             Time.BufferedTimeWidth = buffer * WebBrowser.ActualWidth;
-
+            
             Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + buffer + " bps:" + bps);
 
             SetSeekCursor(time);
@@ -444,7 +456,7 @@ namespace SRNicoNico.ViewModels {
             Time.CurrentTimeMilis = (int)(time * 100);
             Time.CurrentTimeString = NicoNicoUtil.GetTimeFromLong(Time.CurrentTime);
             Time.CurrentTimeWidth = WebBrowser.ActualWidth / VideoData.ApiData.Length * Time.CurrentTime;
-            SeekCursor = new Thickness(Time.CurrentTimeWidth - 10, 0, 0, 0);
+            SeekCursor = new Thickness(Time.CurrentTimeWidth, 0, 0, 0);
 
         }
 

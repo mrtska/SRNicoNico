@@ -13,9 +13,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="620"
              d:DataContext="{d:DesignInstance vm:NicoRepoViewModel}"
-             
-             
              >
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Reflesh" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="170"/>

@@ -33,7 +33,7 @@ function JsInjectComment(xml) {
 	
 	flash.AsInjectComment(xml);
 }
-function JsInjectContributorComment(xml) {
+function JsToggleComment() {
 	
-	flash.AsInjectContributorComment(xml);
+	flash.AsToggleComment();
 }
