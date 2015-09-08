@@ -14,6 +14,8 @@ using Fizzler.Systems.HtmlAgilityPack;
 
 using Codeplex.Data;
 using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
+using SRNicoNico.ViewModels;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
@@ -115,8 +117,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.Description = url.Replace(ret.Description, new MatchEvaluator(Match));
 
             Console.WriteLine(ret.Description);
-           
 
+            ret.TagList = new ObservableCollection<VideoTagViewModel>();
 
             foreach(var tag in videoDetail.tagList) {
 
@@ -128,8 +130,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     Lck = tag.lck == "1" ? true : false,
                     Cat = tag.cat()
                 };
-
-                ret.TagList.Add(entry); 
+                Console.WriteLine("Id:" + entry.Id + " tag:"+entry.Tag + " dic:" + entry.Dic + " lck:" + entry.Lck + " cat:" + entry.Cat);
+                ret.TagList.Add(new VideoTagViewModel(entry)); 
             }
             //------
 
@@ -189,7 +191,22 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public string HighestRank { get; set; }
 
         //タグリスト
-        public List<NicoNicoTag> TagList = new List<NicoNicoTag>();
+        #region TagList変更通知プロパティ
+        private ObservableCollection<VideoTagViewModel> _TagList;
+
+        public ObservableCollection<VideoTagViewModel> TagList {
+            get { return _TagList; }
+            set { 
+                if(_TagList == value)
+                    return;
+                _TagList = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
     }
 
     //タグ情報

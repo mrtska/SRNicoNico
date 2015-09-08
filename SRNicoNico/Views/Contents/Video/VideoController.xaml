@@ -74,7 +74,7 @@
                 </i:Interaction.Triggers>
             </mui:ModernButton>
 
-            <mui:ModernButton Margin="10,0,0,0" VerticalAlignment="Stretch" EllipseDiameter="36" IconWidth="20" IconHeight="20" HorizontalAlignment="Stretch" Focusable="False">
+            <mui:ModernButton VerticalAlignment="Stretch" EllipseDiameter="36" IconWidth="20" IconHeight="20" HorizontalAlignment="Stretch" Focusable="False">
                 <mui:ModernButton.Style>
                     <Style TargetType="mui:ModernButton">
                         <Style.Triggers>

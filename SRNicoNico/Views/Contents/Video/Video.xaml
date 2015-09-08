@@ -12,20 +12,20 @@
              xmlns:bc="http://www.quickzip.org/BaseControls"
              xmlns:behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
              d:DesignHeight="600"
-             d:DesignWidth="600"
+             d:DesignWidth="825"
 			 d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
-             mc:Ignorable="d" DataContextChanged="UserControl_DataContextChanged" Focusable="True">
+             mc:Ignorable="d" DataContextChanged="UserControl_DataContextChanged" Focusable="False">
 
     <i:Interaction.Triggers>
 
         <l:InteractionMessageTrigger Messenger="{Binding Messenger}">
             <l:TransitionInteractionMessageAction/>
         </l:InteractionMessageTrigger>
-        
+
 
         <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="F">
-			<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="GoToFullScreen" />
-		</ei:KeyTrigger>
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="GoToFullScreen" />
+        </ei:KeyTrigger>
         <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Space">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="PlayOrPauseOrResume" />
         </ei:KeyTrigger>
@@ -34,9 +34,13 @@
         </ei:KeyTrigger>
     </i:Interaction.Triggers>
 
-	
-	
+
+
     <Grid x:Name="Grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="46*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="154*"/>
@@ -44,61 +48,77 @@
             <RowDefinition Height="113*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock HorizontalAlignment="Left" Grid.Row="0" TextWrapping="NoWrap" FontSize="20" Text="{Binding VideoData.ApiData.Title}" VerticalAlignment="Top"/>
+        <StackPanel Grid.RowSpan="2" Margin="10" >
 
-        <mui:ModernButton Focusable="False" HorizontalAlignment="Right" IconData="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z" >
+            <Border BorderBrush="#FF444444" BorderThickness="1">
+                <StackPanel Margin="3">
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.Cmsid, StringFormat=動画ID : {0}}" VerticalAlignment="Top" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.ViewCounter, StringFormat=再生数 : {0:N0}}" VerticalAlignment="Top" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.CommentCounter, StringFormat=コメント数 : {0:N0}}" VerticalAlignment="Top" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.MylistCounter, StringFormat=マイリスト数 : {0:N0}}" VerticalAlignment="Top" />
+                </StackPanel>
+            </Border>
+           
+           
+
+
+        </StackPanel>
+
+
+
+        <TextBlock HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1" TextWrapping="NoWrap" FontSize="20" Text="{Binding VideoData.ApiData.Title}" VerticalAlignment="Top"/>
+
+        <mui:ModernButton Focusable="False" HorizontalAlignment="Right" IconData="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z" Margin="0,0,10,0" Grid.Column="1" >
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                     <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="DisposeViewModel" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-            
-        
-        
         </mui:ModernButton>
-        <video:VideoFlash Grid.Row="1" />
-        <video:VideoController x:Name="Controller"  Grid.Row="2" />
 
-        <Grid Grid.Row="3" Grid.RowSpan="2" >
-            
-            
+        <video:VideoFlash Grid.Row="1" Grid.Column="1" />
+        <video:VideoController x:Name="Controller"  Grid.Row="2" Grid.Column="1" />
+
+        <Grid Grid.Row="3" Grid.Column="1" >
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="90"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
 
             <ScrollViewer>
-                <TextBlock HorizontalAlignment="Stretch"  Padding="5" TextWrapping="Wrap" behaviors:HtmlTextBoxProperties.TriggerRequest="TextBlock_TriggerRequest"  behaviors:HtmlTextBoxProperties.HtmlText="{Binding VideoData.ApiData.Description, Mode=OneWay}" >
-                    
-                    
-                </TextBlock>
+                <Grid>
+                    <TextBlock HorizontalAlignment="Stretch"  Padding="5" TextWrapping="Wrap" behaviors:HtmlTextBoxProperties.TriggerRequest="TextBlock_TriggerRequest"  behaviors:HtmlTextBoxProperties.HtmlText="{Binding VideoData.ApiData.Description, Mode=OneWay}" />
+                    <mui:ModernProgressRing Grid.Row="2" HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}"  />
+
+                </Grid>
 
             </ScrollViewer>
-           
-            <Border Grid.Column="1">
-                <StackPanel Margin="5" Grid.Column="1" Orientation="Vertical" >
+            <Border Grid.Column="2" BorderBrush="#FF444444" BorderThickness="1" Margin="0,10,0,0" >
+                <StackPanel Margin="3">
 
-                    <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="動画ID" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="再生数" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="コメント数" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="マイリスト数" VerticalAlignment="Top"/>
+                    <TextBlock Text="タグ" Margin="10" FontSize="16" />
 
+                    <Rectangle Stroke="#FF444444" Margin="10,-5,10,5" />
 
+                    <ListView Margin="10" ItemsSource="{Binding VideoData.ApiData.TagList}" Focusable="False" >
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                
+                                <Setter Property="Focusable" Value="False" />
+                                <Setter Property="Foreground" Value="#FFAAAAAA" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.Resources>
+                            <DataTemplate DataType="{x:Type vm:VideoTagViewModel}">
+                                <video:VideoTag />
+                            </DataTemplate>
+                        </ListView.Resources>
+                    </ListView>
                 </StackPanel>
             </Border>
-
-
-            <StackPanel Margin="5" Grid.Column="2" Orientation="Vertical">
-
-                <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.Cmsid}" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.ViewCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.CommentCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.MylistCounter, StringFormat={}{0:N0}}" VerticalAlignment="Top"/>
-
-            </StackPanel>
-
         </Grid>
 
 
@@ -106,6 +126,6 @@
 
     </Grid>
 
-    
+
 
 </UserControl>

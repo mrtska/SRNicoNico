@@ -189,6 +189,20 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region IsActive変更通知プロパティ
+        private bool _IsActive;
+
+        public bool IsActive {
+            get { return _IsActive; }
+            set { 
+                if(_IsActive == value)
+                    return;
+                _IsActive = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         #region VideoFlash変更通知プロパティ UI要素だけどこればっかりは仕方ない
         private VideoFlash _VideoFlash;
@@ -235,7 +249,6 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-
         public VideoViewModel(string videoUrl) : base("動画") {
 
             App.ViewModelRoot.TabItems.Add(this);
@@ -245,6 +258,7 @@ namespace SRNicoNico.ViewModels {
 
         private void Initialize(string videoUrl) {
 
+            IsActive = true;
             Task.Run(() => {
 
                 VideoData = new VideoData();
@@ -272,6 +286,7 @@ namespace SRNicoNico.ViewModels {
 
                     }
                 }));
+                IsActive = false;
 
                 Time = new VideoTime();
 
