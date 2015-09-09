@@ -24,24 +24,24 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             List<NicoRepoListViewModel> ret = new List<NicoRepoListViewModel>();
 
 
-            NicoRepoListViewModel all = new NicoRepoListViewModel("すべて") { Id = "all" };
-            NicoRepoListViewModel myself = new NicoRepoListViewModel("自分") { Id = "myself" };
-            NicoRepoListViewModel user = new NicoRepoListViewModel("お気に入りユーザー") { Id = "user" };
-            NicoRepoListViewModel chcom = new NicoRepoListViewModel("チャンネル&コミュニティ") { Id = "chcom" };
-            NicoRepoListViewModel mylist = new NicoRepoListViewModel("マイリスト") { Id = "mylist" };
+            NicoRepoListViewModel all = new NicoRepoListViewModel("すべて", "all");
+            NicoRepoListViewModel myself = new NicoRepoListViewModel("自分", "myself");
+            NicoRepoListViewModel user = new NicoRepoListViewModel("お気に入りユーザー", "user");
+            NicoRepoListViewModel chcom = new NicoRepoListViewModel("チャンネル&コミュニティ", "chcom");
+            NicoRepoListViewModel mylist = new NicoRepoListViewModel("マイリスト", "mylist");
 
             ret.Add(all);
             ret.Add(myself);
             ret.Add(user);
             ret.Add(chcom);
             ret.Add(mylist);
-            ret = new List<NicoRepoListViewModel>(ret.Concat(GetUserDefinitionsNicoRepoList()));
+            ret = new List<NicoRepoListViewModel>(ret.Concat(GetUserDefinitionNicoRepoList()));
             
             return ret;
         }
 
         //ユーザー定義の二コレポリストを取得
-        private List<NicoRepoListViewModel> GetUserDefinitionsNicoRepoList() {
+        private List<NicoRepoListViewModel> GetUserDefinitionNicoRepoList() {
 
             //htmlからCSRFトークンを抜き出す
             string html = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(NicoRepoWebUrl).Result;
@@ -50,7 +50,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             string token = html.Substring(html.IndexOf("Mypage_globals.hash = \"") + 23, 60);
 
             string response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(NicoRepoListApiUrl + token).Result;
-
+            Console.WriteLine(NicoRepoListApiUrl + token);
             var json = DynamicJson.Parse(response);
 
 
@@ -58,8 +58,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             foreach(var entry in json.nicorepolists) {
 
-                NicoRepoListViewModel list = new NicoRepoListViewModel(entry.title);
-                list.Id = entry.id;
+                NicoRepoListViewModel list = new NicoRepoListViewModel(entry.title, entry.id);
 
                 ret.Add(list);
             }

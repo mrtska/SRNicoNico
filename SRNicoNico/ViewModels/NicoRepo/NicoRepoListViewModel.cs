@@ -18,34 +18,9 @@ namespace SRNicoNico.ViewModels {
     public class NicoRepoListViewModel : TabItemViewModel {
 
 
-        #region Title変更通知プロパティ
-        private string _Title;
-
-        public string Title {
-            get { return _Title; }
-            set { 
-                if(_Title == value)
-                    return;
-                _Title = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
 
 
-        #region Id変更通知プロパティ
-        private string _Id;
-
-        public string Id {
-            get { return _Id; }
-            set { 
-                if(_Id == value)
-                    return;
-                _Id = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
+        private readonly string Id;
 
 
 
@@ -65,9 +40,9 @@ namespace SRNicoNico.ViewModels {
 
         private NicoNicoNicoRepo NicoRepo;
 
-        public NicoRepoListViewModel(string title) : base(title) {
+        public NicoRepoListViewModel(string title, string id) : base(title) {
 
-            Title = title;
+            Id = id;
             OpenNicoRepoList();
         }
 

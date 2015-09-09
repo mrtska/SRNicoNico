@@ -82,6 +82,13 @@ namespace SRNicoNico.ViewModels {
 
 		public void Open() {
 
+            //not existsの時など
+            if(SelectedItem == null || SelectedItem.Entry.VideoUrl == null) {
+
+                return;
+            }
+
+
 			//ニコレポが動画だったら動画を開く
             if(SelectedItem.Entry.VideoUrl.StartsWith("http://www.nicovideo.jp/watch/")) {
 
