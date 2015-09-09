@@ -46,7 +46,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //取得したい二コレポのID allとかmyselfとかuserとかいろいろ
         public NicoNicoNicoRepo(string id) {
 
-
             Id = id;
         }
 

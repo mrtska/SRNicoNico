@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Livet;
 
@@ -10,11 +8,9 @@ using Fizzler.Systems.HtmlAgilityPack;
 
 using Codeplex.Data;
 
-using SRNicoNico.Models.NicoNicoViewer;
-using System.Windows;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
-	public class NicoNicoComment : NotificationObject {
+    public class NicoNicoComment : NotificationObject {
 
 
 		//スレッドキー取得API
@@ -158,8 +154,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 entry.Date = long.Parse(attr["date"].Value);
                 entry.UserId = attr.Contains("user_id") ? attr["user_id"].Value : "contributor";
                 entry.Mail = attr.Contains("mail") ? attr["mail"].Value : "";
-                entry.Content = node.InnerText;
-
+                entry.Content = System.Web.HttpUtility.HtmlDecode(node.InnerText);
+                
                 list.Add(entry);
             }
         }
