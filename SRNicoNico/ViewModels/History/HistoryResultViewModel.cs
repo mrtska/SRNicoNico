@@ -66,15 +66,13 @@ namespace SRNicoNico.ViewModels {
 		#endregion
 
 
-		
-
-
 		//選択された動画を開く
 		public void Open() {
 
             if(SelectedItem != null) {
 
                 new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Data.Id);
+                SelectedItem = null;
             }
         }
 

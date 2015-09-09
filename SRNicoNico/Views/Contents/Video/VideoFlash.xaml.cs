@@ -17,6 +17,8 @@ using System.ComponentModel;
 using System.Windows.Markup;
 using System.IO;
 using SRNicoNico.ViewModels;
+using System.Windows.Interop;
+using mshtml;
 
 namespace SRNicoNico.Views.Contents.Video {
     /// <summary>
@@ -42,9 +44,7 @@ namespace SRNicoNico.Views.Contents.Video {
             if(DataContext is VideoViewModel) {
 
                 VideoViewModel vm = (VideoViewModel)DataContext;
-                //インスタンスを設定
-                vm.WebBrowser = browser;
-
+                
                 //動画オープン
                 vm.OpenVideo();
             }
@@ -60,6 +60,8 @@ namespace SRNicoNico.Views.Contents.Video {
 
                     return;
                 }
+                //インスタンスを設定
+                vm.WebBrowser = browser;
                 vm.VideoFlash = this;
             }
         }

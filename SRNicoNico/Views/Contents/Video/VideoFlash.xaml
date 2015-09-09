@@ -10,7 +10,7 @@
              d:DataContext="{d:DesignInstance vm:VideoViewModel}" DataContextChanged="UserControl_DataContextChanged"
 			 >
     <Grid>
-        <WebBrowser x:Name="browser" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LoadCompleted="browser_LoadCompleted" />
+        <WebBrowser x:Name="browser" LoadCompleted="browser_LoadCompleted" />
 		
     </Grid>
 </UserControl>

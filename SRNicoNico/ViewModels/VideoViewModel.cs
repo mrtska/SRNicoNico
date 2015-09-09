@@ -249,7 +249,7 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-        public VideoViewModel(string videoUrl) : base("動画") {
+        public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
             App.ViewModelRoot.TabItems.Add(this);
             App.ViewModelRoot.SelectedTab = this;
@@ -278,11 +278,11 @@ namespace SRNicoNico.ViewModels {
                     if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
 
-                        VideoFlash.browser.Source = new Uri(GetNMPlayerPath());
+                        WebBrowser.Source = new Uri(GetNMPlayerPath());
 
                     } else {
 
-                        VideoFlash.browser.Source = new Uri(GetPlayerPath());
+                        WebBrowser.Source = new Uri(GetPlayerPath());
 
                     }
                 }));
