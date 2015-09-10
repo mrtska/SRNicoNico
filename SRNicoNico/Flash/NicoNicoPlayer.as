@@ -6,14 +6,15 @@ package  {
 	import flash.events.KeyboardEvent;
 	import flash.events.NetStatusEvent;
 	import flash.geom.Rectangle;
+	import flash.media.SoundTransform;
 	import flash.media.StageVideo;
 	import flash.media.Video;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
-	import flash.system.fscommand;
-	import flash.ui.Keyboard;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.system.fscommand;
+	import flash.ui.Keyboard;
 	
 	[SWF(width="672", height="384")]
 	public class NicoNicoPlayer extends NicoNicoPlayerBase {
@@ -106,7 +107,10 @@ package  {
 			wantSeekPos = pos;
 			stream.seek(pos);
 		}
-		
+		public override function ChangeVolume(vol:Number):void {
+			
+			stream.soundTransform = new SoundTransform(vol);
+		}
 
 		
 		//ビデオコントロールにストリームを繋ぐ

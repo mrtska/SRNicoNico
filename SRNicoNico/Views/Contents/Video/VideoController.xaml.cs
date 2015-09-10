@@ -37,37 +37,39 @@ namespace SRNicoNico.Views.Contents.Video {
 			
 			//シーク中の動画時間
 			int ans = (int) (x / ActualWidth * Seek.VideoTime);
-			ans = Math.Abs(ans);
+            if(ans < 0 || Seek.VideoTime < ans) {
 
-			Seek.PopupText = NicoNicoUtil.GetTimeFromLong(ans);
-			Seek.PopupRect = new Rect(x - 5, 0, 20, 20);
-
+                return;
+            }
 
 			if(Seek.IsPopupImageOpen) {
 
 				NicoNicoStoryBoardData Story = vm.VideoData.StoryBoardData;
 
-				Seek.PopupImageRect = new Rect(x - Story.Width / 2, -10, Story.Width, Story.Height);
 
-				Bitmap test = Story.BitmapCollection[ans - ans % Story.Interval];
-				IntPtr hBitMap = test.GetHbitmap();
-				try {
+                if(Story.BitmapCollection.ContainsKey(ans - ans % Story.Interval)) {
 
-					Seek.PopupImage = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitMap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-				} finally {
+                    Seek.PopupText = NicoNicoUtil.GetTimeFromLong(ans);
+                    Seek.PopupRect = new Rect(x - 5, 0, 20, 20);
 
-					DeleteObject(hBitMap);
-				}
+                    Seek.PopupImageRect = new Rect(x - Story.Width / 2, -10, Story.Width, Story.Height);
+
+                    Bitmap test = Story.BitmapCollection[ans - ans % Story.Interval];
+                    IntPtr hBitMap = test.GetHbitmap();
+                    try {
+
+                        Seek.PopupImage = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitMap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    } finally {
+
+                        DeleteObject(hBitMap);
+                    }
+                }
 			}
-			
-
 		}
 
 		private void Seek_MouseLeave(object sender, MouseEventArgs e) {
 
-
-
-			Seek.IsPopupImageOpen = false;
+            Seek.IsPopupImageOpen = false;
 			Seek.IsPopupOpen = false;
 		}
 
@@ -78,7 +80,7 @@ namespace SRNicoNico.Views.Contents.Video {
                 return;
             }
             VideoViewModel vm = (VideoViewModel)DataContext;
-
+            
 
             if(vm.VideoData.StoryBoardData != null) {
 
@@ -98,8 +100,17 @@ namespace SRNicoNico.Views.Contents.Video {
 
             double x = e.GetPosition(this).X;
             int ans = (int)(x / ActualWidth * Seek.VideoTime);
-            ans = Math.Abs(ans);
+            
+            if(ans < 0) {
+
+                ans = 0;
+            } else if(ans > Seek.VideoTime) {
+
+                ans = (int) Seek.VideoTime;
+            }
+
             vm.Seek(ans);
         }
+
     }
 }

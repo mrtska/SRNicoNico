@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 using SRNicoNico.Models.NicoNicoWrapper;
+using System.Windows.Input;
 
 namespace SRNicoNico.Views.Controls {
 
@@ -20,7 +21,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for VideoTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty VideoTimeProperty =
-			DependencyProperty.Register("VideoTime", typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
+			DependencyProperty.Register(nameof(VideoTime), typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
 
 
 
@@ -33,7 +34,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for CurrentTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty CurrentTimeProperty =
-			DependencyProperty.Register("CurrentTime", typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
+			DependencyProperty.Register(nameof(CurrentTime), typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
 
 
 
@@ -44,7 +45,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for CurrentTimeString.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty CurrentTimeWidthProperty =
-			DependencyProperty.Register("CurrentTimeWidth", typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0.0));
+			DependencyProperty.Register(nameof(CurrentTimeWidth), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0.0));
 
 
 
@@ -57,7 +58,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for BufferedTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty BufferedTimeProperty =
-			DependencyProperty.Register("BufferedTime", typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
+			DependencyProperty.Register(nameof(BufferedTime), typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
 
 
 
@@ -68,7 +69,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for BufferedTimeString.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty BufferedTimeWidthProperty =
-			DependencyProperty.Register("BufferedTimeWidth", typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0.0));
+			DependencyProperty.Register(nameof(BufferedTimeWidth), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0.0));
 
 
 
@@ -79,7 +80,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for SeekCursor.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty SeekCursorProperty =
-			DependencyProperty.Register("SeekCursor", typeof(Thickness), typeof(SeekBar), new FrameworkPropertyMetadata(null));
+			DependencyProperty.Register(nameof(SeekCursor), typeof(Thickness), typeof(SeekBar), new FrameworkPropertyMetadata(null));
 
 
 
@@ -92,7 +93,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for PopupText.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty PopupTextProperty =
-			DependencyProperty.Register("PopupText", typeof(string), typeof(SeekBar), new FrameworkPropertyMetadata(""));
+			DependencyProperty.Register(nameof(PopupText), typeof(string), typeof(SeekBar), new FrameworkPropertyMetadata(""));
 
 
 
@@ -103,7 +104,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for IsPopupOpen.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty IsPopupOpenProperty =
-			DependencyProperty.Register("IsPopupOpen", typeof(bool), typeof(SeekBar), new FrameworkPropertyMetadata(false));
+			DependencyProperty.Register(nameof(IsPopupOpen), typeof(bool), typeof(SeekBar), new FrameworkPropertyMetadata(false));
 
 
 
@@ -114,7 +115,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for IsPopupImageOpen.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty IsPopupImageOpenProperty =
-			DependencyProperty.Register("IsPopupImageOpen", typeof(bool), typeof(SeekBar), new FrameworkPropertyMetadata(false));
+			DependencyProperty.Register(nameof(IsPopupImageOpen), typeof(bool), typeof(SeekBar), new FrameworkPropertyMetadata(false));
 
 
 
@@ -127,7 +128,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for PopupRect.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty PopupRectProperty =
-			DependencyProperty.Register("PopupRect", typeof(Rect), typeof(SeekBar), new FrameworkPropertyMetadata(null));
+			DependencyProperty.Register(nameof(PopupRect), typeof(Rect), typeof(SeekBar), new FrameworkPropertyMetadata(null));
 
 
 
@@ -138,7 +139,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for PopupImageRect.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty PopupImageRectProperty =
-			DependencyProperty.Register("PopupImageRect", typeof(Rect), typeof(SeekBar), new FrameworkPropertyMetadata(null));
+			DependencyProperty.Register(nameof(PopupImageRect), typeof(Rect), typeof(SeekBar), new FrameworkPropertyMetadata(null));
 
 
 
@@ -149,10 +150,22 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for PopupImage.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty PopupImageProperty =
-			DependencyProperty.Register("PopupImage", typeof(BitmapSource), typeof(SeekBar), new FrameworkPropertyMetadata(null));
+			DependencyProperty.Register(nameof(PopupImage), typeof(BitmapSource), typeof(SeekBar), new FrameworkPropertyMetadata(null));
 
 
-		static SeekBar() {
+
+        public bool IsDrag {
+            get { return (bool)GetValue(IsDragProperty); }
+            set { SetValue(IsDragProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsDrag.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsDragProperty =
+            DependencyProperty.Register("IsDrag", typeof(bool), typeof(SeekBar), new PropertyMetadata(false));
+
+
+
+        static SeekBar() {
 
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(SeekBar), new FrameworkPropertyMetadata(typeof(SeekBar)));
 		}
@@ -163,11 +176,41 @@ namespace SRNicoNico.Views.Controls {
             timer.Interval = TimeSpan.FromMilliseconds(10);
             timer.Tick += Fired;
             timer.Start();
+
+            MouseLeftButtonDown += SeekBar_MouseLeftButtonDown;
+            MouseLeftButtonUp += SeekBar_MouseLeftButtonUp;
+            MouseMove += SeekBar_MouseMove;
+        }
+
+        private void SeekBar_MouseMove(object sender, MouseEventArgs e) {
+
+            if(IsDrag) {
+
+                
+            } else {
+
+                
+            }
+        }
+
+        private void SeekBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+
+            IsDrag = false;
+            UIElement el = sender as UIElement;
+            el.ReleaseMouseCapture();
+        }
+
+        private void SeekBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+
+            IsDrag = true;
+            UIElement el = sender as UIElement;
+            el.CaptureMouse();
+
         }
 
         private void Fired(object sender, EventArgs e) {
 
-            CurrentTimeWidth = ActualWidth / VideoTime * CurrentTime;
+            CurrentTimeWidth = (ActualWidth - 10) / VideoTime * CurrentTime;
             SeekCursor = new Thickness(CurrentTimeWidth, 0, 0, 0);
             BufferedTimeWidth = BufferedTime * ActualWidth;
         }

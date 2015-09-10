@@ -111,9 +111,6 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
        
-
-
-
         #region CommentVisibility変更通知プロパティ
         private bool _CommentVisibility = false;
 
@@ -173,6 +170,25 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
+
+
+        #region Volume変更通知プロパティ
+        private int _Volume = -1;
+
+        public int Volume {
+            get { return _Volume; }
+            set { 
+                if(_Volume == value)
+                    return;
+                _Volume = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
+
 
 
         #region VideoFlash変更通知プロパティ UI要素だけどこればっかりは仕方ない
@@ -256,6 +272,7 @@ namespace SRNicoNico.ViewModels {
                         WebBrowser.Source = new Uri(GetPlayerPath());
 
                     }
+
                 }));
                 IsActive = false;
 
@@ -322,6 +339,17 @@ namespace SRNicoNico.ViewModels {
             InvokeScript("JsToggleComment");
         }
 
+        public void ToggleMute() {
+
+            if(Volume == 0) {
+
+                Volume = 100;
+            } else {
+
+                Volume = 0;
+            }
+            ChangeVolume(Volume);
+        }
 
         //フルスクリーンにする
         public void GoToFullScreen() {
@@ -451,11 +479,15 @@ namespace SRNicoNico.ViewModels {
 				Thread.Sleep(50);
 			}
 
+            //ここからInvoke可能
             WebBrowser.ObjectForScripting = new ObjectForScriptingHelper(this);
             IsPlaying = true;
+
             InvokeScript("JsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
-            
-            
+
+            Volume = Properties.Settings.Default.Volume;
+            ChangeVolume(Volume);
+
         }
 
 
@@ -481,6 +513,13 @@ namespace SRNicoNico.ViewModels {
         public void InjectComment(string json) {
             
            InvokeScript("JsInjectComment", json);
+        }
+
+        public void ChangeVolume(int vol) {
+
+            Properties.Settings.Default.Volume = vol;
+            Properties.Settings.Default.Save();
+            InvokeScript("JsChangeVolume", (vol / 100.0).ToString());
         }
         
         //JSを呼ぶ

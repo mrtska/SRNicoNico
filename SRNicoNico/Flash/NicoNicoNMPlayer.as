@@ -4,6 +4,7 @@ package  {
 	import flash.display.Loader;
 	import flash.display.MovieClip;
 	import flash.events.Event;
+	import flash.media.SoundTransform;
 	import flash.net.URLRequest;
 	import flash.system.fscommand;
 	
@@ -69,7 +70,10 @@ package  {
 			movie.gotoAndPlay(pos * movie.loaderInfo.frameRate);
 		}
 		
-
+		public override function ChangeVolume(vol:Number):void {
+			
+			movie.soundTransform = new SoundTransform(vol);
+		}
 		
 		private function onInit(e:Event):void {
 			

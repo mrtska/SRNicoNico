@@ -9,7 +9,8 @@
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
-             xmlns:seek="clr-namespace:SRNicoNico.Views.Controls"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
+             xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              d:DesignHeight="54.974" d:DesignWidth="680"
@@ -20,7 +21,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         
-        <seek:SeekBar x:Name="Seek" BufferedTime="{Binding Time.BufferedTime}" VideoTime="{Binding VideoData.ApiData.Length}" CurrentTime="{Binding Time.CurrentTime}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter" MouseLeftButtonUp="Seek_MouseLeftButtonUp"  />
+        <controls:SeekBar x:Name="Seek" BufferedTime="{Binding Time.BufferedTime}" VideoTime="{Binding VideoData.ApiData.Length}" CurrentTime="{Binding Time.CurrentTime}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter" MouseLeftButtonUp="Seek_MouseLeftButtonUp"  />
         <StackPanel Grid.Row="1" Orientation="Horizontal" >
             <mui:ModernButton Margin="10,0,0,0" EllipseDiameter="36" IconWidth="20" IconHeight="20" Focusable="False">
                 <mui:ModernButton.Style>
@@ -94,11 +95,9 @@
                 </i:Interaction.Triggers>
             </mui:ModernButton>
 
-            <ProgressBar Margin="10" VerticalAlignment="Center" Height="20" Width="100" Maximum="1" Minimum="0" ToolTip="音量" >
-                
-            </ProgressBar>
-
-
+            <misc:VolumeBar Margin="10,0,0,0"/>
+            
+            
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
 

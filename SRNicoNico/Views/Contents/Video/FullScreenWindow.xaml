@@ -17,8 +17,6 @@
         Foreground="{DynamicResource ActiveForegroundBrushKey}"
         >
 
-    
-
     <i:Interaction.Triggers>
 
 
@@ -42,7 +40,7 @@
             <DynamicResource ResourceKey="VideoFlashKey" />
         </ContentControl>
 
-        <Popup IsOpen="True" StaysOpen="True" AllowsTransparency="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" Width="{Binding ElementName=screen, Path=ActualWidth}">
+        <Popup IsOpen="True" StaysOpen="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" Width="{Binding ElementName=screen, Path=ActualWidth}">
             
             <video:VideoController  Opacity="1"/>
         </Popup>
