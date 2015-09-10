@@ -37,3 +37,7 @@ function JsToggleComment() {
 	
 	flash.AsToggleComment();
 }
+function JsChangeVolume(vol) {
+	
+	flash.AsChangeVolume(vol);
+}

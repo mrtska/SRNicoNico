@@ -104,6 +104,7 @@ namespace SRNicoNico.ViewModels {
         private void OpenVideo() {
 
             new VideoViewModel(SelectedItem.Entry.VideoUrl);
+            SelectedItem = null;
 
         }
 

@@ -27,23 +27,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 		}
         #endregion
 
-
-        #region CurrentTimeMilis変更通知プロパティ
-        private long _CurrentTimeMilis;
-
-        public long CurrentTimeMilis {
-            get { return _CurrentTimeMilis; }
-            set {   
-                if(_CurrentTimeMilis == value)
-                    return;
-                _CurrentTimeMilis = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-
         #region CurrentTimeString変更通知プロパティ
         private string _CurrentTimeString = "0:00";
 
@@ -58,21 +41,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 		}
 		#endregion
 
-
-
-		#region CurrentTimeWidth変更通知プロパティ
-		private double _CurrentTimeWidth;
-
-		public double CurrentTimeWidth {
-			get { return _CurrentTimeWidth; }
-			set { 
-				if (_CurrentTimeWidth == value)
-					return;
-				_CurrentTimeWidth = value;
-				RaisePropertyChanged();
-			}
-		}
-        #endregion
 
 
         #region VideoTimeString変更通知プロパティ
@@ -103,24 +71,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
         #endregion
-
-
-        #region BufferedTimeWidth変更通知プロパティ
-        private double _BufferedTimeWidth;
-
-        public double BufferedTimeWidth {
-            get { return _BufferedTimeWidth; }
-            set { 
-                if(_BufferedTimeWidth == value)
-                    return;
-                _BufferedTimeWidth = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-
 
     }
 }

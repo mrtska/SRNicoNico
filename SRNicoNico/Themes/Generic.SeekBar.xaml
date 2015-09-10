@@ -12,7 +12,6 @@
                             HorizontalAlignment="{TemplateBinding HorizontalAlignment}" >
                         <Grid>
 
-                            <!-- background -->
                             <Rectangle Fill="#FF404040" />
                             <Rectangle Panel.ZIndex="1"  HorizontalAlignment="Left" Width="{TemplateBinding BufferedTimeWidth}" Fill="#FF555555" />
                             <Rectangle Panel.ZIndex="2" HorizontalAlignment="Left" Width="{TemplateBinding CurrentTimeWidth}" Fill="#FF007AFF"/>

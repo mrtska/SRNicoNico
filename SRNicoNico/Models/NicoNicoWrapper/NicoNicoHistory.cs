@@ -1,65 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net;
+using System.Net.Http;
 
 using Livet;
 
-using Codeplex.Data;
+using HtmlAgilityPack;
+using Fizzler.Systems.HtmlAgilityPack;
+
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoHistory : NotificationObject {
         
+        //視聴履歴URL やはりこれが一番コストが安い
+        private const string HistoryUrl = "http://www.nicovideo.jp/my/history";
         
-        //視聴履歴を返すAPI
+        //視聴履歴を返すAPI ちょっと情報が足りない
         private const string HistroyApiUrl = "http://www.nicovideo.jp/api/videoviewhistory/list";
+
+        //動画情報を取得するVitaAPI コミュ限動画なども取得できる コストが高い
+        private const string VideoDataApiUrl = "http://api.ce.nicovideo.jp/nicoapi/v1/video.info?__format=json&v=";
+
+        //動画情報を一括で取得するVitaAPI コミュ限動画などは取得出来ない
+        private const string VideoDataArrayApiUrl = "http://api.ce.nicovideo.jp/nicoapi/v1/video.array?__format=json&v=";
+
+        //動画情報を取得するXPath
+        private const string GetVideoInfoXPath = "//div[parent::div[@id='historyList']]";
 
         //たまに失敗するから注意
         public List<NicoNicoHistoryData> GetHistroyData() {
 
-            int retry = 1;
 
             App.ViewModelRoot.StatusBar.Status = "視聴履歴取得中";
-start:
-            //このAPIだけでは再生数やコメント数などが取得できないので
-            string result = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(HistroyApiUrl).Result;
+            int retry = 1;
+            start:
+            //たまに失敗する
 
-            List<NicoNicoHistoryData> ret = new List<NicoNicoHistoryData>();
+            HttpResponseMessage result = NicoNicoWrapperMain.GetSession().HttpClient.GetAsync(HistoryUrl).Result;
 
-            var json = DynamicJson.Parse(result);
+            //失敗
+            if(result.StatusCode == HttpStatusCode.ServiceUnavailable) {
 
-            //取得失敗
-            if(json.code() && json.code == "internal_error") {
-
-                if(retry == 5) {
-
-                    App.ViewModelRoot.StatusBar.Status = "視聴履歴の取得に失敗しました。";
-                    return null;
-                }
                 App.ViewModelRoot.StatusBar.Status = "視聴履歴取得失敗(" + retry++ + "回)";
                 goto start;
             }
-            App.ViewModelRoot.StatusBar.Status = "視聴履歴取得中";
 
-            foreach(var entry in json.history) {
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml2(result.Content.ReadAsStringAsync().Result);
 
-                NicoNicoHistoryData data = new NicoNicoHistoryData() {
+            var info = doc.DocumentNode.SelectNodes(GetVideoInfoXPath);
 
-                    Id = entry.video_id,
-                    Length = entry.length,
-                    ThumbnailUrl = entry.thumbnail_url,
-                    Title = entry.title,
-                    WatchCount = (int) entry.watch_count,
-                    WatchDate = (long) entry.watch_date
-                };
+            List<NicoNicoHistoryData> ret = new List<NicoNicoHistoryData>();
 
 
+            foreach(HtmlNode node in info) {
 
+                NicoNicoHistoryData data = new NicoNicoHistoryData();
 
+                //---各種情報取得---
+                data.ThumbnailUrl = node.SelectSingleNode("child::div[@class='thumbContainer']/a/img").Attributes["src"].Value;
 
+                //削除されていない動画だったら
+                if(!data.ThumbnailUrl.Contains("deleted")) {
 
+                    data.Length = node.SelectSingleNode("child::div[@class='thumbContainer']/span").InnerText;
+                } else {
 
+                    data.ThumbnailUrl = "http://www.nicovideo.jp/" + data.ThumbnailUrl;
+                }
+                data.WatchDate = node.SelectSingleNode("child::div[@class='section']/p").ChildNodes["#text"].InnerText;
+                data.WatchCount = node.SelectSingleNode("child::div[@class='section']/p/span").InnerText;
 
+                data.Title = node.SelectSingleNode("child::div[@class='section']/h5/a").InnerText;
+                data.Id = node.SelectSingleNode("child::div[@class='section']/h5/a").Attributes["href"].Value.Substring(6);
+
+                data.ViewCounter = node.SelectSingleNode("child::div[@class='section']/ul[@class='metadata']/li[@class='play']").InnerText;
+                data.CommentCounter = node.SelectSingleNode("child::div[@class='section']/ul[@class='metadata']/li[@class='comment']").InnerText;
+                data.MylistCounter = node.SelectSingleNode("child::div[@class='section']/ul[@class='metadata']/li[@class='mylist']/a").InnerText;
+                data.PostDate = node.SelectSingleNode("child::div[@class='section']/ul[@class='metadata']/li[@class='posttime']").InnerText;
+                
 
                 ret.Add(data);
             }
@@ -85,20 +104,23 @@ start:
         //動画の長さ
         public string Length { get; set; }
 
-        //視聴日時 Unix時間
-        public long WatchDate { get; set; }
+        //視聴日時
+        public string WatchDate { get; set; }
 
         //視聴回数
-        public int WatchCount { get; set; }
+        public string WatchCount { get; set; }
 
         //再生数
-        public int ViewCounter { get; set; }
+        public string ViewCounter { get; set; }
 
         //コメント数
-        public int CommentCounter { get; set; }
+        public string CommentCounter { get; set; }
 
         //マイリスト数
-        public int MylistCounter { get; set; }
+        public string MylistCounter { get; set; }
+
+        //投稿日時
+        public string PostDate { get; set; }
     }
 
 }

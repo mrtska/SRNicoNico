@@ -65,35 +65,6 @@ namespace SRNicoNico.ViewModels {
 		#endregion
 
 
-		#region SeekCursor変更通知プロパティ
-		private Thickness _SeekCursor;
-
-		public Thickness SeekCursor {
-			get { return _SeekCursor; }
-			set {
-				if(_SeekCursor == value)
-					return;
-				_SeekCursor = value;
-				RaisePropertyChanged();
-			}
-		}
-		#endregion
-
-
-		#region LoadStatus変更通知プロパティ
-		private string _LoadStatus;
-
-		public string LoadStatus {
-			get { return _LoadStatus; }
-			set {
-				if(_LoadStatus == value)
-					return;
-				_LoadStatus = value;
-				RaisePropertyChanged();
-			}
-		}
-        #endregion
-
         #region IsPlaying変更通知プロパティ
         private bool _IsPlaying;
 
@@ -441,7 +412,7 @@ namespace SRNicoNico.ViewModels {
             
             BPS = (bps / 1024).ToString() + "KiB/秒";
 
-            Time.BufferedTimeWidth = buffer * WebBrowser.ActualWidth;
+            Time.BufferedTime = (long) (buffer * WebBrowser.ActualWidth);
             
             Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + buffer + " bps:" + bps);
 
@@ -468,10 +439,7 @@ namespace SRNicoNico.ViewModels {
         private void SetSeekCursor(float time) {
 
             Time.CurrentTime = (int)time;
-            Time.CurrentTimeMilis = (int)(time * 100);
             Time.CurrentTimeString = NicoNicoUtil.GetTimeFromLong(Time.CurrentTime);
-            Time.CurrentTimeWidth = WebBrowser.ActualWidth / VideoData.ApiData.Length * Time.CurrentTime;
-            SeekCursor = new Thickness(Time.CurrentTimeWidth, 0, 0, 0);
 
         }
 

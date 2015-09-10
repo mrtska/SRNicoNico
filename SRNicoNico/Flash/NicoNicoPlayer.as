@@ -3,6 +3,7 @@ package  {
 	
 	import flash.events.AsyncErrorEvent;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.NetStatusEvent;
 	import flash.geom.Rectangle;
 	import flash.media.StageVideo;
@@ -10,6 +11,9 @@ package  {
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	import flash.system.fscommand;
+	import flash.ui.Keyboard;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
 	
 	[SWF(width="672", height="384")]
 	public class NicoNicoPlayer extends NicoNicoPlayerBase {
@@ -36,7 +40,7 @@ package  {
 		public function NicoNicoPlayer() {
 			
 			super();
-			//OpenVideo("Z:/smile.flv");
+			/*OpenVideo("Z:/smile.flv");
 			//OpenVideo("Z:/smile.swf");
 			//OpenVideo("Z:/smile.mp4");
 			//OpenVideo("Z:/smile (1).mp4");
@@ -44,14 +48,38 @@ package  {
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
-			/*var loader:URLLoader = new URLLoader();
+			var loader:URLLoader = new URLLoader();
 			var req:URLRequest = new URLRequest("Z:/msg.txt");
 			
 			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
 			
 			InjectComment(loader.data);
 			});
-			loader.load(req);*/
+			loader.load(req);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void {
+				
+				if(e.keyCode == Keyboard.NUMBER_0) {
+					
+					stream.seek(0);
+				}
+				if(e.keyCode == Keyboard.NUMBER_1) {
+					
+					stream.seek(30);
+				}
+				if(e.keyCode == Keyboard.NUMBER_2) {
+					
+					stream.seek(60);
+				}
+				if(e.keyCode == Keyboard.SPACE) {
+					
+					stream.togglePause();
+				}
+				if(e.keyCode == Keyboard.N) {
+					
+					trace("step");
+					stream.step(1);
+				}
+			});*/
 			
 		}
 		
