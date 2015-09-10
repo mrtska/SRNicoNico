@@ -303,8 +303,14 @@ namespace SRNicoNico.ViewModels {
 
                     DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => InjectComment(json.ToString())));
                 }
-                CommentVisibility = true;
 
+                if(!Properties.Settings.Default.CommentVisibility) {
+
+                    DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => InvokeScript("JsToggleComment")));
+                } else {
+
+                    CommentVisibility = true;
+                }
                 //App.ViewModelRoot.StatusBar.Status = "動画取得完了";
             });
         }
@@ -331,11 +337,17 @@ namespace SRNicoNico.ViewModels {
         public void ToggleRepeat() {
 
             IsRepeat ^= true;
+            Properties.Settings.Default.IsRepeat = IsRepeat;
+            Properties.Settings.Default.Save();
+
+
         }
 
         public void ToggleComment() {
 
             CommentVisibility ^= true;
+            Properties.Settings.Default.CommentVisibility = CommentVisibility;
+            Properties.Settings.Default.Save();
             InvokeScript("JsToggleComment");
         }
 
@@ -487,6 +499,9 @@ namespace SRNicoNico.ViewModels {
 
             Volume = Properties.Settings.Default.Volume;
             ChangeVolume(Volume);
+
+            IsRepeat = Properties.Settings.Default.IsRepeat;
+            
 
         }
 
