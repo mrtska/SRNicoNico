@@ -569,7 +569,7 @@ namespace SRNicoNico.ViewModels {
             WebBrowser.Dispose();
             WebBrowser.IsEnabled = false;
 
-            //App.ViewModelRoot.TabItems.Remove(this);
+            App.ViewModelRoot.TabItems.Remove(this);
 
             Dispose();
         }
