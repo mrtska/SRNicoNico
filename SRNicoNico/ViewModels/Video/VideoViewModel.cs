@@ -13,6 +13,7 @@ using SRNicoNico.Views.Contents.Video;
 
 using Codeplex.Data;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace SRNicoNico.ViewModels {
 
@@ -325,7 +326,7 @@ namespace SRNicoNico.ViewModels {
                 System.Diagnostics.Process.Start(cmsid);
             }
 
-            if(cmsid.Contains("sm")) {
+            if(cmsid.Contains("sm") || cmsid.Contains("nm")) {
 
                 new VideoViewModel("http://www.nicovideo.jp/watch/" + cmsid);
                 DisposeViewModel();
@@ -544,7 +545,14 @@ namespace SRNicoNico.ViewModels {
             
             if(WebBrowser != null && WebBrowser.IsEnabled) {
 
-                WebBrowser.InvokeScript(func, args);
+                try {
+
+                    WebBrowser.InvokeScript(func, args);
+
+                } catch(COMException) {
+
+                    Console.WriteLine("COMException：" + func);
+                }
             }
             
         }

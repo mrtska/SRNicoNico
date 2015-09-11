@@ -11,11 +11,8 @@
              d:DesignWidth="491"
              mc:Ignorable="d"
 			 BorderBrush="#FF333333"
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
 			 >
-
-
-
-
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="80" />
@@ -23,58 +20,22 @@
 		</Grid.ColumnDefinitions>
 
 
-		<Image Width="65"
-		       Height="50"
-		       Margin="5,4,0,0"
-		       HorizontalAlignment="Left"
-		       VerticalAlignment="Top"
-		       Source="{Binding Node.thumbnail_url}" />
-		<TextBlock Grid.Column="1"
-		           Width="auto"
-		           Height="20"
-		           Margin="10,0,0,0"
-		           HorizontalAlignment="Stretch"
-		           VerticalAlignment="Top"
-		           Foreground="#FFAAAAAA"
-		           Text="{Binding Node.title}"
-		           TextWrapping="Wrap" />
-        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFAAAAAA" Text="再生数:" VerticalAlignment="Top" Grid.Column="1" Margin="10,20,0,0"/>
-		<TextBlock Grid.Column="1"
-		           Margin="60,20,0,0"
-		           HorizontalAlignment="Left"
-		           VerticalAlignment="Top"
-		           Foreground="#FFAAAAAA"
-		           Text="{Binding Node.view_counter, StringFormat={}{0:N0}}"
-		           TextWrapping="Wrap" />
+		<Image Width="65" Height="50" Margin="5,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="{Binding Node.thumbnail_url}" />
+        <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Node.length}" VerticalAlignment="Top" Margin="10,54,10,1"/>
+       
+        
+        <TextBlock Grid.Column="1" Height="20" Margin="10,4,0,0" VerticalAlignment="Top" Text="{Binding Node.title}" TextWrapping="Wrap" />
 
-        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFAAAAAA" Text="コメント数:" VerticalAlignment="Top" Grid.Column="1" Margin="170,20,0,0" RenderTransformOrigin="0.496,-0.359"/>
-		<TextBlock Grid.Column="1"
-		           Margin="246,20,0,0"
-		           HorizontalAlignment="Left"
-		           VerticalAlignment="Top"
-		           Foreground="#FFAAAAAA"
-		           Text="{Binding Node.comment_counter, StringFormat={}{0:N0}}"
-		           TextWrapping="Wrap" />
+        <UniformGrid Grid.Column="1" Columns="2" Margin="10,27,0,0">
 
-        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFAAAAAA" Text="マイリスト数:" VerticalAlignment="Top" Grid.Column="1" Margin="157,40,0,0"/>
-		<TextBlock Grid.Column="1"
-		           Margin="246,40,0,0"
-		           HorizontalAlignment="Left"
-		           VerticalAlignment="Top"
-		           Foreground="#FFAAAAAA"
-		           Text="{Binding Node.mylist_counter, StringFormat={}{0:N0}}"
-		           TextWrapping="Wrap" />
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Node.view_counter, StringFormat=再生数:{0:N0}}"  />
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Node.comment_counter, StringFormat=コメント数:{0:N0}}"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Node.mylist_counter, StringFormat=マイリスト数:{0:N0}}" />
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Node.cmsid, StringFormat=動画ID:{0}}"  />
 
-		<TextBlock Grid.Column="1"
-		           Margin="60,40,0,0"
-		           HorizontalAlignment="Left"
-		           VerticalAlignment="Top"
-		           Foreground="#FFAAAAAA"
-		           Text="{Binding Node.cmsid, StringFormat={}{0:N0}}"
-		           TextWrapping="Wrap" Width="92" />
-        <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Foreground="#FFAAAAAA" Text="{Binding Node.length}" VerticalAlignment="Top" Margin="10,54,10,1"/>
-        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFAAAAAA" Text="動画ID:" VerticalAlignment="Top" Grid.Column="1" Margin="10,40,0,0"/>
+        </UniformGrid>
 
 
+        
 	</Grid>
 </UserControl>

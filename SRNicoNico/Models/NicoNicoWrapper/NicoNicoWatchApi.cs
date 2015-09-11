@@ -41,9 +41,17 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //削除された動画
             if(response.StatusCode == HttpStatusCode.NotFound) {
 
+                
+                return null;
+            }
+
+            //混雑中
+            if(response.StatusCode == HttpStatusCode.ServiceUnavailable) {
 
                 return null;
             }
+
+
 
             var cookie = response.Headers.GetValues("Set-Cookie");
             foreach(string s in cookie) {
@@ -110,7 +118,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             Console.WriteLine(ret.Description);
             //ret.Description = ret.Description.Replace("<", "[").Replace(">", "]");
-            Regex regex = new Regex(@"sm\d*");
+            Regex regex = new Regex(@"sm\d*|watch/\d*|nm\d*");
             ret.Description = regex.Replace(ret.Description, new MatchEvaluator(Match));
 
             Regex url = new Regex(@"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+");

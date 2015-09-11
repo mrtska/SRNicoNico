@@ -59,25 +59,36 @@ package  {
 		//そのまんま
 		public override function Pause():void {
 			
-			movie.stop();
+			if(movie) {
+				
+				movie.stop();
+			}
 		}
 		public override function Resume():void {
 			
-			movie.play();
+			if(movie) {
+				
+				movie.play();
+			}
 		}
 		public override function Seek(pos:Number):void {
 			
-			movie.gotoAndPlay(pos * movie.loaderInfo.frameRate);
+			if(movie) {
+				
+				movie.gotoAndPlay(pos * movie.loaderInfo.frameRate);
+			}
 		}
 		
 		public override function ChangeVolume(vol:Number):void {
 			
-			movie.soundTransform = new SoundTransform(vol);
+			if(movie) {
+				
+				movie.soundTransform = new SoundTransform(vol);
+			}
 		}
 		
 		private function onInit(e:Event):void {
 			
-			trace(e);
 			addChild(loader);
 			
 			movie = loader.content as MovieClip;

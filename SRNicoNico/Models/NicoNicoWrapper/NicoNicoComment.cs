@@ -73,53 +73,61 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //コメント取得APIに渡すGETパラメーター
             string leaves = "thread_leaves?thread=" + ThreadId + "&body=0-" + Length / 60 + 1 + ":100,1000&scores=1";
 
-			string response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + leaves).Result;
+            try {
+                string response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + leaves).Result;
 
-            //thread_leavesが失敗したら（コメント数が少ないと失敗しやすいっぽい？）
-            if(response.IndexOf("resultcode=\"11\"") >= 0) {
+                //thread_leavesが失敗したら（コメント数が少ないと失敗しやすいっぽい？）
+                if(response.IndexOf("resultcode=\"11\"") >= 0) {
 
-                App.ViewModelRoot.StatusBar.Status = "ユーザーコメント取得失敗（リカバリー中）";
+                    App.ViewModelRoot.StatusBar.Status = "ユーザーコメント取得失敗（リカバリー中）";
 
-                string recv = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000";
-                response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + recv).Result;
-            }
-            
-            //公式動画
-            if(response.IndexOf("resultcode=\"9\"") >= 0) {
+                    string recv = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000";
+                    response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + recv).Result;
+                }
 
-                App.ViewModelRoot.StatusBar.Status = "ユーザーコメント取得失敗（公式動画）リカバリー中";
-                string threadKey = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(GetThreadKeyApiUrl + ThreadId).Result;
+                //公式動画
+                if(response.IndexOf("resultcode=\"9\"") >= 0) {
 
-                string recv = leaves + "&" + threadKey + "&user_id=" + UserId;
-                response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + recv).Result;
-            }
+                    App.ViewModelRoot.StatusBar.Status = "ユーザーコメント取得失敗（公式動画）リカバリー中";
+                    string threadKey = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(GetThreadKeyApiUrl + ThreadId).Result;
 
-
+                    string recv = leaves + "&" + threadKey + "&user_id=" + UserId;
+                    response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + recv).Result;
+                }
 
 
-            StoreEntry(response, list);
-            //------
 
-            App.ViewModelRoot.StatusBar.Status = "投稿者コメント取得中";
 
-            //---投稿者コメント取得---
-            string thread = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000&fork=1";
-            string authComment = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + thread).Result;
+                StoreEntry(response, list);
+                //------
 
-            StoreEntry(authComment, list);
+                App.ViewModelRoot.StatusBar.Status = "投稿者コメント取得中";
 
-            //------
+                //---投稿者コメント取得---
+                string thread = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000&fork=1";
+                string authComment = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + thread).Result;
 
-            if(list.Count == 0) {
+                StoreEntry(authComment, list);
 
-                App.ViewModelRoot.StatusBar.Status = "コメント取得失敗";
+                //------
+
+                if(list.Count == 0) {
+
+                    App.ViewModelRoot.StatusBar.Status = "コメント取得に失敗しました。";
+                    return null;
+                }
+                list.Sort();
+
+                App.ViewModelRoot.StatusBar.Status = "コメント取得完了";
+
+                return list;
+
+            } catch(AggregateException) {
+
+                App.ViewModelRoot.StatusBar.Status = "コメント取得に失敗しました。（タイムアウト）";
                 return null;
             }
-            list.Sort();
-
-            App.ViewModelRoot.StatusBar.Status = "コメント取得完了";
-
-            return list;
+			
 		}
 
 

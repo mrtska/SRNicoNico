@@ -54,9 +54,9 @@
             <DynamicResource ResourceKey="VideoFlashKey" />
         </ContentControl>
 
-        <Popup Opacity="0.3" AllowsTransparency="True" IsOpen="True" StaysOpen="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" Width="{Binding ElementName=screen, Path=ActualWidth}">
+        <Popup AllowsTransparency="True" IsOpen="True" StaysOpen="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" Width="{Binding ElementName=screen, Path=ActualWidth}">
             
-            <video:VideoController  Opacity="1"/>
+            <video:VideoController Opacity="0.5" />
         </Popup>
         
     </Grid>

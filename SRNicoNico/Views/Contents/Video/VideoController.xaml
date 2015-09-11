@@ -14,6 +14,8 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              d:DesignHeight="54.974" d:DesignWidth="680"
+             Background="{DynamicResource ThemeBrushKey}"
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
              >
     <Grid>
         <Grid.RowDefinitions>
