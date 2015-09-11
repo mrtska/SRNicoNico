@@ -23,13 +23,16 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <metro:TabView Grid.Column="0" Background="{DynamicResource ActiveBackgroundBrushKey}" ItemsSource="{Binding TabItems}" SelectedValue="{Binding SelectedTab}" Margin="0,0,0,0" />
-
+        <metro:TabView Grid.Column="0" Background="{DynamicResource ActiveBackgroundBrushKey}" ItemsSource="{Binding TabItems}" SelectedValue="{Binding SelectedTab}" Margin="0,0,0,0" >
+            
+        
+        </metro:TabView>
         <ItemsControl Grid.Column="1" ItemsSource="{Binding TabItems}">
 
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:StartViewModel}">
-                    <local:Start />
+                    
+                    <local:Start/>
                 </DataTemplate>
                 
                 <DataTemplate DataType="{x:Type vm:SearchViewModel}">

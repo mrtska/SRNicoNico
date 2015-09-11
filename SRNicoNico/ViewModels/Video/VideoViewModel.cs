@@ -270,8 +270,8 @@ namespace SRNicoNico.ViewModels {
                     } else {
 
                         WebBrowser.Source = new Uri(GetPlayerPath());
-
                     }
+                    WebBrowser.Focus();
 
                 }));
                 IsActive = false;
@@ -382,7 +382,7 @@ namespace SRNicoNico.ViewModels {
             //フルスクリーンウィンドウ表示
             Messenger.Raise(message);
 
-
+            WebBrowser.Focus();
         }
 
         //ウィンドウモードに戻す
@@ -405,7 +405,7 @@ namespace SRNicoNico.ViewModels {
             //ウィンドウにFlash部分を追加
             Video.Grid.Children.Add(VideoFlash);
 
-            App.Current.MainWindow.Focus();
+            WebBrowser.Focus();
 
         }
 
@@ -501,7 +501,8 @@ namespace SRNicoNico.ViewModels {
             ChangeVolume(Volume);
 
             IsRepeat = Properties.Settings.Default.IsRepeat;
-            
+
+            VideoFlash.Focus();
 
         }
 
@@ -564,18 +565,13 @@ namespace SRNicoNico.ViewModels {
 
         public void DisposeViewModel() {
 
-
             //ウェブブラウザ開放
-            WebBrowser.IsEnabled = false;
             WebBrowser.Dispose();
+            WebBrowser.IsEnabled = false;
 
-            App.ViewModelRoot.TabItems.Remove(this);
+            //App.ViewModelRoot.TabItems.Remove(this);
 
             Dispose();
         }
-
-
-
-
     }
 }

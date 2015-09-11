@@ -15,6 +15,8 @@
         x:Name="screen"
 		Background="{DynamicResource ThemeBrushKey}"
         Foreground="{DynamicResource ActiveForegroundBrushKey}"
+        InputMethod.PreferredImeState="Off"
+        KeyboardNavigation.IsTabStop="False"
         >
 
     <i:Interaction.Triggers>
@@ -27,11 +29,23 @@
 
         <!--WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください-->
 
-        <ei:KeyTrigger Key="Esc" ActiveOnFocus="True" FiredOn="KeyDown">
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Esc">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ReturnFromFullScreen" />
         </ei:KeyTrigger>
-        <ei:KeyTrigger FiredOn="KeyDown" ActiveOnFocus="True" Key="Space">
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Space">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="PlayOrPauseOrResume" />
+        </ei:KeyTrigger>
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Left">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Restart" />
+        </ei:KeyTrigger>
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="C">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleComment" />
+        </ei:KeyTrigger>
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="R">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleRepeat" />
+        </ei:KeyTrigger>
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="M">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleMute" />
         </ei:KeyTrigger>
     </i:Interaction.Triggers>
 
@@ -40,7 +54,7 @@
             <DynamicResource ResourceKey="VideoFlashKey" />
         </ContentControl>
 
-        <Popup IsOpen="True" StaysOpen="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" Width="{Binding ElementName=screen, Path=ActualWidth}">
+        <Popup Opacity="0.3" AllowsTransparency="True" IsOpen="True" StaysOpen="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" Width="{Binding ElementName=screen, Path=ActualWidth}">
             
             <video:VideoController  Opacity="1"/>
         </Popup>

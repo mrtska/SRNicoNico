@@ -15,6 +15,7 @@
              d:DesignWidth="825"
 			 d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              mc:Ignorable="d"
+             Focusable="False"
              DataContextChanged="UserControl_DataContextChanged">
 
     <i:Interaction.Triggers>
@@ -22,7 +23,6 @@
         <l:InteractionMessageTrigger Messenger="{Binding Messenger}">
             <l:TransitionInteractionMessageAction/>
         </l:InteractionMessageTrigger>
-
 
         <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="F">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="GoToFullScreen" />
@@ -32,6 +32,15 @@
         </ei:KeyTrigger>
         <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Left">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Restart" />
+        </ei:KeyTrigger>
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="C">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleComment" />
+        </ei:KeyTrigger>
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="R">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleRepeat" />
+        </ei:KeyTrigger>
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="M">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleMute" />
         </ei:KeyTrigger>
     </i:Interaction.Triggers>
 

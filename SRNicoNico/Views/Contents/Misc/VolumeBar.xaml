@@ -13,7 +13,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="140"
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
-             ToolTip="音量"
+             ToolTip="音量(M)"
              >
     <Grid >
         <StackPanel Orientation="Horizontal">
