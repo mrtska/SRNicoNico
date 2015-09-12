@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using FirstFloor.ModernUI.Windows.Controls;
+using MetroRadiance.Controls;
 
 namespace SRNicoNico.Views {
 	/* 
@@ -26,7 +27,7 @@ namespace SRNicoNico.Views {
 	/// <summary>
 	/// SignInDialog.xaml の相互作用ロジック
 	/// </summary>
-	public partial class SignInDialog : ModernWindow {
+	public partial class SignInDialog : MetroWindow {
 		public SignInDialog() {
 			InitializeComponent();
 		}

@@ -42,15 +42,16 @@ namespace SRNicoNico.Views.Contents.Video {
                 return;
             }
 
-			if(Seek.IsPopupImageOpen) {
+            Seek.PopupText = NicoNicoUtil.GetTimeFromLong(ans);
+            Seek.PopupRect = new Rect(x - 5, 0, 20, 20);
+
+            if(Seek.IsPopupImageOpen) {
 
 				NicoNicoStoryBoardData Story = vm.VideoData.StoryBoardData;
 
 
                 if(Story.BitmapCollection.ContainsKey(ans - ans % Story.Interval)) {
 
-                    Seek.PopupText = NicoNicoUtil.GetTimeFromLong(ans);
-                    Seek.PopupRect = new Rect(x - 5, 0, 20, 20);
 
                     Seek.PopupImageRect = new Rect(x - Story.Width / 2, -10, Story.Width, Story.Height);
 

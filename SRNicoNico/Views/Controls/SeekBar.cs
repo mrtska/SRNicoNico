@@ -83,9 +83,6 @@ namespace SRNicoNico.Views.Controls {
 			DependencyProperty.Register(nameof(SeekCursor), typeof(Thickness), typeof(SeekBar), new FrameworkPropertyMetadata(null));
 
 
-
-
-
         public string PopupText {
 			get { return (string)GetValue(PopupTextProperty); }
 			set { SetValue(PopupTextProperty, value); }

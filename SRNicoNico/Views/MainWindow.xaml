@@ -69,8 +69,7 @@
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0"
-				metro:MetroWindow.IsCaptionBar="True">
+        <Border metro:MetroWindow.IsCaptionBar="True">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -81,12 +80,10 @@
 						   Text="{Binding Title}"
 						   TextTrimming="CharacterEllipsis"
 						   Foreground="{DynamicResource ForegroundBrushKey}"
-						   FontFamily="Segoe UI Light"
 						   FontSize="18"
 						   Margin="3,0,0,0"
 						   VerticalAlignment="Center" />
-                <metro:SystemButtons Grid.Column="2"
-										VerticalAlignment="Top" />
+                <metro:SystemButtons Grid.Column="2" VerticalAlignment="Top" />
             </Grid>
         </Border>
 

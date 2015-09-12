@@ -325,12 +325,7 @@ namespace SRNicoNico.ViewModels {
             
             string cmsid = uri.OriginalString;
 
-            if(cmsid.StartsWith("http")) {
-
-                System.Diagnostics.Process.Start(cmsid);
-                return;
-            }
-
+          
             if(cmsid.Contains("sm") || cmsid.Contains("nm")) {
 
                 new VideoViewModel("http://www.nicovideo.jp/watch/" + cmsid);
@@ -342,6 +337,12 @@ namespace SRNicoNico.ViewModels {
 
                 new VideoViewModel("http://www.nicovideo.jp/" + cmsid);
                 DisposeViewModel();
+                return;
+            }
+
+              if(cmsid.StartsWith("http")) {
+
+                System.Diagnostics.Process.Start(cmsid);
                 return;
             }
 
@@ -470,16 +471,14 @@ namespace SRNicoNico.ViewModels {
             if(comp > 1024) {
 
                 BPS = Math.Floor((comp / 1024) * 100) / 100 + "MiB/秒";
-
             } else {
 
                 BPS = Math.Floor(comp * 100) / 100 + "KiB/秒";
             }
 
-
             Time.BufferedTime = (long) (buffer * WebBrowser.ActualWidth);
             
-            Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + buffer + " bps:" + bps);
+            //Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + buffer + " bps:" + bps);
 
             SetSeekCursor(time);
 
@@ -505,7 +504,6 @@ namespace SRNicoNico.ViewModels {
 
             Time.CurrentTime = (int)time;
             Time.CurrentTimeString = NicoNicoUtil.GetTimeFromLong(Time.CurrentTime);
-
         }
 
         //このメソッド以降はWebBrowserプロパティはnullではない
@@ -528,7 +526,6 @@ namespace SRNicoNico.ViewModels {
             IsRepeat = Properties.Settings.Default.IsRepeat;
 
             VideoFlash.Focus();
-
         }
 
 
@@ -578,7 +575,6 @@ namespace SRNicoNico.ViewModels {
                     Console.WriteLine("COMException：" + func);
                 }
             }
-            
         }
 
         public string GetPlayerPath() {

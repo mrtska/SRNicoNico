@@ -102,7 +102,10 @@ namespace SRNicoNico.ViewModels {
 		//動画を開く
 		public void OpenVideo() {
 
-			new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Node.cmsid);
+            if(SelectedItem != null) {
+
+                new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Node.cmsid);
+            }
 		}
 
 	}

@@ -56,9 +56,7 @@ namespace SRNicoNico.Views.Behaviors {
 
             try {
                 xaml = HtmlToXamlConverter.ConvertHtmlToXaml(html, false);
-                ;
                 xamLines = ((Paragraph)((Section)System.Windows.Markup.XamlReader.Parse(xaml)).Blocks.FirstBlock).Inlines;
-
             } catch {
                 // There was a problem parsing the html, return out. 
                 return;
@@ -79,11 +77,16 @@ namespace SRNicoNico.Views.Behaviors {
                         if(spanInline is Hyperlink) {
 
                             Hyperlink spanLink = (Hyperlink)spanInline;
-                            spanLink.ToolTip = spanLink.NavigateUri.OriginalString;
-                            spanLink.RequestNavigate += ((sender, o) => {
 
-                                spanLink.RaiseEvent(new RoutedEventArgs(TriggerRequestEvent));
-                            });
+                            //たまにnullの時がある
+                            if(spanLink.NavigateUri != null) {
+
+                                spanLink.ToolTip = spanLink.NavigateUri.OriginalString;
+                                spanLink.RequestNavigate += ((sender, o) => {
+
+                                    spanLink.RaiseEvent(new RoutedEventArgs(TriggerRequestEvent));
+                                });
+                            }
                         }
                     }
                 }
@@ -91,13 +94,17 @@ namespace SRNicoNico.Views.Behaviors {
                 if(inline is Hyperlink) {
 
                     Hyperlink link = (Hyperlink) inline;
-                    link.ToolTip = link.NavigateUri.OriginalString;
-                    link.RequestNavigate += ((sender, o) => {
 
-                        link.RaiseEvent(new RoutedEventArgs(TriggerRequestEvent));
-                    });
+                    //たまにnullの時がある
+                    if(link.NavigateUri != null) {
+
+                        link.ToolTip = link.NavigateUri.OriginalString;
+                        link.RequestNavigate += ((sender, o) => {
+
+                            link.RaiseEvent(new RoutedEventArgs(TriggerRequestEvent));
+                        });
+                    }
                 }
-
             }
 
             txtBox.Inlines.Clear();

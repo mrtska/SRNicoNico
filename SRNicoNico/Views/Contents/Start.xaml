@@ -10,32 +10,39 @@
 			 xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
              xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
              xmlns:history="clr-namespace:SRNicoNico.Views.Contents.History"
-             d:DesignHeight="348"
+             d:DesignHeight="600"
              d:DesignWidth="585"
-			d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
+			 d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
              mc:Ignorable="d"
 			 >
 
-
-
-
-                    
-        <Grid Height="auto" Width="auto">
-            <TextBlock Grid.Column="1" Text="NicoNico Viewer" FontSize="36"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="10,62,0,0" Height="140" Width="auto">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="16*"/>
+            <RowDefinition Height="13*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="NicoNico Viewer" FontSize="36" Grid.RowSpan="2"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="10,62,0,0" Height="140">
 			このアプリケーションはニコニコ動画をブラウザを起動しなくても見られるようにするアプリケーションです。<LineBreak />
 			権利者からの申し立てなどには速やかに対処します。<LineBreak />
 			このアプリケーションを利用して生じた障害や不利益の責任は一切負いません。自己責任でお使いください。<LineBreak /><LineBreak />
             GeforceやRadeonよりはIntel HD GraphicsなどのオンボードGPUのほうがパーフォーマンスが良い場合があります。
-            </TextBlock>
+        </TextBlock>
 
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24"	VerticalAlignment="Top" Margin="0,274,0,0" Text="～更新履歴～" />
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12"	VerticalAlignment="Top" Margin="0,310,0,0" Text="・いろいろあり過ぎて覚えてない。" />
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="0,328,0,0" Text="・ライブラリ、開発環境を変更" />
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24"	VerticalAlignment="Bottom" Text="～更新履歴～" />
 
-        </Grid>
+        <TextBox Grid.Row="1" TextWrapping="Wrap" IsReadOnly="True" xml:space="preserve">v0.1 ベータ版リリース
+v0.11 検索時にクラッシュする不具合を修正
+          視聴履歴のプログレスリングの色がおかしかったのを修正
+          特定の動画(sm27131194)でクラッシュする不具合を修正
+          ストーリーボードが存在しない動画でシークバーをマウスオーバーしても指定時間のポップアップが表示されない不具合を修正
+            
+            
+        </TextBox>
 
-        
+    </Grid>
+
+
 
 
 
