@@ -34,10 +34,10 @@
 
         <UniformGrid Grid.Column="1" Columns="2" Margin="10,27,0,0">
 
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Data.ViewCounter, StringFormat=再生数:{0:N0}}"  />
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Data.CommentCounter, StringFormat=コメント数:{0:N0}}"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Data.MylistCounter, StringFormat=マイリスト数:{0:N0}}" />
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Data.Id, StringFormat=動画ID:{0}}"  />
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Data.ViewCounter, StringFormat={}{0:N0}}"  />
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Data.CommentCounter, StringFormat={}{0:N0}}"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Data.MylistCounter, StringFormat=マイリスト数:{0:N0}}" />
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Data.WatchDate}"  />
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Data.WatchCount}" Foreground="Red"  />
 

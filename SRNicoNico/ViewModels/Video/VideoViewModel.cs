@@ -237,8 +237,12 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+
+        private readonly string VideoUrl;
+
         public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
+            VideoUrl = videoUrl;
             App.ViewModelRoot.TabItems.Add(this);
             App.ViewModelRoot.SelectedTab = this;
             Initialize(videoUrl);
@@ -324,13 +328,23 @@ namespace SRNicoNico.ViewModels {
             if(cmsid.StartsWith("http")) {
 
                 System.Diagnostics.Process.Start(cmsid);
+                return;
             }
 
             if(cmsid.Contains("sm") || cmsid.Contains("nm")) {
 
                 new VideoViewModel("http://www.nicovideo.jp/watch/" + cmsid);
                 DisposeViewModel();
+                return;
             }
+
+            if(cmsid.Contains("watch/")) {
+
+                new VideoViewModel("http://www.nicovideo.jp/" + cmsid);
+                DisposeViewModel();
+                return;
+            }
+
 
 
         }
@@ -450,8 +464,18 @@ namespace SRNicoNico.ViewModels {
             double vpos = time * 100;
             vpos = Math.Floor(vpos);
 
-            
-            BPS = (bps / 1024).ToString() + "KiB/秒";
+            double comp = bps / 1024;
+
+            //大きいから単位を変えましょう
+            if(comp > 1024) {
+
+                BPS = Math.Floor((comp / 1024) * 100) / 100 + "MiB/秒";
+
+            } else {
+
+                BPS = Math.Floor(comp * 100) / 100 + "KiB/秒";
+            }
+
 
             Time.BufferedTime = (long) (buffer * WebBrowser.ActualWidth);
             
@@ -570,6 +594,11 @@ namespace SRNicoNico.ViewModels {
             return cur + "./Flash/NicoNicoNMPlayer.html";
         }
 
+        public void Reflesh() {
+
+            DisposeViewModel();
+            new VideoViewModel(VideoUrl);
+        }
 
         public void DisposeViewModel() {
 

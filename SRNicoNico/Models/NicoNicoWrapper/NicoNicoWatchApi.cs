@@ -117,12 +117,43 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
             Console.WriteLine(ret.Description);
-            //ret.Description = ret.Description.Replace("<", "[").Replace(">", "]");
-            Regex regex = new Regex(@"sm\d*|watch/\d*|nm\d*");
-            ret.Description = regex.Replace(ret.Description, new MatchEvaluator(Match));
 
-            Regex url = new Regex(@"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+");
+            //動画
+            Regex regex = new Regex(@"(.?)((sm|watch/|nm)\d+)");//
+            ret.Description = regex.Replace(ret.Description, new MatchEvaluator((match) => {
+
+
+                if(match.Groups[1].Value.Length != 0 && (match.Groups[1].Value == "/" || match.Groups[1].Value == ">")) {
+
+                    return match.Value;
+                }
+
+
+                return match.Groups[1].Value + "<a href=\"" + match.Groups[2].Value + "\">" + match.Groups[2].Value + "</a>";
+            }));
+
+            //生放送
+            Regex live = new Regex(@"(.?)(lv\d+)");
+            ret.Description = live.Replace(ret.Description, new MatchEvaluator((match) => {
+
+                if(match.Groups[1].Value.Length != 0 && (match.Groups[1].Value == "/" || match.Groups[1].Value == ">")) {
+
+                    return match.Value;
+                }
+
+                return "<a href=\"http://live.nicovideo.jp/watch/" + match.Value + "\">" + match.Value + "</a>";
+            }));
+
+            //普通のURLだったら
+            Regex url = new Regex(@"[^>]*https?://[\w/:%#\$&\?\(\)~\.=\+\-]+");
             ret.Description = url.Replace(ret.Description, new MatchEvaluator(Match));
+
+            //TwitterのIDだった場合
+            Regex twitter = new Regex(@"@[A-z|0-9|_]+");
+            ret.Description = twitter.Replace(ret.Description, new MatchEvaluator((match) => {
+
+                return "<a href=\"https://twitter.com/" + match.Value.Substring(1) + "\">" + match.Value + "</a>";
+            }));
 
             Console.WriteLine(ret.Description);
 
@@ -138,7 +169,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     Lck = tag.lck == "1" ? true : false,
                     Cat = tag.cat()
                 };
-                Console.WriteLine("Id:" + entry.Id + " tag:"+entry.Tag + " dic:" + entry.Dic + " lck:" + entry.Lck + " cat:" + entry.Cat);
                 ret.TagList.Add(new VideoTagViewModel(entry)); 
             }
             //------
@@ -149,7 +179,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
         private static string Match(Match match) {
+            
+            Console.WriteLine(match);
 
+            //aタグが書いてあったらそのまま返す
+            if(match.Value.Contains("<a")) {
+
+                return match.Value;
+            }
 
             return "<a href=\"" + match.Value + "\">" + match.Value + "</a>";
 

@@ -18,7 +18,6 @@ using System.Windows.Markup;
 using System.IO;
 using SRNicoNico.ViewModels;
 using System.Windows.Interop;
-using mshtml;
 
 namespace SRNicoNico.Views.Contents.Video {
     /// <summary>

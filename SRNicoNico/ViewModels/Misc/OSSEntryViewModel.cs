@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 using Livet;
 using Livet.Commands;
@@ -11,18 +11,17 @@ using Livet.Messaging.IO;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
-using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.Models;
 
 namespace SRNicoNico.ViewModels {
-    public class OtherViewModel : TabItemViewModel {
+    public class OSSEntryViewModel : TabItemViewModel {
+        
+
+        public OSSEntryViewModel(string name) : base(name) {
 
 
-
-        public OtherViewModel() : base("その他") { }
-
+        }
 
 
-
-       
     }
 }

@@ -68,7 +68,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		}
 
 
-
 		//ストーリーボードのデータを取得する
 		private NicoNicoStoryBoardData GetStoryBoardInternalData() {
 

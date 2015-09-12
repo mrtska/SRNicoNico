@@ -39,7 +39,7 @@ namespace Codeplex.Data {
                 return ToValue(XElement.Load(reader));
             }
         }
-
+        
         /// <summary>from JsonSringStream to DynamicJson</summary>
         public static dynamic Parse(Stream stream) {
             using(var reader = JsonReaderWriterFactory.CreateJsonReader(stream, XmlDictionaryReaderQuotas.Max)) {

@@ -79,6 +79,7 @@ namespace SRNicoNico.Views.Behaviors {
                         if(spanInline is Hyperlink) {
 
                             Hyperlink spanLink = (Hyperlink)spanInline;
+                            spanLink.ToolTip = spanLink.NavigateUri.OriginalString;
                             spanLink.RequestNavigate += ((sender, o) => {
 
                                 spanLink.RaiseEvent(new RoutedEventArgs(TriggerRequestEvent));
@@ -90,6 +91,7 @@ namespace SRNicoNico.Views.Behaviors {
                 if(inline is Hyperlink) {
 
                     Hyperlink link = (Hyperlink) inline;
+                    link.ToolTip = link.NavigateUri.OriginalString;
                     link.RequestNavigate += ((sender, o) => {
 
                         link.RaiseEvent(new RoutedEventArgs(TriggerRequestEvent));
