@@ -51,8 +51,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			//URLに検索キーワードを入れる
 			string search = SearchURL + "search/" + Keyword + "?mode=watch" + Sort + Order + "&page=" + CurrentPage++;
 
-			HttpResponseMessage response = NicoNicoWrapperMain.GetSession().HttpClient.GetAsync(search).Result;
-			return response.Content.ReadAsStringAsync().Result;
+			return NicoNicoWrapperMain.GetSession().GetAsync(search).Result;
 		}
 
 		public void DoSearch() {
@@ -81,8 +80,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			string search = SearchURL + "search/" + Keyword + "?mode=watch" + Sort + Order + "&page=" + CurrentPage++;
 
-			HttpResponseMessage response = NicoNicoWrapperMain.GetSession().HttpClient.GetAsync(search).Result;
-			return response.Content.ReadAsStringAsync().Result;
+			return NicoNicoWrapperMain.GetSession().GetAsync(search).Result;
 		}
 
 		public void SearchNext() {

@@ -7,7 +7,7 @@ using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
 
 using Codeplex.Data;
-
+using System.Net.Http;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoComment : NotificationObject {
@@ -74,7 +74,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             string leaves = "thread_leaves?thread=" + ThreadId + "&body=0-" + Length / 60 + 1 + ":100,1000&scores=1";
 
             try {
-                string response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + leaves).Result;
+
+                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, ServerUrl + leaves);
+                string response = NicoNicoWrapperMain.GetSession().GetAsync(message).Result;
 
                 //thread_leavesが失敗したら（コメント数が少ないと失敗しやすいっぽい？）
                 if(response.IndexOf("resultcode=\"11\"") >= 0) {
@@ -82,17 +84,17 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     App.ViewModelRoot.StatusBar.Status = "ユーザーコメント取得失敗（リカバリー中）";
 
                     string recv = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000";
-                    response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + recv).Result;
+                    response = NicoNicoWrapperMain.GetSession().GetAsync(ServerUrl + recv).Result;
                 }
 
                 //公式動画
                 if(response.IndexOf("resultcode=\"9\"") >= 0) {
 
                     App.ViewModelRoot.StatusBar.Status = "ユーザーコメント取得失敗（公式動画）リカバリー中";
-                    string threadKey = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(GetThreadKeyApiUrl + ThreadId).Result;
+                    string threadKey = NicoNicoWrapperMain.GetSession().GetAsync(GetThreadKeyApiUrl + ThreadId).Result;
 
                     string recv = leaves + "&" + threadKey + "&user_id=" + UserId;
-                    response = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + recv).Result;
+                    response = NicoNicoWrapperMain.GetSession().GetAsync(ServerUrl + recv).Result;
                 }
 
 
@@ -105,7 +107,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 //---投稿者コメント取得---
                 string thread = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000&fork=1";
-                string authComment = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(ServerUrl + thread).Result;
+                string authComment = NicoNicoWrapperMain.GetSession().GetAsync(ServerUrl + thread).Result;
 
                 StoreEntry(authComment, list);
 

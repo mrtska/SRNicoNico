@@ -56,7 +56,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             var api = @"http://www.nicovideo.jp/my/top/" + Id + @"?innerPage=1&mode=next_page";
            
             //html
-            var html = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(api).Result;
+            var html = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
 
             NicoNicoNicoRepoData data = new NicoNicoNicoRepoData();
 
@@ -145,7 +145,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             var api = NextUrl;
 
             //html
-            var html = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(api).Result;
+            var html = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
 
             NicoNicoNicoRepoData data = new NicoNicoNicoRepoData();
 

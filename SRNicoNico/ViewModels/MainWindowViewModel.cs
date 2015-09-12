@@ -173,9 +173,7 @@ namespace SRNicoNico.ViewModels {
 
 			if(disposing) {
 
-				NicoNicoWrapperMain.GetSession().HttpHandler.Dispose();
-				NicoNicoWrapperMain.GetSession().HttpClient.Dispose();
-
+                NicoNicoWrapperMain.GetSession().Dispose();
 
 
 			}

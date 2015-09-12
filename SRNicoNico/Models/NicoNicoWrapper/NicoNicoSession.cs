@@ -5,9 +5,11 @@ using System.Text;
 
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Livet;
+using System.IO;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
@@ -50,9 +52,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		private const string NicoNicoTop = "http://www.nicovideo.jp/";
 
 
-		//Http通信用
-		public HttpClient HttpClient { get; internal set; }
-		public HttpClientHandler HttpHandler { get; internal set; }
+        //Http通信用
+        private HttpClient HttpClient;
+        private HttpClientHandler HttpHandler;
 
 		//ユーザーID
 		public uint UserId { get; internal set; }
@@ -66,36 +68,90 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 		public NicoNicoSession() {
-
 			
-			this.HttpHandler = new HttpClientHandler();
-			this.HttpHandler.UseCookies = true;
-			this.HttpHandler.AllowAutoRedirect = false;
-			this.HttpHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-			this.HttpClient = new HttpClient(this.HttpHandler, false);
-			this.HttpClient.DefaultRequestHeaders.Add("user-agent", UserAgent);
+			HttpHandler = new HttpClientHandler();
+			HttpHandler.UseCookies = true;
+			HttpHandler.AllowAutoRedirect = false;
+			HttpHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+			HttpClient = new HttpClient(HttpHandler, false);
+			HttpClient.DefaultRequestHeaders.Add("user-agent", UserAgent);
 		}
 
 		//オートログイン時
 		public NicoNicoSession(string key, DateTimeOffset expire) {
 
-			this.HttpHandler = new HttpClientHandler();
-			this.HttpHandler.UseCookies = true;
-			this.HttpHandler.AllowAutoRedirect = false;
-			this.HttpHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-			this.HttpClient = new HttpClient(this.HttpHandler, false);
-			this.HttpClient.DefaultRequestHeaders.Add("user-agent", UserAgent);
+			HttpHandler = new HttpClientHandler();
+			HttpHandler.UseCookies = true;
+			HttpHandler.AllowAutoRedirect = false;
+			HttpHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+			HttpClient = new HttpClient(HttpHandler, false);
+			HttpClient.DefaultRequestHeaders.Add("user-agent", UserAgent);
 
-			this.Key = key;
+			Key = key;
 
 			//Cookieを設定する
 			Cookie cookieKey = new Cookie("user_session", key, "/", ".nicovideo.jp");
 			cookieKey.Expires = expire.DateTime;
-			this.HttpHandler.CookieContainer.Add(cookieKey);
+			HttpHandler.CookieContainer.Add(cookieKey);
 		}
 
-		//サインイン
-		public SigninStatus SignIn(string address, string passwd) {
+
+        public async Task<string> GetAsync(HttpRequestMessage request) {
+
+            HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+
+            VerifyResponse(response);
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<string> GetAsync(string uri) {
+            
+            return await GetAsync(new HttpRequestMessage(HttpMethod.Get, uri));
+        }
+
+        public async Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage request) {
+
+            HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+
+            VerifyResponse(response);
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> GetResponseAsync(string uri) {
+
+            return await GetResponseAsync(new HttpRequestMessage(HttpMethod.Get, uri));
+        }
+
+
+        public async Task<Stream> GetStreamAsync(HttpRequestMessage request) {
+
+            HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+
+            VerifyResponse(response);
+
+            return await response.Content.ReadAsStreamAsync();
+        }
+
+        public async Task<Stream> GetStreamAsync(string uri) {
+
+            return await GetStreamAsync(new HttpRequestMessage(HttpMethod.Get, uri));
+        }
+
+        //レスポンスの正当性を確認
+        private void VerifyResponse(HttpResponseMessage response) {
+
+            
+            Console.WriteLine("Access:" + response.RequestMessage.RequestUri + " ResponseCode:" + response.StatusCode);
+
+
+
+        }
+
+
+        //サインイン
+        public SigninStatus SignIn(string address, string passwd) {
 
 
 			var request = new Dictionary<string, string>();
@@ -103,7 +159,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			request.Add("password", passwd);		//パスワード
 
 			//サインインリクエスト
-			return this.HttpClient.PostAsync(SignInURL, new FormUrlEncodedContent(request)).ContinueWith(prevTask => {
+			return HttpClient.PostAsync(SignInURL, new FormUrlEncodedContent(request)).ContinueWith(prevTask => {
 
 				return SignInInternal();
 			}).Result;
@@ -117,7 +173,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
 
 
-			HttpResponseMessage response = this.HttpClient.SendAsync(message).Result;
+			HttpResponseMessage response = HttpClient.SendAsync(message).Result;
 
 			//成功したら
 			if(response.StatusCode == HttpStatusCode.OK) {
@@ -151,5 +207,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			//サインイン失敗
 			return SigninStatus.Failed;
 		}
+
+        //終了時
+        public void Dispose() {
+
+            HttpHandler.Dispose();
+            HttpClient.Dispose();
+        }
+
 	}
 }

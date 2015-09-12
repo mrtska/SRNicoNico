@@ -29,13 +29,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public static WatchApiData GetWatchApiData(string videoPage) {
 
             //動画ページのhtml取得
-            HttpResponseMessage response = NicoNicoWrapperMain.GetSession().HttpClient.GetAsync(videoPage).Result;
+            HttpResponseMessage response = NicoNicoWrapperMain.GetSession().GetResponseAsync(videoPage).Result;
 
             //チャンネル、公式動画
             if(response.StatusCode == HttpStatusCode.MovedPermanently) {
 
                 
-                response = NicoNicoWrapperMain.GetSession().HttpClient.GetAsync(response.Headers.Location).Result;
+                response = NicoNicoWrapperMain.GetSession().GetResponseAsync(response.Headers.Location.OriginalString).Result;
             }
 
             //削除された動画
