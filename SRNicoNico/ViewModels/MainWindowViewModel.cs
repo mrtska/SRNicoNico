@@ -63,6 +63,18 @@ namespace SRNicoNico.ViewModels {
 
         public StatusBarViewModel StatusBar { get; set; }
 
+
+        public string Status {
+            set {
+
+                StatusBar.Status = value;
+            }
+            get {
+
+                return StatusBar.Status;
+            }
+        }
+
         public ObservableCollection<ViewModel> TabItems { get; set; }
 
 
@@ -88,10 +100,11 @@ namespace SRNicoNico.ViewModels {
             TabItems = new ObservableCollection<ViewModel> {
 
                 (SelectedTab = new StartViewModel()),
-                (new SearchViewModel()),
-                (new NicoRepoViewModel()),
-                (new HistoryViewModel()),
-                (new OtherViewModel())
+                new SearchViewModel(),
+                new NicoRepoViewModel(),
+                new MylistViewModel(),
+                new HistoryViewModel(),
+                new OtherViewModel()
             };
 
 

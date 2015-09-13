@@ -13,6 +13,7 @@
              xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
              xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
              xmlns:history="clr-namespace:SRNicoNico.Views.Contents.History"
+             xmlns:mylist="clr-namespace:SRNicoNico.Views.Contents.Mylist"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600"
@@ -31,10 +32,8 @@
 
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:StartViewModel}">
-                    
                     <local:Start/>
                 </DataTemplate>
-                
                 <DataTemplate DataType="{x:Type vm:SearchViewModel}">
                     <search:Search />
                 </DataTemplate>
@@ -49,6 +48,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:VideoViewModel}">
                     <video:Video />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:MylistViewModel}">
+                    <mylist:Mylist />
                 </DataTemplate>
             </ItemsControl.Resources>
             
