@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="81" d:DesignWidth="485.77"
              d:DataContext="{d:DesignInstance {x:Type vm:HistoryResultEntryViewModel}}"
-             BorderThickness="1"
+             BorderThickness="0,1,1,0"
              BorderBrush="#FF333333"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
              >

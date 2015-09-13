@@ -11,7 +11,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="59" d:DesignWidth="361"
              d:DataContext="{d:DesignInstance { x:Type vm:NicoRepoResultEntryViewModel}}"
-             BorderThickness="1"
+             BorderThickness="0,1,1,0"
              BorderBrush="#FF333333"
              >
 

@@ -35,14 +35,49 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var item = entry.item_data;
 
-                data.FirstRetrieve = UnixTime.FromUnixTime((long)item.first_retrieve).ToString();
-                data.Length = NicoNicoUtil.GetTimeFromLong(long.Parse(item.length_seconds));
-                data.Id = item.video_id;
-                data.Title = item.title;
-                data.ViewCounter = int.Parse(item.view_counter);
-                data.CommentCounter = int.Parse(item.num_res);
-                data.MylistCounter = int.Parse(item.mylist_counter);
-                data.ThumbNailUrl = item.thumbnail_url;
+                if(entry.item_type is string) {
+
+                    data.Type = int.Parse(entry.item_type);
+                } else if(entry.item_type is double) {
+
+                    data.Type = (int)entry.item_type;
+                }
+
+
+                //動画
+                if(data.Type == 0) {
+
+                    data.FirstRetrieve = UnixTime.FromUnixTime((long)item.first_retrieve).ToString();
+                    data.Length = NicoNicoUtil.GetTimeFromLong(long.Parse(item.length_seconds));
+                    data.Id = item.video_id;
+                    data.Title = item.title;
+                    data.ViewCounter = int.Parse(item.view_counter);
+                    data.CommentCounter = int.Parse(item.num_res);
+                    data.MylistCounter = int.Parse(item.mylist_counter);
+                    data.ThumbNailUrl = item.thumbnail_url;
+
+                } else if(data.Type == 6) { //書籍
+
+                    data.FirstRetrieve = UnixTime.FromUnixTime((long)item.released_at).ToString();
+                    data.Id = "bk" + item.id;
+                    data.Title = item.title;
+                    data.ViewCounter = (int)item.view_count;
+                    data.CommentCounter = (int)item.comment_count;
+                    data.MylistCounter = (int)item.mylist_count;
+                    data.ThumbNailUrl = item.thumbnail;
+
+                } else if(data.Type == 13) { //ブロマガ
+
+                    data.FirstRetrieve = UnixTime.FromUnixTime((long)item.create_time).ToString();
+                    data.Id = "ar" + item.id;
+                    data.Title = item.title;
+                    data.CommentCounter = (int)item.comment_count;
+                    data.MylistCounter = int.Parse(item.mylist_count);
+                    data.ThumbNailUrl = item.thumbnail_url;
+
+                
+                }
+
 
                 ret.Add(data);
             }
@@ -97,7 +132,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 data.CreateTime = UnixTime.FromUnixTime((long)entry.create_time).ToString();
                 data.Description = entry.description;
 
-
                 data.Id = int.Parse(entry.id);
                 data.Name = entry.name;
                 data.IsPublic = entry.@public == "0" ? false : true;
@@ -142,6 +176,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
     //マイリストエントリ
     public class NicoNicoMylistData {
+
+        //エントリタイプ 0が動画 13がブロマガ
+        public int Type { get; set; }
 
         //追加日時 Unixタイム
         public string CreateTime { get; set; }

@@ -60,7 +60,10 @@ namespace SRNicoNico.ViewModels {
 
             if(SelectedItem != null) {
 
-                new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Id);
+                if(SelectedItem.Type == 0) {
+
+                    new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Id);
+                }
                 SelectedItem = null;
             }
         }

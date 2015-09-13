@@ -23,7 +23,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         //UNIX時間からDateTimeに変換するメソッド
         public static DateTime FromUnixTime(long unixTime) {
             // unix epochからunixTime秒だけ経過した時刻を求める
-            return UnixEpoch.AddSeconds(unixTime);
+            return UnixEpoch.AddSeconds(unixTime).AddHours(9);
         }
     }
 }

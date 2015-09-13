@@ -54,7 +54,7 @@
 
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:MylistListViewModel}">
-                    <local:MylistResult  />
+                    <local:MylistResult />
                 </DataTemplate>
             </ItemsControl.Resources>
 
