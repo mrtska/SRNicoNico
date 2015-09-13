@@ -31,14 +31,33 @@
 
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24"	VerticalAlignment="Bottom" Text="～更新履歴～" />
 
-        <TextBox Grid.Row="1" TextWrapping="Wrap" IsReadOnly="True" xml:space="preserve">v0.1 ベータ版リリース
-v0.11 検索時にクラッシュする不具合を修正
-          視聴履歴のプログレスリングの色がおかしかったのを修正
-          特定の動画(sm27131194)でクラッシュする不具合を修正
-          ストーリーボードが存在しない動画でシークバーをマウスオーバーしても指定時間のポップアップが表示されない不具合を修正
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="105*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock TextWrapping="Wrap">
+                v0.1<LineBreak /> <LineBreak />
+                v0.11<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
+                v0.2
+                
             
+            </TextBlock>
+            <TextBlock Grid.Column="1">
+                ベータ版リリース<LineBreak /><LineBreak />
+                検索時にクラッシュする不具合を修正<LineBreak />
+                視聴履歴のプログレスリングの色がおかしかったのを修正<LineBreak />
+                特定の動画(sm27131194)でクラッシュする不具合を修正<LineBreak />
+                ストーリーボードが存在しない動画でシークバーをマウスオーバーしても指定時間のポップアップが表示されない不具合を修正<LineBreak /><LineBreak />
+                とりあえずマイリスト実装<LineBreak />
+                一般会員に起因する不具合を修正
+                
+                
+                
+            </TextBlock>
             
-        </TextBox>
+        </Grid>
+
 
     </Grid>
 

@@ -30,6 +30,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//取得したストーリーボードのデータにBitmapオブジェクトを追加して返す
 		public NicoNicoStoryBoardData GetStoryBoardData() {
 
+            //エコノミーだったら
+            if(StoryBoardApiBaseUrl.Contains("low")) {
+
+                return null;
+            }
+
 			NicoNicoStoryBoardData data = GetStoryBoardInternalData();
 			
 			//ストーリーボードが無かったら
@@ -37,6 +43,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 				return null;;
 			}
+
+
 
 			//APIURL
 			string uri = StoryBoardApiBaseUrl + "&sb=" + data.Id + "&board=";
@@ -72,7 +80,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			var result = NicoNicoWrapperMain.GetSession().GetResponseAsync(StoryBoardApiBaseUrl + "&sb=1").Result;
 			
 			//見つからなかったり見せてもらえなかったりしたら
-			if(result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.NotFound) {
+			if(result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.NotFound || result.Content.Headers.ContentDisposition.FileName.Contains("smile")) {
 
 				return null;
 			}

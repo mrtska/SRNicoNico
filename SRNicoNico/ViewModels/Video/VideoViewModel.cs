@@ -286,10 +286,13 @@ namespace SRNicoNico.ViewModels {
                 //動画時間
                 Time.VideoTimeString = NicoNicoUtil.GetTimeFromLong(VideoData.ApiData.Length);
 
-                App.ViewModelRoot.StatusBar.Status = "ストーリーボード取得中";
+                if(VideoData.ApiData.GetFlv.IsPremium) {
 
-                NicoNicoStoryBoard sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
-                VideoData.StoryBoardData = sb.GetStoryBoardData();
+                    App.ViewModelRoot.StatusBar.Status = "ストーリーボード取得中";
+
+                    NicoNicoStoryBoard sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
+                    VideoData.StoryBoardData = sb.GetStoryBoardData();
+                }
 
                 NicoNicoComment comment = new NicoNicoComment(VideoData.ApiData.GetFlv);
 

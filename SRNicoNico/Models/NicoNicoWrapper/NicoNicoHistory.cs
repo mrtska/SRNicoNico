@@ -52,6 +52,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             List<NicoNicoHistoryData> ret = new List<NicoNicoHistoryData>();
 
+            if(info == null) {
+
+                App.ViewModelRoot.StatusBar.Status = "視聴履歴はありません。";
+
+                return ret;
+            }
 
             foreach(HtmlNode node in info) {
 
