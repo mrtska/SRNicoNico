@@ -48,8 +48,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 				var response = NicoNicoWrapperMain.GetSession().GetStreamAsync(uri + i).Result;
 
-				
-
 				Bitmap bitmap = new Bitmap(response);
 
 				for(int j = 0; j < data.Cols; j++) {

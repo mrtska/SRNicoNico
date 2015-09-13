@@ -53,6 +53,7 @@ namespace SRNicoNico.ViewModels {
         public OtherViewModel() : base("その他") {
 
             OtherCollection = new ObservableCollection<TabItemViewModel>();
+            OtherCollection.Add(new OverViewViewModel());
             OtherCollection.Add(new OSSViewModel());
 
         }
