@@ -30,7 +30,7 @@
         <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Space">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="PlayOrPauseOrResume" />
         </ei:KeyTrigger>
-        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Left">
+        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Backspace">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Restart" />
         </ei:KeyTrigger>
         <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="C">

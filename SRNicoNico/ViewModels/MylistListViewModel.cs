@@ -19,7 +19,6 @@ namespace SRNicoNico.ViewModels {
     public class MylistListViewModel : TabItemViewModel {
 
 
-        private static NicoNicoMylist MylistInstance = new NicoNicoMylist();
 
 
 
@@ -52,16 +51,9 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        public MylistListViewModel(string name, int type) : base(name) {
+        public MylistListViewModel(string name, List<NicoNicoMylistData> list) : base(name) {
 
-
-            Task.Run(() => {
-
-                Mylist = new ObservableCollection<NicoNicoMylistData>(MylistInstance.GetDefMylist());
-                
-                
-            });
-
+            Mylist = new ObservableCollection<NicoNicoMylistData>(list);
         }
 
         public void Open() {
@@ -69,6 +61,7 @@ namespace SRNicoNico.ViewModels {
             if(SelectedItem != null) {
 
                 new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Id);
+                SelectedItem = null;
             }
         }
 

@@ -19,6 +19,7 @@ namespace SRNicoNico.ViewModels {
     public class MylistViewModel : TabItemViewModel {
 
 
+        private static NicoNicoMylist MylistInstance = new NicoNicoMylist();
 
 
         #region IsActive変更通知プロパティ
@@ -39,9 +40,9 @@ namespace SRNicoNico.ViewModels {
 
 
         #region NicoRepoListCollection変更通知プロパティ
-        private ObservableCollection<MylistListViewModel> _MylistListCollection = new ObservableCollection<MylistListViewModel>();
+        private DispatcherCollection<MylistListViewModel> _MylistListCollection = new DispatcherCollection<MylistListViewModel>(DispatcherHelper.UIDispatcher);
 
-        public ObservableCollection<MylistListViewModel> MylistListCollection {
+        public DispatcherCollection<MylistListViewModel> MylistListCollection {
             get { return _MylistListCollection; }
             set {
                 if(_MylistListCollection == value)
@@ -80,10 +81,35 @@ namespace SRNicoNico.ViewModels {
             IsActive = true;
 
 
-            MylistListCollection.Clear();
+            Task.Run(() => {
 
-            MylistListCollection.Add(new MylistListViewModel("とりあえずマイリスト", 0));
-            IsActive = false;
+                MylistListCollection.Clear();
+
+                App.ViewModelRoot.Status = "マイリスト取得中(とりあえずマイリスト)";
+                MylistListCollection.Add(new MylistListViewModel("とりあえずマイリスト", MylistInstance.GetDefMylist()));
+
+                foreach(NicoNicoMylistGroupData group in MylistInstance.GetMylistGroup()) {
+
+                    App.ViewModelRoot.Status = "マイリスト取得中(" + group.Name + ")";
+                    MylistListCollection.Add(new MylistListViewModel(group.Name, MylistInstance.GetMylist(group.Id)));
+
+
+                    
+                }
+                App.ViewModelRoot.Status = "マイリスト取得完了";
+
+
+                IsActive = false;
+            });
+
+            
+
+
+
+
+
+
+
 
 
         }
