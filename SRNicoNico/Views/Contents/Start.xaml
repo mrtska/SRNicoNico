@@ -31,7 +31,7 @@
 
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24"	VerticalAlignment="Bottom" Text="～更新履歴～" />
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Background="#FF111111">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="8*"/>
                 <ColumnDefinition Width="105*"/>
@@ -39,7 +39,8 @@
             <TextBlock TextWrapping="Wrap">
                 v0.1<LineBreak /> <LineBreak />
                 v0.11<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
-                v0.2
+                v0.2<LineBreak /><LineBreak /><LineBreak />
+                v0.21
                 
             
             </TextBlock>
@@ -50,7 +51,9 @@
                 特定の動画(sm27131194)でクラッシュする不具合を修正<LineBreak />
                 ストーリーボードが存在しない動画でシークバーをマウスオーバーしても指定時間のポップアップが表示されない不具合を修正<LineBreak /><LineBreak />
                 とりあえずマイリスト実装<LineBreak />
-                一般会員に起因する不具合を修正
+                一般会員に起因する不具合を修正<LineBreak /><LineBreak />
+                マイリスト実装<LineBreak />
+                UI微調整
                 
                 
                 

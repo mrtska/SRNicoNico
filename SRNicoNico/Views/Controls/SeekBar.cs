@@ -183,7 +183,20 @@ namespace SRNicoNico.Views.Controls {
 
             if(IsDrag) {
 
-                
+                //マウスカーソルX座標
+                double x = e.GetPosition(this).X;
+
+
+                //シーク中の動画時間
+                int ans = (int)(x / ActualWidth * VideoTime);
+                if(ans < 0 || VideoTime < ans) {
+
+                    return;
+                }
+                //シーク中の動画時間
+                CurrentTimeWidth = (ActualWidth - 10) / VideoTime * CurrentTime;
+                SeekCursor = new Thickness(x - 5, 0, 0, 0);
+
             } else {
 
                 
@@ -207,9 +220,13 @@ namespace SRNicoNico.Views.Controls {
 
         private void Fired(object sender, EventArgs e) {
 
-            CurrentTimeWidth = (ActualWidth - 10) / VideoTime * CurrentTime;
-            SeekCursor = new Thickness(CurrentTimeWidth, 0, 0, 0);
-            BufferedTimeWidth = BufferedTime * ActualWidth;
+            if(!IsDrag) {
+
+                CurrentTimeWidth = (ActualWidth - 10) / VideoTime * CurrentTime;
+                SeekCursor = new Thickness(CurrentTimeWidth, 0, 0, 0);
+                BufferedTimeWidth = BufferedTime * ActualWidth;
+            }
+            
         }
 
 

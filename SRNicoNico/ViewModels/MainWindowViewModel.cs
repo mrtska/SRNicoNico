@@ -57,12 +57,9 @@ namespace SRNicoNico.ViewModels {
 
         public SignInDialogViewModel SignIn { get; private set; }
 
+        public StatusBarViewModel StatusBar { get; private set; }
 
-
-
-
-        public StatusBarViewModel StatusBar { get; set; }
-
+        public ConfigViewModel Config { get; private set; }
 
         public string Status {
             set {
@@ -104,7 +101,8 @@ namespace SRNicoNico.ViewModels {
                 new NicoRepoViewModel(),
                 new MylistViewModel(),
                 new HistoryViewModel(),
-                new OtherViewModel()
+                new OtherViewModel(),
+                (Config = new ConfigViewModel())
             };
 
 
