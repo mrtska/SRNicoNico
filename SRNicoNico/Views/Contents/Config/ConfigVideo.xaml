@@ -4,9 +4,39 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Config"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance {x:Type vm:ConfigVideoViewModel}}"
+             >
+    
     <Grid>
-        <TextBlock Text="どーが" FontSize="100"/>
+    
+        
+        <StackPanel Margin="50">
+
+            <StackPanel Orientation="Horizontal">
+
+                
+                <TextBlock Text="動画情報の位置:" VerticalAlignment="Top" FontSize="16" Margin="0,0,50,0"/>
+                <RadioButton Content="左" IsChecked="" Margin="0,0,50,0"/>
+
+
+                <RadioButton Content="右" IsChecked="" />
+
+            </StackPanel>
+
+
+
+
+        </StackPanel>
+
+
     </Grid>
 </UserControl>

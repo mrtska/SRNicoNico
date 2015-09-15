@@ -59,9 +59,9 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
 
         #region BufferedTime変更通知プロパティ
-        private long _BufferedTime;
+        private double _BufferedTime;
 
-        public long BufferedTime {
+        public double BufferedTime {
             get { return _BufferedTime; }
             set { 
                 if(_BufferedTime == value)

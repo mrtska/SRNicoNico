@@ -59,12 +59,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			if(IsPremium) {
 
 				string waybackKey = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(GetWayBackKeyApiUrl + ThreadId).Result;
-
-
-				
-
 			}*/
-
+            
             App.ViewModelRoot.StatusBar.Status = "ユーザーコメント取得中";
             List<NicoNicoCommentEntry> list = new List<NicoNicoCommentEntry>();
 

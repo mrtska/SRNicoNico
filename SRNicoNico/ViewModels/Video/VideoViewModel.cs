@@ -479,9 +479,10 @@ namespace SRNicoNico.ViewModels {
                 BPS = Math.Floor(comp * 100) / 100 + "KiB/秒";
             }
 
-            Time.BufferedTime = (long) (buffer * WebBrowser.ActualWidth);
+
+            Time.BufferedTime = buffer;
             
-            //Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + buffer + " bps:" + bps);
+            Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + Time.BufferedTime + " bps:" + bps);
 
             SetSeekCursor(time);
 

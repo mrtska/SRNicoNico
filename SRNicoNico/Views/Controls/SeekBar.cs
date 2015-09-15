@@ -51,14 +51,14 @@ namespace SRNicoNico.Views.Controls {
 
 
 
-		public long BufferedTime {
-			get { return (long)GetValue(BufferedTimeProperty); }
+		public double BufferedTime {
+			get { return (double)GetValue(BufferedTimeProperty); }
 			set { SetValue(BufferedTimeProperty, value); }
 		}
 
 		// Using a DependencyProperty as the backing store for BufferedTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty BufferedTimeProperty =
-			DependencyProperty.Register(nameof(BufferedTime), typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
+			DependencyProperty.Register(nameof(BufferedTime), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0D));
 
 
 
@@ -224,7 +224,9 @@ namespace SRNicoNico.Views.Controls {
 
                 CurrentTimeWidth = (ActualWidth - 10) / VideoTime * CurrentTime;
                 SeekCursor = new Thickness(CurrentTimeWidth, 0, 0, 0);
+                Console.WriteLine("BufferedTime:" + BufferedTime);
                 BufferedTimeWidth = BufferedTime * ActualWidth;
+                ;
             }
             
         }
