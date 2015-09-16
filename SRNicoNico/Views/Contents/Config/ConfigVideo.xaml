@@ -15,28 +15,31 @@
              d:DesignHeight="600" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:ConfigVideoViewModel}}"
              >
-    
-    <Grid>
-    
-        
-        <StackPanel Margin="50">
 
-            <StackPanel Orientation="Horizontal">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto">
 
-                
-                <TextBlock Text="動画情報の位置:" VerticalAlignment="Top" FontSize="16" Margin="0,0,50,0"/>
-                <RadioButton Content="左" IsChecked="" Margin="0,0,50,0"/>
+        <Grid>
+
+            
+            <TextBlock Text="動画設定" FontSize="16" Margin="10,10,0,0"/>
+
+            <StackPanel Margin="0,50,0,0">
+
+                <StackPanel Orientation="Horizontal" Height="150" Margin="10" ToolTip="動画情報の位置を左右どちらにするか設定します">
 
 
-                <RadioButton Content="右" IsChecked="" />
+                    <TextBlock Text="動画情報の位置:" VerticalAlignment="Center" FontSize="16" />
+                    <local:ConfigVideoRect Placement="{Binding VideoPlacement}" Width="400"/>
+
+                </StackPanel>
+
+
+
 
             </StackPanel>
+        </Grid>
 
+    </ScrollViewer>    
+        
 
-
-
-        </StackPanel>
-
-
-    </Grid>
 </UserControl>

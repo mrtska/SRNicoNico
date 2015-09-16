@@ -1,0 +1,134 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.Config.ConfigVideoRect"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Config"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+
+             mc:Ignorable="d" 
+             d:DesignHeight="215" d:DesignWidth="500"
+             d:DataContext="{d:DesignInstance {x:Type vm:ConfigVideoViewModel}}"
+             
+             x:Name="root"
+             >
+
+
+    <UserControl.Resources>
+        <Style x:Key="Left" TargetType="Rectangle">
+            <Setter Property="Stroke" Value="#FF555555"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=root, Path=Placement}" Value="Left">
+                    <Setter Property="Stroke" Value="{DynamicResource AccentBrushKey}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="LeftText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FF555555"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=root, Path=Placement}" Value="Left">
+                    <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Right" TargetType="Rectangle">
+            <Setter Property="Stroke" Value="#FF555555"/>
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=root, Path=Placement}" Value="Right">
+                    <Setter Property="Stroke" Value="{DynamicResource AccentBrushKey}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="RightText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FF555555"/>
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=root, Path=Placement}" Value="Right">
+                    <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+
+        <Border Margin="10" Grid.Row="1" Background="{DynamicResource ThemeBrushKey}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="VideoPlacement" Value="Left" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="15*"/>
+
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.ColumnSpan="3" Style="{DynamicResource LeftText}" Text="左" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
+
+
+                <Grid Grid.Row="1">
+                    <Rectangle Style="{DynamicResource Left}"/>
+                    <TextBlock Style="{DynamicResource LeftText}" Text="情報" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+                <Grid Grid.Column="2" Grid.Row="1">
+                    <Rectangle Style="{DynamicResource Left}" />
+                    <TextBlock Style="{DynamicResource LeftText}" Text="動画" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                </Grid>
+            </Grid>
+        </Border>
+
+
+        <Border Grid.Column="1" Margin="10" Background="{DynamicResource ThemeBrushKey}" >
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="VideoPlacement" Value="Right" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="15*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="5*"/>
+
+                </Grid.ColumnDefinitions>
+                <TextBlock Style="{DynamicResource RightText}" Text="右" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Grid.ColumnSpan="3" />
+
+                <Grid Grid.Row="1">
+                    <Rectangle Style="{DynamicResource Right}"/>
+                    <TextBlock Style="{DynamicResource RightText}" Text="動画" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+                <Grid Grid.Column="2" Grid.Row="1">
+                    <Rectangle Style="{DynamicResource Right}" />
+                    <TextBlock Style="{DynamicResource RightText}" Text="情報" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                </Grid>
+            </Grid>
+        </Border>
+
+    </Grid>
+</UserControl>

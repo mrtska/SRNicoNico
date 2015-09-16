@@ -44,21 +44,61 @@
         </ei:KeyTrigger>
     </i:Interaction.Triggers>
 
+    <UserControl.Resources>
+
+
+
+    </UserControl.Resources>
 
 
     <Grid x:Name="Grid">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="46*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="154*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="113*"/>
-        </Grid.RowDefinitions>
 
-        <StackPanel Grid.RowSpan="2" Margin="10" >
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition>
+                <ColumnDefinition.Style>
+                    <Style TargetType="{x:Type ColumnDefinition}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding VideoInfoPlacement}" Value="Left">
+                                <Setter Property="Width" Value="150" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding VideoInfoPlacement}" Value="Right">
+                                <Setter Property="Width" Value="46*" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ColumnDefinition.Style>
+            </ColumnDefinition>
+
+            <ColumnDefinition>
+                <ColumnDefinition.Style>
+                    <Style TargetType="{x:Type ColumnDefinition}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding VideoInfoPlacement}" Value="Left">
+                                <Setter Property="Width" Value="46*" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding VideoInfoPlacement}" Value="Right">
+                                <Setter Property="Width" Value="150" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ColumnDefinition.Style>
+            </ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Margin="10" >
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding VideoInfoPlacement}" Value="Left">
+                            <Setter Property="Grid.Column" Value="0" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding VideoInfoPlacement}" Value="Right">
+                            <Setter Property="Grid.Column" Value="1" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
 
             <Border BorderBrush="#FF444444" BorderThickness="1">
                 <StackPanel Margin="3">
@@ -68,53 +108,7 @@
                     <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.MylistCounter, StringFormat=マイリスト数 : {0:N0}}" VerticalAlignment="Top" />
                 </StackPanel>
             </Border>
-           
-           
-
-
-        </StackPanel>
-
-
-
-        <TextBlock HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1" TextWrapping="NoWrap" FontSize="20" Text="{Binding VideoData.ApiData.Title}" VerticalAlignment="Top"/>
-
-        <mui:ModernButton ToolTip="更新" HorizontalAlignment="Right" IconData="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z" Margin="0,0,40,0" Grid.Column="1" >
-
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Reflesh" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </mui:ModernButton>
-        <mui:ModernButton ToolTip="閉じる" HorizontalAlignment="Right" IconData="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z" Margin="0,0,10,0" Grid.Column="1" >
-
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="DisposeViewModel" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </mui:ModernButton>
-        
-
-        <video:VideoFlash Grid.Row="1" Grid.Column="1" />
-        <video:VideoController x:Name="Controller"  Grid.Row="2" Grid.Column="1" />
-
-        <Grid Grid.Row="3" Grid.Column="1" >
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="200"/>
-            </Grid.ColumnDefinitions>
-
-            <ScrollViewer>
-                <Grid>
-                    <TextBlock HorizontalAlignment="Stretch"  Padding="5" TextWrapping="Wrap" behaviors:HtmlTextBoxProperties.TriggerRequest="TextBlock_TriggerRequest"  behaviors:HtmlTextBoxProperties.HtmlText="{Binding VideoData.ApiData.Description, Mode=OneWay}" />
-                    <mui:ModernProgressRing Grid.Row="2" HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}"  />
-
-                </Grid>
-
-            </ScrollViewer>
-            <Border Grid.Column="2" BorderBrush="#FF444444" BorderThickness="1" Margin="0,10,0,0" >
+            <Border BorderBrush="#FF444444" BorderThickness="1" Margin="0,10,0,0" >
                 <StackPanel Margin="3">
 
                     <TextBlock Text="タグ" Margin="10" FontSize="16" />
@@ -124,7 +118,7 @@
                     <ListView Margin="10" ItemsSource="{Binding VideoData.ApiData.TagList}" Focusable="False" >
                         <ListView.ItemContainerStyle>
                             <Style TargetType="{x:Type ListViewItem}">
-                                
+
                                 <Setter Property="Focusable" Value="False" />
                                 <Setter Property="Foreground" Value="#FFAAAAAA" />
                             </Style>
@@ -138,7 +132,67 @@
                     </ListView>
                 </StackPanel>
             </Border>
+
+
+
+        </StackPanel>
+
+
+        <Grid>
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding VideoInfoPlacement}" Value="Left">
+                            <Setter Property="Grid.Column" Value="1" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding VideoInfoPlacement}" Value="Right">
+                            <Setter Property="Grid.Column" Value="0" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="154*"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="113*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" FontSize="20" Text="{Binding VideoData.ApiData.Title}" VerticalAlignment="Top"/>
+            <mui:ModernButton ToolTip="更新" HorizontalAlignment="Right" IconData="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z" Margin="0,0,40,0" >
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Reflesh" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </mui:ModernButton>
+            <mui:ModernButton ToolTip="閉じる" HorizontalAlignment="Right" IconData="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z" Margin="0,0,10,0" >
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="DisposeViewModel" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </mui:ModernButton>
+
+            <video:VideoFlash Grid.Row="1" />
+            <video:VideoController Grid.Row="2" />
+
+            <Grid Grid.Row="3" >
+
+
+                <ScrollViewer>
+                    <Grid>
+                        <TextBlock Padding="5" TextWrapping="Wrap" behaviors:HtmlTextBoxProperties.TriggerRequest="TextBlock_TriggerRequest"  behaviors:HtmlTextBoxProperties.HtmlText="{Binding VideoData.ApiData.Description, Mode=OneWay}" />
+                        <mui:ModernProgressRing Panel.ZIndex="1" HorizontalAlignment="Center" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}" />
+                    </Grid>
+                </ScrollViewer>
+                
+            </Grid>
+
         </Grid>
+
 
 
 

@@ -237,6 +237,13 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        public string VideoInfoPlacement { get {
+
+                return App.ViewModelRoot.Config.Video.VideoPlacement;
+            }
+            set { }
+        }
+
 
         private readonly string VideoUrl;
 
@@ -482,7 +489,7 @@ namespace SRNicoNico.ViewModels {
 
             Time.BufferedTime = buffer;
             
-            Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + Time.BufferedTime + " bps:" + bps);
+            //Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + Time.BufferedTime + " bps:" + bps);
 
             SetSeekCursor(time);
 

@@ -48,9 +48,6 @@ namespace SRNicoNico.Views.Controls {
 			DependencyProperty.Register(nameof(CurrentTimeWidth), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0.0));
 
 
-
-
-
 		public double BufferedTime {
 			get { return (double)GetValue(BufferedTimeProperty); }
 			set { SetValue(BufferedTimeProperty, value); }
@@ -224,9 +221,7 @@ namespace SRNicoNico.Views.Controls {
 
                 CurrentTimeWidth = (ActualWidth - 10) / VideoTime * CurrentTime;
                 SeekCursor = new Thickness(CurrentTimeWidth, 0, 0, 0);
-                Console.WriteLine("BufferedTime:" + BufferedTime);
                 BufferedTimeWidth = BufferedTime * ActualWidth;
-                ;
             }
             
         }

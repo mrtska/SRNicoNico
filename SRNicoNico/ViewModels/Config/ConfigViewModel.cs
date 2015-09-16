@@ -47,9 +47,14 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+
+
+        public ConfigVideoViewModel Video { get; private set; }
+
+
         public ConfigViewModel() : base("設定") {
 
-            ConfigCollection.Add(new ConfigVideoViewModel());
+            ConfigCollection.Add(Video = new ConfigVideoViewModel());
 
         }
 

@@ -19,35 +19,24 @@ namespace SRNicoNico.ViewModels {
 
 
         #region VideoPlacement変更通知プロパティ
-        private string _VideoPlacement;
 
         public string VideoPlacement {
-            get { return _VideoPlacement; }
+            get { return Properties.Settings.Default.VideoInfoPlacement; }
             set { 
-                if(_VideoPlacement == value)
+                if(Properties.Settings.Default.VideoInfoPlacement == value)
                     return;
-                _VideoPlacement = value;
+                Properties.Settings.Default.VideoInfoPlacement = value;
+                Properties.Settings.Default.Save();
                 RaisePropertyChanged();
             }
         }
         #endregion
-
+        
 
 
         public ConfigVideoViewModel() : base("動画関連") {
 
             VideoPlacement = Properties.Settings.Default.VideoInfoPlacement;
         }
-
-        public void ToggleVideoPlacement() {
-
-            VideoPlacement = VideoPlacement == "Left" ? "Right" : "Left";
-            Properties.Settings.Default.VideoInfoPlacement = VideoPlacement;
-            Properties.Settings.Default.Save();
-            Console.WriteLine("!!!" + VideoPlacement);
-        }
-
-
-
     }
 }
