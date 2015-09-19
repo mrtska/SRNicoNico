@@ -11,7 +11,8 @@ using System.Windows.Documents;
 using System.Windows.Navigation;
 
 using SRNicoNico.Views.Extentions;
-
+using SRNicoNico.Views.Contents.Video;
+using SRNicoNico.ViewModels;
 
 
 namespace SRNicoNico.Views.Behaviors {
@@ -42,6 +43,42 @@ namespace SRNicoNico.Views.Behaviors {
             }
         }
 
+        private static void AddHandler(Hyperlink link) {
+
+            //たまにnullの時がある
+            if(link.NavigateUri != null) {
+
+                if(link.NavigateUri.OriginalString.StartsWith("http://www.nicovideo.jp/watch/")) {
+
+                    ToolTipService.SetShowDuration(link, 100000);
+
+                    ToolTipService.SetHorizontalOffset(link, 150);
+                    link.ToolTipOpening += Link_ToolTipOpening;
+                    VideoToolTip tooltip = new VideoToolTip();
+                    VideoDataViewModel vm = new VideoDataViewModel();
+                    tooltip.DataContext = vm;
+
+
+                    link.ToolTip = tooltip;
+
+                } else {
+
+                    link.ToolTip = link.NavigateUri.OriginalString;
+                }
+                link.RequestNavigate += ((sender, o) => {
+
+                    link.RaiseEvent(new RoutedEventArgs(TriggerRequestEvent));
+                });
+            }
+        }
+
+        private static void Link_ToolTipOpening(object sender, ToolTipEventArgs e) {
+
+            Hyperlink link = sender as Hyperlink;
+            VideoToolTip tooltip = link.ToolTip as VideoToolTip;
+            
+            ((VideoDataViewModel)tooltip.DataContext).Intialize(link.NavigateUri.OriginalString.Substring(30));
+        }
 
         private static void OnHtmlTextChanged(DependencyObject depObj, DependencyPropertyChangedEventArgs e) {
             // Go ahead and return out if we set the property on something other than a textblock, or set a value that is not a string.
@@ -78,15 +115,7 @@ namespace SRNicoNico.Views.Behaviors {
 
                             Hyperlink spanLink = (Hyperlink)spanInline;
 
-                            //たまにnullの時がある
-                            if(spanLink.NavigateUri != null) {
-
-                                spanLink.ToolTip = spanLink.NavigateUri.OriginalString;
-                                spanLink.RequestNavigate += ((sender, o) => {
-
-                                    spanLink.RaiseEvent(new RoutedEventArgs(TriggerRequestEvent));
-                                });
-                            }
+                            AddHandler(spanLink);
                         }
                     }
                 }
@@ -94,16 +123,8 @@ namespace SRNicoNico.Views.Behaviors {
                 if(inline is Hyperlink) {
 
                     Hyperlink link = (Hyperlink) inline;
-
-                    //たまにnullの時がある
-                    if(link.NavigateUri != null) {
-
-                        link.ToolTip = link.NavigateUri.OriginalString;
-                        link.RequestNavigate += ((sender, o) => {
-
-                            link.RaiseEvent(new RoutedEventArgs(TriggerRequestEvent));
-                        });
-                    }
+                    AddHandler(link);
+                    
                 }
             }
 

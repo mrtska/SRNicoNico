@@ -40,7 +40,8 @@
                 v0.1<LineBreak /> <LineBreak />
                 v0.11<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
                 v0.2<LineBreak /><LineBreak /><LineBreak />
-                v0.21
+                v0.21<LineBreak /><LineBreak /><LineBreak />
+                v0.3<LineBreak /><LineBreak />
                 
             
             </TextBlock>
@@ -53,7 +54,10 @@
                 とりあえずマイリスト実装<LineBreak />
                 一般会員に起因する不具合を修正<LineBreak /><LineBreak />
                 マイリスト実装<LineBreak />
-                UI微調整
+                UI微調整<LineBreak /><LineBreak />
+                動画説明文のハイパーリンク化処理を強化<LineBreak />
+                コンフィグで一部画面レイアウト変更可能に
+                シークバーのバッファリングラインが機能していなかった不具合を修正
                 
                 
                 

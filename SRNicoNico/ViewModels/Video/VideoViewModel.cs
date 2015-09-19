@@ -305,7 +305,6 @@ namespace SRNicoNico.ViewModels {
                         NicoNicoStoryBoard sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
                         VideoData.StoryBoardData = sb.GetStoryBoardData();
                         App.ViewModelRoot.StatusBar.Status = "ストーリーボード取得完了";
-
                     });
                 }
 

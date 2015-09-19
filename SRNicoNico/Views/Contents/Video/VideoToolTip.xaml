@@ -4,9 +4,42 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="200">
+             Width="250"
+             Height="200"
+             d:DataContext="{d:DesignInstance {x:Type vm:VideoDataViewModel}}"
+             >
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.ColumnSpan="2" Text="{Binding Data.Title}" TextTrimming="CharacterEllipsis" />
+        <mui:ModernProgressRing Panel.ZIndex="1" HorizontalAlignment="Center" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}" Grid.ColumnSpan="2" Grid.RowSpan="3" />
+
+        <Image Grid.Row="1" Source="{Binding Data.ThumbnailUrl}" Margin="1,0,0,20" />
+        <TextBlock Grid.Row="1" Text="{Binding Data.Length}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5"/>
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0">
+            <TextBlock Text="{Binding Data.Id, StringFormat=動画ID:{0}}" />
+            <TextBlock Text="{Binding Data.ViewCounter, StringFormat=再生数:{0:N0}}" />
+            <TextBlock Text="{Binding Data.CommentCounter, StringFormat=コメント数:{0:N0}}" />
+            <TextBlock Text="{Binding Data.MylistCounter, StringFormat=マイリスト数:{0:N0}}" />
+
+        </StackPanel>
+
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding Data.Description}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
 
     </Grid>
 </UserControl>
