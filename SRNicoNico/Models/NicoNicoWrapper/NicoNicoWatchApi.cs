@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.IO;
 
 using System.Net;
 using System.Net.Http;
 
 using Livet;
 
-
 using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
 
 using Codeplex.Data;
-using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using SRNicoNico.ViewModels;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
@@ -104,7 +103,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.Cmsid = videoDetail.id;
             ret.Title = videoDetail.title;
             ret.Thumbnail = videoDetail.thumbnail;
-            ret.Description = videoDetail.description_original;
+            ret.Description = videoDetail.description;
             ret.PostedAt = videoDetail.postedAt;
             ret.Length = (int) videoDetail.length;
             ret.ViewCounter = (int) videoDetail.viewCount;
@@ -113,45 +112,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.YesterdayRank = videoDetail.yesterday_rank;
             ret.HighestRank = videoDetail.highest_rank;
 
-            Console.WriteLine(ret.Description);
 
-            //動画
-            Regex regex = new Regex(@"(.?)((sm|watch/|nm)\d+)");//
-            ret.Description = regex.Replace(ret.Description, new MatchEvaluator((match) => {
+#if DEBUG
+            FileInfo info = new FileInfo(@"Z:\debug.txt");
+            info.Delete();
+            StreamWriter writer = info.AppendText();
+            writer.WriteLine(ret.Description);
 
+            ret.Description = HyperLinkParser.Parse(ret.Description);
 
-                if(match.Groups[1].Value.Length != 0 && (match.Groups[1].Value == "/" || match.Groups[1].Value == ">" || match.Groups[1].Value == "\"")) {
-
-                    return match.Value;
-                }
-
-
-                return match.Groups[1].Value + "<a href=\"" + match.Groups[2].Value + "\">" + match.Groups[2].Value + "</a>";
-            }));
-
-            //生放送
-            Regex live = new Regex(@"(.?)(lv\d+)");
-            ret.Description = live.Replace(ret.Description, new MatchEvaluator((match) => {
-
-                if(match.Groups[1].Value.Length != 0 && (match.Groups[1].Value == "/" || match.Groups[1].Value == ">" || match.Groups[1].Value == "\"")) {
-
-                    return match.Value;
-                }
-
-                return "<a href=\"http://live.nicovideo.jp/watch/" + match.Value + "\">" + match.Value + "</a>";
-            }));
-
-            //普通のURLだったら
-            Regex url = new Regex(@"(.?)(https?://[\w/:%#\$&\?\(\)~\.=\+\-]+)");
-            ret.Description = url.Replace(ret.Description, new MatchEvaluator(Match));
             
-            //TwitterのIDだった場合
-            Regex twitter = new Regex(@"@[A-z|0-9|_]+");
-            ret.Description = twitter.Replace(ret.Description, new MatchEvaluator((match) => {
-
-                return "<a href=\"https://twitter.com/" + match.Value.Substring(1) + "\">" + match.Value + "</a>";
-            }));
-
+            writer.WriteLine("\n" + ret.Description);
+            writer.Flush();
+            writer.Close();
+#endif
             ret.TagList = new ObservableCollection<VideoTagViewModel>();
 
             foreach(var tag in videoDetail.tagList) {
@@ -167,26 +141,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 ret.TagList.Add(new VideoTagViewModel(entry)); 
             }
             //------
-            Console.WriteLine("# " + ret.Description);
 
             return ret;
         }
 
-
-        private static string Match(Match match) {
-
-            //aタグが書いてあったらそのまま返す
-            if(match.Groups[1].Value.Length != 0 && (match.Groups[1].Value == "/" || match.Groups[1].Value == ">" || match.Groups[1].Value == "\"")) {
-
-                return match.Value;
-            }
-
-            return "<a href=\"" + match.Groups[2].Value.Trim() + "\">" + match.Groups[2].Value.Trim() + "</a>";
-
-        }
-
-
-
+        
 
     }
 

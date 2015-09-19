@@ -31,7 +31,7 @@
 
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24"	VerticalAlignment="Bottom" Text="～更新履歴～" />
 
-        <Grid Grid.Row="1" Background="#FF111111">
+        <Grid Grid.Row="1" Background="#FF222222">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="8*"/>
                 <ColumnDefinition Width="105*"/>

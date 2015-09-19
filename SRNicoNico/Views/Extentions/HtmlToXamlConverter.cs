@@ -2802,6 +2802,8 @@ namespace SRNicoNico.Views.Extentions {
             // Create well-formed Xml from Html string
             XmlElement htmlElement = HtmlParser.ParseHtml(htmlString);
 
+
+            ReplaceInvalidThings(htmlElement);
             // Decide what name to use as a root
             string rootElementName = asFlowDocument ? Xaml_FlowDocument : Xaml_Section;
 
@@ -2832,6 +2834,30 @@ namespace SRNicoNico.Views.Extentions {
 
             return xaml;
         }
+
+
+        private static void ReplaceInvalidThings(XmlElement element) {
+
+            foreach(XmlNode node in element) {
+
+                if(node is XmlElement) {
+
+                    ReplaceInvalidThings((XmlElement)node);
+                }
+
+                if(node.ParentNode != null && node.LocalName == "a" && node.ParentNode.LocalName == "a") {
+
+                    node.ParentNode.ParentNode.ReplaceChild(node, node.ParentNode);
+                    //node.ParentNode.RemoveAll();
+                }
+
+            }
+
+        }
+
+
+
+
 
         /// <summary>
         /// Returns a value for an attribute by its name (ignoring casing)
@@ -3137,6 +3163,8 @@ namespace SRNicoNico.Views.Extentions {
 
             // Recurse into element subtree
             for(XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling) {
+
+
                 AddInline(xamlElement, htmlChildNode, currentProperties, stylesheet, sourceContext);
             }
 
@@ -3208,6 +3236,9 @@ namespace SRNicoNico.Views.Extentions {
         // .............................................................
 
         private static void AddInline(XmlElement xamlParentElement, XmlNode htmlNode, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
+            
+
+
             if(htmlNode is XmlComment) {
                 DefineInlineFragmentParent((XmlComment)htmlNode, xamlParentElement);
             } else if(htmlNode is XmlText) {
@@ -3333,6 +3364,7 @@ namespace SRNicoNico.Views.Extentions {
                 for(XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling) {
                     AddInline(xamlElement, htmlChildNode, currentProperties, stylesheet, sourceContext);
                 }
+                
 
                 // Add the new element to the parent.
                 xamlParentElement.AppendChild(xamlElement);
