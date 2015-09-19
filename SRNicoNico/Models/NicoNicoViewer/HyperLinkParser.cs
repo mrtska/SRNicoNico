@@ -12,7 +12,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
 
         public static string Parse(string desc) {
-
+            /*
             //動画
             Regex regex = new Regex(@"(.?)((sm|watch/|nm)\d+)");//
             desc = regex.Replace(desc, new MatchEvaluator((match) => {
@@ -38,14 +38,21 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                 return "<a href=\"http://live.nicovideo.jp/watch/" + match.Value + "\">" + match.Value + "</a>";
             }));
-
+            */
             if(Properties.Settings.Default.EnableUrlLink) {
 
                 //普通のURLだったら
-                Regex url = new Regex(@"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+");
+                Regex url = new Regex(@"(.....)(https?://[\w/:%#\$&\?\(\)~\.=\+\-]+)");
                 desc = url.Replace(desc, new MatchEvaluator((match) => {
 
-                    return "<a href=\"" + match.Value + "\">" + match.Value + "</a>";
+
+                    //aタグが書いてあったらそのまま返す
+                    if(match.Groups[1].Value.Length != 0 && (match.Groups[1].Value == "/" || match.Groups[1].Value == ">" || match.Groups[1].Value == "ref=\"")) {
+
+                        return match.Value;
+                    }
+
+                    return match.Groups[1].Value + "<a href=\"" + match.Groups[2].Value + "\">" + match.Groups[2].Value + "</a>";
                 }));
             }
 

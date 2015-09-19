@@ -41,7 +41,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			//ストーリーボードが無かったら
 			if(data == null) {
 
-				return null;;
+				return null;
 			}
 
 

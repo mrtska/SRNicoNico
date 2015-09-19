@@ -2,6 +2,9 @@
 using System.Windows;
 using System.Threading;
 using System.Windows.Controls;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Windows.Input;
 using System;
 
 using Livet;
@@ -12,8 +15,7 @@ using Livet.Messaging;
 using SRNicoNico.Views.Contents.Video;
 
 using Codeplex.Data;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+
 
 namespace SRNicoNico.ViewModels {
 
@@ -335,28 +337,46 @@ namespace SRNicoNico.ViewModels {
             
             string cmsid = uri.OriginalString;
 
-          
-            if(cmsid.Contains("sm") || cmsid.Contains("nm")) {
+            /*
+                        if(cmsid.Contains("sm") || cmsid.Contains("nm")) {
 
-                new VideoViewModel("http://www.nicovideo.jp/watch/" + cmsid);
-                DisposeViewModel();
-                return;
-            }
+                            new VideoViewModel("http://www.nicovideo.jp/watch/" + cmsid);
+                            DisposeViewModel();
+                            return;
+                        }
 
-            if(cmsid.Contains("watch/")) {
+                        if(cmsid.Contains("watch/")) {
 
-                new VideoViewModel("http://www.nicovideo.jp/" + cmsid);
-                DisposeViewModel();
-                return;
-            }
+                            new VideoViewModel("http://www.nicovideo.jp/" + cmsid);
+                            DisposeViewModel();
+                            return;
+                        }
 
-              if(cmsid.StartsWith("http")) {
+                          if(cmsid.StartsWith("http")) {
+
+                            System.Diagnostics.Process.Start(cmsid);
+                            return;
+                        }
+            */
+
+            if(Keyboard.IsKeyDown(Key.LeftCtrl)) {
 
                 System.Diagnostics.Process.Start(cmsid);
                 return;
             }
 
+            if(cmsid.StartsWith("http://www.nicovideo.jp/watch/")) {
 
+                new VideoViewModel(cmsid);
+                DisposeViewModel();
+                return;
+            }
+
+            if(cmsid.StartsWith("http")) {
+
+                System.Diagnostics.Process.Start(cmsid);
+                return;
+            }
 
         }
 
