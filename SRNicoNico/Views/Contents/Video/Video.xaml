@@ -46,15 +46,7 @@
         </ei:KeyTrigger>
     </i:Interaction.Triggers>
 
-    <UserControl.Resources>
-
-
-
-    </UserControl.Resources>
-
-
     <Grid>
-
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition>
