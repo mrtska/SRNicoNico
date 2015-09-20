@@ -16,6 +16,7 @@ package {
 			stage.color = 0x000000;
 			//枠に合わせてスケールする
 			stage.scaleMode = StageScaleMode.SHOW_ALL;
+			stage.frameRate = 30;
 			
 			//JSコールバック登録
 			if(ExternalInterface.available) {

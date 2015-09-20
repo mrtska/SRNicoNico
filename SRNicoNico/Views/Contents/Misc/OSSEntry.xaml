@@ -44,7 +44,99 @@
                                             ライセンス : MIT License<LineBreak />
                                             ﻿The MIT License (MIT)<LineBreak /><LineBreak />
 
-                                            Copyright (c) 2014 Grabacr07<LineBreak /><LineBreak />
+                                            Copyright (c) 2015 Grabacr07<LineBreak /><LineBreak />
+
+                                            Permission is hereby granted, free of charge, to any person obtaining a copy<LineBreak />
+                                            of this software and associated documentation files (the "Software"), to deal<LineBreak />
+                                            in the Software without restriction, including without limitation the rights<LineBreak />
+                                            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<LineBreak />
+                                            copies of the Software, and to permit persons to whom the Software is<LineBreak />
+                                            furnished to do so, subject to the following conditions:<LineBreak /><LineBreak />
+
+                                            The above copyright notice and this permission notice shall be included in<LineBreak />
+                                            all copies or substantial portions of the Software.<LineBreak /><LineBreak />
+
+                                            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<LineBreak />
+                                            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<LineBreak />
+                                            FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE<LineBreak />
+                                            AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<LineBreak />
+                                            LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<LineBreak />
+                                            OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN<LineBreak />
+                                            THE SOFTWARE.<LineBreak />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="MetroTrilithon">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="MetroTrilithon 0.1.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            このライブラリは動画再生部分にURLをドラッグアンドドロップすることが出来てしまう不具合を抑制するためのライブラリです。<LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="https://github.com/Grabacr07/MetroTrilithon" >
+                                                https://github.com/Grabacr07/MetroTrilithon
+                                            </Hyperlink><LineBreak />
+                                            <Hyperlink NavigateUri="https://twitter.com/Grabacr07" ToolTip="https://twitter.com/Grabacr07" >
+                                                @Grabacr07
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : MIT License<LineBreak />
+                                            ﻿The MIT License (MIT)<LineBreak /><LineBreak />
+
+                                            Copyright (c) 2015 Grabacr07<LineBreak /><LineBreak />
+
+                                            Permission is hereby granted, free of charge, to any person obtaining a copy<LineBreak />
+                                            of this software and associated documentation files (the "Software"), to deal<LineBreak />
+                                            in the Software without restriction, including without limitation the rights<LineBreak />
+                                            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<LineBreak />
+                                            copies of the Software, and to permit persons to whom the Software is<LineBreak />
+                                            furnished to do so, subject to the following conditions:<LineBreak /><LineBreak />
+
+                                            The above copyright notice and this permission notice shall be included in<LineBreak />
+                                            all copies or substantial portions of the Software.<LineBreak /><LineBreak />
+
+                                            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<LineBreak />
+                                            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<LineBreak />
+                                            FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE<LineBreak />
+                                            AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<LineBreak />
+                                            LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<LineBreak />
+                                            OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN<LineBreak />
+                                            THE SOFTWARE.<LineBreak />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="StatefulModel">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="StatefulModel 0.2.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            このライブラリは上記MetroTrilithonの依存ライブラリです。<LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="https://github.com/ugaya40/StatefulModel" >
+                                                https://github.com/ugaya40/StatefulModel
+                                            </Hyperlink><LineBreak />
+                                            <Hyperlink NavigateUri="https://twitter.com/ugaya40" ToolTip="https://twitter.com/ugaya40" >
+                                                @ugaya40
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : MIT License<LineBreak />
+                                            ﻿The MIT License (MIT)<LineBreak /><LineBreak />
+
+                                            Copyright (c) 2015 Masanori Onoue<LineBreak /><LineBreak />
 
                                             Permission is hereby granted, free of charge, to any person obtaining a copy<LineBreak />
                                             of this software and associated documentation files (the "Software"), to deal<LineBreak />

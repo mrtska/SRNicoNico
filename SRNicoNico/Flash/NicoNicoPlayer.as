@@ -133,12 +133,6 @@ package  {
 				for(var propName:String in param){
 					trace(propName + "=" + param[propName]);
 				}
-				
-				stage.frameRate = param.videoframerate;
-				if(stage.frameRate == 0) {
-					
-					stage.frameRate = param.framerate;
-				}
 
 				var vec:Vector.<StageVideo> = stage.stageVideos;
 				if(vec.length >= 1) {

@@ -50,6 +50,8 @@ namespace SRNicoNico.ViewModels {
         public OSSViewModel() : base("オープンソースライセンス") {
 
             OSSCollection.Add(new OSSEntryViewModel("MetroRadiance"));
+            OSSCollection.Add(new OSSEntryViewModel("MetroTrilithon"));
+            OSSCollection.Add(new OSSEntryViewModel("StatefulModel"));
             OSSCollection.Add(new OSSEntryViewModel("ModernUI"));
             OSSCollection.Add(new OSSEntryViewModel("Livet"));
             OSSCollection.Add(new OSSEntryViewModel("Newtonsoft.Json"));

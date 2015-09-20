@@ -18,6 +18,7 @@ using System.Windows.Markup;
 using System.IO;
 using SRNicoNico.ViewModels;
 using System.Windows.Interop;
+using System.Reflection;
 
 namespace SRNicoNico.Views.Contents.Video {
     /// <summary>
@@ -43,7 +44,6 @@ namespace SRNicoNico.Views.Contents.Video {
             if(DataContext is VideoViewModel) {
 
                 VideoViewModel vm = (VideoViewModel)DataContext;
-                
                 //動画オープン
                 vm.OpenVideo();
             }

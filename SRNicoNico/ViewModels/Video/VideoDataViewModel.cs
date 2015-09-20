@@ -46,8 +46,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-
         public void Intialize(string cmsid) {
 
 
@@ -58,13 +56,6 @@ namespace SRNicoNico.ViewModels {
                 Data = NicoNicoVitaApi.GetVideoData(cmsid);
                 IsActive = false;
             });
-           
-
-
-
         }
-
-
-
     }
 }
