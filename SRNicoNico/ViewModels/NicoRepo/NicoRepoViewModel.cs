@@ -92,6 +92,7 @@ namespace SRNicoNico.ViewModels {
                 foreach(NicoRepoListViewModel vm in result) {
 
                     App.ViewModelRoot.StatusBar.Status = "ニコレポ取得中(" + vm.Name + ")";
+                    vm.Result.IsActive = true;
                     vm.OpenNicoRepoList();
                     DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoRepoListCollection.Add(vm)));
                 }

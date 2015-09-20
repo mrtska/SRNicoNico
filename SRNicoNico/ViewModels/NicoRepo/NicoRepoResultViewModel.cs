@@ -75,12 +75,32 @@ namespace SRNicoNico.ViewModels {
 				RaisePropertyChanged();
 			}
 		}
-		#endregion
+        #endregion
+
+
+        #region Title変更通知プロパティ
+        private string _Title;
+
+        public string Title {
+            get { return _Title; }
+            set { 
+                if(_Title == value)
+                    return;
+                _Title = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        public NicoRepoResultViewModel(string title) {
+
+            Title = title;
+        }
 
 
 
 
-		public void Open() {
+        public void Open() {
 
             //not existsの時など
             if(SelectedItem == null || SelectedItem.Entry.VideoUrl == null) {

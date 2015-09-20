@@ -54,7 +54,7 @@
 
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:NicoRepoListViewModel}">
-                    <local:NicoRepoResult DataContext="{Binding Result}" />
+                    <local:NicoRepoResult />
                 </DataTemplate>
             </ItemsControl.Resources>
 

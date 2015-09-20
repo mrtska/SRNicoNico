@@ -25,7 +25,7 @@ namespace SRNicoNico.ViewModels {
 
 
         #region Result変更通知プロパティ
-        private NicoRepoResultViewModel _Result = new NicoRepoResultViewModel();
+        private NicoRepoResultViewModel _Result;
 
         public NicoRepoResultViewModel Result {
             get { return _Result; }
@@ -43,6 +43,7 @@ namespace SRNicoNico.ViewModels {
         public NicoRepoListViewModel(string title, string id) : base(title) {
 
             Id = id;
+            Result = new NicoRepoResultViewModel(title);
         }
 
 
@@ -50,7 +51,6 @@ namespace SRNicoNico.ViewModels {
         public void OpenNicoRepoList() {
 
             App.ViewModelRoot.Status = "ニコレポ取得中(" + Name + ")";
-            Result.IsActive = true;
             Result.OwnerViewModel = this;
             Result.NicoRepo.Clear();
 
@@ -63,6 +63,8 @@ namespace SRNicoNico.ViewModels {
 
 				Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry));
             }
+
+            App.ViewModelRoot.Status = "ニコレポ取得完了(" + Name + ")";
 
             Result.IsActive = false;
         }
@@ -89,13 +91,16 @@ namespace SRNicoNico.ViewModels {
 
                 Result.IsActive = false;
             });
-
-
-
-
-
-
         }
 
+        public void Reflesh() {
+
+            Result.IsActive = true;
+
+            Task.Run(() => {
+
+                OpenNicoRepoList();
+            });
+        }
     }
 }

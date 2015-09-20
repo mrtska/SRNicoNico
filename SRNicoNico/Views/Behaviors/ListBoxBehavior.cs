@@ -16,15 +16,6 @@ namespace SRNicoNico.Views.Behaviors {
 
 	public class ListBoxBehavior : Behavior<ListBox> {
 
-
-
-
-
-
-
-
-
-
         public ViewModel ViewModel {
             get { return (ViewModel)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
@@ -45,9 +36,6 @@ namespace SRNicoNico.Views.Behaviors {
         // Using a DependencyProperty as the backing store for MethodName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MethodNameProperty =
             DependencyProperty.Register("MethodName", typeof(string), typeof(ListBoxBehavior), new PropertyMetadata(""));
-
-
-
 
         private ScrollViewer ScrollViewer;
 

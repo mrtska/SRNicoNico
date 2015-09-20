@@ -96,7 +96,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		}
 
 
-        public async Task<string> GetAsync(HttpRequestMessage request) {
+        public async Task<string> GetAsync(HttpRequestMessage request)  {
 
             HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 

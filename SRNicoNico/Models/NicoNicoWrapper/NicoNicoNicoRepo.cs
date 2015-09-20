@@ -40,7 +40,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //ID ユーザー定義ニコレポリストID
         private string Id;
 
+
         //過去ページへのURL
+        private string PrevUrl;
         private string NextUrl;
 
         //取得したい二コレポのID allとかmyselfとかuserとかいろいろ
@@ -53,7 +55,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public NicoNicoNicoRepoData GetNicoRepo() {
 
             //APIと言うのか謎
-            var api = @"http://www.nicovideo.jp/my/top/" + Id + @"?innerPage=1&mode=next_page";
+            var api = PrevUrl = @"http://www.nicovideo.jp/my/top/" + Id + @"?innerPage=1&mode=next_page";
            
             //html
             var html = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
@@ -141,8 +143,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 return null;
             }
 
+            //ビヘイビア暴発
+            if(PrevUrl == NextUrl) {
+
+                return null;
+            }
+
             //APIと言うのか謎
-            var api = NextUrl;
+            var api = PrevUrl = NextUrl;
 
             //html
             var html = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
