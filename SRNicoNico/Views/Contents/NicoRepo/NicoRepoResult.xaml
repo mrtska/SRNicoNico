@@ -15,10 +15,16 @@
              d:DataContext="{d:DesignInstance {x:Type vm:NicoRepoResultViewModel}}"
              >
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <TextBlock Text="{Binding }"/>
 
-        <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding IsActive}"/>
+        <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding IsActive}" Margin="120,90,120,120" Grid.Row="1"/>
 
-        <ListBox SelectedItem="{Binding SelectedItem}" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" HorizontalAlignment="Stretch" ItemsSource="{Binding NicoRepo}" HorizontalContentAlignment="Stretch" >
+        <ListBox SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" HorizontalAlignment="Stretch" ItemsSource="{Binding NicoRepo}" HorizontalContentAlignment="Stretch" Grid.Row="1" >
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="PreviewMouseLeftButtonUp">

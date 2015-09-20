@@ -43,31 +43,28 @@ namespace SRNicoNico.ViewModels {
         public NicoRepoListViewModel(string title, string id) : base(title) {
 
             Id = id;
-            OpenNicoRepoList();
         }
 
 
         //ニコレポリストを開く
         public void OpenNicoRepoList() {
 
-
+            App.ViewModelRoot.Status = "ニコレポ取得中(" + Name + ")";
             Result.IsActive = true;
             Result.OwnerViewModel = this;
             Result.NicoRepo.Clear();
 
-            Task.Run(() => {
 
-                NicoRepo = new NicoNicoNicoRepo(Id);
+            NicoRepo = new NicoNicoNicoRepo(Id);
 
-                NicoNicoNicoRepoData data = NicoRepo.GetNicoRepo();
+            NicoNicoNicoRepoData data = NicoRepo.GetNicoRepo();
 
-                foreach(NicoNicoNicoRepoDataEntry entry in data.DataCollection) {
+            foreach(NicoNicoNicoRepoDataEntry entry in data.DataCollection) {
 
-					Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry));
-                }
+				Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry));
+            }
 
-                Result.IsActive = false;
-            });
+            Result.IsActive = false;
         }
 
         public void NextNicoRepoList() {

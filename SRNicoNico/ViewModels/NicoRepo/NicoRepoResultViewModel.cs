@@ -85,6 +85,7 @@ namespace SRNicoNico.ViewModels {
             //not existsの時など
             if(SelectedItem == null || SelectedItem.Entry.VideoUrl == null) {
 
+                SelectedItem = null;
                 return;
             }
 
@@ -93,18 +94,15 @@ namespace SRNicoNico.ViewModels {
             if(SelectedItem.Entry.VideoUrl.StartsWith("http://www.nicovideo.jp/watch/")) {
 
                 OpenVideo();
-                return;
             }
 
-            
-
+            SelectedItem = null;
         }
 
 
         private void OpenVideo() {
 
             new VideoViewModel(SelectedItem.Entry.VideoUrl);
-            SelectedItem = null;
 
         }
 
