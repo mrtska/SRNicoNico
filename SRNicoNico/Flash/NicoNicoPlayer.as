@@ -196,6 +196,7 @@ package  {
 		private function onNetStatus(e:NetStatusEvent):void {
 			
 			trace("onNetStatus");
+			fscommand(e.info.code);
 			switch(e.info.code) {
 			case "NetStream.Play.Start":
 
@@ -245,6 +246,7 @@ package  {
 		
 		private function onConnect(e:NetStatusEvent):void {
 			
+			fscommand(e.info.code);
 			switch(e.info.code) {
 			case "NetConnection.Connect.Success":
 				ConnectStream();

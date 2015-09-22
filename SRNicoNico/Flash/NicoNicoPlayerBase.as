@@ -2,6 +2,7 @@ package {
 	import flash.display.Sprite;
 	import flash.display.StageScaleMode;
 	import flash.external.ExternalInterface;
+	import comment.CommentRasterizer;
 	
 	//抽象クラスのように使う
 	public class NicoNicoPlayerBase extends Sprite {

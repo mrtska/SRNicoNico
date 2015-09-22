@@ -57,9 +57,9 @@ namespace SRNicoNico.ViewModels {
 
             NicoRepo = new NicoNicoNicoRepo(Id);
 
-            NicoNicoNicoRepoData data = NicoRepo.GetNicoRepo();
+            IList<NicoNicoNicoRepoDataEntry> data = NicoRepo.GetNicoRepo();
 
-            foreach(NicoNicoNicoRepoDataEntry entry in data.DataCollection) {
+            foreach(NicoNicoNicoRepoDataEntry entry in data) {
 
 				Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry));
             }
@@ -75,7 +75,7 @@ namespace SRNicoNico.ViewModels {
 
             Task.Run(() => {
 
-                NicoNicoNicoRepoData data = NicoRepo.NextNicoRepo();
+                IList<NicoNicoNicoRepoDataEntry> data = NicoRepo.NextNicoRepo();
 
                 if(data == null) {
 
@@ -84,7 +84,7 @@ namespace SRNicoNico.ViewModels {
                 }
 
 
-                foreach(NicoNicoNicoRepoDataEntry entry in data.DataCollection) {
+                foreach(NicoNicoNicoRepoDataEntry entry in data) {
 
                     Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry));
                 }

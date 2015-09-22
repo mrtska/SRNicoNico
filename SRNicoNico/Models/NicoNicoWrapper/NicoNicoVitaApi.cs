@@ -26,13 +26,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             ret.Id = response.video.id;
             ret.Title = response.video.title;
-            ret.ViewCounter = response.video.view_counter;
+            ret.ViewCounter = int.Parse(response.video.view_counter);
             ret.CommentCounter = int.Parse(response.thread.num_res);
             ret.MylistCounter = int.Parse(response.video.mylist_counter);
             ret.Length = NicoNicoUtil.GetTimeFromLong(long.Parse(response.video.length_in_seconds));
             ret.Description = response.video.description;
             ret.ThumbnailUrl = response.video.thumbnail_url;
-
+            
             return ret;
         }
     }
@@ -46,7 +46,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public string Title { get; set; }
 
         //再生数
-        public string ViewCounter { get; set; }
+        public int ViewCounter { get; set; }
 
         //コメント数
         public int CommentCounter { get; set; }

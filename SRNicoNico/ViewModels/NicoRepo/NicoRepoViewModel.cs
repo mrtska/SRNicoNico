@@ -73,7 +73,7 @@ namespace SRNicoNico.ViewModels {
 
         public NicoNicoNicoRepoList NicoRepoList = new NicoNicoNicoRepoList();
 
-        public NicoNicoNicoRepoData Data { get; set; }
+        public IList<NicoNicoNicoRepoDataEntry> Data { get; set; }
         
         public NicoRepoViewModel() : base("ニコレポ") {}
 

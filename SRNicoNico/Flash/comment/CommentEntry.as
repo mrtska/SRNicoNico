@@ -1,4 +1,4 @@
-package {
+package comment {
 	import flash.filters.BevelFilter;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;

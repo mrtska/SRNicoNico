@@ -278,11 +278,16 @@ namespace SRNicoNico.ViewModels {
 
                     if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
-
+                        VideoData.VideoType = NicoNicoVideoType.SWF;
                         WebBrowser.Source = new Uri(GetNMPlayerPath());
 
+                    } else if(VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
+
+                        VideoData.VideoType = NicoNicoVideoType.RTMP;
+                        WebBrowser.Source = new Uri(GetRTMPPlayerPath());
                     } else {
 
+                        VideoData.VideoType = NicoNicoVideoType.MP4;
                         WebBrowser.Source = new Uri(GetPlayerPath());
                     }
                     WebBrowser.Focus();
@@ -296,7 +301,7 @@ namespace SRNicoNico.ViewModels {
                 Time.VideoTimeString = NicoNicoUtil.GetTimeFromLong(VideoData.ApiData.Length);
 
 
-                if(VideoData.ApiData.GetFlv.IsPremium) {
+                if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
 
                     Task.Run(() => {
 
@@ -336,6 +341,7 @@ namespace SRNicoNico.ViewModels {
                 //App.ViewModelRoot.StatusBar.Status = "動画取得完了";
             });
         }
+
 
         public void OpenLink(Uri uri) {
 
@@ -548,13 +554,23 @@ namespace SRNicoNico.ViewModels {
 			while(VideoData.ApiData == null) {
 
 				Thread.Sleep(50);
-			}
-
+			} 
+            
             //ここからInvoke可能
             WebBrowser.ObjectForScripting = new ObjectForScriptingHelper(this);
             IsPlaying = true;
+            
+            Console.WriteLine("VideoUrl:" + VideoData.ApiData.GetFlv.VideoUrl);
 
-            InvokeScript("JsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
+            if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
+
+                InvokeScript("JsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken);
+
+            } else {
+
+                InvokeScript("JsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
+            }
+
 
             Volume = Properties.Settings.Default.Volume;
             ChangeVolume(Volume);
@@ -598,12 +614,12 @@ namespace SRNicoNico.ViewModels {
         
         //JSを呼ぶ
         private void InvokeScript(string func, params string[] args) {
-
+            
             
             if(WebBrowser != null && WebBrowser.IsEnabled) {
 
                 try {
-
+                    
                     WebBrowser.InvokeScript(func, args);
 
                 } catch(COMException) {
@@ -624,6 +640,13 @@ namespace SRNicoNico.ViewModels {
 
             var cur = System.IO.Directory.GetCurrentDirectory();
             return cur + "./Flash/NicoNicoNMPlayer.html";
+        }
+
+
+        private string GetRTMPPlayerPath() {
+
+            var cur = System.IO.Directory.GetCurrentDirectory();
+            return cur + "./Flash/NicoNicoRTMPPlayer.html";
         }
 
         public void Reflesh() {

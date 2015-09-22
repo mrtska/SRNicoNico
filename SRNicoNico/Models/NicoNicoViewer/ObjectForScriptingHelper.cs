@@ -15,14 +15,14 @@ namespace SRNicoNico.Models.NicoNicoViewer {
     [ComVisible(true)]
     public class ObjectForScriptingHelper {
 
-
+        
         private readonly VideoViewModel Video;
 
         public ObjectForScriptingHelper(VideoViewModel video) {
-
-
-            Video = video;
-        }
+           
+            
+            Video = video; 
+        } 
 
         public void InvokeFromJavaScript(string func, string args) {
 
@@ -35,8 +35,8 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                     break;
 
                 default:
-                    Console.WriteLine("Invoked From Javascript:" + func);
-                    Console.WriteLine("Args:" + args);
+                    Console.Write("Invoked From Actionscript:" + func);
+                    Console.WriteLine(" Args:" + args);
                     break;
             }
 

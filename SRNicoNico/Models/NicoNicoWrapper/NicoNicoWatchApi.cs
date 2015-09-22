@@ -231,28 +231,31 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //getflvAPIで取得できるデータ
 
         //スレッドID
-        public string ThreadID { get; internal set; }
+        public string ThreadID { get; private set; }
 
         //長さ
-        public uint Length { get; internal set; }
+        public uint Length { get; private set; }
 
         //動画URL
-        public string VideoUrl { get; internal set; }
+        public string VideoUrl { get; private set; }
 
         //コメントサーバーURL
-        public Uri CommentServerUrl { get; internal set; }
+        public Uri CommentServerUrl { get; private set; }
 
         //サブコメントサーバーURL
-        public Uri SubCommentServerUrl { get; internal set; }
-
+        public Uri SubCommentServerUrl { get; private set; }
+        
 		//ユーザーID
-		public string UserId { get; internal set; }
-
-		//プレミアムか否か
-		public bool IsPremium { get; internal set; }
-
+		public string UserId { get; private set; }
+        
+		//プレミアムか否か 
+		public bool IsPremium { get; private set; }
+         
+        //FMSトークン
+        public string FmsToken { get; private set; } 
+         
         //非公開理由
-        public int ClosedReason { get; internal set; }
+        public int ClosedReason { get; private set; }   
 
         public NicoNicoGetFlvData(Dictionary<string, string> wwwData) {
 
@@ -263,7 +266,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             SubCommentServerUrl = new Uri(wwwData["ms_sub"]);
 			UserId = wwwData["user_id"];
 			IsPremium = wwwData["is_premium"] == "1" ? true : false;
+            FmsToken = wwwData.ContainsKey("fmst") ? wwwData["fmst"] : null;
         }
-
     }
+    
+    public enum NicoNicoVideoType {
+
+        MP4,
+        FLV,
+        SWF,
+        RTMP
+    }
+
 }

@@ -46,8 +46,9 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 				RaisePropertyChanged();
 			}
 		}
-		#endregion
+        #endregion
 
+        public NicoNicoVideoType VideoType { get; set; }
 
 
 	}

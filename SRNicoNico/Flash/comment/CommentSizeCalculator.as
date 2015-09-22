@@ -1,4 +1,4 @@
-package {
+package comment {
 	public class CommentSizeCalculator {
 		
 

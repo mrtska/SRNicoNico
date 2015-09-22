@@ -35,7 +35,7 @@
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                    <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+                    <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding Result}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
 

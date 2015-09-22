@@ -52,7 +52,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
 
-        public NicoNicoNicoRepoData GetNicoRepo() {
+        public IList<NicoNicoNicoRepoDataEntry> GetNicoRepo() {
 
             //APIと言うのか謎
             var api = PrevUrl = @"http://www.nicovideo.jp/my/top/" + Id + @"?innerPage=1&mode=next_page";
@@ -60,7 +60,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //html
             var html = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
 
-            NicoNicoNicoRepoData data = new NicoNicoNicoRepoData();
+            IList<NicoNicoNicoRepoDataEntry> data = new List<NicoNicoNicoRepoDataEntry>();
 
             //XPathでhtmlから抜き出す
             HtmlDocument doc = new HtmlDocument();
@@ -73,7 +73,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 entry.ImageUrl = entry.IconUrl = null;
                 entry.Description = "ニコレポが存在しません。";
-                data.DataCollection.Add(entry);
+                data.Add(entry);
 
                 return data;
             }
@@ -112,7 +112,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 entry.Time = nicorepoTimes[i].InnerText.Trim();
 
-                data.DataCollection.Add(entry);
+                data.Add(entry);
             }
                 
             //ニコレポが中途半端に終わっていたら
@@ -123,7 +123,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 NextUrl = "end";
                 entry.ImageUrl = entry.IconUrl = null;
                 entry.Description = "これより過去のニコレポは存在しません。";
-                data.DataCollection.Add(entry);
+                data.Add(entry);
             } else {
 
                 //過去ニコレポのURL
@@ -135,7 +135,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
         //ニコレポの
-        public NicoNicoNicoRepoData NextNicoRepo() {
+        public IList<NicoNicoNicoRepoDataEntry> NextNicoRepo() {
 
             //もう過去の二コレポは存在しない
             if(NextUrl == null || NextUrl.Equals("end")) {
@@ -155,7 +155,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //html
             var html = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
 
-            NicoNicoNicoRepoData data = new NicoNicoNicoRepoData();
+            IList<NicoNicoNicoRepoDataEntry> data = new List<NicoNicoNicoRepoDataEntry>();
 
             //XPathでhtmlから抜き出す
             HtmlDocument doc = new HtmlDocument();
@@ -194,7 +194,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 				entry.Time = nicorepoTimes[i].InnerText.Trim();
 
-                data.DataCollection.Add(entry);
+                data.Add(entry);
             }
 
             if(doc.DocumentNode.SelectSingleNode("/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='no-next-page']") != null) {
@@ -205,7 +205,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 NextUrl = "end";
                 entry.ImageUrl = entry.IconUrl = null;
                 entry.Description = "これより過去のニコレポは存在しません。";
-                data.DataCollection.Add(entry);
+                data.Add(entry);
 
 
             } else {
@@ -220,19 +220,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             return data;
         }
 
+        
+
 
 
     }
-
-    public class NicoNicoNicoRepoData {
-
-
-
-
-        public ObservableSynchronizedCollection<NicoNicoNicoRepoDataEntry> DataCollection = new ObservableSynchronizedCollection<NicoNicoNicoRepoDataEntry>();
-
-    }
-
+    
 
     public class NicoNicoNicoRepoDataEntry {
 
@@ -254,5 +247,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //ニコレポ日時
         public string Time { get; set; }
+
+
+
+
+
     }
 }
