@@ -123,7 +123,7 @@
                                 <ScrollViewer>
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="StatefulModel 0.2.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Run Text="StatefulModel 0.3.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
                                             このライブラリは上記MetroTrilithonの依存ライブラリです。<LineBreak /><LineBreak />
                                             <Hyperlink NavigateUri="https://github.com/ugaya40/StatefulModel" >
                                                 https://github.com/ugaya40/StatefulModel
@@ -221,7 +221,7 @@
                                 <ScrollViewer>
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Livet 1.1.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Run Text="Livet 1.3.1" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
                                             このライブラリはシステムの構成するのに必要な基幹ライブラリです。<LineBreak /><LineBreak />
                                             <Hyperlink NavigateUri="http://ugaya40.hateblo.jp/entry/livet"  >
                                                 http://ugaya40.hateblo.jp/entry/livet

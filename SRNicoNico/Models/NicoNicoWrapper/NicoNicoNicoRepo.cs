@@ -129,9 +129,23 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 entry.Description = desc != null ? desc.InnerText.Trim() : "";
 
+                entry.VideoUrl = desc != null ? desc.Attributes["href"].Value : "";
+
                 HtmlNode time = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-footer']/div/a[contains(@class, 'log-footer-date')]/time");
 
                 entry.Time = time.InnerText.Trim();
+
+                //自分のニコレポだったら
+                HtmlNode delete = node.SelectSingleNode("child::form");
+                if(delete != null) {
+
+                    entry.IsMyNicoRepo = true;
+
+                    entry.LogId = delete.SelectSingleNode("child::input[@name='log_id']").Attributes["value"].Value;
+                    entry.Type = delete.SelectSingleNode("child::input[@name='type']").Attributes["value"].Value;
+                    entry.DeleteTime = delete.SelectSingleNode("child::input[@name='time']").Attributes["value"].Value;
+                    entry.Token = delete.SelectSingleNode("child::input[@name='token']").Attributes["value"].Value;
+                }
 
                 list.Add(entry);
 
@@ -161,7 +175,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
     public class NicoNicoNicoRepoDataEntry {
 
-
         //ニコレポタイトル
         public string Title { get; set; }
 
@@ -174,7 +187,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //ユーザーとかコミュニティのアイコンのURL
         public string IconUrl { get; set; }
 
-        //動画とかその辺のURL
+        //動画サムネイルとかその辺のURL
         public string ImageUrl { get; set; }
 
         //ニコレポ日時
@@ -183,9 +196,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //自分のニコレポかどうか
         public bool IsMyNicoRepo { get; set; }
 
-
-
-
+        //---自分のニコレポのみ---
+        public string LogId { get; set; }       //ニコレポID
+        public string Type { get; set; }        //ニコレポタイプ
+        public string DeleteTime { get; set; }  //時間
+        public string Token { get; set; }       //CSRFトークン
+        //------
 
     }
 }

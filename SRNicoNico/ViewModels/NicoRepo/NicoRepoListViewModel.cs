@@ -61,7 +61,7 @@ namespace SRNicoNico.ViewModels {
 
             foreach(NicoNicoNicoRepoDataEntry entry in data) {
 
-				Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry));
+				Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));
             }
 
             App.ViewModelRoot.Status = "ニコレポ取得完了(" + Name + ")";
@@ -86,7 +86,7 @@ namespace SRNicoNico.ViewModels {
 
                 foreach(NicoNicoNicoRepoDataEntry entry in data) {
 
-                    Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry));
+                    Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));
                 }
 
                 Result.IsActive = false;

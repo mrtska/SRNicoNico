@@ -10,7 +10,6 @@
 		           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
                    Title="ログイン"
-                   HorizontalAlignment="Stretch"
                    FontFamily="Meiryo"
                    FontStyle="Normal"
                    FontWeight="Normal" 
