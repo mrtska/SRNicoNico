@@ -47,7 +47,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			this.mylist_counter = mylist_counter;
 			this.thumbnail_url = thumbnail_url;
 			this.length = length;
-			this.first_retrieve = first_retrieve;
+			this.first_retrieve = first_retrieve.Replace('-', '/');
 		}
 
 	}
@@ -65,7 +65,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//コンストラクタ使用不可
 		private NicoNicoSearchResult() {
 
-			this.List = new List<NicoNicoSearchResultNode>();
+            List = new List<NicoNicoSearchResultNode>();
 
 		}
 

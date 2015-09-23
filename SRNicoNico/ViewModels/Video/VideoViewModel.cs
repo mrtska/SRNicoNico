@@ -287,7 +287,14 @@ namespace SRNicoNico.ViewModels {
                         WebBrowser.Source = new Uri(GetRTMPPlayerPath());
                     } else {
 
-                        VideoData.VideoType = NicoNicoVideoType.MP4;
+                        if(VideoData.ApiData.MovieType == "flv") {
+
+                            VideoData.VideoType = NicoNicoVideoType.FLV;
+                        } else {
+
+                            VideoData.VideoType = NicoNicoVideoType.MP4;
+
+                        }
                         WebBrowser.Source = new Uri(GetPlayerPath());
                     }
                     WebBrowser.Focus();

@@ -48,8 +48,22 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 		}
         #endregion
 
-        public NicoNicoVideoType VideoType { get; set; }
+
+        #region VideoType変更通知プロパティ
+        private NicoNicoVideoType? _VideoType;
+
+        public NicoNicoVideoType? VideoType {
+            get { return _VideoType; }
+            set { 
+                if(_VideoType == value)
+                    return;
+                _VideoType = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
 
-	}
+
+    }
 }

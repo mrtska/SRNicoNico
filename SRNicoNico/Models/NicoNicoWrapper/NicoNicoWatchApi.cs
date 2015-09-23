@@ -101,6 +101,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             //---情報を詰める---
             ret.Cmsid = videoDetail.id;
+            ret.MovieType = json.flashvars.movie_type;
             ret.Title = videoDetail.title;
             ret.Thumbnail = videoDetail.thumbnail;
             ret.Description = videoDetail.description;
@@ -156,6 +157,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public NicoNicoGetFlvData GetFlv { get; set; }
 
         public string Cmsid { get; set; }
+
+        //動画タイプ mp4かflv
+        public string MovieType { get; set; }
 
         //動画タイトル
         public string Title { get; set; }

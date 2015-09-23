@@ -6,6 +6,7 @@ using System.Web;
 
 using Livet;
 using HtmlAgilityPack;
+using Fizzler.Systems.HtmlAgilityPack;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
@@ -27,15 +28,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //マイリスト
         private const string NicoRepoMylistAPI = @"http://www.nicovideo.jp/my/top?innerPage=1&mode=next_page";
-
-        //htmlからいろいろ持ってくるXPath
-        private const string IconUrlXPath = "//a[parent::div[@class='log-author ']]/img";
-        private const string TitleXPath = "//div[parent::div[@class='log-content']][@class='log-body']";
-        private const string ThumbnailXPath = "//a[parent::div[@class='log-target-thumbnail']]/img|//div[parent::div[@class='log-details log-target-none']]";
-        private const string DescriptionXPath = "//a[parent::div[@class='log-target-info']]|//div[parent::div[@class='log-details log-target-none']]";
-        private const string TimeXPath = "//time[parent::a[@class='log-footer-date ']]|//time[parent::a[@class='log-footer-date hot']]";
-
-
 
         //ID ユーザー定義ニコレポリストID
         private string Id;
@@ -64,7 +56,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             //XPathでhtmlから抜き出す
             HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml(html);
+            doc.LoadHtml2(html);
 
             //ニコレポが存在しなかったら存在しないというエントリを返す
             if(doc.DocumentNode.SelectSingleNode("/div[@class='nicorepo']/div[@class='nicorepo-page']/div").Attributes["class"].Value.Equals("empty")) {
@@ -77,59 +69,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 return data;
             }
+
+            StoreData(doc, data);
             
-
-            //アイコンURL取得
-            var iconUrls = doc.DocumentNode.SelectNodes(IconUrlXPath);
-
-            //ニコレポタイトル取得
-            var titles = doc.DocumentNode.SelectNodes(TitleXPath);
-
-            //ニコレポサムネイル取得
-            var thumbNails = doc.DocumentNode.SelectNodes(ThumbnailXPath);
-
-            //ニコレポ取得
-            var descriptions = doc.DocumentNode.SelectNodes(DescriptionXPath);
-
-            //時間取得
-            var nicorepoTimes = doc.DocumentNode.SelectNodes(TimeXPath);
-
-
-            //XPathで取得したデータをエントリに詰める
-            for(int i = 0; i < iconUrls.Count; i++) {
-
-                NicoNicoNicoRepoDataEntry entry = new NicoNicoNicoRepoDataEntry();
-
-                entry.IconUrl = iconUrls[i].Attributes["data-original"].Value;
-
-                entry.Title = titles[i].InnerText.Trim();
-
-                entry.ImageUrl = thumbNails[i].Attributes.Contains("data-original") ? thumbNails[i].Attributes["data-original"].Value : entry.IconUrl;
-
-                entry.VideoUrl = descriptions[i].Name == "a" ? descriptions[i].Attributes["href"].Value : "";
-
-                entry.Description = descriptions[i].Name == "a" ? descriptions[i].InnerText.Trim() : null;
-
-                entry.Time = nicorepoTimes[i].InnerText.Trim();
-
-                data.Add(entry);
-            }
-                
-            //ニコレポが中途半端に終わっていたら
-            if(doc.DocumentNode.SelectSingleNode("/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='no-next-page']") != null) {
-
-                NicoNicoNicoRepoDataEntry entry = new NicoNicoNicoRepoDataEntry();
-
-                NextUrl = "end";
-                entry.ImageUrl = entry.IconUrl = null;
-                entry.Description = "これより過去のニコレポは存在しません。";
-                data.Add(entry);
-            } else {
-
-                //過去ニコレポのURL
-                string attr = HttpUtility.HtmlDecode(doc.DocumentNode.SelectSingleNode("/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='next-page']/a").Attributes["href"].Value);
-                NextUrl = @"http://www.nicovideo.jp" + attr;
-            }
 
             return data;
         }
@@ -159,43 +101,42 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             //XPathでhtmlから抜き出す
             HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml(html);
+            doc.LoadHtml2(html);
 
-            //アイコンURL取得
-            var iconUrls = doc.DocumentNode.SelectNodes(IconUrlXPath);
+            StoreData(doc, data);
 
-            //ニコレポタイトル取得
-            var titles = doc.DocumentNode.SelectNodes(TitleXPath);
+            return data;
+        }
 
-            //ニコレポサムネイル取得
-            var thumbNails = doc.DocumentNode.SelectNodes(ThumbnailXPath);
-
-            //ニコレポ取得
-            var descriptions = doc.DocumentNode.SelectNodes(DescriptionXPath);
-
-            //時間取得
-            var nicorepoTimes = doc.DocumentNode.SelectNodes(TimeXPath);
+        private void StoreData(HtmlDocument doc, IList<NicoNicoNicoRepoDataEntry> list) {
 
 
-            //エントリに詰める
-            for(int i = 0; i < iconUrls.Count; i++) {
+            var timeline = doc.DocumentNode.SelectNodes("//div[@class='timeline']/div");
+
+            //ニコレポタイムライン走査
+            foreach(HtmlNode node in timeline) {
 
                 NicoNicoNicoRepoDataEntry entry = new NicoNicoNicoRepoDataEntry();
 
-                entry.IconUrl = iconUrls[i].Attributes["data-original"].Value;
+                entry.IconUrl = node.SelectSingleNode("child::div[@class='log-author ']/a/img").Attributes["data-original"].Value;
+                entry.Title = node.SelectSingleNode("child::div[@class='log-content']/div[@class='log-body']").InnerText.Trim();
 
-                entry.Title = titles[i].InnerText.Trim();
+                HtmlNode thumbnail = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-target-thumbnail']/a/img");
 
-				entry.ImageUrl = thumbNails[i].Attributes.Contains("data-original") ? thumbNails[i].Attributes["data-original"].Value : entry.IconUrl;
+                entry.ImageUrl = thumbnail != null ? thumbnail.Attributes["data-original"].Value : entry.IconUrl;
 
-				entry.VideoUrl = descriptions[i].Name == "a" ? descriptions[i].Attributes["href"].Value : "";
+                HtmlNode desc = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-target-info']/a");
 
-				entry.Description = descriptions[i].Name == "a" ? descriptions[i].InnerText.Trim() : null;
+                entry.Description = desc != null ? desc.InnerText.Trim() : "";
 
-				entry.Time = nicorepoTimes[i].InnerText.Trim();
+                HtmlNode time = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-footer']/div/a[contains(@class, 'log-footer-date')]/time");
 
-                data.Add(entry);
+                entry.Time = time.InnerText.Trim();
+
+                list.Add(entry);
+
             }
+
 
             if(doc.DocumentNode.SelectSingleNode("/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='no-next-page']") != null) {
 
@@ -205,7 +146,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 NextUrl = "end";
                 entry.ImageUrl = entry.IconUrl = null;
                 entry.Description = "これより過去のニコレポは存在しません。";
-                data.Add(entry);
+                list.Add(entry);
 
 
             } else {
@@ -214,16 +155,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 string attr = HttpUtility.HtmlDecode(doc.DocumentNode.SelectSingleNode("/div[@class='nicorepo']/div[@class='nicorepo-page']/div[@class='next-page']/a").Attributes["href"].Value);
                 NextUrl = @"http://www.nicovideo.jp" + attr;
             }
-
-
-
-            return data;
         }
-
-        
-
-
-
     }
     
 
@@ -247,6 +179,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //ニコレポ日時
         public string Time { get; set; }
+
+        //自分のニコレポかどうか
+        public bool IsMyNicoRepo { get; set; }
 
 
 

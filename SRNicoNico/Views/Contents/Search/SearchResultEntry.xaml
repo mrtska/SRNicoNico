@@ -32,6 +32,7 @@
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Node.view_counter, StringFormat=再生数:{0:N0}}"  />
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Node.comment_counter, StringFormat=コメント数:{0:N0}}"/>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Node.mylist_counter, StringFormat=マイリスト数:{0:N0}}" />
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Node.first_retrieve, StringFormat=投稿日時:{0:N0}}" />
 
         </UniformGrid>
 
