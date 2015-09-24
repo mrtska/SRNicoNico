@@ -43,10 +43,8 @@ namespace SRNicoNico.ViewModels {
 
                 ShowDeleteButton = false;
                 
-                Messenger.Raise(new TransitionMessage(typeof(Views.Contents.NicoRepo.NicoRepoDeleteDialog), this, TransitionMode.Modal));
+                App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.NicoRepo.NicoRepoDeleteDialog), this, TransitionMode.Modal));
 
-                Console.WriteLine("!!!!!!!");
-                Owner.Reflesh();
             }
         }
 
@@ -67,9 +65,9 @@ namespace SRNicoNico.ViewModels {
                 request.Content = new FormUrlEncodedContent(form);
 
                 var response = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
-                Console.WriteLine(response);
 
                 Close();
+                Owner.Reflesh();
             });
             
 

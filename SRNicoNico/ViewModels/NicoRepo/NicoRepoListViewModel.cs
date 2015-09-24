@@ -18,8 +18,6 @@ namespace SRNicoNico.ViewModels {
     public class NicoRepoListViewModel : TabItemViewModel {
 
 
-
-
         private readonly string Id;
 
 
