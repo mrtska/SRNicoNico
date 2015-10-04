@@ -98,6 +98,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public async Task<string> GetAsync(HttpRequestMessage request)  {
 
+            VerifyRequest(request);
+
             HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
             VerifyResponse(response);
@@ -111,6 +113,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
         public async Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage request) {
+
+            VerifyRequest(request);
 
             HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
@@ -127,6 +131,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public async Task<Stream> GetStreamAsync(HttpRequestMessage request) {
 
+            VerifyRequest(request);
+
             HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
             VerifyResponse(response);
@@ -136,7 +142,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public async Task<Stream> GetStreamAsync(string uri) {
 
+
             return await GetStreamAsync(new HttpRequestMessage(HttpMethod.Get, uri));
+        }
+
+
+        private void VerifyRequest(HttpRequestMessage request) {
+
+            App.ViewModelRoot.AccessLog.StartAccessUrl(request);
+
         }
 
         //レスポンスの正当性を確認
@@ -144,7 +158,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             
             Console.WriteLine("Access:" + response.RequestMessage.RequestUri + " ResponseCode:" + response.StatusCode);
-            App.ViewModelRoot.AccessLog.PutAccessUrl(response.RequestMessage.RequestUri.OriginalString);
+            App.ViewModelRoot.AccessLog.EndAccessUrl(response);
 
 
         }

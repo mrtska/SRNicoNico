@@ -43,8 +43,8 @@ namespace SRNicoNico.Views.Behaviors {
 		protected override void OnAttached() {
 			base.OnAttached();
 
-			this.AssociatedObject.Loaded += AssociatedObject_Loaded;
-			this.AssociatedObject.Unloaded += AssociatedObject_Unloaded;
+			AssociatedObject.Loaded += AssociatedObject_Loaded;
+			AssociatedObject.Unloaded += AssociatedObject_Unloaded;
 		}
 
 		

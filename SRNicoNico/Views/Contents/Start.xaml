@@ -43,7 +43,8 @@
                     v0.2<LineBreak /><LineBreak /><LineBreak />
                     v0.21<LineBreak /><LineBreak /><LineBreak />
                     v0.3<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
-                    v0.4
+                    v0.4<LineBreak /><LineBreak /><LineBreak />
+                    v0.41
 
 
                 </TextBlock>
@@ -62,7 +63,8 @@
                     シークバーのバッファリングラインが機能していなかった不具合を修正<LineBreak />
                     動画のインライン表示<LineBreak /><LineBreak />
                     一部RTMP動画（監獄学園（プリズンスクール）など）に対応<LineBreak />
-                    動画視聴画面のUIを一部改修
+                    動画視聴画面のUIを一部改修<LineBreak /><LineBreak />
+                    アクセスログを表示出来るように
                     
 
 
