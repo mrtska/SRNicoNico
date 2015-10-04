@@ -13,15 +13,38 @@
              d:DataContext="{d:DesignInstance {x:Type vm:OtherViewModel}}"
              >
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="135*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180"/>
             <ColumnDefinition Width="69*"/>
         </Grid.ColumnDefinitions>
 
-        <metro:TabView Background="#FF252627" ItemsSource="{Binding OtherCollection}" SelectedValue="{Binding SelectedItem}" />
+        <Grid Grid.RowSpan="2" Background="#FF252627" >
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <ScrollViewer>
+                <metro:TabView ItemsSource="{Binding OtherCollection}" SelectedValue="{Binding SelectedItem}" />
+            </ScrollViewer>
+            <Button Grid.Row="1" Content="アクセスログの表示" Margin="10">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ShowAccessLog"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
 
 
-        <ItemsControl Grid.Column="1" ItemsSource="{Binding OtherCollection}">
+        </Grid>
+        
+       
+
+
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding OtherCollection}" Grid.RowSpan="2">
 
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:OSSViewModel}">

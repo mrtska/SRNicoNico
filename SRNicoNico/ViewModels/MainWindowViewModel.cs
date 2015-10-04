@@ -61,6 +61,8 @@ namespace SRNicoNico.ViewModels {
 
         public ConfigViewModel Config { get; private set; }
 
+        public AccessLogViewModel AccessLog { get; private set; }
+
         public string Status {
             set {
 
@@ -108,6 +110,7 @@ namespace SRNicoNico.ViewModels {
 
 
             StatusBar = new StatusBarViewModel();
+            AccessLog = new AccessLogViewModel();
 
             StatusBar.TimerStart();
 		}

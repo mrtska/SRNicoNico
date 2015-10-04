@@ -1,7 +1,11 @@
 package {
 	import flash.display.Sprite;
 	import flash.display.StageScaleMode;
+	import flash.events.Event;
+	import flash.events.NetStatusEvent;
 	import flash.external.ExternalInterface;
+	import flash.system.fscommand;
+	
 	import comment.CommentRasterizer;
 	
 	//抽象クラスのように使う
@@ -64,6 +68,16 @@ package {
 		
 			rastarizer.load(json);
 		}
+		
+		public function onFrame(e:Event):void {
+		
+		}
+		public function onNetStatus(e:NetStatusEvent):void {
+		
+			fscommand("NetStatus", e.info.code);
+		}
+		
+		
 		
 		public function ToggleComment():void {
 			

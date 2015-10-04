@@ -33,6 +33,7 @@
                    KeyboardNavigation.IsTabStop="False"
                    KeyboardNavigation.TabNavigation="None"
                    x:Name="Root"
+                   Title="NicoNicoViewer"
 				  >
 
     <i:Interaction.Triggers>

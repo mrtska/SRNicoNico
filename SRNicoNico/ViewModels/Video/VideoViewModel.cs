@@ -15,7 +15,7 @@ using Livet.Messaging;
 using SRNicoNico.Views.Contents.Video;
 
 using Codeplex.Data;
-
+using Livet.Messaging.Windows;
 
 namespace SRNicoNico.ViewModels {
 
@@ -655,6 +655,18 @@ namespace SRNicoNico.ViewModels {
             var cur = System.IO.Directory.GetCurrentDirectory();
             return cur + "./Flash/NicoNicoRTMPPlayer.html";
         }
+
+        //RTMP動画でタイムアウトになった時又は予期せぬ理由でエラーになった時
+        public void RTMPTimeOut() {
+
+            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Video.VideoTimeOutDialog), this, TransitionMode.Modal));
+        }
+
+        public void CloseDialog() {
+
+            Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
+        }
+
 
         public void Reflesh() {
 

@@ -33,7 +33,10 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                     
                     Video.CsFrame(float.Parse(arg[0]), float.Parse(arg[1]), long.Parse(arg[2]));
                     break;
+                case "NetConnection.Connect.Closed":
 
+                    Video.RTMPTimeOut();
+                    break;
                 default:
                     Console.Write("Invoked From Actionscript:" + func);
                     Console.WriteLine(" Args:" + args);

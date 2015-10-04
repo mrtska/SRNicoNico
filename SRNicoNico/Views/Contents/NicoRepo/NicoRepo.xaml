@@ -47,7 +47,9 @@
 
         <mui:ModernProgressRing Grid.Row="2" HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}"  />
 
-        <metro:TabView Grid.Row="2" Background="#FF252627" ItemsSource="{Binding NicoRepoListCollection}" SelectedValue="{Binding SelectedList}" />
+        <ScrollViewer Grid.Row="2">
+            <metro:TabView Background="#FF252627" ItemsSource="{Binding NicoRepoListCollection}" SelectedValue="{Binding SelectedList}" />
+        </ScrollViewer>
 
 
         <ItemsControl Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" ItemsSource="{Binding NicoRepoListCollection}">

@@ -144,7 +144,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             
             Console.WriteLine("Access:" + response.RequestMessage.RequestUri + " ResponseCode:" + response.StatusCode);
-
+            App.ViewModelRoot.AccessLog.PutAccessUrl(response.RequestMessage.RequestUri.OriginalString);
 
 
         }

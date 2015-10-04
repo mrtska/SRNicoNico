@@ -110,8 +110,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.ViewCounter = (int) videoDetail.viewCount;
             ret.CommentCounter = (int) videoDetail.commentCount;
             ret.MylistCounter = (int) videoDetail.mylistCount;
-            ret.YesterdayRank = videoDetail.yesterday_rank;
-            ret.HighestRank = videoDetail.highest_rank;
+            ret.YesterdayRank = videoDetail.yesterday_rank == null ? "圏外" : videoDetail.yesterday_rank + "位";
+            ret.HighestRank = videoDetail.highest_rank == null ? "圏外" : videoDetail.highest_rank + "位";
 
 
 #if DEBUG

@@ -119,13 +119,16 @@ package  {
 			//インスタンス作成
 			stream = new NetStream(connection);
 			//stream.soundTransform = new SoundTransform(0.1);
-			
 			//イベントリスナ登録
 			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			stream.addEventListener(AsyncErrorEvent.ASYNC_ERROR, onAsyncError);
+			
+			
 			stream.inBufferSeek = true;
 			//ハードウェアデコーダーは使う
 			stream.useHardwareDecoder = true;
+			stream.bufferTime = 3;
+			
 			var obj:Object = new Object();
 			obj.onMetaData = function(param:Object):void {
 				
@@ -163,7 +166,7 @@ package  {
 		private var prevTime:int = 0;
 		private var prevLoaded:uint = 0;
 		
-		private function onFrame(e:Event):void {
+		public override function onFrame(e:Event):void {
 			
 			// 再生時間を取得
 			var value:Number = stream.time;
@@ -188,20 +191,19 @@ package  {
 		
 		private function onAsyncError(e:AsyncErrorEvent):void {
 			
+			fscommand("AsyncError");
 			trace("onAsyncError");
 			
 			trace(e.text);
 		}
 		
-		private function onNetStatus(e:NetStatusEvent):void {
+		public override function onNetStatus(e:NetStatusEvent):void {
 			
 			trace("onNetStatus");
-			fscommand(e.info.code);
+			super.onNetStatus(e);
 			switch(e.info.code) {
 			case "NetStream.Play.Start":
 
-				
-				
 				break;
 			
 			case "NetStream.Seek.Notify":				

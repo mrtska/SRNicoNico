@@ -25,7 +25,7 @@ namespace SRNicoNico.ViewModels {
 
         public bool ShowDeleteButton { get; set; }
 
-        
+
         public NicoRepoResultEntryViewModel(NicoNicoNicoRepoDataEntry entry, NicoRepoListViewModel owner) {
 
             Owner = owner;
@@ -35,7 +35,7 @@ namespace SRNicoNico.ViewModels {
                 ShowDeleteButton = true;
             }
         }
-
+        
         //ニコレポ削除
         public void DeleteNicoRepo() {
 
@@ -48,7 +48,7 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-
+        
         public void Delete() {
 
 
@@ -77,7 +77,7 @@ namespace SRNicoNico.ViewModels {
         //ダイアログクローズ
         public void Close() {
 
-            Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
+            App.ViewModelRoot.Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
         }
 
 
