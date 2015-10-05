@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
+using System.Web;
 using System;
 
 using Livet;
@@ -16,6 +17,7 @@ using SRNicoNico.Views.Contents.Video;
 
 using Codeplex.Data;
 using Livet.Messaging.Windows;
+using System.Text;
 
 namespace SRNicoNico.ViewModels {
 
@@ -247,7 +249,21 @@ namespace SRNicoNico.ViewModels {
         }
 
 
-        private readonly string VideoUrl;
+        #region VideoUrl変更通知プロパティ
+        private string _VideoUrl;
+
+        public string VideoUrl {
+            get { return _VideoUrl; }
+            set { 
+                if(_VideoUrl == value)
+                    return;
+                _VideoUrl = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
 
         public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
@@ -268,6 +284,12 @@ namespace SRNicoNico.ViewModels {
                 App.ViewModelRoot.StatusBar.Status = "動画情報取得中";
                 //動画情報取得
                 VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
+
+                if(VideoData.ApiData.IsPaidVideo) {
+
+                    App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Video.PaidVideoDialog), this, TransitionMode.Modal));
+                    return;
+                }
 
                 DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
@@ -350,10 +372,9 @@ namespace SRNicoNico.ViewModels {
         }
 
 
-        public void OpenLink(Uri uri) {
+        public void OpenLink(string cmsid) {
 
             
-            string cmsid = uri.OriginalString;
 
             /*
                         if(cmsid.Contains("sm") || cmsid.Contains("nm")) {
@@ -377,7 +398,7 @@ namespace SRNicoNico.ViewModels {
                         }
             */
 
-            if(Keyboard.IsKeyDown(Key.LeftCtrl)) {
+            if(Keyboard.IsKeyDown(Key.LeftCtrl) || VideoData.ApiData.IsPaidVideo) {
 
                 System.Diagnostics.Process.Start(cmsid);
                 return;
@@ -396,6 +417,18 @@ namespace SRNicoNico.ViewModels {
                 return;
             }
 
+        }
+
+        public void OpenTweetDialog() {
+
+            TweetDialogViewModel vm = new TweetDialogViewModel();
+            string url = "https://twitter.com/intent/tweet?hashtags=" + VideoData.ApiData.Cmsid
+                            + "&text=Bad Apple" ;// VideoData.ApiData.Title;// + "(" + VideoData.ApiData.Length + ")";
+            Console.WriteLine(url);
+            url = url.Replace(" ", "%20");
+
+            vm.OriginalUri = new Uri(url);
+            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Misc.TweetDialog), vm, TransitionMode.Modal));
         }
 
         public void ToggleRepeat() {

@@ -110,7 +110,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         private void StoreData(HtmlDocument doc, IList<NicoNicoNicoRepoDataEntry> list) {
 
-
             var timeline = doc.DocumentNode.SelectNodes("//div[@class='timeline']/div");
 
             //ニコレポタイムライン走査
@@ -118,7 +117,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 NicoNicoNicoRepoDataEntry entry = new NicoNicoNicoRepoDataEntry();
 
-                entry.IconUrl = node.SelectSingleNode("child::div[@class='log-author ']/a/img").Attributes["data-original"].Value;
+                entry.IconUrl = node.SelectSingleNode("child::div[contains(@class, 'log-author ')]/a/img").Attributes["data-original"].Value;
                 entry.Title = node.SelectSingleNode("child::div[@class='log-content']/div[@class='log-body']").InnerText.Trim();
 
                 HtmlNode thumbnail = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-target-thumbnail']/a/img");

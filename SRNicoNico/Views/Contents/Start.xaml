@@ -64,7 +64,10 @@
                     動画のインライン表示<LineBreak /><LineBreak />
                     一部RTMP動画（監獄学園（プリズンスクール）など）に対応<LineBreak />
                     動画視聴画面のUIを一部改修<LineBreak /><LineBreak />
-                    アクセスログを表示出来るように
+                    アクセスログを表示出来るように<LineBreak />
+                    フレンドのニコレポが取得できない不具合を修正<LineBreak />
+                    有料動画に対応
+                    
                     
 
 

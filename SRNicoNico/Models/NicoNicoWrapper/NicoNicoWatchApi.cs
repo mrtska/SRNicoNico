@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 
 using Livet;
+using Livet.Messaging;
 
 using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
@@ -52,15 +53,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 
-            var cookie = response.Headers.GetValues("Set-Cookie");
-            foreach(string s in cookie) {
-
-                foreach(string ss in s.Split(';')) {
-
-                    App.SetCookie(new Uri("http://nicovideo.jp/"), ss);
-                }
-
-            }
 
 
 
@@ -94,7 +86,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             source => Uri.UnescapeDataString(source.Substring(source.IndexOf('=') + 1)));
 
             ret.GetFlv = new NicoNicoGetFlvData(getFlv);
-            
+
+
+
 
             //動画情報
             var videoDetail = json.videoDetail;
@@ -113,20 +107,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.YesterdayRank = videoDetail.yesterday_rank == null ? "圏外" : videoDetail.yesterday_rank + "位";
             ret.HighestRank = videoDetail.highest_rank == null ? "圏外" : videoDetail.highest_rank + "位";
 
+            if(ret.Description.Contains("<font size=\"1\"")) {
 
-#if DEBUG
-            FileInfo info = new FileInfo(@"Z:\debug.txt");
-            info.Delete();
-            StreamWriter writer = info.AppendText();
-            writer.WriteLine(ret.Description);
+                ret.Description = ret.Description.Replace("<font size=\"1\"","<font size=\"2.6\"");
 
-            ret.Description = HyperLinkParser.Parse(ret.Description);
-
-            
-            writer.WriteLine("\n" + ret.Description);
-            writer.Flush();
-            writer.Close();
-#endif
+            }
             ret.TagList = new ObservableCollection<VideoTagViewModel>();
 
             foreach(var tag in videoDetail.tagList) {
@@ -143,6 +128,22 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
             //------
 
+
+            if(ret.GetFlv.VideoUrl == null || ret.GetFlv.VideoUrl.Count() == 0) {
+
+                ret.IsPaidVideo = true;
+                return ret;
+            }
+
+            var cookie = response.Headers.GetValues("Set-Cookie");
+            foreach(string s in cookie) {
+
+                foreach(string ss in s.Split(';')) {
+
+                    App.SetCookie(new Uri("http://nicovideo.jp/"), ss);
+                }
+            }
+
             return ret;
         }
 
@@ -152,6 +153,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
     public class WatchApiData : NotificationObject {
+
+        public bool IsPaidVideo { get; set; }
+
 
         //GetFlvAPIの結果
         public NicoNicoGetFlvData GetFlv { get; set; }

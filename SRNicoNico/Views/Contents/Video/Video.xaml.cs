@@ -42,7 +42,7 @@ namespace SRNicoNico.Views.Contents.Video {
 
                     Hyperlink link = (Hyperlink) e.OriginalSource;
 
-                    vm.OpenLink(link.NavigateUri);
+                    vm.OpenLink(link.NavigateUri.OriginalString);
                 }
             }
         }
