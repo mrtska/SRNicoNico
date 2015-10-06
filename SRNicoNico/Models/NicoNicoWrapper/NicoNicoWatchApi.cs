@@ -16,6 +16,7 @@ using Codeplex.Data;
 using System.Collections.ObjectModel;
 using SRNicoNico.ViewModels;
 using SRNicoNico.Models.NicoNicoViewer;
+using System.Text.RegularExpressions;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
@@ -50,11 +51,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 return null;
             }
-
-
-
-
-
 
             string html = response.Content.ReadAsStringAsync().Result;
 
@@ -107,11 +103,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.YesterdayRank = videoDetail.yesterday_rank == null ? "圏外" : videoDetail.yesterday_rank + "位";
             ret.HighestRank = videoDetail.highest_rank == null ? "圏外" : videoDetail.highest_rank + "位";
             ret.Token = json.flashvars.csrfToken;
+
             if(ret.Description.Contains("<font size=\"1\"")) {
 
                 ret.Description = ret.Description.Replace("<font size=\"1\"","<font size=\"2.6\"");
 
             }
+
+            ret.Description = HyperLinkParser.Parse(ret.Description);
+
             ret.TagList = new ObservableCollection<VideoTagViewModel>();
 
             foreach(var tag in videoDetail.tagList) {
@@ -127,7 +127,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 ret.TagList.Add(new VideoTagViewModel(entry)); 
             }
             //------
-
+            
 
             if(ret.GetFlv.VideoUrl == null || ret.GetFlv.VideoUrl.Count() == 0) {
 
