@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Net.Http;
 
 using Livet;
 
@@ -15,6 +15,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //とりあえずマイリスト取得API
         private const string DefListAPI = "http://www.nicovideo.jp/api/deflist/list";
+
+        private const string DefListAddAPI = "http://www.nicovideo.jp/api/deflist/add";
 
         //マイリスト一覧取得API
         private const string MylistGroupAPI = "http://www.nicovideo.jp/api/mylistgroup/list";
@@ -84,7 +86,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
 
-        
+        //とりあえずマイリストに登録
+        public void AddDefMylist(string cmsid) {
+
+            Dictionary<string, string> pair = new Dictionary<string, string>();
+            pair["item_id"] = cmsid;
+
+            HttpRequestMessage request = new HttpRequestMessage();
+
+            request.Content = new FormUrlEncodedContent(pair);
+
+
+            var response = NicoNicoWrapperMain.GetSession().GetResponseAsync(request).Result;
+
+            ;
+        }
 
 
         //とりあえずマイリストを取得する

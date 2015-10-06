@@ -19,7 +19,7 @@ namespace SRNicoNico.ViewModels {
     public class MylistViewModel : TabItemViewModel {
 
 
-        private static NicoNicoMylist MylistInstance = new NicoNicoMylist();
+        public static NicoNicoMylist MylistInstance = new NicoNicoMylist();
 
 
         #region IsActive変更通知プロパティ

@@ -423,12 +423,12 @@ namespace SRNicoNico.ViewModels {
 
             TweetDialogViewModel vm = new TweetDialogViewModel();
             string url = "https://twitter.com/intent/tweet?hashtags=" + VideoData.ApiData.Cmsid
-                            + "&text=Bad Apple" ;// VideoData.ApiData.Title;// + "(" + VideoData.ApiData.Length + ")";
+                            + "&text=" + HttpUtility.UrlEncode(VideoData.ApiData.Title) + "(" + Time.VideoTimeString + ")&url=" + VideoUrl;
             Console.WriteLine(url);
             url = url.Replace(" ", "%20");
-
+            System.Diagnostics.Process.Start(url);
             vm.OriginalUri = new Uri(url);
-            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Misc.TweetDialog), vm, TransitionMode.Modal));
+            //App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Misc.TweetDialog), vm, TransitionMode.Modal));
         }
 
         public void ToggleRepeat() {
@@ -436,8 +436,6 @@ namespace SRNicoNico.ViewModels {
             IsRepeat ^= true;
             Properties.Settings.Default.IsRepeat = IsRepeat;
             Properties.Settings.Default.Save();
-
-
         }
 
         public void ToggleComment() {
@@ -498,12 +496,10 @@ namespace SRNicoNico.ViewModels {
             //ウィンドウを閉じる
             FullScreenWindow.Close();
 
-
             //ウィンドウにFlash部分を追加
             Video.Grid.Children.Add(VideoFlash);
 
             WebBrowser.Focus();
-
         }
 
         //フルスクリーン切り替え
