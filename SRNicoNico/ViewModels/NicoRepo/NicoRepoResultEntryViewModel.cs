@@ -77,7 +77,7 @@ namespace SRNicoNico.ViewModels {
         //ダイアログクローズ
         public void Close() {
 
-            App.ViewModelRoot.Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
+            Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
         }
 
 
