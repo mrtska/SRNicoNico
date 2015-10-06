@@ -68,11 +68,7 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        public MylistViewModel() : base("マイリスト") {
-
-
-
-        }
+        public MylistViewModel() : base("マイリスト") { }
 
 
 
@@ -85,18 +81,15 @@ namespace SRNicoNico.ViewModels {
 
                 MylistListCollection.Clear();
 
-                App.ViewModelRoot.Status = "マイリスト取得中(とりあえずマイリスト)";
+                Status = "マイリスト取得中(とりあえずマイリスト)";
                 MylistListCollection.Add(new MylistListViewModel("とりあえずマイリスト", MylistInstance.GetDefMylist()));
 
                 foreach(NicoNicoMylistGroupData group in MylistInstance.GetMylistGroup()) {
 
-                    App.ViewModelRoot.Status = "マイリスト取得中(" + group.Name + ")";
+                    Status = "マイリスト取得中(" + group.Name + ")";
                     MylistListCollection.Add(new MylistListViewModel(group.Name, MylistInstance.GetMylist(group.Id)));
-
-
-                    
                 }
-                App.ViewModelRoot.Status = "マイリスト取得完了";
+                Status = "マイリスト取得完了";
 
 
                 IsActive = false;

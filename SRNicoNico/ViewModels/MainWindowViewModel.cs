@@ -66,7 +66,7 @@ namespace SRNicoNico.ViewModels {
         public string Status {
             set {
 
-                StatusBar.Status = value;
+                    StatusBar.Status = value;
             }
             get {
 
@@ -74,19 +74,23 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public ObservableCollection<ViewModel> TabItems { get; set; }
+        public ObservableCollection<TabItemViewModel> TabItems { get; set; }
 
 
         #region SelectedTab変更通知プロパティ
-        private ViewModel _SelectedTab;
+        private TabItemViewModel _SelectedTab;
 
-        public ViewModel SelectedTab {
+        public TabItemViewModel SelectedTab {
             get { return _SelectedTab; }
             set { 
                 if(_SelectedTab == value)
                     return;
                 _SelectedTab = value;
                 RaisePropertyChanged();
+                if(value != null) {
+
+                    Status = value.Status;
+                }
             }
         }
         #endregion
@@ -94,9 +98,12 @@ namespace SRNicoNico.ViewModels {
 
         public MainWindowViewModel() {
 
-			SignIn = new SignInDialogViewModel();
+            StatusBar = new StatusBarViewModel();
+            StatusBar.TimerStart();
 
-            TabItems = new ObservableCollection<ViewModel> {
+            SignIn = new SignInDialogViewModel();
+
+            TabItems = new ObservableCollection<TabItemViewModel> {
 
                 (SelectedTab = new StartViewModel()),
                 new SearchViewModel(),
@@ -107,12 +114,8 @@ namespace SRNicoNico.ViewModels {
                 (Config = new ConfigViewModel())
             };
 
-
-
-            StatusBar = new StatusBarViewModel();
             AccessLog = new AccessLogViewModel();
 
-            StatusBar.TimerStart();
 		}
 
 

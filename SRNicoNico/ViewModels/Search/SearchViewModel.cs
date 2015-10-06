@@ -95,11 +95,23 @@ namespace SRNicoNico.ViewModels {
             SearchResult.IsActive = true;
 
             //検索
-            currentSearch = new NicoNicoSearch(SearchResult, SearchText, sort_by[SelectedIndex]);
+            currentSearch = new NicoNicoSearch(this, SearchText, sort_by[SelectedIndex]);
 
 			Task.Run(() => {
 
-                currentSearch.DoSearch();
+                NicoNicoSearchResult result = currentSearch.Search();
+                //検索結果をUIに
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+                    SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
+
+                    SearchResult.List.Clear();
+                    foreach(NicoNicoSearchResultEntry node in result.List) {
+
+                        SearchResult.List.Add(new SearchResultEntryViewModel(node));
+                    }
+
+                }));
                 SearchResult.IsActive = false;
             });
 		}
@@ -109,9 +121,24 @@ namespace SRNicoNico.ViewModels {
             SearchResult.IsActive = true;
             Task.Run(() => {
 
-				currentSearch.SearchNext();
+
+                NicoNicoSearchResult result = currentSearch.Search();
+                //検索結果をUIに
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+                    SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
+
+                    SearchResult.List.Clear();
+                    foreach(NicoNicoSearchResultEntry node in result.List) {
+
+                        SearchResult.List.Add(new SearchResultEntryViewModel(node));
+                    }
+
+                }));
                 SearchResult.IsActive = false;
             });
         }
     }
+
+
 }

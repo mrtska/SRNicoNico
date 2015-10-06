@@ -90,8 +90,8 @@ namespace SRNicoNico.ViewModels {
 		//サインイン
 		public void SignIn() {
 
-			this.StateText = "ログイン中・・・";
-			this.Enabled = false;
+			StateText = "ログイン中・・・";
+			Enabled = false;
 
 			Task.Run(new Action(() => {
 
@@ -100,13 +100,13 @@ namespace SRNicoNico.ViewModels {
 				//サインイン失敗
 				if(status != SigninStatus.Success) {
 
-					this.StateText = "ログインに失敗しました。";
-					this.Enabled = true;
+					StateText = "ログインに失敗しました。";
+					Enabled = true;
 					return;
 				}
 				NicoNicoWrapperMain.Instance.PostInit();
 
-				this.Success = true;
+				Success = true;
 				Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
 
 			}));
@@ -116,10 +116,10 @@ namespace SRNicoNico.ViewModels {
 		public void Close() {
 
 			//ログイン成功
-			if(this.Success) {
+			if(Success) {
 
 				//自動的にログインするにチェックが入っていたら
-				if(this.AutoLogin) {
+				if(AutoLogin) {
 
 					StreamWriter writer = new StreamWriter(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
 
@@ -138,7 +138,7 @@ namespace SRNicoNico.ViewModels {
 		//初期化
 		public void Initialize() {
 
-			this.Enabled = true;
+			Enabled = true;
 		}
 	}
 }

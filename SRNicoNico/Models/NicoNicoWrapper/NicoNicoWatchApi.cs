@@ -106,7 +106,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.MylistCounter = (int) videoDetail.mylistCount;
             ret.YesterdayRank = videoDetail.yesterday_rank == null ? "圏外" : videoDetail.yesterday_rank + "位";
             ret.HighestRank = videoDetail.highest_rank == null ? "圏外" : videoDetail.highest_rank + "位";
-
+            ret.Token = json.flashvars.csrfToken;
             if(ret.Description.Contains("<font size=\"1\"")) {
 
                 ret.Description = ret.Description.Replace("<font size=\"1\"","<font size=\"2.6\"");
@@ -194,6 +194,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //最高ランキング
         public string HighestRank { get; set; }
+
+        //CSRFトークン
+        public string Token { get; set; }
 
         //タグリスト
         #region TagList変更通知プロパティ

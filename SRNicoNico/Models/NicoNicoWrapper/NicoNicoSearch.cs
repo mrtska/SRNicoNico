@@ -30,13 +30,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//取得しているページ
 		private byte CurrentPage = 1;
 
-        private SearchResultViewModel SearchResult;
+        private SearchViewModel SearchVM;
 
 
+		public NicoNicoSearch(SearchViewModel vm, string keyword, string sort) {
 
-		public NicoNicoSearch(SearchResultViewModel vm, string keyword, string sort) {
-
-            SearchResult = vm;
+            SearchVM = vm;
 			Keyword = keyword;
 
 			Sort = "&sort=" + sort.Split(':')[0];
@@ -44,60 +43,98 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 		}
+        //リクエストのレスポンスを返す
+        public NicoNicoSearchResult Search() {
 
-		//検索結果 json デシリアライズはこのクラスでは行わない
-		private string Response() {
+            SearchVM.Status = "検索中(" + Keyword + ")";
 
-			//URLに検索キーワードを入れる
-			string search = SearchURL + "search/" + Keyword + "?mode=watch" + Sort + Order + "&page=" + CurrentPage++;
+            //URLに検索キーワードやその他いろいろをGETリクエストする
+            string search = SearchURL + "search/" + Keyword + "?mode=watch" + Sort + Order + "&page=" + CurrentPage++;
 
-			return NicoNicoWrapperMain.GetSession().GetAsync(search).Result;
-		}
+            string jsonString = NicoNicoWrapperMain.GetSession().GetAsync(search).Result;
 
-		public void DoSearch() {
+            NicoNicoSearchResult result = new NicoNicoSearchResult();
 
-            App.ViewModelRoot.StatusBar.Status = "検索中(" + Keyword + ")";
-			//検索結果をUIに
-			NicoNicoSearchResult result = NicoNicoSearchResult.Deserialize(Response());
+            //取得したJsonの全体
+            var json = DynamicJson.Parse(jsonString);
 
+            //検索結果総数
+            result.Total = (ulong)json.count;
 
-			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+            //Jsonからリストを取得、データを格納
+            foreach(var entry in json.list) {
 
-				SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
+                NicoNicoSearchResultEntry node = new NicoNicoSearchResultEntry(entry.id, entry.title_short, (ulong)entry.view_counter, (ulong)entry.num_res,
+                                                                                (ulong)entry.mylist_counter, entry.thumbnail_url, entry.length, entry.first_retrieve);
 
-				SearchResult.List.Clear();
-				foreach (NicoNicoSearchResultNode node in result.List) {
-
-					SearchResult.List.Add(new SearchResultEntryViewModel(node));
-				}
-                App.ViewModelRoot.StatusBar.Status = "検索完了(" + Keyword + ")";
-
-            }));
-		}
+                result.List.Add(node);
+            }
+            SearchVM.Status = "検索完了(" + Keyword + ")";
 
 
-		private string Next() {
-
-			string search = SearchURL + "search/" + Keyword + "?mode=watch" + Sort + Order + "&page=" + CurrentPage++;
-
-			return NicoNicoWrapperMain.GetSession().GetAsync(search).Result;
-		}
-
-		public void SearchNext() {
-
-            App.ViewModelRoot.StatusBar.Status = "さらに検索中(" + Keyword + ")";
-
-            //検索結果をUIに
-            NicoNicoSearchResult result = NicoNicoSearchResult.Deserialize(Next());
-
-			DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-				foreach (NicoNicoSearchResultNode node in result.List) {
-
-					SearchResult.List.Add(new SearchResultEntryViewModel(node));
-				}
-                App.ViewModelRoot.StatusBar.Status = "検索完了(" + Keyword + ")";
-            }));
-		}
+            return result;
+        }
 	}
+
+
+    public class NicoNicoSearchResult : NotificationObject {
+        /*
+		 * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
+		 */
+
+
+        //検索結果の総数
+        public ulong Total { get; set; }
+        public List<NicoNicoSearchResultEntry> List { get; set; }
+
+        public NicoNicoSearchResult() {
+
+            List = new List<NicoNicoSearchResultEntry>();
+
+        }
+
+
+    }
+
+    public class NicoNicoSearchResultEntry {
+
+        //ID sm9みたいな
+        public string Cmsid { get; private set; }
+
+        //タイトル
+        public string Title { get; private set; }
+
+        //再生回数
+        public ulong ViewCounter { get; private set; }
+
+        //コメント数
+        public ulong CommentCounter { get; private set; }
+
+        //マイリスト数
+        public ulong MylistCounter { get; private set; }
+
+        //サムネイルURL
+        public string ThumbnailUrl { get; private set; }
+
+        //再生時間
+        public string Length { get; private set; }
+
+        //動画投稿時日時
+        public string FirstRetrieve { get; private set; }
+
+
+        //コンストラクタ
+        public NicoNicoSearchResultEntry(string cmsid, string title, ulong view_counter, ulong comment_counter, ulong mylist_counter, string thumbnail_url, string length, string first_retrieve) {
+
+            Cmsid = cmsid;
+            Title = title;
+            ViewCounter = view_counter;
+            CommentCounter = comment_counter;
+            MylistCounter = mylist_counter;
+            ThumbnailUrl = thumbnail_url;
+            Length = length;
+            FirstRetrieve = first_retrieve.Replace('-', '/');
+        }
+
+    }
 }

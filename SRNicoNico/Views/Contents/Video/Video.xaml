@@ -1,15 +1,15 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.Contents.Video.Video"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
-             xmlns:bc="http://www.quickzip.org/BaseControls"
              xmlns:behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
              d:DesignHeight="600"
              d:DesignWidth="825"
@@ -95,22 +95,7 @@
             </StackPanel.Style>
 
             <Border BorderBrush="#FF444444" BorderThickness="1">
-                <StackPanel Margin="3">
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.Cmsid, StringFormat=動画ID : {0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.ViewCounter, StringFormat=再生数 : {0:N0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.CommentCounter, StringFormat=コメント数 : {0:N0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.MylistCounter, StringFormat=マイリスト数 : {0:N0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.HighestRank, StringFormat=過去最高順位 : {0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.YesterdayRank, StringFormat=前日総合順位 : {0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.VideoType, StringFormat=動画タイプ : {0}, TargetNullValue={}}" />
-                    <Button Content="ツイートする">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenTweetDialog"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Button>
-                </StackPanel>
+                <local:VideoInfo />
             </Border>
             <Border BorderBrush="#FF444444" BorderThickness="1" Margin="0,10,0,0" >
                 <StackPanel Margin="3">
@@ -130,7 +115,7 @@
 
                         <ListView.Resources>
                             <DataTemplate DataType="{x:Type vm:VideoTagViewModel}">
-                                <video:VideoTag />
+                                <local:VideoTag />
                             </DataTemplate>
                         </ListView.Resources>
                     </ListView>
@@ -180,8 +165,8 @@
                 </i:Interaction.Triggers>
             </mui:ModernButton>
 
-            <video:VideoFlash Grid.Row="1" />
-            <video:VideoController Grid.Row="2" />
+            <local:VideoFlash Grid.Row="1" />
+            <local:VideoController Grid.Row="2" />
 
             <Grid Grid.Row="3" >
 

@@ -87,19 +87,37 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
         //とりあえずマイリストに登録
-        public void AddDefMylist(string cmsid) {
+        public MylistResult AddDefMylist(string cmsid, string token) {
 
             Dictionary<string, string> pair = new Dictionary<string, string>();
             pair["item_id"] = cmsid;
+            pair["token"] = token;
 
-            HttpRequestMessage request = new HttpRequestMessage();
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, DefListAddAPI);
 
             request.Content = new FormUrlEncodedContent(pair);
 
+            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
 
-            var response = NicoNicoWrapperMain.GetSession().GetResponseAsync(request).Result;
+            var json = DynamicJson.Parse(text);
 
-            ;
+            if(json.error()) {
+
+                if(json.error.code == "EXIST") {
+
+                    return MylistResult.EXIST;
+                }
+                ;
+            }
+            if(json.status()) {
+
+                if(json.status == "ok") {
+
+                    return MylistResult.SUCCESS;
+                }
+            }
+
+            return MylistResult.FAILED;
         }
 
 
@@ -165,6 +183,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 
+    }
+
+    public  enum MylistResult {
+
+        SUCCESS,
+        EXIST,
+        FAILED
     }
 
     //マイリストグループエントリ

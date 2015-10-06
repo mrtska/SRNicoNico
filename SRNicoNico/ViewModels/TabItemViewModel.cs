@@ -68,15 +68,31 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+
+        #region Status変更通知プロパティ
+        private string _Status;
+
+        public string Status {
+            get { return _Status; }
+            set { 
+                if(_Status == value)
+                    return;
+                _Status = value;
+                if(App.ViewModelRoot.SelectedTab == this) {
+
+                    App.ViewModelRoot.Status = value;
+                }
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         public TabItemViewModel(string name) {
 
             Name = name;
         }
 
-        public void Jump(string name) {
-
-            ;
-        }
 
 
 

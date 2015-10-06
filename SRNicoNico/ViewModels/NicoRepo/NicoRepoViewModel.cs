@@ -81,17 +81,18 @@ namespace SRNicoNico.ViewModels {
 
         public void Reflesh() {
 
-            App.ViewModelRoot.StatusBar.Status = "ニコレポ取得中";
+            Status = "ニコレポ取得中";
             IsActive = true;
             DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoRepoListCollection.Clear()));
             
             Task.Run(() => {
 
-                IList<NicoRepoListViewModel> result = NicoRepoList.GetNicoRepoList();
+                IList<NicoNicoNicoRepoListEntry> result = NicoRepoList.GetNicoRepoList();
 
-                foreach(NicoRepoListViewModel vm in result) {
+                foreach(NicoNicoNicoRepoListEntry entry in result) {
 
-                    App.ViewModelRoot.StatusBar.Status = "ニコレポ取得中(" + vm.Name + ")";
+                    NicoRepoListViewModel vm = new NicoRepoListViewModel(this, entry.Title, entry.Id);
+                    Status = "ニコレポ取得中(" + vm.Name + ")";
                     vm.Result.IsActive = true;
                     vm.OpenNicoRepoList();
                     DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoRepoListCollection.Add(vm)));
@@ -100,7 +101,7 @@ namespace SRNicoNico.ViewModels {
 
                 IsActive = false;
 
-                App.ViewModelRoot.StatusBar.Status = "ニコレポ取得完了";
+                Status = "ニコレポ取得完了";
 
             });
         }

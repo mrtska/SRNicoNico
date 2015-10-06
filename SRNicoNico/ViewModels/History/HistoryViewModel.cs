@@ -49,7 +49,7 @@ namespace SRNicoNico.ViewModels {
 
             Task.Run(() => {
 
-                foreach(NicoNicoHistoryData data in new NicoNicoHistory().GetHistroyData()) {
+                foreach(NicoNicoHistoryData data in new NicoNicoHistory(this).GetHistroyData()) {
 
                     HistoryResultEntryViewModel entry = new HistoryResultEntryViewModel() {
 

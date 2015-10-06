@@ -8,9 +8,9 @@ namespace SRNicoNico.ViewModels {
 	public class SearchResultEntryViewModel : ViewModel {
 	
 		//検索結果
-		public NicoNicoSearchResultNode Node { get; private set; }
+		public NicoNicoSearchResultEntry Node { get; private set; }
 
-        public SearchResultEntryViewModel(NicoNicoSearchResultNode node) {
+        public SearchResultEntryViewModel(NicoNicoSearchResultEntry node) {
 
             Node = node;
         }

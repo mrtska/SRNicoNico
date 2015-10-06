@@ -104,7 +104,7 @@ namespace SRNicoNico.ViewModels {
 
             if(SelectedItem != null) {
 
-                new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Node.cmsid);
+                new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Node.Cmsid);
                 SelectedItem = null;
             }
 		}

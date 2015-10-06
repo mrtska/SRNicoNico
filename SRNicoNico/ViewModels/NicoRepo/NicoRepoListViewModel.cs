@@ -38,8 +38,11 @@ namespace SRNicoNico.ViewModels {
 
         private NicoNicoNicoRepo NicoRepo;
 
-        public NicoRepoListViewModel(string title, string id) : base(title) {
+        private NicoRepoViewModel NicoRepoVM;
 
+        public NicoRepoListViewModel(NicoRepoViewModel vm, string title, string id) : base(title) {
+
+            NicoRepoVM = vm;
             Id = id;
             Result = new NicoRepoResultViewModel(title);
         }
@@ -48,7 +51,7 @@ namespace SRNicoNico.ViewModels {
         //ニコレポリストを開く
         public void OpenNicoRepoList() {
 
-            App.ViewModelRoot.Status = "ニコレポ取得中(" + Name + ")";
+            NicoRepoVM.Status = "ニコレポ取得中(" + Name + ")";
             Result.OwnerViewModel = this;
             Result.NicoRepo.Clear();
 
@@ -62,7 +65,7 @@ namespace SRNicoNico.ViewModels {
 				Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));
             }
 
-            App.ViewModelRoot.Status = "ニコレポ取得完了(" + Name + ")";
+            NicoRepoVM.Status = "ニコレポ取得完了(" + Name + ")";
 
             Result.IsActive = false;
         }

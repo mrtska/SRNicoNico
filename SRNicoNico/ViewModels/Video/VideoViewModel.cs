@@ -67,7 +67,22 @@ namespace SRNicoNico.ViewModels {
 				RaisePropertyChanged();
 			}
 		}
-		#endregion
+        #endregion
+
+
+        #region IsInitialized変更通知プロパティ
+        private bool _IsInitialized;
+
+        public bool IsInitialized {
+            get { return _IsInitialized; }
+            set { 
+                if(_IsInitialized == value)
+                    return;
+                _IsInitialized = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
 
         #region IsPlaying変更通知プロパティ
@@ -263,7 +278,7 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
+        public VideoMylistViewModel Mylist { get; set; }
 
         public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
@@ -271,17 +286,18 @@ namespace SRNicoNico.ViewModels {
             App.ViewModelRoot.TabItems.Add(this);
             App.ViewModelRoot.SelectedTab = this;
             Initialize(videoUrl);
-		}
+        }
 
         private void Initialize(string videoUrl) {
 
             IsActive = true;
             Task.Run(() => {
 
+                Mylist = new VideoMylistViewModel(this);
                 VideoData = new VideoData();
 
 
-                App.ViewModelRoot.StatusBar.Status = "動画情報取得中";
+                Status = "動画情報取得中";
                 //動画情報取得
                 VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
 
@@ -334,15 +350,15 @@ namespace SRNicoNico.ViewModels {
 
                     Task.Run(() => {
 
-                        App.ViewModelRoot.StatusBar.Status = "ストーリーボード取得中";
+                        Status = "ストーリーボード取得中";
 
                         NicoNicoStoryBoard sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
                         VideoData.StoryBoardData = sb.GetStoryBoardData();
-                        App.ViewModelRoot.StatusBar.Status = "ストーリーボード取得完了";
+                        Status = "ストーリーボード取得完了";
                     });
                 }
 
-                NicoNicoComment comment = new NicoNicoComment(VideoData.ApiData.GetFlv);
+                NicoNicoComment comment = new NicoNicoComment(VideoData.ApiData.GetFlv, this);
 
                 List<NicoNicoCommentEntry> list = comment.GetComment();
 
@@ -476,7 +492,6 @@ namespace SRNicoNico.ViewModels {
 
             //フルスクリーンウィンドウ表示
             Messenger.Raise(message);
-
             WebBrowser.Focus();
         }
 
@@ -595,7 +610,9 @@ namespace SRNicoNico.ViewModels {
             //ここからInvoke可能
             WebBrowser.ObjectForScripting = new ObjectForScriptingHelper(this);
             IsPlaying = true;
-            
+            IsInitialized = true;
+            Mylist.EnableButtons();
+
             Console.WriteLine("VideoUrl:" + VideoData.ApiData.GetFlv.VideoUrl);
 
             if(VideoData.VideoType == NicoNicoVideoType.RTMP) {

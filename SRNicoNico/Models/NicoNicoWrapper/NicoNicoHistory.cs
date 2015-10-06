@@ -8,6 +8,8 @@ using Livet;
 using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
 
+using SRNicoNico.ViewModels;
+
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoHistory : NotificationObject {
@@ -27,11 +29,23 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //動画情報を取得するXPath
         private const string GetVideoInfoXPath = "//div[parent::div[@id='historyList']]";
 
+
+
+        private HistoryViewModel History;
+
+        public NicoNicoHistory(HistoryViewModel vm) {
+
+            History = vm;
+        }
+
+
+
+
         //たまに失敗するから注意
         public List<NicoNicoHistoryData> GetHistroyData() {
 
 
-            App.ViewModelRoot.StatusBar.Status = "視聴履歴取得中";
+            History.Status = "視聴履歴取得中";
             int retry = 1;
             start:
             //たまに失敗する
@@ -41,7 +55,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //失敗
             if(result.StatusCode == HttpStatusCode.ServiceUnavailable) {
 
-                App.ViewModelRoot.StatusBar.Status = "視聴履歴取得失敗(" + retry++ + "回)";
+                History.Status = "視聴履歴取得失敗(" + retry++ + "回)";
                 goto start;
             }
 
@@ -54,7 +68,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             if(info == null) {
 
-                App.ViewModelRoot.StatusBar.Status = "視聴履歴はありません。";
+                History.Status = "視聴履歴はありません。";
 
                 return ret;
             }
@@ -89,7 +103,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 ret.Add(data);
             }
 
-            App.ViewModelRoot.StatusBar.Status = "視聴履歴取得完了";
+            History.Status = "視聴履歴取得完了";
 
 
             return ret;
