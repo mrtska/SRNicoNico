@@ -51,8 +51,27 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        public MylistListViewModel(string name, List<NicoNicoMylistData> list) : base(name) {
 
+        #region IsActive変更通知プロパティ
+        private bool _IsActive;
+
+        public bool IsActive {
+            get { return _IsActive; }
+            set { 
+                if(_IsActive == value)
+                    return;
+                _IsActive = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        private NicoNicoMylistGroupData Group;
+
+
+        public MylistListViewModel(NicoNicoMylistGroupData group, List<NicoNicoMylistData> list) : base(group.Name) {
+
+            Group = group;
             Mylist = new ObservableCollection<NicoNicoMylistData>(list);
         }
 
@@ -66,6 +85,19 @@ namespace SRNicoNico.ViewModels {
                 }
                 SelectedItem = null;
             }
+        }
+
+
+        public void Reflesh() {
+
+            IsActive = true;
+            Mylist.Clear();
+
+            Task.Run(() => {
+
+                Mylist = new ObservableCollection<NicoNicoMylistData>(MylistViewModel.MylistInstance.GetMylist(Group.Id));
+                IsActive = false;
+            });
         }
 
     }

@@ -13,6 +13,8 @@
              d:DataContext="{d:DesignInstance { x:Type vm:NicoRepoResultEntryViewModel}}"
              BorderThickness="0,1,1,0"
              BorderBrush="#FF333333"
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             
              >
     <i:Interaction.Triggers>
         <l:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}">
@@ -33,11 +35,11 @@
 
         <Image Grid.Column="0" Source="{Binding Entry.ImageUrl,TargetNullValue={x:Null}}" Margin="7,5,0,7" HorizontalAlignment="Left" Width="51" Grid.RowSpan="2"/>
         <Image Grid.Column="1" Grid.Row="0" Source="{Binding Entry.IconUrl, TargetNullValue={x:Null}}" HorizontalAlignment="Center" Height="30" VerticalAlignment="Center" Width="30" />
-        <TextBlock Grid.Column="1" TextWrapping="Wrap" Foreground="#FFAAAAAA" Text="{Binding Entry.Time}" VerticalAlignment="Stretch" Height="20" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Left" />
+        <TextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" TextWrapping="Wrap" Text="{Binding Entry.Time}" Height="20" HorizontalAlignment="Left" />
         <StackPanel Grid.Column="2" >
 
-            <TextBlock Text="{Binding Entry.Title}" TextWrapping="Wrap" Foreground="#FFAAAAAA" />
-            <TextBlock Text="{Binding Entry.Description, TargetNullValue={x:Null}}" TextWrapping="Wrap" Foreground="#FFAAAAAA" />
+            <TextBlock Text="{Binding Entry.Title}" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding Entry.Description, TargetNullValue={x:Null}}" TextWrapping="Wrap" />
 
         </StackPanel>
 

@@ -82,12 +82,16 @@ namespace SRNicoNico.ViewModels {
                 MylistListCollection.Clear();
 
                 Status = "マイリスト取得中(とりあえずマイリスト)";
-                MylistListCollection.Add(new MylistListViewModel("とりあえずマイリスト", MylistInstance.GetDefMylist()));
+                NicoNicoMylistGroupData deflist = new NicoNicoMylistGroupData();
+                deflist.Name = "とりあえずマイリスト";
+                deflist.Id = 0;
+
+                MylistListCollection.Add(new MylistListViewModel(deflist, MylistInstance.GetDefMylist()));
 
                 foreach(NicoNicoMylistGroupData group in MylistInstance.GetMylistGroup()) {
 
                     Status = "マイリスト取得中(" + group.Name + ")";
-                    MylistListCollection.Add(new MylistListViewModel(group.Name, MylistInstance.GetMylist(group.Id)));
+                    MylistListCollection.Add(new MylistListViewModel(group, MylistInstance.GetMylist(group.Id)));
                 }
                 Status = "マイリスト取得完了";
 

@@ -139,6 +139,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //指定したIDのマイリストを取得する
         public List<NicoNicoMylistData> GetMylist(int groupId) {
 
+            //0ならとりあえずマイリストを返す
+            if(groupId == 0) {
+
+                return GetDefMylist();
+            }
 
             const string api = "http://www.nicovideo.jp/api/mylist/list?group_id=";
 
