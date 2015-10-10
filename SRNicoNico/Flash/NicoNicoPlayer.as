@@ -41,9 +41,10 @@ package  {
 		public function NicoNicoPlayer() {
 			
 			super();
+			//OpenVideo("Z:/smile[3].mp4");
 			/*OpenVideo("Z:/smile.flv");
 			//OpenVideo("Z:/smile.swf");
-			//OpenVideo("Z:/smile.mp4");
+			//
 			//OpenVideo("Z:/smile (1).mp4");
 			//var now:Date = new Date();
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());

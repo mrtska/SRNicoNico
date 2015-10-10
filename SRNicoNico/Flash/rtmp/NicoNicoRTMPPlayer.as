@@ -43,7 +43,7 @@ package rtmp  {
 		private var diff:Number = 0;
 		
 		//動画メタデータ
-		private var metadata:Object;
+		private var metadata:*;
 		
 		private var secureNetConnection:SecureNetConnection = new SecureNetConnection("http://res.nimg.jp/swf/player/secure_nccreator.swf?t=201111091500");
 		
@@ -229,7 +229,7 @@ package rtmp  {
 		private var prevTime:int = 0;
 		private var prevLoaded:uint = 0;
 		
-		private function onFrame(e:Event):void {
+		public override function onFrame(e:Event):void {
 			
 			// 再生時間を取得
 			var value:Number = stream.time;
@@ -259,7 +259,7 @@ package rtmp  {
 			trace(e.text);
 		}
 		
-		private function onNetStatus(e:NetStatusEvent):void {
+		public override function onNetStatus(e:NetStatusEvent):void {
 			
 			trace("onNetStatus");
 			fscommand("onNetStatus", e.info.code);

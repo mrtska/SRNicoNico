@@ -11,9 +11,11 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:Behaviors="clr-namespace:SRNicoNico.Views.Behaviors" 
              xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:MylistListViewModel}}"
+
              >
     <Grid>
         <Grid.RowDefinitions>
@@ -32,23 +34,33 @@
 
         <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding IsActive}" Grid.Row="1"/>
 
-        <ListBox SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding Mylist}" Grid.Row="1" >
+        <ListBox dd:DragDrop.DragHandler="{Binding}" dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True" dd:DragDrop.UseDefaultDragAdorner="True" SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding Mylist}" Grid.Row="1" >
 
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                <i:EventTrigger EventName="MouseDoubleClick">
                     <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseUp">
+                    <ei:ChangePropertyAction PropertyName="SelectedItem" Value="{x:Null}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewMouseUp">
+                    <ei:ChangePropertyAction PropertyName="SelectedItem" Value="{x:Null}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
 
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
-
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                    </Style.Resources>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
 
-                <DataTemplate DataType="{x:Type m:NicoNicoMylistData}">
+                <DataTemplate DataType="{x:Type vm:MylistListEntryViewModel}">
                     <local:MylistResultEntry />
                 </DataTemplate>
             </ListBox.ItemTemplate>

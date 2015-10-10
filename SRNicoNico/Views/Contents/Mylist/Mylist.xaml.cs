@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using SRNicoNico.ViewModels;
+
 namespace SRNicoNico.Views.Contents.Mylist {
     /// <summary>
     /// Mylist.xaml の相互作用ロジック

@@ -14,9 +14,11 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Threading.Tasks;
+using GongSolutions.Wpf.DragDrop;
+using System.Windows;
 
 namespace SRNicoNico.ViewModels {
-    public class MylistViewModel : TabItemViewModel {
+    public class MylistViewModel : TabItemViewModel,IDropTarget {
 
 
         public static NicoNicoMylist MylistInstance = new NicoNicoMylist();
@@ -86,31 +88,70 @@ namespace SRNicoNico.ViewModels {
                 deflist.Name = "とりあえずマイリスト";
                 deflist.Id = 0;
 
-                MylistListCollection.Add(new MylistListViewModel(deflist, MylistInstance.GetDefMylist()));
+                MylistListCollection.Add(new MylistListViewModel(this, deflist, MylistInstance.GetDefMylist()));
 
                 foreach(NicoNicoMylistGroupData group in MylistInstance.GetMylistGroup()) {
 
                     Status = "マイリスト取得中(" + group.Name + ")";
-                    MylistListCollection.Add(new MylistListViewModel(group, MylistInstance.GetMylist(group.Id)));
+                    MylistListCollection.Add(new MylistListViewModel(this, group, MylistInstance.GetMylist(group.Id)));
                 }
                 Status = "マイリスト取得完了";
 
 
                 IsActive = false;
             });
+        }
+        
 
-            
+        void IDropTarget.DragOver(IDropInfo dropInfo) {
 
+            if(dropInfo.TargetItem is MylistListViewModel) {
 
+                var target = dropInfo.TargetItem as MylistListViewModel;
+                var item = dropInfo.Data as MylistListEntryViewModel;
 
+                if(SelectedList.Group.Id == target.Group.Id) {
 
+                    return;
+                }
 
+                
+                Status = item.Entry.Title + " を " + item.Owner.Name + " から " + target.Name + " に移動します";
 
+                dropInfo.Effects = DragDropEffects.Move;
+            }
 
-
-
+            ;
         }
 
+        void IDropTarget.Drop(IDropInfo dropInfo) {
 
+            if(dropInfo.TargetItem is MylistListViewModel) {
+
+                var target = dropInfo.TargetItem as MylistListViewModel;
+                var item = dropInfo.Data as MylistListEntryViewModel;
+
+                if(SelectedList.Group.Id == target.Group.Id) {
+
+                    return;
+                }
+
+                target.SelectedItem = null;
+                Status = item.Entry.Title + " を " + item.Owner.Name + " から " + target.Name + " に移動しています";
+
+                Task.Run(() => {
+
+                    MylistInstance.MoveMylist(item, target);
+                    Status = item.Entry.Title + " を " + item.Owner.Name + " から " + target.Name + " に移動しました";
+                    target.Reflesh();
+                    item.Owner.Reflesh();
+
+                });
+
+            }
+
+
+            ;
+        }
     }
 }

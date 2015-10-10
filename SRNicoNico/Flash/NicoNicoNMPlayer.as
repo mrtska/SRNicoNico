@@ -101,7 +101,7 @@ package  {
 		private var prevTime:int = 0;
 		private var prevLoaded:uint = 0;
 		
-		private function onFrame(e:Event):void {
+		public override function onFrame(e:Event):void {
 			
 			// 再生時間を取得
 			var frame:int = movie.currentFrame;

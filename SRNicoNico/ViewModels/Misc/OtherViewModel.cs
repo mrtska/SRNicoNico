@@ -16,7 +16,7 @@ using SRNicoNico.Models.NicoNicoWrapper;
 namespace SRNicoNico.ViewModels {
     public class OtherViewModel : TabItemViewModel {
 
-
+        
 
         #region OtherCollection変更通知プロパティ
         private ObservableCollection<TabItemViewModel> _OtherCollection;

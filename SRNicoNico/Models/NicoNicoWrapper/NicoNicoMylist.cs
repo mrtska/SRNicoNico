@@ -8,6 +8,7 @@ using Livet;
 using Codeplex.Data;
 
 using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.ViewModels;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoMylist : NotificationObject {
@@ -16,7 +17,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //とりあえずマイリスト取得API
         private const string DefListAPI = "http://www.nicovideo.jp/api/deflist/list";
 
+        //とりあえずマイリストに登録するAPI
         private const string DefListAddAPI = "http://www.nicovideo.jp/api/deflist/add";
+
+        //とりあえずマイリスト移動API
+        private const string DefListMoveAPI = "http://www.nicovideo.jp/api/deflist/move";
+
+        //マイリスト移動API
+        private const string MylistMoveAPI = "http://www.nicovideo.jp/api/mylist/move";
 
         //マイリスト一覧取得API
         private const string MylistGroupAPI = "http://www.nicovideo.jp/api/mylistgroup/list";
@@ -34,6 +42,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 NicoNicoMylistData data = new NicoNicoMylistData();
                 data.CreateTime = UnixTime.FromUnixTime((long)entry.create_time).ToString();
                 data.Description = entry.description;
+                data.ItemId = entry.item_id;
 
                 var item = entry.item_data;
 
@@ -76,8 +85,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     data.CommentCounter = (int)item.comment_count;
                     data.MylistCounter = int.Parse(item.mylist_count);
                     data.ThumbNailUrl = item.thumbnail_url;
-
-                
                 }
 
 
@@ -86,39 +93,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
 
-        //とりあえずマイリストに登録
-        public MylistResult AddDefMylist(string cmsid, string token) {
-
-            Dictionary<string, string> pair = new Dictionary<string, string>();
-            pair["item_id"] = cmsid;
-            pair["token"] = token;
-
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, DefListAddAPI);
-
-            request.Content = new FormUrlEncodedContent(pair);
-
-            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
-
-            var json = DynamicJson.Parse(text);
-
-            if(json.error()) {
-
-                if(json.error.code == "EXIST") {
-
-                    return MylistResult.EXIST;
-                }
-                ;
-            }
-            if(json.status()) {
-
-                if(json.status == "ok") {
-
-                    return MylistResult.SUCCESS;
-                }
-            }
-
-            return MylistResult.FAILED;
-        }
 
 
         //とりあえずマイリストを取得する
@@ -184,13 +158,83 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
 
+        //とりあえずマイリストに登録
+        public MylistResult AddDefMylist(string cmsid, string token) {
 
+            Dictionary<string, string> pair = new Dictionary<string, string>();
+            pair["item_id"] = cmsid;
+            pair["token"] = token;
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, DefListAddAPI);
+
+            request.Content = new FormUrlEncodedContent(pair);
+
+            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+
+            var json = DynamicJson.Parse(text);
+
+            if(json.error()) {
+
+                if(json.error.code == "EXIST") {
+
+                    return MylistResult.EXIST;
+                }
+                ;
+            }
+            if(json.status()) {
+
+                if(json.status == "ok") {
+
+                    return MylistResult.SUCCESS;
+                }
+            }
+
+            return MylistResult.FAILED;
+        }
+
+        //マイリストを移動
+        public void MoveMylist(MylistListEntryViewModel source, MylistListViewModel dest) {
+
+
+            Dictionary<string, string> pair = new Dictionary<string, string>();
+            pair["group_id"] = source.Owner.Group.Id.ToString();
+            pair["target_group_id"] = dest.Group.Id.ToString();
+            pair["id_list[0][]"] = source.Entry.ItemId;
+            pair["token"] = GetMylistToken(source.Owner.Group);
+
+
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistMoveAPI);
+
+            if(source.Owner.Group.Id == 0) {
+
+                request.RequestUri = new Uri(DefListMoveAPI);
+            }
+
+            request.Content = new FormUrlEncodedContent(pair);
+
+            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+            ;
+
+
+        }
+
+
+        //マイリストページからCSRFトークンを取得する
+        public string GetMylistToken(NicoNicoMylistGroupData Group) {
+            
+            var api = "http://www.nicovideo.jp/my/mylist/#/" + Group.Id;
+
+            var result = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
+
+            return result.Substring(result.IndexOf("NicoAPI.token = \"") + 17, 60);
+        }
 
 
 
     }
 
-    public  enum MylistResult {
+    public enum MylistResult {
 
         SUCCESS,
         EXIST,
@@ -240,6 +284,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //ID
         public string Id { get; set; }
+        
+        //マイリストアイテムID
+        public string ItemId { get; set; }
 
         //タイトル
         public string Title { get; set; }
