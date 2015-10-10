@@ -584,6 +584,57 @@
                         </Setter.Value>
                     </Setter>
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="gong-wpf-dragdrop">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="gong-wpf-dragdrop 0.1.4.3" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            このライブラリは各種ドラッグアンドドロップ処理を円滑に実装するために必要なライブラリです。<LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="https://github.com/punker76/gong-wpf-dragdrop" >
+                                                https://github.com/punker76/gong-wpf-dragdrop
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : 三条項BSD License<LineBreak />
+                                            BSD 3-Clause License<LineBreak /><LineBreak />
+
+                                            Copyright (c) 2015, Jan Karger (Steven Kirk)<LineBreak />
+                                            All rights reserved.<LineBreak /><LineBreak />
+
+                                            Redistribution and use in source and binary forms, with or without<LineBreak />
+                                            modification, are permitted provided that the following conditions are met:<LineBreak /><LineBreak />
+
+                                            * Redistributions of source code must retain the above copyright notice, this<LineBreak />
+                                              list of conditions and the following disclaimer.<LineBreak /><LineBreak />
+
+                                            * Redistributions in binary form must reproduce the above copyright notice,<LineBreak />
+                                              this list of conditions and the following disclaimer in the documentation<LineBreak />
+                                              and/or other materials provided with the distribution.<LineBreak /><LineBreak />
+
+                                            * Neither the name of gong-wpf-dragdrop nor the names of its<LineBreak />
+                                              contributors may be used to endorse or promote products derived from<LineBreak />
+                                              this software without specific prior written permission.<LineBreak /><LineBreak />
+
+                                            THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"<LineBreak />
+                                            AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE<LineBreak />
+                                            IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE<LineBreak />
+                                            DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE<LineBreak />
+                                            FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL<LineBreak />
+                                            DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR<LineBreak />
+                                            SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER<LineBreak />
+                                            CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,<LineBreak />
+                                            OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE<LineBreak />
+                                            OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.<LineBreak />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
                 <DataTrigger Binding="{Binding Name}" Value="ForcibleLoader">
                     <Setter Property="Template">
                         <Setter.Value>

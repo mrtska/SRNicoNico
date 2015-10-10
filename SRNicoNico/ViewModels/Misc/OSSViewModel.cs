@@ -58,6 +58,7 @@ namespace SRNicoNico.ViewModels {
             OSSCollection.Add(new OSSEntryViewModel("DynamicJson"));
             OSSCollection.Add(new OSSEntryViewModel("Fizzler"));
             OSSCollection.Add(new OSSEntryViewModel("HtmlAgilityPack"));
+            OSSCollection.Add(new OSSEntryViewModel("gong-wpf-dragdrop"));
             OSSCollection.Add(new OSSEntryViewModel("ForcibleLoader"));
 
 
