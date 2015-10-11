@@ -94,7 +94,5 @@ namespace SRNicoNico.ViewModels {
         }
 
 
-
-
     }
 }

@@ -707,12 +707,7 @@ namespace SRNicoNico.ViewModels {
 
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Video.VideoTimeOutDialog), this, TransitionMode.Modal));
         }
-
-        public void CloseDialog() {
-
-            Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
-        }
-
+        
 
         public void Reflesh() {
 

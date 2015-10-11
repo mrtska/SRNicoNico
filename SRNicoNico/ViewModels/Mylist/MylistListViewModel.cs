@@ -63,7 +63,44 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        public NicoNicoMylistGroupData Group;
+
+        #region EditMode変更通知プロパティ
+        private bool _EditMode;
+
+        public bool EditMode {
+            get { return _EditMode; }
+            set { 
+                if(_EditMode == value)
+                    return;
+                _EditMode = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region AllSelect変更通知プロパティ
+        private bool _AllSelect;
+
+        public bool AllSelect {
+            get { return _AllSelect; }
+            set { 
+                if(_AllSelect == value)
+                    return;
+                _AllSelect = value;
+
+
+                foreach(MylistListEntryViewModel entry in Mylist) {
+
+                    entry.IsChecked = value;
+                }
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        public NicoNicoMylistGroupData Group { get; private set; }
 
         public MylistViewModel Owner { get; private set; }
 
@@ -110,6 +147,17 @@ namespace SRNicoNico.ViewModels {
                 IsActive = false;
             });
         }
+
+        public void ShowDeleteDialog() {
+
+
+        }
+
+        public void Delete() {
+
+
+        }
+
 
         void IDragSource.StartDrag(IDragInfo dragInfo) {
 

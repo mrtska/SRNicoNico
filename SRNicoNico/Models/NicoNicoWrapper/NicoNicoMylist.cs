@@ -23,6 +23,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //とりあえずマイリスト移動API
         private const string DefListMoveAPI = "http://www.nicovideo.jp/api/deflist/move";
 
+        //マイリスト作成API
+        private const string MylistCreateAPI = "http://www.nicovideo.jp/api/mylistgroup/add";
+
         //マイリスト移動API
         private const string MylistMoveAPI = "http://www.nicovideo.jp/api/mylist/move";
 
@@ -67,6 +70,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     data.MylistCounter = int.Parse(item.mylist_counter);
                     data.ThumbNailUrl = item.thumbnail_url;
 
+                } else if(data.Type == 5) { //静画
+
+                    data.FirstRetrieve = UnixTime.FromUnixTime((long)item.create_time).ToString();
+                    data.Id = item.id.ToString();
+                    data.Title = item.title;
+                    data.ViewCounter = (int)item.view_count;
+                    data.CommentCounter = (int)item.comment_count;
+                    data.MylistCounter = (int)item.mylist_count;
+                    data.ThumbNailUrl = item.thumbnail_url;
+
                 } else if(data.Type == 6) { //書籍
 
                     data.FirstRetrieve = UnixTime.FromUnixTime((long)item.released_at).ToString();
@@ -86,6 +99,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     data.MylistCounter = int.Parse(item.mylist_count);
                     data.ThumbNailUrl = item.thumbnail_url;
                 }
+
 
 
                 ret.Add(data);
@@ -113,7 +127,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //指定したIDのマイリストを取得する
         public List<NicoNicoMylistData> GetMylist(int groupId) {
 
-            //0ならとりあえずマイリストを返す
+            //0なら"とりあえずマイリスト"を返す
             if(groupId == 0) {
 
                 return GetDefMylist();
@@ -192,16 +206,36 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             return MylistResult.FAILED;
         }
 
+        //マイリストを作成
+        public void CreateMylist(string name, string desc) {
+
+            string token = GetMylistToken();
+
+            Dictionary<string, string> pair = new Dictionary<string, string>();
+            pair["name"] = name;
+            pair["default_sort"] = "1";
+            pair["description"] = desc;
+            pair["token"] = token;
+
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistCreateAPI);
+
+            request.Content = new FormUrlEncodedContent(pair);
+
+            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+            
+        }
+
         //マイリストを移動
         public void MoveMylist(MylistListEntryViewModel source, MylistListViewModel dest) {
 
+            string token = GetMylistToken(source.Owner.Group);
 
             Dictionary<string, string> pair = new Dictionary<string, string>();
             pair["group_id"] = source.Owner.Group.Id.ToString();
             pair["target_group_id"] = dest.Group.Id.ToString();
             pair["id_list[0][]"] = source.Entry.ItemId;
-            pair["token"] = GetMylistToken(source.Owner.Group);
-
+            pair["token"] = token;
 
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistMoveAPI);
@@ -211,12 +245,17 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 request.RequestUri = new Uri(DefListMoveAPI);
             }
 
+
+
             request.Content = new FormUrlEncodedContent(pair);
 
             var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
             ;
 
+            if(dest.Group.Id == 0) {
 
+                AddDefMylist(source.Entry.Id, token);
+            }
         }
 
 
@@ -229,6 +268,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             return result.Substring(result.IndexOf("NicoAPI.token = \"") + 17, 60);
         }
+        public string GetMylistToken() {
+
+            var api = "http://www.nicovideo.jp/my/mylist";
+
+            var result = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
+
+            return result.Substring(result.IndexOf("NicoAPI.token = \"") + 17, 60);
+        }
+
 
 
 

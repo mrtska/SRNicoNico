@@ -43,6 +43,24 @@
                         </Setter.Value>
                     </Setter>
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Entry.Type}" Value="5" >
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Control">
+                                <UniformGrid Grid.Column="1" Columns="2" Margin="10,27,0,0">
+
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Entry.Id, StringFormat=静画ID:mg{0}}"  />
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Entry.ViewCounter, StringFormat=再生数:{0:N0}}"  />
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Entry.CommentCounter, StringFormat=コメント数:{0:N0}}"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Entry.MylistCounter, StringFormat=マイリスト数:{0:N0}}" />
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Entry.CreateTime, StringFormat=登録日時:{0}}" />
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Entry.FirstRetrieve, StringFormat=投稿日時:{0}}" />
+
+                                </UniformGrid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
                 <DataTrigger Binding="{Binding Entry.Type}" Value="6" >
                     <Setter Property="Template">
                         <Setter.Value>

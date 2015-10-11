@@ -39,8 +39,6 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-
-
         #region NicoRepoListCollection変更通知プロパティ
         private DispatcherCollection<MylistListViewModel> _MylistListCollection = new DispatcherCollection<MylistListViewModel>(DispatcherHelper.UIDispatcher);
 
@@ -70,14 +68,23 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+
+
+
+
         public MylistViewModel() : base("マイリスト") { }
 
+        //マイリスト作成
+        public void ShowAddMylistDialog() {
+
+            NewMylistViewModel newlist = new NewMylistViewModel(this);
+            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Mylist.NewMylistDialog), newlist, TransitionMode.Modal));
+        }
 
 
         public void Reflesh() {
 
             IsActive = true;
-
 
             Task.Run(() => {
 
@@ -86,6 +93,7 @@ namespace SRNicoNico.ViewModels {
                 Status = "マイリスト取得中(とりあえずマイリスト)";
                 NicoNicoMylistGroupData deflist = new NicoNicoMylistGroupData();
                 deflist.Name = "とりあえずマイリスト";
+                deflist.Description = "";
                 deflist.Id = 0;
 
                 MylistListCollection.Add(new MylistListViewModel(this, deflist, MylistInstance.GetDefMylist()));

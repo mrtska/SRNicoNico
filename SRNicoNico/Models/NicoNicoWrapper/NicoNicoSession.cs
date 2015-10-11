@@ -75,10 +75,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			HttpHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
 			HttpClient = new HttpClient(HttpHandler, false);
 			HttpClient.DefaultRequestHeaders.Add("user-agent", UserAgent);
-		}
+            HttpClient.Timeout = TimeSpan.FromSeconds(30);
 
-		//オートログイン時
-		public NicoNicoSession(string key, DateTimeOffset expire) {
+        }
+
+        //オートログイン時
+        public NicoNicoSession(string key, DateTimeOffset expire) {
 
 			HttpHandler = new HttpClientHandler();
 			HttpHandler.UseCookies = true;
@@ -86,7 +88,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			HttpHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
 			HttpClient = new HttpClient(HttpHandler, false);
 			HttpClient.DefaultRequestHeaders.Add("user-agent", UserAgent);
-
+            HttpClient.Timeout = TimeSpan.FromSeconds(30);
 			Key = key;
 
 			//Cookieを設定する

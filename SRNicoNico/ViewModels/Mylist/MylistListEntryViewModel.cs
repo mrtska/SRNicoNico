@@ -24,6 +24,23 @@ namespace SRNicoNico.ViewModels {
         public MylistListViewModel Owner { get; set; }
 
 
+        //編集モード時
+        #region IsChecked変更通知プロパティ
+        private bool _IsChecked;
+
+        public bool IsChecked {
+            get { return _IsChecked; }
+            set {
+                if(_IsChecked == value)
+                    return;
+                _IsChecked = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
         public MylistListEntryViewModel(MylistListViewModel vm, NicoNicoMylistData data) {
 
             Owner = vm;

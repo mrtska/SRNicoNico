@@ -10,7 +10,7 @@
 			 xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
              xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
              xmlns:history="clr-namespace:SRNicoNico.Views.Contents.History"
-             d:DesignHeight="1200"
+             d:DesignHeight="2000"
              d:DesignWidth="585"
 			 d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
              mc:Ignorable="d"
@@ -45,8 +45,8 @@
                     v0.3<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.4<LineBreak /><LineBreak /><LineBreak />
                     v0.41<LineBreak /><LineBreak /><LineBreak /><LineBreak />
-                    v0.42
-
+                    v0.42<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
+                    v0.43
 
                 </TextBlock>
                 <TextBlock Grid.Column="1">
@@ -72,7 +72,11 @@
                     ニコレポ削除ダイアログが消えない不具合を修正<LineBreak />
                     簡易ツイートボタン実装<LineBreak />
                     ステータスバーの仕様を改良<LineBreak />
-                    ハイパーリンクパーサーが機能していなかった不具合を修正<LineBreak />
+                    ハイパーリンクパーサーが機能していなかった不具合を修正<LineBreak /><LineBreak />
+                    マイリストエディットモード実装<LineBreak />
+                    ドラッグアンドドロップでマイリスト移動が出来るように<LineBreak />
+                    動画再生はクリックからダブルクリックに変更<LineBreak />
+                    マイリストの静画に対応<LineBreak />
                     
                     
 
