@@ -72,7 +72,7 @@ namespace SRNicoNico.ViewModels {
             Mylist.Status = "新しいマイリスト " + NewMylistName + " を作成しています";
             Task.Run(() => {
 
-                MylistViewModel.MylistInstance.CreateMylist(NewMylistName, NewMylistDescription);
+                MylistViewModel.MylistInstance.CreateMylistGroup(NewMylistName, NewMylistDescription);
 
                 Mylist.Reflesh();
                 Mylist.Status = "新しいマイリスト " + NewMylistName + " を作成しました";

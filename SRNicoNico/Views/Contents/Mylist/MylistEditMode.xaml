@@ -60,7 +60,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock FontSize="18" Foreground="#FFAAAAAA" VerticalAlignment="Center" Text="マイリストタイトル：" />
-                        <TextBox Grid.Column="1" Text="{Binding Name,Mode=TwoWay}" FontSize="16" Margin="0,0,2,0" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Text="{Binding Group.Name,Mode=TwoWay}" FontSize="16" Margin="0,0,2,0" VerticalAlignment="Center"/>
 
                     </Grid>
                 </ContentControl>
@@ -148,13 +148,16 @@
         <Grid Grid.Row="2" Background="#FF222222">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="17*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" >
                 <CheckBox IsChecked="{Binding EditModeViewModel.AllSelect}" Content="すべて選択" Margin="4" />
             </StackPanel>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="4">
+            <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="17" Margin="10,0" Foreground="#FFAAAAAA" Text="{Binding EditModeViewModel.Status}"/>
+            
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,4,4,4">
                 <Button IsEnabled="{Binding EditModeViewModel.IsAnyoneChecked}" Content="削除" ToolTip="選択したマイリストを削除します">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
@@ -179,7 +182,7 @@
                 <Button Content="確定" ToolTip="編集モードを終了します">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <ei:ChangePropertyAction PropertyName="EditMode" TargetObject="{Binding}" Value="False"/>
+                            <l:LivetCallMethodAction MethodTarget="{Binding EditModeViewModel}" MethodName="UpdateMylist"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>

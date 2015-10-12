@@ -53,7 +53,7 @@
                         <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
                     </Style.Resources>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-
+                    <Setter Property="Focusable" Value="False"/>
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
@@ -64,13 +64,37 @@
         </ListBox>
         <StackPanel Grid.Row="2" VerticalAlignment="Top">
 
+            <ContentControl>
+                <ContentControl.Resources>
+                    <Style TargetType="ContentControl">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Process}" Value="削除">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ContentControl" />
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Resources>
+
+                <ComboBox x:Name="box" Width="240" SelectedIndex="0" ItemsSource="{Binding TargetMylist}">
+                    <ComboBox.Resources>
+                        <DataTemplate DataType="{x:Type vm:MylistListViewModel}">
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.Resources>
+                </ComboBox>
+            </ContentControl>
+            
             <TextBlock HorizontalAlignment="Center" FontSize="18" Text="{Binding Process,StringFormat=これらのマイリストを{0}します}"/>
             
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="{Binding Process}" Margin="10">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="DoProcess" />
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="DoProcess" MethodParameter="{Binding ElementName=box,Path=SelectedValue}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>

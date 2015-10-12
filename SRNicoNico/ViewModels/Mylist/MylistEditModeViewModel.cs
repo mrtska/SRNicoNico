@@ -12,6 +12,7 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using SRNicoNico.Models;
+using System.Threading.Tasks;
 
 namespace SRNicoNico.ViewModels {
 
@@ -73,6 +74,21 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region Status変更通知プロパティ
+        private string _Status;
+
+        public string Status {
+            get { return _Status; }
+            set { 
+                if(_Status == value)
+                    return;
+                _Status = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         #region SelectedMylist変更通知プロパティ
         private DispatcherCollection<MylistListEntryViewModel> _SelectedMylist = new DispatcherCollection<MylistListEntryViewModel>(DispatcherHelper.UIDispatcher);
 
@@ -87,6 +103,20 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+
+        #region TargetMylist変更通知プロパティ
+        private DispatcherCollection<MylistListViewModel> _TargetMylist = new DispatcherCollection<MylistListViewModel>(DispatcherHelper.UIDispatcher);
+
+        public DispatcherCollection<MylistListViewModel> TargetMylist {
+            get { return _TargetMylist; }
+            set {
+                if(_TargetMylist == value)
+                    return;
+                _TargetMylist = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         public MylistListViewModel List { get; set; }
 
@@ -110,25 +140,73 @@ namespace SRNicoNico.ViewModels {
                 }
             }
 
+            foreach(MylistListViewModel list in List.Owner.MylistListCollection) {
+
+                if(List != list) {
+
+                    TargetMylist.Add(list);
+                }
+            }
+
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Mylist.EditConfirmDialog), this, TransitionMode.Modal));
         }
 
 
         public void DoProcess(MylistListViewModel list) {
 
-            switch(Process) {
-                case "削除":
-                    
-                    break;
-                case "コピー":
-                    MylistViewModel.MylistInstance.CopyMylist(SelectedMylist, list);
-                    break;
-            }
 
+            Status = "マイリストを" + Process + "しています";
+            Task.Run(() => {
 
+                switch(Process) {
+                    case "削除":
+                        MylistViewModel.MylistInstance.DeleteMylist(SelectedMylist);
+                        break;
+                    case "移動":
+                        MylistViewModel.MylistInstance.MoveMylist(SelectedMylist, list);
+                        break;
+                    case "コピー":
+                        MylistViewModel.MylistInstance.CopyMylist(SelectedMylist, list);
+                        break;
+                }
+                if(Process == "削除") {
+
+                    List.Reflesh();
+                } else {
+
+                    List.Reflesh();
+                    list.Reflesh();
+                }
+
+                Status = "マイリストを" + Process + "しました";
+                List.CloseDialog();
+
+            });
         }
 
+        public void UpdateMylist() {
 
+            if(List.Group.Id == 0) {
+
+                List.EditMode = false;
+                return;
+            }
+
+            if(List.Group.BeforeName == List.Group.Name && List.Group.BeforeDescription == List.Group.Description) {
+
+                List.EditMode = false;
+                return;
+            }
+
+            Task.Run(() => {
+
+                Status = "マイリスト更新中";
+                MylistViewModel.MylistInstance.UpdateMylistGroup(List.Group);
+                List.Name = List.Group.Name;
+                Status = "マイリストを更新しました";
+                List.EditMode = false;
+            });
+        }
 
 
 

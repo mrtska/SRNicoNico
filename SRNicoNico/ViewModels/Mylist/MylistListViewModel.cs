@@ -73,6 +73,11 @@ namespace SRNicoNico.ViewModels {
                 if(_EditMode == value)
                     return;
                 _EditMode = value;
+                if(value) {
+
+                    Group.BeforeName = Group.Name;
+                    Group.BeforeDescription = Group.Description;
+                }
                 RaisePropertyChanged();
             }
         }
@@ -126,6 +131,7 @@ namespace SRNicoNico.ViewModels {
                     Mylist.Add(new MylistListEntryViewModel(this, data));
                 }
 
+                EditModeViewModel.AllSelect = false;
                 EditModeViewModel.IsAnyoneChecked = false;
                 IsActive = false;
             });
@@ -141,7 +147,7 @@ namespace SRNicoNico.ViewModels {
             Owner.Status = Group.Name + " を削除しています";
             Task.Run(() => {
 
-                MylistViewModel.MylistInstance.DeleteMylist(Group.Id);
+                MylistViewModel.MylistInstance.DeleteMylistGroup(Group.Id);
                 CloseDialog();
                 Owner.Reflesh();
                 Owner.Status = Group.Name + " を削除しました";

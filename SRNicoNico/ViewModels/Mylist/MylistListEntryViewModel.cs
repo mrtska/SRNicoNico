@@ -35,6 +35,23 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _IsChecked = value;
                 Owner.EditModeViewModel.IsAnyoneChecked = value;
+
+                int count = 0;
+                foreach(MylistListEntryViewModel entry in Owner.Mylist) {
+
+                    if(entry.IsChecked) {
+
+                        count++;
+                    }
+                }
+                if(count != 0) {
+
+                    Owner.EditModeViewModel.Status = count + "個選択中";
+                } else {
+
+                    Owner.EditModeViewModel.Status = "";
+                }
+
                 RaisePropertyChanged();
             }
         }

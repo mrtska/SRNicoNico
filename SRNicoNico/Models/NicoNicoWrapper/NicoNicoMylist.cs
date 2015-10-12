@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net.Http;
-
+using System.Web;
 using Livet;
 
 using Codeplex.Data;
@@ -18,17 +18,29 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //とりあえずマイリスト取得API
         private const string DefListAPI = "http://www.nicovideo.jp/api/deflist/list";
 
-        //とりあえずマイリストに登録するAPI
+        //とりあえずマイリスト登録API
         private const string DefListAddAPI = "http://www.nicovideo.jp/api/deflist/add";
+
+        //とりあえずマイリストコピーAPI
+        private const string DefListCopyAPI = "http://www.nicovideo.jp/api/deflist/copy";
 
         //とりあえずマイリスト移動API
         private const string DefListMoveAPI = "http://www.nicovideo.jp/api/deflist/move";
 
+        //とりあえずマイリスト削除API
+        private const string DefListDeleteAPI = "http://www.nicovideo.jp/api/deflist/delete";
+
+        //マイリスト一覧取得API
+        private const string MylistGroupAPI = "http://www.nicovideo.jp/api/mylistgroup/list";
+
         //マイリスト作成API
-        private const string MylistCreateAPI = "http://www.nicovideo.jp/api/mylistgroup/add";
+        private const string MylistGroupCreateAPI = "http://www.nicovideo.jp/api/mylistgroup/add";
+
+        //マイリスト更新API
+        private const string MylistGroupUpdateAPI = "http://www.nicovideo.jp/api/mylistgroup/update";
 
         //マイリスト削除API
-        private const string MylistDeleteAPI = "http://www.nicovideo.jp/api/mylistgroup/delete";
+        private const string MylistGroupDeleteAPI = "http://www.nicovideo.jp/api/mylistgroup/delete";
         
         //マイリストコピーAPI
         private const string MylistCopyAPI = "http://www.nicovideo.jp/api/mylist/copy";
@@ -36,8 +48,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //マイリスト移動API
         private const string MylistMoveAPI = "http://www.nicovideo.jp/api/mylist/move";
 
-        //マイリスト一覧取得API
-        private const string MylistGroupAPI = "http://www.nicovideo.jp/api/mylistgroup/list";
+        //マイリスト削除API
+        private const string MylistDeleteAPI = "http://www.nicovideo.jp/api/mylist/delete";
 
         public NicoNicoMylist() {
 
@@ -118,7 +130,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //とりあえずマイリストを取得する
         public List<NicoNicoMylistData> GetDefMylist() {
-
 
             //とりあえずマイリスト
             var json = DynamicJson.Parse(NicoNicoWrapperMain.GetSession().GetAsync(DefListAPI).Result);
@@ -214,7 +225,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
         //マイリストを作成
-        public void CreateMylist(string name, string desc) {
+        public void CreateMylistGroup(string name, string desc) {
 
             string token = GetMylistToken();
 
@@ -225,7 +236,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             pair["token"] = token;
 
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistCreateAPI);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistGroupCreateAPI);
 
             request.Content = new FormUrlEncodedContent(pair);
 
@@ -233,8 +244,29 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             
         }
 
+        public void UpdateMylistGroup(NicoNicoMylistGroupData group) {
 
-        public void DeleteMylist(int groupId) {
+
+            string token = GetMylistToken(group);
+
+            Dictionary<string, string> pair = new Dictionary<string, string>();
+            pair["group_id"] = group.Id.ToString();
+            pair["name"] = group.Name;
+            pair["default_sort"] = "1";
+            pair["description"] = group.Description;
+            pair["token"] = token;
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistGroupUpdateAPI);
+
+            request.Content = new FormUrlEncodedContent(pair);
+
+            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+
+            
+            ;
+        }
+
+        public void DeleteMylistGroup(int groupId) {
 
             string token = GetMylistToken();
 
@@ -243,7 +275,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             pair["token"] = token;
 
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistDeleteAPI);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistGroupDeleteAPI);
 
             request.Content = new FormUrlEncodedContent(pair);
 
@@ -286,19 +318,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
         //マイリストを移動
-        public void MoveMylists(IEnumerable<MylistListEntryViewModel> source, MylistListViewModel dest) {
+        public void MoveMylist(IEnumerable<MylistListEntryViewModel> source, MylistListViewModel dest) {
 
             string token = GetMylistToken(source.First().Owner.Group);
 
             Dictionary<string, string> pair = new Dictionary<string, string>();
             pair["group_id"] = source.First().Owner.Group.Id.ToString();
             pair["target_group_id"] = dest.Group.Id.ToString();
-
-            foreach(MylistListEntryViewModel vm in source) {
-
-                pair.Add("id_list[0][]", vm.Entry.ItemId);
-            }
             pair["token"] = token;
+
+            var encodedContent = new FormUrlEncodedContent(pair);
+
+            var text = encodedContent.ReadAsStringAsync().Result;
+
+            text += MakeIdList(source);
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistMoveAPI);
 
@@ -308,17 +341,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
 
 
-            request.Content = new FormUrlEncodedContent(pair);
+            request.Content = new StringContent(text);
+            request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-            var a = request.Content.ReadAsStringAsync().Result;
-
-            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
-            ;
 
             if(dest.Group.Id == 0) {
 
-                AddDefMylist(source.First().Entry.Id, token);
+                foreach(MylistListEntryViewModel vm in source) {
+
+                    AddDefMylist(vm.Entry.Id, token);
+                }
+            } else {
+
+                var ret = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
             }
+
         }
 
         public void CopyMylist(IEnumerable<MylistListEntryViewModel> source, MylistListViewModel dest) {
@@ -329,34 +366,67 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             Dictionary<string, string> pair = new Dictionary<string, string>();
             pair["group_id"] = source.First().Owner.Group.Id.ToString();
             pair["target_group_id"] = dest.Group.Id.ToString();
-
-            foreach(MylistListEntryViewModel vm in source) {
-
-                pair.Add("id_list[0][]", vm.Entry.ItemId);
-            }
             pair["token"] = token;
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistMoveAPI);
+            var encodedContent = new FormUrlEncodedContent(pair);
+
+            var text = encodedContent.ReadAsStringAsync().Result;
+
+            text += MakeIdList(source);
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistCopyAPI);
 
             if(source.First().Owner.Group.Id == 0) {
 
-                request.RequestUri = new Uri(DefListMoveAPI);
+                request.RequestUri = new Uri(DefListCopyAPI);
             }
 
 
-            request.Content = new FormUrlEncodedContent(pair);
+            request.Content = new StringContent(text);
+            request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-            var a = request.Content.ReadAsStringAsync().Result;
-
-            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
-            ;
 
             if(dest.Group.Id == 0) {
 
-                AddDefMylist(source.First().Entry.Id, token);
-            }
-        }
+                foreach(MylistListEntryViewModel vm in source) {
 
+                    AddDefMylist(vm.Entry.Id, token);
+                }
+            } else {
+
+                var ret = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+            }
+
+
+
+        }
+        //マイリストを削除
+        public void DeleteMylist(IEnumerable<MylistListEntryViewModel> source) {
+
+            string token = GetMylistToken(source.First().Owner.Group);
+
+            Dictionary<string, string> pair = new Dictionary<string, string>();
+            pair["group_id"] = source.First().Owner.Group.Id.ToString();
+            pair["token"] = token;
+
+            var encodedContent = new FormUrlEncodedContent(pair);
+
+            var text = encodedContent.ReadAsStringAsync().Result;
+
+            text += MakeIdList(source);
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistDeleteAPI);
+
+            if(source.First().Owner.Group.Id == 0) {
+
+                request.RequestUri = new Uri(DefListDeleteAPI);
+            }
+
+            request.Content = new StringContent(text);
+            request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+            var ret = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+        }
 
         //マイリストページからCSRFトークンを取得する
         public string GetMylistToken(NicoNicoMylistGroupData Group) {
@@ -376,6 +446,17 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             return result.Substring(result.IndexOf("NicoAPI.token = \"") + 17, 60);
         }
 
+        private string MakeIdList(IEnumerable<MylistListEntryViewModel> source) {
+
+            string text = "&";
+
+            foreach(MylistListEntryViewModel vm in source) {
+
+                text += "id_list[0][]=" + vm.Entry.ItemId + "&";
+            }
+
+            return text.Substring(0, text.Length - 1);
+        }
 
 
 
@@ -409,6 +490,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //ソートオーダー
         public int SortOrder { get; set; }
+
+
+        public string BeforeName { get; set; }
+        public string BeforeDescription { get; set; }
     }
 
     //マイリストエントリ
