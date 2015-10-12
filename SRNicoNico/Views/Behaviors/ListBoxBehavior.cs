@@ -25,9 +25,6 @@ namespace SRNicoNico.Views.Behaviors {
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(ViewModel), typeof(ListBoxBehavior), new PropertyMetadata(null));
 
-
-
-
         public string MethodName {
             get { return (string)GetValue(MethodNameProperty); }
             set { SetValue(MethodNameProperty, value); }
@@ -39,7 +36,6 @@ namespace SRNicoNico.Views.Behaviors {
 
         private ScrollViewer ScrollViewer;
 
-
 		protected override void OnAttached() {
 			base.OnAttached();
 
@@ -47,14 +43,10 @@ namespace SRNicoNico.Views.Behaviors {
 			AssociatedObject.Unloaded += AssociatedObject_Unloaded;
 		}
 
-		
-
 		//ここでScrollViewerのインスタンスを取得する
 		private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
 
-
 			if(VisualTreeHelper.GetChildrenCount(this.AssociatedObject) != 0) {
-
 
 				var border = VisualTreeHelper.GetChild(this.AssociatedObject, 0) as Border;
 				ScrollViewer = border.Child as ScrollViewer;
@@ -63,37 +55,28 @@ namespace SRNicoNico.Views.Behaviors {
 			}
 		}
 
-
 		private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
-
 
 			ScrollViewer.ScrollChanged -= scrollViewer_ScrollChanged;
 		}
 
 		void scrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e) {
 
-				
 			//一番下までスクロールしたら
 			if(e.ExtentHeight != 1 && e.ExtentHeight == (e.VerticalOffset + e.ViewportHeight)) {
 
                 Type type = ViewModel.GetType();
                 MethodInfo method = type.GetMethod(MethodName);
                 method.Invoke(ViewModel, null);
-				this.ScrollViewer.ScrollToVerticalOffset(e.ExtentHeight - e.ViewportHeight);
+                ScrollViewer.ScrollToVerticalOffset(e.ExtentHeight - e.ViewportHeight);
 
 			}
 		}
-
-
-
-
 		protected override void OnDetaching() {
 			base.OnDetaching();
 
-			this.AssociatedObject.Loaded -= AssociatedObject_Loaded;
-			this.AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
-
-
+            AssociatedObject.Loaded -= AssociatedObject_Loaded;
+            AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
 		}
 	}
 }

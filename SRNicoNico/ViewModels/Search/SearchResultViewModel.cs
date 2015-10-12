@@ -36,9 +36,9 @@ namespace SRNicoNico.ViewModels {
 		
 		
 		#region searchResult変更通知プロパティ
-		private ObservableCollection<SearchResultEntryViewModel> _List = new ObservableCollection<SearchResultEntryViewModel>();
+		private DispatcherCollection<SearchResultEntryViewModel> _List = new DispatcherCollection<SearchResultEntryViewModel>(DispatcherHelper.UIDispatcher);
 
-		public ObservableCollection<SearchResultEntryViewModel> List {
+		public DispatcherCollection<SearchResultEntryViewModel> List {
 			get { return _List; }
 			set { 
 				if(_List == value)

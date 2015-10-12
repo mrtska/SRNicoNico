@@ -16,7 +16,8 @@ using SRNicoNico.ViewModels;
 namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoSearch : NotificationObject {
 
-		private readonly string SearchURL = "http://ext.nicovideo.jp/api/search/";
+        //検索API
+        private const string SearchURL = "http://ext.nicovideo.jp/api/search/";
 
 		//検索キーワード
 		private string Keyword;
@@ -78,9 +79,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
     public class NicoNicoSearchResult : NotificationObject {
-        /*
-		 * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
-		 */
 
 
         //検索結果の総数

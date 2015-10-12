@@ -21,12 +21,17 @@
             <RowDefinition Height="16*"/>
             <RowDefinition Height="13*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="NicoNico Viewer" FontSize="36" Grid.RowSpan="2"/>
+        <TextBlock FontSize="36" >
+            NicoNico Viewer <Run FontSize="20">beta 0.43</Run>
+        </TextBlock>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="10,62,0,0" Height="140">
 			このアプリケーションはニコニコ動画をブラウザを起動しなくても見られるようにするアプリケーションです。<LineBreak />
 			権利者からの申し立てなどには速やかに対処します。<LineBreak />
 			このアプリケーションを利用して生じた障害や不利益の責任は一切負いません。自己責任でお使いください。<LineBreak /><LineBreak />
-            GeforceやRadeonよりはIntel HD GraphicsなどのオンボードGPUのほうがパーフォーマンスが良い場合があります。
+            GeforceやRadeonよりはIntel HD GraphicsなどのオンボードGPUのほうがパーフォーマンスが良い場合があります。<LineBreak /><LineBreak /><LineBreak />
+            <Run  FontSize="18" Foreground="Aqua">
+                このバージョンから動画を開くときにはクリックではなくダブルクリックに変更になります                
+            </Run>
         </TextBlock>
 
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24"	VerticalAlignment="Bottom" Text="～更新履歴～" />

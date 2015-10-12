@@ -17,8 +17,6 @@ using System.Collections.ObjectModel;
 namespace SRNicoNico.ViewModels {
     public class VideoTagViewModel : ViewModel {
 
-
-
         #region Tag変更通知プロパティ
         private NicoNicoTag _Tag;
 
@@ -33,13 +31,9 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         public VideoTagViewModel(NicoNicoTag tag) {
 
             Tag = tag;
         }
-
-
-
     }
 }

@@ -20,10 +20,10 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         public ObjectForScriptingHelper(VideoViewModel video) {
            
-            
             Video = video; 
         } 
 
+        //fscommandでActionscriptから呼ばれる
         public void InvokeFromJavaScript(string func, string args) {
 
             string[] arg = args.Split(':');
@@ -42,12 +42,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                     Console.WriteLine(" Args:" + args);
                     break;
             }
-
         }
-
-
-
-
-
     }
 }

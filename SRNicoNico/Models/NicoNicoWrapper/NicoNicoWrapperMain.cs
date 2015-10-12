@@ -2,18 +2,12 @@
 
 using Livet;
 
-using SRNicoNico.Models.NicoNicoViewer;
-
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoWrapperMain : NotificationObject {
-		/*
-		 * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
-		 */
 
 
 		public static NicoNicoWrapperMain Instance;
-
 
 		public NicoNicoSession Session { get; set; }
 
@@ -21,7 +15,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //セッションが確立した後に呼ぶ
         public void PostInit() {
-
 
             User = new NicoNicoUser(Session.UserId);
 			App.ViewModelRoot.Title += "(user:" + User.UserName + ")";
@@ -37,13 +30,5 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			return Instance.Session;
 		}
-
-
-
-		
-
-
-			
-
 	}
 }

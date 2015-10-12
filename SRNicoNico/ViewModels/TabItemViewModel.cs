@@ -16,9 +16,7 @@ using MetroRadiance.Controls;
 
 namespace SRNicoNico.ViewModels {
 
-
     public class TabItemViewModel : ViewModel,ITabItem {
-
 
         #region IsSelected変更通知プロパティ
         private bool _IsSelected;
@@ -34,7 +32,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region Name変更通知プロパティ
         private string _Name;
 
@@ -47,7 +44,6 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        
         #endregion
 
         #region Badge 変更通知プロパティ
@@ -68,7 +64,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region Status変更通知プロパティ
         private string _Status;
 
@@ -87,12 +82,12 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         public TabItemViewModel(string name) {
 
             Name = name;
         }
 
+        //ダイアログを閉じる
         public void CloseDialog() {
 
             Messenger.Raise(new WindowActionMessage(Livet.Messaging.Windows.WindowAction.Close, "WindowAction"));

@@ -19,9 +19,6 @@ using System.Collections.ObjectModel;
 namespace SRNicoNico.ViewModels {
     public class AccessLogViewModel : ViewModel {
 
-
-
-
         #region Text変更通知プロパティ
         private DispatcherCollection<AccessLogEntryViewModel> _LogEntries = new DispatcherCollection<AccessLogEntryViewModel>(DispatcherHelper.UIDispatcher);
 
@@ -38,8 +35,6 @@ namespace SRNicoNico.ViewModels {
 
         private Dictionary<HttpRequestMessage, AccessLogEntryViewModel> HashMap = new Dictionary<HttpRequestMessage, AccessLogEntryViewModel>();
 
-
-
         public void StartAccessUrl(HttpRequestMessage request) {
 
 
@@ -51,9 +46,7 @@ namespace SRNicoNico.ViewModels {
 
             HashMap[request] = vm;
 
-
             LogEntries.Add(vm);
-           
         }
 
         public void EndAccessUrl(HttpResponseMessage response) {
@@ -64,8 +57,6 @@ namespace SRNicoNico.ViewModels {
 
                 vm.Status = "完了";
             }
-
         }
-
     }
 }

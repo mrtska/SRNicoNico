@@ -17,9 +17,6 @@ namespace SRNicoNico.ViewModels {
     public class HistoryResultEntryViewModel : ViewModel {
 
 		//これをViewModelと呼んでいいのか謎だがとても重要なもの
-
-
-
         public NicoNicoHistoryData Data { get; set; }
     }
 }

@@ -38,9 +38,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             History = vm;
         }
 
-
-
-
         //たまに失敗するから注意
         public List<NicoNicoHistoryData> GetHistroyData() {
 
@@ -104,7 +101,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
 
             History.Status = "視聴履歴取得完了";
-
 
             return ret;
         }

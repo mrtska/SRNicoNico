@@ -118,16 +118,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     data.MylistCounter = int.Parse(item.mylist_count);
                     data.ThumbNailUrl = item.thumbnail_url;
                 }
-
-
-
                 ret.Add(data);
             }
         }
-
-
-
-
         //とりあえずマイリストを取得する
         public List<NicoNicoMylistData> GetDefMylist() {
 
@@ -139,7 +132,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             StoreItem(json, ret);
 
             return ret;
-
         }
 
         //指定したIDのマイリストを取得する
@@ -163,13 +155,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             return ret;
         }
 
-
+        //自分のマイリストを取得
         public List<NicoNicoMylistGroupData> GetMylistGroup() {
 
             List<NicoNicoMylistGroupData> ret = new List<NicoNicoMylistGroupData>();
 
-
-            //指定した
+            //マイリスト取得
             var json = DynamicJson.Parse(NicoNicoWrapperMain.GetSession().GetAsync(MylistGroupAPI).Result);
             foreach(var entry in json.mylistgroup) {
 
@@ -184,11 +175,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 ret.Add(data);
             }
-
-
             return ret;
         }
-
 
         //とりあえずマイリストに登録
         public MylistResult AddDefMylist(string cmsid, string token) {
@@ -205,13 +193,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             var json = DynamicJson.Parse(text);
 
+            //エラー時
             if(json.error()) {
 
+                //もうすでに登録済み
                 if(json.error.code == "EXIST") {
 
                     return MylistResult.EXIST;
                 }
-                ;
             }
             if(json.status()) {
 
@@ -220,7 +209,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     return MylistResult.SUCCESS;
                 }
             }
-
+            //失敗
             return MylistResult.FAILED;
         }
 
@@ -244,6 +233,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             
         }
 
+        //マイリストの情報を更新
         public void UpdateMylistGroup(NicoNicoMylistGroupData group) {
 
 
@@ -261,11 +251,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             request.Content = new FormUrlEncodedContent(pair);
 
             var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
-
-            
-            ;
         }
 
+        //指定したマイリストを削除
         public void DeleteMylistGroup(int groupId) {
 
             string token = GetMylistToken();
@@ -274,15 +262,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             pair["group_id"] = groupId.ToString();
             pair["token"] = token;
 
-
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistGroupDeleteAPI);
 
             request.Content = new FormUrlEncodedContent(pair);
 
             var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
-
-            ;
-
         }
 
         //マイリストを移動
@@ -299,18 +283,17 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistMoveAPI);
 
+            //とりあえずマイリストだったら
             if(source.Owner.Group.Id == 0) {
 
                 request.RequestUri = new Uri(DefListMoveAPI);
             }
 
-
-
             request.Content = new FormUrlEncodedContent(pair);
 
             var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
-            ;
 
+            //移動先がとりあえずマイリストだったら
             if(dest.Group.Id == 0) {
 
                 AddDefMylist(source.Entry.Id, token);
@@ -327,24 +310,30 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             pair["target_group_id"] = dest.Group.Id.ToString();
             pair["token"] = token;
 
+            //id_list以外のペアを指定
             var encodedContent = new FormUrlEncodedContent(pair);
 
+            //エンコードされたデータを取得
             var text = encodedContent.ReadAsStringAsync().Result;
 
+            //id_listを付け足す
             text += MakeIdList(source);
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistMoveAPI);
 
+            //ソースがとりあえずマイリストだったら
             if(source.First().Owner.Group.Id == 0) {
 
                 request.RequestUri = new Uri(DefListMoveAPI);
             }
 
-
+            //データｗ指定
             request.Content = new StringContent(text);
+
+            //コンテンツタイプを設定
             request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-
+            //移動先がとりあえずマイリストだったら
             if(dest.Group.Id == 0) {
 
                 foreach(MylistListEntryViewModel vm in source) {
@@ -358,8 +347,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         }
 
+        //マイリストをコピー
         public void CopyMylist(IEnumerable<MylistListEntryViewModel> source, MylistListViewModel dest) {
-
 
             string token = GetMylistToken(source.First().Owner.Group);
 
@@ -380,7 +369,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 request.RequestUri = new Uri(DefListCopyAPI);
             }
-
 
             request.Content = new StringContent(text);
             request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
@@ -446,6 +434,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             return result.Substring(result.IndexOf("NicoAPI.token = \"") + 17, 60);
         }
 
+        //IDリストを作成
         private string MakeIdList(IEnumerable<MylistListEntryViewModel> source) {
 
             string text = "&";
@@ -457,11 +446,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             return text.Substring(0, text.Length - 1);
         }
-
-
-
     }
 
+    //マイリスト結果
     public enum MylistResult {
 
         SUCCESS,

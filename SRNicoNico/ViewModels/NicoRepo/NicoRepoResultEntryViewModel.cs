@@ -18,13 +18,13 @@ using SRNicoNico.Models.NicoNicoWrapper;
 namespace SRNicoNico.ViewModels {
     public class NicoRepoResultEntryViewModel : ViewModel {
 
-
+        //エントリ
         public NicoNicoNicoRepoDataEntry Entry { get; private set; }
 
         public NicoRepoListViewModel Owner;
 
+        //自分のニコレポには削除ボタンを表示する
         public bool ShowDeleteButton { get; set; }
-
 
         public NicoRepoResultEntryViewModel(NicoNicoNicoRepoDataEntry entry, NicoRepoListViewModel owner) {
 
@@ -44,13 +44,11 @@ namespace SRNicoNico.ViewModels {
                 ShowDeleteButton = false;
                 
                 App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.NicoRepo.NicoRepoDeleteDialog), this, TransitionMode.Modal));
-
             }
         }
 
-        
+        //ニコレポ削除処理
         public void Delete() {
-
 
             Task.Run(() => {
 
@@ -69,17 +67,12 @@ namespace SRNicoNico.ViewModels {
                 Close();
                 Owner.Reflesh();
             });
-            
-
         }
-
 
         //ダイアログクローズ
         public void Close() {
 
             Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
         }
-
-
     }
 }

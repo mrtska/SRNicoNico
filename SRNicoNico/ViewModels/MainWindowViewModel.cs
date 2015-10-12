@@ -23,7 +23,6 @@ using System.Collections.ObjectModel;
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
 
-
 		#region Title変更通知プロパティ
 		private string _Title = "NicoNicoViewer ";
 
@@ -37,8 +36,6 @@ namespace SRNicoNico.ViewModels {
 			}
 		}
         #endregion
-
-
 
         #region WindowState変更通知プロパティ
         private WindowState _WindowState;
@@ -54,7 +51,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         public SignInDialogViewModel SignIn { get; private set; }
 
         public StatusBarViewModel StatusBar { get; private set; }
@@ -65,11 +61,9 @@ namespace SRNicoNico.ViewModels {
 
         public string Status {
             set {
-
                     StatusBar.Status = value;
             }
             get {
-
                 return StatusBar.Status;
             }
         }
@@ -95,7 +89,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         public MainWindowViewModel() {
 
             StatusBar = new StatusBarViewModel();
@@ -118,9 +111,7 @@ namespace SRNicoNico.ViewModels {
 
 		}
 
-
 		public void Initialize() {
-
             
 			//Modelsを初期化
 			Task.Run(() => {
@@ -180,9 +171,7 @@ namespace SRNicoNico.ViewModels {
 					Messenger.Raise(new TransitionMessage(typeof(Views.SignInDialog), this.SignIn, TransitionMode.Modal));
 					return;
 				}
-
 			});
-            
 		}
 
 		//終了処理
@@ -191,14 +180,8 @@ namespace SRNicoNico.ViewModels {
 			if(disposing) {
 
                 NicoNicoWrapperMain.GetSession().Dispose();
-
-
 			}
-
-
-
 			base.Dispose(disposing);
 		}
-
 	}
 }

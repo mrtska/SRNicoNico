@@ -83,11 +83,13 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
+        //リスト情報
         public NicoNicoMylistGroupData Group { get; private set; }
 
+        //オーナー
         public MylistViewModel Owner { get; private set; }
 
+        //エディットモード時
         public MylistEditModeViewModel EditModeViewModel { get; set; }
 
         public MylistListViewModel(MylistViewModel vm, NicoNicoMylistGroupData group, List<NicoNicoMylistData> list) : base(group.Name) {
@@ -103,6 +105,7 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+        //選択したマイリストを開く
         public void Open() {
 
             if(SelectedItem != null) {
@@ -115,7 +118,7 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-
+        //更新
         public void Reflesh() {
 
             IsActive = true;
@@ -125,23 +128,25 @@ namespace SRNicoNico.ViewModels {
 
                 Mylist = new DispatcherCollection<MylistListEntryViewModel>(DispatcherHelper.UIDispatcher);
 
-
                 foreach(NicoNicoMylistData data in MylistViewModel.MylistInstance.GetMylist(Group.Id)) {
 
                     Mylist.Add(new MylistListEntryViewModel(this, data));
                 }
 
+                //エディットモードの情報をクリア
                 EditModeViewModel.AllSelect = false;
                 EditModeViewModel.IsAnyoneChecked = false;
                 IsActive = false;
             });
         }
 
+        //マイリスト削除ダイアログ表示
         public void ShowDeleteDialog() {
 
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Mylist.DeleteMylistDialog), this, TransitionMode.Modal));
         }
 
+        //マイリスト削除
         public void DeleteMylist() {
 
             Owner.Status = Group.Name + " を削除しています";
@@ -155,7 +160,7 @@ namespace SRNicoNico.ViewModels {
             });
         }
 
-
+        //ドラッグ開始
         void IDragSource.StartDrag(IDragInfo dragInfo) {
 
             dragInfo.Data = SelectedItem;

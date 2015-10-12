@@ -38,7 +38,6 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-
         public void OpenHistory() {
 
 
@@ -55,7 +54,6 @@ namespace SRNicoNico.ViewModels {
 
                         Data = data
                     };
-
 
                     History.List.Add(entry);
                 }

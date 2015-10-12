@@ -16,13 +16,11 @@ using SRNicoNico.Models.NicoNicoWrapper;
 namespace SRNicoNico.ViewModels {
     public class MylistListEntryViewModel : ViewModel {
 
-
-
+        //エントリ
         public NicoNicoMylistData Entry { get; set; }
 
-
+        //リスト
         public MylistListViewModel Owner { get; set; }
-
 
         //編集モード時
         #region IsChecked変更通知プロパティ
@@ -51,21 +49,15 @@ namespace SRNicoNico.ViewModels {
 
                     Owner.EditModeViewModel.Status = "";
                 }
-
                 RaisePropertyChanged();
             }
         }
         #endregion
-
-
 
         public MylistListEntryViewModel(MylistListViewModel vm, NicoNicoMylistData data) {
 
             Owner = vm;
             Entry = data;
         }
-
-
-
     }
 }

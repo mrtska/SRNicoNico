@@ -16,8 +16,6 @@ using SRNicoNico.Models.NicoNicoWrapper;
 namespace SRNicoNico.ViewModels {
     public class NicoRepoResultViewModel : ViewModel {
 
-
-
         #region IsActive変更通知プロパティ
         private bool _IsActive;
 
@@ -31,7 +29,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region OwnerViewModel変更通知プロパティ
         private ViewModel _OwnerViewModel;
@@ -47,7 +44,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region NicoRepo変更通知プロパティ
         private DispatcherCollection<NicoRepoResultEntryViewModel> _NicoRepo = new DispatcherCollection<NicoRepoResultEntryViewModel>(DispatcherHelper.UIDispatcher);
 
@@ -62,7 +58,6 @@ namespace SRNicoNico.ViewModels {
         }
 		#endregion
 
-
 		#region SelectedItem変更通知プロパティ
 		private NicoRepoResultEntryViewModel _SelectedItem;
 
@@ -76,7 +71,6 @@ namespace SRNicoNico.ViewModels {
 			}
 		}
         #endregion
-
 
         #region Title変更通知プロパティ
         private string _Title;
@@ -97,9 +91,6 @@ namespace SRNicoNico.ViewModels {
             Title = title;
         }
 
-
-
-
         public void Open() {
 
             //not existsの時など
@@ -108,8 +99,6 @@ namespace SRNicoNico.ViewModels {
                 SelectedItem = null;
                 return;
             }
-
-
 			//ニコレポが動画だったら動画を開く
             if(SelectedItem.Entry.VideoUrl.StartsWith("http://www.nicovideo.jp/watch/")) {
 
@@ -125,8 +114,5 @@ namespace SRNicoNico.ViewModels {
             new VideoViewModel(SelectedItem.Entry.VideoUrl);
 
         }
-
-
-
     }
 }

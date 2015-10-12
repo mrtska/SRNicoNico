@@ -7,14 +7,14 @@ using Livet;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
 	public class VideoTime : NotificationObject {
-		/*
+        /*
          * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
          */
 
 
-
-		#region CurrentTime変更通知プロパティ
-		private long _CurrentTime;
+        //動画の現在時間
+        #region CurrentTime変更通知プロパティ
+        private long _CurrentTime;
 
 		public long CurrentTime {
 			get { return _CurrentTime; }
@@ -27,6 +27,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 		}
         #endregion
 
+        //現在時間を文字列にしたもの
         #region CurrentTimeString変更通知プロパティ
         private string _CurrentTimeString = "0:00";
 
@@ -39,10 +40,9 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 				RaisePropertyChanged();
 			}
 		}
-		#endregion
+        #endregion
 
-
-
+        //動画時間
         #region VideoTimeString変更通知プロパティ
         private string _VideoTimeString;
 
@@ -57,7 +57,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
         #endregion
 
-
+        //バッファリングが終わった時間
         #region BufferedTime変更通知プロパティ
         private double _BufferedTime;
 

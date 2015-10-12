@@ -21,7 +21,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//ウェイバックキー取得API
 		private const string GetWayBackKeyApiUrl = "http://flapi.nicovideo.jp/api/getwaybackkey?thread=";
 
-
 		//サーバーURL
 		private readonly Uri ServerUrl;
 
@@ -55,8 +54,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             Video = vm;
 		}
 
-
-		public List<NicoNicoCommentEntry> GetComment() {
+        //コメント取得
+        public List<NicoNicoCommentEntry> GetComment() {
 
             /**string threadKey = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(GetThreadKeyApiUrl + ThreadId).Result;
 
@@ -96,10 +95,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     string recv = leaves + "&" + threadKey + "&user_id=" + UserId;
                     response = NicoNicoWrapperMain.GetSession().GetAsync(ServerUrl + recv).Result;
                 }
-
-
-
-
                 StoreEntry(response, list);
                 //------
 
@@ -110,7 +105,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 string authComment = NicoNicoWrapperMain.GetSession().GetAsync(ServerUrl + thread).Result;
 
                 StoreEntry(authComment, list);
-
                 //------
 
                 if(list.Count == 0) {
@@ -156,9 +150,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     continue;
                 }
 
-
                 NicoNicoCommentEntry entry = new NicoNicoCommentEntry();
-                ;
+                
                 entry.No = int.Parse(attr["no"].Value);
                 entry.Vpos = int.Parse(attr["vpos"].Value);
                 entry.Date = long.Parse(attr["date"].Value);

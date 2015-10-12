@@ -17,7 +17,6 @@ using SRNicoNico.Models;
 namespace SRNicoNico.ViewModels {
     public class StatusBarViewModel : ViewModel {
 
-
         #region Status変更通知プロパティ
         private string _Status;
 
@@ -31,7 +30,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region Time変更通知プロパティ
         private string _Time;
@@ -58,12 +56,6 @@ namespace SRNicoNico.ViewModels {
                     Thread.Sleep(1000);
                 }
             });
-            
-
-
         }
-
-
-
     }
 }

@@ -16,7 +16,6 @@ using SRNicoNico.Models;
 namespace SRNicoNico.ViewModels {
     public class OSSViewModel : TabItemViewModel {
 
-
         #region OtherCollection変更通知プロパティ
         private ObservableCollection<TabItemViewModel> _OSSCollection = new ObservableCollection<TabItemViewModel>();
 
@@ -30,7 +29,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region SelectedItem変更通知プロパティ
         private TabItemViewModel _SelectedItem;
@@ -46,7 +44,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         public OSSViewModel() : base("オープンソースライセンス") {
 
             OSSCollection.Add(new OSSEntryViewModel("MetroRadiance"));
@@ -60,9 +57,6 @@ namespace SRNicoNico.ViewModels {
             OSSCollection.Add(new OSSEntryViewModel("HtmlAgilityPack"));
             OSSCollection.Add(new OSSEntryViewModel("gong-wpf-dragdrop"));
             OSSCollection.Add(new OSSEntryViewModel("ForcibleLoader"));
-
-
         }
-
     }
 }

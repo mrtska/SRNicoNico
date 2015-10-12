@@ -24,8 +24,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     //動画を見るうえで必要な情報をこのAPIだけで全て取得できるヤバいAPI
     public sealed class NicoNicoWatchApi : NotificationObject {
 
-
-
         //動画ページを指定
         public static WatchApiData GetWatchApiData(string videoPage) {
 
@@ -34,18 +32,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             //チャンネル、公式動画
             if(response.StatusCode == HttpStatusCode.MovedPermanently) {
-
                 
                 response = NicoNicoWrapperMain.GetSession().GetResponseAsync(response.Headers.Location.OriginalString).Result;
             }
-
             //削除された動画
             if(response.StatusCode == HttpStatusCode.NotFound) {
 
-                
                 return null;
             }
-
             //混雑中
             if(response.StatusCode == HttpStatusCode.ServiceUnavailable) {
 
@@ -53,7 +47,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
 
             string html = response.Content.ReadAsStringAsync().Result;
-
 
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml2(html);
@@ -83,9 +76,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             ret.GetFlv = new NicoNicoGetFlvData(getFlv);
 
-
-
-
             //動画情報
             var videoDetail = json.videoDetail;
 
@@ -104,10 +94,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.HighestRank = videoDetail.highest_rank == null ? "圏外" : videoDetail.highest_rank + "位";
             ret.Token = json.flashvars.csrfToken;
 
+            //フォントサイズが1だと異様に小さいので補正
             if(ret.Description.Contains("<font size=\"1\"")) {
 
                 ret.Description = ret.Description.Replace("<font size=\"1\"","<font size=\"2.6\"");
-
             }
 
             ret.Description = HyperLinkParser.Parse(ret.Description);
@@ -127,14 +117,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 ret.TagList.Add(new VideoTagViewModel(entry)); 
             }
             //------
-            
 
+            //有料動画
             if(ret.GetFlv.VideoUrl == null || ret.GetFlv.VideoUrl.Count() == 0) {
 
                 ret.IsPaidVideo = true;
                 return ret;
             }
 
+            //念のためCookieを設定
             var cookie = response.Headers.GetValues("Set-Cookie");
             foreach(string s in cookie) {
 
@@ -143,19 +134,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     App.SetCookie(new Uri("http://nicovideo.jp/"), ss);
                 }
             }
-
             return ret;
         }
-
-        
-
     }
 
 
     public class WatchApiData : NotificationObject {
 
+        //有料動画か否か
         public bool IsPaidVideo { get; set; }
-
 
         //GetFlvAPIの結果
         public NicoNicoGetFlvData GetFlv { get; set; }
@@ -212,8 +199,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
         #endregion
-
-
 
     }
 

@@ -11,11 +11,11 @@ using Codeplex.Data;
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoNicoRepoList : NotificationObject {
 
-
+        //WebURL
         private const string NicoRepoWebUrl = @"http://www.nicovideo.jp/my/top";
 
+        //ユーザー定義ニコレポリストを取得するAPI
         private const string NicoRepoListApiUrl = @"http://www.nicovideo.jp/api/nicorepolist?token=";
-
 
         //すべてのニコレポリストを取得
         public List<NicoNicoNicoRepoListEntry> GetNicoRepoList() {
@@ -69,8 +69,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
     public class NicoNicoNicoRepoListEntry {
 
-
+        //ニコレポリストの名前
         public string Title { get; set; }
+
+        //ニコレポリストID
         public string Id { get; set; }
 
         public NicoNicoNicoRepoListEntry(string title, string id) {

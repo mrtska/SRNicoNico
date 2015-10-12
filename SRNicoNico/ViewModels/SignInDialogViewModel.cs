@@ -10,7 +10,6 @@ using SRNicoNico.Models.NicoNicoWrapper;
 namespace SRNicoNico.ViewModels {
 	public class SignInDialogViewModel : ViewModel {
 		
-
 		#region MailAddress変更通知プロパティ
 		private string _MailAddress;
 
@@ -24,7 +23,6 @@ namespace SRNicoNico.ViewModels {
 			}
 		}
 		#endregion
-
 
 		#region Password変更通知プロパティ
 		private string _Password;
@@ -40,7 +38,6 @@ namespace SRNicoNico.ViewModels {
 		}
 		#endregion
 
-
 		#region Enabled変更通知プロパティ
 		private bool _Enabled;
 
@@ -55,7 +52,6 @@ namespace SRNicoNico.ViewModels {
 		}
 		#endregion
 
-
 		#region StateText変更通知プロパティ
 		private string _StateText;
 
@@ -69,7 +65,6 @@ namespace SRNicoNico.ViewModels {
 			}
 		}
 		#endregion
-
 
 		#region AutoLogin変更通知プロパティ
 		private bool _AutoLogin;
@@ -108,9 +103,7 @@ namespace SRNicoNico.ViewModels {
 
 				Success = true;
 				Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
-
 			}));
-
 		}
 
 		public void Close() {

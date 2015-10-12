@@ -125,13 +125,15 @@ namespace SRNicoNico.ViewModels {
             List = vm;
         }
 
-
+        //ダイアログ表示 Processは処理内容
         public void ShowDialog(string process) {
 
             Process = process;
 
+            //リストをクリア
             SelectedMylist.Clear();
 
+            //選択されているマイリストを追加
             foreach(MylistListEntryViewModel entry in List.Mylist) {
 
                 if(entry.IsChecked) {
@@ -140,6 +142,7 @@ namespace SRNicoNico.ViewModels {
                 }
             }
 
+            //ターゲットになるマイリストのリストをコンボボックスに追加
             foreach(MylistListViewModel list in List.Owner.MylistListCollection) {
 
                 if(List != list) {
@@ -147,17 +150,17 @@ namespace SRNicoNico.ViewModels {
                     TargetMylist.Add(list);
                 }
             }
-
+            //ダイアログ表示
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Mylist.EditConfirmDialog), this, TransitionMode.Modal));
         }
 
-
+        //Processを処理
         public void DoProcess(MylistListViewModel list) {
-
 
             Status = "マイリストを" + Process + "しています";
             Task.Run(() => {
 
+                //各種バックエンド呼び出し
                 switch(Process) {
                     case "削除":
                         MylistViewModel.MylistInstance.DeleteMylist(SelectedMylist);
@@ -169,6 +172,8 @@ namespace SRNicoNico.ViewModels {
                         MylistViewModel.MylistInstance.CopyMylist(SelectedMylist, list);
                         break;
                 }
+
+                //削除なら削除したマイリストのみ更新 その他はソースとディスティネーションを更新
                 if(Process == "削除") {
 
                     List.Reflesh();
@@ -180,24 +185,27 @@ namespace SRNicoNico.ViewModels {
 
                 Status = "マイリストを" + Process + "しました";
                 List.CloseDialog();
-
             });
         }
 
+        //マイリスト情報を更新
         public void UpdateMylist() {
 
+            //とりあえずマイリストならエディットモードを終了するだけ
             if(List.Group.Id == 0) {
 
                 List.EditMode = false;
                 return;
             }
 
+            //リストの名前と説明に変化が無かったらエディットモードを終了して終わり
             if(List.Group.BeforeName == List.Group.Name && List.Group.BeforeDescription == List.Group.Description) {
 
                 List.EditMode = false;
                 return;
             }
 
+            //変化があったら変更APIを叩く
             Task.Run(() => {
 
                 Status = "マイリスト更新中";
@@ -207,12 +215,5 @@ namespace SRNicoNico.ViewModels {
                 List.EditMode = false;
             });
         }
-
-
-
-
-
-
-
     }
 }

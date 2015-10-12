@@ -23,7 +23,6 @@ namespace SRNicoNico.ViewModels {
 
 	public class VideoViewModel : TabItemViewModel {
 
-        
 		//API結果
 		#region VideoData変更通知プロパティ
 		private VideoData _VideoData;
@@ -54,7 +53,6 @@ namespace SRNicoNico.ViewModels {
 		}
 		#endregion
 
-
 		#region BPS変更通知プロパティ
 		private string _BPS;
 
@@ -68,7 +66,6 @@ namespace SRNicoNico.ViewModels {
 			}
 		}
         #endregion
-
 
         #region IsInitialized変更通知プロパティ
         private bool _IsInitialized;
@@ -84,7 +81,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region IsPlaying変更通知プロパティ
         private bool _IsPlaying;
 
@@ -98,7 +94,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region IsSeekChanged変更通知プロパティ
         private bool _IsSeekChanged;
@@ -114,8 +109,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-
         #region WebBrowser変更通知プロパティ
         private WebBrowser _WebBrowser;
 
@@ -129,7 +122,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
        
         #region CommentVisibility変更通知プロパティ
         private bool _CommentVisibility = false;
@@ -144,7 +136,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         //フルスクリーンかどうか
         #region IsFullScreen変更通知プロパティ
@@ -176,7 +167,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region IsActive変更通知プロパティ
         private bool _IsActive;
 
@@ -190,7 +180,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region Volume変更通知プロパティ
         private int _Volume = -1;
@@ -206,11 +195,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-
-
-
-
         #region VideoFlash変更通知プロパティ UI要素だけどこればっかりは仕方ない
         private VideoFlash _VideoFlash;
 
@@ -224,7 +208,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region Video変更通知プロパティ UI要素 仕方ないんや・・・
         private Video _Video;
@@ -240,7 +223,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region FullScreenWindow変更通知プロパティ UI要素 仕方ないんです
         private FullScreenWindow _FullScreenWindow;
 
@@ -255,14 +237,12 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         public string VideoInfoPlacement { get {
 
                 return App.ViewModelRoot.Config.Video.VideoPlacement;
             }
             set { }
         }
-
 
         #region VideoUrl変更通知プロパティ
         private string _VideoUrl;
@@ -387,32 +367,8 @@ namespace SRNicoNico.ViewModels {
             });
         }
 
-
+        //リンクを開く
         public void OpenLink(string cmsid) {
-
-            
-
-            /*
-                        if(cmsid.Contains("sm") || cmsid.Contains("nm")) {
-
-                            new VideoViewModel("http://www.nicovideo.jp/watch/" + cmsid);
-                            DisposeViewModel();
-                            return;
-                        }
-
-                        if(cmsid.Contains("watch/")) {
-
-                            new VideoViewModel("http://www.nicovideo.jp/" + cmsid);
-                            DisposeViewModel();
-                            return;
-                        }
-
-                          if(cmsid.StartsWith("http")) {
-
-                            System.Diagnostics.Process.Start(cmsid);
-                            return;
-                        }
-            */
 
             if(Keyboard.IsKeyDown(Key.LeftCtrl) || VideoData.ApiData.IsPaidVideo) {
 
@@ -435,6 +391,7 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+        //ツイートダイアログ表示
         public void OpenTweetDialog() {
 
             TweetDialogViewModel vm = new TweetDialogViewModel();
@@ -447,6 +404,7 @@ namespace SRNicoNico.ViewModels {
             //App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Misc.TweetDialog), vm, TransitionMode.Modal));
         }
 
+        //リピート
         public void ToggleRepeat() {
 
             IsRepeat ^= true;

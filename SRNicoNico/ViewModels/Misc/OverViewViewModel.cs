@@ -17,10 +17,6 @@ namespace SRNicoNico.ViewModels {
     public class OverViewViewModel : TabItemViewModel {
 
         public OverViewViewModel() : base("このソフトウェアについて") {
-
         }
-
-
-
     }
 }

@@ -18,10 +18,6 @@ using System.Windows.Documents;
 namespace SRNicoNico.ViewModels {
     public class AccessLogEntryViewModel : ViewModel {
 
-        　
-
-
-
         #region Status変更通知プロパティ
         private string _Status;
 
@@ -36,7 +32,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region Url変更通知プロパティ
         private string _Url;
 
@@ -50,8 +45,5 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
-
-
     }
 }

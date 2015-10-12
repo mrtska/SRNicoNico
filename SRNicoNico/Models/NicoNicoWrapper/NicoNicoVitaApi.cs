@@ -12,6 +12,7 @@ using SRNicoNico.Models.NicoNicoViewer;
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoVitaApi : NotificationObject {
 
+        //動画情報取得API コミュ限動画などでも取得できる
         private const string VideoDataApiUrl = "http://api.ce.nicovideo.jp/nicoapi/v1/video.info?__format=json&v=";
 
 

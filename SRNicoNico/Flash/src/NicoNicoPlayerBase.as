@@ -78,7 +78,6 @@ package {
 		}
 		
 		
-		
 		public function ToggleComment():void {
 			
 			trace("とぐる");
@@ -91,16 +90,6 @@ package {
 			}
 		}
 		public function ChangeVolume(vol:Number):void {}		
-		
-		
-		public function CalcAspectRatio(width:Number, height:Number):String {
-			
-			
-			
-			
-			
-			
-		}
 		
 	}
 }

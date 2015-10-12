@@ -48,7 +48,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 		}
         #endregion
 
-
+        //動画タイプ mp4とかswfとかrtmpとか
         #region VideoType変更通知プロパティ
         private NicoNicoVideoType? _VideoType;
 

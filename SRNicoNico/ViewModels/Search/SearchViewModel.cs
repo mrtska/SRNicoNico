@@ -101,17 +101,14 @@ namespace SRNicoNico.ViewModels {
 
                 NicoNicoSearchResult result = currentSearch.Search();
                 //検索結果をUIに
-                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+                SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
 
-                    SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
+                SearchResult.List.Clear();
+                foreach(NicoNicoSearchResultEntry node in result.List) {
 
-                    SearchResult.List.Clear();
-                    foreach(NicoNicoSearchResultEntry node in result.List) {
+                    SearchResult.List.Add(new SearchResultEntryViewModel(node));
+                }
 
-                        SearchResult.List.Add(new SearchResultEntryViewModel(node));
-                    }
-
-                }));
                 SearchResult.IsActive = false;
             });
 		}
@@ -121,20 +118,15 @@ namespace SRNicoNico.ViewModels {
             SearchResult.IsActive = true;
             Task.Run(() => {
 
-
                 NicoNicoSearchResult result = currentSearch.Search();
-                //検索結果をUIに
-                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                    SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
+                SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
 
-                    SearchResult.List.Clear();
-                    foreach(NicoNicoSearchResultEntry node in result.List) {
+                foreach(NicoNicoSearchResultEntry node in result.List) {
 
-                        SearchResult.List.Add(new SearchResultEntryViewModel(node));
-                    }
+                    SearchResult.List.Add(new SearchResultEntryViewModel(node));
+                }
 
-                }));
                 SearchResult.IsActive = false;
             });
         }

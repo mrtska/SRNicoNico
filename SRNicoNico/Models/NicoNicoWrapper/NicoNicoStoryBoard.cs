@@ -11,9 +11,6 @@ using Codeplex.Data;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoStoryBoard : NotificationObject {
-		/*
-         * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
-         */
 
 		//ストリーミングサーバーのURL
 		public string StoryBoardApiBaseUrl { get; set; }
@@ -24,8 +21,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			StoryBoardApiBaseUrl = url;
 		}
-
-
 
 		//取得したストーリーボードのデータにBitmapオブジェクトを追加して返す
 		public NicoNicoStoryBoardData GetStoryBoardData() {
@@ -43,8 +38,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 				return null;
 			}
-
-
 
 			//APIURL
 			string uri = StoryBoardApiBaseUrl + "&sb=" + data.Id + "&board=";
@@ -130,18 +123,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			return null;
 		}
-
-
-
-
-
-
-
-
-
-
-
-
 	}
 
 

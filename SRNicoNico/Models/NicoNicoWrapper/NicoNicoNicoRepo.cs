@@ -43,7 +43,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             Id = id;
         }
 
-
+        //ニコレポ取得
         public IList<NicoNicoNicoRepoDataEntry> GetNicoRepo() {
 
             //APIと言うのか謎
@@ -71,12 +71,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
 
             StoreData(doc, data);
-            
 
             return data;
         }
 
-        //ニコレポの
+        //過去のニコレポを取得
         public IList<NicoNicoNicoRepoDataEntry> NextNicoRepo() {
 
             //もう過去の二コレポは存在しない

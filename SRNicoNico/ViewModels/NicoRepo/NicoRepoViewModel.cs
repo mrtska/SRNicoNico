@@ -22,8 +22,6 @@ using System.Collections.ObjectModel;
 namespace SRNicoNico.ViewModels {
     public class NicoRepoViewModel : TabItemViewModel {
 
-
-
         #region IsActive変更通知プロパティ
         private bool _IsActive = false;
 
@@ -37,8 +35,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
-
 
         #region NicoRepoListCollection変更通知プロパティ
         private ObservableCollection<NicoRepoListViewModel> _NicoRepoListCollection = new ObservableCollection<NicoRepoListViewModel>();
@@ -54,7 +50,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region SelectedList変更通知プロパティ
         private NicoRepoListViewModel _SelectedList;
 
@@ -69,15 +64,11 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-
         public NicoNicoNicoRepoList NicoRepoList = new NicoNicoNicoRepoList();
 
         public IList<NicoNicoNicoRepoDataEntry> Data { get; set; }
         
         public NicoRepoViewModel() : base("ニコレポ") {}
-
-        
 
         public void Reflesh() {
 
@@ -108,18 +99,7 @@ namespace SRNicoNico.ViewModels {
 
         public void InitNicoRepo() {
 
-
-
             Reflesh();
-
-
-
-
         }
-
-
-
-
-
     }
 }

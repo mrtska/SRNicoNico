@@ -84,7 +84,6 @@ namespace SRNicoNico.ViewModels {
                     return;
                 }
 
-
                 foreach(NicoNicoNicoRepoDataEntry entry in data) {
 
                     Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));

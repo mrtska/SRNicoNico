@@ -31,7 +31,5 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-
     }
 }

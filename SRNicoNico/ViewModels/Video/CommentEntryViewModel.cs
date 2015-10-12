@@ -16,6 +16,5 @@ namespace SRNicoNico.ViewModels {
 
 			Entry = entry;
 		}
-
 	}
 }

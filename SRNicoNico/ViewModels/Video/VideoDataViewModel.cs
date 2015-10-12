@@ -16,7 +16,6 @@ using SRNicoNico.Models.NicoNicoWrapper;
 namespace SRNicoNico.ViewModels {
     public class VideoDataViewModel : ViewModel {
 
-
         #region Data変更通知プロパティ
         private NicoNicoVitaApiVideoData _Data;
 
@@ -30,7 +29,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region IsActive変更通知プロパティ
         private bool _IsActive;
@@ -47,7 +45,6 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
         public void Intialize(string cmsid) {
-
 
             Task.Run(() => {
 

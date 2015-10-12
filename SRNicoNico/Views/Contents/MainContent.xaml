@@ -25,10 +25,13 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <metro:TabView Grid.Column="0" Background="{DynamicResource ActiveBackgroundBrushKey}" ItemsSource="{Binding TabItems}" SelectedValue="{Binding SelectedTab}" Margin="0,0,0,0" >
-            
-        
-        </metro:TabView>
+
+        <ScrollViewer>
+            <metro:TabView Background="{DynamicResource ActiveBackgroundBrushKey}" ItemsSource="{Binding TabItems}" SelectedValue="{Binding SelectedTab}" />
+        </ScrollViewer>
+
+
+
         <ItemsControl Grid.Column="1" ItemsSource="{Binding TabItems}">
 
             <ItemsControl.Resources>
@@ -69,43 +72,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <!--<tab:TabControlEx Grid.Column="1" Background="Transparent" BorderThickness="0" TabStripPlacement="Left" Grid.ColumnSpan="2" >
-
-            <tab:TabItemEx Text="スタート">
-                <local:Start />
-            </tab:TabItemEx>
-            <tab:TabItemEx Text="検索">
-
-                <Grid>
-                    <search:Search />
-                    <search:SearchResult/>
-                </Grid>
-
-            </tab:TabItemEx>
-
-            <tab:TabItemEx Text="二コレポ">
-
-                <Grid>
-                    <nicorepo:NicoRepo />
-                    <nicorepo:NicoRepoResult/>
-                    <Line X1="3" X2="3" Grid.Column="1" Y1="0" Y2="{Binding ElementName=Root,Path=ActualHeight}" Stroke="#FF333333"/>
-
-                </Grid>
-
-            </tab:TabItemEx>
-            <tab:TabItemEx Text="マイリスト">
-                <video:Video/>
-
-            </tab:TabItemEx>
-            <tab:TabItemEx Text="その他">
-                <Grid>
-                    <misc:Other />
-                    <history:HistoryResult/>
-                </Grid>
-
-            </tab:TabItemEx>
-
-        </tab:TabControlEx>-->
 
     </Grid>
 </UserControl>

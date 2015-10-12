@@ -16,8 +16,6 @@ using SRNicoNico.Models.NicoNicoWrapper;
 namespace SRNicoNico.ViewModels {
     public class OtherViewModel : TabItemViewModel {
 
-        
-
         #region OtherCollection変更通知プロパティ
         private ObservableCollection<TabItemViewModel> _OtherCollection;
 
@@ -31,7 +29,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region SelectedItem変更通知プロパティ
         private TabItemViewModel _SelectedItem;
@@ -47,26 +44,16 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-
-
         public OtherViewModel() : base("その他") {
 
             OtherCollection = new ObservableCollection<TabItemViewModel>();
             OtherCollection.Add(new OverViewViewModel());
             OtherCollection.Add(new OSSViewModel());
-
         }
-
 
         public void ShowAccessLog() {
 
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Log.AccessLogDialog), App.ViewModelRoot.AccessLog, TransitionMode.NewOrActive));
         }
-
-
-
-
-       
     }
 }

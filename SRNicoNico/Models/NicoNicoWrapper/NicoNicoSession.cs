@@ -13,8 +13,6 @@ using System.IO;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
-
-
 	public enum SigninStatus {
 
 		ServiceUnavailable = -2,    //メンテナンス中
@@ -36,21 +34,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 	public class NicoNicoSession : NotificationObject {
 
-
-		/*
-		 * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
-		 */
-
-
 		//サインインURL
 		private const string SignInURL = "https://secure.nicovideo.jp/secure/login?site=niconico";
-
 
 		//アカウント権限
 		private const string UserAgent = "SRNicoNico/1.0";
 
-		private const string NicoNicoTop = "http://www.nicovideo.jp/";
-
+        //ニコニコトップ
+        private const string NicoNicoTop = "http://www.nicovideo.jp/";
 
         //Http通信用
         private HttpClient HttpClient;
@@ -97,7 +88,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			HttpHandler.CookieContainer.Add(cookieKey);
 		}
 
-
+        
         public async Task<string> GetAsync(HttpRequestMessage request)  {
 
             VerifyRequest(request);
@@ -144,13 +135,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public async Task<Stream> GetStreamAsync(string uri) {
 
-
             return await GetStreamAsync(new HttpRequestMessage(HttpMethod.Get, uri));
         }
 
-
         private void VerifyRequest(HttpRequestMessage request) {
 
+            //アクセスログに登録
             App.ViewModelRoot.AccessLog.StartAccessUrl(request);
 
         }
@@ -164,7 +154,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
         }
-
 
         //サインイン
         public SigninStatus SignIn(string address, string passwd) {

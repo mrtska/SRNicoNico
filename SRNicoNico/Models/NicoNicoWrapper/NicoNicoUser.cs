@@ -11,25 +11,20 @@ using Livet;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoUser : NotificationObject {
-		/*
-		 * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
-		 */
 
+        //ユーザー名取得API
+        public const string UserLookUpURL = "http://seiga.nicovideo.jp/api/user/info?id=";
 
+        //ユーザーID
+        public uint UserId { get; private set; }
 
-		public const string UserLookUpURL = "http://seiga.nicovideo.jp/api/user/info?id=";
-
-		public uint UserId { get; internal set; }
-
-		public string UserName { get; internal set; }
+        //ユーザーネーム
+        public string UserName { get; private set; }
 
 		public NicoNicoUser(uint userId) {
 
             UserId = userId;
-
             UserName = LookupUserName(UserId);
-
-			
 		}
 
         public NicoNicoUser(uint userId, string userName) {

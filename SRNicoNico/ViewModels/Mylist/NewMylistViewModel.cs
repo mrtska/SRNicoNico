@@ -67,6 +67,7 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        //新しいマイリストを作成
         public void AddMylist() {
 
             Mylist.Status = "新しいマイリスト " + NewMylistName + " を作成しています";

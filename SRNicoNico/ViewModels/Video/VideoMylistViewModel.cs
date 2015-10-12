@@ -21,8 +21,6 @@ namespace SRNicoNico.ViewModels {
 
         private VideoViewModel Video;
 
-
-
         #region MylistStatus変更通知プロパティ
         private string _MylistStatus;
 
@@ -36,7 +34,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region IsDeflistButtonEnabled変更通知プロパティ
         private bool _IsDeflistButtonEnabled;
@@ -52,7 +49,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         public VideoMylistViewModel(VideoViewModel vm) {
 
             Video = vm;
@@ -62,8 +58,6 @@ namespace SRNicoNico.ViewModels {
 
             IsDeflistButtonEnabled = true;
         }
-
-
 
         //とりあえずマイリストに登録
         public void AddDeflist() {
@@ -88,16 +82,6 @@ namespace SRNicoNico.ViewModels {
 
                 IsDeflistButtonEnabled = true;
             });
-
         }
-
-
-
-
-
-        
-
-
-
     }
 }

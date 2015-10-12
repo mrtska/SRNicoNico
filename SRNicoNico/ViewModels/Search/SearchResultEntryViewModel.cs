@@ -14,6 +14,5 @@ namespace SRNicoNico.ViewModels {
 
             Node = node;
         }
-
 	}
 }

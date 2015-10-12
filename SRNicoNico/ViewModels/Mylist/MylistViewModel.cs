@@ -18,11 +18,10 @@ using GongSolutions.Wpf.DragDrop;
 using System.Windows;
 
 namespace SRNicoNico.ViewModels {
-    public class MylistViewModel : TabItemViewModel,IDropTarget {
+    public class MylistViewModel : TabItemViewModel, IDropTarget {
 
-
+        //バックエンドインスタンス
         public static NicoNicoMylist MylistInstance = new NicoNicoMylist();
-
 
         #region IsActive変更通知プロパティ
         private bool _IsActive;
@@ -68,10 +67,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-
-
-
         public MylistViewModel() : base("マイリスト") { }
 
         //マイリスト作成
@@ -80,7 +75,6 @@ namespace SRNicoNico.ViewModels {
             NewMylistViewModel newlist = new NewMylistViewModel(this);
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Mylist.NewMylistDialog), newlist, TransitionMode.Modal));
         }
-
 
         public void Reflesh() {
 
@@ -109,8 +103,8 @@ namespace SRNicoNico.ViewModels {
                 IsActive = false;
             });
         }
-        
 
+        //マイリストをドラッグしてきた時
         void IDropTarget.DragOver(IDropInfo dropInfo) {
 
             if(dropInfo.TargetItem is MylistListViewModel) {
@@ -132,6 +126,7 @@ namespace SRNicoNico.ViewModels {
             ;
         }
 
+        //マイリストをドロップ
         void IDropTarget.Drop(IDropInfo dropInfo) {
 
             if(dropInfo.TargetItem is MylistListViewModel) {
@@ -153,13 +148,8 @@ namespace SRNicoNico.ViewModels {
                     Status = item.Entry.Title + " を " + item.Owner.Name + " から " + target.Name + " に移動しました";
                     target.Reflesh();
                     item.Owner.Reflesh();
-
                 });
-
             }
-
-
-            ;
         }
     }
 }

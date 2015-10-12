@@ -23,24 +23,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			return JsonConvert.SerializeXmlNode(doc);
 		}
 
-
-
+        //カレントディレクトリ取得
 		private static FileInfo _CurrentDirectory;
-
 		public static FileInfo CurrentDirectory {
 			get {
-
 				if(_CurrentDirectory == null) {
 
 					var currentAssembly = Assembly.GetEntryAssembly();
 					_CurrentDirectory = new FileInfo(currentAssembly.Location);
 				}
-
 				return _CurrentDirectory;
 			}
 		}
 
-        //n:nをnに変換
+        //m:sをsに変換
         public static long GetTimeOfLong(string s) {
 
             string[] strings = s.Split(':');
@@ -50,7 +46,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             return (long.Parse(minutes) * 60) + long.Parse(seconds);
         }
 
-		//nをn:nに変換
+		//sをm:sに変換
 		public static string GetTimeFromLong(long time) {
 
 			long munites = time / 60;

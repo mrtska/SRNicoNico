@@ -17,8 +17,6 @@ namespace SRNicoNico.ViewModels {
     public class HistoryResultViewModel : ViewModel {
 
 
-
-
         #region IsActive変更通知プロパティ
         private bool _IsActive;
 
@@ -32,9 +30,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
-
-
 
         #region List変更通知プロパティ
         private DispatcherCollection<HistoryResultEntryViewModel> _List = new DispatcherCollection<HistoryResultEntryViewModel>(DispatcherHelper.UIDispatcher);
