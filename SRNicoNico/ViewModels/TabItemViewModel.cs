@@ -93,6 +93,9 @@ namespace SRNicoNico.ViewModels {
             Name = name;
         }
 
+        public void CloseDialog() {
 
+            Messenger.Raise(new WindowActionMessage(Livet.Messaging.Windows.WindowAction.Close, "WindowAction"));
+        }
     }
 }

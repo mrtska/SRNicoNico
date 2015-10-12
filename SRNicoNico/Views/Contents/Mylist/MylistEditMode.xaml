@@ -60,7 +60,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock FontSize="18" Foreground="#FFAAAAAA" VerticalAlignment="Center" Text="マイリストタイトル：" />
-                        <TextBox Grid.Column="1" Text="{Binding Name,Mode=TwoWay}" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Text="{Binding Name,Mode=TwoWay}" FontSize="16" Margin="0,0,2,0" VerticalAlignment="Center"/>
 
                     </Grid>
                 </ContentControl>
@@ -106,7 +106,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <TextBlock FontSize="18" Foreground="#FFAAAAAA" Text="マイリストの説明："/>
-                    <TextBox ScrollViewer.VerticalScrollBarVisibility="Auto" MaxLines="5" Grid.Column="1" AcceptsReturn="True" Background="#FF303030" Foreground="#FFAAAAAA" Margin="2,0,8,0" Padding="5,2" Text="{Binding Group.Description}"  />
+                    <TextBox ScrollViewer.VerticalScrollBarVisibility="Auto" MaxLines="5" Grid.Column="1" AcceptsReturn="True" Background="#FF303030" Margin="2,2,8,0" Padding="5,2" Text="{Binding Group.Description}"  />
 
                 </Grid>
             </ContentControl>
@@ -151,28 +151,28 @@
                 <ColumnDefinition Width="17*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" >
-                <CheckBox IsChecked="{Binding AllSelect}" Content="すべて選択" Margin="4" />
+                <CheckBox IsChecked="{Binding EditModeViewModel.AllSelect}" Content="すべて選択" Margin="4" />
             </StackPanel>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="4">
-                <Button Content="削除" ToolTip="選択したマイリストを削除します">
+                <Button IsEnabled="{Binding EditModeViewModel.IsAnyoneChecked}" Content="削除" ToolTip="選択したマイリストを削除します">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-
+                            <l:LivetCallMethodAction MethodTarget="{Binding EditModeViewModel}" MethodName="ShowDialog" MethodParameter="削除"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
-                <Button Content="移動" ToolTip="選択したマイリストを指定したリストに移動します" Margin="10,0,0,0">
+                <Button IsEnabled="{Binding EditModeViewModel.IsAnyoneChecked}" Content="移動" ToolTip="選択したマイリストを指定したリストに移動します" Margin="10,0,0,0">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-
+                            <l:LivetCallMethodAction MethodTarget="{Binding EditModeViewModel}" MethodName="ShowDialog" MethodParameter="移動"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
-                <Button Content="コピー" Margin="10,0" ToolTip="選択したマイリストを指定したリストにコピーします">
+                <Button IsEnabled="{Binding EditModeViewModel.IsAnyoneChecked}" Content="コピー" Margin="10,0" ToolTip="選択したマイリストを指定したリストにコピーします">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-
+                            <l:LivetCallMethodAction MethodTarget="{Binding EditModeViewModel}" MethodName="ShowDialog" MethodParameter="コピー"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>

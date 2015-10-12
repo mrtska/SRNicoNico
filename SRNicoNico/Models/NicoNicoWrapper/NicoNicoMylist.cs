@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net.Http;
 
@@ -25,6 +26,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //マイリスト作成API
         private const string MylistCreateAPI = "http://www.nicovideo.jp/api/mylistgroup/add";
+
+        //マイリスト削除API
+        private const string MylistDeleteAPI = "http://www.nicovideo.jp/api/mylistgroup/delete";
+        
+        //マイリストコピーAPI
+        private const string MylistCopyAPI = "http://www.nicovideo.jp/api/mylist/copy";
 
         //マイリスト移動API
         private const string MylistMoveAPI = "http://www.nicovideo.jp/api/mylist/move";
@@ -226,6 +233,26 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             
         }
 
+
+        public void DeleteMylist(int groupId) {
+
+            string token = GetMylistToken();
+
+            Dictionary<string, string> pair = new Dictionary<string, string>();
+            pair["group_id"] = groupId.ToString();
+            pair["token"] = token;
+
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistDeleteAPI);
+
+            request.Content = new FormUrlEncodedContent(pair);
+
+            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+
+            ;
+
+        }
+
         //マイリストを移動
         public void MoveMylist(MylistListEntryViewModel source, MylistListViewModel dest) {
 
@@ -255,6 +282,78 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             if(dest.Group.Id == 0) {
 
                 AddDefMylist(source.Entry.Id, token);
+            }
+        }
+
+        //マイリストを移動
+        public void MoveMylists(IEnumerable<MylistListEntryViewModel> source, MylistListViewModel dest) {
+
+            string token = GetMylistToken(source.First().Owner.Group);
+
+            Dictionary<string, string> pair = new Dictionary<string, string>();
+            pair["group_id"] = source.First().Owner.Group.Id.ToString();
+            pair["target_group_id"] = dest.Group.Id.ToString();
+
+            foreach(MylistListEntryViewModel vm in source) {
+
+                pair.Add("id_list[0][]", vm.Entry.ItemId);
+            }
+            pair["token"] = token;
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistMoveAPI);
+
+            if(source.First().Owner.Group.Id == 0) {
+
+                request.RequestUri = new Uri(DefListMoveAPI);
+            }
+
+
+            request.Content = new FormUrlEncodedContent(pair);
+
+            var a = request.Content.ReadAsStringAsync().Result;
+
+            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+            ;
+
+            if(dest.Group.Id == 0) {
+
+                AddDefMylist(source.First().Entry.Id, token);
+            }
+        }
+
+        public void CopyMylist(IEnumerable<MylistListEntryViewModel> source, MylistListViewModel dest) {
+
+
+            string token = GetMylistToken(source.First().Owner.Group);
+
+            Dictionary<string, string> pair = new Dictionary<string, string>();
+            pair["group_id"] = source.First().Owner.Group.Id.ToString();
+            pair["target_group_id"] = dest.Group.Id.ToString();
+
+            foreach(MylistListEntryViewModel vm in source) {
+
+                pair.Add("id_list[0][]", vm.Entry.ItemId);
+            }
+            pair["token"] = token;
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistMoveAPI);
+
+            if(source.First().Owner.Group.Id == 0) {
+
+                request.RequestUri = new Uri(DefListMoveAPI);
+            }
+
+
+            request.Content = new FormUrlEncodedContent(pair);
+
+            var a = request.Content.ReadAsStringAsync().Result;
+
+            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+            ;
+
+            if(dest.Group.Id == 0) {
+
+                AddDefMylist(source.First().Entry.Id, token);
             }
         }
 

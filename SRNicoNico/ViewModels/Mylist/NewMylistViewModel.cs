@@ -76,17 +76,11 @@ namespace SRNicoNico.ViewModels {
 
                 Mylist.Reflesh();
                 Mylist.Status = "新しいマイリスト " + NewMylistName + " を作成しました";
-                CloseDialog();
+                Mylist.CloseDialog();
 
             });
 
         }
-
-        public void CloseDialog() {
-
-            Messenger.Raise(new WindowActionMessage(Livet.Messaging.Windows.WindowAction.Close, "WindowAction"));
-        }
-
 
     }
 }

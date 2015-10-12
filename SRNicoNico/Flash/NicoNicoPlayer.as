@@ -41,9 +41,9 @@ package  {
 		public function NicoNicoPlayer() {
 			
 			super();
-			//OpenVideo("Z:/smile[3].mp4");
-			/*OpenVideo("Z:/smile.flv");
-			//OpenVideo("Z:/smile.swf");
+			//OpenVideo("Z:/issue2.mp4");
+			//OpenVideo("Z:/smile.flv");
+			/*OpenVideo("Z:/smile.swf");
 			//
 			//OpenVideo("Z:/smile (1).mp4");
 			//var now:Date = new Date();
@@ -128,7 +128,7 @@ package  {
 			stream.inBufferSeek = true;
 			//ハードウェアデコーダーは使う
 			stream.useHardwareDecoder = true;
-			stream.bufferTime = 3;
+			stream.bufferTime = 1;
 			
 			var obj:Object = new Object();
 			obj.onMetaData = function(param:Object):void {
@@ -143,7 +143,22 @@ package  {
 					;
 					var stageVideo:StageVideo = vec[0];
 					
-					stageVideo.viewPort = new  Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
+					//アスペクト比が4:3だったら
+					if ((param.height / param.width) == 0.75) {
+						
+						var aspect:* = (stage.stageWidth - 512) / 2;
+					
+						if (aspect < 0) {
+							
+							aspect = 0;
+
+						}
+						stageVideo.viewPort = new  Rectangle(aspect, 0, 512, stage.stageHeight);
+
+					} else {
+						
+						stageVideo.viewPort = new  Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
+					}
 					
 					stageVideo.attachNetStream(stream);
 					

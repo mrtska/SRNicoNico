@@ -79,33 +79,15 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-        #region AllSelect変更通知プロパティ
-        private bool _AllSelect;
-
-        public bool AllSelect {
-            get { return _AllSelect; }
-            set { 
-                if(_AllSelect == value)
-                    return;
-                _AllSelect = value;
-
-
-                foreach(MylistListEntryViewModel entry in Mylist) {
-
-                    entry.IsChecked = value;
-                }
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
         public NicoNicoMylistGroupData Group { get; private set; }
 
         public MylistViewModel Owner { get; private set; }
 
+        public MylistEditModeViewModel EditModeViewModel { get; set; }
+
         public MylistListViewModel(MylistViewModel vm, NicoNicoMylistGroupData group, List<NicoNicoMylistData> list) : base(group.Name) {
 
+            EditModeViewModel = new MylistEditModeViewModel(this);
             Owner = vm;
             Group = group;
             Mylist = new DispatcherCollection<MylistListEntryViewModel>(DispatcherHelper.UIDispatcher);
@@ -144,18 +126,27 @@ namespace SRNicoNico.ViewModels {
                     Mylist.Add(new MylistListEntryViewModel(this, data));
                 }
 
+                EditModeViewModel.IsAnyoneChecked = false;
                 IsActive = false;
             });
         }
 
         public void ShowDeleteDialog() {
 
-
+            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Mylist.DeleteMylistDialog), this, TransitionMode.Modal));
         }
 
-        public void Delete() {
+        public void DeleteMylist() {
 
+            Owner.Status = Group.Name + " を削除しています";
+            Task.Run(() => {
 
+                MylistViewModel.MylistInstance.DeleteMylist(Group.Id);
+                CloseDialog();
+                Owner.Reflesh();
+                Owner.Status = Group.Name + " を削除しました";
+
+            });
         }
 
 

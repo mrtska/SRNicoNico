@@ -124,7 +124,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             return response;
         }
-
+        
         public async Task<HttpResponseMessage> GetResponseAsync(string uri) {
 
             return await GetResponseAsync(new HttpRequestMessage(HttpMethod.Get, uri));

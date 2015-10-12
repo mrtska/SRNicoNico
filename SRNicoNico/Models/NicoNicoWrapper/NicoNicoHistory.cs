@@ -49,7 +49,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             int retry = 1;
             start:
             //たまに失敗する
-
+            
             HttpResponseMessage result = NicoNicoWrapperMain.GetSession().GetResponseAsync(HistoryUrl).Result;
 
             //失敗

@@ -34,6 +34,7 @@ namespace SRNicoNico.ViewModels {
                 if(_IsChecked == value)
                     return;
                 _IsChecked = value;
+                Owner.EditModeViewModel.IsAnyoneChecked = value;
                 RaisePropertyChanged();
             }
         }

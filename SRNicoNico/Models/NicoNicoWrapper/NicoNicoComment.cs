@@ -74,7 +74,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             string leaves = "thread_leaves?thread=" + ThreadId + "&body=0-" + Length / 60 + 1 + ":100,1000&scores=1";
 
             try {
-
+                
                 HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, ServerUrl + leaves);
                 string response = NicoNicoWrapperMain.GetSession().GetAsync(message).Result;
 
