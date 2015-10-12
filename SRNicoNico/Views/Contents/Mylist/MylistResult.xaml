@@ -80,9 +80,7 @@
                             <DataTrigger Binding="{Binding Group.Description}" Value="">
                                 <Setter Property="Template">
                                     <Setter.Value>
-                                        <ControlTemplate TargetType="ContentControl">
-                                            
-                                        </ControlTemplate>
+                                        <ControlTemplate TargetType="ContentControl" />
                                     </Setter.Value>
                                 </Setter>
                             </DataTrigger>

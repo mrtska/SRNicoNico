@@ -34,14 +34,17 @@
         <ListBox SelectedItem="{Binding Result.SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding Result.NicoRepo}" Grid.Row="1" >
 
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                <i:EventTrigger EventName="MouseDoubleClick">
                     <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding Result}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
 
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
-
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                    </Style.Resources>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListBox.ItemContainerStyle>

@@ -11,16 +11,9 @@
              BorderThickness="0,1,1,0"
              BorderBrush="#FF333333"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             Background="Transparent"
              >
-
-
-
-
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-
-
-
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
             <ColumnDefinition Width="155*"/>

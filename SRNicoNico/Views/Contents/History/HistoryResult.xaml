@@ -47,14 +47,17 @@
         <ListBox x:Name="list" Grid.Row="1" SelectedItem="{Binding HistoryResult.SelectedItem}" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding HistoryResult.List}" >
 
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                <i:EventTrigger EventName="MouseDoubleClick">
                     <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding HistoryResult}" />
 				</i:EventTrigger>
 			</i:Interaction.Triggers>
 			
 			<ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
-                    
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                    </Style.Resources>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListBox.ItemContainerStyle>

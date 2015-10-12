@@ -43,12 +43,16 @@
         <ListBox Grid.Row="1" SelectedItem="{Binding SelectedItem}" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding List}" HorizontalContentAlignment="Stretch" >
 
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                <i:EventTrigger EventName="MouseDoubleClick">
                     <l:LivetCallMethodAction MethodName="OpenVideo" MethodTarget="{Binding}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                    </Style.Resources>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListBox.ItemContainerStyle>
