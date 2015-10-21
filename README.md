@@ -6,7 +6,7 @@ WPFにWebBrowserコントロールを乗せ、そこで自作のFlashを動か�
 C# XAML HTML CSS3 JavaScript ActionScript3
 
 #開発環境
-Visual Studio 2015 Community<br>
+Visual Studio 2015 Community  
 Flash Develop
 
 
