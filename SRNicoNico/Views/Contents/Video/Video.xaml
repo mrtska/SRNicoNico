@@ -12,7 +12,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
              d:DesignHeight="600"
-             d:DesignWidth="825"
+             d:DesignWidth="1200"
 			 d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              mc:Ignorable="d"
              Focusable="False"
@@ -127,7 +127,7 @@
         </StackPanel>
 
 
-        <Grid x:Name="Grid">
+        <Grid>
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Style.Triggers>
@@ -146,7 +146,7 @@
                 <RowDefinition Height="113*"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0">
+            <Grid  x:Name="Grid" Grid.Row="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
                     <RowDefinition Height="154*"/>
@@ -175,9 +175,7 @@
                 <local:VideoController Grid.Row="2" />
             </Grid>
 
-            <GridSplitter Grid.Row="1" Height="10" Width="100"
-                          VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                          ResizeDirection="Rows" Background="#FF888888" />
+            <GridSplitter Grid.Row="1" Margin="4,2" Height="3" Width="auto" ResizeDirection="Rows" Background="#FF222222" />
 
             <Grid Grid.Row="2" >
 

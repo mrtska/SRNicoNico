@@ -22,7 +22,6 @@
                    MinHeight="500"
 		           Background="{DynamicResource ThemeBrushKey}"
 		  	       Foreground="{DynamicResource ActiveForegroundBrushKey}"
-				   FontFamily="Yu Gothic UI"
 	               IsRestoringWindowPlacement="True"
 		           UseLayoutRounding="True"
 			       TextOptions.TextFormattingMode="Display"
