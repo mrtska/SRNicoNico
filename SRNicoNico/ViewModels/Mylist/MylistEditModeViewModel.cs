@@ -192,7 +192,7 @@ namespace SRNicoNico.ViewModels {
         public void UpdateMylist() {
 
             //とりあえずマイリストならエディットモードを終了するだけ
-            if(List.Group.Id == 0) {
+            if(List.Group.Id == "0") {
 
                 List.EditMode = false;
                 return;

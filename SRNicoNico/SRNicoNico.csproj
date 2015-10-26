@@ -202,6 +202,7 @@
     <Compile Include="Models\NicoNicoViewer\HyperLinkParser.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylist.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoVitaApi.cs" />
+    <Compile Include="Models\NicoNicoWrapper\RequestTimeout.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\Config\ConfigVideoViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigViewModel.cs" />
@@ -362,6 +363,9 @@
     </Compile>
     <Compile Include="Views\Contents\Video\PaidVideoDialog.xaml.cs">
       <DependentUpon>PaidVideoDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\AddVideoMylistDialog.xaml.cs">
+      <DependentUpon>AddVideoMylistDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Video\VideoTimeOutDialog.xaml.cs">
       <DependentUpon>VideoTimeOutDialog.xaml</DependentUpon>
@@ -538,6 +542,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Contents\Video\PaidVideoDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Video\AddVideoMylistDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

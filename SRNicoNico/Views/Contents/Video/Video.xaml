@@ -94,9 +94,7 @@
                 </Style>
             </StackPanel.Style>
 
-            <Border BorderBrush="#FF444444" BorderThickness="1">
-                <local:VideoInfo />
-            </Border>
+            <local:VideoInfo />
             <Border BorderBrush="#FF444444" BorderThickness="1" Margin="0,10,0,0" >
                 <StackPanel Margin="3">
 
@@ -191,17 +189,8 @@
                         <mui:ModernProgressRing Panel.ZIndex="1" HorizontalAlignment="Center" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}"  Grid.RowSpan="2" />
                     </Grid>
                 </ScrollViewer>
-
             </Grid>
-
         </Grid>
-
-
-
-
-
     </Grid>
-
-
 
 </UserControl>

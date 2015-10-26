@@ -15,28 +15,43 @@
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              >
     <Grid>
-        <StackPanel Margin="3">
-            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.Cmsid, StringFormat=動画ID : {0}}" />
-            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.ViewCounter, StringFormat=再生数 : {0:N0}}" />
-            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.CommentCounter, StringFormat=コメント数 : {0:N0}}" />
-            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.MylistCounter, StringFormat=マイリスト数 : {0:N0}}" />
-            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.HighestRank, StringFormat=過去最高順位 : {0}}" />
-            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.YesterdayRank, StringFormat=前日総合順位 : {0}}" />
-            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.VideoType, StringFormat=動画タイプ : {0}, TargetNullValue=読込中}" />
-            <Button Content="ツイートする" Margin="4,0" IsEnabled="{Binding IsInitialized}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenTweetDialog"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-            <Button Content="とりあえずマイリスト&#10;        に登録" Margin="4,10,4,0" IsEnabled="{Binding Mylist.IsDeflistButtonEnabled}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding Mylist}" MethodName="AddDeflist"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
+
+        <StackPanel>
+            <Image Source="{Binding VideoData.ApiData.Thumbnail}" Margin="5" />
+
+            <Border BorderBrush="#FF444444" BorderThickness="1">
+                <StackPanel Margin="3">
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.Cmsid, StringFormat=動画ID : {0}}" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.ViewCounter, StringFormat=再生数 : {0:N0}}" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.CommentCounter, StringFormat=コメント数 : {0:N0}}" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.MylistCounter, StringFormat=マイリスト数 : {0:N0}}" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.HighestRank, StringFormat=過去最高順位 : {0}}" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.YesterdayRank, StringFormat=前日総合順位 : {0}}" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.VideoType, StringFormat=動画タイプ : {0}, TargetNullValue=読込中}" />
+                    <Button Content="ツイートする" Margin="4,0" IsEnabled="{Binding IsInitialized}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenTweetDialog"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                    <Button Content="とりあえずマイリスト&#10;        に登録" Margin="4,10,4,0" IsEnabled="{Binding Mylist.IsDeflistButtonEnabled}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <l:LivetCallMethodAction MethodTarget="{Binding Mylist}" MethodName="AddDeflist"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                    <Button Content="マイリストに登録" Margin="4,10,4,0" IsEnabled="{Binding Mylist.IsDeflistButtonEnabled}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <l:LivetCallMethodAction MethodTarget="{Binding Mylist}" MethodName="OpenMylistDialog"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </StackPanel>
+            </Border>
         </StackPanel>
+       
     </Grid>
 </UserControl>

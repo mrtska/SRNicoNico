@@ -91,13 +91,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         
         public async Task<string> GetAsync(HttpRequestMessage request)  {
 
-            VerifyRequest(request);
+            try {
 
-            HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                VerifyRequest(request);
 
-            VerifyResponse(response);
+                HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
-            return await response.Content.ReadAsStringAsync();
+                VerifyResponse(response);
+
+                return await response.Content.ReadAsStringAsync();
+
+            } catch(AggregateException e) {
+
+                throw new RequestTimeout(e);
+            }
         }
 
         public async Task<string> GetAsync(string uri) {
@@ -107,13 +114,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public async Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage request) {
 
-            VerifyRequest(request);
+            try {
 
-            HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                VerifyRequest(request);
 
-            VerifyResponse(response);
+                HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
-            return response;
+                VerifyResponse(response);
+
+                return response;
+
+            } catch(AggregateException e) {
+
+                throw new RequestTimeout(e);
+            }
         }
         
         public async Task<HttpResponseMessage> GetResponseAsync(string uri) {
@@ -124,13 +138,19 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public async Task<Stream> GetStreamAsync(HttpRequestMessage request) {
 
-            VerifyRequest(request);
+            try {
+                VerifyRequest(request);
 
-            HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
-            VerifyResponse(response);
+                VerifyResponse(response);
 
-            return await response.Content.ReadAsStreamAsync();
+                return await response.Content.ReadAsStreamAsync();
+
+            } catch(AggregateException e) {
+
+                throw new RequestTimeout(e);
+            }
         }
 
         public async Task<Stream> GetStreamAsync(string uri) {

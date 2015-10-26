@@ -88,7 +88,7 @@ namespace SRNicoNico.ViewModels {
                 NicoNicoMylistGroupData deflist = new NicoNicoMylistGroupData();
                 deflist.Name = "とりあえずマイリスト";
                 deflist.Description = "";
-                deflist.Id = 0;
+                deflist.Id = "0";
 
                 MylistListCollection.Add(new MylistListViewModel(this, deflist, MylistInstance.GetDefMylist()));
 
