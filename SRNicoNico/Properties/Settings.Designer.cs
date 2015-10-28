@@ -94,5 +94,17 @@ namespace SRNicoNico.Properties {
                 this["EnableUrlLink"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int SearchIndex {
+            get {
+                return ((int)(this["SearchIndex"]));
+            }
+            set {
+                this["SearchIndex"] = value;
+            }
+        }
     }
 }

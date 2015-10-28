@@ -25,13 +25,7 @@
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ComboBox Width="180"
-		          Margin="5,26,0,0"
-		          HorizontalAlignment="Left"
-		          VerticalAlignment="Top"
-		          Background="#FF2D2D2D"
-		          BorderBrush="#FFAAAAAA"
-		          SelectedIndex="{Binding SelectedIndex}">
+        <ComboBox Width="180" Margin="5,26,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FF2D2D2D" BorderBrush="#FFAAAAAA" SelectedIndex="{Binding SelectedIndex,Mode=TwoWay}">
 			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="投稿日時が新しい順" Foreground="#FFAAAAAA" />
 			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="投稿日時が古い順" Foreground="#FFAAAAAA" />
 			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生数が多い順" Foreground="#FFAAAAAA" />

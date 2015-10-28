@@ -44,14 +44,15 @@ namespace SRNicoNico.ViewModels {
 
 
         #region SelectedIndex変更通知プロパティ
-        private int _SelectedIndex = 2;
 
+        //バッキングストアはコンフィグ
         public int SelectedIndex {
-            get { return _SelectedIndex; }
+            get { return Properties.Settings.Default.SearchIndex; }
             set {
-                if (_SelectedIndex == value)
+                if (Properties.Settings.Default.SearchIndex == value)
                     return;
-                _SelectedIndex = value;
+                Properties.Settings.Default.SearchIndex = value;
+                Properties.Settings.Default.Save();
                 RaisePropertyChanged();
             }
         }
