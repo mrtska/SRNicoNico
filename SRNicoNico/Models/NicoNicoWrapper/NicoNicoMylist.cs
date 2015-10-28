@@ -68,6 +68,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 data.Description = entry.description;
                 data.ItemId = entry.item_id;
 
+
+
+
+
                 var item = entry.item_data;
                 data.Title = HttpUtility.HtmlDecode(item.title);
 
@@ -83,6 +87,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //動画
                 if(data.Type == 0) {
 
+                    data.UpdateTime = UnixTime.FromUnixTime((long)item.update_time).ToString();
                     data.FirstRetrieve = UnixTime.FromUnixTime((long)item.first_retrieve).ToString();
                     data.Length = NicoNicoUtil.GetTimeFromLong(long.Parse(item.length_seconds));
                     data.Id = item.video_id;
@@ -93,6 +98,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 } else if(data.Type == 5) { //静画
 
+                    data.UpdateTime = UnixTime.FromUnixTime((long)item.update_time).ToString();
                     data.FirstRetrieve = UnixTime.FromUnixTime((long)item.create_time).ToString();
                     data.Id = item.id.ToString();
                     data.ViewCounter = (int)item.view_count;
@@ -102,6 +108,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 } else if(data.Type == 6) { //書籍
 
+                    data.UpdateTime = UnixTime.FromUnixTime((long)entry.update_time).ToString();
                     data.FirstRetrieve = UnixTime.FromUnixTime((long)item.released_at).ToString();
                     data.Id = "bk" + item.id;
                     data.ViewCounter = (int)item.view_count;
@@ -111,6 +118,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 } else if(data.Type == 13) { //ブロマガ
 
+                    data.UpdateTime = UnixTime.FromUnixTime((long)item.commented_time).ToString();
                     data.FirstRetrieve = UnixTime.FromUnixTime((long)item.create_time).ToString();
                     data.Id = "ar" + item.id;
                     data.CommentCounter = (int)item.comment_count;
@@ -527,6 +535,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //追加日時 Unixタイム
         public string CreateTime { get; set; }
+
+        //コメントアップデートタイム
+        public string UpdateTime { get; set; }
 
         //マイリストコメント
         public string Description { get; set; }

@@ -21,9 +21,9 @@ namespace SRNicoNico.ViewModels {
     public class MylistListViewModel : TabItemViewModel, IDragSource  {
 
         #region Mylist変更通知プロパティ
-        private DispatcherCollection<MylistListEntryViewModel> _Mylist;
+        private ObservableSynchronizedCollection<MylistListEntryViewModel> _Mylist;
 
-        public DispatcherCollection<MylistListEntryViewModel> Mylist {
+        public ObservableSynchronizedCollection<MylistListEntryViewModel> Mylist {
             get { return _Mylist; }
             set { 
                 if(_Mylist == value)
@@ -43,6 +43,22 @@ namespace SRNicoNico.ViewModels {
                 if(_SelectedItem == value)
                     return;
                 _SelectedItem = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region SortIndex変更通知プロパティ
+        private int _SortIndex;
+
+        public int SortIndex {
+            get { return _SortIndex; }
+            set { 
+                if(_SortIndex == value)
+                    return;
+                _SortIndex = value;
+                Sort(value);
                 RaisePropertyChanged();
             }
         }
@@ -97,11 +113,87 @@ namespace SRNicoNico.ViewModels {
             EditModeViewModel = new MylistEditModeViewModel(this);
             Owner = vm;
             Group = group;
-            Mylist = new DispatcherCollection<MylistListEntryViewModel>(DispatcherHelper.UIDispatcher);
+            Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>();
             foreach(NicoNicoMylistData data in list) {
 
                 Mylist.Add(new MylistListEntryViewModel(this, data));
             }
+            Sort(0);
+
+        }
+
+        /*
+            <ComboBoxItem Content="登録が新しい順" />
+            <ComboBoxItem Content="登録が古い順" />
+            <ComboBoxItem Content="タイトル昇順" />
+            <ComboBoxItem Content="タイトル降順" />
+            <ComboBoxItem Content="マイリストコメント昇順" />
+            <ComboBoxItem Content="マイリストコメント降順" />
+            <ComboBoxItem Content="投稿が新しい順" />
+            <ComboBoxItem Content="投稿が古い順" />
+            <ComboBoxItem Content="再生数が多い順" />
+            <ComboBoxItem Content="再生数が少ない順" />
+            <ComboBoxItem Content="コメントが新しい順" />
+            <ComboBoxItem Content="コメントが古い順" />
+            <ComboBoxItem Content="コメントが多い順" />
+            <ComboBoxItem Content="コメントが少ない順" />
+            <ComboBoxItem Content="マイリスト登録が多い順" />
+            <ComboBoxItem Content="マイリスト登録が少ない順" />
+        */
+        //ソート
+        public void Sort(int index) {
+
+            switch(index) {
+                case 0:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(entry => entry.Entry.CreateTime));
+                    break;
+                case 1:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.CreateTime));
+                    break;
+                case 2:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.Title));
+                    break;
+                case 3:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(r => r.Entry.Title));
+                    break;
+                case 4:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.Description));
+                    break;
+                case 5:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(r => r.Entry.Description));
+                    break;
+                case 6:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(entry => entry.Entry.FirstRetrieve));
+                    break;
+                case 7:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.FirstRetrieve));
+                    break;
+                case 8:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(entry => entry.Entry.ViewCounter));
+                    break;
+                case 9:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.ViewCounter));
+                    break;
+                case 10:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(entry => entry.Entry.UpdateTime));
+                    break;
+                case 11:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.UpdateTime));
+                    break;
+                case 12:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(entry => entry.Entry.CommentCounter));
+                    break;
+                case 13:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.CommentCounter));
+                    break;
+                case 14:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(entry => entry.Entry.MylistCounter));
+                    break;
+                case 15:
+                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.MylistCounter));
+                    break;
+            }
+
 
         }
 
@@ -126,7 +218,7 @@ namespace SRNicoNico.ViewModels {
 
             Task.Run(() => {
 
-                Mylist = new DispatcherCollection<MylistListEntryViewModel>(DispatcherHelper.UIDispatcher);
+                Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>();
 
                 foreach(NicoNicoMylistData data in MylistViewModel.MylistInstance.GetMylist(Group.Id)) {
 
