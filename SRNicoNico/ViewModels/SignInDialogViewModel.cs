@@ -99,7 +99,6 @@ namespace SRNicoNico.ViewModels {
 					Enabled = true;
 					return;
 				}
-				NicoNicoWrapperMain.Instance.PostInit();
 
 				Success = true;
 				Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));

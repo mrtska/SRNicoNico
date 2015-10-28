@@ -51,6 +51,9 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+
+        public NicoNicoUser User { get; private set; }
+
         public SignInDialogViewModel SignIn { get; private set; }
 
         public StatusBarViewModel StatusBar { get; private set; }
@@ -68,7 +71,7 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public ObservableCollection<TabItemViewModel> TabItems { get; set; }
+        public DispatcherCollection<TabItemViewModel> TabItems { get; set; }
 
 
         #region SelectedTab変更通知プロパティ
@@ -96,20 +99,29 @@ namespace SRNicoNico.ViewModels {
 
             SignIn = new SignInDialogViewModel();
 
-            TabItems = new ObservableCollection<TabItemViewModel> {
+            TabItems = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher) {
 
-                (SelectedTab = new StartViewModel()),
-                new SearchViewModel(),
-                new NicoRepoViewModel(),
-                new MylistViewModel(),
-                new HistoryViewModel(),
-                new OtherViewModel(),
-                (Config = new ConfigViewModel())
+                (SelectedTab = new StartViewModel())
             };
 
             AccessLog = new AccessLogViewModel();
 
 		}
+
+        //ログイン後の初期化処理
+        private void LogedInInit() {
+
+            User = new NicoNicoUser(NicoNicoWrapperMain.GetSession().UserId);
+            App.ViewModelRoot.Title += "(user:" + User.UserName + ")";
+
+            TabItems.Add(new SearchViewModel());
+            TabItems.Add(new NicoRepoViewModel());
+            TabItems.Add(new MylistViewModel());
+            TabItems.Add(new HistoryViewModel());
+            TabItems.Add(new OtherViewModel());
+            TabItems.Add(Config = new ConfigViewModel());
+
+        }
 
 		public void Initialize() {
             
@@ -157,10 +169,10 @@ namespace SRNicoNico.ViewModels {
 						return;
 					}
 
+                    //ログイン成功
                     StatusBar.Status = "ログイン完了";
-					//ログイン成功
-					NicoNicoWrapperMain.Instance.PostInit();
 
+                    LogedInInit();
 
 
 				//手動ログイン
