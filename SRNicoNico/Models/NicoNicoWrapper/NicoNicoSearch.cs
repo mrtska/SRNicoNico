@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using System.Net;
 using System.Net.Http;
+using System.Web;
+
 using Codeplex.Data;
 
 using System.Web.Script.Serialization;
@@ -125,7 +126,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public NicoNicoSearchResultEntry(string cmsid, string title, ulong view_counter, ulong comment_counter, ulong mylist_counter, string thumbnail_url, string length, string first_retrieve) {
 
             Cmsid = cmsid;
-            Title = title;
+            Title = HttpUtility.HtmlDecode(title);
             ViewCounter = view_counter;
             CommentCounter = comment_counter;
             MylistCounter = mylist_counter;

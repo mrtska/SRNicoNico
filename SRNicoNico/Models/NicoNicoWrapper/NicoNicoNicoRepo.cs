@@ -117,7 +117,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 NicoNicoNicoRepoDataEntry entry = new NicoNicoNicoRepoDataEntry();
 
                 entry.IconUrl = node.SelectSingleNode("child::div[contains(@class, 'log-author ')]/a/img").Attributes["data-original"].Value;
-                entry.Title = node.SelectSingleNode("child::div[@class='log-content']/div[@class='log-body']").InnerText.Trim();
+                entry.Title = HttpUtility.HtmlDecode(node.SelectSingleNode("child::div[@class='log-content']/div[@class='log-body']").InnerText.Trim());
 
                 HtmlNode thumbnail = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-target-thumbnail']/a/img");
 
@@ -125,7 +125,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 HtmlNode desc = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-target-info']/a");
 
-                entry.Description = desc != null ? desc.InnerText.Trim() : "";
+                entry.Description = desc != null ? HttpUtility.HtmlDecode(desc.InnerText.Trim()) : "";
 
                 entry.VideoUrl = desc != null ? desc.Attributes["href"].Value : "";
 

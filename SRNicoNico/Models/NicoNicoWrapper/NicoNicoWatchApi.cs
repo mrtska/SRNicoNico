@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 
+using System.Web;
 using System.Net;
 using System.Net.Http;
 
@@ -82,7 +83,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //---情報を詰める---
             ret.Cmsid = videoDetail.id;
             ret.MovieType = json.flashvars.movie_type;
-            ret.Title = videoDetail.title;
+            ret.Title = HttpUtility.HtmlDecode(videoDetail.title);  //html特殊文字をデコード
             ret.Thumbnail = videoDetail.thumbnail;
             ret.Description = videoDetail.description;
             ret.PostedAt = videoDetail.postedAt;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 
 using Livet;
 
@@ -88,7 +89,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 data.WatchDate = node.SelectSingleNode("child::div[@class='section']/p").ChildNodes["#text"].InnerText;
                 data.WatchCount = node.SelectSingleNode("child::div[@class='section']/p/span").InnerText;
 
-                data.Title = node.SelectSingleNode("child::div[@class='section']/h5/a").InnerText;
+                data.Title = HttpUtility.HtmlDecode(node.SelectSingleNode("child::div[@class='section']/h5/a").InnerText);
                 data.Id = node.SelectSingleNode("child::div[@class='section']/h5/a").Attributes["href"].Value.Substring(6);
 
                 data.ViewCounter = node.SelectSingleNode("child::div[@class='section']/ul[@class='metadata']/li[@class='play']").InnerText;

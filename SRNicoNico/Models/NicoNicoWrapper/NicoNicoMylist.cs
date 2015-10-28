@@ -69,6 +69,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 data.ItemId = entry.item_id;
 
                 var item = entry.item_data;
+                data.Title = HttpUtility.HtmlDecode(item.title);
 
                 if(entry.item_type is string) {
 
@@ -85,7 +86,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     data.FirstRetrieve = UnixTime.FromUnixTime((long)item.first_retrieve).ToString();
                     data.Length = NicoNicoUtil.GetTimeFromLong(long.Parse(item.length_seconds));
                     data.Id = item.video_id;
-                    data.Title = item.title;
                     data.ViewCounter = int.Parse(item.view_counter);
                     data.CommentCounter = int.Parse(item.num_res);
                     data.MylistCounter = int.Parse(item.mylist_counter);
@@ -95,7 +95,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     data.FirstRetrieve = UnixTime.FromUnixTime((long)item.create_time).ToString();
                     data.Id = item.id.ToString();
-                    data.Title = item.title;
                     data.ViewCounter = (int)item.view_count;
                     data.CommentCounter = (int)item.comment_count;
                     data.MylistCounter = (int)item.mylist_count;
@@ -105,7 +104,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     data.FirstRetrieve = UnixTime.FromUnixTime((long)item.released_at).ToString();
                     data.Id = "bk" + item.id;
-                    data.Title = item.title;
                     data.ViewCounter = (int)item.view_count;
                     data.CommentCounter = (int)item.comment_count;
                     data.MylistCounter = (int)item.mylist_count;
@@ -115,7 +113,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     data.FirstRetrieve = UnixTime.FromUnixTime((long)item.create_time).ToString();
                     data.Id = "ar" + item.id;
-                    data.Title = item.title;
                     data.CommentCounter = (int)item.comment_count;
                     data.MylistCounter = int.Parse(item.mylist_count);
                     data.ThumbNailUrl = item.thumbnail_url;
@@ -168,10 +165,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 NicoNicoMylistGroupData data = new NicoNicoMylistGroupData();
                 data.CreateTime = UnixTime.FromUnixTime((long)entry.create_time).ToString();
-                data.Description = entry.description;
+                data.Description = HttpUtility.HtmlDecode(entry.description);
 
                 data.Id = entry.id;
-                data.Name = entry.name;
+                data.Name = HttpUtility.HtmlDecode(entry.name);
                 data.IsPublic = entry.@public == "0" ? false : true;
                 data.SortOrder = int.Parse(entry.sort_order);
 
