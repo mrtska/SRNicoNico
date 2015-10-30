@@ -209,7 +209,7 @@ namespace SRNicoNico.ViewModels {
             Task.Run(() => {
 
                 Status = "マイリスト更新中";
-                MylistViewModel.MylistInstance.UpdateMylistGroup(List.Group);
+                MylistViewModel.MylistGroupInstance.UpdateMylistGroup(List.Group);
                 List.Name = List.Group.Name;
                 Status = "マイリストを更新しました";
                 List.EditMode = false;

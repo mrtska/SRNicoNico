@@ -17,6 +17,8 @@ using SRNicoNico.Models.NicoNicoWrapper;
 using System.Collections.ObjectModel;
 
 namespace SRNicoNico.ViewModels {
+
+
     public class VideoMylistViewModel : ViewModel {
 
 
@@ -50,7 +52,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        
         #region Mylists変更通知プロパティ
         private ObservableCollection<NicoNicoMylistGroupData> _Mylists = new ObservableCollection<NicoNicoMylistGroupData>();
 
@@ -64,7 +65,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region SelectedMylist変更通知プロパティ
         private NicoNicoMylistGroupData _SelectedMylist;
@@ -80,13 +80,11 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-
         public VideoMylistViewModel(VideoViewModel vm) {
 
             Video = vm;
             
-            Task.Run(() => Mylists = new ObservableCollection<NicoNicoMylistGroupData>(MylistViewModel.MylistInstance.GetMylistGroup()));
+            Task.Run(() => Mylists = new ObservableCollection<NicoNicoMylistGroupData>(MylistViewModel.MylistGroupInstance.GetMylistGroup()));
         }
 
         public void EnableButtons() {
@@ -142,7 +140,6 @@ namespace SRNicoNico.ViewModels {
 
                     Video.Status = SelectedMylist.Name + "に登録しました";
                 }
-
             });
         }
 
@@ -150,6 +147,5 @@ namespace SRNicoNico.ViewModels {
 
             Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
         }
-
     }
 }

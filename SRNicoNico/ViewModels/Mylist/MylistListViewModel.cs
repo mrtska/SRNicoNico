@@ -244,7 +244,7 @@ namespace SRNicoNico.ViewModels {
             Owner.Status = Group.Name + " を削除しています";
             Task.Run(() => {
 
-                MylistViewModel.MylistInstance.DeleteMylistGroup(Group.Id);
+                MylistViewModel.MylistGroupInstance.DeleteMylistGroup(Group.Id);
                 CloseDialog();
                 Owner.Reflesh();
                 Owner.Status = Group.Name + " を削除しました";

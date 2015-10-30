@@ -19,7 +19,7 @@
                    Topmost="True"
                    WindowStartupLocation="CenterOwner"
                    Width="431" 
-                   Height="200"
+                   
                    >
 
     <i:Interaction.Triggers>

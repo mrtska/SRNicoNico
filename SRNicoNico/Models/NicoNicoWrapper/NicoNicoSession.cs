@@ -164,22 +164,18 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             //アクセスログに登録
             App.ViewModelRoot.AccessLog.StartAccessUrl(request);
-
         }
 
         //レスポンスの正当性を確認
         private void VerifyResponse(HttpResponseMessage response) {
 
             
-            Console.WriteLine("Access:" + response.RequestMessage.RequestUri + " ResponseCode:" + response.StatusCode);
+            System.Diagnostics.Debug.WriteLine("Access:" + response.RequestMessage.RequestUri + " ResponseCode:" + response.StatusCode);
             App.ViewModelRoot.AccessLog.EndAccessUrl(response);
-
-
         }
 
         //サインイン
         public SigninStatus SignIn(string address, string passwd) {
-
 
 			var request = new Dictionary<string, string>();
 			request.Add("mail_tel", address);		//アドレス
@@ -234,6 +230,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			//サインイン失敗
 			return SigninStatus.Failed;
 		}
+
+        public string GetCsrfToken() {
+
+            return "";
+        }
 
         //終了時
         public void Dispose() {

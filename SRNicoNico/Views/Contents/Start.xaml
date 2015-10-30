@@ -21,8 +21,8 @@
             <RowDefinition Height="16*"/>
             <RowDefinition Height="13*"/>
         </Grid.RowDefinitions>
-        <TextBlock FontSize="36" >
-            NicoNico Viewer <Run FontSize="20">beta 0.43</Run>
+        <TextBlock FontSize="36">
+            NicoNico Viewer <Run FontSize="20">beta 0.44</Run>
         </TextBlock>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="10,62,0,0" Height="140">
 			このアプリケーションはニコニコ動画をブラウザを起動しなくても見られるようにするアプリケーションです。<LineBreak />
@@ -42,8 +42,8 @@
                     <ColumnDefinition Width="8*"/>
                     <ColumnDefinition Width="105*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock TextWrapping="Wrap">
-                    v0.1<LineBreak /> <LineBreak />
+                <TextBlock TextWrapping="Wrap" Margin="-5,0,5,0">
+                    v0.1<LineBreak /> <LineBreak  />
                     v0.11<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.2<LineBreak /><LineBreak /><LineBreak />
                     v0.21<LineBreak /><LineBreak /><LineBreak />
@@ -51,7 +51,8 @@
                     v0.4<LineBreak /><LineBreak /><LineBreak />
                     v0.41<LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.42<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
-                    v0.43
+                    v0.43<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
+                    v0.44
 
                 </TextBlock>
                 <TextBlock Grid.Column="1">
@@ -81,7 +82,9 @@
                     マイリストエディットモード実装<LineBreak />
                     ドラッグアンドドロップでマイリスト移動が出来るように<LineBreak />
                     動画再生はクリックからダブルクリックに変更<LineBreak />
-                    マイリストの静画に対応<LineBreak />
+                    マイリストの静画に対応<LineBreak /><LineBreak />
+                    マイリストソート機能実装<LineBreak />
+                    html特殊文字の対処
                     
                     
 

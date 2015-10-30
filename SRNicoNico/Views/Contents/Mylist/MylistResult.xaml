@@ -48,7 +48,6 @@
                     <ComboBoxItem Content="コメントが少ない順" />
                     <ComboBoxItem Content="マイリスト登録が多い順" />
                     <ComboBoxItem Content="マイリスト登録が少ない順" />
-
                 </ComboBox>
                 
                 <StackPanel HorizontalAlignment="Right" Grid.Column="2" >

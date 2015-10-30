@@ -9,8 +9,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 		public static NicoNicoWrapperMain Instance;
 
-		public NicoNicoSession Session { get; set; }
+		private NicoNicoSession _Session { get; set; }
 
+        public NicoNicoSession Session {
+
+            get {
+
+                return _Session;
+            }
+        }
 
         //現在のセッションを取得
         public static NicoNicoSession GetSession() {
@@ -22,5 +29,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			return Instance.Session;
 		}
+
+        public NicoNicoWrapperMain(NicoNicoSession session) {
+
+            _Session = session;
+        }
 	}
 }

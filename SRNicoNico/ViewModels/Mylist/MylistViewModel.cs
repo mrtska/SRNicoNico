@@ -22,6 +22,7 @@ namespace SRNicoNico.ViewModels {
 
         //バックエンドインスタンス
         public static NicoNicoMylist MylistInstance = new NicoNicoMylist();
+        public static NicoNicoMylistGroup MylistGroupInstance = new NicoNicoMylistGroup();
 
         #region IsActive変更通知プロパティ
         private bool _IsActive;
@@ -92,7 +93,7 @@ namespace SRNicoNico.ViewModels {
 
                 MylistListCollection.Add(new MylistListViewModel(this, deflist, MylistInstance.GetDefMylist()));
 
-                foreach(NicoNicoMylistGroupData group in MylistInstance.GetMylistGroup()) {
+                foreach(NicoNicoMylistGroupData group in MylistGroupInstance.GetMylistGroup()) {
 
                     Status = "マイリスト取得中(" + group.Name + ")";
                     MylistListCollection.Add(new MylistListViewModel(this, group, MylistInstance.GetMylist(group.Id)));

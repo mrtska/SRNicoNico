@@ -128,7 +128,6 @@ namespace SRNicoNico.ViewModels {
 			//Modelsを初期化
 			Task.Run(() => {
 
-				NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain();
 
 
 				if(File.Exists(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session")) {
@@ -157,7 +156,7 @@ namespace SRNicoNico.ViewModels {
 
 
 					//セッションが有効だった場合
-					NicoNicoWrapperMain.Instance.Session = new NicoNicoSession(key, expire);
+					NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession(key, expire));
 					if(NicoNicoWrapperMain.Instance.Session.SignInInternal() != SigninStatus.Success) {
 
 						//ログイン失敗
@@ -179,7 +178,7 @@ namespace SRNicoNico.ViewModels {
 				} else {
 
 					//セッションを確立
-					NicoNicoWrapperMain.Instance.Session = new NicoNicoSession();
+					NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession());
 					Messenger.Raise(new TransitionMessage(typeof(Views.SignInDialog), this.SignIn, TransitionMode.Modal));
 					return;
 				}
