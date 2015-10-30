@@ -219,6 +219,7 @@
     <Compile Include="ViewModels\Mylist\MylistListViewModel.cs" />
     <Compile Include="ViewModels\Mylist\MylistViewModel.cs" />
     <Compile Include="ViewModels\Mylist\NewMylistViewModel.cs" />
+    <Compile Include="ViewModels\SignIn\TwitterSignInViewModel.cs" />
     <Compile Include="ViewModels\StartViewModel.cs" />
     <Compile Include="ViewModels\TabItemViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoDataViewModel.cs" />
@@ -283,6 +284,9 @@
     <Compile Include="Views\Contents\Log\AccessLogDialog.xaml.cs">
       <DependentUpon>AccessLogDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\SignIn\TwitterSignInDialog.xaml.cs">
+      <DependentUpon>TwitterSignInDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Video\FullScreenWindow.xaml.cs">
       <DependentUpon>FullScreenWindow.xaml</DependentUpon>
     </Compile>
@@ -312,7 +316,7 @@
     <Compile Include="ViewModels\Search\SearchResultEntryViewModel.cs" />
     <Compile Include="ViewModels\Search\SearchViewModel.cs" />
     <Compile Include="ViewModels\Search\SearchResultViewModel.cs" />
-    <Compile Include="ViewModels\SignInDialogViewModel.cs" />
+    <Compile Include="ViewModels\SignIn\SignInViewModel.cs" />
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
     <Compile Include="Views\Behaviors\ListBoxBehavior.cs" />
     <Compile Include="Views\Behaviors\TextBlockHtmlBehavior.cs" />
@@ -380,7 +384,7 @@
     <Compile Include="Views\Controls\SeekBar.cs" />
     <Compile Include="Views\Extentions\DictionaryExtentions.cs" />
     <Compile Include="Views\Extentions\HtmlToXamlConverter.cs" />
-    <Compile Include="Views\SignInDialog.xaml.cs">
+    <Compile Include="Views\Contents\SignIn\SignInDialog.xaml.cs">
       <DependentUpon>SignInDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StatusBar.xaml.cs">
@@ -461,6 +465,10 @@
     <Page Include="Views\Contents\Log\AccessLogDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\SignIn\TwitterSignInDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Video\FullScreenWindow.xaml">
       <SubType>Designer</SubType>
@@ -578,7 +586,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SignInDialog.xaml">
+    <Page Include="Views\Contents\SignIn\SignInDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -611,6 +619,7 @@
     <Content Include="InfrastructureAssemblies\Livet.XML" />
     <Content Include="InfrastructureAssemblies\Microsoft.Expression.Interactions.dll" />
     <Content Include="InfrastructureAssemblies\System.Windows.Interactivity.dll" />
+    <Resource Include="Resources\TwitterIcon.png" />
     <Resource Include="SRNicoNico.ico" />
   </ItemGroup>
   <ItemGroup>

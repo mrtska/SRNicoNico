@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using System.IO;
 
 using Livet;
+using Livet.Messaging;
 using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.Views.Contents.Signin;
 
 namespace SRNicoNico.ViewModels {
-	public class SignInDialogViewModel : ViewModel {
+	public class SignInViewModel : ViewModel {
 		
 		#region MailAddress変更通知プロパティ
 		private string _MailAddress;
@@ -132,5 +134,14 @@ namespace SRNicoNico.ViewModels {
 
 			Enabled = true;
 		}
+
+
+        public void TwitterSignin() {
+
+
+
+            Messenger.Raise(new TransitionMessage(typeof(TwitterSignInDialog), new TwitterSignInViewModel(), TransitionMode.Modal));
+        }
+
 	}
 }

@@ -13,12 +13,12 @@ using Livet.Messaging.IO;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
-using SRNicoNico.Views.Contents;
 using SRNicoNico.Views.Contents.Search;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Windows;
 using System.Collections.ObjectModel;
+using SRNicoNico.Views.Contents.SignIn;
 
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
@@ -54,7 +54,7 @@ namespace SRNicoNico.ViewModels {
 
         public NicoNicoUser User { get; private set; }
 
-        public SignInDialogViewModel SignIn { get; private set; }
+        public SignInViewModel SignIn { get; private set; }
 
         public StatusBarViewModel StatusBar { get; private set; }
 
@@ -97,7 +97,7 @@ namespace SRNicoNico.ViewModels {
             StatusBar = new StatusBarViewModel();
             StatusBar.TimerStart();
 
-            SignIn = new SignInDialogViewModel();
+            SignIn = new SignInViewModel();
 
             TabItems = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher) {
 
@@ -150,7 +150,7 @@ namespace SRNicoNico.ViewModels {
 						this.SignIn.AutoLogin = true;
 
 						//ログインダイアログ表示
-						Messenger.Raise(new TransitionMessage(typeof(Views.SignInDialog), this.SignIn, TransitionMode.Modal));
+						Messenger.Raise(new TransitionMessage(typeof(SignInDialog), this.SignIn, TransitionMode.Modal));
 						return;
 					}
 
@@ -164,7 +164,7 @@ namespace SRNicoNico.ViewModels {
 						this.SignIn.AutoLogin = true;
 
 						//ログインダイアログ表示
-						Messenger.Raise(new TransitionMessage(typeof(Views.SignInDialog), this.SignIn, TransitionMode.Modal));
+						Messenger.Raise(new TransitionMessage(typeof(SignInDialog), SignIn, TransitionMode.Modal));
 						return;
 					}
 
@@ -179,7 +179,7 @@ namespace SRNicoNico.ViewModels {
 
 					//セッションを確立
 					NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession());
-					Messenger.Raise(new TransitionMessage(typeof(Views.SignInDialog), this.SignIn, TransitionMode.Modal));
+					Messenger.Raise(new TransitionMessage(typeof(SignInDialog), SignIn, TransitionMode.Modal));
 					return;
 				}
 			});

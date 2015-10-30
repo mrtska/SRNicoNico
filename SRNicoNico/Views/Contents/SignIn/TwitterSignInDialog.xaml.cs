@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using FirstFloor.ModernUI.Windows.Controls;
 using MetroRadiance.Controls;
 
-namespace SRNicoNico.Views {
+namespace SRNicoNico.Views.Contents.Signin {
 	/* 
 	 * ViewModelからの変更通知などの各種イベントを受け取る場合は、PropertyChangedWeakEventListenerや
      * CollectionChangedWeakEventListenerを使うと便利です。独自イベントの場合はLivetWeakEventListenerが使用できます。
@@ -27,8 +27,8 @@ namespace SRNicoNico.Views {
 	/// <summary>
 	/// SignInDialog.xaml の相互作用ロジック
 	/// </summary>
-	public partial class SignInDialog : MetroWindow {
-		public SignInDialog() {
+	public partial class TwitterSignInDialog : MetroWindow {
+		public TwitterSignInDialog() {
 			InitializeComponent();
 		}
 

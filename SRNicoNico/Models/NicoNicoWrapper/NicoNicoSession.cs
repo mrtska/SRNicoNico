@@ -35,9 +35,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoSession : NotificationObject {
 
 		//サインインURL
-		private const string SignInURL = "https://secure.nicovideo.jp/secure/login?site=niconico";
-
-        private const string TwitterSignInUrl = "https://account.nicovideo.jp/login/linkages/twitter/authorize?show_button_twitter=1&site=niconico&show_button_facebook=1&next_url=";
+		private const string SignInURL = "https://account.nicovideo.jp/login?site=niconico";
 
         //アカウント権限
         private const string UserAgent = "SRNicoNico/1.0";
@@ -232,6 +230,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		}
 
         public string GetCsrfToken() {
+
+
+
+
+
+
 
             return "";
         }
