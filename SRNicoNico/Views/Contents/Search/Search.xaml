@@ -37,10 +37,10 @@
 			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生時間が長い順" Foreground="#FFAAAAAA" />
 			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生時間が短い順" Foreground="#FFAAAAAA" />
 
-		</ComboBox>
-		<TextBox Width="180"
+        </ComboBox>
+        <TextBox Width="180"
 		         Height="23"
-		         Margin="5,77,0,0"
+		         Margin="5,87,0,0"
 		         HorizontalAlignment="Left"
 		         VerticalAlignment="Top"
 		         Text="{Binding SearchText}"
@@ -58,8 +58,21 @@
 		             HorizontalAlignment="Left"
 		             VerticalAlignment="Top"
 		             Content="生放送" IsEnabled="False" />
-		<Button Width="75"
-		        Margin="110,129,0,0"
+
+        <RadioButton Margin="32,55,0,0"
+		             HorizontalAlignment="Left"
+		             VerticalAlignment="Top"
+                     GroupName="Type"
+		             Content="テキスト"
+                     IsChecked="{Binding SearchTypeText}" />
+        <RadioButton Margin="102,55,0,0"
+		             HorizontalAlignment="Left"
+		             VerticalAlignment="Top"
+                     GroupName="Type"
+		             Content="タグ"
+                     IsChecked="{Binding SearchTypeTag}" />
+        <Button Width="75"
+		        Margin="110,139,0,0"
 		        HorizontalAlignment="Left"
 		        VerticalAlignment="Top"
 		        Content="検索">
