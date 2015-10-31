@@ -180,11 +180,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
         //マイリストに追加
-        public MylistResult AddMylist(NicoNicoMylistGroupData group, string cmsid, string token) {
+        public MylistResult AddMylist(NicoNicoMylistGroupData group, string cmsid, string desc, string token) {
 
             Dictionary<string, string> pair = new Dictionary<string, string>();
             pair["group_id"] = group.Id;
             pair["item_id"] = cmsid;
+            pair["description"] = desc;
             pair["token"] = token;
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, MylistAddAPI);

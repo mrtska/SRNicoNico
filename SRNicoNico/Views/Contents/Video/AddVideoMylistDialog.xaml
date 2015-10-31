@@ -27,6 +27,10 @@
         <l:InteractionMessageTrigger MessageKey="WindowAction" Messenger="{Binding Messenger, Mode=OneWay}">
             <l:WindowInteractionMessageAction />
         </l:InteractionMessageTrigger>
+
+        <ei:KeyTrigger Key="Esc" FiredOn="KeyUp">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CloseDialog"/>
+        </ei:KeyTrigger>
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
@@ -42,7 +46,7 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="マイリスト登録" TextTrimming="CharacterEllipsis" FontSize="18" Margin="10,0,0,0" VerticalAlignment="Center" />
+                <TextBlock Text="マイリスト登録" TextTrimming="CharacterEllipsis" FontSize="17" Margin="10,0,0,0" VerticalAlignment="Center" />
             </Grid>
         </Border>
         
@@ -55,6 +59,10 @@
                     </DataTemplate>
                 </ComboBox.Resources>
             </ComboBox>
+
+            <TextBlock Text="マイリストコメント（任意）" HorizontalAlignment="Center"/>
+            <TextBox Text="{Binding MylistDescription}" Margin="10,4"/>
+            
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <Button Content="登録" Margin="10">
                     <i:Interaction.Triggers>

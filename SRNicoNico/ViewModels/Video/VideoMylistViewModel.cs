@@ -80,6 +80,22 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+
+        #region MylistDescription変更通知プロパティ
+        private string _MylistDescription;
+
+        public string MylistDescription {
+            get { return _MylistDescription; }
+            set { 
+                if(_MylistDescription == value)
+                    return;
+                _MylistDescription = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         public VideoMylistViewModel(VideoViewModel vm) {
 
             Video = vm;
@@ -128,7 +144,7 @@ namespace SRNicoNico.ViewModels {
             Task.Run(() => {
 
                 Video.Status = SelectedMylist.Name + "に登録中";
-                MylistResult result = MylistViewModel.MylistInstance.AddMylist(SelectedMylist, Video.VideoData.ApiData.Cmsid, Video.VideoData.ApiData.Token);
+                MylistResult result = MylistViewModel.MylistInstance.AddMylist(SelectedMylist, Video.VideoData.ApiData.Cmsid, MylistDescription, Video.VideoData.ApiData.Token);
 
                 if(result == MylistResult.EXIST) {
 
