@@ -21,9 +21,9 @@ namespace SRNicoNico.ViewModels {
     public class MylistListViewModel : TabItemViewModel, IDragSource  {
 
         #region Mylist変更通知プロパティ
-        private ObservableSynchronizedCollection<MylistListEntryViewModel> _Mylist;
+        private DispatcherCollection<MylistListEntryViewModel> _Mylist;
 
-        public ObservableSynchronizedCollection<MylistListEntryViewModel> Mylist {
+        public DispatcherCollection<MylistListEntryViewModel> Mylist {
             get { return _Mylist; }
             set { 
                 if(_Mylist == value)
@@ -113,7 +113,7 @@ namespace SRNicoNico.ViewModels {
             EditModeViewModel = new MylistEditModeViewModel(this);
             Owner = vm;
             Group = group;
-            Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>();
+            Mylist = new DispatcherCollection<MylistListEntryViewModel>(DispatcherHelper.UIDispatcher);
             foreach(NicoNicoMylistData data in list) {
 
                 Mylist.Add(new MylistListEntryViewModel(this, data));
@@ -143,58 +143,70 @@ namespace SRNicoNico.ViewModels {
         //ソート
         public void Sort(int index) {
 
+            IOrderedEnumerable<MylistListEntryViewModel> sorted = null;
+
+            MylistListEntryViewModel[] tmp = Mylist.ToArray();
+            
+            //並び替え
             switch(index) {
                 case 0:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(entry => entry.Entry.CreateTime));
+                    sorted = tmp.OrderByDescending(r => r.Entry.CreateTime);
                     break;
                 case 1:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.CreateTime));
+                    sorted = tmp.OrderBy(r => r.Entry.CreateTime);
                     break;
                 case 2:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.Title));
+                    sorted = tmp.OrderBy(r => r.Entry.Title);
                     break;
                 case 3:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(r => r.Entry.Title));
+                    sorted = tmp.OrderByDescending(r => r.Entry.Title);
                     break;
                 case 4:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.Description));
+                    sorted = tmp.OrderBy(r => r.Entry.Description);
                     break;
                 case 5:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(r => r.Entry.Description));
+                    sorted = tmp.OrderByDescending(r => r.Entry.Description);
                     break;
                 case 6:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(entry => entry.Entry.FirstRetrieve));
+                    sorted = tmp.OrderByDescending(r => r.Entry.FirstRetrieve);
                     break;
                 case 7:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.FirstRetrieve));
+                    sorted = tmp.OrderBy(r => r.Entry.FirstRetrieve);
                     break;
                 case 8:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(entry => entry.Entry.ViewCounter));
+                    sorted = tmp.OrderByDescending(r => r.Entry.ViewCounter);
                     break;
                 case 9:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.ViewCounter));
+                    sorted = tmp.OrderBy(r => r.Entry.ViewCounter);
                     break;
                 case 10:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(entry => entry.Entry.UpdateTime));
+                    sorted = tmp.OrderByDescending(r => r.Entry.UpdateTime);
                     break;
                 case 11:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.UpdateTime));
+                    sorted = tmp.OrderBy(r => r.Entry.UpdateTime);
                     break;
                 case 12:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(entry => entry.Entry.CommentCounter));
+                    sorted = tmp.OrderByDescending(r => r.Entry.CommentCounter);
                     break;
                 case 13:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.CommentCounter));
+                    sorted = tmp.OrderBy(r => r.Entry.CommentCounter);
                     break;
                 case 14:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderByDescending(entry => entry.Entry.MylistCounter));
+                    sorted = tmp.OrderByDescending(r => r.Entry.MylistCounter);
                     break;
                 case 15:
-                    Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>(Mylist.OrderBy(r => r.Entry.MylistCounter));
+                    sorted = tmp.OrderBy(r => r.Entry.MylistCounter);
                     break;
             }
 
+            //一度空にする
+            Mylist.Clear();
 
+            //ソートしたマイリストを再度追加
+            foreach(var entry in sorted) {
+
+                Mylist.Add(entry);
+            }
         }
 
         //選択したマイリストを開く
@@ -214,11 +226,10 @@ namespace SRNicoNico.ViewModels {
         public void Reflesh() {
 
             IsActive = true;
-            Mylist.Clear();
 
             Task.Run(() => {
 
-                Mylist = new ObservableSynchronizedCollection<MylistListEntryViewModel>();
+                Mylist.Clear();
 
                 foreach(NicoNicoMylistData data in MylistViewModel.MylistInstance.GetMylist(Group.Id)) {
 
@@ -240,7 +251,7 @@ namespace SRNicoNico.ViewModels {
 
         //マイリスト削除
         public void DeleteMylist() {
-
+            
             Owner.Status = Group.Name + " を削除しています";
             Task.Run(() => {
 

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 using Livet;
 using System.IO;
+using Codeplex.Data;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
@@ -231,13 +232,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public string GetCsrfToken() {
 
+            //CSRFトークンが一番楽に取得できるAPIがこれ
+            const string api = "http://www.nicovideo.jp/api/videoviewhistory/list";
 
-
-
-
-
-
-            return "";
+            var json = DynamicJson.Parse(GetAsync(api).Result);
+            
+            return json.token;
         }
 
         //終了時

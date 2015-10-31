@@ -25,6 +25,24 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private const string MylistGroupDeleteAPI = "http://www.nicovideo.jp/api/mylistgroup/delete";
 
 
+        //マイリストページからCSRFトークンを取得する
+        public string GetMylistToken(NicoNicoMylistGroupData Group) {
+
+            var api = "http://www.nicovideo.jp/my/mylist/#/" + Group.Id;
+
+            var result = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
+
+            return result.Substring(result.IndexOf("NicoAPI.token = \"") + 17, 60);
+        }
+        public string GetMylistToken() {
+
+            var api = "http://www.nicovideo.jp/my/mylist";
+
+            var result = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
+
+            return result.Substring(result.IndexOf("NicoAPI.token = \"") + 17, 60);
+        }
+
 
         //自分のマイリストを取得
         public List<NicoNicoMylistGroupData> GetMylistGroup() {
@@ -69,7 +87,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
         public void CreateMylistGroup(string name, string desc) {
 
-            
+            CreateMylistGroup(name, desc, GetMylistToken());
         }
 
         //マイリストの情報を更新
@@ -90,7 +108,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
         public void UpdateMylistGroup(NicoNicoMylistGroupData group) {
 
-           // UpdateMylistGroup(group, );
+            UpdateMylistGroup(group, GetMylistToken(group));
         }
 
 
@@ -109,7 +127,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
         public void DeleteMylistGroup(string groupId) {
 
-
+            DeleteMylistGroup(groupId, GetMylistToken());
         }
     }
 }
