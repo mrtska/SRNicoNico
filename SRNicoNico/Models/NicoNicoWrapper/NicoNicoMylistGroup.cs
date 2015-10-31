@@ -130,4 +130,31 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             DeleteMylistGroup(groupId, GetMylistToken());
         }
     }
+
+    //マイリストグループエントリ
+    public class NicoNicoMylistGroupData {
+
+
+        //追加日時 Unixタイム
+        public string CreateTime { get; set; }
+
+        //マイリストグループコメント
+        public string Description { get; set; }
+
+        //グループID
+        public string Id { get; set; }
+
+        //名前
+        public string Name { get; set; }
+
+        //is公開
+        public bool IsPublic { get; set; }
+
+        //ソートオーダー
+        public int SortOrder { get; set; }
+
+
+        public string BeforeName { get; set; }
+        public string BeforeDescription { get; set; }
+    }
 }
