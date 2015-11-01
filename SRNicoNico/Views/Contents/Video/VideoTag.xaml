@@ -11,19 +11,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="280"
              d:DataContext="{d:DesignInstance vm:VideoTagViewModel}"
+             Background="Transparent"
              >
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="MouseDoubleClick">
+            <l:LivetCallMethodAction MethodName="TagClick" MethodTarget="{Binding}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
-        <Button>
-            <Button.Template>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <TextBlock VerticalAlignment="Center" Text="{Binding Tag.Tag}" FontSize="16" />
-                </ControlTemplate>
-            </Button.Template>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    <l:LivetCallMethodAction MethodName="TagClick" MethodTarget="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </Button>
+        <TextBlock VerticalAlignment="Center" Text="{Binding Tag.Tag}" FontSize="16" />
     </Grid>
 </UserControl>

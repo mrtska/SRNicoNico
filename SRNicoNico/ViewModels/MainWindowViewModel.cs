@@ -197,5 +197,17 @@ namespace SRNicoNico.ViewModels {
 			}
 			base.Dispose(disposing);
 		}
-	}
+
+
+        public void SearchText(SearchType type, string text) {
+
+            Search.SearchType = type;
+            Search.SearchText = text;
+            Search.DoSearch();
+            SelectedTab = Search;
+
+        }
+
+
+    }
 }

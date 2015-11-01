@@ -21,7 +21,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private const string SearchURL = "http://ext.nicovideo.jp/api/search/";
 
         //検索の種類
-        private string Type;
+        private SearchType Type;
         
         //検索キーワード
 		private string Keyword;
@@ -38,7 +38,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private SearchViewModel SearchVM;
 
 
-		public NicoNicoSearch(SearchViewModel vm, string keyword, string type, string sort) {
+		public NicoNicoSearch(SearchViewModel vm, string keyword, SearchType type, string sort) {
 
             SearchVM = vm;
             Type = type;
@@ -52,16 +52,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //リクエストのレスポンスを返す
         public NicoNicoSearchResult Search() {
 
-            string TypeString;
-            if (Type == "search") {
-                TypeString = "テキスト";
+            string typeString;  //表示文字列
+            string type;        //クエリ文字列
+            if (Type == SearchType.Keyword) {
+
+                typeString = "テキスト";
+                type = "search";
             } else {
-                TypeString = "タグ";
+
+                typeString = "タグ";
+                type = "tag";
             }
-            SearchVM.Status = "検索中(" + TypeString + ":" + Keyword + ")";
+            SearchVM.Status = "検索中(" + typeString + ":" + Keyword + ")";
 
             //URLに検索キーワードやその他いろいろをGETリクエストする
-            string search = SearchURL + Type + "/" + Keyword + "?mode=watch" + Sort + Order + "&page=" + CurrentPage++;
+            string search = SearchURL + type + "/" + Keyword + "?mode=watch" + Sort + Order + "&page=" + CurrentPage++;
 
             string jsonString = NicoNicoWrapperMain.GetSession().GetAsync(search).Result;
 
@@ -81,7 +86,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 result.List.Add(node);
             }
-            SearchVM.Status = "検索完了(" + TypeString + ":" + Keyword + ")";
+            SearchVM.Status = "検索完了(" + typeString + ":" + Keyword + ")";
 
 
             return result;
@@ -146,4 +151,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
     }
+
+    public enum SearchType {
+
+        Keyword,
+        Tag
+    }
+
 }
