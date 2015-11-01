@@ -117,7 +117,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 NicoNicoNicoRepoDataEntry entry = new NicoNicoNicoRepoDataEntry();
 
                 entry.IconUrl = node.SelectSingleNode("child::div[contains(@class, 'log-author ')]/a/img").Attributes["data-original"].Value;
-                entry.Title = HttpUtility.HtmlDecode(node.SelectSingleNode("child::div[@class='log-content']/div[@class='log-body']").InnerText.Trim());
+                entry.Title = HttpUtility.HtmlDecode(node.SelectSingleNode("child::div[@class='log-content']/div[@class='log-body']").InnerHtml.Trim());
 
                 HtmlNode thumbnail = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-target-thumbnail']/a/img");
 

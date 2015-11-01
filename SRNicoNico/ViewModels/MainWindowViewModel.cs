@@ -52,7 +52,7 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-        public NicoNicoUser User { get; private set; }
+        public NicoNicoUserEntry User { get; private set; }
 
         public SignInViewModel SignIn { get; private set; }
 
@@ -109,9 +109,12 @@ namespace SRNicoNico.ViewModels {
 		}
 
         //ログイン後の初期化処理
-        private void LogedInInit() {
+        public void LogedInInit() {
 
-            User = new NicoNicoUser(NicoNicoWrapperMain.GetSession().UserId);
+            User = new NicoNicoUserEntry();
+            User.UserId = NicoNicoWrapperMain.GetSession().UserId;
+            User.UserName = NicoNicoUser.LookupUserName(User.UserId);
+
             App.ViewModelRoot.Title += "(user:" + User.UserName + ")";
 
             TabItems.Add(new SearchViewModel());
@@ -157,7 +160,7 @@ namespace SRNicoNico.ViewModels {
 
 					//セッションが有効だった場合
 					NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession(key, expire));
-					if(NicoNicoWrapperMain.Instance.Session.SignInInternal() != SigninStatus.Success) {
+					if(NicoNicoWrapperMain.Session.SignInInternal() != SigninStatus.Success) {
 
 						//ログイン失敗
 						this.SignIn.StateText = "ログインに失敗しました。";
@@ -171,7 +174,6 @@ namespace SRNicoNico.ViewModels {
                     //ログイン成功
                     StatusBar.Status = "ログイン完了";
 
-                    LogedInInit();
 
 
 				//手動ログイン

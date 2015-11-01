@@ -29,9 +29,6 @@
 			権利者からの申し立てなどには速やかに対処します。<LineBreak />
 			このアプリケーションを利用して生じた障害や不利益の責任は一切負いません。自己責任でお使いください。<LineBreak /><LineBreak />
             GeforceやRadeonよりはIntel HD GraphicsなどのオンボードGPUのほうがパーフォーマンスが良い場合があります。<LineBreak /><LineBreak /><LineBreak />
-            <Run  FontSize="18" Foreground="Aqua">
-                このバージョンから動画を開くときにはクリックではなくダブルクリックに変更になります                
-            </Run>
         </TextBlock>
 
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24"	VerticalAlignment="Bottom" Text="～更新履歴～" />
@@ -42,7 +39,7 @@
                     <ColumnDefinition Width="8*"/>
                     <ColumnDefinition Width="105*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock TextWrapping="Wrap" Margin="-5,0,5,0">
+                <TextBlock TextWrapping="Wrap" Margin="0,0,10,0">
                     v0.1<LineBreak /> <LineBreak  />
                     v0.11<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.2<LineBreak /><LineBreak /><LineBreak />
@@ -84,7 +81,11 @@
                     動画再生はクリックからダブルクリックに変更<LineBreak />
                     マイリストの静画に対応<LineBreak /><LineBreak />
                     マイリストソート機能実装<LineBreak />
-                    html特殊文字の対処
+                    html特殊文字の対処<LineBreak />
+                    マイリストコメント表示、投稿機能<LineBreak />
+                    バグ修正、UI微調整
+                    
+                    
                     
                     
 

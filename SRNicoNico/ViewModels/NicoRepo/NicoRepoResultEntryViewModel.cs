@@ -35,7 +35,12 @@ namespace SRNicoNico.ViewModels {
                 ShowDeleteButton = true;
             }
         }
-        
+
+        public void OpenHyperLink(string uri) {
+
+
+        }
+
         //ニコレポ削除
         public void DeleteNicoRepo() {
 

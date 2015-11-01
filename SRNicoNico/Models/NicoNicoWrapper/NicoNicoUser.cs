@@ -15,25 +15,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //ユーザー名取得API
         public const string UserLookUpURL = "http://seiga.nicovideo.jp/api/user/info?id=";
 
-        //ユーザーID
-        public uint UserId { get; private set; }
-
-        //ユーザーネーム
-        public string UserName { get; private set; }
-
-		public NicoNicoUser(uint userId) {
-
-            UserId = userId;
-            UserName = LookupUserName(UserId);
-		}
-
-        public NicoNicoUser(uint userId, string userName) {
-
-            UserId = userId;
-            UserName = userName;
-        }
-
-        public static string LookupUserName(uint userId) {
+        //ユーザーIDからユーザーネームを取得する
+        public static string LookupUserName(string userId) {
 
 			string uri = UserLookUpURL + userId;
 
@@ -42,5 +25,65 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			return DynamicJson.Parse(json).response.user.nickname;
 		}
 
+        private string UserPage = "http://www.nicovideo.jp/user/";
+
+        public NicoNicoUser(string id) {
+
+            UserPage += id;
+        }
+
+        public NicoNicoUserEntry GetUserInfo() {
+
+            var ret = new NicoNicoUserEntry();
+
+            var a = NicoNicoWrapperMain.Session;
+
+
+
+
+
+
+            return ret;
+        }
+
+
+
+
+
 	}
+
+
+    public class NicoNicoUserEntry {
+
+
+        //ユーザーID
+        public string UserId { get; set; }
+
+        //ユーザーネーム
+        public string UserName { get; set; }
+
+        //ユーザー説明文
+        public string Description { get; set; }
+
+        //IDと会員クラス
+        public string Id { get; set; }
+
+        //性別
+        public string Gender { get; set; }
+
+        //生年月日
+        public string BirthDay { get; set; }
+
+        //お住まいの地域
+        public string Region { get; set; }
+
+        //お気に入り登録された数
+        public int FavoriteCount { get; set; }
+
+        //スタンプ経験値
+        public int StampExp { get; set; }
+
+
+    }
+
 }

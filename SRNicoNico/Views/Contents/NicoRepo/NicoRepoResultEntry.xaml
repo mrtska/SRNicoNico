@@ -8,6 +8,7 @@
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="59" d:DesignWidth="361"
              d:DataContext="{d:DesignInstance { x:Type vm:NicoRepoResultEntryViewModel}}"
@@ -38,7 +39,12 @@
         <TextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" TextWrapping="Wrap" Text="{Binding Entry.Time}" Height="20" HorizontalAlignment="Left" />
         <StackPanel Grid.Column="2" >
 
-            <TextBlock Text="{Binding Entry.Title}" TextWrapping="Wrap" />
+            <StackPanel.Resources>
+                <Style TargetType="Hyperlink">
+                    <EventSetter Event="RequestNavigate" Handler="OpenHyperLink"/>
+                </Style>
+            </StackPanel.Resources>
+            <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Entry.Title}" TextWrapping="Wrap" />
             <TextBlock Text="{Binding Entry.Description, TargetNullValue={x:Null}}" TextWrapping="Wrap" />
 
         </StackPanel>
@@ -66,16 +72,13 @@
                         <DataTrigger Binding="{Binding ShowDeleteButton}" Value="False">
                             <Setter Property="Template">
                                 <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                    </ControlTemplate>
+                                    <ControlTemplate TargetType="Button"/>
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
-
                     </Style.Triggers>
                 </Style>
             </Button.Style>
-            
         </Button>
     </Grid>
 </UserControl>

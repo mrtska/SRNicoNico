@@ -36,7 +36,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoSession : NotificationObject {
 
 		//サインインURL
-		private const string SignInURL = "https://account.nicovideo.jp/login?site=niconico";
+		private const string SignInURL = "https://secure.nicovideo.jp/secure/login?site=niconico";
 
         //アカウント権限
         private const string UserAgent = "SRNicoNico/1.0";
@@ -49,7 +49,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private HttpClientHandler HttpHandler;
 
 		//ユーザーID
-		public uint UserId { get; internal set; }
+		public string UserId { get; internal set; }
 
 		//ログイン情報
 		public string Key { get; set; }
@@ -206,7 +206,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 					return SigninStatus.Failed;
 				}
                 //ユーザーIDを取得
-                UserId = uint.Parse(response.Headers.GetValues("x-niconico-id").Single());
+                UserId = response.Headers.GetValues("x-niconico-id").Single();
 
                 //アカウント権限
                 Authority = (NiconicoAccountAuthority)int.Parse(response.Headers.GetValues("x-niconico-authflag").Single());
@@ -222,6 +222,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     Expire = cookie.Expires;
 
                     App.SetCookie(new Uri("http://nicovideo.jp/"), "user_session=" + Key);
+
+                    App.ViewModelRoot.LogedInInit();
 					return SigninStatus.Success;
 				}
 			}
@@ -230,15 +232,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			return SigninStatus.Failed;
 		}
 
-        public string GetCsrfToken() {
-
-            //CSRFトークンが一番楽に取得できるAPIがこれ
-            const string api = "http://www.nicovideo.jp/api/videoviewhistory/list";
-
-            var json = DynamicJson.Parse(GetAsync(api).Result);
-            
-            return json.token;
-        }
 
         //終了時
         public void Dispose() {

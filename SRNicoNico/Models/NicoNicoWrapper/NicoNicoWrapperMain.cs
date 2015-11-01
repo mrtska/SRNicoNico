@@ -9,9 +9,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 		public static NicoNicoWrapperMain Instance;
 
-		private NicoNicoSession _Session { get; set; }
+		private static NicoNicoSession _Session { get; set; }
 
-        public NicoNicoSession Session {
+        public static NicoNicoSession Session {
 
             get {
 
@@ -27,7 +27,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 				throw new SystemException("NicoNicoWrapperMainインスタンスがnullになりました。");
 			}
 
-			return Instance.Session;
+			return Session;
 		}
 
         public NicoNicoWrapperMain(NicoNicoSession session) {
