@@ -9,7 +9,7 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-
+             xmlns:behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.User"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600"
@@ -30,11 +30,18 @@
         <Image Width="130" Height="130" Source="{Binding UserEntry.UserIconUrl}" />
 
         <StackPanel Grid.Column="1">
-            <TextBlock FontSize="24" Text="{Binding UserEntry.UserName}"/>
-            <TextBlock FontSize="18" Text="{Binding UserEntry.Id}"/>
-            <TextBlock FontSize="18" Text="{Binding UserEntry.Gender}"/>
-            <TextBlock FontSize="18" Text="{Binding UserEntry.BirthDay}"/>
-            <TextBlock FontSize="18" Text="{Binding UserEntry.Region}"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" >
+                <TextBlock FontSize="24" Text="{Binding UserEntry.UserName}"/>
+                <TextBlock Margin="5,0" FontSize="13" VerticalAlignment="Bottom" Text="{Binding UserEntry.Id}"/>
+                <TextBlock Margin="5,0" FontSize="13" VerticalAlignment="Bottom" Text="{Binding UserEntry.Gender}"/>
+                <TextBlock Margin="5,0" FontSize="13" VerticalAlignment="Bottom" Text="{Binding UserEntry.BirthDay}"/>
+                <TextBlock Margin="5,0" FontSize="13" VerticalAlignment="Bottom" Text="{Binding UserEntry.Region}" />
+            </StackPanel>
+            <ScrollViewer Margin="0,5,10,0" >
+                <TextBlock Foreground="#FFAAAAAA" TextWrapping="Wrap" Background="#FF222222" behaviors:HtmlTextBoxProperties.HtmlText="{Binding UserEntry.Description}"/>
+
+            </ScrollViewer>
         </StackPanel>
+
     </Grid>
 </UserControl>

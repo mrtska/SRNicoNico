@@ -14,15 +14,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MetroRadiance.Controls;
+using SRNicoNico.ViewModels;
 
 namespace SRNicoNico.Views {
-	/* 
-	 * ViewModelからの変更通知などの各種イベントを受け取る場合は、PropertyChangedWeakEventListenerや
-     * CollectionChangedWeakEventListenerを使うと便利です。独自イベントの場合はLivetWeakEventListenerが使用できます。
-     * クローズ時などに、LivetCompositeDisposableに格納した各種イベントリスナをDisposeする事でイベントハンドラの開放が容易に行えます。
-     *
-     * WeakEventListenerなので明示的に開放せずともメモリリークは起こしませんが、できる限り明示的に開放するようにしましょう。
-     */
 
 	/// <summary>
 	/// MainWindow.xaml の相互作用ロジック
@@ -31,5 +25,16 @@ namespace SRNicoNico.Views {
 		public MainWindow() {
 			InitializeComponent();
 		}
-	}
+
+        private void Root_KeyDown(object sender, KeyEventArgs e) {
+            
+            if(DataContext is MainWindowViewModel) {
+
+                var vm = (MainWindowViewModel)DataContext;
+
+                vm.KeyDown(e);
+
+            }
+        }
+    }
 }

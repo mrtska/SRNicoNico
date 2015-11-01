@@ -25,13 +25,12 @@
 	               IsRestoringWindowPlacement="True"
 		           UseLayoutRounding="True"
 			       TextOptions.TextFormattingMode="Display"
-	       	       WindowState="{Binding WindowState}"
                    InputMethod.PreferredImeState="Off"
                    InputMethod.IsInputMethodSuspended="True"
                    KeyboardNavigation.IsTabStop="False"
                    KeyboardNavigation.TabNavigation="None"
                    x:Name="Root"
-                   Title="NicoNicoViewer"
+                   Title="NicoNicoViewer" KeyDown="Root_KeyDown"
 				  >
 
     <i:Interaction.Triggers>
@@ -40,9 +39,6 @@
         </l:InteractionMessageTrigger>
 
 
-        <!--  Viewに特別な要件が存在しない限りは、トリガーやアクションの自作にこだわらず積極的にコードビハインドを使いましょう  -->
-        <!--  Viewのコードビハインドは、基本的にView内で完結するロジックとViewModelからのイベントの受信(専用リスナを使用する)に限るとトラブルが少なくなります  -->
-        <!--  Livet1.1からはコードビハインドでViewModelのイベントを受信するためのWeakEventLisnterサポートが追加されています  -->
 
         <!--  WindowのContentRenderedイベントのタイミングでViewModelのInitializeメソッドが呼ばれます  -->
         <i:EventTrigger EventName="ContentRendered">

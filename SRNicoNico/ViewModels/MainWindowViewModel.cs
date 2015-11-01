@@ -19,6 +19,7 @@ using SRNicoNico.Models.NicoNicoWrapper;
 using System.Windows;
 using System.Collections.ObjectModel;
 using SRNicoNico.Views.Contents.SignIn;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
@@ -198,6 +199,10 @@ namespace SRNicoNico.ViewModels {
 			base.Dispose(disposing);
 		}
 
+        public void KeyDown(KeyEventArgs e) {
+
+            SelectedTab.KeyDown(e);
+        }
 
         public void SearchText(SearchType type, string text) {
 

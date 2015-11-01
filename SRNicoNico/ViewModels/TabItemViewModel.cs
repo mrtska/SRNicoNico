@@ -13,6 +13,7 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models;
 using MetroRadiance.Controls;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
 
@@ -85,6 +86,11 @@ namespace SRNicoNico.ViewModels {
         public TabItemViewModel(string name = "") {
 
             Name = name;
+        }
+
+        public virtual void KeyDown(KeyEventArgs e) {
+
+
         }
 
         //ダイアログを閉じる

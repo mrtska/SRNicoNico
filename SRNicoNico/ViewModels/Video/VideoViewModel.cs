@@ -683,5 +683,35 @@ namespace SRNicoNico.ViewModels {
 
             Dispose();
         }
+
+        public override void KeyDown(KeyEventArgs e) {
+
+            switch(e.Key) {
+                case Key.Space:
+                    PlayOrPauseOrResume();
+                    break;
+                case Key.F:
+                    ToggleFullScreen();
+                    break;
+                case Key.Back:
+                    Restart();
+                    break;
+                case Key.C:
+                    ToggleComment();
+                    break;
+                case Key.R:
+                    ToggleRepeat();
+                    break;
+                case Key.M:
+                    ToggleMute();
+                    break;
+
+            }
+
+
+            Console.WriteLine(e.Key);
+        }
+
+
     }
 }

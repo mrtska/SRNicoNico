@@ -25,7 +25,7 @@
         <l:InteractionMessageTrigger Messenger="{Binding Messenger}">
             <l:TransitionInteractionMessageAction/>
         </l:InteractionMessageTrigger>
-
+<!--
         <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="F">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="GoToFullScreen" />
         </ei:KeyTrigger>
@@ -44,6 +44,7 @@
         <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="M">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleMute" />
         </ei:KeyTrigger>
+        -->
     </i:Interaction.Triggers>
 
     <Grid>
