@@ -20,7 +20,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //検索API
         private const string SearchURL = "http://ext.nicovideo.jp/api/search/";
 
-		//検索キーワード
+        //検索の種類
+        private string Type;
+        
+        //検索キーワード
 		private string Keyword;
 
 		//ソート
@@ -35,9 +38,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private SearchViewModel SearchVM;
 
 
-		public NicoNicoSearch(SearchViewModel vm, string keyword, string sort) {
+		public NicoNicoSearch(SearchViewModel vm, string keyword, string type, string sort) {
 
             SearchVM = vm;
+            Type = type;
 			Keyword = keyword;
 
 			Sort = "&sort=" + sort.Split(':')[0];
@@ -48,10 +52,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //リクエストのレスポンスを返す
         public NicoNicoSearchResult Search() {
 
-            SearchVM.Status = "検索中(" + Keyword + ")";
+            string TypeString;
+            if (Type == "search") {
+                TypeString = "テキスト";
+            } else {
+                TypeString = "タグ";
+            }
+            SearchVM.Status = "検索中(" + TypeString + ":" + Keyword + ")";
 
             //URLに検索キーワードやその他いろいろをGETリクエストする
-            string search = SearchURL + "search/" + Keyword + "?mode=watch" + Sort + Order + "&page=" + CurrentPage++;
+            string search = SearchURL + Type + "/" + Keyword + "?mode=watch" + Sort + Order + "&page=" + CurrentPage++;
 
             string jsonString = NicoNicoWrapperMain.GetSession().GetAsync(search).Result;
 
@@ -71,7 +81,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 result.List.Add(node);
             }
-            SearchVM.Status = "検索完了(" + Keyword + ")";
+            SearchVM.Status = "検索完了(" + TypeString + ":" + Keyword + ")";
 
 
             return result;

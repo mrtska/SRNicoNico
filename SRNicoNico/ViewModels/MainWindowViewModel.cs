@@ -58,6 +58,8 @@ namespace SRNicoNico.ViewModels {
 
         public StatusBarViewModel StatusBar { get; private set; }
 
+        public SearchViewModel Search { get; private set; }
+
         public ConfigViewModel Config { get; private set; }
 
         public AccessLogViewModel AccessLog { get; private set; }
@@ -117,7 +119,7 @@ namespace SRNicoNico.ViewModels {
 
             App.ViewModelRoot.Title += "(user:" + User.UserName + ")";
 
-            TabItems.Add(new SearchViewModel());
+            TabItems.Add(Search = new SearchViewModel());
             TabItems.Add(new NicoRepoViewModel());
             TabItems.Add(new MylistViewModel());
             TabItems.Add(new HistoryViewModel());

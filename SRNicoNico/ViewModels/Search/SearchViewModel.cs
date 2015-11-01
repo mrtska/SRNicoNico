@@ -42,7 +42,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region SelectedIndex変更通知プロパティ
 
         //バッキングストアはコンフィグ
@@ -58,6 +57,54 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        #region SearchType変更通知プロパティ
+        private bool _SearchTypeText = true;
+        private bool _SearchTypeTag;
+
+        public string SearchType {
+            get {
+                if(_SearchTypeText) {
+                    return "search";
+                } else if (_SearchTypeTag) {
+                    return "tag";
+                } else {
+                    return "search";
+                }
+            }
+            set {
+                if (value == "search" || value == "text") {
+                    SearchTypeText = true;
+                } else if(value == "tag") {
+                    SearchTypeTag = true;
+                } else {
+                    SearchTypeText = true;
+                }
+            }
+        }
+        #region SearchType内部プロパティ
+        //直接アクセスするのは非推奨
+        public bool SearchTypeText
+        {
+            get { return _SearchTypeText; }
+            set {
+                if (_SearchTypeText == value) return;
+                _SearchTypeText = value;
+                _SearchTypeTag = !value;
+                RaisePropertyChanged();
+            }
+        }
+        //直接アクセスするのは非推奨
+        public bool SearchTypeTag {
+            get { return _SearchTypeTag; }
+            set {
+                if (_SearchTypeTag == value) return;
+                _SearchTypeTag = value;
+                _SearchTypeText = !value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+        #endregion
 
         private NicoNicoSearch currentSearch;
 
@@ -94,9 +141,9 @@ namespace SRNicoNico.ViewModels {
             SearchResult.OwnerViewModel = this;
 
             SearchResult.IsActive = true;
-
+            
             //検索
-            currentSearch = new NicoNicoSearch(this, SearchText, sort_by[SelectedIndex]);
+            currentSearch = new NicoNicoSearch(this, SearchText, SearchType, sort_by[SelectedIndex]);
 
 			Task.Run(() => {
 

@@ -35,5 +35,12 @@ namespace SRNicoNico.ViewModels {
 
             Tag = tag;
         }
+
+        public void TagClick() {
+            App.ViewModelRoot.SelectedTab = App.ViewModelRoot.Search;
+            App.ViewModelRoot.Search.SearchText = Tag.Tag;
+            App.ViewModelRoot.Search.SearchType = "tag";
+            App.ViewModelRoot.Search.DoSearch();
+        }
     }
 }
