@@ -82,7 +82,7 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        public TabItemViewModel(string name) {
+        public TabItemViewModel(string name = "") {
 
             Name = name;
         }

@@ -222,6 +222,7 @@
     <Compile Include="ViewModels\SignIn\TwitterSignInViewModel.cs" />
     <Compile Include="ViewModels\StartViewModel.cs" />
     <Compile Include="ViewModels\TabItemViewModel.cs" />
+    <Compile Include="ViewModels\User\UserViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoDataViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoMylistViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoTagViewModel.cs" />
@@ -286,6 +287,9 @@
     </Compile>
     <Compile Include="Views\Contents\SignIn\TwitterSignInDialog.xaml.cs">
       <DependentUpon>TwitterSignInDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\User\UserInformation.xaml.cs">
+      <DependentUpon>UserInformation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Video\FullScreenWindow.xaml.cs">
       <DependentUpon>FullScreenWindow.xaml</DependentUpon>
@@ -470,6 +474,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Contents\User\UserInformation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Contents\Video\FullScreenWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -637,6 +645,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir $(TargetDir)Flash

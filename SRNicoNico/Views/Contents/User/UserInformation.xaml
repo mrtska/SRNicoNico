@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.User.UserInformation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.User"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="600"
+		     Background="{DynamicResource ThemeBrushKey}"
+		  	 Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             d:DataContext="{d:DesignInstance {x:Type vm:UserViewModel}}"
+             >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Image Width="130" Height="130" Source="{Binding UserEntry.UserIconUrl}" />
+
+        <StackPanel Grid.Column="1">
+            <TextBlock FontSize="24" Text="{Binding UserEntry.UserName}"/>
+            <TextBlock FontSize="18" Text="{Binding UserEntry.Id}"/>
+            <TextBlock FontSize="18" Text="{Binding UserEntry.Gender}"/>
+            <TextBlock FontSize="18" Text="{Binding UserEntry.BirthDay}"/>
+            <TextBlock FontSize="18" Text="{Binding UserEntry.Region}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

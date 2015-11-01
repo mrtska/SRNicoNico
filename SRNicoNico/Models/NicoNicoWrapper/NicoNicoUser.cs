@@ -7,6 +7,8 @@ using System.Xml;
 using Newtonsoft.Json;
 using Codeplex.Data;
 
+using HtmlAgilityPack;
+using Fizzler.Systems.HtmlAgilityPack;
 using Livet;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
@@ -25,23 +27,36 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			return DynamicJson.Parse(json).response.user.nickname;
 		}
 
-        private string UserPage = "http://www.nicovideo.jp/user/";
+        private string UserPage;
 
-        public NicoNicoUser(string id) {
+        public NicoNicoUser(string pageUrl) {
 
-            UserPage += id;
+            UserPage = pageUrl;
         }
 
         public NicoNicoUserEntry GetUserInfo() {
 
             var ret = new NicoNicoUserEntry();
 
-            var a = NicoNicoWrapperMain.Session;
+            //ユーザーページのhtmlを取得
+            var a = NicoNicoWrapperMain.Session.GetAsync(UserPage).Result;
 
+            //htmlをロード
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml2(a);
 
+            //ユーザープロファイル
+            HtmlNode detail = doc.DocumentNode.SelectSingleNode("//div[@class='userDetail']");
+            HtmlNode profile = detail.SelectSingleNode("child::div[@class='profile']");
+            HtmlNode account = profile.SelectSingleNode("child::div[@class='account']");
 
-
-
+            ret.UserIconUrl = detail.SelectSingleNode("child::div[@class='avatar']/img").Attributes["src"].Value;
+            ret.UserName = profile.SelectSingleNode("child::h2").InnerText.Trim();
+            ret.Description = profile.SelectSingleNode("child::ul[@class='userDetailComment channel_open_mt0']/li/p/span").InnerHtml;
+            ret.Id = account.SelectSingleNode("child::p[@class='accountNumber']").InnerText.Trim();
+            ret.Gender = account.SelectSingleNode("child::p[2]").InnerText.Trim();
+            ret.BirthDay = account.SelectSingleNode("child::p[3]").InnerText.Trim();
+            ret.Region = account.SelectSingleNode("child::p[4]").InnerText.Trim();
 
             return ret;
         }
@@ -64,6 +79,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //ユーザー説明文
         public string Description { get; set; }
+
+        //ユーザーアイコン
+        public string UserIconUrl { get; set; }
 
         //IDと会員クラス
         public string Id { get; set; }

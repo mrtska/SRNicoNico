@@ -39,6 +39,17 @@ namespace SRNicoNico.ViewModels {
         public void OpenHyperLink(string uri) {
 
 
+            if(uri.Contains("user")) {
+
+
+                Task.Run(() => {
+
+                    new UserViewModel(uri);
+                });
+            }
+
+
+
         }
 
         //ニコレポ削除

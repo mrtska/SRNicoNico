@@ -157,7 +157,6 @@ namespace SRNicoNico.ViewModels {
 						return;
 					}
 
-
 					//セッションが有効だった場合
 					NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession(key, expire));
 					if(NicoNicoWrapperMain.Session.SignInInternal() != SigninStatus.Success) {
