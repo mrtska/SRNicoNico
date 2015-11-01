@@ -13,6 +13,17 @@
              d:DataContext="{d:DesignInstance vm:VideoTagViewModel}"
              >
     <Grid>
-        <TextBlock VerticalAlignment="Center" Text="{Binding Tag.Tag}" FontSize="16" />
+        <Button>
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <TextBlock VerticalAlignment="Center" Text="{Binding Tag.Tag}" FontSize="16" />
+                </ControlTemplate>
+            </Button.Template>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <l:LivetCallMethodAction MethodName="TagClick" MethodTarget="{Binding}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Button>
     </Grid>
 </UserControl>
