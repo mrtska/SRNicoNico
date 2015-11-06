@@ -27,6 +27,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             ret.Id = response.video.id;
             ret.Title = response.video.title;
+            ret.FirstRetrieve = NicoNicoUtil.DateFromVitaFormatDate(response.video.first_retrieve);
             ret.ViewCounter = int.Parse(response.video.view_counter);
             ret.CommentCounter = int.Parse(response.thread.num_res);
             ret.MylistCounter = int.Parse(response.video.mylist_counter);
@@ -57,7 +58,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //動画時間
         public string Length { get; set; }
-
+        
+        //動画投稿時日時
+        public string FirstRetrieve { get; set; }
+        
         //説明文（タグなし）
         public string Description { get; set; }
 

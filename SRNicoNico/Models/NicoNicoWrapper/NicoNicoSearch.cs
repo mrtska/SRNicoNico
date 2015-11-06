@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Net;
 using System.Net.Http;
 using System.Web;
@@ -64,27 +65,44 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 type = "tag";
             }
             SearchVM.Status = "検索中(" + typeString + ":" + Keyword + ")";
+            
+            NicoNicoSearchResult result = new NicoNicoSearchResult();
+
+            //テキスト検索のとき、urlの場合はそれも検索結果に表示する
+            if (Type == SearchType.Keyword)
+            {
+                Match match = Regex.Match(Keyword, @"^(?:http://www.nicovideo.jp/watch/)?(?<cmsid>\w{0,2}\d+)$");
+                if (match.Success)
+                {
+                    NicoNicoVitaApiVideoData data = NicoNicoVitaApi.GetVideoData(match.Groups["cmsid"].Value);
+                    NicoNicoSearchResultEntry node = new NicoNicoSearchResultEntry(data.Id, data.Title, (ulong)data.ViewCounter, (ulong)data.CommentCounter,
+                                                                                    (ulong)data.MylistCounter, data.ThumbnailUrl, data.Length, data.FirstRetrieve);
+                    result.List.Add(node);
+                }
+            }
 
             //URLに検索キーワードやその他いろいろをGETリクエストする
             string search = SearchURL + type + "/" + Keyword + "?mode=watch" + Sort + Order + "&page=" + CurrentPage++;
 
             string jsonString = NicoNicoWrapperMain.GetSession().GetAsync(search).Result;
 
-            NicoNicoSearchResult result = new NicoNicoSearchResult();
-
             //取得したJsonの全体
             var json = DynamicJson.Parse(jsonString);
 
             //検索結果総数
-            result.Total = (ulong)json.count;
+            if (json.IsDefined("count")) {
+                result.Total = (ulong)json.count;
+            }
 
             //Jsonからリストを取得、データを格納
-            foreach(var entry in json.list) {
+            if (json.IsDefined("list")) {
+                foreach (var entry in json.list) {
 
-                NicoNicoSearchResultEntry node = new NicoNicoSearchResultEntry(entry.id, entry.title_short, (ulong)entry.view_counter, (ulong)entry.num_res,
+                    NicoNicoSearchResultEntry node = new NicoNicoSearchResultEntry(entry.id, entry.title_short, (ulong)entry.view_counter, (ulong)entry.num_res,
                                                                                 (ulong)entry.mylist_counter, entry.thumbnail_url, entry.length, entry.first_retrieve);
 
-                result.List.Add(node);
+                    result.List.Add(node);
+                }
             }
             SearchVM.Status = "検索完了(" + typeString + ":" + Keyword + ")";
 

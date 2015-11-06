@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Reflection;
@@ -59,8 +60,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			return munites + ":" + seconds;
 		}
-
-
+        
+        public static string DateFromVitaFormatDate(string date) {
+            return Regex.Replace(date, @"(\d\d\d\d-\d\d-\d\d).(\d\d:\d\d:\d\d).\d\d:\d\d", "$1 $2");
+        }
 
 
 	}
