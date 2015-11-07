@@ -95,20 +95,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        #region IsSeekChanged変更通知プロパティ
-        private bool _IsSeekChanged;
-
-        public bool IsSeekChanged {
-            get { return _IsSeekChanged; }
-            set { 
-                if(_IsSeekChanged == value)
-                    return;
-                _IsSeekChanged = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
         #region WebBrowser変更通知プロパティ
         private WebBrowser _WebBrowser;
 
@@ -315,7 +301,6 @@ namespace SRNicoNico.ViewModels {
                         }
                         WebBrowser.Source = new Uri(GetPlayerPath());
                     }
-                    WebBrowser.Focus();
 
                 }));
                 IsActive = false;
@@ -450,7 +435,6 @@ namespace SRNicoNico.ViewModels {
 
             //フルスクリーンウィンドウ表示
             Messenger.Raise(message);
-            WebBrowser.Focus();
         }
 
         //ウィンドウモードに戻す
@@ -472,7 +456,6 @@ namespace SRNicoNico.ViewModels {
             //ウィンドウにFlash部分を追加
             Video.Grid.Children.Add(VideoFlash);
 
-            WebBrowser.Focus();
         }
 
         //フルスクリーン切り替え
@@ -588,7 +571,6 @@ namespace SRNicoNico.ViewModels {
 
             IsRepeat = Properties.Settings.Default.IsRepeat;
 
-            VideoFlash.Focus();
         }
 
 
@@ -626,8 +608,9 @@ namespace SRNicoNico.ViewModels {
         //JSを呼ぶ
         private void InvokeScript(string func, params string[] args) {
             
-            
-            if(WebBrowser != null && WebBrowser.IsEnabled) {
+
+            //読み込み前にボタンを押しても大丈夫なように
+            if(WebBrowser != null && WebBrowser.IsEnabled && WebBrowser.Source != null) {
 
                 try {
                     
@@ -705,7 +688,9 @@ namespace SRNicoNico.ViewModels {
                 case Key.M:
                     ToggleMute();
                     break;
-
+                case Key.F5:
+                    Reflesh();
+                    break;
             }
 
 
