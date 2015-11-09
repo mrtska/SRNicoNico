@@ -71,7 +71,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //テキスト検索のとき、urlの場合はそれも検索結果に表示する
             if (Type == SearchType.Keyword)
             {
-                Match match = Regex.Match(Keyword, @"^(?:http://www.nicovideo.jp/watch/)?(?<cmsid>\w{0,2}\d+)$");
+                Match match = Regex.Match(Keyword, @"^(:?http://(:?www.nicovideo.jp/watch/|nico.ms/))?(?<cmsid>\w{0,2}\d+).*?$");
                 if (match.Success)
                 {
                     NicoNicoVitaApiVideoData data = NicoNicoVitaApi.GetVideoData(match.Groups["cmsid"].Value);
