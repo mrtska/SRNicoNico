@@ -11,6 +11,8 @@ using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
 using Livet;
 
+using SRNicoNico.Models.NicoNicoViewer;
+
 namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoUser : NotificationObject {
 
@@ -57,6 +59,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.Gender = account.SelectSingleNode("child::p[2]").InnerText.Trim();
             ret.BirthDay = account.SelectSingleNode("child::p[3]").InnerText.Trim();
             ret.Region = account.SelectSingleNode("child::p[4]").InnerText.Trim();
+
+            //URLをハイパーリンク化する
+            ret.Description = HyperLinkParser.Parse(ret.Description);
 
             return ret;
         }
