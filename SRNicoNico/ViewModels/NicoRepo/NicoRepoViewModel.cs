@@ -18,6 +18,7 @@ using SRNicoNico.Models.NicoNicoWrapper;
 using FirstFloor.ModernUI.Presentation;
 using SRNicoNico.Models.NicoNicoViewer;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class NicoRepoViewModel : TabItemViewModel {
@@ -84,7 +85,6 @@ namespace SRNicoNico.ViewModels {
 
                     NicoRepoListViewModel vm = new NicoRepoListViewModel(this, entry.Title, entry.Id);
                     Status = "ニコレポ取得中(" + vm.Name + ")";
-                    vm.Result.IsActive = true;
                     vm.OpenNicoRepoList();
                     DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoRepoListCollection.Add(vm)));
                 }
@@ -101,5 +101,23 @@ namespace SRNicoNico.ViewModels {
 
             Reflesh();
         }
+
+        public override void KeyDown(KeyEventArgs e) {
+
+            if(e.Key == Key.F5) {
+
+                if(e.KeyboardDevice.Modifiers == ModifierKeys.Control || e.KeyboardDevice.Modifiers == ModifierKeys.Shift) {
+
+                    Reflesh();
+                } else if(SelectedList != null) {
+
+                    SelectedList.Reflesh();
+                } else {
+
+                    Reflesh();
+                }
+            }
+        }
+
     }
 }

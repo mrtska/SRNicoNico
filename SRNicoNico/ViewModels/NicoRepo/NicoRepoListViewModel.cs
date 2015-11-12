@@ -51,23 +51,30 @@ namespace SRNicoNico.ViewModels {
         //ニコレポリストを開く
         public void OpenNicoRepoList() {
 
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => Result.IsActive = true));
+           
             NicoRepoVM.Status = "ニコレポ取得中(" + Name + ")";
-            Result.OwnerViewModel = this;
-            Result.NicoRepo.Clear();
+
+            Task.Run(() => {
+
+                Result.OwnerViewModel = this;
+                Result.NicoRepo.Clear();
 
 
-            NicoRepo = new NicoNicoNicoRepo(Id);
+                NicoRepo = new NicoNicoNicoRepo(Id);
 
-            IList<NicoNicoNicoRepoDataEntry> data = NicoRepo.GetNicoRepo();
+                IList<NicoNicoNicoRepoDataEntry> data = NicoRepo.GetNicoRepo();
 
-            foreach(NicoNicoNicoRepoDataEntry entry in data) {
+                foreach(NicoNicoNicoRepoDataEntry entry in data) {
 
-				Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));
-            }
+                    Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));
+                }
 
-            NicoRepoVM.Status = "ニコレポ取得完了(" + Name + ")";
+                NicoRepoVM.Status = "ニコレポ取得完了(" + Name + ")";
 
-            Result.IsActive = false;
+                Result.IsActive = false;
+            });
+
         }
 
         public void NextNicoRepoList() {
@@ -80,7 +87,6 @@ namespace SRNicoNico.ViewModels {
 
                 if(data == null) {
 
-                    Result.IsActive = false;
                     return;
                 }
 
@@ -95,12 +101,7 @@ namespace SRNicoNico.ViewModels {
 
         public void Reflesh() {
 
-            Result.IsActive = true;
-
-            Task.Run(() => {
-
-                OpenNicoRepoList();
-            });
+            OpenNicoRepoList();
         }
     }
 }

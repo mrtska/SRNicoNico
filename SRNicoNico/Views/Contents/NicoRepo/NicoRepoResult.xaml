@@ -29,7 +29,7 @@
             </i:Interaction.Triggers>
         </mui:ModernButton>
 
-        <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding Result.IsActive}" Grid.RowSpan="2"/>
+        <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding Result.IsActive, IsAsync=True}" Grid.RowSpan="2"/>
 
         <ListBox SelectedItem="{Binding Result.SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding Result.NicoRepo}" Grid.Row="1" >
 

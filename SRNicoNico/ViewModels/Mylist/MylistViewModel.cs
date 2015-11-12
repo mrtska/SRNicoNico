@@ -16,6 +16,7 @@ using SRNicoNico.Models.NicoNicoWrapper;
 using System.Threading.Tasks;
 using GongSolutions.Wpf.DragDrop;
 using System.Windows;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class MylistViewModel : TabItemViewModel, IDropTarget {
@@ -105,6 +106,23 @@ namespace SRNicoNico.ViewModels {
             });
         }
 
+        public override void KeyDown(KeyEventArgs e) {
+
+            if(e.Key == Key.F5) {
+
+                if(e.KeyboardDevice.Modifiers == ModifierKeys.Control || e.KeyboardDevice.Modifiers == ModifierKeys.Shift) {
+
+                    Reflesh();
+                } else if(SelectedList != null) {
+
+                    SelectedList.Reflesh();
+                } else {
+
+                    Reflesh();
+                }
+            }
+        }
+
         //マイリストをドラッグしてきた時
         void IDropTarget.DragOver(IDropInfo dropInfo) {
 
@@ -118,13 +136,10 @@ namespace SRNicoNico.ViewModels {
                     return;
                 }
 
-                
                 Status = item.Entry.Title + " を " + item.Owner.Name + " から " + target.Name + " に移動します";
 
                 dropInfo.Effects = DragDropEffects.Move;
             }
-
-            ;
         }
 
         //マイリストをドロップ

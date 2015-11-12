@@ -13,6 +13,7 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoWrapper;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class HistoryViewModel : TabItemViewModel {
@@ -60,5 +61,13 @@ namespace SRNicoNico.ViewModels {
                 History.IsActive = false;
             });
         }
+        public override void KeyDown(KeyEventArgs e) {
+
+            if(e.Key == Key.F5) {
+
+                OpenHistory();
+            }
+        }
+
     }
 }
