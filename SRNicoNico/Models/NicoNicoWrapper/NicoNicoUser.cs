@@ -35,6 +35,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         private UserViewModel Owner;
 
+        //ニコレポオフセット
+        private int Offset = 0;
+
+
         public NicoNicoUser(UserViewModel vm, string pageUrl) {
 
             Owner = vm;
@@ -77,9 +81,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             return ret;
         }
 
+        //一度nullを返してきたら二度と呼ばない
         public List<NicoNicoNicoRepoDataEntry> GetUserNicoRepo() {
 
-            var url = UserPage + "/top?innerPage=1&offset=0";
+
+            var url = UserPage + "/top?innerPage=1&offset=" + Offset;
             Owner.Status = "ユーザーニコレポ取得中";
 
             List<NicoNicoNicoRepoDataEntry> ret = new List<NicoNicoNicoRepoDataEntry>();
@@ -92,6 +98,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 doc.LoadHtml2(a);
 
                 var timeline = doc.DocumentNode.SelectNodes("//div[@class='timeline']/div");
+
+                //タイムラインを取得できなかったら終了
+                if(timeline == null) {
+
+                    return null;
+                }
 
                 //ニコレポタイムライン走査
                 foreach(HtmlNode node in timeline) {
@@ -121,7 +133,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 Owner.Status = "";
 
-
+                Offset += 20;
                 return ret;
             } catch(RequestTimeout) {
 

@@ -43,6 +43,9 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
 
+                <i:Interaction.Behaviors>
+                    <Behaviors:ListBoxBehavior ViewModel="{Binding}" MethodName="Next"/>
+                </i:Interaction.Behaviors>
 
             </ListBox>
 

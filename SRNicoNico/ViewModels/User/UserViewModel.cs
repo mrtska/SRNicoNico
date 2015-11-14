@@ -65,7 +65,7 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-        public UserViewModel(string url) {
+        public UserViewModel(string url) : base("読込中") {
 
 
             App.ViewModelRoot.TabItems.Add(this);
@@ -119,15 +119,28 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        //OwnerViewModel
+        private UserViewModel User;
+
+        //ニコレポを全て取得し終わったら
+        private bool IsEnd = false;
 
         public UserNicoRepoViewModel(UserViewModel user) : base("ニコレポ") {
 
+            User = user;
             IsActive = true;
             UserNicoRepoList = new DispatcherCollection<NicoRepoResultEntryViewModel>(DispatcherHelper.UIDispatcher);
 
             Task.Run(() => {
 
-                foreach(var entry in user.UserInstance.GetUserNicoRepo()) {
+                var timeline = User.UserInstance.GetUserNicoRepo();
+
+                if(timeline == null) {
+
+                    IsActive = false;
+                    return;
+                }
+                foreach(var entry in timeline) {
 
                     UserNicoRepoList.Add(new NicoRepoResultEntryViewModel(entry));
                 }
@@ -138,7 +151,29 @@ namespace SRNicoNico.ViewModels {
 
         public void Next() {
 
+            if(IsEnd) {
 
+                return;
+            }
+            IsActive = true;
+
+            Task.Run(() => {
+
+                var timeline = User.UserInstance.GetUserNicoRepo();
+
+                if(timeline == null) {
+
+                    IsEnd = true;
+                    IsActive = false;
+                    return;
+                }
+                foreach(var entry in timeline) {
+
+                    UserNicoRepoList.Add(new NicoRepoResultEntryViewModel(entry));
+                }
+
+                IsActive = false;
+            });
         }
 
 

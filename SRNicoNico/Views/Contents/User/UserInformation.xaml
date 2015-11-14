@@ -75,11 +75,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-
-
             </Grid>
-
         </Grid>
-
     </Grid>
 </UserControl>
