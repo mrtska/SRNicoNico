@@ -24,22 +24,7 @@ namespace SRNicoNico.ViewModels {
         //バックエンドインスタンス
         public static NicoNicoMylist MylistInstance = new NicoNicoMylist();
         public static NicoNicoMylistGroup MylistGroupInstance = new NicoNicoMylistGroup();
-
-        #region IsActive変更通知プロパティ
-        private bool _IsActive;
-
-        public bool IsActive {
-            get { return _IsActive; }
-            set { 
-                if(_IsActive == value)
-                    return;
-                _IsActive = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
+        
         #region NicoRepoListCollection変更通知プロパティ
         private DispatcherCollection<MylistListViewModel> _MylistListCollection = new DispatcherCollection<MylistListViewModel>(DispatcherHelper.UIDispatcher);
 

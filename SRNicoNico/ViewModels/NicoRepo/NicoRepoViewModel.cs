@@ -22,20 +22,7 @@ using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class NicoRepoViewModel : TabItemViewModel {
-
-        #region IsActive変更通知プロパティ
-        private bool _IsActive = false;
-
-        public bool IsActive {
-            get { return _IsActive; }
-            set { 
-                if(_IsActive == value)
-                    return;
-                _IsActive = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
+        
 
         #region NicoRepoListCollection変更通知プロパティ
         private ObservableCollection<NicoRepoListViewModel> _NicoRepoListCollection = new ObservableCollection<NicoRepoListViewModel>();

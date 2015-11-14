@@ -152,20 +152,7 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
-        #region IsActive変更通知プロパティ
-        private bool _IsActive;
-
-        public bool IsActive {
-            get { return _IsActive; }
-            set { 
-                if(_IsActive == value)
-                    return;
-                _IsActive = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
+        
 
         #region Volume変更通知プロパティ
         private int _Volume = -1;

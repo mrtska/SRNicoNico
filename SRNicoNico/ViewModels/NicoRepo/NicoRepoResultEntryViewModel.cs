@@ -26,6 +26,7 @@ namespace SRNicoNico.ViewModels {
         //自分のニコレポには削除ボタンを表示する
         public bool ShowDeleteButton { get; set; }
 
+        //削除ボタンを利用するならこっち
         public NicoRepoResultEntryViewModel(NicoNicoNicoRepoDataEntry entry, NicoRepoListViewModel owner) {
 
             Owner = owner;
@@ -35,6 +36,12 @@ namespace SRNicoNico.ViewModels {
                 ShowDeleteButton = true;
             }
         }
+
+        public NicoRepoResultEntryViewModel(NicoNicoNicoRepoDataEntry entry) {
+
+            Entry = entry;
+        }
+
 
         public void OpenHyperLink(string uri) {
 
@@ -81,7 +88,9 @@ namespace SRNicoNico.ViewModels {
                 var response = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
 
                 Close();
-                Owner.Reflesh();
+
+
+                Owner?.Reflesh();
             });
         }
 

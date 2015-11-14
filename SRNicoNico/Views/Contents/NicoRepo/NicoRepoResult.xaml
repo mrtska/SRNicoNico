@@ -1,4 +1,4 @@
-﻿<UserControl
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.NicoRepo.NicoRepoResult"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,7 +9,7 @@
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-             xmlns:Behaviors="clr-namespace:SRNicoNico.Views.Behaviors" x:Class="SRNicoNico.Views.Contents.NicoRepo.NicoRepoResult"
+             xmlns:Behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type vm:NicoRepoListViewModel}}"
@@ -31,7 +31,7 @@
 
         <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding Result.IsActive, IsAsync=True}" Grid.RowSpan="2"/>
 
-        <ListBox SelectedItem="{Binding Result.SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding Result.NicoRepo}" Grid.Row="1" >
+        <ListBox ScrollViewer.CanContentScroll="False" SelectedItem="{Binding Result.SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding Result.NicoRepo}" Grid.Row="1" >
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">

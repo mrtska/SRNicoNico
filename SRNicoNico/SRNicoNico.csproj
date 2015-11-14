@@ -288,6 +288,9 @@
     <Compile Include="Views\Contents\SignIn\TwitterSignInDialog.xaml.cs">
       <DependentUpon>TwitterSignInDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\User\UserNicoRepoResult.xaml.cs">
+      <DependentUpon>UserNicoRepoResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\User\UserInformation.xaml.cs">
       <DependentUpon>UserInformation.xaml</DependentUpon>
     </Compile>
@@ -471,6 +474,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Contents\SignIn\TwitterSignInDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\User\UserNicoRepoResult.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
