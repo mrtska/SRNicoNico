@@ -12,6 +12,7 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class NicoRepoResultViewModel : ViewModel {
@@ -99,20 +100,14 @@ namespace SRNicoNico.ViewModels {
                 SelectedItem = null;
                 return;
             }
-			//ニコレポが動画だったら動画を開く
-            if(SelectedItem.Entry.VideoUrl.StartsWith("http://www.nicovideo.jp/watch/")) {
 
-                OpenVideo();
-            }
+            //URLに応じて開くものを変える
+            NicoNicoOpener.Open(SelectedItem.Entry.VideoUrl);
 
             SelectedItem = null;
         }
 
 
-        private void OpenVideo() {
-
-            new VideoViewModel(SelectedItem.Entry.VideoUrl);
-
-        }
+        
     }
 }

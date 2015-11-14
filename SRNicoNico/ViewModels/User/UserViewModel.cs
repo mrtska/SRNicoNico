@@ -13,6 +13,7 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Threading.Tasks;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class UserViewModel : TabItemViewModel {
@@ -149,6 +150,7 @@ namespace SRNicoNico.ViewModels {
             });
         }
 
+        //インフィニットスクロール発動で呼ばれる
         public void Next() {
 
             if(IsEnd) {
@@ -174,6 +176,21 @@ namespace SRNicoNico.ViewModels {
 
                 IsActive = false;
             });
+        }
+
+        public void Open() {
+
+
+            //not existsの時など
+            if(SelectedItem == null || SelectedItem.Entry.VideoUrl == null) {
+
+                SelectedItem = null;
+                return;
+            }
+
+            NicoNicoOpener.Open(SelectedItem.Entry.VideoUrl);
+
+            SelectedItem = null;
         }
 
 

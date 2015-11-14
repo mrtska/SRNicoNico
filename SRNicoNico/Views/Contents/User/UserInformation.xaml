@@ -53,7 +53,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <metro:TabView Background="{DynamicResource ActiveBackgroundBrushKey}" Style="{DynamicResource HorizontalViewStyle}" Height="38" ItemsSource="{Binding UserContentList}" SelectedValue="{Binding SelectedList}">
+            <metro:TabView SelectedIndex="0" Background="{DynamicResource ActiveBackgroundBrushKey}" Style="{DynamicResource HorizontalViewStyle}" Height="38" ItemsSource="{Binding UserContentList}" SelectedValue="{Binding SelectedList}">
             </metro:TabView>
 
             <Grid Grid.Row="1">
