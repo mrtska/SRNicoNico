@@ -18,8 +18,6 @@
                    xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
                    Width="870"
                    Height="723"
-                   MinWidth="700"
-                   MinHeight="500"
 		           Background="{DynamicResource ThemeBrushKey}"
 		  	       Foreground="{DynamicResource ActiveForegroundBrushKey}"
 	               IsRestoringWindowPlacement="True"

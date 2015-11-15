@@ -680,8 +680,14 @@ namespace SRNicoNico.ViewModels {
                     break;
             }
 
+            if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
 
-            Console.WriteLine(e.Key);
+                if(e.Key == Key.W) {
+
+                    DisposeViewModel();
+                }
+            }
+
         }
 
 

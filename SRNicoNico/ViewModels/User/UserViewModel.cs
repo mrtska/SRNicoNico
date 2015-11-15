@@ -85,7 +85,10 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+        public void OpenBrowser() {
 
+            System.Diagnostics.Process.Start(UserEntry.UserPage);
+        }
     }
 
     class UserNicoRepoViewModel : TabItemViewModel {

@@ -14,6 +14,7 @@ using Livet.Messaging.Windows;
 using FirstFloor.ModernUI.Windows.Controls;
 
 using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class NicoRepoResultEntryViewModel : ViewModel {
@@ -45,17 +46,7 @@ namespace SRNicoNico.ViewModels {
 
         public void OpenHyperLink(string uri) {
 
-
-            if(uri.Contains("user")) {
-
-
-                Task.Run(() => {
-
-                    new UserViewModel(uri);
-                });
-            }
-
-
+            NicoNicoOpener.Open(uri);
 
         }
 

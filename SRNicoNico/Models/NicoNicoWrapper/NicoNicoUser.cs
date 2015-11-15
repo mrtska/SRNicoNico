@@ -73,6 +73,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             ret.Description = temp == null ? "" : temp.InnerHtml;
 
+            ret.UserPage = UserPage;
 
             //URLをハイパーリンク化する
             ret.Description = HyperLinkParser.Parse(ret.Description);
@@ -156,6 +157,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //ユーザーID
         public string UserId { get; set; }
+
+        //ユーザーページ
+        public string UserPage { get; set; }
 
         //ユーザーネーム
         public string UserName { get; set; }

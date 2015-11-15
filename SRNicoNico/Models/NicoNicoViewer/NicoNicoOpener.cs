@@ -6,19 +6,28 @@ using System.Text;
 using Livet;
 
 using SRNicoNico.ViewModels;
+using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
     public class NicoNicoOpener : NotificationObject {
 
 
+        //URLから適当なViewを開く
         public static void Open(string url) {
 
-            if(url.StartsWith("http://www.nicovideo.jp/watch/")) {
+            Task.Run(() => {
 
-                new VideoViewModel(url);
-            }
+                if(url.StartsWith("http://www.nicovideo.jp/watch/")) {
 
+                    new VideoViewModel(url);
+                } else if(url.StartsWith("http://www.nicovideo.jp/user/")) {
+
+                    new UserViewModel(url);
+                } else {
+
+                    System.Diagnostics.Process.Start(url);
+                }
+            });
         }
-
     }
 }

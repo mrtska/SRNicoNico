@@ -44,6 +44,11 @@
             </TextBlock>
             <ScrollViewer Grid.Row="1">
                 <Grid>
+                    <Grid.Resources>
+                        <Style TargetType="Hyperlink">
+                            <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
+                        </Style>
+                    </Grid.Resources>
                     <TextBlock Foreground="#FFAAAAAA" TextWrapping="Wrap" Background="#FF222222" behaviors:HtmlTextBoxProperties.HtmlText="{Binding UserEntry.Description}"/>
                 </Grid>
             </ScrollViewer>
@@ -53,8 +58,23 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <metro:TabView SelectedIndex="0" Background="{DynamicResource ActiveBackgroundBrushKey}" Style="{DynamicResource HorizontalViewStyle}" Height="38" ItemsSource="{Binding UserContentList}" SelectedValue="{Binding SelectedList}">
-            </metro:TabView>
+
+            <Grid Background="{DynamicResource ActiveBackgroundBrushKey}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <metro:TabView SelectedIndex="0" Style="{DynamicResource HorizontalViewStyle}" Height="38" ItemsSource="{Binding UserContentList}" SelectedValue="{Binding SelectedList}" />
+
+                <mui:ModernButton Grid.Column="1" ToolTip="ブラウザで開く" Margin="5" Focusable="False" HorizontalAlignment="Right" EllipseDiameter="25" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodName="OpenBrowser" MethodTarget="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </mui:ModernButton>
+            </Grid>
+
 
             <Grid Grid.Row="1">
                 <ItemsControl  ItemsSource="{Binding UserContentList}" >
