@@ -23,5 +23,8 @@
     <Setting Name="SearchIndex" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
+    <Setting Name="UserSelectedFont" Type="System.Windows.Media.FontFamily" Scope="User">
+      <Value Profile="(Default)">Yu Gothic UI</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

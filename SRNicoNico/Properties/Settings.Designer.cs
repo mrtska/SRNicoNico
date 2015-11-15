@@ -106,5 +106,17 @@ namespace SRNicoNico.Properties {
                 this["SearchIndex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Yu Gothic UI")]
+        public global::System.Windows.Media.FontFamily UserSelectedFont {
+            get {
+                return ((global::System.Windows.Media.FontFamily)(this["UserSelectedFont"]));
+            }
+            set {
+                this["UserSelectedFont"] = value;
+            }
+        }
     }
 }

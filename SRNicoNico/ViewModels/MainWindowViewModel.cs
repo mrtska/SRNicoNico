@@ -20,6 +20,7 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using SRNicoNico.Views.Contents.SignIn;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
@@ -53,6 +54,25 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region UserSelectedFont変更通知プロパティ
+        public FontFamily UserSelectedFont {
+            get { return Properties.Settings.Default.UserSelectedFont; }
+            set { 
+                if(Properties.Settings.Default.UserSelectedFont == value)
+                    return;
+                Properties.Settings.Default.UserSelectedFont = value;
+                Properties.Settings.Default.Save();
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        public void ApplyFont() {
+
+            RaisePropertyChanged("UserSelectedFont");
+        }
+
+        
         public NicoNicoUserEntry User { get; private set; }
 
         public SignInViewModel SignIn { get; private set; }

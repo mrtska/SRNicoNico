@@ -206,6 +206,7 @@
     <Compile Include="Models\NicoNicoWrapper\NicoNicoVitaApi.cs" />
     <Compile Include="Models\NicoNicoWrapper\RequestTimeout.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="ViewModels\Config\ConfigGeneralViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigVideoViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigViewModel.cs" />
     <Compile Include="ViewModels\Log\AccessLogEntryViewModel.cs" />
@@ -234,6 +235,9 @@
     </Compile>
     <Compile Include="Views\Contents\Config\ConfigEntry.xaml.cs">
       <DependentUpon>ConfigEntry.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Config\ConfigGeneral.xaml.cs">
+      <DependentUpon>ConfigGeneral.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Config\ConfigVideo.xaml.cs">
       <DependentUpon>ConfigVideo.xaml</DependentUpon>
@@ -390,6 +394,7 @@
     <Compile Include="Views\Controls\TabControlEx.cs" />
     <Compile Include="Views\Controls\TabItemEx.cs" />
     <Compile Include="Views\Controls\SeekBar.cs" />
+    <Compile Include="Views\Converter\FontFamilyToLocalizedNameConverter.cs" />
     <Compile Include="Views\Extentions\DictionaryExtentions.cs" />
     <Compile Include="Views\Extentions\HtmlToXamlConverter.cs" />
     <Compile Include="Views\Contents\SignIn\SignInDialog.xaml.cs">
@@ -405,6 +410,10 @@
     <Page Include="Views\Contents\Config\ConfigEntry.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Config\ConfigGeneral.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Config\ConfigVideo.xaml">
       <SubType>Designer</SubType>

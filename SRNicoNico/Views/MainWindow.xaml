@@ -28,7 +28,9 @@
                    KeyboardNavigation.IsTabStop="False"
                    KeyboardNavigation.TabNavigation="None"
                    x:Name="Root"
-                   Title="NicoNicoViewer" KeyDown="Root_KeyDown"
+                   Title="NicoNicoViewer" 
+                   KeyDown="Root_KeyDown"
+                   FontFamily="{Binding  UserSelectedFont,Mode=TwoWay}"
 				  >
 
     <i:Interaction.Triggers>

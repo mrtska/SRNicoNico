@@ -29,6 +29,9 @@
                 <DataTemplate DataType="{x:Type vm:ConfigVideoViewModel}">
                     <local:ConfigVideo />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:ConfigGeneralViewModel}">
+                    <local:ConfigGeneral />
+                </DataTemplate>
             </ItemsControl.Resources>
 
             <ItemsControl.ItemsPanel>

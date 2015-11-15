@@ -1,5 +1,4 @@
-﻿using SRNicoNico.Models.NicoNicoViewer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,20 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SRNicoNico.Views.Contents.User {
+namespace SRNicoNico.Views.Contents.Config {
     /// <summary>
-    /// UserInformation.xaml の相互作用ロジック
+    /// ConfigVideo.xaml の相互作用ロジック
     /// </summary>
-    public partial class UserInformation : UserControl {
-
-        public UserInformation() {
+    public partial class ConfigGeneral : UserControl {
+        public ConfigGeneral() {
             InitializeComponent();
-        }
-
-        
-        public void OpenHyperLink(object sender, RequestNavigateEventArgs e) {
-
-            NicoNicoOpener.Open(e.Uri.OriginalString);
         }
     }
 }

@@ -61,8 +61,8 @@
 
             <Grid Background="{DynamicResource ActiveBackgroundBrushKey}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <metro:TabView SelectedIndex="0" Style="{DynamicResource HorizontalViewStyle}" Height="38" ItemsSource="{Binding UserContentList}" SelectedValue="{Binding SelectedList}" />
 

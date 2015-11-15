@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MetroRadiance.Controls;
 using SRNicoNico.ViewModels;
+using System.Windows.Markup;
+using System.Threading;
 
 namespace SRNicoNico.Views {
 
@@ -24,7 +26,8 @@ namespace SRNicoNico.Views {
 	public partial class MainWindow : MetroWindow {
 		public MainWindow() {
 			InitializeComponent();
-		}
+            Language = XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name);
+        }
 
         private void Root_KeyDown(object sender, KeyEventArgs e) {
             
