@@ -356,6 +356,12 @@ namespace SRNicoNico.ViewModels {
             });
         }
 
+        public void OpenBrowser()
+        {
+
+            System.Diagnostics.Process.Start(VideoUrl);
+        }
+
         //リンクを開く
         public void OpenLink(string cmsid) {
 
