@@ -18,6 +18,7 @@
              Focusable="False"
              DataContextChanged="UserControl_DataContextChanged"
              InputMethod.IsInputMethodSuspended="True"
+             x:Name="VideoRoot"
              >
 
     <i:Interaction.Triggers>
@@ -189,12 +190,19 @@
 
                 <ScrollViewer>
                     <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="Hyperlink">
+                                <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
+                                <Setter Property="ToolTipService.ShowDuration" Value="100000" />
+                                <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
+                            </Style>
+                        </Grid.Resources>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Padding="5" Text="{Binding VideoData.ApiData.PostedAt,StringFormat={}{0} 投稿}"/>
-                        <TextBlock Padding="5" TextWrapping="Wrap" behaviors:HtmlTextBoxProperties.TriggerRequest="TextBlock_TriggerRequest"  behaviors:HtmlTextBoxProperties.HtmlText="{Binding VideoData.ApiData.Description, Mode=OneWay}" Grid.Row="1" />
+                        <TextBlock Padding="5" TextWrapping="Wrap" behaviors:HtmlTextBoxProperties.HtmlText="{Binding VideoData.ApiData.Description, Mode=OneWay}" Grid.Row="1" />
                         <mui:ModernProgressRing Panel.ZIndex="1" HorizontalAlignment="Center" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}"  Grid.RowSpan="2" />
                     </Grid>
                 </ScrollViewer>

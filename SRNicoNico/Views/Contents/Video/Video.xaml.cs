@@ -1,4 +1,5 @@
-﻿using SRNicoNico.ViewModels;
+﻿using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,18 +34,35 @@ namespace SRNicoNico.Views.Contents.Video {
             }
         }
 
-        private void TextBlock_TriggerRequest(object sender, RoutedEventArgs e) {
 
-            if(DataContext is VideoViewModel) {
+        public void OpenHyperLink(object sender, RequestNavigateEventArgs e) {
 
-                VideoViewModel vm = (VideoViewModel)DataContext;
-                if(e.OriginalSource is Hyperlink) {
+            NicoNicoOpener.Open(e.Uri.OriginalString);
+        }
 
-                    Hyperlink link = (Hyperlink) e.OriginalSource;
+        public void InitializeToolTip(object sender, RoutedEventArgs e) {
 
-                    vm.OpenLink(link.NavigateUri.OriginalString);
+            var link = sender as Hyperlink;
+            var inline = link.Inlines.First() as Run;
+            if(inline != null) {
+
+                var text = link.NavigateUri.OriginalString;
+                if(text.StartsWith("http://www.nicovideo.jp/watch/")) {
+
+                    VideoToolTip tooltip = new VideoToolTip();
+                    VideoDataViewModel vm = new VideoDataViewModel(text.Substring(30));
+                    tooltip.DataContext = vm;
+                    link.ToolTip = tooltip;
+
+                    
+                } else {
+
+                    link.ToolTip = text;
                 }
             }
+
+            ;
         }
+
     }
 }

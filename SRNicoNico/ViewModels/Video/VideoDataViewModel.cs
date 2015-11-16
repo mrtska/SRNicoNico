@@ -44,7 +44,8 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        public void Intialize(string cmsid) {
+
+        public  VideoDataViewModel(string cmsid) {
 
             Task.Run(() => {
 
@@ -54,5 +55,6 @@ namespace SRNicoNico.ViewModels {
                 IsActive = false;
             });
         }
+
     }
 }

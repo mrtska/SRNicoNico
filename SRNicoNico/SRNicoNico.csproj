@@ -201,6 +201,7 @@
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Models\NicoNicoViewer\HyperLinkParser.cs" />
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
+    <Compile Include="Models\NicoNicoWrapper\NicoNicoFavorite.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylist.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylistGroup.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoVitaApi.cs" />

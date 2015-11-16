@@ -233,9 +233,26 @@ namespace SRNicoNico.ViewModels {
 
         public VideoMylistViewModel Mylist { get; set; }
 
+
+        #region Cmsid変更通知プロパティ
+        private string _Cmsid;
+
+        public string Cmsid {
+            get { return _Cmsid; }
+            set {
+                if(_Cmsid == value)
+                    return;
+                _Cmsid = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
             VideoUrl = videoUrl;
+            Cmsid = Name;
             App.ViewModelRoot.TabItems.Add(this);
             App.ViewModelRoot.SelectedTab = this;
             Initialize(videoUrl);

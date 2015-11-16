@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SRNicoNico.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,8 +19,10 @@ namespace SRNicoNico.Views.Contents.Video {
     /// VideoToolTip.xaml の相互作用ロジック
     /// </summary>
     public partial class VideoToolTip : UserControl {
+        
         public VideoToolTip() {
             InitializeComponent();
+
         }
     }
 }
