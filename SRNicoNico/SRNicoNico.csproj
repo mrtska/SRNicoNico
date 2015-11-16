@@ -230,6 +230,7 @@
     <Compile Include="ViewModels\StartViewModel.cs" />
     <Compile Include="ViewModels\TabItemViewModel.cs" />
     <Compile Include="ViewModels\User\UserViewModel.cs" />
+    <Compile Include="ViewModels\Video\MylistDataViewModel.cs" />
     <Compile Include="ViewModels\Video\UserDataViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoDataViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoMylistViewModel.cs" />
@@ -374,6 +375,9 @@
     </Compile>
     <Compile Include="Views\Contents\Start.xaml.cs">
       <DependentUpon>Start.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\MylistToolTip.xaml.cs">
+      <DependentUpon>MylistToolTip.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Video\UserToolTip.xaml.cs">
       <DependentUpon>UserToolTip.xaml</DependentUpon>
@@ -568,6 +572,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Contents\Start.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\MylistToolTip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

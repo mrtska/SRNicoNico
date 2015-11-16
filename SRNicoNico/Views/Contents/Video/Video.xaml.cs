@@ -62,6 +62,13 @@ namespace SRNicoNico.Views.Contents.Video {
                     tooltip.DataContext = vm;
                     link.ToolTip = tooltip;
 
+                } else if(text.StartsWith("http://www.nicovideo.jp/mylist/")) {
+
+                    MylistToolTip tooltip = new MylistToolTip();
+                    MylistDataViewModel vm = new MylistDataViewModel(text.Substring(31));
+                    tooltip.DataContext = vm;
+                    link.ToolTip = tooltip;
+
                 } else {
 
                     link.ToolTip = text;
