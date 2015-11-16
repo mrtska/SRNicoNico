@@ -209,6 +209,8 @@
     <Compile Include="ViewModels\Config\ConfigGeneralViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigVideoViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigViewModel.cs" />
+    <Compile Include="ViewModels\Favorite\FavoriteUserViewModel.cs" />
+    <Compile Include="ViewModels\Favorite\FavoriteViewModel.cs" />
     <Compile Include="ViewModels\Log\AccessLogEntryViewModel.cs" />
     <Compile Include="ViewModels\Log\AccessLogViewModel.cs" />
     <Compile Include="ViewModels\History\HistoryViewModel.cs" />
@@ -244,6 +246,9 @@
     </Compile>
     <Compile Include="Views\Contents\Config\ConfigVideoRect.xaml.cs">
       <DependentUpon>ConfigVideoRect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Favorite\Favorite.xaml.cs">
+      <DependentUpon>Favorite.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Log\AccessLog.xaml.cs">
       <DependentUpon>AccessLog.xaml</DependentUpon>
@@ -422,6 +427,10 @@
     <Page Include="Views\Contents\Config\ConfigVideoRect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Favorite\Favorite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Log\AccessLog.xaml">
       <SubType>Designer</SubType>

@@ -141,6 +141,7 @@ namespace SRNicoNico.ViewModels {
             App.ViewModelRoot.Title += "(user:" + User.UserName + ")";
 
             TabItems.Add(Search = new SearchViewModel());
+            TabItems.Add(new FavoriteViewModel());
             TabItems.Add(new NicoRepoViewModel());
             TabItems.Add(new MylistViewModel());
             TabItems.Add(new HistoryViewModel());

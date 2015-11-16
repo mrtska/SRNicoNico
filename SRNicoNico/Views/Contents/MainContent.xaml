@@ -11,6 +11,7 @@
 			 xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
              xmlns:tab="clr-namespace:SRNicoNico.Views.Controls"
              xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
+             xmlns:fav="clr-namespace:SRNicoNico.Views.Contents.Favorite"
              xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
              xmlns:history="clr-namespace:SRNicoNico.Views.Contents.History"
              xmlns:mylist="clr-namespace:SRNicoNico.Views.Contents.Mylist"
@@ -41,6 +42,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:SearchViewModel}">
                     <search:Search />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:FavoriteViewModel}">
+                    <fav:Favorite />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:NicoRepoViewModel}">
                     <nicorepo:NicoRepo />
