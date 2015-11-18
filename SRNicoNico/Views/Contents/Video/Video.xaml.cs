@@ -74,9 +74,6 @@ namespace SRNicoNico.Views.Contents.Video {
                     link.ToolTip = text;
                 }
             }
-
-            ;
         }
-
     }
 }
