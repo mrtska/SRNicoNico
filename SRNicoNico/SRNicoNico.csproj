@@ -251,6 +251,9 @@
     <Compile Include="Views\Contents\Favorite\Favorite.xaml.cs">
       <DependentUpon>Favorite.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\Favorite\FavoriteUser.xaml.cs">
+      <DependentUpon>FavoriteUser.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Log\AccessLog.xaml.cs">
       <DependentUpon>AccessLog.xaml</DependentUpon>
     </Compile>
@@ -430,6 +433,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Contents\Favorite\Favorite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Favorite\FavoriteUser.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

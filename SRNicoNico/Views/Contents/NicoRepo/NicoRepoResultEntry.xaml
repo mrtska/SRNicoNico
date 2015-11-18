@@ -42,6 +42,7 @@
             <StackPanel.Resources>
                 <Style TargetType="Hyperlink">
                     <EventSetter Event="RequestNavigate" Handler="OpenHyperLink"/>
+                    <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
                 </Style>
             </StackPanel.Resources>
             <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Entry.Title}" TextWrapping="Wrap" />

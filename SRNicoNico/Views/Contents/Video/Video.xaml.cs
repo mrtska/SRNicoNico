@@ -53,16 +53,11 @@ namespace SRNicoNico.Views.Contents.Video {
                     VideoDataViewModel vm = new VideoDataViewModel(text.Substring(30));
                     tooltip.DataContext = vm;
                     link.ToolTip = tooltip;
-
-                    
                 } else {
 
                     link.ToolTip = text;
                 }
             }
-
-            ;
         }
-
     }
 }

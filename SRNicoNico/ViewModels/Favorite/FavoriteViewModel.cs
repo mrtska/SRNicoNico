@@ -11,7 +11,7 @@ using Livet.Messaging.IO;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
-using SRNicoNico.Models;
+using SRNicoNico.Models.NicoNicoWrapper;
 using System.Collections.ObjectModel;
 
 namespace SRNicoNico.ViewModels {
@@ -47,14 +47,18 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        private NicoNicoFavorite FavoriteInstance;
 
         public FavoriteViewModel() : base("お気に入り") {
 
+            FavoriteInstance = new NicoNicoFavorite();
             FavoriteList = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
 
-            FavoriteList.Add(new FavoriteUserViewModel());
+            FavoriteList.Add(new FavoriteUserViewModel(FavoriteInstance));
+
 
         }
+
 
 
     }
