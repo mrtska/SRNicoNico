@@ -9,7 +9,7 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="280"
+             d:DesignHeight="30" d:DesignWidth="280"
              d:DataContext="{d:DesignInstance vm:VideoTagViewModel}"
              Background="Transparent"
              >
@@ -19,6 +19,6 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        <TextBlock VerticalAlignment="Center" Text="{Binding Tag.Tag}" FontSize="16" />
+        <TextBlock VerticalAlignment="Center" Text="{Binding Tag.Tag}" FontSize="13" />
     </Grid>
 </UserControl>

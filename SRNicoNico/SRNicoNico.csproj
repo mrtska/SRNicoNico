@@ -385,6 +385,9 @@
     <Compile Include="Views\Contents\Video\UserToolTip.xaml.cs">
       <DependentUpon>UserToolTip.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\Video\VideoContent.xaml.cs">
+      <DependentUpon>VideoContent.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Video\VideoController.xaml.cs">
       <DependentUpon>VideoController.xaml</DependentUpon>
     </Compile>
@@ -581,6 +584,10 @@
     <Page Include="Views\Contents\Video\UserToolTip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoContent.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Video\Video.xaml">
       <SubType>Designer</SubType>

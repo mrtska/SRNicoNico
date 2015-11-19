@@ -9,11 +9,10 @@ using Livet;
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoFavorite : NotificationObject {
 
+        //ロードするページ
         private int Page = 1;
 
-
         public List<NicoNicoFavoriteUser> GetFavoriteUser() {
-
 
             var url = "http://www.nicovideo.jp/my/fav/user?page=" + Page++;
             var a = NicoNicoWrapperMain.Session.GetAsync(url).Result;
@@ -49,20 +48,17 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     user.Description = "";
                 }
-
                 //改行を空白に置換
                 user.Description = user.Description.Replace('\n', ' ');
-
                 ret.Add(user);
             }
-
             return ret;
         }
 
 
     }
 
-    public class NicoNicoFavoriteUser : object {
+    public class NicoNicoFavoriteUser {
 
         //ユーザーページURL
         public string UserPage { get; set; }

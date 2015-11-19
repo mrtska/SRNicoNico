@@ -33,7 +33,7 @@
 
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24"	VerticalAlignment="Bottom" Text="～更新履歴～" />
 
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <Grid Background="#FF222222">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="8*"/>

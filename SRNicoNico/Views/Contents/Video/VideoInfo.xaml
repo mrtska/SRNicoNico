@@ -11,47 +11,75 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              mc:Ignorable="d" 
-             d:DesignHeight="230" d:DesignWidth="190"
+             d:DesignHeight="500" d:DesignWidth="190"
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              >
-    <Grid>
+    <ScrollViewer>
+        <Grid>
 
-        <StackPanel>
-            <Image Source="{Binding VideoData.ApiData.Thumbnail}" Margin="5" />
+            <StackPanel>
+                <Image MinWidth="50" MinHeight="50" Source="{Binding VideoData.ApiData.Thumbnail}" Margin="5" />
 
-            <Border BorderBrush="#FF444444" BorderThickness="1">
-                <StackPanel Margin="3">
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.Cmsid, StringFormat=動画ID : {0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.ViewCounter, StringFormat=再生数 : {0:N0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.CommentCounter, StringFormat=コメント数 : {0:N0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.MylistCounter, StringFormat=マイリスト数 : {0:N0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.HighestRank, StringFormat=過去最高順位 : {0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.YesterdayRank, StringFormat=前日総合順位 : {0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.VideoType, StringFormat=動画タイプ : {0}, TargetNullValue=読込中}" />
-                    <Button Content="ツイートする" Margin="4,0" IsEnabled="{Binding IsInitialized}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenTweetDialog"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Button>
-                    <Button Content="とりあえずマイリスト&#10;        に登録" Margin="4,10,4,0" IsEnabled="{Binding Mylist.IsDeflistButtonEnabled}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <l:LivetCallMethodAction MethodTarget="{Binding Mylist}" MethodName="AddDeflist"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Button>
-                    <Button Content="マイリストに登録" Margin="4,10,4,0" IsEnabled="{Binding Mylist.IsDeflistButtonEnabled}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <l:LivetCallMethodAction MethodTarget="{Binding Mylist}" MethodName="OpenMylistDialog"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Button>
-                </StackPanel>
-            </Border>
-        </StackPanel>
-       
-    </Grid>
+                <Border BorderBrush="#FF444444" BorderThickness="1">
+                    <StackPanel Margin="3">
+                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.Cmsid, StringFormat=動画ID : {0}}" />
+                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.ViewCounter, StringFormat=再生数 : {0:N0}}" />
+                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.CommentCounter, StringFormat=コメント数 : {0:N0}}" />
+                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.MylistCounter, StringFormat=マイリスト数 : {0:N0}}" />
+                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.HighestRank, StringFormat=過去最高順位 : {0}}" />
+                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.YesterdayRank, StringFormat=前日総合順位 : {0}}" />
+                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.VideoType, StringFormat=動画タイプ : {0}, TargetNullValue=読込中}" />
+                        <Button Content="ツイートする" Margin="4,0" IsEnabled="{Binding IsInitialized}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenTweetDialog"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                        <Button Content="とりあえずマイリスト&#10;        に登録" Margin="4,10,4,0" IsEnabled="{Binding Mylist.IsDeflistButtonEnabled}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding Mylist}" MethodName="AddDeflist"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                        <Button Content="マイリストに登録" Margin="4,10,4,0" IsEnabled="{Binding Mylist.IsDeflistButtonEnabled}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding Mylist}" MethodName="OpenMylistDialog"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#FF444444" BorderThickness="1" Margin="0,10,0,0" >
+                    <StackPanel Margin="3">
+
+                        <TextBlock Text="タグ" Margin="10" FontSize="16" />
+
+                        <Rectangle Stroke="#FF444444" Margin="10,-5,10,5" />
+
+                        <ListView Margin="10" ItemsSource="{Binding VideoData.ApiData.TagList}" Focusable="False" >
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+
+                                    <Setter Property="Focusable" Value="False" />
+                                    <Setter Property="Foreground" Value="#FFAAAAAA" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+
+                            <ListView.Resources>
+                                <DataTemplate DataType="{x:Type vm:VideoTagViewModel}">
+                                    <local:VideoTag />
+                                </DataTemplate>
+                            </ListView.Resources>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
+   
 </UserControl>

@@ -183,9 +183,9 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
         #region Video変更通知プロパティ UI要素 仕方ないんや・・・
-        private Video _Video;
+        private VideoContent _Video;
 
-        public Video Video {
+        public VideoContent Video {
             get { return _Video; }
             set { 
                 if(_Video == value)
@@ -679,38 +679,61 @@ namespace SRNicoNico.ViewModels {
 
         public override void KeyDown(KeyEventArgs e) {
 
-            switch(e.Key) {
-                case Key.Space:
-                    PlayOrPauseOrResume();
-                    break;
-                case Key.F:
-                    ToggleFullScreen();
-                    break;
-                case Key.Back:
-                    Restart();
-                    break;
-                case Key.C:
-                    ToggleComment();
-                    break;
-                case Key.R:
-                    ToggleRepeat();
-                    break;
-                case Key.M:
-                    ToggleMute();
-                    break;
-                case Key.F5:
-                    Reflesh();
-                    break;
-            }
+            if(IsFullScreen) {
 
-            if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
+                switch(e.Key) {
+                    case Key.Space:
+                        PlayOrPauseOrResume();
+                        break;
+                    case Key.Escape:
+                        ToggleFullScreen();
+                        break;
+                    case Key.Back:
+                        Restart();
+                        break;
+                    case Key.C:
+                        ToggleComment();
+                        break;
+                    case Key.R:
+                        ToggleRepeat();
+                        break;
+                    case Key.M:
+                        ToggleMute();
+                        break;
+                }
+            } else {
 
-                if(e.Key == Key.W) {
+                switch(e.Key) {
+                    case Key.Space:
+                        PlayOrPauseOrResume();
+                        break;
+                    case Key.F:
+                        ToggleFullScreen();
+                        break;
+                    case Key.Back:
+                        Restart();
+                        break;
+                    case Key.C:
+                        ToggleComment();
+                        break;
+                    case Key.R:
+                        ToggleRepeat();
+                        break;
+                    case Key.M:
+                        ToggleMute();
+                        break;
+                    case Key.F5:
+                        Reflesh();
+                        break;
+                }
+                if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
 
-                    DisposeViewModel();
+                    if(e.Key == Key.W) {
+
+                        DisposeViewModel();
+                    }
                 }
             }
-
         }
 
 

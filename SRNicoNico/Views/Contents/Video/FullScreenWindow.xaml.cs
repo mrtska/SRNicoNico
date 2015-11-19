@@ -35,10 +35,21 @@ namespace SRNicoNico.Views.Contents.Video {
 
             if(DataContext is VideoViewModel) {
 
-                VideoViewModel vm = (VideoViewModel) DataContext;
+                var vm = (VideoViewModel) DataContext;
                 vm.FullScreenWindow = this;
+                Focus();
             }
 
+        }
+
+        private void screen_KeyDown(object sender, KeyEventArgs e) {
+
+            Console.WriteLine(e.Key);
+            if(DataContext is VideoViewModel) {
+
+                var vm = (VideoViewModel)DataContext;
+                vm.KeyDown(e);
+            }
         }
     }
 }

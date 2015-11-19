@@ -16,37 +16,14 @@
 		Background="{DynamicResource ThemeBrushKey}"
         Foreground="{DynamicResource ActiveForegroundBrushKey}"
         InputMethod.PreferredImeState="Off"
-        KeyboardNavigation.IsTabStop="False"
+        KeyboardNavigation.IsTabStop="False" KeyDown="screen_KeyDown"
         >
 
     <i:Interaction.Triggers>
 
-
-        <!--Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます-->
         <i:EventTrigger EventName="Closed">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ReturnFromFullScreen" />
         </i:EventTrigger>
-
-        <!--WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください-->
-
-        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Esc">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ReturnFromFullScreen" />
-        </ei:KeyTrigger>
-        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Space">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="PlayOrPauseOrResume" />
-        </ei:KeyTrigger>
-        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="Backspace">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Restart" />
-        </ei:KeyTrigger>
-        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="C">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleComment" />
-        </ei:KeyTrigger>
-        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="R">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleRepeat" />
-        </ei:KeyTrigger>
-        <ei:KeyTrigger FiredOn="KeyUp" ActiveOnFocus="True" Key="M">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleMute" />
-        </ei:KeyTrigger>
     </i:Interaction.Triggers>
 
     <Grid x:Name="Grid">
@@ -58,6 +35,5 @@
             
             <video:VideoController Opacity="0.5" Width="{Binding ElementName=ContentControl, Path=ActualWidth}"/>
         </Popup>
-        
     </Grid>
 </Window>
