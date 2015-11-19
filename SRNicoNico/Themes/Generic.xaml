@@ -6,8 +6,6 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.SeekBar.xaml" />
-        <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.TabControlEx.xaml" />
-        <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.TabItemEx.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 

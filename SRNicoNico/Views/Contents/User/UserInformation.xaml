@@ -35,13 +35,15 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock TextTrimming="CharacterEllipsis">
-                <Run FontSize="24" Text="{Binding UserEntry.UserName}"/>
-                <Run FontSize="13" Text="{Binding UserEntry.Id}"/>
-                <Run FontSize="13" Text="{Binding UserEntry.Gender}"/>
-                <Run FontSize="13" Text="{Binding UserEntry.BirthDay}"/>
-                <Run FontSize="13" Text="{Binding UserEntry.Region}"/>
-            </TextBlock>
+            <StackPanel>
+                <TextBlock FontSize="24" Text="{Binding UserEntry.UserName}" />
+                <TextBlock TextTrimming="CharacterEllipsis">
+                    <Run FontSize="13" Text="{Binding UserEntry.Id}"/>
+                    <Run FontSize="13" Text="{Binding UserEntry.Gender}"/>
+                    <Run FontSize="13" Text="{Binding UserEntry.BirthDay}"/>
+                    <Run FontSize="13" Text="{Binding UserEntry.Region}"/>
+                </TextBlock>
+            </StackPanel>
             <ScrollViewer Grid.Row="1">
                 <Grid>
                     <Grid.Resources>

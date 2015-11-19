@@ -54,6 +54,8 @@ namespace SRNicoNico.ViewModels {
 
         private FavoriteViewModel Owner;
 
+        private bool IsEnd = false;
+
         public FavoriteUserViewModel(FavoriteViewModel vm, NicoNicoFavorite fav) : base("ユーザー") {
 
             Owner = vm;
@@ -79,12 +81,36 @@ namespace SRNicoNico.ViewModels {
         //情報再取得
         public void Reflesh() {
 
-
+            Initialize();
         }
 
+        //インフィニットスクロール
         public void NextPage() {
 
+            if(IsEnd) {
 
+                return;
+            }
+            IsActive = true;
+            Owner.Status = "お気に入りユーザーを取得中";
+            Task.Run(() => {
+
+                var users = FavoriteInstance.GetFavoriteUser();
+                if(users == null) {
+
+                    IsEnd = true;
+                    IsActive = false;
+                    Owner.Status = "";
+                    return;
+                }
+
+                foreach(var entry in users) {
+
+                    UserList.Add(entry);
+                }
+                IsActive = false;
+                Owner.Status = "";
+            });
         }
 
         //ユーザーページを開く

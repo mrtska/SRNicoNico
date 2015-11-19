@@ -11,9 +11,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         private int Page = 1;
 
-        private bool IsEnd = false;
 
         public List<NicoNicoFavoriteUser> GetFavoriteUser() {
+
 
             var url = "http://www.nicovideo.jp/my/fav/user?page=" + Page++;
             var a = NicoNicoWrapperMain.Session.GetAsync(url).Result;
@@ -25,7 +25,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             var content = doc.DocumentNode.SelectSingleNode("//div[@class='content']");
 
-            foreach(var entry in content.SelectNodes("child::div[@class='articleBody']/div[@class='outer']")) {
+            var outers = content.SelectNodes("child::div[@class='articleBody']/div[@class='outer']");
+
+            //終了
+            if(outers == null) {
+
+                return null;
+            }
+
+            foreach(var entry in outers) {
 
                 NicoNicoFavoriteUser user = new NicoNicoFavoriteUser();
 
