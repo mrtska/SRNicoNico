@@ -60,16 +60,22 @@ namespace SRNicoNico.Views.Behaviors {
 			ScrollViewer.ScrollChanged -= scrollViewer_ScrollChanged;
 		}
 
+        private double PrevExtentHeight;
+
 		void scrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e) {
 
+            
 			//一番下までスクロールしたら
-			if(e.ExtentHeight != 1 && e.ExtentHeight == (e.VerticalOffset + e.ViewportHeight)) {
+			if(e.ExtentHeight > 1 && PrevExtentHeight != e.ExtentHeight && e.ExtentHeight == (e.VerticalOffset + e.ViewportHeight)) {
 
+                PrevExtentHeight = e.ExtentHeight;
+                Console.WriteLine(e.ExtentHeight);
+                Console.WriteLine(e.VerticalOffset);
                 Type type = ViewModel.GetType();
                 MethodInfo method = type.GetMethod(MethodName);
                 method.Invoke(ViewModel, null);
                 ScrollViewer.ScrollToVerticalOffset(e.ExtentHeight - e.ViewportHeight);
-
+                
 			}
 		}
 		protected override void OnDetaching() {

@@ -43,7 +43,7 @@
         </Border>
 
             <Grid Grid.Row="1" Background="#FF222222" Margin="5">
-                <ListBox Focusable="False" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding LogEntries}" >
+                <ListBox Focusable="False" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding LogEntries}" >
 
                 <i:Interaction.Behaviors>
                     <behaviors:ListBoxAutoScrollBehavior />

@@ -89,6 +89,11 @@ namespace SRNicoNico.ViewModels {
 
             System.Diagnostics.Process.Start(UserEntry.UserPage);
         }
+
+        public void Close() {
+
+            App.ViewModelRoot.TabItems.Remove(this);
+        }
     }
 
     class UserNicoRepoViewModel : TabItemViewModel {

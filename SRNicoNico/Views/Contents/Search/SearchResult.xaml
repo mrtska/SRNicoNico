@@ -40,7 +40,7 @@
 
         <mui:ModernProgressRing Grid.Row="1" Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60"  IsActive="{Binding IsActive}"/>
 
-        <ListBox Grid.Row="1" SelectedItem="{Binding SelectedItem}" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding List}" HorizontalContentAlignment="Stretch" >
+        <ListBox Grid.Row="1" SelectedItem="{Binding SelectedItem}" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding List}" HorizontalContentAlignment="Stretch" >
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">

@@ -202,6 +202,15 @@ namespace SRNicoNico.ViewModels {
                 if(SelectedItem.Entry.Type == 0) {
 
                     new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Entry.Id);
+                } else if(SelectedItem.Entry.Type == 5) {
+
+                    System.Diagnostics.Process.Start("http://seiga.nicovideo.jp/watch/mg" + SelectedItem.Entry.Id);
+                } else if(SelectedItem.Entry.Type == 6) {
+
+                    System.Diagnostics.Process.Start("http://seiga.nicovideo.jp/watch/bk" + SelectedItem.Entry.Id);
+                } else if(SelectedItem.Entry.Type == 11) {
+
+                    //System.Diagnostics.Process.Start("http://ch.nicovideo.jp/" + SelectedItem.Entry);
                 }
                 SelectedItem = null;
             }

@@ -55,6 +55,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             return ret;
         }
 
+        public void ResetFavoriteUser() {
+
+            Page = 1;
+        }
+
 
     }
 

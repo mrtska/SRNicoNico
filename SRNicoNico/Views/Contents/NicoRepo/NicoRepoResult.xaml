@@ -31,7 +31,7 @@
 
         <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding Result.IsActive, IsAsync=True}" Grid.RowSpan="2"/>
 
-        <ListBox SelectedItem="{Binding Result.SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding Result.NicoRepo}" Grid.Row="1" >
+        <ListBox SelectedItem="{Binding Result.SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding Result.NicoRepo}" Grid.Row="1" >
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">

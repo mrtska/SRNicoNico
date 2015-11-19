@@ -15,11 +15,9 @@
              d:DesignHeight="600" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:UserNicoRepoViewModel}}"
              >
-
     <Grid>
-
         <Grid>
-            <ListBox SelectedItem="{Binding SelectedItem}"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding UserNicoRepoList}">
+            <ListBox SelectedItem="{Binding SelectedItem}"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding UserNicoRepoList}">
 
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
@@ -46,12 +44,8 @@
                 <i:Interaction.Behaviors>
                     <Behaviors:ListBoxInfiniteScrollBehavior ViewModel="{Binding}" MethodName="Next"/>
                 </i:Interaction.Behaviors>
-
             </ListBox>
-
         </Grid>
-
         <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding IsActive}"/>
-
     </Grid>
 </UserControl>

@@ -15,6 +15,7 @@ using SRNicoNico.Models.NicoNicoWrapper;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using SRNicoNico.Models.NicoNicoViewer;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class FavoriteUserViewModel : TabItemViewModel {
@@ -81,6 +82,8 @@ namespace SRNicoNico.ViewModels {
         //情報再取得
         public void Reflesh() {
 
+            FavoriteInstance.ResetFavoriteUser();
+            IsEnd = false;
             Initialize();
         }
 
@@ -121,6 +124,14 @@ namespace SRNicoNico.ViewModels {
                 NicoNicoOpener.Open(SelectedUser.UserPage);
             }
             SelectedUser = null;
+        }
+        public override void KeyDown(KeyEventArgs e) {
+
+            if(e.Key == Key.F5) {
+
+                Reflesh();
+            }
+
         }
     }
 }

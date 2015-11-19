@@ -116,7 +116,7 @@
 
         <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding IsActive}" Grid.Row="1"/>
 
-        <ListBox Grid.Row="1" dd:DragDrop.DragHandler="{Binding}" dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True" dd:DragDrop.UseDefaultDragAdorner="True" SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding Mylist}"  >
+        <ListBox Grid.Row="1" dd:DragDrop.DragHandler="{Binding}" dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True" dd:DragDrop.UseDefaultDragAdorner="True" SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding Mylist}"  >
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">

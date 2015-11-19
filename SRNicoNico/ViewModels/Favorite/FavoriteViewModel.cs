@@ -13,6 +13,7 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class FavoriteViewModel : TabItemViewModel {
@@ -64,6 +65,9 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+        public override void KeyDown(KeyEventArgs e) {
 
+            SelectedList.KeyDown(e);
+        }
     }
 }

@@ -44,7 +44,7 @@
             </Grid>
         </Border>
 
-        <ListBox BorderThickness="1" BorderBrush="#FF333333" Grid.Row="1" Margin="5" MaxHeight="300" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding SelectedMylist}"  >
+        <ListBox BorderThickness="1" BorderBrush="#FF333333" Grid.Row="1" Margin="5" MaxHeight="300" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding SelectedMylist}"  >
 
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">

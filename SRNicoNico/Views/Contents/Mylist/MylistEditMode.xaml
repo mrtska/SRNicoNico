@@ -114,7 +114,7 @@
 
 
 
-        <ListBox SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding Mylist}" Grid.Row="1"  >
+        <ListBox SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding Mylist}" Grid.Row="1"  >
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseUp">

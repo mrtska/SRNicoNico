@@ -101,6 +101,10 @@
                 </Setter>
             </Style>
 
+            <ScrollUnit x:Key="ScrollMethod" >
+                Pixel
+            </ScrollUnit>
+
         </ResourceDictionary>
 	</Application.Resources>
 </Application>
