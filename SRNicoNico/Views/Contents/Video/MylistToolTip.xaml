@@ -30,7 +30,6 @@
         <mui:ModernProgressRing Panel.ZIndex="1" HorizontalAlignment="Center" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}" Grid.ColumnSpan="2" Grid.RowSpan="3" />
 
         <!-- <Image Grid.Row="1" Source="{Binding Data.IconUrl}" Margin="1,0,0,20" /> -->
-        <TextBlock Grid.Row="1" Text="{Binding Data.Length}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5"/>
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="0">
             <TextBlock Text="{Binding Data.Id, StringFormat=マイリストID:{0}}" />
             <TextBlock Text="{Binding Data.UserName, StringFormat=作成者:{0:N0}}" />
