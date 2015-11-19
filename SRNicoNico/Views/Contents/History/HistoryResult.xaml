@@ -18,9 +18,6 @@
         <i:EventTrigger EventName="Loaded">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenHistory" />
         </i:EventTrigger>
-        <ei:KeyTrigger FiredOn="KeyUp" Key="F5" ActiveOnFocus="True">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenHistory" />
-        </ei:KeyTrigger>
     </i:Interaction.Triggers>
     
     <Grid>

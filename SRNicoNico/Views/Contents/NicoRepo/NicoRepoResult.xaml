@@ -56,7 +56,7 @@
             </ListBox.ItemTemplate>
 
             <i:Interaction.Behaviors>
-                <Behaviors:ListBoxBehavior MethodName="NextNicoRepoList" ViewModel="{Binding Result.OwnerViewModel}"/>
+                <Behaviors:ListBoxInfiniteScrollBehavior MethodName="NextNicoRepoList" ViewModel="{Binding Result.OwnerViewModel}"/>
             </i:Interaction.Behaviors>
 
         </ListBox>

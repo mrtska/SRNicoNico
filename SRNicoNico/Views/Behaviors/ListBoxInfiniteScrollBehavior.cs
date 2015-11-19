@@ -14,7 +14,7 @@ using Livet;
 
 namespace SRNicoNico.Views.Behaviors {
 
-	public class ListBoxBehavior : Behavior<ListBox> {
+	public class ListBoxInfiniteScrollBehavior : Behavior<ListBox> {
 
         public ViewModel ViewModel {
             get { return (ViewModel)GetValue(ViewModelProperty); }
@@ -23,7 +23,7 @@ namespace SRNicoNico.Views.Behaviors {
 
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(ViewModel), typeof(ListBoxBehavior), new PropertyMetadata(null));
+            DependencyProperty.Register("ViewModel", typeof(ViewModel), typeof(ListBoxInfiniteScrollBehavior), new PropertyMetadata(null));
 
         public string MethodName {
             get { return (string)GetValue(MethodNameProperty); }
@@ -32,7 +32,7 @@ namespace SRNicoNico.Views.Behaviors {
 
         // Using a DependencyProperty as the backing store for MethodName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MethodNameProperty =
-            DependencyProperty.Register("MethodName", typeof(string), typeof(ListBoxBehavior), new PropertyMetadata(""));
+            DependencyProperty.Register("MethodName", typeof(string), typeof(ListBoxInfiniteScrollBehavior), new PropertyMetadata(""));
 
         private ScrollViewer ScrollViewer;
 

@@ -24,7 +24,7 @@
 		<Image Width="65" Height="50" Margin="5,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="{Binding ThumbnailUrl}" />
         <StackPanel Grid.Column="1">
             <TextBlock Height="20" Margin="10,4,0,0" VerticalAlignment="Top" Text="{Binding Name}" TextWrapping="Wrap" />
-            <TextBlock Height="20" Margin="10,4,0,0" VerticalAlignment="Top" Text="{Binding Description}" TextWrapping="Wrap" />
+            <TextBlock Height="20" Margin="10,4,0,0" VerticalAlignment="Top" Text="{Binding Description}" TextWrapping="Wrap" Foreground="#777777" TextTrimming="CharacterEllipsis" />
 
         </StackPanel>
       

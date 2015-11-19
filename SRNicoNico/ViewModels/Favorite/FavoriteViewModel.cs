@@ -54,11 +54,15 @@ namespace SRNicoNico.ViewModels {
             FavoriteInstance = new NicoNicoFavorite();
             FavoriteList = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
 
-            FavoriteList.Add(new FavoriteUserViewModel(FavoriteInstance));
+            FavoriteList.Add(new FavoriteUserViewModel(this, FavoriteInstance));
 
 
         }
 
+        public void Reflesh() {
+
+
+        }
 
 
     }

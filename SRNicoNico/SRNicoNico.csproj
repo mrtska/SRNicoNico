@@ -343,7 +343,7 @@
     <Compile Include="ViewModels\Search\SearchResultViewModel.cs" />
     <Compile Include="ViewModels\SignIn\SignInViewModel.cs" />
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
-    <Compile Include="Views\Behaviors\ListBoxBehavior.cs" />
+    <Compile Include="Views\Behaviors\ListBoxInfiniteScrollBehavior.cs" />
     <Compile Include="Views\Behaviors\TextBlockHtmlBehavior.cs" />
     <Compile Include="Views\Behaviors\TextBoxBehavior.cs" />
     <Compile Include="Views\Contents\History\HistoryResult.xaml.cs">

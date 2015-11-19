@@ -56,36 +56,43 @@
 
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:FavoriteUserViewModel}">
-                    <ListBox SelectedItem="{Binding SelectedUser}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding UserList}" >
-
+                    <Grid>
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDoubleClick">
-                                <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+                            <i:EventTrigger EventName="Loaded">
+                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
+                        <ListBox SelectedItem="{Binding SelectedUser}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Item" ItemsSource="{Binding UserList}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDoubleClick">
+                                    <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
 
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}">
-                                <Style.Resources>
-                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
-                                </Style.Resources>
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Style.Resources>
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                                    </Style.Resources>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
 
-                            <DataTemplate DataType="{x:Type m:NicoNicoFavoriteUser}">
-                                <local:FavoriteUser />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type m:NicoNicoFavoriteUser}">
+                                    <local:FavoriteUser />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
 
-                        <!--<i:Interaction.Behaviors>
-                            <Behaviors:ListBoxBehavior MethodName="NextNicoRepoList" ViewModel="{Binding Result.OwnerViewModel}"/>
-                        </i:Interaction.Behaviors>-->
+                            <i:Interaction.Behaviors>
+                                <b:ListBoxInfiniteScrollBehavior MethodName="NextPage" ViewModel="{Binding}"/>
+                            </i:Interaction.Behaviors>
+                        </ListBox>
 
-                    </ListBox>
+                        <mui:ModernProgressRing Panel.ZIndex="1" Width="60" Height="60" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}" />
 
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.Resources>
 

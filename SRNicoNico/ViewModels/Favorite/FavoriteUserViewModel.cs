@@ -14,6 +14,7 @@ using Livet.Messaging.Windows;
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class FavoriteUserViewModel : TabItemViewModel {
@@ -51,15 +52,26 @@ namespace SRNicoNico.ViewModels {
 
         private NicoNicoFavorite FavoriteInstance;
 
-        public FavoriteUserViewModel(NicoNicoFavorite fav) : base("ユーザー") {
+        private FavoriteViewModel Owner;
 
+        public FavoriteUserViewModel(FavoriteViewModel vm, NicoNicoFavorite fav) : base("ユーザー") {
+
+            Owner = vm;
             FavoriteInstance = fav;
+        }
+
+        public void Initialize() {
+
+            IsActive = true;
+            Owner.Status = "お気に入りユーザーを取得中";
             UserList = new DispatcherCollection<NicoNicoFavoriteUser>(DispatcherHelper.UIDispatcher);
             Task.Run(() => {
-                foreach(var entry in fav.GetFavoriteUser()) {
+                foreach(var entry in FavoriteInstance.GetFavoriteUser()) {
 
                     UserList.Add(entry);
                 }
+                IsActive = false;
+                Owner.Status = "";
             });
         }
 
@@ -70,6 +82,19 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+        public void NextPage() {
 
+
+        }
+
+        //ユーザーページを開く
+        public void Open() {
+
+            if(SelectedUser != null) {
+
+                NicoNicoOpener.Open(SelectedUser.UserPage);
+            }
+            SelectedUser = null;
+        }
     }
 }
