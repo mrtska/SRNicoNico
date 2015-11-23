@@ -36,7 +36,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoSession : NotificationObject {
 
 		//サインインURL
-		private const string SignInURL = "https://account.nicovideo.jp/login?site=niconico";
+		private const string SignInURL = "https://secure.nicovideo.jp/secure/login?site=niconico";
 
         //アカウント権限
         private const string UserAgent = "SRNicoNico/1.0";
