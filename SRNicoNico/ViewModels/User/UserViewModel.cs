@@ -103,6 +103,11 @@ namespace SRNicoNico.ViewModels {
 
         public void Reflesh() {
 
+            Task.Run(() => {
+
+                Close();
+                new UserViewModel(UserPageUrl);
+            });
 
         }
 
