@@ -29,7 +29,7 @@
         </Grid.ColumnDefinitions>
 
         <ScrollViewer>
-            <metro:TabView Width="120" Focusable="False" Background="{DynamicResource ActiveBackgroundBrushKey}" ItemsSource="{Binding TabItems}" SelectedValue="{Binding SelectedTab}" />
+            <metro:TabView Width="130" Focusable="False" Background="{DynamicResource ActiveBackgroundBrushKey}" ItemsSource="{Binding TabItems}" SelectedValue="{Binding SelectedTab}" />
         </ScrollViewer>
 
 
