@@ -22,30 +22,51 @@
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Grid>
-        <ListBox SelectedItem="{Binding SelectedItem}" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding UserVideoList}">
+    <ContentControl>
+        <ContentControl.Resources>
+            <Style TargetType="ContentControl">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Closed}" Value="True">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ContentControl">
+                                    <TextBlock Text="非公開、又は動画を投稿していません。" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ContentControl.Resources>
+        <Grid>
+            <ListBox SelectedItem="{Binding SelectedItem}" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding UserVideoList}">
 
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
 
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Style.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
-                    </Style.Resources>
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type vm:SearchResultEntryViewModel}">
-                    <video:SearchResultEntry />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding IsActive}"/>
-    </Grid>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Style.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                        </Style.Resources>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:SearchResultEntryViewModel}">
+                        <video:SearchResultEntry />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <i:Interaction.Behaviors>
+                    <Behaviors:ListBoxInfiniteScrollBehavior ViewModel="{Binding}" MethodName="Next" />
+                </i:Interaction.Behaviors>
+            </ListBox>
+            <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding IsActive}"/>
+        </Grid>
+
+    </ContentControl>
 </UserControl>

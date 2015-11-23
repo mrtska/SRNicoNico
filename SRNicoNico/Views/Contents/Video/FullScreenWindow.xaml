@@ -16,7 +16,8 @@
 		Background="{DynamicResource ThemeBrushKey}"
         Foreground="{DynamicResource ActiveForegroundBrushKey}"
         InputMethod.PreferredImeState="Off"
-        KeyboardNavigation.IsTabStop="False" KeyDown="screen_KeyDown"
+        KeyboardNavigation.IsTabStop="False"
+        KeyDown="screen_KeyDown"
         >
 
     <i:Interaction.Triggers>

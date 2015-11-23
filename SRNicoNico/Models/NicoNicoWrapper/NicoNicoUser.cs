@@ -222,7 +222,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public List<NicoNicoVideoInfoEntry> GetUserVideo() {
 
-            var url = UserPage + "/video?page=" + Page;
+            var url = UserPage + "/video?page=" + Page++;
             Owner.Status = "投稿動画を取得中";
 
             List<NicoNicoVideoInfoEntry> ret = new List<NicoNicoVideoInfoEntry>();
@@ -262,7 +262,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     var section = outer.SelectSingleNode("child::div[@class='section']");
 
-                    entry.Title = section.SelectSingleNode("child::h5/a").InnerText.Trim();
+                    entry.Title = HttpUtility.HtmlDecode(section.SelectSingleNode("child::h5/a").InnerText.Trim());
                     entry.FirstRetrieve = section.SelectSingleNode("child::p").InnerText.Trim();
 
                     var metadata = section.SelectSingleNode("child::div[@class='dataOuter']/ul");
@@ -274,6 +274,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     ret.Add(entry);
                 }
 
+                Owner.Status = "";
                 return ret;
             } catch(RequestTimeout) {
 

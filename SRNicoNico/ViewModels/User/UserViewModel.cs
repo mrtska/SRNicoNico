@@ -66,14 +66,20 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        private readonly string UserPageUrl;
 
         public UserViewModel(string url) : base("読込中") {
 
-
+            UserPageUrl = url;
             App.ViewModelRoot.TabItems.Add(this);
             App.ViewModelRoot.SelectedTab = this;
-            UserInstance = new NicoNicoUser(this, url);
 
+            Initialize();
+        }
+
+        public void Initialize() {
+
+            UserInstance = new NicoNicoUser(this, UserPageUrl);
             UserEntry = UserInstance.GetUserInfo();
             Name = UserEntry.UserName;
 
@@ -83,17 +89,21 @@ namespace SRNicoNico.ViewModels {
                 new UserMylistViewModel(this),
                 new UserVideoViewModel(this)
             };
-
         }
 
         public void OpenBrowser() {
 
-            System.Diagnostics.Process.Start(UserEntry.UserPage);
+            System.Diagnostics.Process.Start(UserPageUrl);
         }
 
         public void Close() {
 
             App.ViewModelRoot.TabItems.Remove(this);
+        }
+
+        public void Reflesh() {
+
+
         }
 
         public override void KeyDown(KeyEventArgs e) {
@@ -102,6 +112,9 @@ namespace SRNicoNico.ViewModels {
             if(e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.W) {
 
                 Close();
+            } else if(e.Key == Key.F5) {
+
+                Reflesh();
             }
 
         }

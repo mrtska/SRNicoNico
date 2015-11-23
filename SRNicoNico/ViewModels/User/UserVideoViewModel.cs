@@ -41,10 +41,27 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region Closed変更通知プロパティ
+        private bool _Closed;
+
+        public bool Closed {
+            get { return _Closed; }
+            set { 
+                if(_Closed == value)
+                    return;
+                _Closed = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         //OwnerViewModel
         private UserViewModel User;
 
-        public UserVideoViewModel(UserViewModel vm) : base("投稿") {
+        private bool IsEnd;
+
+        public UserVideoViewModel(UserViewModel vm) : base("投稿動画") {
 
             User = vm;
             UserVideoList = new DispatcherCollection<SearchResultEntryViewModel>(DispatcherHelper.UIDispatcher);
@@ -60,6 +77,41 @@ namespace SRNicoNico.ViewModels {
 
                 if(videos == null) {
 
+
+                    if(UserVideoList.Count == 0) {
+
+                        //非公開、又は表示期限切れ
+                        Closed = true;
+                    }
+                    IsEnd = true;
+                    IsActive = false;
+                    return;
+                }
+
+                foreach(var video in videos) {
+
+                    UserVideoList.Add(new SearchResultEntryViewModel(video));
+                }
+
+                IsActive = false;
+            });
+        }
+
+        public void Next() {
+
+            if(IsEnd) {
+
+                return;
+            }
+            IsActive = true;
+
+            Task.Run(() => {
+
+                var videos = User.UserInstance.GetUserVideo();
+
+                if(videos == null) {
+
+                    IsEnd = true;
                     IsActive = false;
                     return;
                 }

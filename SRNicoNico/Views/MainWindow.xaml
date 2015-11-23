@@ -31,6 +31,7 @@
                    Title="NicoNicoViewer" 
                    KeyDown="Root_KeyDown"
                    FontFamily="{Binding  UserSelectedFont,Mode=TwoWay}"
+                   Visibility="{Binding Visibility,Mode=TwoWay}"
 				  >
 
     <i:Interaction.Triggers>
