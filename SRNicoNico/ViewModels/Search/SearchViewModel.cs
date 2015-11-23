@@ -119,7 +119,7 @@ namespace SRNicoNico.ViewModels {
                 SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
 
                 SearchResult.List.Clear();
-                foreach(NicoNicoSearchResultEntry node in result.List) {
+                foreach(NicoNicoVideoInfoEntry node in result.List) {
 
                     SearchResult.List.Add(new SearchResultEntryViewModel(node));
                 }
@@ -137,7 +137,7 @@ namespace SRNicoNico.ViewModels {
 
                 SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
 
-                foreach(NicoNicoSearchResultEntry node in result.List) {
+                foreach(NicoNicoVideoInfoEntry node in result.List) {
 
                     SearchResult.List.Add(new SearchResultEntryViewModel(node));
                 }

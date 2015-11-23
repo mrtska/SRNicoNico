@@ -98,6 +98,12 @@
                         <DataTemplate DataType="{x:Type vm:UserNicoRepoViewModel}">
                             <local:UserNicoRepoResult />
                         </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:UserMylistViewModel}">
+                            <local:UserMylistResult />
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:UserVideoViewModel}">
+                            <local:UserVideoResult />
+                        </DataTemplate>
                     </ItemsControl.Resources>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

@@ -16,46 +16,46 @@ using Livet;
 using SRNicoNico.ViewModels;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
-	public class NicoNicoSearch : NotificationObject {
+    public class NicoNicoSearch : NotificationObject {
 
         //検索API
         private const string SearchURL = "http://ext.nicovideo.jp/api/search/";
 
         //検索の種類
         private SearchType Type;
-        
+
         //検索キーワード
-		private string Keyword;
+        private string Keyword;
 
-		//ソート
-		private string Sort;
+        //ソート
+        private string Sort;
 
-		//オーダー
-		private string Order;
+        //オーダー
+        private string Order;
 
-		//取得しているページ
-		private byte CurrentPage = 1;
+        //取得しているページ
+        private byte CurrentPage = 1;
 
         private SearchViewModel SearchVM;
 
 
-		public NicoNicoSearch(SearchViewModel vm, string keyword, SearchType type, string sort) {
+        public NicoNicoSearch(SearchViewModel vm, string keyword, SearchType type, string sort) {
 
             SearchVM = vm;
             Type = type;
-			Keyword = keyword;
+            Keyword = keyword;
 
-			Sort = "&sort=" + sort.Split(':')[0];
-			Order = "&order=" + sort.Split(':')[1];
+            Sort = "&sort=" + sort.Split(':')[0];
+            Order = "&order=" + sort.Split(':')[1];
 
 
-		}
+        }
         //リクエストのレスポンスを返す
         public NicoNicoSearchResult Search() {
 
             string typeString;  //表示文字列
             string type;        //クエリ文字列
-            if (Type == SearchType.Keyword) {
+            if(Type == SearchType.Keyword) {
 
                 typeString = "テキスト";
                 type = "search";
@@ -65,19 +65,29 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 type = "tag";
             }
             SearchVM.Status = "検索中(" + typeString + ":" + Keyword + ")";
-            
+
             NicoNicoSearchResult result = new NicoNicoSearchResult();
 
             //テキスト検索のとき、urlの場合はそれも検索結果に表示する
-            if (Type == SearchType.Keyword)
-            {
+            if(Type == SearchType.Keyword) {
+
                 Match match = Regex.Match(Keyword, @"^(:?http://(:?www.nicovideo.jp/watch/|nico.ms/))?(?<cmsid>\w{0,2}\d+).*?$");
-                if (match.Success)
-                {
+                if(match.Success) {
+
                     NicoNicoVitaApiVideoData data = NicoNicoVitaApi.GetVideoData(match.Groups["cmsid"].Value);
-                    NicoNicoSearchResultEntry node = new NicoNicoSearchResultEntry(data.Id, data.Title, (ulong)data.ViewCounter, (ulong)data.CommentCounter,
-                                                                                    (ulong)data.MylistCounter, data.ThumbnailUrl, data.Length, data.FirstRetrieve);
+                    NicoNicoVideoInfoEntry node = new NicoNicoVideoInfoEntry();
+                    node.Cmsid = data.Id;
+                    node.Title = HttpUtility.HtmlDecode(data.Title);
+                    node.ViewCounter = data.ViewCounter;
+                    node.CommentCounter = data.CommentCounter;
+                    node.MylistCounter = data.MylistCounter;
+                    node.ThumbnailUrl = data.ThumbnailUrl;
+                    node.Length = data.Length;
+                    node.FirstRetrieve = data.FirstRetrieve.Replace('-', '/');
+
                     result.List.Add(node);
+
+                    result.Total++;
                 }
             }
 
@@ -90,16 +100,24 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             var json = DynamicJson.Parse(jsonString);
 
             //検索結果総数
-            if (json.IsDefined("count")) {
-                result.Total = (ulong)json.count;
+            if(json.count()) {
+                result.Total += (ulong)json.count;
             }
 
             //Jsonからリストを取得、データを格納
-            if (json.IsDefined("list")) {
-                foreach (var entry in json.list) {
+            if(json.list()) {
+                foreach(var entry in json.list) {
 
-                    NicoNicoSearchResultEntry node = new NicoNicoSearchResultEntry(entry.id, entry.title_short, (ulong)entry.view_counter, (ulong)entry.num_res,
-                                                                                (ulong)entry.mylist_counter, entry.thumbnail_url, entry.length, entry.first_retrieve);
+                    NicoNicoVideoInfoEntry node = new NicoNicoVideoInfoEntry();
+
+                    node.Cmsid = entry.id;
+                    node.Title = entry.title_short;
+                    node.ViewCounter = (int) entry.view_counter;
+                    node.CommentCounter = (int) entry.num_res;
+                    node.MylistCounter = (int) entry.mylist_counter;
+                    node.ThumbnailUrl = entry.thumbnail_url;
+                    node.Length = entry.length;
+                    node.FirstRetrieve = entry.first_retrieve;
 
                     result.List.Add(node);
                 }
@@ -109,66 +127,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             return result;
         }
-	}
+    }
 
 
     public class NicoNicoSearchResult : NotificationObject {
 
-
         //検索結果の総数
         public ulong Total { get; set; }
-        public List<NicoNicoSearchResultEntry> List { get; set; }
+        public List<NicoNicoVideoInfoEntry> List { get; set; }
 
         public NicoNicoSearchResult() {
 
-            List = new List<NicoNicoSearchResultEntry>();
-
+            List = new List<NicoNicoVideoInfoEntry>();
         }
-
-
     }
 
-    public class NicoNicoSearchResultEntry {
-
-        //ID sm9みたいな
-        public string Cmsid { get; private set; }
-
-        //タイトル
-        public string Title { get; private set; }
-
-        //再生回数
-        public ulong ViewCounter { get; private set; }
-
-        //コメント数
-        public ulong CommentCounter { get; private set; }
-
-        //マイリスト数
-        public ulong MylistCounter { get; private set; }
-
-        //サムネイルURL
-        public string ThumbnailUrl { get; private set; }
-
-        //再生時間
-        public string Length { get; private set; }
-
-        //動画投稿時日時
-        public string FirstRetrieve { get; private set; }
-
-
-        //コンストラクタ
-        public NicoNicoSearchResultEntry(string cmsid, string title, ulong view_counter, ulong comment_counter, ulong mylist_counter, string thumbnail_url, string length, string first_retrieve) {
-
-            Cmsid = cmsid;
-            Title = HttpUtility.HtmlDecode(title);
-            ViewCounter = view_counter;
-            CommentCounter = comment_counter;
-            MylistCounter = mylist_counter;
-            ThumbnailUrl = thumbnail_url;
-            Length = length;
-            FirstRetrieve = first_retrieve.Replace('-', '/');
-        }
-
-    }
 
     public enum SearchType {
 

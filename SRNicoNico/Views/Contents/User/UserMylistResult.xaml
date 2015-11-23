@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SRNicoNico.Views.Contents.User.UserNicoRepoResult"
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.User.UserMylistResult"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.User"
              xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -13,17 +14,14 @@
              xmlns:Behaviors="clr-namespace:SRNicoNico.Views.Behaviors" 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance {x:Type vm:UserNicoRepoViewModel}}"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             d:DataContext="{d:DesignInstance {x:Type vm:UserMylistViewModel}}"
              >
     <i:Interaction.Triggers>
         <i:EventTrigger>
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    
     <Grid>
-
         <ContentControl>
             <ContentControl.Resources>
                 <Style TargetType="ContentControl">
@@ -32,7 +30,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ContentControl">
-                                        <TextBlock Text="非公開、又は表示期限が過ぎています。" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="非公開です。" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -41,7 +39,7 @@
                 </Style>
             </ContentControl.Resources>
             <Grid>
-                <ListBox SelectedItem="{Binding SelectedItem}"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding UserNicoRepoList}">
+                <ListBox SelectedItem="{Binding SelectedItem}"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding UserMylistList}">
 
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
@@ -59,19 +57,14 @@
                         </Style>
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
-
-                        <DataTemplate DataType="{x:Type vm:NicoRepoResultEntryViewModel}">
-                            <nicorepo:NicoRepoResultEntry />
+                        <DataTemplate DataType="{x:Type m:NicoNicoUserMylistEntry}">
+                            <local:UserMylistEntry />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
-
-                    <i:Interaction.Behaviors>
-                        <Behaviors:ListBoxInfiniteScrollBehavior ViewModel="{Binding}" MethodName="Next"/>
-                    </i:Interaction.Behaviors>
                 </ListBox>
                 <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding IsActive}"/>
             </Grid>
         </ContentControl>
-       
+
     </Grid>
 </UserControl>

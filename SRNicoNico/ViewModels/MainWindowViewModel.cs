@@ -222,7 +222,7 @@ namespace SRNicoNico.ViewModels {
 
         public void KeyDown(KeyEventArgs e) {
 
-            SelectedTab.KeyDown(e);
+            SelectedTab?.KeyDown(e);
         }
 
         public void SearchText(SearchType type, string text) {

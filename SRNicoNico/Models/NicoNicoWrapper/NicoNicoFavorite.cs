@@ -21,7 +21,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             var doc = new HtmlDocument();
             doc.LoadHtml2(a);
-
+            
             var content = doc.DocumentNode.SelectSingleNode("//div[@class='content']");
 
             var outers = content.SelectNodes("child::div[@class='articleBody']/div[@class='outer']");
@@ -59,6 +59,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             Page = 1;
         }
+
+
 
 
     }

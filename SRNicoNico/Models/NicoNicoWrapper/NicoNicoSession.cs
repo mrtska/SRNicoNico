@@ -190,10 +190,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//セッションを確立した後に呼ぶ
 		public SigninStatus SignInInternal() {
 
-
 			//ニコニコTOPにレスポンスヘッダを要求する
 			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
-
 
 			HttpResponseMessage response = HttpClient.SendAsync(message).Result;
 
