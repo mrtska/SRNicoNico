@@ -50,6 +50,8 @@ namespace SRNicoNico.Views.Contents.Misc {
             }
 
             Volume.PopupText = ans + "%";
+            VideoViewModel vm = (VideoViewModel)DataContext;
+            vm.Volume = ans;
         }
 
         private void Volume_MouseUp(object sender, MouseButtonEventArgs e) {
@@ -58,22 +60,6 @@ namespace SRNicoNico.Views.Contents.Misc {
 
                 return;
             }
-            double x = e.GetPosition(this).X;
-
-            int ans = (int)(x / Volume.ActualWidth * Volume.VideoTime);
-
-            if(ans < 0) {
-
-                ans = 0;
-            } else if(ans > Volume.VideoTime) {
-
-                ans = (int)Volume.VideoTime;
-            }
-
-            Volume.CurrentTime = ans;
-
-            VideoViewModel vm = (VideoViewModel)DataContext;
-            vm.ChangeVolume(ans);
         }
     }
 }

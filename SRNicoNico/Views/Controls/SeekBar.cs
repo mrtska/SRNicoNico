@@ -29,7 +29,14 @@ namespace SRNicoNico.Views.Controls {
 
 		public long CurrentTime {
 			get { return (long)GetValue(CurrentTimeProperty); }
-			set { SetValue(CurrentTimeProperty, value);	}
+			set {
+                SetValue(CurrentTimeProperty, value);
+                //CurrentTimeWidth = (ActualWidth - 10) / VideoTime * value;
+                Console.WriteLine("Current:"+value);
+                CurrentTimeWidth = 100;
+                SeekCursor = new Thickness(CurrentTimeWidth, 0, 0, 0);
+                BufferedTimeWidth = BufferedTime * ActualWidth;
+            }
 		}
 
 		// Using a DependencyProperty as the backing store for CurrentTime.  This enables animation, styling, binding, etc...
@@ -167,7 +174,7 @@ namespace SRNicoNico.Views.Controls {
         public SeekBar() {
 
             DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(10);
+            timer.Interval = TimeSpan.FromMilliseconds(500);
             timer.Tick += Fired;
             timer.Start();
 
@@ -191,7 +198,7 @@ namespace SRNicoNico.Views.Controls {
                     return;
                 }
                 //シーク中の動画時間
-                CurrentTimeWidth = (ActualWidth - 10) / VideoTime * CurrentTime;
+                CurrentTimeWidth = (ActualWidth ) / VideoTime * ans;
                 SeekCursor = new Thickness(x - 5, 0, 0, 0);
 
             } else {
@@ -223,7 +230,7 @@ namespace SRNicoNico.Views.Controls {
                 SeekCursor = new Thickness(CurrentTimeWidth, 0, 0, 0);
                 BufferedTimeWidth = BufferedTime * ActualWidth;
             }
-            
+
         }
 
 

@@ -38,7 +38,7 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <local:VideoInfo />
+                                        <local:VideoInfo Margin="10"/>
                                         <local:VideoContent Grid.Column="1"/>
                                     </Grid>
                                 </ControlTemplate>

@@ -23,7 +23,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         
-        <controls:SeekBar x:Name="Seek" BufferedTime="{Binding Time.BufferedTime}" VideoTime="{Binding VideoData.ApiData.Length}" CurrentTime="{Binding Time.CurrentTime}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter" MouseLeftButtonUp="Seek_MouseLeftButtonUp"  />
+        <controls:SeekBar x:Name="Seek" BufferedTime="{Binding Time.BufferedTime}" VideoTime="{Binding VideoData.ApiData.Length}" CurrentTime="{Binding Time.CurrentTime,Mode=TwoWay}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter" MouseLeftButtonUp="Seek_MouseLeftButtonUp"  />
         <StackPanel Grid.Row="1" Orientation="Horizontal" >
             <mui:ModernButton Margin="10,0,0,0" EllipseDiameter="36" IconWidth="20" IconHeight="20" Focusable="False">
                 <mui:ModernButton.Style>
