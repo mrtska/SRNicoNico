@@ -18,7 +18,7 @@
     <Grid >
         <StackPanel Orientation="Horizontal">
 
-            <controls:SeekBar x:Name="Volume" PopupRect="45,0,20,20" CurrentTime="{Binding Volume, Mode=TwoWay}" VideoTime="100" BufferedTime="100" Height="10" Width="100" MouseEnter="Volume_MouseEnter" MouseLeave="Volume_MouseLeave" MouseMove="Volume_MouseMove" MouseUp="Volume_MouseUp" />
+            <controls:SeekBar x:Name="Volume" PopupRect="45,0,20,20" CurrentTime="{Binding Volume, Mode=TwoWay}" VideoTime="100" BufferedTime="100" Height="10" Width="100" MouseEnter="Volume_MouseEnter" MouseLeave="Volume_MouseLeave" MouseMove="Volume_MouseMove" MouseUp="Volume_MouseUp" MouseDown="Volume_MouseDown" />
             <mui:ModernButton x:Name="button" Margin="2,0,0,0" EllipseDiameter="30" IconWidth="30" Focusable="False" >
                 <i:Interaction.Triggers>
 

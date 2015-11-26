@@ -23,7 +23,7 @@ namespace SRNicoNico.Views.Contents.Misc {
             InitializeComponent();
         }
 
-        
+        private bool IsDrag;
 
         private void Volume_MouseEnter(object sender, MouseEventArgs e) {
 
@@ -50,16 +50,23 @@ namespace SRNicoNico.Views.Contents.Misc {
             }
 
             Volume.PopupText = ans + "%";
-            VideoViewModel vm = (VideoViewModel)DataContext;
-            vm.Volume = ans;
+
+            if(IsDrag) {
+
+                VideoViewModel vm = (VideoViewModel)DataContext;
+                vm.Volume = ans;
+            }
+
         }
 
         private void Volume_MouseUp(object sender, MouseButtonEventArgs e) {
 
-            if(!(DataContext is VideoViewModel)) {
+            IsDrag = false;
+        }
 
-                return;
-            }
+        private void Volume_MouseDown(object sender, MouseButtonEventArgs e) {
+
+            IsDrag = true;
         }
     }
 }

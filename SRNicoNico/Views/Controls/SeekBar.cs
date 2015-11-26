@@ -176,7 +176,7 @@ namespace SRNicoNico.Views.Controls {
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(500);
             timer.Tick += Fired;
-            timer.Start();
+            timer.Start();  
 
             MouseLeftButtonDown += SeekBar_MouseLeftButtonDown;
             MouseLeftButtonUp += SeekBar_MouseLeftButtonUp;
