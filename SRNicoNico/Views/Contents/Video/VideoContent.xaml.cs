@@ -44,7 +44,14 @@ namespace SRNicoNico.Views.Contents.Video {
             var inline = link.Inlines.First() as Run;
             if(inline != null) {
 
-                var text = link.NavigateUri.OriginalString;
+                var uri = link.NavigateUri;
+                if(uri == null) {
+
+                    return;
+                }
+
+                var text = uri.OriginalString;
+
                 if(text.StartsWith("http://www.nicovideo.jp/watch/")) {
 
                     VideoToolTip tooltip = new VideoToolTip();

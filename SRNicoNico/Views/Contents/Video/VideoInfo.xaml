@@ -11,13 +11,21 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="190"
+             d:DesignHeight="500" 
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              >
     <ScrollViewer>
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <StackPanel>
+            <StackPanel  Margin="10" >
                 <Image MinWidth="50" MinHeight="50" Source="{Binding VideoData.ApiData.Thumbnail}" Margin="5" />
 
                 <Border BorderBrush="#FF444444" BorderThickness="1">
@@ -52,34 +60,39 @@
                         </Button>
                     </StackPanel>
                 </Border>
-                <Border BorderBrush="#FF444444" BorderThickness="1" Margin="0,10,0,0" >
-                    <StackPanel Margin="3">
 
-                        <TextBlock Text="タグ" Margin="10" FontSize="16" />
-
-                        <Rectangle Stroke="#FF444444" Margin="10,-5,10,5" />
-
-                        <ListView Margin="10" ItemsSource="{Binding VideoData.ApiData.TagList}" Focusable="False" >
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="{x:Type ListViewItem}">
-
-                                    <Setter Property="Focusable" Value="False" />
-                                    <Setter Property="Foreground" Value="#FFAAAAAA" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
-
-                            <ListView.Resources>
-                                <DataTemplate DataType="{x:Type vm:VideoTagViewModel}">
-                                    <local:VideoTag />
-                                </DataTemplate>
-                            </ListView.Resources>
-                        </ListView>
-                    </StackPanel>
-                </Border>
 
             </StackPanel>
 
+            <Border Grid.Column="1"  BorderBrush="#FF444444" BorderThickness="1" Margin="0,12" >
+                <StackPanel Margin="3">
+
+                    <TextBlock Text="タグ" Margin="10" FontSize="16" />
+
+                    <Rectangle Stroke="#FF444444" Margin="10,-5,10,5" />
+
+                    <ListView Height="auto"  Margin="10" ItemsSource="{Binding VideoData.ApiData.TagList}" Focusable="False" >
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}">
+
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Focusable" Value="False" />
+                                <Setter Property="Foreground" Value="#FFAAAAAA" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.Resources>
+                            <DataTemplate DataType="{x:Type vm:VideoTagViewModel}">
+                                <local:VideoTag />
+                            </DataTemplate>
+                        </ListView.Resources>
+                    </ListView>
+                </StackPanel>
+            </Border>
+            
+            
         </Grid>
     </ScrollViewer>
-   
+
 </UserControl>

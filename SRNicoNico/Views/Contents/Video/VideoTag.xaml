@@ -11,14 +11,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="280"
              d:DataContext="{d:DesignInstance vm:VideoTagViewModel}"
-             Background="Transparent"
+             ToolTip="{Binding Tag.Tag}"
              >
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
             <l:LivetCallMethodAction MethodName="TagClick" MethodTarget="{Binding}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Grid>
-        <TextBlock VerticalAlignment="Center" Text="{Binding Tag.Tag}" FontSize="13" />
-    </Grid>
+    <TextBlock VerticalAlignment="Center" Text="{Binding Tag.Tag}" FontSize="11"/>
 </UserControl>
