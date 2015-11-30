@@ -38,7 +38,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		}
 
         //m:sをsに変換
-        public static long GetTimeOfLong(string s) {
+        public static long ConvertTime(string s) {
 
             string[] strings = s.Split(':');
             string minutes = strings[0];
@@ -48,7 +48,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
 		//sをm:sに変換
-		public static string GetTimeFromLong(long time) {
+		public static string ConvertTime(long time) {
 
 			long munites = time / 60;
 			long seconds = time % 60;

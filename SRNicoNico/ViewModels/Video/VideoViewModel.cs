@@ -334,7 +334,7 @@ namespace SRNicoNico.ViewModels {
                 Time = new VideoTime();
 
                 //動画時間
-                Time.VideoTimeString = NicoNicoUtil.GetTimeFromLong(VideoData.ApiData.Length);
+                Time.VideoTimeString = NicoNicoUtil.ConvertTime(VideoData.ApiData.Length);
 
 
                 if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
@@ -576,7 +576,7 @@ namespace SRNicoNico.ViewModels {
         private void SetSeekCursor(float time) {
 
             Time.CurrentTime = (int)time;
-            Time.CurrentTimeString = NicoNicoUtil.GetTimeFromLong(Time.CurrentTime);
+            Time.CurrentTimeString = NicoNicoUtil.ConvertTime(Time.CurrentTime);
         }
 
         //このメソッド以降はWebBrowserプロパティはnullではない

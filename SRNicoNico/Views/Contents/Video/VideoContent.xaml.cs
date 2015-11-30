@@ -1,4 +1,5 @@
 ﻿using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,21 @@ namespace SRNicoNico.Views.Contents.Video {
         }
         public void OpenHyperLink(object sender, RequestNavigateEventArgs e) {
 
-            NicoNicoOpener.Open(e.Uri.OriginalString);
+            var url = e.Uri.OriginalString;
+            if(url.StartsWith("#")) {
+
+                if(DataContext is VideoViewModel) {
+
+                    VideoViewModel vm = (VideoViewModel)DataContext;
+                    var time = url.Substring(1);
+
+                    vm.Seek(NicoNicoUtil.ConvertTime((time)));
+                }
+            } else {
+
+                NicoNicoOpener.Open(e.Uri.OriginalString);
+            }
+
         }
 
         public void InitializeToolTip(object sender, RoutedEventArgs e) {
@@ -45,7 +60,15 @@ namespace SRNicoNico.Views.Contents.Video {
             if(inline != null) {
 
                 var uri = link.NavigateUri;
+                //#○○:×× リンクだとnullになるので
                 if(uri == null) {
+
+                    var time = inline.Text;
+
+                    if(time.StartsWith("#")) {
+
+                        link.NavigateUri = new Uri(time, UriKind.Relative);
+                    }
 
                     return;
                 }

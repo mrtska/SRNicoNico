@@ -42,7 +42,7 @@ namespace SRNicoNico.Views.Contents.Video {
                 return;
             }
 
-            Seek.PopupText = NicoNicoUtil.GetTimeFromLong(ans);
+            Seek.PopupText = NicoNicoUtil.ConvertTime(ans);
             Seek.PopupRect = new Rect(x - 5, 0, 20, 20);
 
             if(Seek.IsPopupImageOpen) {

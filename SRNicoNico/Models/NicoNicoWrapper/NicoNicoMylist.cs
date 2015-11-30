@@ -72,7 +72,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     data.UpdateTime = UnixTime.FromUnixTime((long)item.update_time).ToString();
                     data.FirstRetrieve = UnixTime.FromUnixTime((long)item.first_retrieve).ToString();
-                    data.Length = NicoNicoUtil.GetTimeFromLong(long.Parse(item.length_seconds));
+                    data.Length = NicoNicoUtil.ConvertTime(long.Parse(item.length_seconds));
                     data.Id = item.video_id;
                     data.ViewCounter = int.Parse(item.view_counter);
                     data.CommentCounter = int.Parse(item.num_res);

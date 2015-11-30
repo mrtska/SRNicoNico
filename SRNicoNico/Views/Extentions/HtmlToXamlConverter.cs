@@ -4853,6 +4853,7 @@ namespace SRNicoNico.Views.Extentions {
                     }
                     attributeValue = GetAttribute(htmlElement, "size");
                     if(attributeValue != null) {
+                        /* fontタグ size属性は無効にする
                         double fontSize = double.Parse(attributeValue) * (12.0 / 3.0);
                         if(fontSize < 1.0) {
                             fontSize = 1.0;
@@ -4860,6 +4861,7 @@ namespace SRNicoNico.Views.Extentions {
                             fontSize = 1000.0;
                         }
                         localProperties["font-size"] = fontSize.ToString();
+                        */
                     }
                     attributeValue = GetAttribute(htmlElement, "color");
                     if(attributeValue != null) {

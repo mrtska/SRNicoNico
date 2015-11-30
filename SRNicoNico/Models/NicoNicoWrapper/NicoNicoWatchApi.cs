@@ -62,11 +62,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             var json = DynamicJson.Parse(data);
 
             //GetFlvの結果
-            string flv = json.flashvars.flvInfo;
+             string flv = json.flashvars.flvInfo;
 
             //2重にエンコードされてるので二回
-            flv = System.Web.HttpUtility.UrlDecode(flv);
-            flv = System.Web.HttpUtility.UrlDecode(flv);
+            flv = HttpUtility.UrlDecode(flv);
+            flv = HttpUtility.UrlDecode(flv);
 
 
             WatchApiData ret = new WatchApiData();
@@ -96,10 +96,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.Token = json.flashvars.csrfToken;
 
             //フォントサイズが1だと異様に小さいので補正
-            if(ret.Description.Contains("<font size=\"1\"")) {
+            /*if(ret.Description.Contains("<font size=\"1\"")) {
 
                 ret.Description = ret.Description.Replace("<font size=\"1\"","<font size=\"2.6\"");
-            }
+            }*/
 
             ret.Description = HyperLinkParser.Parse(ret.Description);
 
