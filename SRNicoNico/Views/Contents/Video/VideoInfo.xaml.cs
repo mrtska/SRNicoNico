@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SRNicoNico.Models.NicoNicoViewer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,13 @@ namespace SRNicoNico.Views.Contents.Video {
     public partial class VideoInfo : UserControl {
         public VideoInfo() {
             InitializeComponent();
+        }
+
+        //投稿者を開く
+        public void OpenHyperLink(object sender, RequestNavigateEventArgs e) {
+
+            NicoNicoOpener.Open("http://www.nicovideo.jp/user/" + e.Uri.OriginalString);
+
         }
     }
 }

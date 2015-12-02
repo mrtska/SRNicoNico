@@ -95,11 +95,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.HighestRank = videoDetail.highest_rank == null ? "圏外" : videoDetail.highest_rank + "位";
             ret.Token = json.flashvars.csrfToken;
 
-            //フォントサイズが1だと異様に小さいので補正
-            /*if(ret.Description.Contains("<font size=\"1\"")) {
+            //投稿者情報
+            var uploaderInfo = json.uploaderInfo;
 
-                ret.Description = ret.Description.Replace("<font size=\"1\"","<font size=\"2.6\"");
-            }*/
+            ret.UploaderId = uploaderInfo.id;
+            ret.UploaderIconUrl = uploaderInfo.icon_url;
+            ret.UploaderName = uploaderInfo.nickname;
+            ret.UploaderIsFavorited = uploaderInfo.is_favorited;
 
             ret.Description = HyperLinkParser.Parse(ret.Description);
 
@@ -200,6 +202,19 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
         #endregion
+
+        //うｐ主のID
+        public string UploaderId { get; set; }
+
+        //うｐ主アイコンURL
+        public string UploaderIconUrl { get; set; }
+
+        //うｐ主の名前
+        public string UploaderName { get; set; }
+
+        //うｐ主をお気に入り登録しているかどうか
+        public bool UploaderIsFavorited { get; set; }
+
 
     }
 

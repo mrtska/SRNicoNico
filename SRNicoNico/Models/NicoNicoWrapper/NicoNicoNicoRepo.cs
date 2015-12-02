@@ -111,6 +111,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             var timeline = doc.DocumentNode.SelectNodes("//div[@class='timeline']/div");
 
+            if(timeline == null) {
+
+                return;
+            }
+
             //ニコレポタイムライン走査
             foreach(HtmlNode node in timeline) {
 
