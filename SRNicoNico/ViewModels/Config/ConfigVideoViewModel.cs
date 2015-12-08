@@ -28,6 +28,12 @@ namespace SRNicoNico.ViewModels {
                 Properties.Settings.Default.VideoInfoPlacement = value;
                 Properties.Settings.Default.Save();
                 RaisePropertyChanged();
+
+                foreach(VideoViewModel tab in App.ViewModelRoot.TabItems.Where(tab => tab is VideoViewModel)) {
+
+                    tab.VideoInfoPlacement = "dummy";
+                }
+
             }
         }
         #endregion

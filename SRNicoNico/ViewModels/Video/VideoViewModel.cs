@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Input;
 using System.Web;
 using System;
-
+using System.Linq;
 using Livet;
 
 using SRNicoNico.Models.NicoNicoViewer;
@@ -236,7 +236,10 @@ namespace SRNicoNico.ViewModels {
 
                 return App.ViewModelRoot.Config.Video.VideoPlacement;
             }
-            set { }
+            set {
+
+                RaisePropertyChanged();
+            }
         }
 
         #region VideoUrl変更通知プロパティ
@@ -378,8 +381,7 @@ namespace SRNicoNico.ViewModels {
             });
         }
 
-        public void OpenBrowser()
-        {
+        public void OpenBrowser() {
 
             System.Diagnostics.Process.Start(VideoUrl);
         }
@@ -702,6 +704,8 @@ namespace SRNicoNico.ViewModels {
             WebBrowser.IsEnabled = false;
 
             App.ViewModelRoot.TabItems.Remove(this);
+            App.ViewModelRoot.SelectedTab = App.ViewModelRoot.TabItems.Last();
+
 
             Dispose();
         }

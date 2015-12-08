@@ -14,6 +14,7 @@ package  {
 	import flash.net.URLRequest;
 	import flash.system.fscommand;
 	import flash.ui.Keyboard;
+	import flash.ui.Mouse;
 	
 	[SWF(width="672", height="384")]
 	public class NicoNicoPlayer extends NicoNicoPlayerBase {
@@ -81,7 +82,8 @@ package  {
 					stream.step(1);
 				}
 			});*/
-			
+				Mouse.hide();
+
 		}
 		
 		//指定したURLをストリーミング再生する

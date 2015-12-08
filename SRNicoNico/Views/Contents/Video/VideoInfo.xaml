@@ -18,7 +18,8 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
-                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150" />
@@ -89,42 +90,40 @@
             </Border>
 
             <Border Grid.Row="1" Grid.ColumnSpan="2"  BorderBrush="#FF444444" BorderThickness="1" Margin="10,0,10,10">
-                <Grid>
-                    <StackPanel>
-                        <TextBlock Text="投稿者情報" Margin="10" FontSize="16" />
-                        <Rectangle Stroke="#FF444444" Margin="10,-5,10,5" />
+                <StackPanel>
+                    <TextBlock Text="投稿者情報" Margin="10" FontSize="16" />
+                    <Rectangle Stroke="#FF444444" Margin="10,-5,10,5" />
 
 
-                        <Grid VerticalAlignment="Top">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Image Source="{Binding VideoData.ApiData.UploaderIconUrl}" Width="65" Height="50" />
-                            <Grid Grid.Column="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock FontSize="16" Margin="5" >
-                                    <TextBlock.ToolTip>
-                                        <ToolTip Content="{Binding VideoData.ApiData.UploaderId}" ContentStringFormat="http://www.nicovideo.jp/user/{0}" />
-                                    </TextBlock.ToolTip>
-                                    <Hyperlink RequestNavigate="OpenHyperLink" NavigateUri="{Binding VideoData.ApiData.UploaderId}">
-                                        <Run Text="{Binding VideoData.ApiData.UploaderName}" />
-                                    </Hyperlink>
-                                </TextBlock>
+                    <Grid VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="{Binding VideoData.ApiData.UploaderIconUrl}" Width="65" Height="50" />
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock FontSize="16" Margin="5" >
+                                <TextBlock.ToolTip>
+                                    <ToolTip FontSize="12" Content="{Binding VideoData.ApiData.UploaderId}" ContentStringFormat="http://www.nicovideo.jp/user/{0}" />
+                                </TextBlock.ToolTip>
+                                <Hyperlink RequestNavigate="OpenHyperLink" NavigateUri="{Binding VideoData.ApiData.UploaderId}">
+                                    <Run Text="{Binding VideoData.ApiData.UploaderName}" />
+                                </Hyperlink>
+                            </TextBlock>
 
-                                <Button Grid.Row="1" Content="お気に入りに登録" HorizontalAlignment="Left" Margin="5,0">
+                            <Button Grid.Row="1" Content="お気に入りに登録" HorizontalAlignment="Left" Margin="5,0,0,10">
                                     
-                                </Button>
-                            </Grid>
+                            </Button>
                         </Grid>
+                    </Grid>
 
-                    </StackPanel>
+                </StackPanel>
 
 
-                </Grid>
             </Border>
 
         </Grid>
