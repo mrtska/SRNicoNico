@@ -29,8 +29,10 @@ namespace SRNicoNico.ViewModels {
                 Properties.Settings.Default.Save();
                 RaisePropertyChanged();
 
+                //タブから動画タブを探して情報コントロールの位置を変える
                 foreach(VideoViewModel tab in App.ViewModelRoot.TabItems.Where(tab => tab is VideoViewModel)) {
 
+                    //プロパティにダミー値を与えて変更通知を飛ばす この方法が最良かは不明
                     tab.VideoInfoPlacement = "dummy";
                 }
 

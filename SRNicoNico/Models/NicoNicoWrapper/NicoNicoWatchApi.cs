@@ -95,13 +95,29 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.HighestRank = videoDetail.highest_rank == null ? "圏外" : videoDetail.highest_rank + "位";
             ret.Token = json.flashvars.csrfToken;
 
-            //投稿者情報
-            var uploaderInfo = json.uploaderInfo;
+            if(json.uploaderInfo()) {
 
-            ret.UploaderId = uploaderInfo.id;
-            ret.UploaderIconUrl = uploaderInfo.icon_url;
-            ret.UploaderName = uploaderInfo.nickname;
-            ret.UploaderIsFavorited = uploaderInfo.is_favorited;
+                //投稿者情報
+                var uploaderInfo = json.uploaderInfo;
+
+                ret.UploaderId = uploaderInfo.id;
+                ret.UploaderIconUrl = uploaderInfo.icon_url;
+                ret.UploaderName = uploaderInfo.nickname;
+                ret.UploaderIsFavorited = uploaderInfo.is_favorited;
+
+            } else if(json.channelInfo()) {
+
+                //投稿者情報
+                var channelInfo = json.channelInfo;
+
+                ret.UploaderId = channelInfo.id;
+                ret.UploaderIconUrl = channelInfo.icon_url;
+                ret.UploaderName = channelInfo.name;
+                ret.UploaderIsFavorited = channelInfo.is_favorited == 1 ? true : false;
+
+                ret.IsChannelVideo = true;
+            }
+
 
             ret.Description = HyperLinkParser.Parse(ret.Description);
 
@@ -203,19 +219,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
         #endregion
 
-        //うｐ主のID
+        //うｐ主又はチャンネルのID
         public string UploaderId { get; set; }
 
-        //うｐ主アイコンURL
+        //うｐ主又はチャンネルアイコンURL
         public string UploaderIconUrl { get; set; }
 
-        //うｐ主の名前
+        //うｐ主又はチャンネルの名前
         public string UploaderName { get; set; }
 
-        //うｐ主をお気に入り登録しているかどうか
+        //うｐ主又はチャンネルをお気に入り登録しているかどうか
         public bool UploaderIsFavorited { get; set; }
 
-
+        //チャンネル動画か否か
+        public bool IsChannelVideo { get; set; }
     }
 
     //タグ情報

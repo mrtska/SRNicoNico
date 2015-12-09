@@ -91,7 +91,18 @@
 
             <Border Grid.Row="1" Grid.ColumnSpan="2"  BorderBrush="#FF444444" BorderThickness="1" Margin="10,0,10,10">
                 <StackPanel>
-                    <TextBlock Text="投稿者情報" Margin="10" FontSize="16" />
+                    <TextBlock  Margin="10" FontSize="16">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="投稿者情報"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding VideoData.ApiData.IsChannelVideo}" Value="true">
+                                        <Setter Property="Text" Value="チャンネル情報"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>   
+                    </TextBlock>
                     <Rectangle Stroke="#FF444444" Margin="10,-5,10,5" />
 
 
@@ -108,7 +119,37 @@
                             </Grid.RowDefinitions>
                             <TextBlock FontSize="16" Margin="5" >
                                 <TextBlock.ToolTip>
-                                    <ToolTip FontSize="12" Content="{Binding VideoData.ApiData.UploaderId}" ContentStringFormat="http://www.nicovideo.jp/user/{0}" />
+                                    <ContentControl>
+                                        <TextBlock FontSize="12" >
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="{Binding VideoData.ApiData.UploaderId,StringFormat='http://www.nicovideo.jp/user/{0}'}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding VideoData.ApiData.IsChannelVideo}" Value="true">
+                                                            <Setter Property="Text" Value="{Binding VideoData.ApiData.UploaderId,StringFormat='http://ch.nicovideo.jp/channel/ch{0}'}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <!--
+                                    <ToolTip FontSize="12" Content="{Binding VideoData.ApiData.UploaderId}" >
+                                        <ToolTip.Style>
+                                            <Style TargetType="ToolTip">
+                                                <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}" />
+                                                <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                                <Setter Property="ContentStringFormat" Value="http://www.nicovideo.jp/user/{0}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding VideoData.ApiData.IsChannelVideo}" Value="true">
+                                                        <Setter Property="ContentStringFormat" Value="http://ch.nicovideo.jp/channel/{0}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ToolTip.Style>
+                                    </ToolTip>
+                                        
+                                        -->
+                                    </ContentControl>
                                 </TextBlock.ToolTip>
                                 <Hyperlink RequestNavigate="OpenHyperLink" NavigateUri="{Binding VideoData.ApiData.UploaderId}">
                                     <Run Text="{Binding VideoData.ApiData.UploaderName}" />

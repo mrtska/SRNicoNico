@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using SRNicoNico.ViewModels;
+
 namespace SRNicoNico.Views.Contents.Video {
     /// <summary>
     /// VideoInfo.xaml の相互作用ロジック
@@ -26,7 +28,19 @@ namespace SRNicoNico.Views.Contents.Video {
         //投稿者を開く
         public void OpenHyperLink(object sender, RequestNavigateEventArgs e) {
 
-            NicoNicoOpener.Open("http://www.nicovideo.jp/user/" + e.Uri.OriginalString);
+            var vm = DataContext as VideoViewModel;
+
+            if(vm != null) {
+
+                if(vm.VideoData.ApiData.IsChannelVideo) {
+
+                    NicoNicoOpener.Open("http://ch.nicovideo.jp/channel/ch" + e.Uri.OriginalString);
+                } else {
+
+                    NicoNicoOpener.Open("http://www.nicovideo.jp/user/" + e.Uri.OriginalString);
+                }
+            }
+
 
         }
     }

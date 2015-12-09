@@ -193,11 +193,11 @@ package  {
 			
 			//trace("Time:" + stream.time);
 			
-			if(prevTime != (int)(value)) {
+			//if(prevTime != (int)(value)) {
 				
 				fscommand("CsFrame", value + ":" + buffer.toString() + ":" + (stream.bytesLoaded - prevLoaded).toString());
 				prevLoaded = stream.bytesLoaded;
-			}
+			//}
 			prevTime = (int) (value);
 			
 			var vpos:Number = Math.floor(value * 100);
