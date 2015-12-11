@@ -11,35 +11,55 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              mc:Ignorable="d" 
-             Width="250"
-             Height="200"
              d:DataContext="{d:DesignInstance {x:Type vm:VideoDataViewModel}}"
              >
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="90"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+    <ContentControl>
+        <ContentControl.Style>
+            <Style TargetType="ContentControl">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Data.Success}" Value="True">
+                        <Setter Property="Width" Value="250"/>
+                        <Setter Property="Height" Value="200"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ContentControl">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="20"/>
+                                            <RowDefinition Height="90"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="120"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.ColumnSpan="2" Text="{Binding Data.Title}" TextTrimming="CharacterEllipsis" />
-        <mui:ModernProgressRing Panel.ZIndex="1" HorizontalAlignment="Center" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}" Grid.ColumnSpan="2" Grid.RowSpan="3" />
+                                        <TextBlock Grid.ColumnSpan="2" Text="{Binding Data.Title}" TextTrimming="CharacterEllipsis" />
+                                        <mui:ModernProgressRing Panel.ZIndex="1" HorizontalAlignment="Center" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}" Grid.ColumnSpan="2" Grid.RowSpan="3" />
 
-        <Image Grid.Row="1" Source="{Binding Data.ThumbnailUrl}" Margin="1,0,0,20" />
-        <TextBlock Grid.Row="1" Text="{Binding Data.Length}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5"/>
-        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0">
-            <TextBlock Text="{Binding Data.Id, StringFormat=動画ID:{0}}" />
-            <TextBlock Text="{Binding Data.ViewCounter, StringFormat=再生数:{0:N0}}" />
-            <TextBlock Text="{Binding Data.CommentCounter, StringFormat=コメント数:{0:N0}}" />
-            <TextBlock Text="{Binding Data.MylistCounter, StringFormat=マイリスト数:{0:N0}}" />
+                                        <Image Grid.Row="1" Source="{Binding Data.ThumbnailUrl}" Margin="1,0,0,20" />
+                                        <TextBlock Grid.Row="1" Text="{Binding Data.Length}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5"/>
+                                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0">
+                                            <TextBlock Text="{Binding Data.Id, StringFormat=動画ID:{0}}" />
+                                            <TextBlock Text="{Binding Data.ViewCounter, StringFormat=再生数:{0:N0}}" />
+                                            <TextBlock Text="{Binding Data.CommentCounter, StringFormat=コメント数:{0:N0}}" />
+                                            <TextBlock Text="{Binding Data.MylistCounter, StringFormat=マイリスト数:{0:N0}}" />
 
-        </StackPanel>
+                                        </StackPanel>
 
-        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding Data.Description}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding Data.Description}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
 
-    </Grid>
+                                    </Grid>
+
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ContentControl.Style>
+        
+        <TextBlock HorizontalAlignment="Center" Text="情報の取得に失敗しました。"/>
+
+    </ContentControl>
 </UserControl>

@@ -25,6 +25,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             NicoNicoVitaApiVideoData ret = new NicoNicoVitaApiVideoData();
 
+            if(!response.video()) {
+
+                return ret;
+            }
+
             ret.Id = response.video.id;
             ret.Title = response.video.title;
             ret.FirstRetrieve = NicoNicoUtil.DateFromVitaFormatDate(response.video.first_retrieve);
@@ -34,7 +39,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.Length = NicoNicoUtil.ConvertTime(long.Parse(response.video.length_in_seconds));
             ret.Description = response.video.description;
             ret.ThumbnailUrl = response.video.thumbnail_url;
-            
+            ret.Success = true;
             return ret;
         }
     }
@@ -67,6 +72,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //サムネイル
         public string ThumbnailUrl { get; set; }
+
+        //成功したか否か
+        public bool Success { get; set; }
 
     }
 

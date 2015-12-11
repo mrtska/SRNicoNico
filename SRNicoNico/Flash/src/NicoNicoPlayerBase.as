@@ -2,9 +2,11 @@ package {
 	import flash.display.Sprite;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.events.NetStatusEvent;
 	import flash.external.ExternalInterface;
 	import flash.system.fscommand;
+	import flash.ui.Mouse;
 	
 	import comment.CommentRasterizer;
 	
@@ -57,7 +59,22 @@ package {
 			InjectComment(loader.data);
 			});
 			loader.load(req);*/
+			trace("aaaa");
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, move);
 		}
+		
+		private function move(e:MouseEvent):void {
+			
+
+			Mouse.show();
+		}
+			
+		
+		
+		
+		
+		
+		
 		
 		//指定したURLをストリーミング再生する オーバーライドして使う
 		public function OpenVideo(videoUrl:String):void {}
@@ -90,6 +107,7 @@ package {
 			}
 		}
 		public function ChangeVolume(vol:Number):void {}		
+		
 		
 	}
 }

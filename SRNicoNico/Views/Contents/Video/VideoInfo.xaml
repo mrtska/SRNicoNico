@@ -69,7 +69,7 @@
                     <TextBlock Text="タグ" Margin="10" FontSize="16" />
                     <Rectangle Stroke="#FF444444" Margin="10,-5,10,5" />
 
-                    <ListBox   Margin="10" ItemsSource="{Binding VideoData.ApiData.TagList}" Focusable="False" >
+                    <ListBox   Margin="3" ItemsSource="{Binding VideoData.ApiData.TagList}" Focusable="False" >
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
 
@@ -132,23 +132,6 @@
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
-                                        <!--
-                                    <ToolTip FontSize="12" Content="{Binding VideoData.ApiData.UploaderId}" >
-                                        <ToolTip.Style>
-                                            <Style TargetType="ToolTip">
-                                                <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}" />
-                                                <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
-                                                <Setter Property="ContentStringFormat" Value="http://www.nicovideo.jp/user/{0}" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding VideoData.ApiData.IsChannelVideo}" Value="true">
-                                                        <Setter Property="ContentStringFormat" Value="http://ch.nicovideo.jp/channel/{0}"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </ToolTip.Style>
-                                    </ToolTip>
-                                        
-                                        -->
                                     </ContentControl>
                                 </TextBlock.ToolTip>
                                 <Hyperlink RequestNavigate="OpenHyperLink" NavigateUri="{Binding VideoData.ApiData.UploaderId}">

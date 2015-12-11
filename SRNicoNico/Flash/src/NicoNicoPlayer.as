@@ -82,8 +82,6 @@ package  {
 					stream.step(1);
 				}
 			});*/
-				Mouse.hide();
-
 		}
 		
 		//指定したURLをストリーミング再生する
