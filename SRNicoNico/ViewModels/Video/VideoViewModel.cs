@@ -687,7 +687,7 @@ namespace SRNicoNico.ViewModels {
         //RTMP動画でタイムアウトになった時又は予期せぬ理由でエラーになった時
         public void RTMPTimeOut() {
 
-            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Video.VideoTimeOutDialog), this, TransitionMode.Modal));
+            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(VideoTimeOutDialog), this, TransitionMode.Modal));
         }
         
 
@@ -713,6 +713,8 @@ namespace SRNicoNico.ViewModels {
 
         public override void KeyDown(KeyEventArgs e) {
 
+            Console.WriteLine("KeyDown:" + e.Key);
+            Console.Out.Flush();
             if(IsFullScreen) {
 
                 switch(e.Key) {
@@ -770,6 +772,21 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        public void ToggleFavorite() {
+
+            VideoData.ApiData.UploaderIsFavorited ^= true;
+            if(VideoData.ApiData.UploaderIsFavorited) {
+
+                NicoNicoWatchApi.AddFavorite(this, VideoData.ApiData.UploaderId, VideoData.ApiData.Token);
+            } else {
+
+                NicoNicoWatchApi.DeleteFavorite(this, VideoData.ApiData.UploaderId, VideoData.ApiData.Token);
+            }
+
+
+
+
+        }
 
     }
 }

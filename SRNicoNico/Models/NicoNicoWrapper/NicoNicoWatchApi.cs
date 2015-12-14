@@ -18,6 +18,7 @@ using System.Collections.ObjectModel;
 using SRNicoNico.ViewModels;
 using SRNicoNico.Models.NicoNicoViewer;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
@@ -29,7 +30,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public static WatchApiData GetWatchApiData(string videoPage) {
 
             //動画ページのhtml取得
-            HttpResponseMessage response = NicoNicoWrapperMain.GetSession().GetResponseAsync(videoPage).Result;
+            var response = NicoNicoWrapperMain.GetSession().GetResponseAsync(videoPage).Result;
 
             //チャンネル、公式動画
             if(response.StatusCode == HttpStatusCode.MovedPermanently) {
@@ -56,7 +57,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             string data = doc.DocumentNode.QuerySelector("#watchAPIDataContainer").InnerHtml;
 
             //html特殊文字をデコードする
-            data = System.Web.HttpUtility.HtmlDecode(data);
+            data = HttpUtility.HtmlDecode(data);
 
             //jsonとしてAPIデータを展開していく
             var json = DynamicJson.Parse(data);
@@ -155,6 +156,72 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
             return ret;
         }
+
+        public static void AddFavorite(VideoViewModel vm, string userId, string token) {
+
+            vm.Status = "お気に入りに登録中";
+
+            Task.Run(() => {
+
+                var add = "http://www.nicovideo.jp/api/watchitem/add";
+
+                var formData = new Dictionary<string, string>();
+
+                formData["item_type"] = "1";
+                formData["item_id"] = userId;
+                formData["token"] = token;
+                try {
+
+                    var request = new HttpRequestMessage(HttpMethod.Post, add);
+
+                    request.Content = new FormUrlEncodedContent(formData);
+
+
+                    var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
+
+                    vm.VideoData.ApiData.UploaderIsFavorited = true;
+
+                    vm.Status = "";
+
+                } catch(RequestTimeout) {
+
+                    vm.Status = "お気に入り登録に失敗しました。";
+                }
+            });
+            
+
+        }
+
+        public static void DeleteFavorite(VideoViewModel vm, string userId, string token) {
+
+            vm.Status = "お気に入り解除中";
+
+            Task.Run(() => {
+
+                var del = "http://www.nicovideo.jp/api/watchitem/delete";
+
+                var formData = new Dictionary<string, string>();
+
+                formData["id_list[1][]"] = userId;
+                formData["token"] = token;
+
+                try {
+
+                    var request = new HttpRequestMessage(HttpMethod.Post, del);
+
+                    request.Content = new FormUrlEncodedContent(formData);
+
+                    var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
+
+                    vm.VideoData.ApiData.UploaderIsFavorited = false;
+                    vm.Status = "";
+                } catch(RequestTimeout) {
+
+                    vm.Status = "お気に入り解除に失敗しました。";
+
+                }
+            });
+        }
     }
 
 
@@ -229,7 +296,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public string UploaderName { get; set; }
 
         //うｐ主又はチャンネルをお気に入り登録しているかどうか
-        public bool UploaderIsFavorited { get; set; }
+        #region UploaderIsFavorited変更通知プロパティ
+        private bool _UploaderIsFavorited;
+
+        public bool UploaderIsFavorited {
+            get { return _UploaderIsFavorited; }
+            set { 
+                if(_UploaderIsFavorited == value)
+                    return;
+                _UploaderIsFavorited = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         //チャンネル動画か否か
         public bool IsChannelVideo { get; set; }

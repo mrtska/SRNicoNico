@@ -44,7 +44,6 @@ namespace SRNicoNico.Views.Contents.Video {
 
         private void screen_KeyDown(object sender, KeyEventArgs e) {
 
-            Console.WriteLine(e.Key);
             if(DataContext is VideoViewModel) {
 
                 var vm = (VideoViewModel)DataContext;
