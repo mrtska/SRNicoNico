@@ -54,7 +54,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             doc.LoadHtml2(html);
 
             //htmlからAPIデータだけを綺麗に抜き出す すごい
-            string data = doc.DocumentNode.QuerySelector("#watchAPIDataContainer").InnerHtml;
+            var container = doc.DocumentNode.QuerySelector("#watchAPIDataContainer");
+
+            if(container == null) {
+
+                return null;
+            }
+
+            var data = container.InnerHtml;
 
             //html特殊文字をデコードする
             data = HttpUtility.HtmlDecode(data);

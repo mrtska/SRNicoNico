@@ -256,6 +256,22 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+
+        #region LoadFailed変更通知プロパティ
+        private bool _LoadFailed;
+
+        public bool LoadFailed {
+            get { return _LoadFailed; }
+            set { 
+                if(_LoadFailed == value)
+                    return;
+                _LoadFailed = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         public VideoMylistViewModel Mylist { get; set; }
 
 
@@ -296,9 +312,18 @@ namespace SRNicoNico.ViewModels {
                 //動画情報取得
                 VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
 
+                //ロードに失敗したら
+                if(VideoData.ApiData == null) {
+
+                    LoadFailed = true;
+                    IsActive = false;
+                    Status = "動画の読み込みに失敗しました。";
+                    return;
+                }
+
                 if(VideoData.ApiData.IsPaidVideo) {
 
-                    App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Video.PaidVideoDialog), this, TransitionMode.Modal));
+                    App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(PaidVideoDialog), this, TransitionMode.Modal));
                     return;
                 }
 
