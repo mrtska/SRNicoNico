@@ -27,14 +27,14 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Grid x:Name="Grid">
-        <ContentControl x:Name="ContentControl">
+    <Grid>
+        <ContentControl x:Name="ContentControl" >
             <DynamicResource ResourceKey="VideoFlashKey" />
         </ContentControl>
 
         <Popup AllowsTransparency="True" IsOpen="True" StaysOpen="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" HorizontalAlignment="Center">
             
-            <video:VideoController Opacity="0.5" Width="{Binding ElementName=ContentControl, Path=ActualWidth}"/>
+            <video:VideoController Opacity="0.5" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualWidth}"/>
         </Popup>
     </Grid>
 </Window>

@@ -157,70 +157,71 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             return ret;
         }
 
-        public static void AddFavorite(VideoViewModel vm, string userId, string token) {
+        public static Status AddFavorite(VideoViewModel vm, string userId, string token) {
 
             vm.Status = "お気に入りに登録中";
 
-            Task.Run(() => {
 
-                var add = "http://www.nicovideo.jp/api/watchitem/add";
+            var add = "http://www.nicovideo.jp/api/watchitem/add";
 
-                var formData = new Dictionary<string, string>();
+            var formData = new Dictionary<string, string>();
 
-                formData["item_type"] = "1";
-                formData["item_id"] = userId;
-                formData["token"] = token;
-                try {
+            formData["item_type"] = "1";
+            formData["item_id"] = userId;
+            formData["token"] = token;
+            try {
 
-                    var request = new HttpRequestMessage(HttpMethod.Post, add);
+                var request = new HttpRequestMessage(HttpMethod.Post, add);
 
-                    request.Content = new FormUrlEncodedContent(formData);
+                request.Content = new FormUrlEncodedContent(formData);
 
 
-                    var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
+                var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
 
-                    vm.VideoData.ApiData.UploaderIsFavorited = true;
+                vm.VideoData.ApiData.UploaderIsFavorited = true;
 
-                    vm.Status = "";
+                vm.Status = "";
 
-                } catch(RequestTimeout) {
+                return Status.Success;
+            } catch(RequestTimeout) {
 
-                    vm.Status = "お気に入り登録に失敗しました。";
-                }
-            });
+                vm.Status = "お気に入り登録に失敗しました。";
+                return Status.Failed;
+            }
             
 
         }
 
-        public static void DeleteFavorite(VideoViewModel vm, string userId, string token) {
+        public static Status DeleteFavorite(VideoViewModel vm, string userId, string token) {
 
             vm.Status = "お気に入り解除中";
+            
 
-            Task.Run(() => {
+            var del = "http://www.nicovideo.jp/api/watchitem/delete";
 
-                var del = "http://www.nicovideo.jp/api/watchitem/delete";
+            var formData = new Dictionary<string, string>();
 
-                var formData = new Dictionary<string, string>();
+            formData["id_list[1][]"] = userId;
+            formData["token"] = token;
 
-                formData["id_list[1][]"] = userId;
-                formData["token"] = token;
+            try {
 
-                try {
+                var request = new HttpRequestMessage(HttpMethod.Post, del);
 
-                    var request = new HttpRequestMessage(HttpMethod.Post, del);
+                request.Content = new FormUrlEncodedContent(formData);
 
-                    request.Content = new FormUrlEncodedContent(formData);
+                var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
 
-                    var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
+                vm.VideoData.ApiData.UploaderIsFavorited = false;
+                vm.Status = "";
 
-                    vm.VideoData.ApiData.UploaderIsFavorited = false;
-                    vm.Status = "";
-                } catch(RequestTimeout) {
+                return Status.Success;
 
-                    vm.Status = "お気に入り解除に失敗しました。";
+            } catch(RequestTimeout) {
 
-                }
-            });
+                vm.Status = "お気に入り解除に失敗しました。";
+                return Status.Failed;
+            }
         }
     }
 
@@ -385,6 +386,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         FLV,
         SWF,
         RTMP
+    }
+
+    public enum Status {
+
+        Success,
+        Failed
     }
 
 }

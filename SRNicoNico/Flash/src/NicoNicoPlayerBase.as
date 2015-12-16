@@ -61,7 +61,6 @@ package {
 			InjectComment(loader.data);
 			});
 			loader.load(req);*/
-			trace("aaaa");
 			timer = new Timer(1200);
 			timer.addEventListener(TimerEvent.TIMER, tick);
 			timer.start();
@@ -71,19 +70,36 @@ package {
 		}
 		
 		private var timer:Timer;
+		private var isRollOver:Boolean;
 		
 		private function move(e:MouseEvent):void {
 			
-			Mouse.show();
 			timer.reset();
 			timer.start();
+			isRollOver = true;
+			Mouse.show();
+			
+			if (!stage.hasEventListener(Event.MOUSE_LEAVE)) {
+				
+				stage.addEventListener(Event.MOUSE_LEAVE, leave);
+			}
+		}
+		
+		private function leave(e:Event):void {
+		
+			isRollOver = false;
+			stage.removeEventListener(Event.MOUSE_LEAVE, leave);
 		}
 		
 		private function tick(e:TimerEvent):void {
 			
-			Mouse.hide();
-		}
+			if (isRollOver) {
 			
+				Mouse.hide();
+			}
+			
+		}
+		
 		
 		
 		

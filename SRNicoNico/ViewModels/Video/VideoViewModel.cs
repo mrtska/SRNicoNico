@@ -677,7 +677,6 @@ namespace SRNicoNico.ViewModels {
             return cur + "./Flash/NicoNicoNMPlayer.html";
         }
 
-
         private string GetRTMPPlayerPath() {
 
             var cur = System.IO.Directory.GetCurrentDirectory();
@@ -774,18 +773,31 @@ namespace SRNicoNico.ViewModels {
        
         public void ToggleFavorite() {
 
-            VideoData.ApiData.UploaderIsFavorited ^= true;
-            if(VideoData.ApiData.UploaderIsFavorited) {
-
-                NicoNicoWatchApi.AddFavorite(this, VideoData.ApiData.UploaderId, VideoData.ApiData.Token);
-            } else {
-
-                NicoNicoWatchApi.DeleteFavorite(this, VideoData.ApiData.UploaderId, VideoData.ApiData.Token);
-            }
+            Task.Run(() => {
 
 
+                if(!VideoData.ApiData.UploaderIsFavorited) {
 
+                    var status = NicoNicoWatchApi.AddFavorite(this, VideoData.ApiData.UploaderId, VideoData.ApiData.Token);
+                    if(status == Models.NicoNicoWrapper.Status.Success) {
 
+                        VideoData.ApiData.UploaderIsFavorited = true;
+                    }
+                } else {
+
+                    var status = NicoNicoWatchApi.DeleteFavorite(this, VideoData.ApiData.UploaderId, VideoData.ApiData.Token);
+                    if(status == Models.NicoNicoWrapper.Status.Success) {
+
+                        VideoData.ApiData.UploaderIsFavorited = false;
+                    }
+                }
+
+            });
+        }
+
+        public void HideCursor() {
+
+            System.Windows.Forms.Cursor.Hide();
         }
 
     }

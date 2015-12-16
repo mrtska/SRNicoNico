@@ -11,7 +11,7 @@
              d:DataContext="{d:DesignInstance vm:VideoViewModel}" DataContextChanged="UserControl_DataContextChanged"
 			 >
     <Grid>
-        <WebBrowser x:Name="browser" LoadCompleted="browser_LoadCompleted" AllowDrop="False" Focusable="False" metro:WebBrowserHelper.AllowWebBrowserDrop="False" metro:WebBrowserHelper.ScriptErrorsSuppressed="True"/>
+        <WebBrowser x:Name="browser" LoadCompleted="browser_LoadCompleted" AllowDrop="False" metro:WebBrowserHelper.AllowWebBrowserDrop="False" metro:WebBrowserHelper.ScriptErrorsSuppressed="True" />
 
         
     </Grid>

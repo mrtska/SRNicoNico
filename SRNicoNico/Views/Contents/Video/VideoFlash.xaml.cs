@@ -38,9 +38,11 @@ namespace SRNicoNico.Views.Contents.Video {
 
         private void browser_LoadCompleted(object sender, NavigationEventArgs e) {
 
+#if DEBUG
             if((bool)(DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue)) {
                 return;
             }
+#endif
             if(DataContext is VideoViewModel) {
 
                 VideoViewModel vm = (VideoViewModel)DataContext;
@@ -64,5 +66,6 @@ namespace SRNicoNico.Views.Contents.Video {
                 vm.VideoFlash = this;
             }
         }
+
     }
 }

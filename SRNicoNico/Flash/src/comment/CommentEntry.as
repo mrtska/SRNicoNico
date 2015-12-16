@@ -42,6 +42,7 @@ package comment {
 			var format:TextFormat = new TextFormat("Arial", command.size, command.color, true);
 			this.defaultTextFormat = format;
 			
+			this.alpha = 0.8;
 			this.multiline = true;
 			this.selectable = false;
 			this.autoSize = TextFieldAutoSize.CENTER;
