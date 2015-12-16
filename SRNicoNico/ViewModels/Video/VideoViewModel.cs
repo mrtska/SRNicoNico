@@ -771,7 +771,7 @@ namespace SRNicoNico.ViewModels {
                 }
             }
         }
-
+       
         public void ToggleFavorite() {
 
             VideoData.ApiData.UploaderIsFavorited ^= true;

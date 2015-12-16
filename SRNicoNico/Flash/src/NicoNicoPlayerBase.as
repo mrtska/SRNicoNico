@@ -4,9 +4,11 @@ package {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.NetStatusEvent;
+	import flash.events.TimerEvent;
 	import flash.external.ExternalInterface;
 	import flash.system.fscommand;
 	import flash.ui.Mouse;
+	import flash.utils.Timer;
 	
 	import comment.CommentRasterizer;
 	
@@ -60,13 +62,26 @@ package {
 			});
 			loader.load(req);*/
 			trace("aaaa");
+			timer = new Timer(1200);
+			timer.addEventListener(TimerEvent.TIMER, tick);
+			timer.start();
+			
+			
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, move);
 		}
 		
+		private var timer:Timer;
+		
 		private function move(e:MouseEvent):void {
 			
-
 			Mouse.show();
+			timer.reset();
+			timer.start();
+		}
+		
+		private function tick(e:TimerEvent):void {
+			
+			Mouse.hide();
 		}
 			
 		

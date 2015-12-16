@@ -140,14 +140,18 @@
                                 </Hyperlink>
                             </TextBlock>
 
-                            <Button Grid.Row="1" Focusable="False" HorizontalAlignment="Left" Margin="5,0,0,10" IsEnabled="{Binding IsInitialized}">
+                            <Button x:Name="favorite" Grid.Row="1" Focusable="False" HorizontalAlignment="Left" Margin="5,0,0,10" IsEnabled="{Binding IsInitialized}" >
                                 <ContentControl>
+                                    <i:Interaction.Triggers>
+                                        <ei:DataTrigger Binding="{Binding VideoData.ApiData.IsChannelVideo}" Value="True">
+                                            <ei:ChangePropertyAction TargetName="favorite" PropertyName="Visibility" Value="Hidden"/>
+                                        </ei:DataTrigger>
+                                    </i:Interaction.Triggers>
                                     <ContentControl.Style>
                                         <Style TargetType="ContentControl">
                                             <Setter Property="Content" Value="お気に入り登録"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding VideoData.ApiData.UploaderIsFavorited}" Value="True">
-                                                    
                                                     <Setter Property="Content" Value="お気に入り登録済み" />
                                                     <Setter Property="Width" Value="100"/>
                                                 </DataTrigger>
