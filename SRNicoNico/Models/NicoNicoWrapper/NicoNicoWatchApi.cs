@@ -80,7 +80,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             WatchApiData ret = new WatchApiData();
 
             //&で繋がれているので剥がす
-            Dictionary<string, string> getFlv = flv.Split(new char[] { '&' }).ToDictionary(source => source.Substring(0, source.IndexOf('=')),
+            var getFlv = flv.Split(new char[] { '&' }).ToDictionary(source => source.Substring(0, source.IndexOf('=')),
             source => Uri.UnescapeDataString(source.Substring(source.IndexOf('=') + 1)));
 
             ret.GetFlv = new NicoNicoGetFlvData(getFlv);

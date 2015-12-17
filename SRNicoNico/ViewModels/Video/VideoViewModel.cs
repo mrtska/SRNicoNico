@@ -321,6 +321,7 @@ namespace SRNicoNico.ViewModels {
                     return;
                 }
 
+                //有料動画なら
                 if(VideoData.ApiData.IsPaidVideo) {
 
                     App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(PaidVideoDialog), this, TransitionMode.Modal));
@@ -557,23 +558,28 @@ namespace SRNicoNico.ViewModels {
             Seek(0);
         }
 
+        private int prevTime;
+
         //1フレーム毎に呼ばれる
         public void CsFrame(float time, float buffer, long bps) {
 
 
-            double vpos = time * 100;
-            vpos = Math.Floor(vpos);
 
-            double comp = bps / 1024;
+            if(prevTime != (int)time) {
 
-            //大きいから単位を変えましょう
-            if(comp > 1024) {
+                double comp = bps / 1024;
 
-                BPS = Math.Floor((comp / 1024) * 100) / 100 + "MiB/秒";
-            } else {
+                //大きいから単位を変えましょう
+                if(comp > 1024) {
 
-                BPS = Math.Floor(comp * 100) / 100 + "KiB/秒";
+                    BPS = Math.Floor((comp / 1024) * 100) / 100 + "MiB/秒";
+                } else {
+
+                    BPS = Math.Floor(comp * 100) / 100 + "KiB/秒";
+                }
             }
+            prevTime = (int)time;
+           
 
 
             Time.BufferedTime = buffer;
@@ -582,8 +588,8 @@ namespace SRNicoNico.ViewModels {
 
             SetSeekCursor(time);
 
-            if((int)time == VideoData.ApiData.Length - 1) {
-
+            if((int)time == VideoData.ApiData.Length) {
+                
                 if(IsRepeat) {
 
                     Seek(0);
