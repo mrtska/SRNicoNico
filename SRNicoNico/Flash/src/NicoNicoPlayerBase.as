@@ -76,11 +76,13 @@ package {
 			
 			timer.reset();
 			timer.start();
+			
 			isRollOver = true;
 			Mouse.show();
-			
+			fscommand("ShowContoller");
+		
 			if (!stage.hasEventListener(Event.MOUSE_LEAVE)) {
-				
+
 				stage.addEventListener(Event.MOUSE_LEAVE, leave);
 			}
 		}
@@ -96,6 +98,7 @@ package {
 			if (isRollOver) {
 			
 				Mouse.hide();
+				fscommand("HideContoller");
 			}
 			
 		}

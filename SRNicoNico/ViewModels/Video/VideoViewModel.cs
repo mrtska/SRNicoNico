@@ -290,6 +290,21 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region FullScreenPopup変更通知プロパティ
+        private bool _FullScreenPopup = true;
+
+        public bool FullScreenPopup {
+            get { return _FullScreenPopup; }
+            set { 
+                if(_FullScreenPopup == value)
+                    return;
+                _FullScreenPopup = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
             VideoUrl = videoUrl;
@@ -551,7 +566,7 @@ namespace SRNicoNico.ViewModels {
             }
 
         }
-
+        
         //最初から
         public void Restart() {
 
@@ -826,9 +841,14 @@ namespace SRNicoNico.ViewModels {
             });
         }
 
-        public void HideCursor() {
+        public void HideFullScreenPopup() {
 
-            System.Windows.Forms.Cursor.Hide();
+            FullScreenPopup = false;
+        }
+
+        public void ShowFullScreenPopup() {
+
+            FullScreenPopup = true;
         }
 
     }

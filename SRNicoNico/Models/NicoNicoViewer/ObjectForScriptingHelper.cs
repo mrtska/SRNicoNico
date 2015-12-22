@@ -37,6 +37,12 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                     Video.RTMPTimeOut();
                     break;
+                case "ShowContoller":
+                    Video.ShowFullScreenPopup();
+                    break;
+                case "HideContoller":
+                    Video.HideFullScreenPopup();
+                    break;
                 default:
                     Console.Write("Invoked From Actionscript:" + func);
                     Console.WriteLine(" Args:" + args);
