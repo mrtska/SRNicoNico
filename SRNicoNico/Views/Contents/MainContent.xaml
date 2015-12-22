@@ -15,6 +15,7 @@
              xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
              xmlns:history="clr-namespace:SRNicoNico.Views.Contents.History"
              xmlns:mylist="clr-namespace:SRNicoNico.Views.Contents.Mylist"
+             xmlns:publicmylist="clr-namespace:SRNicoNico.Views.Contents.PublicMylist"
              xmlns:config="clr-namespace:SRNicoNico.Views.Contents.Config"
              xmlns:user="clr-namespace:SRNicoNico.Views.Contents.User"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
@@ -66,6 +67,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:UserViewModel}">
                     <user:UserInformation />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:PublicMylistViewModel}">
+                    <publicmylist:PublicMylist />
                 </DataTemplate>
             </ItemsControl.Resources>
             

@@ -204,6 +204,7 @@
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavorite.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylist.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylistGroup.cs" />
+    <Compile Include="Models\NicoNicoWrapper\NicoNicoPublicMylist.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoVideo.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoVitaApi.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoVitaMylistApi.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="ViewModels\Mylist\MylistListViewModel.cs" />
     <Compile Include="ViewModels\Mylist\MylistViewModel.cs" />
     <Compile Include="ViewModels\Mylist\NewMylistViewModel.cs" />
+    <Compile Include="ViewModels\Mylist\PublicMylistViewModel.cs" />
     <Compile Include="ViewModels\SignIn\TwitterSignInViewModel.cs" />
     <Compile Include="ViewModels\StartViewModel.cs" />
     <Compile Include="ViewModels\TabItemViewModel.cs" />
@@ -306,6 +308,9 @@
     </Compile>
     <Compile Include="Views\Contents\Log\AccessLogDialog.xaml.cs">
       <DependentUpon>AccessLogDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\PublicMylist\PublicMylist.xaml.cs">
+      <DependentUpon>PublicMylist.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\SignIn\TwitterSignInDialog.xaml.cs">
       <DependentUpon>TwitterSignInDialog.xaml</DependentUpon>
@@ -526,6 +531,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Contents\PublicMylist\PublicMylist.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Contents\SignIn\TwitterSignInDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -721,9 +730,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Contents\MylistView\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir $(TargetDir)Flash

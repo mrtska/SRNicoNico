@@ -23,6 +23,9 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 } else if(url.StartsWith("http://www.nicovideo.jp/user/")) {
 
                     new UserViewModel(url);
+                } else if(url.StartsWith("http://www.nicovideo.jp/mylist/")) {
+
+                    new PublicMylistViewModel(url);
                 } else {
 
                     System.Diagnostics.Process.Start(url);

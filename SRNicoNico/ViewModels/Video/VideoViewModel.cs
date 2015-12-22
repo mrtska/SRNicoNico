@@ -307,7 +307,7 @@ namespace SRNicoNico.ViewModels {
 
         public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
-            VideoUrl = videoUrl;
+            VideoUrl = videoUrl + "?watch_harmful=1";
             Cmsid = Name;
             App.ViewModelRoot.TabItems.Add(this);
             App.ViewModelRoot.SelectedTab = this;
@@ -397,11 +397,11 @@ namespace SRNicoNico.ViewModels {
 
                 List<NicoNicoCommentEntry> list = comment.GetComment();
 
-
+                
                 if(list != null) {
 
                     foreach(NicoNicoCommentEntry entry in list) {
-
+                            
                         VideoData.CommentData.Add(new CommentEntryViewModel(entry));
                     }
 
