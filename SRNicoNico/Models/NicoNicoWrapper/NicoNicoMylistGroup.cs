@@ -49,22 +49,28 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             List<NicoNicoMylistGroupData> ret = new List<NicoNicoMylistGroupData>();
 
-            //マイリスト取得
-            var json = DynamicJson.Parse(NicoNicoWrapperMain.GetSession().GetAsync(MylistGroupAPI).Result);
-            foreach(var entry in json.mylistgroup) {
+            try {
 
-                NicoNicoMylistGroupData data = new NicoNicoMylistGroupData();
-                data.CreateTime = UnixTime.FromUnixTime((long)entry.create_time).ToString();
-                data.Description = HttpUtility.HtmlDecode(entry.description);
+                //マイリスト取得
+                var json = DynamicJson.Parse(NicoNicoWrapperMain.Session.GetAsync(MylistGroupAPI).Result);
+                foreach(var entry in json.mylistgroup) {
 
-                data.Id = entry.id;
-                data.Name = HttpUtility.HtmlDecode(entry.name);
-                data.IsPublic = entry.@public == "0" ? false : true;
-                data.SortOrder = int.Parse(entry.sort_order);
+                    NicoNicoMylistGroupData data = new NicoNicoMylistGroupData();
+                    data.CreateTime = UnixTime.FromUnixTime((long)entry.create_time).ToString();
+                    data.Description = HttpUtility.HtmlDecode(entry.description);
 
-                ret.Add(data);
+                    data.Id = entry.id;
+                    data.Name = HttpUtility.HtmlDecode(entry.name);
+                    data.IsPublic = entry.@public == "0" ? false : true;
+                    data.SortOrder = int.Parse(entry.sort_order);
+
+                    ret.Add(data);
+                }
+                return ret;
+            } catch(RequestTimeout) {
+
+                return null;
             }
-            return ret;
         }
 
 
