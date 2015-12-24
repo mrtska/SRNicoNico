@@ -27,6 +27,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             if(!response.video()) {
 
+                ret.Success = false;
                 return ret;
             }
 
@@ -39,7 +40,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.Length = NicoNicoUtil.ConvertTime(long.Parse(response.video.length_in_seconds));
             ret.Description = response.video.description;
             ret.ThumbnailUrl = response.video.thumbnail_url;
-            ret.Success = true;
             return ret;
         }
     }
@@ -74,7 +74,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public string ThumbnailUrl { get; set; }
 
         //成功したか否か
-        public bool Success { get; set; }
+        public bool Success { get; set; } = true;
 
     }
 

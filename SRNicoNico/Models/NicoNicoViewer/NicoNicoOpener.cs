@@ -32,5 +32,35 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 }
             });
         }
+
+        //ニコニコのURLが何を指しているかを返す
+        public static NicoNicoUrlType GetType(string url) {
+
+            if(url.StartsWith("http://www.nicovideo.jp/watch/")) {
+
+                return NicoNicoUrlType.Video;
+            }
+            if(url.StartsWith("http://www.nicovideo.jp/user/")) {
+
+                return NicoNicoUrlType.User;
+            }
+            if(url.StartsWith("http://www.nicovideo.jp/mylist/")) {
+
+                return NicoNicoUrlType.Mylist;
+            }
+
+            return NicoNicoUrlType.Other;
+        }
+
+    }
+    
+    public enum NicoNicoUrlType {
+
+        Video,
+        Live,
+        Mylist,
+        User,
+        Other
+
     }
 }

@@ -9,19 +9,37 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
+             xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
              mc:Ignorable="d" 
              d:DesignHeight="59" d:DesignWidth="361"
              d:DataContext="{d:DesignInstance { x:Type vm:NicoRepoResultEntryViewModel}}"
              BorderThickness="0,1,1,0"
              BorderBrush="#FF333333"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             
+             Background="Transparent"
+             ToolTipService.InitialShowDelay="1200"
+             ToolTipService.ShowDuration="300000"
              >
     <i:Interaction.Triggers>
         <l:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}">
             <l:TransitionInteractionMessageAction/>
         </l:InteractionMessageTrigger>
+        <i:EventTrigger EventName="ToolTipOpening">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ShowInfomation"/>
+        </i:EventTrigger>
     </i:Interaction.Triggers>
+    <UserControl.ToolTip>
+        <ToolTip Visibility="{Binding ToolTipVisibility}">
+            <ContentControl Content="{Binding ToolTip}">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type vm:VideoDataViewModel}">
+                        <video:VideoToolTip />
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
+
+        </ToolTip>
+    </UserControl.ToolTip>
 
     <Grid>
         <Grid.RowDefinitions>

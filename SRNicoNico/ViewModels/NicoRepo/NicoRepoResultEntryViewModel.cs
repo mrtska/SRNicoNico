@@ -15,6 +15,7 @@ using FirstFloor.ModernUI.Windows.Controls;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Models.NicoNicoViewer;
+using System.Windows;
 
 namespace SRNicoNico.ViewModels {
     public class NicoRepoResultEntryViewModel : ViewModel {
@@ -26,6 +27,53 @@ namespace SRNicoNico.ViewModels {
 
         //自分のニコレポには削除ボタンを表示する
         public bool ShowDeleteButton { get; set; }
+
+
+
+        #region NicoRepoType変更通知プロパティ
+        private NicoNicoUrlType _NicoRepoType;
+
+        public NicoNicoUrlType NicoRepoType {
+            get { return _NicoRepoType; }
+            set { 
+                if(_NicoRepoType == value)
+                    return;
+                _NicoRepoType = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region ToolTip変更通知プロパティ
+        private ViewModel _ToolTip;
+
+        public ViewModel ToolTip {
+            get { return _ToolTip; }
+            set { 
+                if(_ToolTip == value)
+                    return;
+                _ToolTip = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region ToolTipBisibility変更通知プロパティ
+        private Visibility _ToolTipVisibility = Visibility.Hidden;
+
+        public Visibility ToolTipVisibility {
+            get { return _ToolTipVisibility; }
+            set { 
+                if(_ToolTipVisibility == value)
+                    return;
+                _ToolTipVisibility = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         //削除ボタンを利用するならこっち
         public NicoRepoResultEntryViewModel(NicoNicoNicoRepoDataEntry entry, NicoRepoListViewModel owner) {
@@ -83,5 +131,23 @@ namespace SRNicoNico.ViewModels {
 
             Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
         }
+
+        public void ShowInfomation() {
+
+            if(ToolTip != null || Entry.VideoUrl == null) {
+
+                return;
+            }
+
+            NicoRepoType = NicoNicoOpener.GetType(Entry.VideoUrl);
+
+            if(NicoRepoType == NicoNicoUrlType.Video) {
+
+                ToolTip = new VideoDataViewModel(Entry.VideoUrl.Substring(30));
+                ToolTipVisibility = Visibility.Visible;
+            }
+            
+        }
+
     }
 }
