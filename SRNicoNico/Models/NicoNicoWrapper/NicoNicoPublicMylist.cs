@@ -88,7 +88,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 ret.Description = description;
 
                 //\nを改行に置換
-                ret.Description = ret.Description.Replace("\\n", "<br>");
+                ret.Description = ret.Description.Replace("\\n", "<br>").Replace("\\r", "");
 
                 ret.Description = HyperLinkParser.Parse(ret.Description); 
 

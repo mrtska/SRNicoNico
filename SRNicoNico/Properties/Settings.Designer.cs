@@ -118,5 +118,17 @@ namespace SRNicoNico.Properties {
                 this["UserSelectedFont"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("115*")]
+        public global::System.Windows.GridLength SplitterHeight {
+            get {
+                return ((global::System.Windows.GridLength)(this["SplitterHeight"]));
+            }
+            set {
+                this["SplitterHeight"] = value;
+            }
+        }
     }
 }

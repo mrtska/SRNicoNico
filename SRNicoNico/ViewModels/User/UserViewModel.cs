@@ -97,7 +97,7 @@ namespace SRNicoNico.ViewModels {
 
         public void Close() {
 
-            App.ViewModelRoot.TabItems.Remove(this);
+            App.ViewModelRoot.RemoveTabAndLastSet(this);
         }
 
         public void Reflesh() {

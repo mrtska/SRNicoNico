@@ -26,5 +26,8 @@
     <Setting Name="UserSelectedFont" Type="System.Windows.Media.FontFamily" Scope="User">
       <Value Profile="(Default)">Yu Gothic UI</Value>
     </Setting>
+    <Setting Name="SplitterHeight" Type="System.Windows.GridLength" Scope="User">
+      <Value Profile="(Default)">115*</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

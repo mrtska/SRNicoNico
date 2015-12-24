@@ -242,6 +242,22 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+
+        #region SplitterHeight変更通知プロパティ
+
+        public GridLength SplitterHeight {
+            get { return Properties.Settings.Default.SplitterHeight; }
+            set { 
+                if(Properties.Settings.Default.SplitterHeight.Value == value.Value)
+                    return;
+                Properties.Settings.Default.SplitterHeight = value;
+                Properties.Settings.Default.Save();
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         #region VideoUrl変更通知プロパティ
         private string _VideoUrl;
 
