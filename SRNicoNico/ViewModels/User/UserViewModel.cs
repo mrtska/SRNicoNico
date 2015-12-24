@@ -111,7 +111,6 @@ namespace SRNicoNico.ViewModels {
         }
 
         public override void KeyDown(KeyEventArgs e) {
-    
 
             if(e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.W) {
 
@@ -120,7 +119,6 @@ namespace SRNicoNico.ViewModels {
 
                 Reflesh();
             }
-
         }
 
     }

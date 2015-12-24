@@ -13,6 +13,7 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoWrapper;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class PublicMylistViewModel : TabItemViewModel {
@@ -205,7 +206,23 @@ namespace SRNicoNico.ViewModels {
 
         public void Close() {
 
-            App.ViewModelRoot.TabItems.Remove(this);
+            App.ViewModelRoot.RemoveTabAndLastSet(this);
+        }
+        public void Reflesh() {
+
+            Initialize();
+        }
+
+        public override void KeyDown(KeyEventArgs e) {
+
+            if(e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.W) {
+
+                Close();
+            } else if(e.Key == Key.F5) {
+
+                Reflesh();
+            }
+
         }
     }
 }

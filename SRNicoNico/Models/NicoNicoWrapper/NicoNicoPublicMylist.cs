@@ -36,6 +36,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var regex = new Regex("\"(.*)\"");
 
                 string nickname = null;
+                string userid = null;
                 string mylistname = null;
                 string description = null;
 
@@ -56,7 +57,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         continue;
                     }
 
-                    if(nickname != null && text.Contains("name:")) {
+                    if(nickname != null && text.Contains("user_id:")) {
+
+                        userid = new Regex(@"\d+").Match(text).Value;
+                        continue;
+                    }
+
+                    if(userid != null && text.Contains("name:")) {
 
                         mylistname = regex.Match(text).Groups[1].Value;
                         continue;
@@ -76,7 +83,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var ret = new NicoNicoPublicMylistEntry();
 
-                ret.NickName = nickname;
+                ret.NickName = @"<a href=""http://www.nicovideo.jp/user/" + userid + @""">" +  nickname + "</a> さんの公開マイリスト";
                 ret.MylistName = mylistname;
                 ret.Description = description;
 
@@ -171,6 +178,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     }
 
     public class NicoNicoPublicMylistEntry {
+
+        //マイリスおオーダーのユーザーID
+        public Uri MylistOwnerUri { get; set; }
 
         //マイリストオーナーのニックネーム
         public string NickName { get; set; }
