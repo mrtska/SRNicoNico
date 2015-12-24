@@ -130,6 +130,11 @@ namespace SRNicoNico.ViewModels {
 
             IOrderedEnumerable<MylistListEntryViewModel> sorted = null;
 
+            if(Mylist == null) {
+
+                return;
+            }
+
             MylistListEntryViewModel[] tmp = Mylist.ToArray();
             
             //並び替え
@@ -225,7 +230,7 @@ namespace SRNicoNico.ViewModels {
 
                 Mylist.Clear();
 
-                foreach(NicoNicoMylistData data in MylistViewModel.MylistInstance.GetMylist(Group.Id)) {
+                foreach(var data in MylistViewModel.MylistInstance.GetMylist(Group.Id)) {
 
                     Mylist.Add(new MylistListEntryViewModel(this, data));
                 }

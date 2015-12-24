@@ -8,6 +8,8 @@ using Codeplex.Data;
 using SRNicoNico.Models.NicoNicoViewer;
 using System.Web;
 
+using SRNicoNico.ViewModels;
+
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoPublicMylist : NotificationObject {
 
@@ -18,7 +20,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             MylistUrl = url;
         }
 
-        public PublicMylistEntry GetMylist() {
+        public NicoNicoPublicMylistEntry GetMylist() {
 
             try {
 
@@ -72,17 +74,24 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     }
                 }
 
-                var ret = new PublicMylistEntry();
+                var ret = new NicoNicoPublicMylistEntry();
 
                 ret.NickName = nickname;
                 ret.MylistName = mylistname;
                 ret.Description = description;
 
-                var list = new List<NicoNicoMylistData>();
+                //\nを改行に置換
+                ret.Description = ret.Description.Replace("\\n", "<br>");
+
+                ret.Description = HyperLinkParser.Parse(ret.Description); 
+
+                var list = new List<MylistListEntryViewModel>();
 
                 var data = DynamicJson.Parse(json);
 
                 StoreItem(data, list);
+
+                ret.Data = list;
 
                 return ret;
             } catch(RequestTimeout) {
@@ -94,7 +103,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         }
         //jsonをパースしてリストにする
-        private void StoreItem(dynamic json, List<NicoNicoMylistData> ret) {
+        private void StoreItem(dynamic json, List<MylistListEntryViewModel> ret) {
 
             foreach(var entry in json) {
 
@@ -155,13 +164,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     data.MylistCounter = int.Parse(item.mylist_count);
                     data.ThumbNailUrl = item.thumbnail_url;
                 }
-                ret.Add(data);
+                ret.Add(new MylistListEntryViewModel(data));
             }
         }
 
     }
 
-    public class PublicMylistEntry {
+    public class NicoNicoPublicMylistEntry {
 
         //マイリストオーナーのニックネーム
         public string NickName { get; set; }
@@ -173,7 +182,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public string Description { get; set; }
 
         //マイリスト
-        public List<NicoNicoMylistData> Data { get; set; }
+        public List<MylistListEntryViewModel> Data { get; set; }
 
     }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SRNicoNico.Models.NicoNicoViewer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,12 @@ namespace SRNicoNico.Views.Contents.PublicMylist {
     public partial class PublicMylist : UserControl {
         public PublicMylist() {
             InitializeComponent();
+        }
+
+
+        public void OpenHyperLink(object sender, RequestNavigateEventArgs e) {
+
+            NicoNicoOpener.Open(e.Uri.OriginalString);
         }
     }
 }

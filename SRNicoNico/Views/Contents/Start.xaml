@@ -22,7 +22,7 @@
             <RowDefinition Height="13*"/>
         </Grid.RowDefinitions>
         <TextBlock FontSize="36">
-            NicoNico Viewer <Run FontSize="20">beta 0.5</Run>
+            NicoNico Viewer <Run FontSize="20">beta 0.6</Run>
         </TextBlock>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="10,62,0,0" Height="140">
 			このアプリケーションはニコニコ動画をブラウザを起動しなくても見られるようにするアプリケーションです。<LineBreak />
@@ -50,7 +50,8 @@
                     v0.42<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.43<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.44<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
-                    v0.5
+                    v0.5<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
+                    v0.6
 
                 </TextBlock>
                 <TextBlock Grid.Column="1">
@@ -90,7 +91,10 @@
                     各種不具合修正、UI調整<LineBreak />
                     マイリスト、ユーザーツールチップ追加<LineBreak />
                     フォントを変更可能に<LineBreak />
-                    その他多数<LineBreak />
+                    その他多数<LineBreak /><LineBreak />
+                    動画UIを改修<LineBreak />
+                    公開マイリストUIを実装<LineBreak />
+                    
                     
                     
                     

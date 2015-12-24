@@ -10,9 +10,12 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:mylist="clr-namespace:SRNicoNico.Views.Contents.Mylist"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
              mc:Ignorable="d" 
+		     Background="{DynamicResource ThemeBrushKey}"
+		  	 Foreground="{DynamicResource ActiveForegroundBrushKey}"
              d:DesignHeight="600" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:PublicMylistViewModel}}"
              >
@@ -22,6 +25,87 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="505*"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="Hyperlink">
+                <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
+            </Style>
+        </Grid.Resources>
+        <StackPanel>
+            <TextBlock Text="{Binding MylistData.NickName,StringFormat={}{0} さんの公開マイリスト}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="230"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock FontSize="24" TextWrapping="Wrap" Text="{Binding MylistData.MylistName}" />
+                <ComboBox Grid.Column="1" SelectedIndex="{Binding SortIndex}" Width="140" Margin="10,0" Height="20">
+
+                    <ComboBoxItem Content="登録が新しい順" />
+                    <ComboBoxItem Content="登録が古い順" />
+                    <ComboBoxItem Content="タイトル昇順" />
+                    <ComboBoxItem Content="タイトル降順" />
+                    <ComboBoxItem Content="マイリストコメント昇順" />
+                    <ComboBoxItem Content="マイリストコメント降順" />
+                    <ComboBoxItem Content="投稿が新しい順" />
+                    <ComboBoxItem Content="投稿が古い順" />
+                    <ComboBoxItem Content="再生数が多い順" />
+                    <ComboBoxItem Content="再生数が少ない順" />
+                    <ComboBoxItem Content="コメントが新しい順" />
+                    <ComboBoxItem Content="コメントが古い順" />
+                    <ComboBoxItem Content="コメントが多い順" />
+                    <ComboBoxItem Content="コメントが少ない順" />
+                    <ComboBoxItem Content="マイリスト登録が多い順" />
+                    <ComboBoxItem Content="マイリスト登録が少ない順" />
+                </ComboBox>
+
+                <mui:ModernButton Grid.Column="1" ToolTip="ブラウザで開く" Margin="5" Focusable="False" HorizontalAlignment="Right" EllipseDiameter="25" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodName="OpenBrowser" MethodTarget="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </mui:ModernButton>
+            </Grid>
+            <TextBlock TextWrapping="Wrap" Background="#FF303030" Foreground="#FFAAAAAA" Margin="10,0" Padding="5,2" FontSize="13" behaviors:HtmlTextBoxProperties.HtmlText="{Binding MylistData.Description}" />
+        </StackPanel>
+
+
+        <ListBox Grid.Row="2" SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding Mylist}"  >
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseUp">
+                    <ei:ChangePropertyAction PropertyName="SelectedItem" Value="{x:Null}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewMouseUp">
+                    <ei:ChangePropertyAction PropertyName="SelectedItem" Value="{x:Null}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                    </Style.Resources>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+
+                <DataTemplate DataType="{x:Type vm:MylistListEntryViewModel}">
+                    <mylist:MylistResultEntry />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+
     </Grid>
 </UserControl>

@@ -59,5 +59,11 @@ namespace SRNicoNico.ViewModels {
             Owner = vm;
             Entry = data;
         }
+
+        public MylistListEntryViewModel(NicoNicoMylistData data) {
+
+            Entry = data;
+        }
+
     }
 }
