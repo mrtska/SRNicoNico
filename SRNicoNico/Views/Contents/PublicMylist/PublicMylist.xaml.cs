@@ -28,5 +28,16 @@ namespace SRNicoNico.Views.Contents.PublicMylist {
 
             NicoNicoOpener.Open(e.Uri.OriginalString);
         }
+
+        public void InitializeToolTip(object sender, RoutedEventArgs e) {
+
+            var link = sender as Hyperlink;
+            var inline = link.Inlines.First() as Run;
+            if(inline != null) {
+
+                var text = link.NavigateUri.OriginalString;
+                link.ToolTip = text;
+            }
+        }
     }
 }

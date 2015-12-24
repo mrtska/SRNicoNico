@@ -202,5 +202,10 @@ namespace SRNicoNico.ViewModels {
                 SelectedItem = null;
             }
         }
+
+        public void Close() {
+
+            App.ViewModelRoot.TabItems.Remove(this);
+        }
     }
 }

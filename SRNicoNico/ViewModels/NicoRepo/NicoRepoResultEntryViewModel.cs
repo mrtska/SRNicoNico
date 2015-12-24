@@ -43,13 +43,6 @@ namespace SRNicoNico.ViewModels {
             Entry = entry;
         }
 
-
-        public void OpenHyperLink(string uri) {
-
-            NicoNicoOpener.Open(uri);
-
-        }
-
         //ニコレポ削除
         public void DeleteNicoRepo() {
 

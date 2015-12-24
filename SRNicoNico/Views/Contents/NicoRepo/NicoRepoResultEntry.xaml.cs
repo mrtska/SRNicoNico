@@ -1,4 +1,5 @@
-﻿using SRNicoNico.ViewModels;
+﻿using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +27,7 @@ namespace SRNicoNico.Views.Contents.NicoRepo {
 
         public void OpenHyperLink(object sender, RequestNavigateEventArgs e) {
 
-            if(DataContext is NicoRepoResultEntryViewModel) {
-
-                var vm = (NicoRepoResultEntryViewModel) DataContext;
-                vm.OpenHyperLink(e.Uri.OriginalString);
-            }
+            NicoNicoOpener.Open(e.Uri.OriginalString);
         }
         public void InitializeToolTip(object sender, RoutedEventArgs e) {
 

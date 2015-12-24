@@ -71,8 +71,7 @@ namespace SRNicoNico.ViewModels {
         public UserViewModel(string url) : base("読込中") {
 
             UserPageUrl = url;
-            App.ViewModelRoot.TabItems.Add(this);
-            App.ViewModelRoot.SelectedTab = this;
+            App.ViewModelRoot.AddTabAndSetCurrent(this);
 
             Initialize();
         }

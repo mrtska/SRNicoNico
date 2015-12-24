@@ -27,11 +27,12 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="505*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.Resources>
             <Style TargetType="Hyperlink">
                 <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
+                <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
             </Style>
         </Grid.Resources>
         <StackPanel>
@@ -39,42 +40,51 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="230"/>
+                    <ColumnDefinition Width="220"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock FontSize="24" TextWrapping="Wrap" Text="{Binding MylistData.MylistName}" />
-                <ComboBox Grid.Column="1" SelectedIndex="{Binding SortIndex}" Width="140" Margin="10,0" Height="20">
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <ComboBox SelectedIndex="{Binding SortIndex}" Width="140" Margin="10,0" Height="20">
 
-                    <ComboBoxItem Content="登録が新しい順" />
-                    <ComboBoxItem Content="登録が古い順" />
-                    <ComboBoxItem Content="タイトル昇順" />
-                    <ComboBoxItem Content="タイトル降順" />
-                    <ComboBoxItem Content="マイリストコメント昇順" />
-                    <ComboBoxItem Content="マイリストコメント降順" />
-                    <ComboBoxItem Content="投稿が新しい順" />
-                    <ComboBoxItem Content="投稿が古い順" />
-                    <ComboBoxItem Content="再生数が多い順" />
-                    <ComboBoxItem Content="再生数が少ない順" />
-                    <ComboBoxItem Content="コメントが新しい順" />
-                    <ComboBoxItem Content="コメントが古い順" />
-                    <ComboBoxItem Content="コメントが多い順" />
-                    <ComboBoxItem Content="コメントが少ない順" />
-                    <ComboBoxItem Content="マイリスト登録が多い順" />
-                    <ComboBoxItem Content="マイリスト登録が少ない順" />
-                </ComboBox>
+                        <ComboBoxItem Content="登録が新しい順" />
+                        <ComboBoxItem Content="登録が古い順" />
+                        <ComboBoxItem Content="タイトル昇順" />
+                        <ComboBoxItem Content="タイトル降順" />
+                        <ComboBoxItem Content="マイリストコメント昇順" />
+                        <ComboBoxItem Content="マイリストコメント降順" />
+                        <ComboBoxItem Content="投稿が新しい順" />
+                        <ComboBoxItem Content="投稿が古い順" />
+                        <ComboBoxItem Content="再生数が多い順" />
+                        <ComboBoxItem Content="再生数が少ない順" />
+                        <ComboBoxItem Content="コメントが新しい順" />
+                        <ComboBoxItem Content="コメントが古い順" />
+                        <ComboBoxItem Content="コメントが多い順" />
+                        <ComboBoxItem Content="コメントが少ない順" />
+                        <ComboBoxItem Content="マイリスト登録が多い順" />
+                        <ComboBoxItem Content="マイリスト登録が少ない順" />
+                    </ComboBox>
 
-                <mui:ModernButton Grid.Column="1" ToolTip="ブラウザで開く" Margin="5" Focusable="False" HorizontalAlignment="Right" EllipseDiameter="25" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodName="OpenBrowser" MethodTarget="{Binding}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </mui:ModernButton>
+                    <mui:ModernButton ToolTip="ブラウザで開く" Margin="0,0,5,0" Focusable="False" HorizontalAlignment="Right" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <l:LivetCallMethodAction MethodName="OpenBrowser" MethodTarget="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </mui:ModernButton>
+                    <mui:ModernButton Focusable="False" HorizontalAlignment="Right" ToolTip="閉じる" IconData="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Close" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </mui:ModernButton>
+                </StackPanel>
             </Grid>
             <TextBlock TextWrapping="Wrap" Background="#FF303030" Foreground="#FFAAAAAA" Margin="10,0" Padding="5,2" FontSize="13" behaviors:HtmlTextBoxProperties.HtmlText="{Binding MylistData.Description}" />
         </StackPanel>
 
 
-        <ListBox Grid.Row="2" SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding Mylist}"  >
+        <ListBox Grid.Row="1" Margin="0,0,0,0" SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding Mylist}"  >
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">

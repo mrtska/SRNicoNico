@@ -309,8 +309,8 @@ namespace SRNicoNico.ViewModels {
 
             VideoUrl = videoUrl + "?watch_harmful=1";
             Cmsid = Name;
-            App.ViewModelRoot.TabItems.Add(this);
-            App.ViewModelRoot.SelectedTab = this;
+
+            App.ViewModelRoot.AddTabAndSetCurrent(this);
             Initialize(videoUrl);
         }
 
@@ -748,10 +748,7 @@ namespace SRNicoNico.ViewModels {
             WebBrowser.Dispose();
             WebBrowser.IsEnabled = false;
 
-            App.ViewModelRoot.TabItems.Remove(this);
-            App.ViewModelRoot.SelectedTab = App.ViewModelRoot.TabItems.Last();
-
-
+            App.ViewModelRoot.RemoveTabAndLastSet(this);
             Dispose();
         }
 

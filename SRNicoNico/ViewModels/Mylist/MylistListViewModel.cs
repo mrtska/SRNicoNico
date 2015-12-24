@@ -135,7 +135,7 @@ namespace SRNicoNico.ViewModels {
                 return;
             }
 
-            MylistListEntryViewModel[] tmp = Mylist.ToArray();
+            var tmp = Mylist.ToArray();
             
             //並び替え
             switch(index) {

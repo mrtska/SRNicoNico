@@ -248,6 +248,17 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+        public void RemoveTabAndLastSet(TabItemViewModel vm) {
+
+            TabItems.Remove(vm);
+            SelectedTab = App.ViewModelRoot.TabItems.Last();
+        }
+
+        public void AddTabAndSetCurrent(TabItemViewModel vm) {
+
+            TabItems.Add(vm);
+            SelectedTab = vm;
+        }
 
     }
 }
