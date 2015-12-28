@@ -21,7 +21,7 @@ namespace SRNicoNico.Views.Contents.Video {
 	/// </summary>
 	public partial class Video : UserControl {
 		public Video() {
-			InitializeComponent();
+            InitializeComponent();
 		}
     }
 }

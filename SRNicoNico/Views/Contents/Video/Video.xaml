@@ -1,5 +1,6 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.Contents.Video.Video"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
@@ -25,38 +26,16 @@
         </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
     <ContentControl>
-        <ContentControl.Resources>
-            <Style TargetType="ContentControl">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding VideoInfoPlacement}" Value="Left">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ContentControl">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="300"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <local:VideoInfo />
-                                        <local:VideoContent Grid.Column="1"/>
-                                    </Grid>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </ContentControl.Resources>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="{DynamicResource GridWidth1}"/>
+                <ColumnDefinition Width="{DynamicResource GridWidth2}"/>
             </Grid.ColumnDefinitions>
 
-            <local:VideoContent />
+            <local:VideoContent Grid.Column="{DynamicResource VideoColumn}" />
+            <local:VideoInfo Grid.Column="{DynamicResource InfoColumn}" />
 
-            <local:VideoInfo Grid.Column="1" />
+
         </Grid>
     </ContentControl>
 

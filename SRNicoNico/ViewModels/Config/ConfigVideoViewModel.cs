@@ -12,6 +12,7 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using SRNicoNico.Models;
+using System.Windows;
 
 namespace SRNicoNico.ViewModels {
     public class ConfigVideoViewModel : TabItemViewModel {
@@ -29,13 +30,20 @@ namespace SRNicoNico.ViewModels {
                 Properties.Settings.Default.Save();
                 RaisePropertyChanged();
 
-                //タブから動画タブを探して情報コントロールの位置を変える
-                foreach(VideoViewModel tab in App.ViewModelRoot.TabItems.Where(tab => tab is VideoViewModel)) {
+                if(value == "Right") {
 
-                    //プロパティにダミー値を与えて変更通知を飛ばす この方法が最良かは不明
-                    tab.VideoInfoPlacement = "dummy";
+                    Application.Current.Resources["VideoColumn"] = 0;
+                    Application.Current.Resources["InfoColumn"] = 1;
+                    Application.Current.Resources["GridWidth1"] = new GridLength(1.0, GridUnitType.Star);
+                    Application.Current.Resources["GridWidth2"] = new GridLength(300);
+                } else {
+
+                    Application.Current.Resources["VideoColumn"] = 1;
+                    Application.Current.Resources["InfoColumn"] = 0;
+                    Application.Current.Resources["GridWidth1"] = new GridLength(300);
+                    Application.Current.Resources["GridWidth2"] = new GridLength(1.0, GridUnitType.Star);
+
                 }
-
             }
         }
         #endregion

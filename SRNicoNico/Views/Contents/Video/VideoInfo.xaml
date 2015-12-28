@@ -118,7 +118,7 @@
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock FontSize="16" Margin="5" >
+                            <TextBlock TextWrapping="Wrap" FontSize="16" Margin="5" >
                                 <TextBlock.ToolTip>
                                     <ContentControl>
                                         <TextBlock FontSize="12" >

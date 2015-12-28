@@ -101,7 +101,11 @@ package  {
 		public override function Resume():void {
 			
 			stream.resume();
+			
 		}
+		
+		
+		
 		public override function Seek(pos:Number):void {
 			
 			wantSeekPos = pos;

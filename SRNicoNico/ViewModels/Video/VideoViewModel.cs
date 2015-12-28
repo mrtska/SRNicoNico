@@ -326,7 +326,23 @@ namespace SRNicoNico.ViewModels {
             VideoUrl = videoUrl + "?watch_harmful=1";
             Cmsid = Name;
 
+            if(Properties.Settings.Default.VideoInfoPlacement == "Right") {
+
+                Application.Current.Resources["VideoColumn"] = 0;
+                Application.Current.Resources["InfoColumn"] = 1;
+                Application.Current.Resources["GridWidth1"] = new GridLength(1.0, GridUnitType.Star);
+                Application.Current.Resources["GridWidth2"] = new GridLength(300);
+            } else {
+
+                Application.Current.Resources["VideoColumn"] = 1;
+                Application.Current.Resources["InfoColumn"] = 0;
+                Application.Current.Resources["GridWidth1"] = new GridLength(300);
+                Application.Current.Resources["GridWidth2"] = new GridLength(1.0, GridUnitType.Star);
+
+            }
+
             App.ViewModelRoot.AddTabAndSetCurrent(this);
+
             Initialize(videoUrl);
         }
 
@@ -619,7 +635,7 @@ namespace SRNicoNico.ViewModels {
 
             SetSeekCursor(time);
 
-            if((int)time == VideoData.ApiData.Length) {
+            if(time >= (float)(VideoData.ApiData.Length - 0.3)) {
                 
                 if(IsRepeat) {
 

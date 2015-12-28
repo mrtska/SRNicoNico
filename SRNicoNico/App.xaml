@@ -1,5 +1,6 @@
 ﻿<Application x:Class="SRNicoNico.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              >
@@ -104,6 +105,10 @@
             <ScrollUnit x:Key="ScrollMethod" >
                 Pixel
             </ScrollUnit>
+            <GridLength x:Key="GridWidth1"/>
+            <GridLength x:Key="GridWidth2"/>
+            <s:Int32 x:Key="VideoColumn">0</s:Int32>
+            <s:Int32 x:Key="InfoColumn">0</s:Int32>
 
         </ResourceDictionary>
 	</Application.Resources>
