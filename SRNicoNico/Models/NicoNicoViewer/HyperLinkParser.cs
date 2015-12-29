@@ -33,11 +33,17 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             if(Properties.Settings.Default.EnableTwitterLink) {
 
                 //TwitterのIDだった場合
-                Regex twitter = new Regex(@"@[A-z|0-9|_]{1,15}");
+                Regex twitter = new Regex(@"[@|＠][A-z|0-9|_]{1,15}");
                 desc = twitter.Replace(desc, new MatchEvaluator((match) => {
 
                     return "<a href=\"https://twitter.com/" + match.Value.Substring(1) + "\">" + match.Value + "</a>";
                 }));
+                Regex twitter2 = new Regex(@"TwitterID:([A-z|0-9|_]{1,15})");
+                desc = twitter2.Replace(desc, new MatchEvaluator((match) => {
+
+                    return "TwitterID:<a href=\"https://twitter.com/" + match.Groups[1].Value + "\">" + match.Groups[1].Value + "</a>";
+                }));
+
             }
 
             return desc;
