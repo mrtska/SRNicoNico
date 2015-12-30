@@ -78,6 +78,19 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        #region AlwaysShowSeekBar変更通知プロパティ
+
+        public bool AlwaysShowSeekBar {
+            get { return Properties.Settings.Default.AlwaysShowSeekBar; }
+            set {
+                if(Properties.Settings.Default.AlwaysShowSeekBar == value)
+                    return;
+                Properties.Settings.Default.AlwaysShowSeekBar = value;
+                Properties.Settings.Default.Save();
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
 
         public ConfigVideoViewModel() : base("動画関連") {

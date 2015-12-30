@@ -79,8 +79,7 @@
                                 </Style>
                             </ListBox.ItemContainerStyle>
                             <ListBox.ItemTemplate>
-
-                                <DataTemplate DataType="{x:Type m:NicoNicoFavoriteUser}">
+                                <DataTemplate DataType="{x:Type m:NicoNicoFavoriteUserContent}">
                                     <local:FavoriteUser />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -94,6 +93,45 @@
 
                     </Grid>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:FavoriteCommunityViewModel}">
+                    <Grid>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Loaded">
+                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ListBox SelectedItem="{Binding SelectedCommunity}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding CommunityList}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDoubleClick">
+                                    <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Style.Resources>
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                                    </Style.Resources>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type m:NicoNicoFavoriteCommunityContent}">
+                                    <local:FavoriteCommunity />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+
+                            <i:Interaction.Behaviors>
+                                <b:ListBoxInfiniteScrollBehavior MethodName="NextPage" ViewModel="{Binding}"/>
+                            </i:Interaction.Behaviors>
+                        </ListBox>
+
+                        <mui:ModernProgressRing Panel.ZIndex="1" Width="60" Height="60" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}" />
+
+                    </Grid>
+                </DataTemplate>
+
             </ItemsControl.Resources>
 
 

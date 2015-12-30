@@ -74,7 +74,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         //削除ボタンを利用するならこっち
         public NicoRepoResultEntryViewModel(NicoNicoNicoRepoDataEntry entry, NicoRepoListViewModel owner) {
 

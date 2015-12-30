@@ -872,6 +872,10 @@ namespace SRNicoNico.ViewModels {
 
         public void HideFullScreenPopup() {
 
+            if(Properties.Settings.Default.AlwaysShowSeekBar) {
+
+                return;
+            }
             FullScreenPopup = false;
         }
 

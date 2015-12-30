@@ -50,29 +50,37 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             var api = PrevUrl = @"http://www.nicovideo.jp/my/top/" + Id + @"?innerPage=1&mode=next_page";
            
             //html
-            var html = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
 
-            IList<NicoNicoNicoRepoDataEntry> data = new List<NicoNicoNicoRepoDataEntry>();
+            try {
 
-            //XPathでhtmlから抜き出す
-            HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml2(html);
+                var html = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
 
-            //ニコレポが存在しなかったら存在しないというエントリを返す
-            if(doc.DocumentNode.SelectSingleNode("/div[@class='nicorepo']/div[@class='nicorepo-page']/div").Attributes["class"].Value.Equals("empty")) {
+                var data = new List<NicoNicoNicoRepoDataEntry>();
 
-                NicoNicoNicoRepoDataEntry entry = new NicoNicoNicoRepoDataEntry();
+                //XPathでhtmlから抜き出す
+                var doc = new HtmlDocument();
+                doc.LoadHtml2(html);
 
-                entry.ImageUrl = entry.IconUrl = null;
-                entry.Description = "ニコレポが存在しません。";
-                data.Add(entry);
+                //ニコレポが存在しなかったら存在しないというエントリを返す
+                if(doc.DocumentNode.SelectSingleNode("/div[@class='nicorepo']/div[@class='nicorepo-page']/div").Attributes["class"].Value.Equals("empty")) {
+
+                    var entry = new NicoNicoNicoRepoDataEntry();
+
+                    entry.ImageUrl = entry.IconUrl = null;
+                    entry.Description = "ニコレポが存在しません。";
+                    data.Add(entry);
+
+                    return data;
+                }
+
+                StoreData(doc, data);
 
                 return data;
+
+            } catch(RequestTimeout) {
+
+                return null;
             }
-
-            StoreData(doc, data);
-
-            return data;
         }
 
         //過去のニコレポを取得

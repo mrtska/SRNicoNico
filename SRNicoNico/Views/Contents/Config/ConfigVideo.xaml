@@ -14,6 +14,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:ConfigVideoViewModel}}"
+             
+             Background="{DynamicResource ThemeBrushKey}"
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
+
              >
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
@@ -38,6 +42,11 @@
                 <StackPanel Margin="10">
                     <CheckBox Content="動画説明文の@○○をTwitterのリンクにする" IsChecked="{Binding EnableTwitterLink}" />
                     <CheckBox Content="動画説明文のURLをリンクにする" IsChecked="{Binding EnableUrlLink}" Margin="0,10,0,0"/>
+
+                </StackPanel>
+                <TextBlock Text="フルスクリーン" FontSize="18" Margin="0,10,0,0"/>
+                <StackPanel Margin="10">
+                    <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding AlwaysShowSeekBar}" />
 
                 </StackPanel>
 

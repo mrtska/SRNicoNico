@@ -18,60 +18,58 @@ using SRNicoNico.Models.NicoNicoViewer;
 using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
-    public class FavoriteUserViewModel : TabItemViewModel {
+    public class FavoriteCommunityViewModel : TabItemViewModel {
 
+        #region CommunityList変更通知プロパティ
+        private DispatcherCollection<NicoNicoFavoriteCommunityContent> _CommunityList;
 
-
-        #region UserList変更通知プロパティ
-        private DispatcherCollection<NicoNicoFavoriteUserContent> _UserList;
-
-        public DispatcherCollection<NicoNicoFavoriteUserContent> UserList {
-            get { return _UserList; }
+        public DispatcherCollection<NicoNicoFavoriteCommunityContent> CommunityList {
+            get { return _CommunityList; }
             set { 
-                if(_UserList == value)
+                if(_CommunityList == value)
                     return;
-                _UserList = value;
+                _CommunityList = value;
                 RaisePropertyChanged();
             }
         }
         #endregion
 
 
-        #region SelectedUser変更通知プロパティ
-        private NicoNicoFavoriteUserContent _SelectedUser;
+        #region SelectedCommunity変更通知プロパティ
+        private NicoNicoFavoriteCommunityContent _SelectedCommunity;
 
-        public NicoNicoFavoriteUserContent SelectedUser {
-            get { return _SelectedUser; }
+        public NicoNicoFavoriteCommunityContent SelectedCommunity {
+            get { return _SelectedCommunity; }
             set { 
-                if(_SelectedUser == value)
+                if(_SelectedCommunity == value)
                     return;
-                _SelectedUser = value;
+                _SelectedCommunity = value;
                 RaisePropertyChanged();
             }
         }
         #endregion
 
-        private NicoNicoFavoriteUser FavoriteInstance;
+        private NicoNicoFavoriteCommunity FavoriteInstance;
 
         private FavoriteViewModel Owner;
 
         private bool IsEnd = false;
 
-        public FavoriteUserViewModel(FavoriteViewModel vm) : base("ユーザー") {
+        public FavoriteCommunityViewModel(FavoriteViewModel vm) : base("コミュニティ") {
 
             Owner = vm;
-            FavoriteInstance = new NicoNicoFavoriteUser();
+            FavoriteInstance = new NicoNicoFavoriteCommunity();
         }
-        
+
         public void Initialize() {
 
             IsActive = true;
-            Owner.Status = "お気に入りユーザーを取得中";
-            UserList = new DispatcherCollection<NicoNicoFavoriteUserContent>(DispatcherHelper.UIDispatcher);
+            Owner.Status = "お気に入りコミュニティを取得中";
+            CommunityList = new DispatcherCollection<NicoNicoFavoriteCommunityContent>(DispatcherHelper.UIDispatcher);
             Task.Run(() => {
-                foreach(var entry in FavoriteInstance.GetFavoriteUser()) {
+                foreach(var entry in FavoriteInstance.GetFavoriteCommunity()) {
 
-                    UserList.Add(entry);
+                    CommunityList.Add(entry);
                 }
                 IsActive = false;
                 Owner.Status = "";
@@ -82,7 +80,7 @@ namespace SRNicoNico.ViewModels {
         //情報再取得
         public void Reflesh() {
 
-            FavoriteInstance.ResetFavoriteUser();
+            FavoriteInstance.ResetFavoriteCommunity();
             IsEnd = false;
             Initialize();
         }
@@ -95,10 +93,10 @@ namespace SRNicoNico.ViewModels {
                 return;
             }
             IsActive = true;
-            Owner.Status = "お気に入りユーザーを取得中";
+            Owner.Status = "お気に入りコミュニティを取得中";
             Task.Run(() => {
 
-                var users = FavoriteInstance.GetFavoriteUser();
+                var users = FavoriteInstance.GetFavoriteCommunity();
                 if(users == null) {
 
                     IsEnd = true;
@@ -109,7 +107,7 @@ namespace SRNicoNico.ViewModels {
 
                 foreach(var entry in users) {
 
-                    UserList.Add(entry);
+                    CommunityList.Add(entry);
                 }
                 IsActive = false;
                 Owner.Status = "";
@@ -119,11 +117,11 @@ namespace SRNicoNico.ViewModels {
         //ユーザーページを開く
         public void Open() {
 
-            if(SelectedUser != null) {
+            if(SelectedCommunity != null) {
 
-                NicoNicoOpener.Open(SelectedUser.UserPage);
+                NicoNicoOpener.Open(SelectedCommunity.CommunityPage);
             }
-            SelectedUser = null;
+            SelectedCommunity = null;
         }
         public override void KeyDown(KeyEventArgs e) {
 

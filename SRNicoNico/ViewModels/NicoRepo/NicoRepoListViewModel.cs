@@ -63,14 +63,19 @@ namespace SRNicoNico.ViewModels {
 
                 NicoRepo = new NicoNicoNicoRepo(Id);
 
-                IList<NicoNicoNicoRepoDataEntry> data = NicoRepo.GetNicoRepo();
+                var data = NicoRepo.GetNicoRepo();
+
+                if(data == null) {
+
+                    NicoRepoVM.Status = "ニコレポ(" + Name + ") の取得に失敗しました";
+                    Result.IsActive = false;
+                    return;
+                }
 
                 foreach(NicoNicoNicoRepoDataEntry entry in data) {
 
                     Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));
                 }
-
-                NicoRepoVM.Status = "ニコレポ取得完了(" + Name + ")";
 
                 Result.IsActive = false;
             });

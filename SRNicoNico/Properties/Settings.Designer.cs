@@ -130,5 +130,17 @@ namespace SRNicoNico.Properties {
                 this["SplitterHeight"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AlwaysShowSeekBar {
+            get {
+                return ((bool)(this["AlwaysShowSeekBar"]));
+            }
+            set {
+                this["AlwaysShowSeekBar"] = value;
+            }
+        }
     }
 }

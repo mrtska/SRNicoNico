@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SRNicoNico.Views.Contents.Favorite.FavoriteUser"
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.Favorite.FavoriteCommunity"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,7 @@
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              BorderThickness="1"
-             d:DataContext="{d:DesignInstance {x:Type m:NicoNicoFavoriteUserContent}}"
+             d:DataContext="{d:DesignInstance {x:Type m:NicoNicoFavoriteCommunityContent}}"
              d:DesignWidth="491"
              mc:Ignorable="d"
 			 BorderBrush="#FF333333"
@@ -23,8 +23,9 @@
 
 		<Image Width="50" Height="50" Margin="5,4" HorizontalAlignment="Left" VerticalAlignment="Top" Source="{Binding ThumbnailUrl}" />
         <StackPanel Grid.Column="1">
-            <TextBlock Height="20" Margin="0,4,0,0" VerticalAlignment="Top" Text="{Binding Name}" TextWrapping="Wrap" />
-            <TextBlock Height="20" Margin="0,4,0,0" VerticalAlignment="Top" Text="{Binding Description}" TextWrapping="Wrap" Foreground="#777777" TextTrimming="CharacterEllipsis" />
+            <TextBlock  FontSize="18" Margin="0,4,0,0" VerticalAlignment="Top" Text="{Binding Name}" TextWrapping="Wrap" />
+            <TextBlock  FontSize="10" Margin="0,2,0,0" VerticalAlignment="Top" Text="{Binding VideoAndMember}" TextWrapping="Wrap" Foreground="#777777" TextTrimming="CharacterEllipsis" />
+            <TextBlock  FontSize="12" VerticalAlignment="Top" Text="{Binding Description}" TextWrapping="Wrap" Foreground="#777777" TextTrimming="CharacterEllipsis" />
 
         </StackPanel>
       

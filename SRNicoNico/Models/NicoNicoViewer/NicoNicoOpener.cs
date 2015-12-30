@@ -7,6 +7,7 @@ using Livet;
 
 using SRNicoNico.ViewModels;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
     public class NicoNicoOpener : NotificationObject {
@@ -14,6 +15,12 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         //URLから適当なViewを開く
         public static void Open(string url) {
+
+            if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
+
+                System.Diagnostics.Process.Start(url);
+                return;
+            }
 
             Task.Run(() => {
 

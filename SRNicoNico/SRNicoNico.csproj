@@ -201,7 +201,8 @@
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Models\NicoNicoViewer\HyperLinkParser.cs" />
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoNicoFavorite.cs" />
+    <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteCommunity.cs" />
+    <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteUser.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylist.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylistGroup.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoPublicMylist.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="ViewModels\Config\ConfigGeneralViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigVideoViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigViewModel.cs" />
+    <Compile Include="ViewModels\Favorite\FavoriteCommunityViewModel.cs" />
     <Compile Include="ViewModels\Favorite\FavoriteUserViewModel.cs" />
     <Compile Include="ViewModels\Favorite\FavoriteViewModel.cs" />
     <Compile Include="ViewModels\Log\AccessLogEntryViewModel.cs" />
@@ -260,6 +262,9 @@
     </Compile>
     <Compile Include="Views\Contents\Favorite\Favorite.xaml.cs">
       <DependentUpon>Favorite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Favorite\FavoriteCommunity.xaml.cs">
+      <DependentUpon>FavoriteCommunity.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Favorite\FavoriteUser.xaml.cs">
       <DependentUpon>FavoriteUser.xaml</DependentUpon>
@@ -464,6 +469,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Contents\Favorite\Favorite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Favorite\FavoriteCommunity.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -730,7 +739,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Contents\Community\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir $(TargetDir)Flash

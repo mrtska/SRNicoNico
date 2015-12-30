@@ -48,14 +48,13 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        private NicoNicoFavorite FavoriteInstance;
 
         public FavoriteViewModel() : base("お気に入り") {
 
-            FavoriteInstance = new NicoNicoFavorite();
             FavoriteList = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
 
-            FavoriteList.Add(new FavoriteUserViewModel(this, FavoriteInstance));
+            FavoriteList.Add(new FavoriteUserViewModel(this));
+            FavoriteList.Add(new FavoriteCommunityViewModel(this));
 
 
         }

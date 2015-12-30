@@ -19,13 +19,24 @@
              Background="Transparent"
              ToolTipService.InitialShowDelay="1200"
              ToolTipService.ShowDuration="300000"
+             ContextMenu="{DynamicResource menuTab}"
              >
+    <UserControl.Resources>
+        <ContextMenu x:Key="menuTab">
+            <MenuItem Header="投稿者ページを開く" />
+            <MenuItem Header="" />
+        </ContextMenu>
+
+    </UserControl.Resources>
     <i:Interaction.Triggers>
         <l:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}">
             <l:TransitionInteractionMessageAction/>
         </l:InteractionMessageTrigger>
         <i:EventTrigger EventName="ToolTipOpening">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ShowInfomation"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="MouseRightButtonDown">
+            <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="ContextMenuVisibility" Value="True" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.ToolTip>
@@ -98,5 +109,8 @@
                 </Style>
             </Button.Style>
         </Button>
+
+
     </Grid>
+
 </UserControl>

@@ -5,19 +5,20 @@ using System.Text;
 using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
 using Livet;
+using System.Web;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
-    public class NicoNicoFavorite : NotificationObject {
+    public class NicoNicoFavoriteCommunity {
 
         //ロードするページ
         private int Page = 1;
 
-        public List<NicoNicoFavoriteUser> GetFavoriteUser() {
+        public List<NicoNicoFavoriteCommunityContent> GetFavoriteCommunity() {
 
-            var url = "http://www.nicovideo.jp/my/fav/user?page=" + Page++;
+            var url = "http://www.nicovideo.jp/my/community?page=" + Page++;
             var a = NicoNicoWrapperMain.Session.GetAsync(url).Result;
 
-            List<NicoNicoFavoriteUser> ret = new List<NicoNicoFavoriteUser>();
+            var ret = new List<NicoNicoFavoriteCommunityContent>();
 
             var doc = new HtmlDocument();
             doc.LoadHtml2(a);
@@ -34,13 +35,17 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             foreach(var entry in outers) {
 
-                NicoNicoFavoriteUser user = new NicoNicoFavoriteUser();
+                var user = new NicoNicoFavoriteCommunityContent();
 
-                user.UserPage = "http://www.nicovideo.jp" + entry.SelectSingleNode("child::div[@class='section']/h5/a").Attributes["href"].Value;
-                user.Name = entry.SelectSingleNode("child::div[@class='section']/h5/a").InnerText.Trim();
+                var section = entry.SelectSingleNode("child::div[@class='section']");
+
+                user.CommunityPage =  section.SelectSingleNode("child::h5/a").Attributes["href"].Value;
+                user.Name = section.SelectSingleNode("child::h5/a").InnerText.Trim();
                 user.ThumbnailUrl = entry.SelectSingleNode("child::div[@class='thumbContainer']/a/img").Attributes["src"].Value;
 
-                var p = entry.SelectSingleNode("child::div[@class='section']/p[1]");
+
+                var p = section.SelectSingleNode("child::p[1]");
+                user.VideoAndMember = section.SelectSingleNode("child::ul/li[1]").InnerText.Trim() + " " + section.SelectSingleNode("child::ul/li[2   ]").InnerText.Trim();
                 user.Description = p == null ? "" : p.InnerText.Trim();
 
                 //説明がなかったら
@@ -49,13 +54,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     user.Description = "";
                 }
                 //改行を空白に置換
-                user.Description = user.Description.Replace('\n', ' ');
+                user.Description = user.Description.Replace('\n', ' ').Replace('\r', ' ');
+
+                user.Description = HttpUtility.HtmlDecode(user.Description);
                 ret.Add(user);
             }
             return ret;
         }
 
-        public void ResetFavoriteUser() {
+        public void ResetFavoriteCommunity() {
 
             Page = 1;
         }
@@ -65,13 +72,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
     }
 
-    public class NicoNicoFavoriteUser {
+    public class NicoNicoFavoriteCommunityContent {
 
-        //ユーザーページURL
-        public string UserPage { get; set; }
+        //コミュニティページURL
+        public string CommunityPage { get; set; }
 
         //お気に入りユーザーの名前
         public string Name { get; set; }
+
+        //動画登録数とメンバー数
+        public string VideoAndMember { get; set; }
 
         //簡易説明文
         public string Description { get; set; }
