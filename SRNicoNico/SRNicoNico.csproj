@@ -128,13 +128,12 @@
       <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Livet, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b0b1d3f711ef38cb, processorArchitecture=MSIL">
+    <Reference Include="Livet">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\LivetCask.1.3.1.0\lib\net45\Livet.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>InfrastructureAssemblies\Livet.dll</HintPath>
     </Reference>
-    <Reference Include="MetroRadiance, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.1.1.0.2\lib\net45\MetroRadiance.dll</HintPath>
+    <Reference Include="MetroRadiance, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroRadiance.1.2.1.0\lib\net45\MetroRadiance.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MetroRadiance.Chrome, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
@@ -145,8 +144,8 @@
       <HintPath>..\packages\MetroRadiance.Core.1.1.0.2\lib\net45\MetroRadiance.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroTrilithon, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroTrilithon.0.1.0.0\lib\portable-net45+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\MetroTrilithon.dll</HintPath>
+    <Reference Include="MetroTrilithon, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroTrilithon.0.1.4\lib\portable-net45+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\MetroTrilithon.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MetroTrilithon.Desktop, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
@@ -154,16 +153,16 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\LivetCask.1.3.1.0\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
+      <HintPath>..\packages\MetroRadiance.1.2.1.0\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationFramework.Classic" />
-    <Reference Include="StatefulModel, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StatefulModel.0.3.0\lib\portable-net45+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\StatefulModel.dll</HintPath>
+    <Reference Include="StatefulModel, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StatefulModel.0.5.0\lib\portable-net45+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\StatefulModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -177,7 +176,7 @@
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\LivetCask.1.3.1.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\packages\MetroRadiance.1.2.1.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
@@ -201,6 +200,7 @@
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Models\NicoNicoViewer\HyperLinkParser.cs" />
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
+    <Compile Include="Models\NicoNicoViewer\UpdateCheck.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteUser.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylist.cs" />
@@ -225,6 +225,7 @@
     <Compile Include="ViewModels\Misc\OSSViewModel.cs" />
     <Compile Include="ViewModels\Misc\OverViewViewModel.cs" />
     <Compile Include="ViewModels\Misc\TweetDialogViewModel.cs" />
+    <Compile Include="ViewModels\Misc\UpdateViewModel.cs" />
     <Compile Include="ViewModels\Mylist\MylistEditModeViewModel.cs" />
     <Compile Include="ViewModels\Mylist\MylistListEntryViewModel.cs" />
     <Compile Include="ViewModels\Mylist\MylistListViewModel.cs" />
@@ -280,6 +281,9 @@
     </Compile>
     <Compile Include="Views\Contents\Misc\OverView.xaml.cs">
       <DependentUpon>OverView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Misc\UpdateDialog.xaml.cs">
+      <DependentUpon>UpdateDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Misc\TweetDialog.xaml.cs">
       <DependentUpon>TweetDialog.xaml</DependentUpon>
@@ -495,6 +499,10 @@
     <Page Include="Views\Contents\Misc\OverView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Misc\UpdateDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Misc\TweetDialog.xaml">
       <Generator>MSBuild:Compile</Generator>

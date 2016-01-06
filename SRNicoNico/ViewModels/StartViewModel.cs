@@ -16,6 +16,12 @@ using SRNicoNico.Models;
 namespace SRNicoNico.ViewModels {
     public class StartViewModel : TabItemViewModel {
        
+
+        public double CurrentVersion {
+            get { return App.ViewModelRoot.CurrentVersion; }
+        }
+
+
         public StartViewModel() : base("スタートページ") {
         }
     }

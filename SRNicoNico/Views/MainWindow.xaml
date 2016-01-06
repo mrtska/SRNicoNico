@@ -72,35 +72,19 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="1"
-						   Text="{Binding Title}"
-						   TextTrimming="CharacterEllipsis"
-						   Foreground="{DynamicResource ForegroundBrushKey}"
-						   FontSize="18"
-						   Margin="3,0,0,0"
-						   VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1"  Text="{Binding Title}" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource ForegroundBrushKey}" FontSize="18" Margin="3,0,0,0" VerticalAlignment="Center" />
                 <metro:SystemButtons Grid.Column="2" VerticalAlignment="Top" />
             </Grid>
         </Border>
 
         <contents:MainContent Grid.Row="1"/>
 
-        <DockPanel x:Name="statusBar"
-				   x:FieldModifier="private"
-				   Grid.Row="2"
-				   Height="23"
-				   Background="{DynamicResource AccentBrushKey}"
-				   >
+        <DockPanel x:Name="statusBar" x:FieldModifier="private" Grid.Row="2" Height="23" Background="{DynamicResource AccentBrushKey}" >
             <Border DockPanel.Dock="Right" Width="{Binding ActualWidth, ElementName=resizeGrip}" />
             <v:StatusBar DataContext="{Binding StatusBar}"/>
         </DockPanel>
 
-        <metro:ResizeGrip Grid.Row="1"
-						  Grid.RowSpan="2"
-						  x:Name="resizeGrip"
-						  x:FieldModifier="private"
-						  HorizontalAlignment="Right"
-						  VerticalAlignment="Bottom"
+        <metro:ResizeGrip Grid.Row="1" Grid.RowSpan="2" x:Name="resizeGrip" x:FieldModifier="private" HorizontalAlignment="Right" VerticalAlignment="Bottom"
 						  WindowChrome.ResizeGripDirection="BottomRight" />
 
     </Grid>

@@ -46,9 +46,9 @@ namespace SRNicoNico.Views.Behaviors {
 		//ここでScrollViewerのインスタンスを取得する
 		private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
 
-			if(VisualTreeHelper.GetChildrenCount(this.AssociatedObject) != 0) {
+			if(VisualTreeHelper.GetChildrenCount(AssociatedObject) != 0) {
 
-				var border = VisualTreeHelper.GetChild(this.AssociatedObject, 0) as Border;
+				var border = VisualTreeHelper.GetChild(AssociatedObject, 0) as Border;
 				ScrollViewer = border.Child as ScrollViewer;
 
 				ScrollViewer.ScrollChanged += scrollViewer_ScrollChanged;
@@ -66,18 +66,27 @@ namespace SRNicoNico.Views.Behaviors {
 
             
 			//一番下までスクロールしたら
-			if(e.ExtentHeight > 1 && PrevExtentHeight != e.ExtentHeight && e.ExtentHeight == (e.VerticalOffset + e.ViewportHeight)) {
+			if(e.ExtentHeight > 1 && PrevExtentHeight != e.ExtentHeight && e.ExtentHeight == (e.VerticalOffset + e.ViewportHeight) || (e.ExtentHeight < e.ViewportHeight && PrevExtentHeight != e.ExtentHeight)) {
 
                 PrevExtentHeight = e.ExtentHeight;
+#if DEBUG
                 Console.WriteLine(e.ExtentHeight);
                 Console.WriteLine(e.VerticalOffset);
-                Type type = ViewModel.GetType();
-                MethodInfo method = type.GetMethod(MethodName);
-                method.Invoke(ViewModel, null);
+#endif
+                InvokeMethod();
+
                 ScrollViewer.ScrollToVerticalOffset(e.ExtentHeight - e.ViewportHeight);
                 
 			}
 		}
+
+        private void InvokeMethod() {
+
+            Type type = ViewModel.GetType();
+            MethodInfo method = type.GetMethod(MethodName);
+            method.Invoke(ViewModel, null);
+        }
+
 		protected override void OnDetaching() {
 			base.OnDetaching();
 

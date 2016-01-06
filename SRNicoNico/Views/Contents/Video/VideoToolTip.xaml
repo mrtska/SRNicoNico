@@ -55,6 +55,7 @@
                 <TextBlock Text="{Binding Data.ViewCounter, StringFormat=再生数:{0:N0}}" />
                 <TextBlock Text="{Binding Data.CommentCounter, StringFormat=コメント数:{0:N0}}" />
                 <TextBlock Text="{Binding Data.MylistCounter, StringFormat=マイリスト数:{0:N0}}" />
+                <TextBlock TextWrapping="Wrap" Text="{Binding Data.FirstRetrieve, StringFormat=投稿日時:{0}}" />
 
             </StackPanel>
 

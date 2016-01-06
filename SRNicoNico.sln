@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRNicoNico", "SRNicoNico\SRNicoNico.csproj", "{2FC82181-45EE-437E-8EA2-4A7249F7486A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,18 @@ Global
 		{2FC82181-45EE-437E-8EA2-4A7249F7486A}.Release|x64.Build.0 = Release|x64
 		{2FC82181-45EE-437E-8EA2-4A7249F7486A}.Release|x86.ActiveCfg = Release|x86
 		{2FC82181-45EE-437E-8EA2-4A7249F7486A}.Release|x86.Build.0 = Release|x86
+		{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}.Debug|x64.ActiveCfg = Debug|x86
+		{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}.Debug|x86.ActiveCfg = Debug|x86
+		{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}.Debug|x86.Build.0 = Debug|x86
+		{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}.Release|Any CPU.ActiveCfg = Release|x86
+		{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}.Release|Mixed Platforms.Build.0 = Release|x86
+		{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}.Release|x64.ActiveCfg = Release|x86
+		{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}.Release|x86.ActiveCfg = Release|x86
+		{9B19CF4E-9D12-438B-AF62-DABBA8762E1C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

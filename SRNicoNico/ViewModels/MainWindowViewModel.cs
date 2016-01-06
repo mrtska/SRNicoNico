@@ -25,6 +25,15 @@ using System.Windows.Media;
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
 
+
+
+
+        public double CurrentVersion {
+
+            get { return 0.6; }
+        }
+
+
 		#region Title変更通知プロパティ
 		private string _Title = "NicoNicoViewer ";
 
@@ -101,6 +110,8 @@ namespace SRNicoNico.ViewModels {
 
         public AccessLogViewModel AccessLog { get; private set; }
 
+        public UpdateViewModel Update { get; private set; }
+
         public string Status {
             set {
                     StatusBar.Status = value;
@@ -145,6 +156,8 @@ namespace SRNicoNico.ViewModels {
 
             AccessLog = new AccessLogViewModel();
 
+            Update = new UpdateViewModel(CurrentVersion);
+
 		}
 
         //ログイン後の初期化処理
@@ -164,6 +177,8 @@ namespace SRNicoNico.ViewModels {
             TabItems.Add(new OtherViewModel());
             TabItems.Add(Config = new ConfigViewModel());
 
+
+            Update.CheckUpdate();
         }
 
 		public void Initialize() {

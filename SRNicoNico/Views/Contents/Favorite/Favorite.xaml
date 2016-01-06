@@ -100,7 +100,7 @@
                                 <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                        <ListBox SelectedItem="{Binding SelectedCommunity}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding CommunityList}" >
+                        <ListBox SelectedItem="{Binding SelectedCommunity}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding CommunityList}" >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseDoubleClick">
                                     <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />

@@ -23,9 +23,8 @@
 
 		<Image Width="50" Height="50" Margin="5,4" HorizontalAlignment="Left" VerticalAlignment="Top" Source="{Binding ThumbnailUrl}" />
         <StackPanel Grid.Column="1">
-            <TextBlock Height="20" Margin="0,4,0,0" VerticalAlignment="Top" Text="{Binding Name}" TextWrapping="Wrap" />
-            <TextBlock Height="20" Margin="0,4,0,0" VerticalAlignment="Top" Text="{Binding Description}" TextWrapping="Wrap" Foreground="#777777" TextTrimming="CharacterEllipsis" />
-
+            <TextBlock FontSize="18" Margin="0,4,0,0" VerticalAlignment="Top" Text="{Binding Name}" TextWrapping="Wrap" />
+            <TextBlock FontSize="14" Margin="0,4,0,0" VerticalAlignment="Top" Text="{Binding Description}" TextWrapping="Wrap" Foreground="#777777" TextTrimming="CharacterEllipsis" />
         </StackPanel>
       
 
