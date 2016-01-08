@@ -18,7 +18,7 @@ using System.Collections.ObjectModel;
 using GongSolutions.Wpf.DragDrop;
 
 namespace SRNicoNico.ViewModels {
-    public class MylistListViewModel : TabItemViewModel, IDragSource  {
+    public sealed class MylistListViewModel : TabItemViewModel, IDragSource  {
 
         #region Mylist変更通知プロパティ
         private DispatcherCollection<MylistListEntryViewModel> _Mylist;

@@ -40,18 +40,18 @@ namespace SRNicoNico.ViewModels {
         }
 
         public void OpenHistory() {
+            
 
-
-            HistoryResultViewModel History = new HistoryResultViewModel();
+            var History = new HistoryResultViewModel();
 
             HistoryResult = History;
             History.IsActive = true;
 
             Task.Run(() => {
 
-                foreach(NicoNicoHistoryData data in new NicoNicoHistory(this).GetHistroyData()) {
+                foreach(var data in new NicoNicoHistory(this).GetHistroyData()) {
 
-                    HistoryResultEntryViewModel entry = new HistoryResultEntryViewModel() {
+                    var entry = new HistoryResultEntryViewModel() {
 
                         Data = data
                     };
