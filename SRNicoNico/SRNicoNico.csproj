@@ -201,6 +201,7 @@
     <Compile Include="Models\NicoNicoViewer\HyperLinkParser.cs" />
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
     <Compile Include="Models\NicoNicoViewer\UpdateCheck.cs" />
+    <Compile Include="Models\NicoNicoWrapper\NicoNicoCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteUser.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylist.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Models\NicoNicoWrapper\NicoNicoVitaUserApi.cs" />
     <Compile Include="Models\NicoNicoWrapper\RequestTimeout.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="ViewModels\Community\CommunityViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigGeneralViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigVideoViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigViewModel.cs" />
@@ -246,6 +248,9 @@
     <Compile Include="ViewModels\Video\VideoTagViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoViewModel.cs" />
     <Compile Include="Views\Behaviors\ListBoxAutoScrollBehavior.cs" />
+    <Compile Include="Views\Contents\Community\Community.xaml.cs">
+      <DependentUpon>Community.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Config\Config.xaml.cs">
       <DependentUpon>Config.xaml</DependentUpon>
     </Compile>
@@ -452,6 +457,10 @@
     <Compile Include="Views\StatusBar.xaml.cs">
       <DependentUpon>StatusBar.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\Contents\Community\Community.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Contents\Config\Config.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -747,9 +756,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Contents\Community\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir $(TargetDir)Flash

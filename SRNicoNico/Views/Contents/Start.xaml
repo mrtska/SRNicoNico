@@ -10,7 +10,7 @@
 			 xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
              xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
              xmlns:history="clr-namespace:SRNicoNico.Views.Contents.History"
-             d:DesignHeight="2000"
+             d:DesignHeight="3000"
              d:DesignWidth="585"
 			 d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
              mc:Ignorable="d"
@@ -51,7 +51,8 @@
                     v0.43<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.44<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.5<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
-                    v0.6
+                    v0.6<LineBreak /><LineBreak /><LineBreak /><LineBreak />
+                    v0.7
 
                 </TextBlock>
                 <TextBlock Grid.Column="1">
@@ -94,8 +95,10 @@
                     その他多数<LineBreak /><LineBreak />
                     動画UIを改修<LineBreak />
                     公開マイリストUIを実装<LineBreak />
-                    ニコレポの動画にツールチップを追加
-                    
+                    ニコレポの動画にツールチップを追加<LineBreak /><LineBreak />
+                    アップデーター搭載<LineBreak />
+                    コミュニティ表示機能実装<LineBreak />
+                    動画設定項目追加<LineBreak />
                     
                     
                     
