@@ -136,7 +136,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 NicoNicoTag entry = new NicoNicoTag() {
 
                     Id = tag.id,
-                    Tag = tag.tag,
+                    Tag = HttpUtility.HtmlDecode(tag.tag),
                     Dic = tag.dic(),
                     Lck = tag.lck == "1" ? true : false,
                     Cat = tag.cat()
