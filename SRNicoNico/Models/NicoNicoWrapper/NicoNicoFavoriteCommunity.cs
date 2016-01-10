@@ -40,7 +40,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var section = entry.SelectSingleNode("child::div[@class='section']");
 
                 user.CommunityPage =  section.SelectSingleNode("child::h5/a").Attributes["href"].Value;
-                user.Name = section.SelectSingleNode("child::h5/a").InnerText.Trim();
+                user.Name = HttpUtility.HtmlDecode(section.SelectSingleNode("child::h5/a").InnerText.Trim());
                 user.ThumbnailUrl = entry.SelectSingleNode("child::div[@class='thumbContainer']/a/img").Attributes["src"].Value;
 
 
