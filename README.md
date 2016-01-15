@@ -12,3 +12,10 @@ Flash Develop
 
 #ライセンス
 MITライセンス
+
+#手動ビルド手順
+
+必要なもの：FlexSDK FlashDevelop（FlexSDKのパスを通しておく） VisualStudio2015  
+FlashDevelopでFlash関連のソースをビルドしてSWFをすべて作成  
+VisualStudioでビルド  
+
