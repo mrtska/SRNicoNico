@@ -22,6 +22,12 @@
              Focusable="False"
              d:DataContext="{d:DesignInstance {x:Type vm:CommunityViewModel}}"
              >
+    <UserControl.Resources>
+        <Style TargetType="Hyperlink">
+            <EventSetter Event="RequestNavigate" Handler="OpenHyperLink"/>
+            <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="190"/>

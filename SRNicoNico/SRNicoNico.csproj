@@ -445,9 +445,6 @@
     <Compile Include="Views\Contents\Video\VideoToolTip.xaml.cs">
       <DependentUpon>VideoToolTip.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\BindableTextBlock.cs" />
-    <Compile Include="Views\Controls\TabControlEx.cs" />
-    <Compile Include="Views\Controls\TabItemEx.cs" />
     <Compile Include="Views\Controls\SeekBar.cs" />
     <Compile Include="Views\Converter\FontFamilyToLocalizedNameConverter.cs" />
     <Compile Include="Views\Extentions\DictionaryExtentions.cs" />

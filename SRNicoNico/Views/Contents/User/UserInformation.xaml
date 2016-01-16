@@ -72,6 +72,7 @@
                     <Grid.Resources>
                         <Style TargetType="Hyperlink">
                             <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
+                            <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
                         </Style>
                     </Grid.Resources>
                     <TextBlock Foreground="#FFAAAAAA" TextWrapping="Wrap" Background="#FF222222" behaviors:HtmlTextBoxProperties.HtmlText="{Binding UserEntry.Description}"/>

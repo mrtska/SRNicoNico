@@ -54,13 +54,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             var a = NicoNicoWrapperMain.Session.GetAsync(UserPage).Result;
 
             //htmlをロード
-            HtmlDocument doc = new HtmlDocument();
+            var doc = new HtmlDocument();
             doc.LoadHtml2(a);
 
             //ユーザープロファイル
-            HtmlNode detail = doc.DocumentNode.SelectSingleNode("//div[@class='userDetail']");
-            HtmlNode profile = detail.SelectSingleNode("child::div[@class='profile']");
-            HtmlNode account = profile.SelectSingleNode("child::div[@class='account']");
+            var detail = doc.DocumentNode.SelectSingleNode("//div[@class='userDetail']");
+            var profile = detail.SelectSingleNode("child::div[@class='profile']");
+            var account = profile.SelectSingleNode("child::div[@class='account']");
 
             ret.UserIconUrl = detail.SelectSingleNode("child::div[@class='avatar']/img").Attributes["src"].Value;
             ret.UserName = profile.SelectSingleNode("child::h2").InnerText.Trim();
@@ -75,8 +75,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             ret.UserPage = UserPage;
 
-            //URLをハイパーリンク化する
+            //html特殊文字をデコード
+            ret.Description = HttpUtility.HtmlDecode(ret.Description);
+
+            //URLをハイパーリンク化する エンコードされてると正しく動かない
             ret.Description = HyperLinkReplacer.Replace(ret.Description);
+
+            //&だけエンコード エンコードしないとUIに&が表示されない
+            ret.Description = ret.Description.Replace("&", "&amp;");
+
 
             Owner.Status = "";
             return ret;

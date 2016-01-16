@@ -11,7 +11,7 @@
              xmlns:behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
              xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
              mc:Ignorable="d" 
-             d:DesignHeight="59" d:DesignWidth="361"
+             d:DesignWidth="361"
              d:DataContext="{d:DesignInstance { x:Type vm:NicoRepoResultEntryViewModel}}"
              BorderThickness="0,1,1,0"
              BorderBrush="#FF333333"
@@ -44,65 +44,61 @@
     </UserControl.ToolTip>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="37*"/>
-            <RowDefinition Height="20*"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="68"/>
-            <ColumnDefinition Width="43"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Image Grid.Column="0" Source="{Binding Entry.ImageUrl,TargetNullValue={x:Null}}" Margin="7,5,0,7" HorizontalAlignment="Left" Width="51" Grid.RowSpan="2"/>
-        <Image Grid.Column="1" Grid.Row="0" Source="{Binding Entry.IconUrl, TargetNullValue={x:Null}}" HorizontalAlignment="Center" Height="30" VerticalAlignment="Center" Width="30" />
-        <TextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" TextWrapping="Wrap" Text="{Binding Entry.Time}" Height="20" HorizontalAlignment="Left" />
-        <StackPanel Grid.Column="2" >
+        <Image Source="{Binding Entry.ImageUrl,TargetNullValue={x:Null}}" Margin="7,5,0,7" HorizontalAlignment="Left" Width="51" />
 
-            <StackPanel.Resources>
-                <Style TargetType="Hyperlink">
-                    <EventSetter Event="RequestNavigate" Handler="OpenHyperLink"/>
-                    <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
-                </Style>
-            </StackPanel.Resources>
-            <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Entry.Title}" TextWrapping="Wrap" />
-            <TextBlock Text="{Binding Entry.Description, TargetNullValue={x:Null}}" TextWrapping="Wrap" />
+        <Grid Grid.Column="1">
+            <StackPanel>
 
-        </StackPanel>
+                <StackPanel.Resources>
+                    <Style TargetType="Hyperlink">
+                        <EventSetter Event="RequestNavigate" Handler="OpenHyperLink"/>
+                        <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Entry.Title}" TextWrapping="Wrap" />
+                <StackPanel Orientation="Horizontal">
+                    <Image  Source="{Binding Entry.IconUrl, TargetNullValue={x:Null}}" Height="30" Width="30" Margin="4" />
+                    <TextBlock Text="{Binding Entry.Description}" TextWrapping="Wrap" />
+                </StackPanel>
+                <TextBlock  TextWrapping="Wrap" Text="{Binding Entry.Time}" />
+            </StackPanel>
+            <Button HorizontalAlignment="Right"  VerticalAlignment="Bottom" Margin="2">
 
-        <Button Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right"  Margin="2">
-
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ShowDeleteButton}" Value="True">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Button Content="削除">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="Click">
-                                                    <l:LivetCallMethodAction MethodName="DeleteNicoRepo" MethodTarget="{Binding}"/>
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </Button>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ShowDeleteButton}" Value="False">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button"/>
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
-
-
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ShowDeleteButton}" Value="True">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Button Content="削除">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <l:LivetCallMethodAction MethodName="DeleteNicoRepo" MethodTarget="{Binding}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </Button>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ShowDeleteButton}" Value="False">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
     </Grid>
 
 </UserControl>

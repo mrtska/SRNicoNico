@@ -58,6 +58,10 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                 return NicoNicoUrlType.Mylist;
             }
+            if(url.StartsWith("http://com.nicovideo.jp/community/")) {
+
+                return NicoNicoUrlType.Community;
+            }
 
             return NicoNicoUrlType.Other;
         }
@@ -70,6 +74,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         Live,
         Mylist,
         User,
+        Community,
         Other
 
     }

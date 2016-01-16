@@ -90,6 +90,7 @@ namespace SRNicoNico.ViewModels {
 
                 if(data == null) {
 
+                    Result.IsActive = false;
                     return;
                 }
 
