@@ -90,7 +90,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //\nを改行に置換
                 ret.Description = ret.Description.Replace("\\n", "<br>").Replace("\\r", "");
 
-                ret.Description = HyperLinkParser.Parse(ret.Description); 
+                ret.Description = HyperLinkReplacer.Replace(ret.Description); 
 
                 var list = new List<MylistListEntryViewModel>();
 

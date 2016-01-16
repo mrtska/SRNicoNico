@@ -38,7 +38,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 ret.CommunityUrl = CommunityUrl;
                 ret.ThumbnailUrl = profile.SelectSingleNode("child::table/tr/td/p/img").Attributes["src"].Value;
                 ret.OwnerUrl = community_main.SelectSingleNode("child::div/div/div/div[@class='r']/p/a").Attributes["href"].Value;
-                ret.OwnerName = community_main.SelectSingleNode("child::div/div/div/div[@class='r']/p/a/strong").InnerText;
+                ret.OwnerName = "<a href=\"" + ret.OwnerUrl + "\">" + community_main.SelectSingleNode("child::div/div/div/div[@class='r']/p/a/strong").InnerText + "</a>";
                 ret.CommunityTitle = community_main.SelectSingleNode("child::div/div/h1").InnerText;
                 ret.OpeningDate = community_main.SelectSingleNode("child::div/div/div/div/p/strong").InnerText;
 
@@ -51,7 +51,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         var b = new NicoNicoCommunityNews();
 
                         b.Title = notify.SelectSingleNode("child::h2").InnerText;
-                        b.Description = HyperLinkParser.Parse(notify.SelectSingleNode("child::div[@class='desc']").InnerHtml.Trim());
+                        b.Description = HyperLinkReplacer.Replace(notify.SelectSingleNode("child::div[@class='desc']").InnerHtml.Trim());
                         b.Date = notify.SelectSingleNode("child::div[@class='date']").InnerText.Trim();
 
                         ret.CommunityNews.Add(b);
@@ -76,7 +76,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
                 //------
 
-                ret.CommunityProfile = HyperLinkParser.Parse(profile.SelectSingleNode("child::div[@id='community_description']/div/div/div").InnerHtml.Trim());
+                ret.CommunityProfile = HyperLinkReplacer.Replace(profile.SelectSingleNode("child::div[@id='community_description']/div/div/div").InnerHtml.Trim());
 
                 //---特権---
                 ret.Privilege = new List<string>();

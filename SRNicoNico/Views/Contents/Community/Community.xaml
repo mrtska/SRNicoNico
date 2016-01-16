@@ -12,6 +12,8 @@
              xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:ss="clr-namespace:System;assembly=System"
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Community"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="800"
@@ -38,10 +40,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding Content.CommunityTitle}" TextWrapping="Wrap" FontSize="24" Margin="5,0"  />
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <TextBlock Grid.Column="1" Text="{Binding Content.OpeningDate,StringFormat=オーナー : {0}}" VerticalAlignment="Center" FontSize="14" Margin="5,0" >
-                        <Hyperlink NavigateUri="{}">
-                            <Run Text=""/>
-                        </Hyperlink>
+                    <TextBlock Grid.Column="1" behaviors:HtmlTextBoxProperties.HtmlText="{Binding Content.OwnerName,StringFormat=オーナー : {0}}" VerticalAlignment="Center" FontSize="14" Margin="5,0" >
                     </TextBlock>
 
                     <TextBlock Grid.Column="1" Text="{Binding Content.OpeningDate,StringFormat=開設日 : {0}}" VerticalAlignment="Center" FontSize="14" Margin="5,0"  />
@@ -102,9 +101,10 @@
                     </StackPanel>
                     <Grid Grid.Column="1">
                         <StackPanel>
-                            <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Content.Videos,StringFormat=コミュニティ動画数 : {0}}" FontSize="14"/>
+                            <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Content.Videos,StringFormat=コミュニティ動画 : {0}}" FontSize="14"/>
 
                             <TextBlock  Text="{Binding Content.TotalVisitors,StringFormat=生放送累計来場者数 : {0}人}" FontSize="14"/>
+                            <TextBlock Text="獲得した特権:"/>
                             <ItemsControl ItemsSource="{Binding Content.Privilege}" Margin="10,0,0,0">
                                 
                             </ItemsControl>
@@ -127,18 +127,27 @@
             <ItemsControl Grid.Column="1" ItemsSource="{Binding TabItems}">
 
                 <ItemsControl.Resources>
-                    <DataTemplate DataType="{x:Type vm:CommunityTopViewModel}">
-                        <ScrollViewer Grid.Column="1">
+                    <DataTemplate DataType="{x:Type vm:CommunityTopViewModel}" >
+                        <ScrollViewer Grid.Column="1" d:DataContext="{d:DesignInstance {x:Type vm:CommunityTopViewModel}}">
                             <StackPanel Margin="5">
-                                <TextBlock Text="～お知らせ～" FontSize="20"/>
+                                <TextBlock Text="～お知らせ～" FontSize="20">
+                                    <i:Interaction.Triggers>
+                                        <ei:DataTrigger Binding="{Binding Owner.Content.CommunityNews.Count}" Value="0">
+                                            <ei:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=TextBlock}, Path=Height}" Value="0"/>
+                                        </ei:DataTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBlock>
                                 <ItemsControl ItemsSource="{Binding Owner.Content.CommunityNews}">
                                     <ItemsControl.Resources>
                                         <DataTemplate DataType="{x:Type m:NicoNicoCommunityNews}">
-                                            <StackPanel Margin="15,0">
-                                                <TextBlock Text="{Binding Title}" FontSize="16"/>
-                                                <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Description}"/>
-                                                <TextBlock Text="{Binding Date}"/>
-                                            </StackPanel>
+                                            <Border BorderThickness="0,0,0,1" BorderBrush="Gray" Margin="0,0,0,10">
+                                                <StackPanel Margin="15,0">
+                                                    <TextBlock Text="{Binding Title}" FontSize="16" TextDecorations="Underline"/>
+                                                    <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Description}" Margin="10,5,0,0"/>
+                                                    <TextBlock Text="{Binding Date}" HorizontalAlignment="Right"/>
+
+                                                </StackPanel>
+                                            </Border>
                                         </DataTemplate>
                                     </ItemsControl.Resources>
                                 </ItemsControl>

@@ -127,7 +127,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
 
 
-            ret.Description = HyperLinkParser.Parse(ret.Description);
+            ret.Description = HyperLinkReplacer.Replace(ret.Description);
 
             ret.TagList = new ObservableCollection<VideoTagViewModel>();
 

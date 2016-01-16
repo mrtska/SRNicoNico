@@ -76,7 +76,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.UserPage = UserPage;
 
             //URLをハイパーリンク化する
-            ret.Description = HyperLinkParser.Parse(ret.Description);
+            ret.Description = HyperLinkReplacer.Replace(ret.Description);
 
             Owner.Status = "";
             return ret;
@@ -173,7 +173,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     var desc = node.SelectSingleNode("child::div/p[@data-nico-mylist-desc-full='true']");
                     entry.Description = desc == null ? "" : desc.InnerText.Trim();
 
-                    entry.Description = HyperLinkParser.Parse(entry.Description);
+                    entry.Description = HyperLinkReplacer.Replace(entry.Description);
 
                     //サムネイル取得
                     var thumb1 = node.SelectSingleNode("child::div/ul/li[1]/img");

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 namespace SRNicoNico.Models.NicoNicoViewer {
 
     //ハイパーリンクを解析してハイパーリンク化する
-    public class HyperLinkParser {
+    public class HyperLinkReplacer {
 
         //URLをハイパーリンク化する
-        public static string Parse(string desc) {
+        public static string Replace(string desc) {
 
             if(Properties.Settings.Default.EnableUrlLink) {
 
@@ -22,7 +22,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
 
                     //aタグが書いてあったらそのまま返す
-                    if(match.Groups[1].Value.Length != 0 && (match.Groups[1].Value == @"""")){
+                    if(match.Groups[1].Value.Length != 0 && (match.Groups[1].Value == "\"" || match.Groups[1].Value == ">")){
 
                         return match.Value;
                     }

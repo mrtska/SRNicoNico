@@ -61,7 +61,6 @@ namespace SRNicoNico.ViewModels {
             TabItems.Add(new CommunityTopViewModel(this));
 
             Community = new NicoNicoCommunity(url);
-
             App.ViewModelRoot.AddTabAndSetCurrent(this);
 
             IsActive = true;
