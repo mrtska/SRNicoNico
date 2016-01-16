@@ -16,12 +16,13 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             if(Properties.Settings.Default.EnableUrlLink) {
 
                 //普通のURLだったら
-                Regex url = new Regex(@"(.....)(https?://[\w/:%#\$&\?\(\)~\.=\+\-]+)");
+                Regex url = new Regex(@"(.?)(https?://[\w/:%#\$&\?\(\)~\.=\+\-]+)");
+                
                 desc = url.Replace(desc, new MatchEvaluator((match) => {
 
 
                     //aタグが書いてあったらそのまま返す
-                    if(match.Groups[1].Value.Length != 0 && (match.Groups[1].Value == "/" || match.Groups[1].Value == ">" || match.Groups[1].Value == "ref=\"")) {
+                    if(match.Groups[1].Value.Length != 0 && (match.Groups[1].Value == @"""")){
 
                         return match.Value;
                     }

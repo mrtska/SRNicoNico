@@ -9,11 +9,12 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Community"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="600"
+             d:DesignHeight="800" d:DesignWidth="800"
 		     Background="{DynamicResource ThemeBrushKey}"
 		  	 Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Focusable="False"
@@ -21,8 +22,8 @@
              >
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="200"/>
-            <RowDefinition Height="97*"/>
+            <RowDefinition Height="190"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid>
@@ -37,7 +38,13 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding Content.CommunityTitle}" TextWrapping="Wrap" FontSize="24" Margin="5,0"  />
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <TextBlock Grid.Column="1" Text="{Binding Content.OpeningDate,StringFormat=開設日 : {0}}" VerticalAlignment="Center" FontSize="16" Margin="5,0"  />
+                    <TextBlock Grid.Column="1" Text="{Binding Content.OpeningDate,StringFormat=オーナー : {0}}" VerticalAlignment="Center" FontSize="14" Margin="5,0" >
+                        <Hyperlink NavigateUri="{}">
+                            <Run Text=""/>
+                        </Hyperlink>
+                    </TextBlock>
+
+                    <TextBlock Grid.Column="1" Text="{Binding Content.OpeningDate,StringFormat=開設日 : {0}}" VerticalAlignment="Center" FontSize="14" Margin="5,0"  />
 
                     <mui:ModernButton ToolTip="更新" IconData="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z"  >
                         <i:Interaction.Triggers>
@@ -65,15 +72,96 @@
 
             </Grid>
 
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Background="#FF222222" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="14*"/>
-                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Image Source="{Binding Content.ThumbnailUrl}" />
+                <Image Source="{Binding Content.ThumbnailUrl}" Margin="10" />
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock FontSize="14">
+                            <Run Text="{Binding Content.CommunityLevel,StringFormat=レベル : {0}・・・}"/>
+                            <Run Text="{Binding Content.CommunityStars}" Foreground="Yellow"/>
+                        </TextBlock>
+                        <TextBlock  behaviors:HtmlTextBoxProperties.HtmlText="{Binding Content.CommunityMember,StringFormat=メンバー : {0}}" FontSize="14"/>
+                        <TextBlock Text="登録タグ:"/>
+                        <ItemsControl ItemsSource="{Binding Content.CommunityTags}" Margin="10,0,0,0">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="2"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+
+                    </StackPanel>
+                    <Grid Grid.Column="1">
+                        <StackPanel>
+                            <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Content.Videos,StringFormat=コミュニティ動画数 : {0}}" FontSize="14"/>
+
+                            <TextBlock  Text="{Binding Content.TotalVisitors,StringFormat=生放送累計来場者数 : {0}人}" FontSize="14"/>
+                            <ItemsControl ItemsSource="{Binding Content.Privilege}" Margin="10,0,0,0">
+                                
+                            </ItemsControl>
+                        </StackPanel>
+
+                    </Grid>
+                </Grid>
             </Grid>
+
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="25*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Background="#FF222222" >
+                <metro:TabView Focusable="False" ItemsSource="{Binding TabItems}" SelectedIndex="0" />
+            </Grid>
+            <ItemsControl Grid.Column="1" ItemsSource="{Binding TabItems}">
+
+                <ItemsControl.Resources>
+                    <DataTemplate DataType="{x:Type vm:CommunityTopViewModel}">
+                        <ScrollViewer Grid.Column="1">
+                            <StackPanel Margin="5">
+                                <TextBlock Text="～お知らせ～" FontSize="20"/>
+                                <ItemsControl ItemsSource="{Binding Owner.Content.CommunityNews}">
+                                    <ItemsControl.Resources>
+                                        <DataTemplate DataType="{x:Type m:NicoNicoCommunityNews}">
+                                            <StackPanel Margin="15,0">
+                                                <TextBlock Text="{Binding Title}" FontSize="16"/>
+                                                <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Description}"/>
+                                                <TextBlock Text="{Binding Date}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.Resources>
+                                </ItemsControl>
+
+                                <TextBlock Text="～プロフィール～" FontSize="20" Margin="0,30,0,0"/>
+                                <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Owner.Content.CommunityProfile}" Margin="15,0"/>
+
+                            </StackPanel>
+                        </ScrollViewer>
+                    </DataTemplate>
+                </ItemsControl.Resources>
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                        <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
         </Grid>
     </Grid>

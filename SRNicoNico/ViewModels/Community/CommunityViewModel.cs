@@ -13,6 +13,8 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace SRNicoNico.ViewModels {
     public class CommunityViewModel : TabItemViewModel {
@@ -35,10 +37,30 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        public ObservableCollection<TabItemViewModel> TabItems { get; set; }
+
+
+        #region SelectedTab変更通知プロパティ
+        private TabItemViewModel _SelectedTab;
+
+        public TabItemViewModel SelectedTab {
+            get { return _SelectedTab; }
+            set {
+                if(_SelectedTab == value)
+                    return;
+                _SelectedTab = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         public CommunityViewModel(string url) : base("読込中") {
 
-            Community = new NicoNicoCommunity(url);
+            TabItems = new ObservableCollection<TabItemViewModel>();
+            TabItems.Add(new CommunityTopViewModel(this));
 
+            Community = new NicoNicoCommunity(url);
 
             App.ViewModelRoot.AddTabAndSetCurrent(this);
 
@@ -46,6 +68,17 @@ namespace SRNicoNico.ViewModels {
             Content = Community.GetCommunity();
             IsActive = false;
             Name = Content.CommunityTitle;
+        }
+
+        public override void KeyDown(KeyEventArgs e) {
+
+            if(e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.W) {
+
+                Close();
+            } else if(e.Key == Key.F5) {
+
+                Reflesh();
+            }
         }
 
 
@@ -64,7 +97,10 @@ namespace SRNicoNico.ViewModels {
             Task.Run(() => {
 
                 Close();
-                new CommunityViewModel(Content.CommunityUrl);
+                if(Content != null) {
+
+                    new CommunityViewModel(Content.CommunityUrl);
+                }
             });
 
         }

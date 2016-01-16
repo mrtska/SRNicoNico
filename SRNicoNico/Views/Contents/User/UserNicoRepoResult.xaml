@@ -14,6 +14,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:UserNicoRepoViewModel}}"
+             
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
              >
     <i:Interaction.Triggers>
@@ -23,23 +24,23 @@
     </i:Interaction.Triggers>
     
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="ContentControl" x:Key="result">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Closed}" Value="True">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ContentControl">
+                                    <TextBlock Text="非公開、又は表示期限が過ぎています。" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
 
-        <ContentControl>
-            <ContentControl.Resources>
-                <Style TargetType="ContentControl">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Closed}" Value="True">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ContentControl">
-                                        <TextBlock Text="非公開、又は表示期限が過ぎています。" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Resources>
+        <ContentControl Style="{StaticResource result}">
             <Grid>
                 <ListBox SelectedItem="{Binding SelectedItem}"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding UserNicoRepoList}">
 

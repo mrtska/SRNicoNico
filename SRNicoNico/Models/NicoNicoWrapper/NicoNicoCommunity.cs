@@ -51,7 +51,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         var b = new NicoNicoCommunityNews();
 
                         b.Title = notify.SelectSingleNode("child::h2").InnerText;
-                        b.Description = HyperLinkParser.Parse(notify.SelectSingleNode("child::div[@class='desc']").InnerHtml);
+                        b.Description = HyperLinkParser.Parse(notify.SelectSingleNode("child::div[@class='desc']").InnerHtml.Trim());
                         b.Date = notify.SelectSingleNode("child::div[@class='date']").InnerText.Trim();
 
                         ret.CommunityNews.Add(b);

@@ -213,6 +213,7 @@
     <Compile Include="Models\NicoNicoWrapper\NicoNicoVitaUserApi.cs" />
     <Compile Include="Models\NicoNicoWrapper\RequestTimeout.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="ViewModels\Community\CommunityTopViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigGeneralViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigVideoViewModel.cs" />

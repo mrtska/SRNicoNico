@@ -79,7 +79,7 @@ namespace SRNicoNico.ViewModels {
 
                 IsActive = false;
 
-                Status = "ニコレポ取得完了";
+                Status = "";
 
             });
         }

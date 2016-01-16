@@ -12,8 +12,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //ロードするページ
         private int Page = 1;
+        private bool IsEnd = false;
 
         public List<NicoNicoFavoriteCommunityContent> GetFavoriteCommunity() {
+
+            //無駄にアクセスしないように
+            if(IsEnd && Page != 1) {
+
+                return null;
+            }
 
             var url = "http://www.nicovideo.jp/my/community?page=" + Page++;
             var a = NicoNicoWrapperMain.Session.GetAsync(url).Result;
@@ -30,8 +37,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //終了
             if(outers == null) {
 
+                IsEnd = true;
                 return null;
             }
+            
 
             foreach(var entry in outers) {
 
