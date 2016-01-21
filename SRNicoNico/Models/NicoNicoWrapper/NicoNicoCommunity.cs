@@ -167,4 +167,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //日付
         public string Date { get; set; }
     }
+
+    public class NicoNicoCommunityLive {
+
+        //生放送URL
+        public string LiveUrl { get; set; }
+
+        //説明
+        public string ShortDescription { get; set; }
+
+
+    }
+
 }

@@ -64,8 +64,11 @@ namespace SRNicoNico.ViewModels {
             App.ViewModelRoot.AddTabAndSetCurrent(this);
 
             IsActive = true;
+            Status = "コミュニティ情報を取得中";
             Content = Community.GetCommunity();
             IsActive = false;
+            Status = "";
+
             Name = Content.CommunityTitle;
         }
 

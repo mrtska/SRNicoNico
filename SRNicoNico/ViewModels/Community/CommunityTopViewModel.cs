@@ -33,7 +33,7 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-        public CommunityTopViewModel(CommunityViewModel vm) : base("トップ") {
+        public CommunityTopViewModel(CommunityViewModel vm) : base("コミュニティトップ") {
 
             Owner = vm;
         }

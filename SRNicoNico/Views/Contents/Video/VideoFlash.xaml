@@ -8,7 +8,8 @@
              xmlns:metro="http://schemes.grabacr.net/winfx/2015/personal/controls"
              mc:Ignorable="d" 
              d:DesignHeight="208" d:DesignWidth="401"
-             d:DataContext="{d:DesignInstance vm:VideoViewModel}" DataContextChanged="UserControl_DataContextChanged"
+             d:DataContext="{d:DesignInstance vm:VideoViewModel}"
+             DataContextChanged="UserControl_DataContextChanged"
 			 >
     <Grid>
         <WebBrowser x:Name="browser" LoadCompleted="browser_LoadCompleted" AllowDrop="False" metro:WebBrowserHelper.AllowWebBrowserDrop="False" metro:WebBrowserHelper.ScriptErrorsSuppressed="True" />

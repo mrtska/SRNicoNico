@@ -198,7 +198,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DynamicJson.cs" />
-    <Compile Include="Models\NicoNicoViewer\HyperLinkParser.cs" />
+    <Compile Include="Models\NicoNicoViewer\HyperLinkReplacer.cs" />
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
     <Compile Include="Models\NicoNicoViewer\UpdateCheck.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoCommunity.cs" />
@@ -214,6 +214,7 @@
     <Compile Include="Models\NicoNicoWrapper\RequestTimeout.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\Community\CommunityTopViewModel.cs" />
+    <Compile Include="ViewModels\Community\CommunityVideoViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigGeneralViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigVideoViewModel.cs" />
