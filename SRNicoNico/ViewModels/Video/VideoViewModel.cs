@@ -16,8 +16,8 @@ using Livet.Messaging;
 using SRNicoNico.Views.Contents.Video;
 
 using Codeplex.Data;
-using Livet.Messaging.Windows;
-using System.Text;
+using Flash.External;
+using AxShockwaveFlashObjects;
 
 namespace SRNicoNico.ViewModels {
 
@@ -95,19 +95,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        #region WebBrowser変更通知プロパティ
-        private WebBrowser _WebBrowser;
-
-        public WebBrowser WebBrowser {
-            get { return _WebBrowser; }
-            set { 
-                if(_WebBrowser == value)
-                    return;
-                _WebBrowser = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
        
         #region CommentVisibility変更通知プロパティ
         private bool _CommentVisibility = false;
@@ -199,6 +186,23 @@ namespace SRNicoNico.ViewModels {
                 if(_VideoFlash == value)
                     return;
                 _VideoFlash = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        public ExternalInterfaceProxy Proxy;
+
+
+        #region AxShockwaveFlash変更通知プロパティ
+        private AxShockwaveFlash _AxShockwaveFlash;
+
+        public AxShockwaveFlash ShockwaveFlash {
+            get { return _AxShockwaveFlash; }
+            set {
+                if(_AxShockwaveFlash == value)
+                    return;
+                _AxShockwaveFlash = value;
                 RaisePropertyChanged();
             }
         }
@@ -323,9 +327,9 @@ namespace SRNicoNico.ViewModels {
 
         public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
-            VideoUrl = videoUrl + "?watch_harmful=1";
+            VideoUrl = videoUrl;
             Cmsid = Name;
-
+            
             if(Properties.Settings.Default.VideoInfoPlacement == "Right") {
 
                 Application.Current.Resources["VideoColumn"] = 0;
@@ -343,7 +347,7 @@ namespace SRNicoNico.ViewModels {
 
             App.ViewModelRoot.AddTabAndSetCurrent(this);
 
-            Initialize(videoUrl);
+            Initialize(videoUrl + "?watch_harmful=1");
         }
 
         private void Initialize(string videoUrl) {
@@ -385,12 +389,12 @@ namespace SRNicoNico.ViewModels {
                     if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
                         VideoData.VideoType = NicoNicoVideoType.SWF;
-                        WebBrowser.Source = new Uri(GetNMPlayerPath());
+                        ShockwaveFlash.LoadMovie(0, GetNMPlayerPath());
 
                     } else if(VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
 
                         VideoData.VideoType = NicoNicoVideoType.RTMP;
-                        WebBrowser.Source = new Uri(GetRTMPPlayerPath());
+                        ShockwaveFlash.LoadMovie(0, GetRTMPPlayerPath());
                     } else {
 
                         if(VideoData.ApiData.MovieType == "flv") {
@@ -401,8 +405,10 @@ namespace SRNicoNico.ViewModels {
                             VideoData.VideoType = NicoNicoVideoType.MP4;
 
                         }
-                        WebBrowser.Source = new Uri(GetPlayerPath());
+                        ShockwaveFlash.LoadMovie(0, GetPlayerPath());
                     }
+                    Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
+
 
                 }));
                 IsActive = false;
@@ -445,7 +451,7 @@ namespace SRNicoNico.ViewModels {
 
                 if(!Properties.Settings.Default.CommentVisibility) {
 
-                    DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => InvokeScript("JsToggleComment")));
+                    InvokeScript("AsToggleComment");
                 } else {
 
                     CommentVisibility = true;
@@ -509,7 +515,7 @@ namespace SRNicoNico.ViewModels {
             CommentVisibility ^= true;
             Properties.Settings.Default.CommentVisibility = CommentVisibility;
             Properties.Settings.Default.Save();
-            InvokeScript("JsToggleComment");
+            InvokeScript("AsToggleComment");
         }
 
         private int PrevVolume;
@@ -668,7 +674,6 @@ namespace SRNicoNico.ViewModels {
 			} 
             
             //ここからInvoke可能
-            WebBrowser.ObjectForScripting = new ObjectForScriptingHelper(this);
             IsPlaying = true;
             IsInitialized = true;
             Mylist.EnableButtons();
@@ -677,64 +682,100 @@ namespace SRNicoNico.ViewModels {
 
             if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
-                InvokeScript("JsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken);
+                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken);
 
             } else {
 
-                InvokeScript("JsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
+                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
             }
 
 
             Volume = Properties.Settings.Default.Volume;
             ChangeVolume(Volume);
-
             IsRepeat = Properties.Settings.Default.IsRepeat;
-
         }
+        
+
+        private object ExternalInterfaceHandler(object sender, ExternalInterfaceCallEventArgs e) {
+
+            if(e.FunctionCall.Arguments == null) {
+
+                InvokeFromActionScript(e.FunctionCall.FunctionName, "");
+                return null;
+            }
+            
+            InvokeFromActionScript(e.FunctionCall.FunctionName, e.FunctionCall.Arguments.Cast<string>().ToArray());
+            return null;
+        }
+        //fscommandでActionscriptから呼ばれる
+        public void InvokeFromActionScript(string func, params string[] args) {
+
+            switch(func) {
+                case "CsFrame":
+
+                    CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]));
+                    break;
+                case "NetConnection.Connect.Closed":
+
+                    RTMPTimeOut();
+                    break;
+                case "ShowContoller":
+                    ShowFullScreenPopup();
+                    break;
+                case "HideContoller":
+                    HideFullScreenPopup();
+                    break;
+                default:
+                    Console.Write("Invoked From Actionscript:" + func);
+                    Console.WriteLine(" Args:" + args);
+                    break;
+            }
+        }
+
 
 
         //Flashに一時停止命令を送る
         public void Pause() {
 
-            InvokeScript("JsPause");
+            InvokeScript("AsPause");
         }
 
         //Flashに再生再開命令を送る
         public void Resume() {
 
-            InvokeScript("JsResume");
+            InvokeScript("AsResume");
         }
 
         //Flashにシーク命令を送る
         public void Seek(float pos) {
 
-            InvokeScript("JsSeek", pos.ToString());
+            InvokeScript("AsSeek", pos.ToString());
         }
 
         //Flashにコメントリストを送る
         public void InjectComment(string json) {
             
-           InvokeScript("JsInjectComment", json);
+           InvokeScript("AsInjectComment", json);
         }
 
         public void ChangeVolume(int vol) {
 
             Properties.Settings.Default.Volume = vol;
             Properties.Settings.Default.Save();
-            InvokeScript("JsChangeVolume", (vol / 100.0).ToString());
+           // InvokeScript("AsChangeVolume", (vol / 100.0).ToString());
         }
         
         //JSを呼ぶ
-        private void InvokeScript(string func, params string[] args) {
+        private void InvokeScript(string func, params object[] args) {
             
 
-            //読み込み前にボタンを押しても大丈夫なように
-            if(WebBrowser != null && WebBrowser.IsEnabled && WebBrowser.Source != null) {
-
+            //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
+            if(ShockwaveFlash != null && !ShockwaveFlash.IsDisposed) {
+                
                 try {
                     
-                    WebBrowser.InvokeScript(func, args);
-
+                    Proxy.Call(func, args);
+                    
                 } catch(COMException) {
 
                     Console.WriteLine("COMException：" + func);
@@ -745,20 +786,20 @@ namespace SRNicoNico.ViewModels {
         public string GetPlayerPath() {
 
             var cur = System.IO.Directory.GetCurrentDirectory();
-            return cur + "./Flash/NicoNicoPlayer.html";
+            return cur + "./Flash/NicoNicoPlayer.swf";
 
         }
 
         public string GetNMPlayerPath() {
 
             var cur = System.IO.Directory.GetCurrentDirectory();
-            return cur + "./Flash/NicoNicoNMPlayer.html";
+            return cur + "./Flash/NicoNicoNMPlayer.swf";
         }
 
         private string GetRTMPPlayerPath() {
 
             var cur = System.IO.Directory.GetCurrentDirectory();
-            return cur + "./Flash/NicoNicoRTMPPlayer.html";
+            return cur + "./Flash/NicoNicoRTMPPlayer.swf";
         }
 
         //RTMP動画でタイムアウトになった時又は予期せぬ理由でエラーになった時
@@ -777,8 +818,7 @@ namespace SRNicoNico.ViewModels {
         public void DisposeViewModel() {
 
             //ウェブブラウザ開放
-            WebBrowser.Dispose();
-            WebBrowser.IsEnabled = false;
+            ShockwaveFlash.Dispose();
 
             App.ViewModelRoot.RemoveTabAndLastSet(this);
             Dispose();

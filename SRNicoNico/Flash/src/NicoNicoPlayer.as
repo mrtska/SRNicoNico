@@ -12,8 +12,8 @@ package  {
 	import flash.net.NetStream;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	import flash.system.fscommand;
 	import flash.ui.Keyboard;
+	import flash.external.ExternalInterface;
 	import flash.ui.Mouse;
 	
 	[SWF(width="672", height="384")]
@@ -43,14 +43,14 @@ package  {
 			super();
 			//OpenVideo("Z:/issue2.mp4");
 			//OpenVideo("Z:/smile.flv");
-			/*OpenVideo("Z:/smile.swf");
+			//OpenVideo("Z:/smile.swf");
 			//
 			//OpenVideo("Z:/smile (1).mp4");
 			//var now:Date = new Date();
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
-			var loader:URLLoader = new URLLoader();
+			/*var loader:URLLoader = new URLLoader();
 			var req:URLRequest = new URLRequest("Z:/msg.txt");
 			
 			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
@@ -197,7 +197,7 @@ package  {
 			
 			//if(prevTime != (int)(value)) {
 				
-				fscommand("CsFrame", value + ":" + buffer.toString() + ":" + (stream.bytesLoaded - prevLoaded).toString());
+				ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString());
 				prevLoaded = stream.bytesLoaded;
 			//}
 			prevTime = (int) (value);
@@ -210,7 +210,7 @@ package  {
 		
 		private function onAsyncError(e:AsyncErrorEvent):void {
 			
-			fscommand("AsyncError");
+			ExternalInterface.call("AsyncError", "");
 			trace("onAsyncError");
 			
 			trace(e.text);
@@ -267,7 +267,7 @@ package  {
 		
 		private function onConnect(e:NetStatusEvent):void {
 			
-			fscommand(e.info.code);
+			ExternalInterface.call(e.info.code, "");
 			switch(e.info.code) {
 			case "NetConnection.Connect.Success":
 				ConnectStream();

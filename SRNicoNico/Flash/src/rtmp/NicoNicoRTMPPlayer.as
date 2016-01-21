@@ -18,7 +18,6 @@ package rtmp  {
 	import flash.system.ApplicationDomain;
 	import flash.system.Security;
 	import flash.system.SecurityDomain;
-	import flash.system.fscommand;
 	import flash.utils.Timer;
 	
 	
@@ -109,7 +108,7 @@ package rtmp  {
 				fmsToken = videoUrl.substr(videoUrl.indexOf("^") + 1);
 				
 				
-				fscommand("OpenVideo", videoUrl);
+				ExternalInterface.call("OpenVideo", videoUrl);
 				NicoNicoRTMPPlayer.videoUrl = videoUrl.substr(0, videoUrl.indexOf("^"));
 				
 				connection.addEventListener(NetStatusEvent.NET_STATUS, onConnect);
@@ -170,7 +169,7 @@ package rtmp  {
 			
 			if(connection == null) {
 				
-				fscommand("ConnectionError");
+				ExternalInterface.call("ConnectionError", "");
 				return;
 			}
 			//インスタンス作成
@@ -181,7 +180,7 @@ package rtmp  {
 			obj.onMetaData = function(param:Object):void {
 				
 				metadata = param;
-				fscommand("onMetadata", param.toString());
+				ExternalInterface.call("onMetadata", param.toString());
 				for(var propName:String in param){
 					trace(propName + "=" + param[propName]);
 				}
@@ -222,7 +221,7 @@ package rtmp  {
 		
 		private function onSecurityError(e:SecurityErrorEvent):void {
 			
-			fscommand(e.toString());
+			ExternalInterface.call(e.toString(), "");
 			trace(e);
 		}
 		
@@ -241,7 +240,7 @@ package rtmp  {
 			
 			if(prevTime != (int)(value)) {
 				
-				fscommand("CsFrame", value + ":" + buffer.toString() + ":" + (stream.bytesLoaded - prevLoaded).toString());
+				ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString());
 				prevLoaded = stream.bytesLoaded;
 			}
 			prevTime = (int) (value);
@@ -255,14 +254,14 @@ package rtmp  {
 		private function onAsyncError(e:AsyncErrorEvent):void {
 			
 			trace("onAsyncError");
-			fscommand("onAsyncError2", e.text);
+			ExternalInterface.call("onAsyncError2", e.text);
 			trace(e.text);
 		}
 		
 		public override function onNetStatus(e:NetStatusEvent):void {
 			
 			trace("onNetStatus");
-			fscommand("onNetStatus", e.info.code);
+			ExternalInterface.call("onNetStatus", e.info.code);
 			switch(e.info.code) {
 			case "NetStream.Play.Start":
 				
@@ -312,7 +311,7 @@ package rtmp  {
 		
 		private function onConnect(e:NetStatusEvent):void {
 			
-			fscommand(e.info.code, e.info.level);
+			ExternalInterface.call(e.info.code, e.info.level);
 			trace("onConnect:" + e.info.level);
 			trace(e.info.code);
 		

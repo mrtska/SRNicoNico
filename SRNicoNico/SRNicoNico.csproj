@@ -109,6 +109,10 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ExternalInterfaceProxy, Version=1.0.5864.43069, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>obj\x86\Debug\ExternalInterfaceProxy.dll</HintPath>
+    </Reference>
     <Reference Include="FirstFloor.ModernUI">
       <HintPath>..\packages\ModernUI.WPF.1.0.6\lib\net45\FirstFloor.ModernUI.dll</HintPath>
     </Reference>
@@ -144,8 +148,8 @@
       <HintPath>..\packages\MetroRadiance.Core.1.1.0.2\lib\net45\MetroRadiance.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroTrilithon, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroTrilithon.0.1.4\lib\portable-net45+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\MetroTrilithon.dll</HintPath>
+    <Reference Include="MetroTrilithon, Version=0.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroTrilithon.0.1.7\lib\portable-net45+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\MetroTrilithon.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MetroTrilithon.Desktop, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
@@ -157,7 +161,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationFramework.Classic" />
@@ -349,7 +353,6 @@
     <Compile Include="Views\Contents\Video\FullScreenWindow.xaml.cs">
       <DependentUpon>FullScreenWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\NicoNicoViewer\ObjectForScriptingHelper.cs" />
     <Compile Include="Models\NicoNicoViewer\UnixTime.cs" />
     <Compile Include="Models\NicoNicoViewer\VideoData.cs" />
     <Compile Include="Models\NicoNicoViewer\VideoTime.cs" />
@@ -755,7 +758,25 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="AxShockwaveFlashObjects">
+      <Guid>{D27CDB6B-AE6D-11CF-96B8-444553540000}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="ShockwaveFlashObjects">
+      <Guid>{D27CDB6B-AE6D-11CF-96B8-444553540000}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir $(TargetDir)Flash

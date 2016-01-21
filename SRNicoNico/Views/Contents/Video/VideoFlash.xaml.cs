@@ -19,51 +19,34 @@ using System.IO;
 using SRNicoNico.ViewModels;
 using System.Windows.Interop;
 using System.Reflection;
+using Flash.External;
 
 namespace SRNicoNico.Views.Contents.Video {
     /// <summary>
     /// VideoFlash.xaml の相互作用ロジック
     /// </summary>
     public partial class VideoFlash : UserControl {
-
-
-
-
         public VideoFlash() {
             InitializeComponent();
-        }
-
-
-
-
-        private void browser_LoadCompleted(object sender, NavigationEventArgs e) {
-
-#if DEBUG
-            if((bool)(DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue)) {
-                return;
-            }
-#endif
-            if(DataContext is VideoViewModel) {
-
-                VideoViewModel vm = (VideoViewModel)DataContext;
-                //動画オープン
-                vm.OpenVideo();
-            }
-            
         }
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
             if(DataContext is VideoViewModel) {
 
-                VideoViewModel vm = (VideoViewModel) DataContext;
+                var vm = (VideoViewModel) DataContext;
                 if(vm.VideoFlash == this) {
 
                     return;
                 }
+
                 //インスタンスを設定
-                vm.WebBrowser = browser;
+                vm.ShockwaveFlash = flash;
+                flash.AllowScriptAccess = "";
+                vm.Proxy = new ExternalInterfaceProxy(flash);
                 vm.VideoFlash = this;
+
+                Task.Run(() => vm.OpenVideo());
             }
         }
 

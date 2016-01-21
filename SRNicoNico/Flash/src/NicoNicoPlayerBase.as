@@ -6,7 +6,6 @@ package {
 	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.external.ExternalInterface;
-	import flash.system.fscommand;
 	import flash.ui.Mouse;
 	import flash.utils.Timer;
 	
@@ -79,7 +78,10 @@ package {
 			
 			isRollOver = true;
 			Mouse.show();
-			fscommand("ShowContoller");
+			if (ExternalInterface.available) {
+				
+				ExternalInterface.call("ShowContoller", "");
+			}
 		
 			if (!stage.hasEventListener(Event.MOUSE_LEAVE)) {
 
@@ -98,7 +100,7 @@ package {
 			if (isRollOver) {
 			
 				Mouse.hide();
-				fscommand("HideContoller");
+				ExternalInterface.call("HideContoller", "");
 			}
 			
 		}
@@ -125,7 +127,7 @@ package {
 		}
 		public function onNetStatus(e:NetStatusEvent):void {
 		
-			fscommand("NetStatus", e.info.code);
+			ExternalInterface.call("NetStatus", e.info.code);
 		}
 		
 		

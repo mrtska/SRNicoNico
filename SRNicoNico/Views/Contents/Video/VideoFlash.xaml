@@ -9,11 +9,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="208" d:DesignWidth="401"
              d:DataContext="{d:DesignInstance vm:VideoViewModel}"
+             xmlns:a="clr-namespace:AxShockwaveFlashObjects;assembly=AxInterop.ShockwaveFlashObjects"
              DataContextChanged="UserControl_DataContextChanged"
 			 >
     <Grid>
-        <WebBrowser x:Name="browser" LoadCompleted="browser_LoadCompleted" AllowDrop="False" metro:WebBrowserHelper.AllowWebBrowserDrop="False" metro:WebBrowserHelper.ScriptErrorsSuppressed="True" />
+        <WindowsFormsHost>
+            <a:AxShockwaveFlash x:Name="flash"/>
+        </WindowsFormsHost>
 
-        
+
+
+
     </Grid>
 </UserControl>

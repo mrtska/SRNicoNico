@@ -6,7 +6,6 @@ package  {
 	import flash.events.Event;
 	import flash.media.SoundTransform;
 	import flash.net.URLRequest;
-	import flash.system.fscommand;
 	
 	import org.libspark.utils.ForcibleLoader;
 	
@@ -117,7 +116,7 @@ package  {
 			
 			if(prevTime != (int)(value)) {
 				
-				fscommand("CsFrame", time + ":" + buffer.toString() + ":" + (loader.contentLoaderInfo.bytesLoaded - prevLoaded).toString());
+				ExternalInterface.call("CsFrame", time.toString(), buffer.toString(), (loader.contentLoaderInfo.bytesLoaded - prevLoaded).toString());
 				prevLoaded = loader.contentLoaderInfo.bytesLoaded;
 			}
 			prevTime = (int) (value);
