@@ -44,8 +44,6 @@ namespace SRNicoNico.Views.Contents.Video {
                 vm.ShockwaveFlash = flash;
                 vm.Proxy = new ExternalInterfaceProxy(flash);
                 vm.VideoFlash = this;
-
-                Task.Run(() => vm.OpenVideo());
             }
         }
 

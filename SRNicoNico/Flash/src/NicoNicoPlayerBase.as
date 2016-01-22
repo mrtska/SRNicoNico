@@ -126,6 +126,7 @@ package {
 		public function Seek(pos:Number):void {}
 		public function InjectComment(json:String):void {
 		
+				
 			rastarizer.load(json);
 		}
 		

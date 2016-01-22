@@ -26,14 +26,6 @@ namespace SRNicoNico.Views.Contents.Video {
             
 		}
 
-        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-
-            if(DataContext is VideoViewModel) {
-
-                VideoViewModel vm = (VideoViewModel)DataContext;
-                vm.Video = this;
-            }
-        }
         public void OpenHyperLink(object sender, RequestNavigateEventArgs e) {
 
             var url = e.Uri.OriginalString;
@@ -103,5 +95,6 @@ namespace SRNicoNico.Views.Contents.Video {
                 }
             }
         }
+
     }
 }

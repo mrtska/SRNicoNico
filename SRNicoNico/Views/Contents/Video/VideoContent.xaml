@@ -16,9 +16,7 @@
 			 d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              mc:Ignorable="d"
              Focusable="False"
-             DataContextChanged="UserControl_DataContextChanged"
              InputMethod.IsInputMethodSuspended="True"
-             x:Name="VideoRoot"
              >
 
     <Grid>
@@ -30,7 +28,7 @@
                 <RowDefinition Height="{Binding SplitterHeight,Mode=TwoWay}"/>
             </Grid.RowDefinitions>
 
-            <Grid  x:Name="Grid" >
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
                     <RowDefinition Height="154*"/>
@@ -66,24 +64,25 @@
                         </i:Interaction.Triggers>
                     </mui:ModernButton>
                 </Grid>
-
-                <local:VideoFlash Grid.Row="1">
-                    <local:VideoFlash.Style>
-                        <Style TargetType="local:VideoFlash">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding LoadFailed}" Value="True">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="local:VideoFlash">
-                                                <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Text="動画の読み込みに失敗しました。" />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </local:VideoFlash.Style>
-                </local:VideoFlash>
+                <ContentControl Grid.Row="1" x:Name="ContentControl" Content="{Binding VideoFlash}">
+                   <!-- <local:VideoFlash>
+                        <local:VideoFlash.Style>
+                            <Style TargetType="local:VideoFlash">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding LoadFailed}" Value="True">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="local:VideoFlash">
+                                                    <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Text="動画の読み込みに失敗しました。" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </local:VideoFlash.Style>
+                    </local:VideoFlash>-->
+                </ContentControl>
                 <local:VideoController Grid.Row="2" />
             </Grid>
 

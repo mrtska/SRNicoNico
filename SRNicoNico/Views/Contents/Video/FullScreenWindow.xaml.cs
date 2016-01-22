@@ -31,17 +31,6 @@ namespace SRNicoNico.Views.Contents.Video {
             InitializeComponent();
         }
 
-        private void Window_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-
-            if(DataContext is VideoViewModel) {
-
-                var vm = (VideoViewModel) DataContext;
-                vm.FullScreenWindow = this;
-                Focus();
-            }
-
-        }
-
         private void screen_KeyDown(object sender, KeyEventArgs e) {
 
             if(DataContext is VideoViewModel) {

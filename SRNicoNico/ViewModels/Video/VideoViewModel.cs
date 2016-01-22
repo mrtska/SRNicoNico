@@ -18,6 +18,7 @@ using SRNicoNico.Views.Contents.Video;
 using Codeplex.Data;
 using Flash.External;
 using AxShockwaveFlashObjects;
+using Livet.Messaging.Windows;
 
 namespace SRNicoNico.ViewModels {
 
@@ -191,6 +192,22 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+
+        #region FullScreenVideoFlash変更通知プロパティ
+        private VideoFlash _FullScreenVideoFlash;
+
+        public VideoFlash FullScreenVideoFlash {
+            get { return _FullScreenVideoFlash; }
+            set { 
+                if(_FullScreenVideoFlash == value)
+                    return;
+                _FullScreenVideoFlash = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        //Flashの関数を呼ぶためのもの
         public ExternalInterfaceProxy Proxy;
 
 
@@ -208,44 +225,14 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        #region Video変更通知プロパティ UI要素 仕方ないんや・・・
-        private VideoContent _Video;
-
-        public VideoContent Video {
-            get { return _Video; }
-            set { 
-                if(_Video == value)
-                    return;
-                _Video = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region FullScreenWindow変更通知プロパティ UI要素 仕方ないんです
-        private FullScreenWindow _FullScreenWindow;
-
-        public FullScreenWindow FullScreenWindow {
-            get { return _FullScreenWindow; }
-            set { 
-                if(_FullScreenWindow == value)
-                    return;
-                _FullScreenWindow = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        public string VideoInfoPlacement { get {
-
+        public string VideoInfoPlacement {
+            get {
                 return App.ViewModelRoot.Config.Video.VideoPlacement;
             }
             set {
-
                 RaisePropertyChanged();
             }
         }
-
 
         #region SplitterHeight変更通知プロパティ
 
@@ -329,7 +316,9 @@ namespace SRNicoNico.ViewModels {
 
             VideoUrl = videoUrl;
             Cmsid = Name;
-            
+            VideoFlash = new VideoFlash() { DataContext = this };
+
+
             if(Properties.Settings.Default.VideoInfoPlacement == "Right") {
 
                 Application.Current.Resources["VideoColumn"] = 0;
@@ -347,11 +336,12 @@ namespace SRNicoNico.ViewModels {
 
             App.ViewModelRoot.AddTabAndSetCurrent(this);
 
-            
+
             Initialize(videoUrl + "?watch_harmful=1");
         }
 
         private void Initialize(string videoUrl) {
+
 
             IsActive = true;
             Task.Run(() => {
@@ -381,11 +371,6 @@ namespace SRNicoNico.ViewModels {
                 }
 
                 DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-                    while(VideoFlash == null) {
-
-                        Thread.Sleep(1);
-                    }
 
                     if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
@@ -432,32 +417,35 @@ namespace SRNicoNico.ViewModels {
                     });
                 }
 
-                NicoNicoComment comment = new NicoNicoComment(VideoData.ApiData.GetFlv, this);
+                OpenVideo();
 
-                List<NicoNicoCommentEntry> list = comment.GetComment();
+                Task.Run(() => {
 
-                
-                if(list != null) {
+                    var comment = new NicoNicoComment(VideoData.ApiData.GetFlv, this);
 
-                    foreach(NicoNicoCommentEntry entry in list) {
-                            
-                        VideoData.CommentData.Add(new CommentEntryViewModel(entry));
+                    var list = comment.GetComment();
+                    if(list != null) {
+
+                        foreach(NicoNicoCommentEntry entry in list) {
+
+                            VideoData.CommentData.Add(new CommentEntryViewModel(entry));
+                        }
+
+                        dynamic json = new DynamicJson();
+                        json.array = list;
+
+                        InjectComment(json.ToString());
                     }
 
-                    dynamic json = new DynamicJson();
-                    json.array = list;
+                    if(!Properties.Settings.Default.CommentVisibility) {
 
-                    DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => InjectComment(json.ToString())));
-                }
+                        InvokeScript("AsToggleComment");
+                    } else {
 
-                if(!Properties.Settings.Default.CommentVisibility) {
-
-                    InvokeScript("AsToggleComment");
-                } else {
-
-                    CommentVisibility = true;
-                }
-                //App.ViewModelRoot.StatusBar.Status = "動画取得完了";
+                        CommentVisibility = true;
+                    }
+                });
+               
             });
         }
 
@@ -545,11 +533,12 @@ namespace SRNicoNico.ViewModels {
             IsFullScreen = true;
 
             //リソースに登録
-            Application.Current.Resources["VideoFlashKey"] = VideoFlash;
             var message = new TransitionMessage(typeof(FullScreenWindow), this, TransitionMode.NewOrActive);
 
             //ウィンドウからFlash部分を消去
-            Video.Grid.Children.Remove(VideoFlash);
+            var temp = VideoFlash;
+            VideoFlash = null;
+            FullScreenVideoFlash = temp;
 
             App.ViewModelRoot.Visibility = Visibility.Hidden;
             //フルスクリーンウィンドウ表示
@@ -568,14 +557,15 @@ namespace SRNicoNico.ViewModels {
             IsFullScreen = false;
 
             //Flash部分をフルスクリーンウィンドウから消去
-            FullScreenWindow.ContentControl.Content = null;
+            Messenger.Raise(new WindowActionMessage(WindowAction.Close));
 
             //ウィンドウを閉じる
-            FullScreenWindow.Close();
             App.ViewModelRoot.Visibility = Visibility.Visible;
 
             //ウィンドウにFlash部分を追加
-            Video.Grid.Children.Add(VideoFlash);
+            var temp = FullScreenVideoFlash;
+            FullScreenVideoFlash = null;
+            VideoFlash = temp;
 
         }
 
@@ -617,8 +607,6 @@ namespace SRNicoNico.ViewModels {
         //1フレーム毎に呼ばれる
         public void CsFrame(float time, float buffer, long bps) {
 
-            
-            
             if(prevTime != (int)time) {
 
                 double comp = bps / 1024;
@@ -721,7 +709,7 @@ namespace SRNicoNico.ViewModels {
                     HideFullScreenPopup();
                     break;
                 default:
-                    Console.Write("Invoked From Actionscript:" + func);
+                    Console.WriteLine("Invoked From Actionscript:" + func);
                     break;
             }
         }
@@ -869,6 +857,8 @@ namespace SRNicoNico.ViewModels {
                         Reflesh();
                         break;
                 }
+
+                //Ctrl+Wで閉じる
                 if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
 
                     if(e.Key == Key.W) {
