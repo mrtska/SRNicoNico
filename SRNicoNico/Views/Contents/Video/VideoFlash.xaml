@@ -16,9 +16,5 @@
         <WindowsFormsHost>
             <a:AxShockwaveFlash x:Name="flash"/>
         </WindowsFormsHost>
-
-
-
-
     </Grid>
 </UserControl>

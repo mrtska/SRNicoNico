@@ -6,6 +6,7 @@ package  {
 	import flash.events.Event;
 	import flash.media.SoundTransform;
 	import flash.net.URLRequest;
+	import flash.external.ExternalInterface;
 	
 	import org.libspark.utils.ForcibleLoader;
 	

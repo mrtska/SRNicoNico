@@ -11,6 +11,7 @@ package {
 	
 	import comment.CommentRasterizer;
 	
+	
 	//抽象クラスのように使う
 	public class NicoNicoPlayerBase extends Sprite {
 		
@@ -37,12 +38,15 @@ package {
 				ExternalInterface.addCallback("AsInjectComment", InjectComment);
 				ExternalInterface.addCallback("AsToggleComment", ToggleComment);
 				ExternalInterface.addCallback("AsChangeVolume", ChangeVolume);
+				
+				ExternalInterface.marshallExceptions = true;
 			}
 			
 			rastarizer = new CommentRasterizer();
 			
 			rastarizer.updateBounds(stage.stageWidth, stage.stageHeight);
-			addChild(rastarizer);
+			
+			
 			
 			//OpenVideo("Z:/smile.flv");
 			
@@ -66,27 +70,29 @@ package {
 			
 			
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, move);
+			
 		}
 		
 		private var timer:Timer;
 		private var isRollOver:Boolean;
 		
-		private function move(e:MouseEvent):void {
+		public function move(e:MouseEvent):void {
+			
 			
 			timer.reset();
 			timer.start();
 			
 			isRollOver = true;
 			Mouse.show();
-			if (ExternalInterface.available) {
-				
-				ExternalInterface.call("ShowContoller", "");
-			}
 		
 			if (!stage.hasEventListener(Event.MOUSE_LEAVE)) {
 
 				stage.addEventListener(Event.MOUSE_LEAVE, leave);
 			}
+			
+				
+			ExternalInterface.call("ShowController");
+
 		}
 		
 		private function leave(e:Event):void {
@@ -100,7 +106,8 @@ package {
 			if (isRollOver) {
 			
 				Mouse.hide();
-				ExternalInterface.call("HideContoller", "");
+				ExternalInterface.call("HideController");
+				
 			}
 			
 		}

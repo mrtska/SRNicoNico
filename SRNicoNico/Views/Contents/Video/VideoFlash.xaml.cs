@@ -42,7 +42,6 @@ namespace SRNicoNico.Views.Contents.Video {
 
                 //インスタンスを設定
                 vm.ShockwaveFlash = flash;
-                flash.AllowScriptAccess = "";
                 vm.Proxy = new ExternalInterfaceProxy(flash);
                 vm.VideoFlash = this;
 

@@ -315,7 +315,7 @@ namespace SRNicoNico.ViewModels {
 
         public bool FullScreenPopup {
             get { return _FullScreenPopup; }
-            set { 
+            private set { 
                 if(_FullScreenPopup == value)
                     return;
                 _FullScreenPopup = value;
@@ -347,6 +347,7 @@ namespace SRNicoNico.ViewModels {
 
             App.ViewModelRoot.AddTabAndSetCurrent(this);
 
+            
             Initialize(videoUrl + "?watch_harmful=1");
         }
 
@@ -616,8 +617,8 @@ namespace SRNicoNico.ViewModels {
         //1フレーム毎に呼ばれる
         public void CsFrame(float time, float buffer, long bps) {
 
-
-
+            
+            
             if(prevTime != (int)time) {
 
                 double comp = bps / 1024;
@@ -664,7 +665,7 @@ namespace SRNicoNico.ViewModels {
             Time.CurrentTime = (int)time;
             Time.CurrentTimeString = NicoNicoUtil.ConvertTime(Time.CurrentTime);
         }
-
+        
         //このメソッド以降はWebBrowserプロパティはnullではない
         public void OpenVideo() {
 
@@ -677,19 +678,19 @@ namespace SRNicoNico.ViewModels {
             IsPlaying = true;
             IsInitialized = true;
             Mylist.EnableButtons();
-
+            
             Console.WriteLine("VideoUrl:" + VideoData.ApiData.GetFlv.VideoUrl);
 
             if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
                 InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken);
-
+                
             } else {
 
                 InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
             }
-
-
+            
+            
             Volume = Properties.Settings.Default.Volume;
             ChangeVolume(Volume);
             IsRepeat = Properties.Settings.Default.IsRepeat;
@@ -698,36 +699,29 @@ namespace SRNicoNico.ViewModels {
 
         private object ExternalInterfaceHandler(object sender, ExternalInterfaceCallEventArgs e) {
 
-            if(e.FunctionCall.Arguments == null) {
-
-                InvokeFromActionScript(e.FunctionCall.FunctionName, "");
-                return null;
-            }
-            
-            InvokeFromActionScript(e.FunctionCall.FunctionName, e.FunctionCall.Arguments.Cast<string>().ToArray());
-            return null;
+            InvokeFromActionScript(e.FunctionCall.FunctionName, e.FunctionCall.Arguments);
+            return false;
         }
         //fscommandでActionscriptから呼ばれる
         public void InvokeFromActionScript(string func, params string[] args) {
 
             switch(func) {
                 case "CsFrame":
-
+                    
                     CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]));
                     break;
                 case "NetConnection.Connect.Closed":
-
+                    
                     RTMPTimeOut();
                     break;
-                case "ShowContoller":
+                case "ShowController":
                     ShowFullScreenPopup();
                     break;
-                case "HideContoller":
+                case "HideController":
                     HideFullScreenPopup();
                     break;
                 default:
                     Console.Write("Invoked From Actionscript:" + func);
-                    Console.WriteLine(" Args:" + args);
                     break;
             }
         }
@@ -762,13 +756,12 @@ namespace SRNicoNico.ViewModels {
 
             Properties.Settings.Default.Volume = vol;
             Properties.Settings.Default.Save();
-           // InvokeScript("AsChangeVolume", (vol / 100.0).ToString());
+            InvokeScript("AsChangeVolume", (vol / 100.0).ToString());
         }
         
         //JSを呼ぶ
         private void InvokeScript(string func, params object[] args) {
             
-
             //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
             if(ShockwaveFlash != null && !ShockwaveFlash.IsDisposed) {
                 

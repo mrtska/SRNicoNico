@@ -172,6 +172,8 @@ package  {
 					
 					video.attachNetStream(stream);
 					addChild(video);
+					addChild(rastarizer);
+
 				}
 				
 				addEventListener(Event.ENTER_FRAME, onFrame);
@@ -210,7 +212,7 @@ package  {
 		
 		private function onAsyncError(e:AsyncErrorEvent):void {
 			
-			ExternalInterface.call("AsyncError", "");
+			ExternalInterface.call("AsyncError");
 			trace("onAsyncError");
 			
 			trace(e.text);
@@ -267,7 +269,7 @@ package  {
 		
 		private function onConnect(e:NetStatusEvent):void {
 			
-			ExternalInterface.call(e.info.code, "");
+			ExternalInterface.call(e.info.code);
 			switch(e.info.code) {
 			case "NetConnection.Connect.Success":
 				ConnectStream();

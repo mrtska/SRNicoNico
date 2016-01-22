@@ -19,6 +19,8 @@ package comment {
 			
 			commentList = new Vector.<CommentEntry>();
 			drawingList = new Vector.<CommentEntry>();
+			
+			
 		}
 		
 		//フィールド初期化

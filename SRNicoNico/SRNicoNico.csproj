@@ -780,8 +780,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir $(TargetDir)Flash
-xcopy /Y  $(ProjectDir)Flash\bin\*.swf $(TargetDir)Flash
-xcopy /Y /Q /S /E $(ProjectDir)Html $(TargetDir)Flash</PostBuildEvent>
+
+xcopy /Y  $(ProjectDir)Flash\bin\*.swf  $(TargetDir)Flash</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

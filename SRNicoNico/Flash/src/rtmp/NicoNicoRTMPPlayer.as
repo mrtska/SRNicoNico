@@ -19,7 +19,7 @@ package rtmp  {
 	import flash.system.Security;
 	import flash.system.SecurityDomain;
 	import flash.utils.Timer;
-	
+	import flash.external.ExternalInterface;
 	
 	[SWF(width="672", height="384")]
 	public class NicoNicoRTMPPlayer extends NicoNicoPlayerBase {
