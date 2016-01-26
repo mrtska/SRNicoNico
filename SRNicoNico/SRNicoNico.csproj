@@ -109,9 +109,9 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ExternalInterfaceProxy, Version=1.0.5864.43069, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ExternalInterfaceProxy, Version=1.0.5865.37006, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>obj\x86\Debug\ExternalInterfaceProxy.dll</HintPath>
+      <HintPath>InfrastructureAssemblies\ExternalInterfaceProxy.dll</HintPath>
     </Reference>
     <Reference Include="FirstFloor.ModernUI">
       <HintPath>..\packages\ModernUI.WPF.1.0.6\lib\net45\FirstFloor.ModernUI.dll</HintPath>

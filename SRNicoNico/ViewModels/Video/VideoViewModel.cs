@@ -316,8 +316,7 @@ namespace SRNicoNico.ViewModels {
 
             VideoUrl = videoUrl;
             Cmsid = Name;
-            VideoFlash = new VideoFlash() { DataContext = this };
-
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => VideoFlash = new VideoFlash() { DataContext = this }));
 
             if(Properties.Settings.Default.VideoInfoPlacement == "Right") {
 
@@ -603,15 +602,16 @@ namespace SRNicoNico.ViewModels {
         }
 
         private int prevTime;
-
+        private double sumBPS;
+        
         //1フレーム毎に呼ばれる
         public void CsFrame(float time, float buffer, long bps) {
 
             if(prevTime != (int)time) {
+               
+                double comp = sumBPS / 1024;
 
-                double comp = bps / 1024;
-
-                //大きいから単位を変えましょう
+                //大きいから単位を変える
                 if(comp > 1024) {
 
                     BPS = Math.Floor((comp / 1024) * 100) / 100 + "MiB/秒";
@@ -619,6 +619,10 @@ namespace SRNicoNico.ViewModels {
 
                     BPS = Math.Floor(comp * 100) / 100 + "KiB/秒";
                 }
+                sumBPS = 0;
+            }else {
+
+                sumBPS += bps;
             }
             prevTime = (int)time;
            
@@ -690,7 +694,7 @@ namespace SRNicoNico.ViewModels {
             InvokeFromActionScript(e.FunctionCall.FunctionName, e.FunctionCall.Arguments);
             return false;
         }
-        //fscommandでActionscriptから呼ばれる
+        //ExternalIntarface.callでActionscriptから呼ばれる
         public void InvokeFromActionScript(string func, params string[] args) {
 
             switch(func) {

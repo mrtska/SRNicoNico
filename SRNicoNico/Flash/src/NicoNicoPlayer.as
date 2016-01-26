@@ -156,25 +156,28 @@ package  {
 							aspect = 0;
 
 						}
-						stageVideo.viewPort = new  Rectangle(aspect, 0, 512, stage.stageHeight);
+						stageVideo.viewPort = new Rectangle(aspect, 0, 512, stage.stageHeight);
 
 					} else {
 						
-						stageVideo.viewPort = new  Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
+						stageVideo.viewPort = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
 					}
 					
 					stageVideo.attachNetStream(stream);
 					
 				} else {
 					
-					var video:Video = new Video(stage.stageWidth, param.height);
+					var video:Video = new Video(stage.stageWidth, stage.stageHeight);
+
 					video.smoothing = true;
+					ExternalInterface.call("call" + ":" + stage.stageWidth + " " + stage.stageHeight);
 					
 					video.attachNetStream(stream);
 					addChild(video);
-					addChild(rastarizer);
 
 				}
+				addChild(rastarizer);
+
 				
 				addEventListener(Event.ENTER_FRAME, onFrame);
 			}

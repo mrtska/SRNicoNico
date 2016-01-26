@@ -18,7 +18,7 @@ using System.Windows.Markup;
 using System.IO;
 using SRNicoNico.ViewModels;
 using System.Windows.Interop;
-using System.Reflection;
+using AxShockwaveFlashObjects;
 using Flash.External;
 
 namespace SRNicoNico.Views.Contents.Video {
@@ -29,7 +29,7 @@ namespace SRNicoNico.Views.Contents.Video {
         public VideoFlash() {
             InitializeComponent();
         }
-
+        
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
             if(DataContext is VideoViewModel) {
@@ -46,6 +46,5 @@ namespace SRNicoNico.Views.Contents.Video {
                 vm.VideoFlash = this;
             }
         }
-
     }
 }
