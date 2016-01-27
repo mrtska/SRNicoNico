@@ -18,34 +18,34 @@ namespace SRNicoNico.Views.Controls {
 			set { SetValue(VideoTimeProperty, value); }
 		}
 
-
 		// Using a DependencyProperty as the backing store for VideoTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty VideoTimeProperty =
 			DependencyProperty.Register(nameof(VideoTime), typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
 
 
-
-		
-
-		public long CurrentTime {
+        public long CurrentTime {
 			get { return (long)GetValue(CurrentTimeProperty); }
-			set {
-                SetValue(CurrentTimeProperty, value);
-                //CurrentTimeWidth = (ActualWidth - 10) / VideoTime * value;
-                Console.WriteLine("Current:"+value);
-                CurrentTimeWidth = 100;
-                SeekCursor = new Thickness(CurrentTimeWidth, 0, 0, 0);
-                BufferedTimeWidth = BufferedTime * ActualWidth;
-            }
+			set { SetValue(CurrentTimeProperty, value); }
 		}
 
 		// Using a DependencyProperty as the backing store for CurrentTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty CurrentTimeProperty =
-			DependencyProperty.Register(nameof(CurrentTime), typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
+			DependencyProperty.Register(nameof(CurrentTime), typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L, OnCurrentTimePropertyChanged));
+
+        private static void OnCurrentTimePropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
+            var control = source as SeekBar;
+            long time = (long)e.NewValue;
+
+            if(!control.IsDrag) {
+
+                control.CurrentTimeWidth = (control.ActualWidth - 10) / control.VideoTime * control.CurrentTime;
+                control.SeekCursor = new Thickness(control.CurrentTimeWidth, 0, 0, 0);
+            }
+
+        }
 
 
-
-		public double CurrentTimeWidth {
+        public double CurrentTimeWidth {
 			get { return (double)GetValue(CurrentTimeWidthProperty); }
 			set { SetValue(CurrentTimeWidthProperty, value); }
 		}
@@ -62,11 +62,18 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for BufferedTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty BufferedTimeProperty =
-			DependencyProperty.Register(nameof(BufferedTime), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0D));
+			DependencyProperty.Register(nameof(BufferedTime), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0D, OnBufferTimePropertyChanged));
+
+        private static void OnBufferTimePropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
+            var control = source as SeekBar;
+            double time = (double)e.NewValue;
+
+            control.BufferedTimeWidth = control.BufferedTime * control.ActualWidth;
+
+        }
 
 
-
-		public double BufferedTimeWidth {
+        public double BufferedTimeWidth {
 			get { return (double)GetValue(BufferedTimeWidthProperty); }
 			set { SetValue(BufferedTimeWidthProperty, value); }
 		}
@@ -173,11 +180,6 @@ namespace SRNicoNico.Views.Controls {
 
         public SeekBar() {
 
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(500);
-            timer.Tick += Fired;
-            timer.Start();  
-
             MouseLeftButtonDown += SeekBar_MouseLeftButtonDown;
             MouseLeftButtonUp += SeekBar_MouseLeftButtonUp;
             MouseMove += SeekBar_MouseMove;
@@ -201,9 +203,6 @@ namespace SRNicoNico.Views.Controls {
                 CurrentTimeWidth = (ActualWidth ) / VideoTime * ans;
                 SeekCursor = new Thickness(x - 5, 0, 0, 0);
 
-            } else {
-
-                
             }
         }
 
@@ -221,20 +220,5 @@ namespace SRNicoNico.Views.Controls {
             el.CaptureMouse();
 
         }
-
-        private void Fired(object sender, EventArgs e) {
-
-            if(!IsDrag) {
-
-                CurrentTimeWidth = (ActualWidth - 10) / VideoTime * CurrentTime;
-                SeekCursor = new Thickness(CurrentTimeWidth, 0, 0, 0);
-                BufferedTimeWidth = BufferedTime * ActualWidth;
-            }
-
-        }
-
-
-
-
 	}
 }

@@ -6,12 +6,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SeekBar}">
-                    <Border Background="{TemplateBinding Background}" 
-                            BorderBrush="{TemplateBinding BorderBrush}"  
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}" >
+                    <Border Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" >
                         <Grid>
-
                             <Rectangle Fill="#FF404040" />
                             <Rectangle Panel.ZIndex="1"  HorizontalAlignment="Left" Width="{TemplateBinding BufferedTimeWidth}" Fill="#FF555555" />
                             <Rectangle Panel.ZIndex="2" HorizontalAlignment="Left" Width="{TemplateBinding CurrentTimeWidth}" Fill="#FF007AFF"/>
@@ -26,7 +22,7 @@
 
                             </Popup>
 
-                           
+
                             <Popup AllowsTransparency="False" IsOpen="{TemplateBinding IsPopupOpen}"  PlacementRectangle="{TemplateBinding PopupRect}" PopupAnimation="Slide">
                                 <Border BorderThickness="1" Background="{DynamicResource ThemeBrushKey}" BorderBrush="#FFAAAAAA">
 
@@ -40,5 +36,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
 </ResourceDictionary>

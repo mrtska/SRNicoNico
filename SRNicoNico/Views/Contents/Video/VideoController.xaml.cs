@@ -29,7 +29,7 @@ namespace SRNicoNico.Views.Contents.Video {
 
                 return;
             }
-            VideoViewModel vm = (VideoViewModel) DataContext;
+            var vm = (VideoViewModel) DataContext;
 
 			//マウスカーソルX座標
 			double x = e.GetPosition(this).X;
@@ -47,11 +47,9 @@ namespace SRNicoNico.Views.Contents.Video {
 
             if(Seek.IsPopupImageOpen) {
 
-				NicoNicoStoryBoardData Story = vm.VideoData.StoryBoardData;
-
+				var Story = vm.VideoData.StoryBoardData;
 
                 if(Story.BitmapCollection.ContainsKey(ans - ans % Story.Interval)) {
-
 
                     Seek.PopupImageRect = new Rect(x - Story.Width / 2, -10, Story.Width, Story.Height);
 
@@ -80,7 +78,7 @@ namespace SRNicoNico.Views.Contents.Video {
 
                 return;
             }
-            VideoViewModel vm = (VideoViewModel)DataContext;
+            var vm = (VideoViewModel)DataContext;
             
 
             if(vm.VideoData.StoryBoardData != null) {
@@ -97,7 +95,7 @@ namespace SRNicoNico.Views.Contents.Video {
 
                 return;
             }
-            VideoViewModel vm = (VideoViewModel)DataContext;
+            var vm = (VideoViewModel)DataContext;
 
             double x = e.GetPosition(this).X;
             int ans = (int)(x / ActualWidth * Seek.VideoTime);

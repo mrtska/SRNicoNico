@@ -656,7 +656,6 @@ namespace SRNicoNico.ViewModels {
                 sumBPS += bps;
             }
             prevTime = (int)time;
-           
 
 
             Time.BufferedTime = buffer;
