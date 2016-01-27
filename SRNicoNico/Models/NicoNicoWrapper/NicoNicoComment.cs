@@ -23,16 +23,18 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		private const string GetWayBackKeyApiUrl = "http://flapi.nicovideo.jp/api/getwaybackkey?thread=";
 
 		//サーバーURL
-		private readonly Uri ServerUrl;
+		private Uri ServerUrl;
 
 		//スレッドID
-		private readonly string ThreadId;
+		private string ThreadId;
 
 		//ユーザーID
-		private readonly string UserId;
+		private string UserId;
 
 		//プレミアムか否か
-		private readonly bool IsPremium;
+		private bool IsPremium;
+
+
 
 		//動画の長さ
 		private readonly uint Length;
@@ -127,7 +129,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			
 		}
 
-        public  void Post(string comment, VideoCommentDecoration deco) {
+        public  void Post(string comment, string mail, string vpos) {
 
 
 

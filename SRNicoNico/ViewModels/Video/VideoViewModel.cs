@@ -24,6 +24,12 @@ namespace SRNicoNico.ViewModels {
 
 	public class VideoViewModel : TabItemViewModel {
 
+        //APIバックエンドインスタンス
+        public NicoNicoWatchApi WatchApi;
+
+        //コメントバックエンドインスタンス
+        public NicoNicoComment CommentInstance;
+
 		//API結果
 		#region VideoData変更通知プロパティ
 		private VideoData _VideoData;
@@ -377,7 +383,8 @@ namespace SRNicoNico.ViewModels {
 
                 Status = "動画情報取得中";
                 //動画情報取得
-                VideoData.ApiData = NicoNicoWatchApi.GetWatchApiData(videoUrl);
+                WatchApi = new NicoNicoWatchApi(videoUrl, this);
+                VideoData.ApiData = WatchApi.GetWatchApiData();
 
                 //ロードに失敗したら
                 if(VideoData.ApiData == null) {
@@ -436,7 +443,7 @@ namespace SRNicoNico.ViewModels {
 
                         Status = "ストーリーボード取得中";
 
-                        NicoNicoStoryBoard sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
+                        var sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
                         VideoData.StoryBoardData = sb.GetStoryBoardData();
                         Status = "ストーリーボード取得完了";
                     });
@@ -446,9 +453,8 @@ namespace SRNicoNico.ViewModels {
 
                 Task.Run(() => {
 
-                    var comment = new NicoNicoComment(VideoData.ApiData.GetFlv, this);
-
-                    var list = comment.GetComment();
+                    CommentInstance = new NicoNicoComment(VideoData.ApiData.GetFlv, this);
+                    var list = CommentInstance.GetComment();
                     if(list != null) {
 
                         foreach(NicoNicoCommentEntry entry in list) {
@@ -847,7 +853,7 @@ namespace SRNicoNico.ViewModels {
                         Comment.AcceptEnter = true;
                     } else {
                         Comment.AcceptEnter = false;
-
+                        Comment.Post();
 
                     }
                 }
@@ -921,14 +927,14 @@ namespace SRNicoNico.ViewModels {
 
                 if(!VideoData.ApiData.UploaderIsFavorited) {
 
-                    var status = NicoNicoWatchApi.AddFavorite(this, VideoData.ApiData.UploaderId, VideoData.ApiData.Token);
+                    var status = WatchApi.AddFavorite(VideoData.ApiData.UploaderId, VideoData.ApiData.Token);
                     if(status == Models.NicoNicoWrapper.Status.Success) {
 
                         VideoData.ApiData.UploaderIsFavorited = true;
                     }
                 } else {
 
-                    var status = NicoNicoWatchApi.DeleteFavorite(this, VideoData.ApiData.UploaderId, VideoData.ApiData.Token);
+                    var status = WatchApi.DeleteFavorite(VideoData.ApiData.UploaderId, VideoData.ApiData.Token);
                     if(status == Models.NicoNicoWrapper.Status.Success) {
 
                         VideoData.ApiData.UploaderIsFavorited = false;

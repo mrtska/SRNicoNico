@@ -141,6 +141,7 @@ namespace SRNicoNico.ViewModels {
 
         public void Post() {
 
+            Owner.CommentInstance.Post(Text, mail, Owner.vpos);
 
         }
 

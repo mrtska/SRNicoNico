@@ -26,11 +26,26 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     //動画を見るうえで必要な情報をこのAPIだけで全て取得できるヤバいAPI
     public sealed class NicoNicoWatchApi : NotificationObject {
 
+        private string VideoPage;
+
+        private VideoViewModel Owner;
+
+
+        public NicoNicoWatchApi(string videoPage, VideoViewModel vm) {
+
+            VideoPage = videoPage;
+            Owner = vm;
+
+        }
+
+
+
+
         //動画ページを指定
-        public static WatchApiData GetWatchApiData(string videoPage) {
+        public WatchApiData GetWatchApiData() {
 
             //動画ページのhtml取得
-            var response = NicoNicoWrapperMain.GetSession().GetResponseAsync(videoPage).Result;
+            var response = NicoNicoWrapperMain.GetSession().GetResponseAsync(VideoPage).Result;
 
             //チャンネル、公式動画
             if(response.StatusCode == HttpStatusCode.MovedPermanently) {
@@ -164,9 +179,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             return ret;
         }
 
-        public static Status AddFavorite(VideoViewModel vm, string userId, string token) {
+        public Status AddFavorite(string userId, string token) {
 
-            vm.Status = "お気に入りに登録中";
+            Owner.Status = "お気に入りに登録中";
 
 
             var add = "http://www.nicovideo.jp/api/watchitem/add";
@@ -185,23 +200,23 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
 
-                vm.VideoData.ApiData.UploaderIsFavorited = true;
+                Owner.VideoData.ApiData.UploaderIsFavorited = true;
 
-                vm.Status = "";
+                Owner.Status = "";
 
                 return Status.Success;
             } catch(RequestTimeout) {
 
-                vm.Status = "お気に入り登録に失敗しました。";
+                Owner.Status = "お気に入り登録に失敗しました。";
                 return Status.Failed;
             }
             
 
         }
 
-        public static Status DeleteFavorite(VideoViewModel vm, string userId, string token) {
+        public Status DeleteFavorite(string userId, string token) {
 
-            vm.Status = "お気に入り解除中";
+            Owner.Status = "お気に入り解除中";
             
 
             var del = "http://www.nicovideo.jp/api/watchitem/delete";
@@ -219,14 +234,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
 
-                vm.VideoData.ApiData.UploaderIsFavorited = false;
-                vm.Status = "";
+                Owner.VideoData.ApiData.UploaderIsFavorited = false;
+                Owner.Status = "";
 
                 return Status.Success;
 
             } catch(RequestTimeout) {
 
-                vm.Status = "お気に入り解除に失敗しました。";
+                Owner.Status = "お気に入り解除に失敗しました。";
                 return Status.Failed;
             }
         }
