@@ -657,7 +657,6 @@ namespace SRNicoNico.ViewModels {
             }
             prevTime = (int)time;
 
-
             Time.BufferedTime = buffer;
             
             //Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + Time.BufferedTime + " bps:" + bps);

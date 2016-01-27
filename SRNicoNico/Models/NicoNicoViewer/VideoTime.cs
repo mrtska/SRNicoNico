@@ -7,10 +7,6 @@ using Livet;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
 	public class VideoTime : NotificationObject {
-        /*
-         * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
-         */
-
 
         //動画の現在時間
         #region CurrentTime変更通知プロパティ

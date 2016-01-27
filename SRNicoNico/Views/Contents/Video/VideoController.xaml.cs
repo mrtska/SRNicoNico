@@ -8,6 +8,9 @@ using System.Drawing;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.ViewModels;
+using System.Runtime.InteropServices;
+using System.Windows.Controls.Primitives;
+using System.Windows.Interop;
 
 namespace SRNicoNico.Views.Contents.Video {
 	/// <summary>
@@ -111,5 +114,19 @@ namespace SRNicoNico.Views.Contents.Video {
             vm.Seek(ans);
         }
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetFocus(IntPtr hWnd);
+
+        IntPtr GetHwnd(Popup popup) {
+            var source = (HwndSource)PresentationSource.FromVisual(popup.Child);
+            return source.Handle;
+        }
+
+        private void popup_Opened(object sender, EventArgs e) {
+
+            //PopupにTextBoxを配置するとIMEがおかしくなるので
+            var handle = GetHwnd(popup);
+            SetFocus(handle);
+        }
     }
 }

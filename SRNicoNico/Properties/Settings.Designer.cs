@@ -142,5 +142,17 @@ namespace SRNicoNico.Properties {
                 this["AlwaysShowSeekBar"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Use184 {
+            get {
+                return ((bool)(this["Use184"]));
+            }
+            set {
+                this["Use184"] = value;
+            }
+        }
     }
 }
