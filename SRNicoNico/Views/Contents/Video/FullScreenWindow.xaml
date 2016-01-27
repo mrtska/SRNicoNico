@@ -31,12 +31,11 @@
     </i:Interaction.Triggers>
 
     <Grid>
-        <ContentControl x:Name="ContentControl" Content="{Binding FullScreenVideoFlash,Mode=TwoWay}" />
+        <ContentControl Content="{Binding FullScreenVideoFlash,Mode=TwoWay}" />
 
-
-        <Popup AllowsTransparency="True" IsOpen="{Binding FullScreenPopup,Mode=OneWay}" StaysOpen="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" HorizontalAlignment="Center">
+        <Popup AllowsTransparency="True" IsOpen="{Binding FullScreenPopup}" StaysOpen="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" HorizontalAlignment="Center">
             
-            <video:VideoController Opacity="0.5" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualWidth}"/>
+            <ContentControl Content="{Binding FullScreenContoller}" Opacity="0.5" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualWidth}"/>
         </Popup>
     </Grid>
 </Window>

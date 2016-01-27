@@ -152,7 +152,6 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _Volume = value;
                 ChangeVolume(value);
-                Console.WriteLine(value);
                 RaisePropertyChanged();
                 if(value != 0) {
 
@@ -206,6 +205,38 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
+
+
+        #region Controller変更通知プロパティ
+        private VideoController _Controller;
+
+        public VideoController Controller {
+            get { return _Controller; }
+            set { 
+                if(_Controller == value)
+                    return;
+                _Controller = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region FullScreenContoller変更通知プロパティ
+        private VideoController _FullScreenContoller;
+
+        public VideoController FullScreenContoller {
+            get { return _FullScreenContoller; }
+            set { 
+                if(_FullScreenContoller == value)
+                    return;
+                _FullScreenContoller = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
 
         //Flashの関数を呼ぶためのもの
         public ExternalInterfaceProxy Proxy;
@@ -278,9 +309,11 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
+        //マイリスト関連
         public VideoMylistViewModel Mylist { get; set; }
 
+        //コメント関連
+        public VideoCommentViewModel Comment { get; set; }
 
         #region Cmsid変更通知プロパティ
         private string _Cmsid;
@@ -316,22 +349,14 @@ namespace SRNicoNico.ViewModels {
 
             VideoUrl = videoUrl;
             Cmsid = Name;
-            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => VideoFlash = new VideoFlash() { DataContext = this }));
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-            if(Properties.Settings.Default.VideoInfoPlacement == "Right") {
 
-                Application.Current.Resources["VideoColumn"] = 0;
-                Application.Current.Resources["InfoColumn"] = 1;
-                Application.Current.Resources["GridWidth1"] = new GridLength(1.0, GridUnitType.Star);
-                Application.Current.Resources["GridWidth2"] = new GridLength(300);
-            } else {
+                VideoFlash = new VideoFlash() { DataContext = this };
+                Controller = new VideoController() { DataContext = this };
 
-                Application.Current.Resources["VideoColumn"] = 1;
-                Application.Current.Resources["InfoColumn"] = 0;
-                Application.Current.Resources["GridWidth1"] = new GridLength(300);
-                Application.Current.Resources["GridWidth2"] = new GridLength(1.0, GridUnitType.Star);
 
-            }
+            }));
 
             App.ViewModelRoot.AddTabAndSetCurrent(this);
 
@@ -346,6 +371,7 @@ namespace SRNicoNico.ViewModels {
             Task.Run(() => {
 
                 Mylist = new VideoMylistViewModel(this);
+                Comment = new VideoCommentViewModel(this);
                 VideoData = new VideoData();
 
 
@@ -448,11 +474,6 @@ namespace SRNicoNico.ViewModels {
             });
         }
 
-        public void OpenBrowser() {
-
-            System.Diagnostics.Process.Start(VideoUrl);
-        }
-
         //リンクを開く
         public void OpenLink(string cmsid) {
 
@@ -482,8 +503,7 @@ namespace SRNicoNico.ViewModels {
 
             TweetDialogViewModel vm = new TweetDialogViewModel();
             string url = "https://twitter.com/intent/tweet?hashtags=" + VideoData.ApiData.Cmsid
-                            + "&text=" + HttpUtility.UrlEncode(VideoData.ApiData.Title) + "(" + Time.VideoTimeString + ")&url=" + VideoUrl;
-            Console.WriteLine(url);
+                            + "&text=" + HttpUtility.UrlEncode(VideoData.ApiData.Title) + "(" + Time.VideoTimeString + ")&ref_src=twsrc%5Etfw&url=" + VideoUrl;
             url = url.Replace(" ", "%20");
             System.Diagnostics.Process.Start(url);
             vm.OriginalUri = new Uri(url);
@@ -519,7 +539,6 @@ namespace SRNicoNico.ViewModels {
 
                 Volume = PrevVolume;
             }
-
         }
 
         //フルスクリーンにする
@@ -538,6 +557,9 @@ namespace SRNicoNico.ViewModels {
             var temp = VideoFlash;
             VideoFlash = null;
             FullScreenVideoFlash = temp;
+            var temp2 = Controller;
+            Controller = null;
+            FullScreenContoller = temp2;
 
             App.ViewModelRoot.Visibility = Visibility.Hidden;
             //フルスクリーンウィンドウ表示
@@ -565,6 +587,9 @@ namespace SRNicoNico.ViewModels {
             var temp = FullScreenVideoFlash;
             FullScreenVideoFlash = null;
             VideoFlash = temp;
+            var temp2 = FullScreenContoller;
+            FullScreenContoller = null;
+            Controller = temp2;
 
         }
 
@@ -671,7 +696,6 @@ namespace SRNicoNico.ViewModels {
             IsInitialized = true;
             Mylist.EnableButtons();
             
-            Console.WriteLine("VideoUrl:" + VideoData.ApiData.GetFlv.VideoUrl);
 
             if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
@@ -814,6 +838,23 @@ namespace SRNicoNico.ViewModels {
 
             Console.WriteLine("KeyDown:" + e.Key);
             Console.Out.Flush();
+            if(Comment.IsPopupOpen) {
+
+                if(e.Key == Key.Enter) {
+
+                    if(e.KeyboardDevice.Modifiers == ModifierKeys.Shift) {
+
+                        Comment.AcceptEnter = true;
+                    } else {
+                        Comment.AcceptEnter = false;
+
+
+                    }
+                }
+
+                return;
+            }
+
             if(IsFullScreen) {
 
                 switch(e.Key) {

@@ -139,8 +139,14 @@ package  {
 				metadata = param;
 				for(var propName:String in param){
 					trace(propName + "=" + param[propName]);
+				}						
+				
+				var aspect:* = (stage.stageWidth - 512) / 2;
+				if (aspect < 0) {
+					
+					aspect = 0;
 				}
-
+				
 				var vec:Vector.<StageVideo> = stage.stageVideos;
 				if(vec.length >= 1) {
 					;
@@ -149,13 +155,7 @@ package  {
 					//アスペクト比が4:3だったら
 					if ((param.height / param.width) == 0.75) {
 						
-						var aspect:* = (stage.stageWidth - 512) / 2;
 					
-						if (aspect < 0) {
-							
-							aspect = 0;
-
-						}
 						stageVideo.viewPort = new Rectangle(aspect, 0, 512, stage.stageHeight);
 
 					} else {
@@ -170,7 +170,14 @@ package  {
 					var video:Video = new Video(stage.stageWidth, stage.stageHeight);
 
 					video.smoothing = true;
-					ExternalInterface.call("call" + ":" + stage.stageWidth + " " + stage.stageHeight);
+					
+					//アスペクト比が4:3だったら
+					if ((param.height / param.width) == 0.75) {
+
+						video.x = aspect;
+						video.width = 512;
+					}
+					
 					
 					video.attachNetStream(stream);
 					addChild(video);

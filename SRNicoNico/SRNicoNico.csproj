@@ -205,6 +205,8 @@
     <Compile Include="Models\NicoNicoViewer\HyperLinkReplacer.cs" />
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
     <Compile Include="Models\NicoNicoViewer\UpdateCheck.cs" />
+    <Compile Include="Models\NicoNicoViewer\VerifyEmptyText.cs" />
+    <Compile Include="Models\NicoNicoViewer\VideoCommentDecoration.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteUser.cs" />
@@ -247,6 +249,7 @@
     <Compile Include="ViewModels\User\UserNicoRepoViewModel.cs" />
     <Compile Include="ViewModels\User\UserVideoViewModel.cs" />
     <Compile Include="ViewModels\User\UserViewModel.cs" />
+    <Compile Include="ViewModels\Video\VideoCommentViewModel.cs" />
     <Compile Include="ViewModels\Video\MylistDataViewModel.cs" />
     <Compile Include="ViewModels\Video\UserDataViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoDataViewModel.cs" />
@@ -421,6 +424,12 @@
     </Compile>
     <Compile Include="Views\Contents\Video\UserToolTip.xaml.cs">
       <DependentUpon>UserToolTip.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoComment.xaml.cs">
+      <DependentUpon>VideoComment.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoCommentDecorator.xaml.cs">
+      <DependentUpon>VideoCommentDecorator.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Video\VideoContent.xaml.cs">
       <DependentUpon>VideoContent.xaml</DependentUpon>
@@ -647,6 +656,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Contents\Video\VideoComment.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoCommentDecorator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Contents\Video\VideoContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -736,6 +753,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="InfrastructureAssemblies\Design\Livet.Design.dll" />
+    <Content Include="InfrastructureAssemblies\ExternalInterfaceProxy.dll" />
     <Content Include="InfrastructureAssemblies\Livet.dll" />
     <Content Include="InfrastructureAssemblies\Livet.XML" />
     <Content Include="InfrastructureAssemblies\Microsoft.Expression.Interactions.dll" />

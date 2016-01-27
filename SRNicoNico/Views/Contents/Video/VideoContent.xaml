@@ -11,7 +11,7 @@
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:behaviors="clr-namespace:SRNicoNico.Views.Behaviors"
-             d:DesignHeight="600"
+             d:DesignHeight="800"
              d:DesignWidth="600"
 			 d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              mc:Ignorable="d"
@@ -45,7 +45,7 @@
                     <mui:ModernButton Focusable="False" ToolTip="ブラウザで開く" HorizontalAlignment="Right" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5" Margin="0,0,70,0" Grid.Column="1" >
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
-                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenBrowser" />
+                                <ei:LaunchUriOrFileAction Path="{Binding VideoUrl}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </mui:ModernButton>
@@ -83,10 +83,10 @@
                         </local:VideoFlash.Style>
                     </local:VideoFlash>-->
                 </ContentControl>
-                <local:VideoController Grid.Row="2" />
+                <ContentControl Content="{Binding Controller}" Grid.Row="2" />
             </Grid>
 
-            <GridSplitter Grid.Row="1" Margin="0,2"  Height="3" Width="auto" ResizeDirection="Rows" Background="#FF222222" />
+                <GridSplitter Grid.Row="1" Margin="0,2"  Height="3" Width="auto" ResizeDirection="Rows" Background="#FF222222" />
 
             <Grid Grid.Row="2" >
                 <Grid.Resources>

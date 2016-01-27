@@ -22,6 +22,20 @@ namespace SRNicoNico.Views.Contents.Video {
 	public partial class Video : UserControl {
 		public Video() {
             InitializeComponent();
-		}
+            if(Properties.Settings.Default.VideoInfoPlacement == "Right") {
+
+                Application.Current.Resources["VideoColumn"] = 0;
+                Application.Current.Resources["InfoColumn"] = 1;
+                Application.Current.Resources["GridWidth1"] = new GridLength(1.0, GridUnitType.Star);
+                Application.Current.Resources["GridWidth2"] = new GridLength(300);
+            } else {
+
+                Application.Current.Resources["VideoColumn"] = 1;
+                Application.Current.Resources["InfoColumn"] = 0;
+                Application.Current.Resources["GridWidth1"] = new GridLength(300);
+                Application.Current.Resources["GridWidth2"] = new GridLength(1.0, GridUnitType.Star);
+
+            }
+        }
     }
 }

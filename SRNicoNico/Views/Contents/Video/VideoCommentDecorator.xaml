@@ -1,0 +1,158 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.Video.VideoCommentDecorator"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+            xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+            xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+            xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+            xmlns:nnv="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
+            xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
+            mc:Ignorable="d" 
+           d:DesignWidth="398.093"
+             
+            Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             Background="#FF111111"
+             BorderThickness="1"
+             BorderBrush="{StaticResource AccentBrushKey}"
+             Width="400"
+             
+             >
+    <UserControl.Resources>
+        <Style TargetType="RadioButton" x:Key="decorator">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border Margin="3" BorderThickness="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
+                            <Grid>
+                                <ContentPresenter HorizontalAlignment="Center"  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="Background" Value="#FF222222"/>
+            <Setter Property="Foreground" Value="{StaticResource ActiveForegroundBrushKey}"/>
+
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource AccentBrushKey}"/>
+                    <Setter Property="Background" Value="{StaticResource AccentBrushKey}"/>
+                </Trigger>
+            </Style.Triggers>
+
+        </Style>
+        <Style TargetType="RadioButton" x:Key="color">
+            <EventSetter Event="Click" Handler="ClickButton" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border Width="15" Height="15" ToolTip="{TemplateBinding Content}" BorderThickness="3" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource AccentBrushKey}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="文字サイズ" HorizontalAlignment="Center"/>
+            <RadioButton Content="大" FontSize="25" Height="40" VerticalContentAlignment="Center" Style="{StaticResource decorator}" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="Size" Value="Big"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </RadioButton>
+            <RadioButton Content="中" FontSize="18" Height="40" VerticalContentAlignment="Center" Style="{StaticResource decorator}" IsChecked="True">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="Size" Value="Medium"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </RadioButton>
+            <RadioButton Content="小" FontSize="14" Height="40" VerticalContentAlignment="Center" Style="{StaticResource decorator}" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="Size" Value="Small"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </RadioButton>
+
+
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="コメント位置" HorizontalAlignment="Center"/>
+            <RadioButton Content="□□□□□" VerticalContentAlignment="Top"  FontSize="12" Height="40" Style="{StaticResource decorator}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="Position" Value="Ue"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </RadioButton>
+            <RadioButton Content="□□□□□" VerticalContentAlignment="Center" FontSize="12" Height="40" Style="{StaticResource decorator}" IsChecked="True">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="Position" Value="Naka"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </RadioButton>
+            <RadioButton Content="□□□□□" VerticalContentAlignment="Bottom" FontSize="12" Height="40" Style="{StaticResource decorator}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="Position" Value="Shita"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </RadioButton>
+        </StackPanel>
+        <Grid Grid.Column="2" Opacity="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Text="色"  HorizontalAlignment="Center" />
+            <UniformGrid Grid.Row="1" Margin="2" Columns="5">
+                <RadioButton Content="white" Background="#FFFFFF" Style="{StaticResource color}" IsChecked="True"/>
+                <RadioButton Content="red" Background="#FF0000" Style="{StaticResource color}"/>
+                <RadioButton Content="pink" Background="#FF8080" Style="{StaticResource color}"/>
+                <RadioButton Content="orange" Background="#FFC000" Style="{StaticResource color}"/>
+                <RadioButton Content="yellow" Background="#FFFF00" Style="{StaticResource color}"/>
+                <RadioButton Content="green" Background="#00FF00" Style="{StaticResource color}"/>
+                <RadioButton Content="cyan" Background="#00FFFF" Style="{StaticResource color}"/>
+                <RadioButton Content="blue" Background="#0000FF" Style="{StaticResource color}"/>
+                <RadioButton Content="purple" Background="#C000FF" Style="{StaticResource color}"/>
+                <RadioButton Content="black" Background="#000000" Style="{StaticResource color}"/>
+                <RadioButton Content="white2, niconicowhite" Background="#CCCC99" Style="{StaticResource color}"/>
+                <RadioButton Content="red2, truered" Background="#CC0033" Style="{StaticResource color}"/>
+                <RadioButton Content="pink2" Background="#FF33CC" Style="{StaticResource color}"/>
+                <RadioButton Content="orange2, passionorange" Background="#FF6600" Style="{StaticResource color}"/>
+                <RadioButton Content="yellow2, madyellow" Background="#999900" Style="{StaticResource color}"/>
+                <RadioButton Content="green2, elementalgreen" Background="#00CC66" Style="{StaticResource color}"/>
+                <RadioButton Content="cyan2" Background="#00CCCC" Style="{StaticResource color}"/>
+                <RadioButton Content="blue2, marineblue" Background="#3399FF" Style="{StaticResource color}"/>
+                <RadioButton Content="purple2, nobleviolet" Background="#6633CC" Style="{StaticResource color}"/>
+                <RadioButton Content="black2" Background="#666666" Style="{StaticResource color}"/>
+
+            </UniformGrid>
+
+        </Grid>
+
+
+
+    </Grid>
+</UserControl>

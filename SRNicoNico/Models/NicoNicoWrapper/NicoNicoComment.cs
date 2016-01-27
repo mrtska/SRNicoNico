@@ -10,6 +10,7 @@ using Codeplex.Data;
 using System.Net.Http;
 
 using SRNicoNico.ViewModels;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoComment : NotificationObject {
@@ -125,6 +126,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
 			
 		}
+
+        public  void Post(string comment, VideoCommentDecoration deco) {
+
+
+
+        }
+
 
 
         private void StoreEntry(string response, List<NicoNicoCommentEntry> list) {
