@@ -29,21 +29,25 @@
             <ColumnDefinition Width="*" MaxWidth="100"/>
         </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="decoration" Text="{Binding Mail,Mode=TwoWay}" BorderThickness="0,0,1,0" FontSize="15">
+        <TextBox x:Name="decoration" Text="{Binding Mail,Mode=TwoWay}" BorderThickness="0,0,1,0" FontSize="15" TextWrapping="Wrap">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="PreviewMouseDown">
                     <ei:ChangePropertyAction TargetName="popup" PropertyName="IsOpen" Value="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TextBox>
-        <Popup x:Name="popup" AllowsTransparency="True" Placement="Top" HorizontalOffset="200"  PlacementTarget="{Binding ElementName=decoration}" PopupAnimation="Slide">
-            <local:VideoCommentDecorator Opacity="0.9"/>
+        <Popup x:Name="popup" AllowsTransparency="True" StaysOpen="False" Placement="Top"  PlacementTarget="{Binding ElementName=decoration}" PopupAnimation="Slide">
+            <local:VideoCommentDecorator Opacity="0.9" VerticalAlignment="Center" />
+
         </Popup>
 
-        <TextBox x:Name="comment" Grid.Column="1" BorderThickness="1,0,1,0" FontSize="15" AcceptsReturn="{Binding AcceptEnter,Mode=TwoWay}" Text="{Binding Text,Mode=TwoWay}" />
+        <TextBox x:Name="comment" Grid.Column="1" BorderThickness="1,0,1,0" FontSize="15" AcceptsReturn="{Binding AcceptEnter,Mode=TwoWay}" Text="{Binding Text,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
-        <Button Grid.Column="2" Content="コメント">
+        <Button Grid.Column="2" Content="コメント" Focusable="False">
             <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Post" />
+                </i:EventTrigger>
                 <l:LivetDataTrigger Binding="{Binding ElementName=comment,Path=Text,Converter={StaticResource verifytext},Mode=OneWay}" Value="0">
                     <ei:ChangePropertyAction PropertyName="IsEnabled" Value="False"/>
                 </l:LivetDataTrigger>

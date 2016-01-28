@@ -51,8 +51,6 @@ package rtmp  {
 			
 			super();
 
-			Security.allowDomain("*");
-			
 			//OpenVideo("rtmpe://smile-chefsf.nicovideo.jp/smile?m=mp4:26673741.16641^1442928807:ca8cce63df646096080443cb50c195c4f73335a4");
 			/*//OpenVideo("Z:/smile.swf");
 			//OpenVideo("Z:/smile.mp4");
@@ -108,7 +106,6 @@ package rtmp  {
 				fmsToken = videoUrl.substr(videoUrl.indexOf("^") + 1);
 				
 				
-				ExternalInterface.call("OpenVideo", videoUrl);
 				NicoNicoRTMPPlayer.videoUrl = videoUrl.substr(0, videoUrl.indexOf("^"));
 				
 				connection.addEventListener(NetStatusEvent.NET_STATUS, onConnect);
@@ -221,8 +218,7 @@ package rtmp  {
 		
 		private function onSecurityError(e:SecurityErrorEvent):void {
 			
-			ExternalInterface.call(e.toString(), "");
-			trace(e);
+			ExternalInterface.call(e.toString());
 		}
 		
 		private var prevTime:int = 0;
@@ -235,17 +231,12 @@ package rtmp  {
 			
 			// バッファの計算
 			var buffer:Number = (stream.bytesLoaded) / (stream.bytesTotal);
-			
-			//trace("Time:" + stream.bytesTotal);
-			
-			if(prevTime != (int)(value)) {
-				
-				ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString());
-				prevLoaded = stream.bytesLoaded;
-			}
+			var vpos:Number = Math.floor(value * 100);
+
+			ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString(), vpos.toString());
+			prevLoaded = stream.bytesLoaded;
 			prevTime = (int) (value);
 			
-			var vpos:Number = Math.floor(value * 100);
 			
 			rastarizer.render(vpos);
 			//trace("value:" + value + " diff:" + this.diff);

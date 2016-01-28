@@ -22,8 +22,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//ウェイバックキー取得API
 		private const string GetWayBackKeyApiUrl = "http://flapi.nicovideo.jp/api/getwaybackkey?thread=";
 
+        //------
 		//サーバーURL
-		private Uri ServerUrl;
+		private string ServerUrl;
 
 		//スレッドID
 		private string ThreadId;
@@ -34,17 +35,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//プレミアムか否か
 		private bool IsPremium;
 
-
-
 		//動画の長さ
 		private readonly uint Length;
 
         private VideoViewModel Video;
+        //------
 
-		public NicoNicoComment(NicoNicoGetFlvData getFlv, VideoViewModel vm) {
+        //チケット 何に使うのかは謎
+        private string Ticket;
 
 
-			ServerUrl = getFlv.CommentServerUrl;
+        public NicoNicoComment(NicoNicoGetFlvData getFlv, VideoViewModel vm) {
+
+
+			ServerUrl = getFlv.CommentServerUrl.OriginalString;
 
 			ThreadId = getFlv.ThreadID;
 
@@ -68,7 +72,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			}*/
             
             Video.Status = "ユーザーコメント取得中";
-            List<NicoNicoCommentEntry> list = new List<NicoNicoCommentEntry>();
+            var list = new List<NicoNicoCommentEntry>();
 
 
             //---ユーザーコメント取得---
@@ -77,13 +81,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             try {
                 
-                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, ServerUrl + leaves);
-                string response = NicoNicoWrapperMain.GetSession().GetAsync(message).Result;
+                var message = new HttpRequestMessage(HttpMethod.Get, ServerUrl + leaves);
+                var response = NicoNicoWrapperMain.GetSession().GetAsync(message).Result;
 
                 //thread_leavesが失敗したら（コメント数が少ないと失敗しやすいっぽい？）
                 if(response.IndexOf("resultcode=\"11\"") >= 0) {
 
-                    Video.Status = "ユーザーコメント取得失敗（リカバリー中）";
+                    Video.Status = "ユーザーコメント取得失敗（復帰中）";
 
                     string recv = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000";
                     response = NicoNicoWrapperMain.GetSession().GetAsync(ServerUrl + recv).Result;
@@ -92,7 +96,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //公式動画
                 if(response.IndexOf("resultcode=\"9\"") >= 0) {
 
-                    Video.Status = "ユーザーコメント取得失敗（公式動画）リカバリー中";
+                    Video.Status = "ユーザーコメント取得失敗（公式動画）復帰中";
                     string threadKey = NicoNicoWrapperMain.GetSession().GetAsync(GetThreadKeyApiUrl + ThreadId).Result;
 
                     string recv = leaves + "&" + threadKey + "&user_id=" + UserId;
@@ -140,7 +144,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private void StoreEntry(string response, List<NicoNicoCommentEntry> list) {
 
 
-            HtmlDocument doc = new HtmlDocument();
+            var doc = new HtmlDocument();
             doc.LoadHtml2(response);
 
             var nodes = doc.DocumentNode.SelectNodes("/packet/chat");
@@ -150,7 +154,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 return;
             }
 
-            foreach(HtmlNode node in nodes) {
+            foreach(var node in nodes) {
 
                 var attr = node.Attributes;
 
@@ -160,7 +164,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     continue;
                 }
 
-                NicoNicoCommentEntry entry = new NicoNicoCommentEntry();
+                var entry = new NicoNicoCommentEntry();
                 
                 entry.No = int.Parse(attr["no"].Value);
                 entry.Vpos = int.Parse(attr["vpos"].Value);

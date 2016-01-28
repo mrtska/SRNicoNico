@@ -205,19 +205,16 @@ package  {
 			// バッファの計算
 			var buffer:Number = (stream.bytesLoaded) / (stream.bytesTotal);
 			
-			//trace("Time:" + stream.time);
-			
-			//if(prevTime != (int)(value)) {
+			//コメントのアレ
+			var vpos:Number = Math.floor(value * 100);
+
 				
-				ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString());
-				prevLoaded = stream.bytesLoaded;
-			//}
+			ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString(), vpos.toString());
+			prevLoaded = stream.bytesLoaded;
 			prevTime = (int) (value);
 			
-			var vpos:Number = Math.floor(value * 100);
 			
 			rastarizer.render(vpos);
-			//trace("value:" + value + " diff:" + this.diff);
 		}
 		
 		private function onAsyncError(e:AsyncErrorEvent):void {

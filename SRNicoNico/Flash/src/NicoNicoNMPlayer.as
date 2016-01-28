@@ -108,24 +108,16 @@ package  {
 			var value:Number = (frame / movie.loaderInfo.frameRate);
 			var vpos:Number = Math.floor(value * 100);
 			
-			var time:int = value;
 			
 			// バッファの計算
 			var buffer:Number = (loader.contentLoaderInfo.bytesLoaded) / (loader.contentLoaderInfo.bytesTotal);
 			
-			trace("Time:" + time + " vpos:" + vpos + " buffer:" + buffer);
 			
-			if(prevTime != (int)(value)) {
-				
-				ExternalInterface.call("CsFrame", time.toString(), buffer.toString(), (loader.contentLoaderInfo.bytesLoaded - prevLoaded).toString());
-				prevLoaded = loader.contentLoaderInfo.bytesLoaded;
-			}
+			ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (loader.contentLoaderInfo.bytesLoaded - prevLoaded).toString(), vpos.toString());
+			prevLoaded = loader.contentLoaderInfo.bytesLoaded;
 			prevTime = (int) (value);
 			
-			
-			
 			rastarizer.render(vpos);
-			//trace("value:" + value + " diff:" + this.diff);
 		}
 		
 		

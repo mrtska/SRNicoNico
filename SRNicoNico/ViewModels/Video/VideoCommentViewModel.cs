@@ -43,6 +43,21 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region CanComment変更通知プロパティ
+        private bool _CanComment = false;
+
+        public bool CanComment {
+            get { return _CanComment; }
+            set { 
+                if(_CanComment == value)
+                    return;
+                _CanComment = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         #region Mail変更通知プロパティ
         private string _Mail = "";
 
@@ -120,6 +135,9 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        //位置
+        public string Vpos { get; set; }
+
         private VideoViewModel Owner;
 
         public VideoCommentViewModel(VideoViewModel vm) {
@@ -140,8 +158,21 @@ namespace SRNicoNico.ViewModels {
         }
 
         public void Post() {
+            
+            if(Text.Length == 0) {
 
-            Owner.CommentInstance.Post(Text, Mail, "");
+                return;
+            }
+
+            Task.Run(() => {
+
+                Owner.CommentInstance.Post(Text, Mail, Vpos);
+
+                Text = "";
+
+            });
+
+
 
         }
 

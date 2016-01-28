@@ -183,6 +183,15 @@ namespace SRNicoNico.Views.Controls {
             MouseLeftButtonDown += SeekBar_MouseLeftButtonDown;
             MouseLeftButtonUp += SeekBar_MouseLeftButtonUp;
             MouseMove += SeekBar_MouseMove;
+            SizeChanged += SeekBar_SizeChanged;
+        }
+
+        private void SeekBar_SizeChanged(object sender, SizeChangedEventArgs e) {
+
+            CurrentTimeWidth = (ActualWidth - 10) / VideoTime * CurrentTime;
+            SeekCursor = new Thickness(CurrentTimeWidth, 0, 0, 0);
+            BufferedTimeWidth = BufferedTime * ActualWidth;
+
         }
 
         private void SeekBar_MouseMove(object sender, MouseEventArgs e) {

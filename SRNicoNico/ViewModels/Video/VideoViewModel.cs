@@ -466,6 +466,7 @@ namespace SRNicoNico.ViewModels {
                         json.array = list;
 
                         InjectComment(json.ToString());
+                        Comment.CanComment = true;
                     }
 
                     if(!Properties.Settings.Default.CommentVisibility) {
@@ -636,7 +637,7 @@ namespace SRNicoNico.ViewModels {
         private double sumBPS;
         
         //1フレーム毎に呼ばれる
-        public void CsFrame(float time, float buffer, long bps) {
+        public void CsFrame(float time, float buffer, long bps, string vpos) {
 
             if(prevTime != (int)time) {
                
@@ -651,15 +652,16 @@ namespace SRNicoNico.ViewModels {
                     BPS = Math.Floor(comp * 100) / 100 + "KiB/秒";
                 }
                 sumBPS = 0;
-            }else {
+            } else {
 
                 sumBPS += bps;
             }
             prevTime = (int)time;
 
             Time.BufferedTime = buffer;
+            Comment.Vpos = vpos;
             
-            //Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + Time.BufferedTime + " bps:" + bps);
+            //Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + buffer + " vpos:" + vpos);
 
             SetSeekCursor(time);
 
@@ -716,7 +718,7 @@ namespace SRNicoNico.ViewModels {
             IsRepeat = Properties.Settings.Default.IsRepeat;
         }
         
-
+        
         private object ExternalInterfaceHandler(object sender, ExternalInterfaceCallEventArgs e) {
 
             InvokeFromActionScript(e.FunctionCall.FunctionName, e.FunctionCall.Arguments);
@@ -728,7 +730,7 @@ namespace SRNicoNico.ViewModels {
             switch(func) {
                 case "CsFrame":
                     
-                    CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]));
+                    CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]), args[3]);
                     break;
                 case "NetConnection.Connect.Closed":
                     

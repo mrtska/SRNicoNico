@@ -20,8 +20,6 @@
              >
 
     <Grid>
-
-        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="184*" />
                 <RowDefinition Height="auto" />
@@ -64,29 +62,11 @@
                         </i:Interaction.Triggers>
                     </mui:ModernButton>
                 </Grid>
-                <ContentControl Grid.Row="1" x:Name="ContentControl" Content="{Binding VideoFlash}">
-                   <!-- <local:VideoFlash>
-                        <local:VideoFlash.Style>
-                            <Style TargetType="local:VideoFlash">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding LoadFailed}" Value="True">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="local:VideoFlash">
-                                                    <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Text="動画の読み込みに失敗しました。" />
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </local:VideoFlash.Style>
-                    </local:VideoFlash>-->
-                </ContentControl>
-                <ContentControl Content="{Binding Controller}" Grid.Row="2" />
+                <ContentControl Grid.Row="1" x:Name="ContentControl" Content="{Binding VideoFlash}" />
+                <ContentControl Grid.Row="2" Content="{Binding Controller}"/>
             </Grid>
 
-                <GridSplitter Grid.Row="1" Margin="0,2"  Height="3" Width="auto" ResizeDirection="Rows" Background="#FF222222" />
+            <GridSplitter Grid.Row="1" Margin="0,2"  Height="3" Width="auto" ResizeDirection="Rows" Background="#FF222222" />
 
             <Grid Grid.Row="2" >
                 <Grid.Resources>
@@ -109,6 +89,5 @@
                 </ScrollViewer>
             </Grid>
         </Grid>
-    </Grid>
 
 </UserControl>
