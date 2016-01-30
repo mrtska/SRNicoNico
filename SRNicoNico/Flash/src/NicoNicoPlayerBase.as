@@ -1,4 +1,5 @@
 package {
+	import comment.UploaderCommentRasterizer;
 	import flash.display.Sprite;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
@@ -18,7 +19,9 @@ package {
 		
 		
 		//コメントラスタライザ
-		public var rastarizer:CommentRasterizer;
+		public var rasterizer:CommentRasterizer;
+		
+		public var uploaderRastarizer:UploaderCommentRasterizer;
 		
 		public function NicoNicoPlayerBase() {
 			
@@ -36,16 +39,18 @@ package {
 				ExternalInterface.addCallback("AsResume", Resume);
 				ExternalInterface.addCallback("AsSeek", Seek);
 				ExternalInterface.addCallback("AsInjectComment", InjectComment);
+				ExternalInterface.addCallback("AsInjectUploaderComment", InjectUploaderComment);
 				ExternalInterface.addCallback("AsToggleComment", ToggleComment);
 				ExternalInterface.addCallback("AsChangeVolume", ChangeVolume);
 				
 				ExternalInterface.marshallExceptions = true;
 			}
 			
-			rastarizer = new CommentRasterizer();
+			rasterizer = new CommentRasterizer();
+			uploaderRastarizer = new UploaderCommentRasterizer();
 			
-			rastarizer.updateBounds(stage.stageWidth, stage.stageHeight);
-			
+			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
+			uploaderRastarizer.updateBounds(stage.stageWidth, stage.stageHeight);
 			
 			
 			//OpenVideo("Z:/smile.flv");
@@ -127,8 +132,14 @@ package {
 		public function InjectComment(json:String):void {
 		
 				
-			rastarizer.load(json);
+			rasterizer.load(json);
 		}
+		public function InjectUploaderComment(json:String):void {
+		
+				
+			uploaderRastarizer.load(json);
+		}
+		
 		
 		public function onFrame(e:Event):void {
 		
@@ -142,12 +153,12 @@ package {
 		public function ToggleComment():void {
 			
 			trace("とぐる");
-			if(rastarizer.visible) {
+			if(rasterizer.visible) {
 				
-				rastarizer.visible = false;
+				rasterizer.visible = false;
 			} else {
 				
-				rastarizer.visible = true;
+				rasterizer.visible = true;
 			}
 		}
 		public function ChangeVolume(vol:Number):void {}		

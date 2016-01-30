@@ -16,7 +16,7 @@ package  {
 	import flash.external.ExternalInterface;
 	import flash.ui.Mouse;
 	
-	[SWF(width="672", height="384")]
+	[SWF(width="640", height="360")]
 	public class NicoNicoPlayer extends NicoNicoPlayerBase {
 		
 		//ストリーミングURL そのまんま
@@ -141,49 +141,42 @@ package  {
 					trace(propName + "=" + param[propName]);
 				}						
 				
-				var aspect:* = (stage.stageWidth - 512) / 2;
-				if (aspect < 0) {
-					
-					aspect = 0;
-				}
+				var stageW:int = stage.stageWidth;
+				var stageH:int = stage.stageHeight;
+				var videoW:int = param.width;
+				var videoH:int = param.height;
+				
+				//動画アスペクト比
+				var AR:* = videoW / videoH;
+				
+				var aspectW:int = stageH * AR;
+				
+				var x:* = (stageW - aspectW) / 2;
+				
 				
 				var vec:Vector.<StageVideo> = stage.stageVideos;
 				if(vec.length >= 1) {
 					;
 					var stageVideo:StageVideo = vec[0];
 					
-					//アスペクト比が4:3だったら
-					if ((param.height / param.width) == 0.75) {
-						
-					
-						stageVideo.viewPort = new Rectangle(aspect, 0, 512, stage.stageHeight);
+					stageVideo.viewPort = new Rectangle(x, 0, aspectW, stageH);
 
-					} else {
-						
-						stageVideo.viewPort = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
-					}
 					
 					stageVideo.attachNetStream(stream);
 					
 				} else {
 					
-					var video:Video = new Video(stage.stageWidth, stage.stageHeight);
-
+					var video:Video = new Video(aspectW, stageH);
 					video.smoothing = true;
 					
-					//アスペクト比が4:3だったら
-					if ((param.height / param.width) == 0.75) {
-
-						video.x = aspect;
-						video.width = 512;
-					}
+					video.x = x;
 					
 					
 					video.attachNetStream(stream);
 					addChild(video);
 
 				}
-				addChild(rastarizer);
+				addChild(rasterizer);
 
 				
 				addEventListener(Event.ENTER_FRAME, onFrame);
@@ -208,13 +201,12 @@ package  {
 			//コメントのアレ
 			var vpos:Number = Math.floor(value * 100);
 
-				
 			ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString(), vpos.toString());
 			prevLoaded = stream.bytesLoaded;
 			prevTime = (int) (value);
 			
 			
-			rastarizer.render(vpos);
+			rasterizer.render(vpos);
 		}
 		
 		private function onAsyncError(e:AsyncErrorEvent):void {

@@ -624,15 +624,15 @@ namespace SRNicoNico.ViewModels {
                 IsPlaying = true;
                 Resume();
             }
-
+            
         }
         
         //最初から
         public void Restart() {
-
+            
             Seek(0);
         }
-
+        
         private int prevTime;
         private double sumBPS;
         

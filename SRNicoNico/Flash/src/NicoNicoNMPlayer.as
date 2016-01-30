@@ -92,8 +92,8 @@ package  {
 			addChild(loader);
 			
 			movie = loader.content as MovieClip;
-			rastarizer.updateBounds(stage.stageWidth, stage.stageHeight);
-			addChild(rastarizer);
+			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
+			addChild(rasterizer);
 			addEventListener(Event.ENTER_FRAME, onFrame);
 		}
 		
@@ -117,7 +117,7 @@ package  {
 			prevLoaded = loader.contentLoaderInfo.bytesLoaded;
 			prevTime = (int) (value);
 			
-			rastarizer.render(vpos);
+			rasterizer.render(vpos);
 		}
 		
 		

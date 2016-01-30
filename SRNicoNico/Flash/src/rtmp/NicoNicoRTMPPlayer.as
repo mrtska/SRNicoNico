@@ -238,7 +238,7 @@ package rtmp  {
 			prevTime = (int) (value);
 			
 			
-			rastarizer.render(vpos);
+			rasterizer.render(vpos);
 			//trace("value:" + value + " diff:" + this.diff);
 		}
 		

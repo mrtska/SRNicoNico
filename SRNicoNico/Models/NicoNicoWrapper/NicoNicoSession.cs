@@ -88,7 +88,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			cookieKey.Expires = expire.DateTime;
 			HttpHandler.CookieContainer.Add(cookieKey);
 		}
-
+        
         
         public async Task<string> GetAsync(HttpRequestMessage request)  {
 
