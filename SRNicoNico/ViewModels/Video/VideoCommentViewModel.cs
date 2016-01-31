@@ -73,6 +73,21 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region Use184変更通知プロパティ
+
+        public bool Use184 {
+            get { return Properties.Settings.Default.Use184; }
+            set { 
+                if(Properties.Settings.Default.Use184 == value)
+                    return;
+                Properties.Settings.Default.Use184 = value;
+                Properties.Settings.Default.Save();
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         #region Size変更通知プロパティ
         private CommentSize _Size = CommentSize.Medium;
 

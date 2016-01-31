@@ -123,6 +123,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             
             <TextBlock Text="色"  HorizontalAlignment="Center" />
@@ -149,6 +150,10 @@
                 <RadioButton Content="black2" Background="#666666" Style="{StaticResource color}"/>
 
             </UniformGrid>
+            <StackPanel Grid.Row="2" Margin="3">
+                <CheckBox Content="184コメントで投稿する" IsChecked="{Binding Use184,Mode=TwoWay}" Margin="10,3" />
+
+            </StackPanel>
 
         </Grid>
 

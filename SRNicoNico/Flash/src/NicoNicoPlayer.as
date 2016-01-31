@@ -151,6 +151,7 @@ package  {
 				
 				var aspectW:int = stageH * AR;
 				
+				//アスペクト比を考慮したときに両端に出る黒い部分の位置　両端からのオフセット
 				var x:* = (stageW - aspectW) / 2;
 				
 				

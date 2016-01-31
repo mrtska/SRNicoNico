@@ -27,7 +27,7 @@ namespace SRNicoNico.ViewModels {
 
 
 
-
+        //現在のバージョン
         public double CurrentVersion {
 
             get { return 0.7; }
@@ -222,15 +222,10 @@ namespace SRNicoNico.ViewModels {
 						Messenger.Raise(new TransitionMessage(typeof(SignInDialog), SignIn, TransitionMode.Modal));
 						return;
 					}
-
                     //ログイン成功
                     StatusBar.Status = "ログイン完了";
-
-
-
 				//手動ログイン
 				} else {
-
 					//セッションを確立
 					NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession());
 					Messenger.Raise(new TransitionMessage(typeof(SignInDialog), SignIn, TransitionMode.Modal));
@@ -244,7 +239,7 @@ namespace SRNicoNico.ViewModels {
 
 			if(disposing) {
 
-                NicoNicoWrapperMain.GetSession().Dispose();
+                NicoNicoWrapperMain.Session.Dispose();
 			}
 			base.Dispose(disposing);
 		}

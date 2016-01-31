@@ -86,23 +86,29 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);
 
+                var resultcode = doc.DocumentNode.SelectSingleNode("/packet/thread").Attributes["resultcode"].Value;
+
+
                 //thread_leavesが失敗したら（コメント数が少ないと失敗しやすいっぽい？）
-                if(a.IndexOf("resultcode=\"11\"") >= 0) {
+                if(resultcode == "11") {
 
                     Video.Status = "ユーザーコメント取得失敗（復帰中）";
 
-                    string recv = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000";
+                    var recv = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000";
                     a = NicoNicoWrapperMain.GetSession().GetAsync(ServerUrl + recv).Result;
+                    doc.LoadHtml2(a);
                 }
 
                 //公式動画
-                if(a.IndexOf("resultcode=\"9\"") >= 0) {
+                if(resultcode == "9") {
 
                     Video.Status = "ユーザーコメント取得失敗（公式動画）復帰中";
-                    string threadKey = NicoNicoWrapperMain.GetSession().GetAsync(GetThreadKeyApiUrl + ThreadId).Result;
+                    var threadKey = NicoNicoWrapperMain.GetSession().GetAsync(GetThreadKeyApiUrl + ThreadId).Result;
 
-                    string recv = leaves + "&" + threadKey + "&user_id=" + UserId;
+                    var recv = leaves + "&" + threadKey + "&user_id=" + UserId;
                     a = NicoNicoWrapperMain.GetSession().GetAsync(ServerUrl + recv).Result;
+                    doc.LoadHtml2(a);
+
                 }
                 StoreEntry(doc, list);
                 //------
@@ -114,6 +120,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
                 list.Sort();
 
+                Ticket = doc.DocumentNode.SelectSingleNode("packet/thread").Attributes["ticket"].Value;
+
                 Video.Status = "コメント取得完了";
 
                 return list;
@@ -124,7 +132,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 return null;
             }
 		}
-        public List<NicoNicoCommentEntry>GetUploaderComment() {
+        public List<NicoNicoCommentEntry> GetUploaderComment() {
 
             try {
 
@@ -134,8 +142,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 Video.Status = "投稿者コメント取得中";
 
                 //---投稿者コメント取得---
-                string thread = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000&fork=1";
-                string a = NicoNicoWrapperMain.GetSession().GetAsync(ServerUrl + thread).Result;
+                var thread = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000&fork=1";
+                var a = NicoNicoWrapperMain.GetSession().GetAsync(ServerUrl + thread).Result;
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);
