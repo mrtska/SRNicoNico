@@ -71,7 +71,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 				string waybackKey = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(GetWayBackKeyApiUrl + ThreadId).Result;
 			}*/
             
-            Video.Status = "ユーザーコメント取得中";
+            Video.CommentStatus = "取得中";
             var list = new List<NicoNicoCommentEntry>();
 
 
@@ -92,7 +92,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //thread_leavesが失敗したら（コメント数が少ないと失敗しやすいっぽい？）
                 if(resultcode == "11") {
 
-                    Video.Status = "ユーザーコメント取得失敗（復帰中）";
+                    Video.Status = "取得失敗（復帰中）";
 
                     var recv = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000";
                     a = NicoNicoWrapperMain.GetSession().GetAsync(ServerUrl + recv).Result;
@@ -102,7 +102,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //公式動画
                 if(resultcode == "9") {
 
-                    Video.Status = "ユーザーコメント取得失敗（公式動画）復帰中";
+                    Video.CommentStatus = "取得失敗（公式動画）復帰中";
                     var threadKey = NicoNicoWrapperMain.GetSession().GetAsync(GetThreadKeyApiUrl + ThreadId).Result;
 
                     var recv = leaves + "&" + threadKey + "&user_id=" + UserId;
@@ -115,20 +115,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 if(list.Count == 0) {
 
-                    Video.Status = "コメント取得に失敗しました。";
+                    Video.CommentStatus = "取得失敗";
                     return null;
                 }
                 list.Sort();
 
                 Ticket = doc.DocumentNode.SelectSingleNode("packet/thread").Attributes["ticket"].Value;
 
-                Video.Status = "コメント取得完了";
+                Video.CommentStatus = "取得完了";
 
                 return list;
 
             } catch(RequestTimeout) {
 
-                Video.Status = "コメント取得に失敗しました。（タイムアウト）";
+                Video.CommentStatus = "取得失敗（タイムアウト）";
                 return null;
             }
 		}
@@ -139,7 +139,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var list = new List<NicoNicoCommentEntry>();
 
 
-                Video.Status = "投稿者コメント取得中";
+                Video.CommentStatus = "投稿者コメント取得中";
 
                 //---投稿者コメント取得---
                 var thread = "thread?version=20090904&thread=" + ThreadId + "&res_from=-1000&fork=1";
@@ -153,7 +153,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 if(list.Count == 0) {
 
-                    Video.Status = "投稿者コメント取得に失敗しました。";
+                    Video.CommentStatus = "投稿者コメント取得失敗";
                     return null;
                 }
                 list.Sort();
@@ -161,7 +161,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 return list;
             } catch(RequestTimeout) {
 
-                Video.Status = "投稿者コメント取得に失敗しました。（タイムアウト）";
+                Video.CommentStatus = "投稿者コメント取得失敗（タイムアウト）";
                 return null;
             }
 
@@ -171,8 +171,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public  void Post(string comment, string mail, string vpos) {
 
+            Video.Status = "コメント投稿中";
 
 
+            Video.Status = "";
         }
 
 

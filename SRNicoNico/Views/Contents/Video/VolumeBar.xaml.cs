@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SRNicoNico.Views.Contents.Misc {
+namespace SRNicoNico.Views.Contents.Video {
     /// <summary>
     /// VolumeBar.xaml の相互作用ロジック
     /// </summary>

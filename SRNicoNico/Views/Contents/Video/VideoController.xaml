@@ -95,7 +95,7 @@
                 </i:Interaction.Triggers>
             </mui:ModernButton>
 
-            <misc:VolumeBar Margin="10,0,0,0"/>
+            <local:VolumeBar Margin="10,0,0,0"/>
             <Popup x:Name="popup" DataContext="{Binding Comment}" d:DataContext="{d:DesignInstance {x:Type vm:VideoCommentViewModel}}" AllowsTransparency="True" PopupAnimation="Slide" IsOpen="{Binding IsPopupOpen,Mode=TwoWay}" Placement="Bottom" StaysOpen="False" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}" Opened="popup_Opened">
                 <local:VideoComment x:Name="comment" Opacity="0.8" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=ActualWidth}"/>
             </Popup>

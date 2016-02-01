@@ -302,7 +302,7 @@
     <Compile Include="Views\Contents\Misc\TweetDialog.xaml.cs">
       <DependentUpon>TweetDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Contents\Misc\VolumeBar.xaml.cs">
+    <Compile Include="Views\Contents\Video\VolumeBar.xaml.cs">
       <DependentUpon>VolumeBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Mylist\EditConfirmDialog.xaml.cs">
@@ -528,7 +528,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Contents\Misc\VolumeBar.xaml">
+    <Page Include="Views\Contents\Video\VolumeBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

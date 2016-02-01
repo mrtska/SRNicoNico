@@ -31,7 +31,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 return null;
             }
 
-			NicoNicoStoryBoardData data = GetStoryBoardInternalData();
+			var data = GetStoryBoardInternalData();
 			
 			//ストーリーボードが無かったら
 			if(data == null) {
@@ -40,7 +40,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			}
 
 			//APIURL
-			string uri = StoryBoardApiBaseUrl + "&sb=" + data.Id + "&board=";
+			var uri = StoryBoardApiBaseUrl + "&sb=" + data.Id + "&board=";
 
 
 			int bitmapindex = 0;
@@ -49,13 +49,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 				var response = NicoNicoWrapperMain.GetSession().GetStreamAsync(uri + i).Result;
 
-				Bitmap bitmap = new Bitmap(response);
+				var bitmap = new Bitmap(response);
 
 				for(int j = 0; j < data.Cols; j++) {
 
 					for(int k = 0; k < data.Rows; k++) {
 
-						Rectangle rect = new Rectangle(data.Width * k, data.Height * j, data.Width, data.Height);
+						var rect = new Rectangle(data.Width * k, data.Height * j, data.Width, data.Height);
 						
 						data.BitmapCollection[bitmapindex] = bitmap.Clone(rect, bitmap.PixelFormat);
 						bitmapindex += data.Interval;
@@ -80,9 +80,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			byte[] response = result.Content.ReadAsByteArrayAsync().Result;
 
-			string xml = new string(Encoding.ASCII.GetChars(response));
+			var xml = new string(Encoding.ASCII.GetChars(response));
 			xml = xml.Substring(39);
-            string json = NicoNicoUtil.XmlToJson(xml);
+            var json = NicoNicoUtil.XmlToJson(xml);
 			json = json.Replace("@", "");
 
 			var root = DynamicJson.Parse(json);
@@ -94,7 +94,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 					
 					return new NicoNicoStoryBoardData() {
 
-						Id = entry.IsDefined("id") ? entry.id : 1,
+						Id = entry.id() ? entry.id : "1",
 						Cols = int.Parse(entry.board_cols),
 						Rows = int.Parse(entry.board_rows),
 						Count = int.Parse(entry.board_number),
@@ -110,7 +110,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 				return new NicoNicoStoryBoardData() {
 
-					Id = entry.IsDefined("id") ? entry.id : "1",
+					Id = entry.id() ? entry.id : "1",
 					Cols = int.Parse(entry.board_cols),
 					Rows = int.Parse(entry.board_rows),
 					Count = int.Parse(entry.board_number),

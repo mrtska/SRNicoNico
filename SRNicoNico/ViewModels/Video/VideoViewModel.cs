@@ -30,9 +30,46 @@ namespace SRNicoNico.ViewModels {
         //コメントバックエンドインスタンス
         public NicoNicoComment CommentInstance;
 
-		//API結果
-		#region VideoData変更通知プロパティ
-		private VideoData _VideoData;
+
+        #region CommentStatus変更通知プロパティ
+        private string _CommentStatus;
+
+        public string CommentStatus {
+            get { return _CommentStatus; }
+            set { 
+                if(_CommentStatus == value)
+                    return;
+                _CommentStatus = value;
+                UpdateStatus();
+            }
+        }
+        #endregion
+
+
+        #region StoryBoardStatus変更通知プロパティ
+        private string _StoryBoardStatus;
+
+        public string StoryBoardStatus {
+            get { return _StoryBoardStatus; }
+            set { 
+                if(_StoryBoardStatus == value)
+                    return;
+                _StoryBoardStatus = value;
+                UpdateStatus();
+            }
+        }
+        #endregion
+
+        private void UpdateStatus() {
+            
+            Status = "コメント:" + CommentStatus + " ストーリーボード:" + StoryBoardStatus;
+        }
+
+
+
+        //API結果
+        #region VideoData変更通知プロパティ
+        private VideoData _VideoData;
 
 		public VideoData VideoData {
 			get { return _VideoData; }
@@ -218,7 +255,7 @@ namespace SRNicoNico.ViewModels {
 
         public VideoController Controller {
             get { return _Controller; }
-            set { 
+            set {
                 if(_Controller == value)
                     return;
                 _Controller = value;
@@ -441,12 +478,22 @@ namespace SRNicoNico.ViewModels {
 
                     Task.Run(() => {
 
-                        Status = "ストーリーボード取得中";
+                        StoryBoardStatus = "取得中";
 
                         var sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
                         VideoData.StoryBoardData = sb.GetStoryBoardData();
-                        Status = "ストーリーボード取得完了";
+
+                        if(VideoData.StoryBoardData == null) {
+
+                            StoryBoardStatus = "データ無し";
+                        } else {
+
+                            StoryBoardStatus = "取得完了";
+                        }
                     });
+                } else {
+
+                    StoryBoardStatus = "データ無し";
                 }
 
                 OpenVideo();

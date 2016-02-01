@@ -201,17 +201,22 @@ namespace SRNicoNico.Views.Controls {
                 //マウスカーソルX座標
                 double x = e.GetPosition(this).X;
 
-
                 //シーク中の動画時間
                 int ans = (int)(x / ActualWidth * VideoTime);
-                if(ans < 0 || VideoTime < ans) {
+                if(ans < 0) {
 
-                    return;
+                    CurrentTimeWidth = 0;
+                    SeekCursor = new Thickness(0, 0, 0, 0);
+                } else if(VideoTime < ans) {
+
+                    CurrentTimeWidth = ActualWidth;
+                    SeekCursor = new Thickness(ActualWidth - 10, 0, 0, 0);
+                } else {
+
+                    //シーク中の動画時間
+                    CurrentTimeWidth = (ActualWidth) / VideoTime * ans;
+                    SeekCursor = new Thickness(x - 5, 0, 0, 0);
                 }
-                //シーク中の動画時間
-                CurrentTimeWidth = (ActualWidth ) / VideoTime * ans;
-                SeekCursor = new Thickness(x - 5, 0, 0, 0);
-
             }
         }
 
