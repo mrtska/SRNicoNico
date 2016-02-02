@@ -56,7 +56,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		public DateTimeOffset Expire;
 
 		//アカウント権限
-		private NiconicoAccountAuthority Authority = NiconicoAccountAuthority.NotSignedIn;
+		public NiconicoAccountAuthority Authority = NiconicoAccountAuthority.NotSignedIn;
 
 
 		public NicoNicoSession() {

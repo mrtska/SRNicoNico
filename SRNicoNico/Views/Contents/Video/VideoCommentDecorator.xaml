@@ -58,6 +58,9 @@
                 <Trigger Property="IsChecked" Value="True">
                     <Setter Property="BorderBrush" Value="{StaticResource AccentBrushKey}" />
                 </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
@@ -138,16 +141,16 @@
                 <RadioButton Content="blue" Background="#0000FF" Style="{StaticResource color}"/>
                 <RadioButton Content="purple" Background="#C000FF" Style="{StaticResource color}"/>
                 <RadioButton Content="black" Background="#000000" Style="{StaticResource color}"/>
-                <RadioButton Content="white2, niconicowhite" Background="#CCCC99" Style="{StaticResource color}"/>
-                <RadioButton Content="red2, truered" Background="#CC0033" Style="{StaticResource color}"/>
-                <RadioButton Content="pink2" Background="#FF33CC" Style="{StaticResource color}"/>
-                <RadioButton Content="orange2, passionorange" Background="#FF6600" Style="{StaticResource color}"/>
-                <RadioButton Content="yellow2, madyellow" Background="#999900" Style="{StaticResource color}"/>
-                <RadioButton Content="green2, elementalgreen" Background="#00CC66" Style="{StaticResource color}"/>
-                <RadioButton Content="cyan2" Background="#00CCCC" Style="{StaticResource color}"/>
-                <RadioButton Content="blue2, marineblue" Background="#3399FF" Style="{StaticResource color}"/>
-                <RadioButton Content="purple2, nobleviolet" Background="#6633CC" Style="{StaticResource color}"/>
-                <RadioButton Content="black2" Background="#666666" Style="{StaticResource color}"/>
+                <RadioButton Content="white2, niconicowhite" Background="#CCCC99" Style="{StaticResource color}" IsEnabled="{Binding IsPremium}"/>
+                <RadioButton Content="red2, truered" Background="#CC0033" Style="{StaticResource color}" IsEnabled="{Binding IsPremium}"/>
+                <RadioButton Content="pink2" Background="#FF33CC" Style="{StaticResource color}" IsEnabled="{Binding IsPremium}"/>
+                <RadioButton Content="orange2, passionorange" Background="#FF6600" Style="{StaticResource color}" IsEnabled="{Binding IsPremium}"/>
+                <RadioButton Content="yellow2, madyellow" Background="#999900" Style="{StaticResource color}" IsEnabled="{Binding IsPremium}"/>
+                <RadioButton Content="green2, elementalgreen" Background="#00CC66" Style="{StaticResource color}" IsEnabled="{Binding IsPremium}"/>
+                <RadioButton Content="cyan2" Background="#00CCCC" Style="{StaticResource color}" IsEnabled="{Binding IsPremium}"/>
+                <RadioButton Content="blue2, marineblue" Background="#3399FF" Style="{StaticResource color}" IsEnabled="{Binding IsPremium}"/>
+                <RadioButton Content="purple2, nobleviolet" Background="#6633CC" Style="{StaticResource color}" IsEnabled="{Binding IsPremium}"/>
+                <RadioButton Content="black2" Background="#666666" Style="{StaticResource color}" IsEnabled="{Binding IsPremium}"/>
 
             </UniformGrid>
             <StackPanel Grid.Row="2" Margin="3">

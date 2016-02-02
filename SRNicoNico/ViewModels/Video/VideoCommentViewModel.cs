@@ -27,6 +27,11 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        public bool IsPremium {
+            get {
+                return NicoNicoWrapperMain.Session.Authority == NiconicoAccountAuthority.Premium;
+            }
+        }
 
         #region AcceptEnter変更通知プロパティ
         private bool _AcceptEnter;

@@ -204,7 +204,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region IsMute変更通知プロパティ
         private bool _IsMute;
 
