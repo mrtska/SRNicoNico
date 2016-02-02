@@ -26,7 +26,7 @@ package comment {
 		//コメントのコマンド
 		public var command:CommentCommand;
 		
-		public function CommentEntry(no:uint, vpos:Number, mail:String, content:String) {
+		public function CommentEntry(no:uint, vpos:Number, mail:String, content:String, isMe:Boolean) {
 		
 			//値指定
 			this.no = no;									//コメントナンバー
@@ -48,6 +48,13 @@ package comment {
 			this.autoSize = TextFieldAutoSize.CENTER;
 			this.filters = DEFAULT_FILTERS;
 			this.text = content;
+			
+			if (isMe) {
+				
+				this.border = true;
+				this.borderColor = 0xFFFF00;
+			}
+			
 			
 			CommentSizeCalculator.calcScale(this, this.numLines);
 		}

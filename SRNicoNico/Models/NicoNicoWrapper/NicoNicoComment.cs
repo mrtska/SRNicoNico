@@ -168,8 +168,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
 
-
-        public  void Post(string comment, string mail, string vpos) {
+        //コメントナンバーを返す
+        public  string Post(string comment, string mail, string vpos) {
 
             Video.Status = "コメント投稿中";
 
@@ -211,12 +211,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     Video.Status = "コメントを投稿しました";
                 }
-                
-               
+
+                return doc.DocumentNode.SelectSingleNode("packet/chat_result").Attributes["no"].Value;
             } catch(RequestTimeout) {
 
                 Video.Status = "コメントの投稿に失敗しました（タイムアウト）";
-
+                return null;
             }
         }
 
@@ -245,12 +245,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var entry = new NicoNicoCommentEntry();
                 
-                entry.No = int.Parse(attr["no"].Value);
-                entry.Vpos = int.Parse(attr["vpos"].Value);
+                entry.No = attr["no"].Value;
+                entry.Vpos = attr["vpos"].Value;
                 entry.Date = long.Parse(attr["date"].Value);
                 entry.UserId = attr.Contains("user_id") ? attr["user_id"].Value : "contributor";
                 entry.Mail = attr.Contains("mail") ? attr["mail"].Value : "";
-                entry.Content = System.Web.HttpUtility.HtmlDecode(node.InnerText);
+                entry.Content = HttpUtility.HtmlDecode(node.InnerText);
                 
                 list.Add(entry);
             }
@@ -261,10 +261,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoCommentEntry : IComparable<NicoNicoCommentEntry> {
 
 		//コメントナンバー
-		public int No { get; set; }
+		public string No { get; set; }
 
 		//コメント再生位置
-		public int Vpos { get; set; }
+		public string Vpos { get; set; }
 
 		//コマンド
 		public string Mail { get; set; }

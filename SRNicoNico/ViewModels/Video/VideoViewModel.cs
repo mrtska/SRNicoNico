@@ -479,6 +479,9 @@ namespace SRNicoNico.ViewModels {
 
                         StoryBoardStatus = "取得中";
 
+                        //少し待ったほうがちゃんとデータを返してくれるっぽい？
+                        Thread.Sleep(1000);
+
                         var sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
                         VideoData.StoryBoardData = sb.GetStoryBoardData();
 
@@ -499,11 +502,14 @@ namespace SRNicoNico.ViewModels {
 
                 Task.Run(() => {
 
+                    //少し待ったほうがちゃんとデータを返してくれるっぽい
+                    Thread.Sleep(1000);
+
                     CommentInstance = new NicoNicoComment(VideoData.ApiData.GetFlv, this);
                     var list = CommentInstance.GetComment();
                     if(list != null) {
 
-                        foreach(NicoNicoCommentEntry entry in list) {
+                        foreach(var entry in list) {
 
                             VideoData.CommentData.Add(new CommentEntryViewModel(entry));
                         }

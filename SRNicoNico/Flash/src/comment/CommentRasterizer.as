@@ -29,7 +29,12 @@ package comment {
 			positioner = new CommentPositioner(width, height, drawingList);
 		}
 		
-		
+		public function loadMyComment(string:String):void {
+			
+			var obj:Object = JSON.parse(string);
+			commentList.push(new CommentEntry(obj.No, obj.Vpos, obj.Mail, obj.Content, true));
+			
+		}
 		
 		//コメントリストをC#からもらう
 		public function load(string:String):void {
@@ -38,7 +43,7 @@ package comment {
 			
 			for each(var obj:Object in json.array) {
 				
-				commentList.push(new CommentEntry(obj.No, obj.Vpos, obj.Mail, obj.Content));
+				commentList.push(new CommentEntry(obj.No, obj.Vpos, obj.Mail, obj.Content, false));
 			}
 		}
 

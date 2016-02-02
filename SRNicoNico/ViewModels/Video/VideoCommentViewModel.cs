@@ -186,16 +186,21 @@ namespace SRNicoNico.ViewModels {
 
             Task.Run(() => {
 
-                Owner.CommentInstance.Post(Text, Mail, Vpos);
+                var no = Owner.CommentInstance.Post(Text, Mail, Vpos);
 
-                Text = "";
+                if(no != null) {
 
+                    var entry = new NicoNicoCommentEntry();
+                    entry.No = no;
+                    entry.Mail = Mail;
+                    entry.Vpos = Vpos;
+                    entry.Content = Text;
+                    var json = entry.ToJson();
+
+                    Owner.Proxy.Call("AsInjectMyComment", entry.ToJson());
+                    Text = "";
+                }
             });
-
-
-
         }
-
-
 	}
 }
