@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SRNicoNico.Views.Contents.Config.ConfigVideo"
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.Config.ConfigComment"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,7 +13,7 @@
 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance {x:Type vm:ConfigVideoViewModel}}"
+             d:DataContext="{d:DesignInstance {x:Type vm:ConfigCommentViewModel}}"
              
              Background="{DynamicResource ThemeBrushKey}"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
@@ -23,25 +23,24 @@
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
 
         <Grid Margin="10">
-            <StackPanel >
-                <TextBlock Text="動画情報の位置" VerticalAlignment="Center" FontSize="20" />
-                <StackPanel Orientation="Horizontal" Height="150" Margin="10,0">
-                    <local:ConfigVideoRect Placement="{Binding VideoPlacement}" Width="400"/>
-                </StackPanel>
-                
-                <TextBlock Text="フルスクリーン" FontSize="20" Margin="0,10,0,0"/>
-                <StackPanel Margin="10">
-                    <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding AlwaysShowSeekBar}" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-                </StackPanel>
+            <StackPanel Margin="10,0" Grid.Row="1">
+
+                <TextBlock Text="コメント非表示設定" FontSize="20" Margin="0,10"/>
+                    <CheckBox Content="3DSからのコメントを非表示にする" IsChecked="{Binding Hide3DSComment}" />
+                    <CheckBox Content="WiiUからのコメントを非表示にする" IsChecked="{Binding HideWiiUComment}" Margin="0,10,0,0"/>
 
 
             </StackPanel>
-            
-            
+
+
         </Grid>
 
-    </ScrollViewer>    
-        
+    </ScrollViewer>
+
 
 </UserControl>

@@ -36,10 +36,38 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region EnableTwitterLink変更通知プロパティ
+
+        public bool EnableTwitterLink {
+            get { return Properties.Settings.Default.EnableTwitterLink; }
+            set {
+                if(Properties.Settings.Default.EnableTwitterLink == value)
+                    return;
+                Properties.Settings.Default.EnableTwitterLink = value;
+                Properties.Settings.Default.Save();
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region EnableUrlLink変更通知プロパティ
+
+        public bool EnableUrlLink {
+            get { return Properties.Settings.Default.EnableUrlLink; }
+            set {
+                if(Properties.Settings.Default.EnableUrlLink == value)
+                    return;
+                Properties.Settings.Default.EnableUrlLink = value;
+                Properties.Settings.Default.Save();
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         public ConfigGeneralViewModel() : base("一般") {
 
-            UserSelectedFont = Properties.Settings.Default.UserSelectedFont;
         }
     }
 }

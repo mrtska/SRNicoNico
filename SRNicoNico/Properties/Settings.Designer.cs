@@ -154,5 +154,29 @@ namespace SRNicoNico.Properties {
                 this["Use184"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Hide3DSComment {
+            get {
+                return ((bool)(this["Hide3DSComment"]));
+            }
+            set {
+                this["Hide3DSComment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HideWiiUComment {
+            get {
+                return ((bool)(this["HideWiiUComment"]));
+            }
+            set {
+                this["HideWiiUComment"] = value;
+            }
+        }
     }
 }

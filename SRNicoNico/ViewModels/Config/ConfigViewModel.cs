@@ -50,13 +50,14 @@ namespace SRNicoNico.ViewModels {
 
         public ConfigGeneralViewModel General { get; private set; }
         public ConfigVideoViewModel Video { get; private set; }
-
+        public ConfigCommentViewModel Comment { get; private set; }
 
 
         public ConfigViewModel() : base("設定") {
 
             ConfigCollection.Add(General = new ConfigGeneralViewModel());
             ConfigCollection.Add(Video = new ConfigVideoViewModel());
+            ConfigCollection.Add(Comment = new ConfigCommentViewModel());
 
         }
     }

@@ -49,34 +49,6 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-        #region EnableTwitterLink変更通知プロパティ
-
-        public bool EnableTwitterLink {
-            get { return Properties.Settings.Default.EnableTwitterLink; }
-            set { 
-                if(Properties.Settings.Default.EnableTwitterLink == value)
-                    return;
-                Properties.Settings.Default.EnableTwitterLink = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region EnableUrlLink変更通知プロパティ
-
-        public bool EnableUrlLink {
-            get { return Properties.Settings.Default.EnableUrlLink; }
-            set { 
-                if(Properties.Settings.Default.EnableUrlLink == value)
-                    return;
-                Properties.Settings.Default.EnableUrlLink = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
 
         #region AlwaysShowSeekBar変更通知プロパティ
 
@@ -93,11 +65,8 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-        public ConfigVideoViewModel() : base("動画関連") {
+        public ConfigVideoViewModel() : base("動画") {
 
-            VideoPlacement = Properties.Settings.Default.VideoInfoPlacement;
-            EnableTwitterLink = Properties.Settings.Default.EnableTwitterLink;
-            EnableUrlLink = Properties.Settings.Default.EnableUrlLink;
         }
     }
 }

@@ -14,6 +14,8 @@
              d:DesignWidth="585"
 			 d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
              mc:Ignorable="d"
+             Background="{DynamicResource ThemeBrushKey}"
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
 			 >
 
     <Grid Margin="10">

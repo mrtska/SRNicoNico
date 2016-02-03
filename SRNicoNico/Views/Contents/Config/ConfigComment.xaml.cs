@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace SRNicoNico.Views.Contents.Config {
     /// <summary>
-    /// ConfigEntry.xaml の相互作用ロジック
+    /// ConfigVideo.xaml の相互作用ロジック
     /// </summary>
-    public partial class ConfigEntry : UserControl {
-        public ConfigEntry() {
+    public partial class ConfigComment : UserControl {
+        public ConfigComment() {
             InitializeComponent();
         }
     }

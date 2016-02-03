@@ -30,8 +30,14 @@
                             <TextBlock Language="ja" Text="{Binding Converter={StaticResource FontFamilyToNameConverter}}" FontFamily="{Binding}" FontSize="16"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
-                
                 </ComboBox>
+
+                <TextBlock Text="ハイパーリンク設定" FontSize="20" Margin="0,10,0,0"/>
+                <StackPanel Margin="10">
+                    <CheckBox Content="動画説明文の@○○をTwitterのリンクにする" IsChecked="{Binding EnableTwitterLink}" />
+                    <CheckBox Content="動画説明文のURLをリンクにする" IsChecked="{Binding EnableUrlLink}" Margin="0,10,0,0"/>
+
+                </StackPanel>
             </StackPanel>
 
         </Grid>

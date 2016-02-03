@@ -32,6 +32,9 @@
                 <DataTemplate DataType="{x:Type vm:ConfigGeneralViewModel}">
                     <local:ConfigGeneral />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:ConfigCommentViewModel}">
+                    <local:ConfigComment />
+                </DataTemplate>
             </ItemsControl.Resources>
 
             <ItemsControl.ItemsPanel>
