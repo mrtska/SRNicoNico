@@ -207,6 +207,7 @@
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
     <Compile Include="Models\NicoNicoViewer\UpdateCheck.cs" />
     <Compile Include="Models\NicoNicoViewer\VerifyEmptyText.cs" />
+    <Compile Include="Models\NicoNicoViewer\VIdeoCommentConfig.cs" />
     <Compile Include="Models\NicoNicoViewer\VideoCommentDecoration.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteCommunity.cs" />
@@ -802,6 +803,9 @@
       <Project>{9b19cf4e-9d12-438b-af62-dabba8762e1c}</Project>
       <Name>Updater</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Contents\PlayList\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

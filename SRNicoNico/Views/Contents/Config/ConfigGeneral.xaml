@@ -21,7 +21,7 @@
     
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
 
-        <Grid Margin="10" Language="ja">
+        <Grid Margin="10" >
             <StackPanel>
                 <TextBlock FontSize="20" Text="フォントの設定"/>
                 <ComboBox  Margin="15,5" HorizontalAlignment="Left" Width="300" SelectedValue="{Binding UserSelectedFont,Mode=TwoWay}" ItemsSource="{x:Static Fonts.SystemFontFamilies}">

@@ -28,12 +28,18 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Margin="10,0" Grid.Row="1">
+            <StackPanel Grid.Row="1">
+                <TextBlock Text="NG共有レベル" FontSize="20" />
+                <Slider SmallChange="1" LargeChange="1" Maximum="3" Ticks="0,4,4,3" Width="400"  HorizontalAlignment="Left" Margin="10" TickPlacement="Both"/>
 
-                <TextBlock Text="コメント非表示設定" FontSize="20" Margin="0,10"/>
+
+                <TextBlock Text="コメント非表示設定" FontSize="20" />
+                <StackPanel Margin="10">
                     <CheckBox Content="3DSからのコメントを非表示にする" IsChecked="{Binding Hide3DSComment}" />
                     <CheckBox Content="WiiUからのコメントを非表示にする" IsChecked="{Binding HideWiiUComment}" Margin="0,10,0,0"/>
+                </StackPanel>
 
+                
 
             </StackPanel>
 
