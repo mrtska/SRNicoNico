@@ -46,6 +46,21 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region NGSharedLevel変更通知プロパティ
+        private string _NGSharedLevel;
+
+        public string NGSharedLevel {
+            get { return _NGSharedLevel; }
+            set { 
+                if(_NGSharedLevel == value)
+                    return;
+                _NGSharedLevel = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
 
 
         public ConfigCommentViewModel() : base("コメント") {
