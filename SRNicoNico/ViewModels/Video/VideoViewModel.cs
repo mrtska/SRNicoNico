@@ -505,7 +505,7 @@ namespace SRNicoNico.ViewModels {
                     //少し待ったほうがちゃんとデータを返してくれるっぽい
                     Thread.Sleep(1000);
 
-                    CommentInstance = new NicoNicoComment(VideoData.ApiData.GetFlv, this);
+                    CommentInstance = new NicoNicoComment(VideoData.ApiData, this);
                     var list = CommentInstance.GetComment();
                     if(list != null) {
 

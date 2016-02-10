@@ -178,5 +178,17 @@ namespace SRNicoNico.Properties {
                 this["HideWiiUComment"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int NGSharedLevel {
+            get {
+                return ((int)(this["NGSharedLevel"]));
+            }
+            set {
+                this["NGSharedLevel"] = value;
+            }
+        }
     }
 }

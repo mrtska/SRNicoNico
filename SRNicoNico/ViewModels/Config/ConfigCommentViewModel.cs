@@ -47,14 +47,13 @@ namespace SRNicoNico.ViewModels {
 
 
         #region NGSharedLevel変更通知プロパティ
-        private string _NGSharedLevel;
-
-        public string NGSharedLevel {
-            get { return _NGSharedLevel; }
+        public int NGSharedLevel {
+            get { return Properties.Settings.Default.NGSharedLevel; }
             set { 
-                if(_NGSharedLevel == value)
+                if(Properties.Settings.Default.NGSharedLevel == value)
                     return;
-                _NGSharedLevel = value;
+                Properties.Settings.Default.NGSharedLevel = value;
+                Properties.Settings.Default.Save();
                 RaisePropertyChanged();
             }
         }
@@ -65,6 +64,8 @@ namespace SRNicoNico.ViewModels {
 
         public ConfigCommentViewModel() : base("コメント") {
 
+            //一応通知を飛ばしておく
+            RaisePropertyChanged("NGSharedLevel");
         }
     }
 }

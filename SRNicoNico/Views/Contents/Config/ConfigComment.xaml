@@ -32,13 +32,20 @@
             <StackPanel Grid.Row="1">
                 <TextBlock Text="NG共有レベル" FontSize="20" />
                 <StackPanel>
-                    <Slider x:Name="slider" SmallChange="1" LargeChange="1" Maximum="3" Value="{Binding NGSharedLevel}" AutoToolTipPlacement="TopLeft" Width="400"  HorizontalAlignment="Left" Margin="10" TickPlacement="Both" Style="{DynamicResource SliderStyle1}" />
-                    <UniformGrid Columns="4" Rows="1"  Width="520" Margin="6,0" HorizontalAlignment="Left">
-                        <TextBlock Text="無" FontSize="18"/>
-                        <TextBlock Text="低" FontSize="18"/>
-                        <TextBlock Text="中" FontSize="18"/>
-                        <TextBlock Text="高" FontSize="18"/>
-                    </UniformGrid>
+                    <ComboBox Width="200" HorizontalAlignment="Left" Margin="10" SelectedIndex="{Binding NGSharedLevel,Mode=TwoWay}">
+                        <ComboBoxItem>
+                            <TextBlock Text="無"/>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <TextBlock Text="低"/>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <TextBlock Text="中"/>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <TextBlock Text="高"/>
+                        </ComboBoxItem>
+                    </ComboBox>
                 </StackPanel>
 
 

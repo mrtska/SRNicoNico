@@ -33,6 +33,10 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 TargetUrl += "&" + query;
             }
         }
+        public void AddQuery(string key, int value) {
+
+            AddQuery(key, value.ToString());
+        }
 
         //key=valueを直接追加する場合はこれを呼ぶ
         public void AddRawQuery(string query) {

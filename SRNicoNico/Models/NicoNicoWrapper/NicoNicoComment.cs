@@ -8,6 +8,8 @@ using Fizzler.Systems.HtmlAgilityPack;
 
 using Codeplex.Data;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Xml;
 
 using SRNicoNico.ViewModels;
 using SRNicoNico.Models.NicoNicoViewer;
@@ -18,7 +20,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 		//スレッドキー取得API
-		private const string GetThreadKeyApiUrl = "http://flapi.nicovideo.jp/api/getthreadkey?thread=";
+		private const string GetThreadKeyApiUrl = "http://flapi.nicovideo.jp/api/getthreadkey";
 
         //ポストキー取得API
         private const string GetPostKeyApiUrl = "http://flapi.nicovideo.jp/api/getpostkey";
@@ -28,6 +30,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //------
         private NicoNicoGetFlvData GetFlv;
+        private WatchApiData ApiData;
 
         private VideoViewModel Video;
         //------
@@ -38,9 +41,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //コメント数
         private int LastRes;
 
-        public NicoNicoComment(NicoNicoGetFlvData getFlv, VideoViewModel vm) {
+        public NicoNicoComment(WatchApiData apiData, VideoViewModel vm) {
 
-            GetFlv = getFlv;
+            ApiData = apiData;
+            GetFlv = apiData.GetFlv;
             Video = vm;
 		}
 
@@ -57,19 +61,65 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             Video.CommentStatus = "取得中";
             var list = new List<NicoNicoCommentEntry>();
 
-
             //---ユーザーコメント取得---
+            var root = new XmlDocument();
+            var packet = root.CreateElement("packet");
+
+            var thread = root.CreateElement("thread");
+            thread.SetAttribute("thread", GetFlv.ThreadID);
+            thread.SetAttribute("version", "20090904");
+            thread.SetAttribute("user_id", GetFlv.UserId);
+            thread.SetAttribute("userkey", GetFlv.UserKey);
+            thread.SetAttribute("scores", "1");
+
+            var leaves = root.CreateElement("thread_leaves");
+            leaves.SetAttribute("thread", GetFlv.ThreadID);
+            leaves.SetAttribute("user_id", GetFlv.UserId);
+            leaves.SetAttribute("userkey", GetFlv.UserKey);
+            leaves.SetAttribute("scores", "1");
+            leaves.InnerText = "0-" + ((GetFlv.Length / 60) + 1) + ":100,1000";
+
+            if(ApiData.IsOfficial) {
+
+                try {
+                    var query = new GetRequestQuery(GetThreadKeyApiUrl);
+                    query.AddQuery("thread", GetFlv.ThreadID);
+                    query.AddQuery("language_id", 0);
+
+                    var threadKeyRaw = NicoNicoWrapperMain.Session.GetAsync(query.TargetUrl).Result;
+                    var temp = threadKeyRaw.Split('&');
+                    var threadKey = temp[0].Split('=')[1];
+                    var force184 = temp[1].Split('=')[1];
+
+                    thread.SetAttribute("threadkey", threadKey);
+                    thread.SetAttribute("force_184", force184);
+                    leaves.SetAttribute("threadkey", threadKey);
+                    leaves.SetAttribute("force_184", force184);
+
+                    thread.RemoveAttribute("userkey");
+                    leaves.RemoveAttribute("userkey");
+
+                } catch(RequestTimeout) {
+
+                    Video.CommentStatus = "取得失敗";
+                }
+
+            }
+
+            packet.AppendChild(thread);
+            packet.AppendChild(leaves);
+            root.AppendChild(packet);
+
             //コメント取得APIに渡すGETパラメーター
-            var leaves = new GetRequestQuery(GetFlv.CommentServerUrl + "thread_leaves");
-            leaves.AddQuery("thread", GetFlv.ThreadID);
-            leaves.AddQuery("body", "0-" + ((GetFlv.Length / 60) + 1) + ":100,1000");
-            leaves.AddQuery("user_id", GetFlv.UserId);
-            leaves.AddQuery("userkey", GetFlv.UserKey);
-            leaves.AddQuery("scores", "1");
+            //leaves.AddQuery("userkey", GetFlv.UserKey);
 
             try {
-                
-                var a = NicoNicoWrapperMain.GetSession().GetAsync(leaves.TargetUrl).Result;
+
+                var request = new HttpRequestMessage(HttpMethod.Post, GetFlv.CommentServerUrl);
+                request.Content = new StringContent(root.InnerXml);
+                request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
+
+                var a = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);
@@ -94,13 +144,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //公式動画
                 if(resultcode == "9") {
 
-                    Video.CommentStatus = "取得失敗（公式動画）復帰中";
                     var threadKey = NicoNicoWrapperMain.Session.GetAsync(GetThreadKeyApiUrl + GetFlv.ThreadID).Result;
 
-                    var rec = new GetRequestQuery(leaves.TargetUrl);
-                    rec.AddRawQuery(threadKey);
 
-                    a = NicoNicoWrapperMain.GetSession().GetAsync(rec.TargetUrl).Result;
+                    // var rec = new GetRequestQuery(leaves.TargetUrl);
+                    // rec.AddRawQuery(threadKey);
+
+                    var request2 = new HttpRequestMessage(HttpMethod.Post, GetFlv.CommentServerUrl);
+                    
+
+                    request2.Content = new StringContent(root.InnerXml);
+                    request2.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
+
+
+                    a = NicoNicoWrapperMain.GetSession().GetAsync(request2).Result;
                     doc.LoadHtml2(a);
 
                 }

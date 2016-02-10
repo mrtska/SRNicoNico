@@ -140,6 +140,11 @@ package {
 				
 			rasterizer.loadMyComment(json);
 		}
+		public function ApplyChanges(json:String):void {
+			
+			
+		}
+		
 		public function InjectUploaderComment(json:String):void {
 		
 				

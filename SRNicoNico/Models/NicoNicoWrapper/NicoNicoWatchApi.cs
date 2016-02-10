@@ -116,6 +116,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.MylistCounter = (int) videoDetail.mylistCount;
             ret.YesterdayRank = videoDetail.yesterday_rank == null ? "圏外" : videoDetail.yesterday_rank + "位";
             ret.HighestRank = videoDetail.highest_rank == null ? "圏外" : videoDetail.highest_rank + "位";
+            ret.IsOfficial = videoDetail.is_official;
             ret.Token = json.flashvars.csrfToken;
 
             if(json.uploaderInfo()) {
@@ -336,6 +337,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //チャンネル動画か否か
         public bool IsChannelVideo { get; set; }
+
+        //公式か否か チャンネル動画は公式扱いっぽい
+        public bool IsOfficial { get; set; }
+
     }
 
     //タグ情報
@@ -391,6 +396,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //非公開理由
         public int ClosedReason { get; private set; }   
+
 
 
 
