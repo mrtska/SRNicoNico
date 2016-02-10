@@ -14,33 +14,31 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
 
         //URLから適当なViewを開く
-        public static void Open(string url) {
+        public static TabItemViewModel Open(string url) {
 
             if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
 
                 System.Diagnostics.Process.Start(url);
-                return;
+                return null;
             }
 
-            Task.Run(() => {
+            if(url.StartsWith("http://www.nicovideo.jp/watch/")) {
 
-                if(url.StartsWith("http://www.nicovideo.jp/watch/")) {
+                return new VideoViewModel(url);
+            } else if(url.StartsWith("http://www.nicovideo.jp/user/")) {
 
-                    new VideoViewModel(url);
-                } else if(url.StartsWith("http://www.nicovideo.jp/user/")) {
+                return new UserViewModel(url);
+            } else if(url.StartsWith("http://www.nicovideo.jp/mylist/")) {
 
-                    new UserViewModel(url);
-                } else if(url.StartsWith("http://www.nicovideo.jp/mylist/")) {
+                return new PublicMylistViewModel(url);
+            } else if(url.StartsWith("http://com.nicovideo.jp/community/")) {
 
-                    new PublicMylistViewModel(url);
-                } else if(url.StartsWith("http://com.nicovideo.jp/community/")) {
+                return new CommunityViewModel(url);
+            } else {
 
-                    new CommunityViewModel(url);
-                } else {
-
-                    System.Diagnostics.Process.Start(url);
-                }
-            });
+                System.Diagnostics.Process.Start(url);
+                return null;
+            }
         }
 
         //ニコニコのURLが何を指しているかを返す

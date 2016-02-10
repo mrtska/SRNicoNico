@@ -73,7 +73,7 @@
                     <Style TargetType="Hyperlink">
                         <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
                         <Setter Property="ToolTipService.ShowDuration" Value="100000" />
-                        <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
+                        <EventSetter Event="MouseEnter" Handler="InitializeToolTip"/>
                     </Style>
                 </Grid.Resources>
                 <ScrollViewer>

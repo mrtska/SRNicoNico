@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,7 +26,6 @@ namespace SRNicoNico.Views.Contents.Video {
 			InitializeComponent();
             
 		}
-
         public void OpenHyperLink(object sender, RequestNavigateEventArgs e) {
 
             var url = e.Uri.OriginalString;
@@ -33,21 +33,35 @@ namespace SRNicoNico.Views.Contents.Video {
 
                 if(DataContext is VideoViewModel) {
 
-                    VideoViewModel vm = (VideoViewModel)DataContext;
+                    var vm = (VideoViewModel) DataContext;
                     var time = url.Substring(1);
 
                     vm.Seek(NicoNicoUtil.ConvertTime((time)));
                 }
             } else {
+                if(DataContext is VideoViewModel) {
 
-                NicoNicoOpener.Open(e.Uri.OriginalString);
+                    var vm = (VideoViewModel) DataContext;
+                    NicoNicoOpener.Open(e.Uri.OriginalString);
+
+                    if(!(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftShift))) {
+
+                        vm.DisposeViewModel();
+                    }
+                }
             }
-
         }
 
         public void InitializeToolTip(object sender, RoutedEventArgs e) {
 
             var link = sender as Hyperlink;
+
+            //すでにツールチップがあったらスキップ
+            if(link.ToolTip != null) {
+
+                return;
+            }
+
             var inline = link.Inlines.First() as Run;
             if(inline != null) {
 
@@ -64,7 +78,6 @@ namespace SRNicoNico.Views.Contents.Video {
 
                     return;
                 }
-
                 var text = uri.OriginalString;
 
                 if(text.StartsWith("http://www.nicovideo.jp/watch/")) {

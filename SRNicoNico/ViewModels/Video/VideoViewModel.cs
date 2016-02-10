@@ -389,18 +389,16 @@ namespace SRNicoNico.ViewModels {
 
         public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
+            App.ViewModelRoot.AddTabAndSetCurrent(this);
+
             VideoUrl = videoUrl;
             Cmsid = Name;
             DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-
                 VideoFlash = new VideoFlash() { DataContext = this };
                 Controller = new VideoController() { DataContext = this };
-
-
             }));
 
-            App.ViewModelRoot.AddTabAndSetCurrent(this);
 
 
             Initialize(videoUrl + "?watch_harmful=1");
@@ -502,9 +500,6 @@ namespace SRNicoNico.ViewModels {
 
                 Task.Run(() => {
 
-                    //少し待ったほうがちゃんとデータを返してくれるっぽい
-                    Thread.Sleep(1000);
-
                     CommentInstance = new NicoNicoComment(VideoData.ApiData, this);
                     var list = CommentInstance.GetComment();
                     if(list != null) {
@@ -531,30 +526,6 @@ namespace SRNicoNico.ViewModels {
                 });
                
             });
-        }
-
-        //リンクを開く
-        public void OpenLink(string cmsid) {
-
-            if(Keyboard.IsKeyDown(Key.LeftCtrl) || VideoData.ApiData.IsPaidVideo) {
-
-                System.Diagnostics.Process.Start(cmsid);
-                return;
-            }
-
-            if(cmsid.StartsWith("http://www.nicovideo.jp/watch/")) {
-
-                new VideoViewModel(cmsid);
-                DisposeViewModel();
-                return;
-            }
-
-            if(cmsid.StartsWith("http")) {
-
-                System.Diagnostics.Process.Start(cmsid);
-                return;
-            }
-
         }
 
         //ツイートダイアログ表示
@@ -895,7 +866,6 @@ namespace SRNicoNico.ViewModels {
         public override void KeyDown(KeyEventArgs e) {
 
             Console.WriteLine("KeyDown:" + e.Key);
-            Console.Out.Flush();
             if(Comment.IsPopupOpen) {
 
                 if(e.Key == Key.Enter) {
