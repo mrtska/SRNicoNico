@@ -181,10 +181,10 @@ namespace SRNicoNico.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int NGSharedLevel {
+        [global::System.Configuration.DefaultSettingValueAttribute("無")]
+        public string NGSharedLevel {
             get {
-                return ((int)(this["NGSharedLevel"]));
+                return ((string)(this["NGSharedLevel"]));
             }
             set {
                 this["NGSharedLevel"] = value;

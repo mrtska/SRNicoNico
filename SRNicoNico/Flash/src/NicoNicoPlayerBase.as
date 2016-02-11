@@ -43,6 +43,7 @@ package {
 				ExternalInterface.addCallback("AsToggleComment", ToggleComment);
 				ExternalInterface.addCallback("AsInjectMyComment", InjectMyComment);
 				ExternalInterface.addCallback("AsChangeVolume", ChangeVolume);
+				ExternalInterface.addCallback("AsApplyChanges", ApplyChanges);
 				
 				ExternalInterface.marshallExceptions = true;
 			}
@@ -114,7 +115,7 @@ package {
 		}
 		public function ApplyChanges(json:String):void {
 			
-			
+			rasterizer.applyChanges(json);
 		}
 		
 		public function InjectUploaderComment(json:String):void {

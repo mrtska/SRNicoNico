@@ -48,7 +48,7 @@ namespace SRNicoNico.ViewModels {
 
 
         #region NGSharedLevel変更通知プロパティ
-        public int NGSharedLevel {
+        public string NGSharedLevel {
             get { return Properties.Settings.Default.NGSharedLevel; }
             set { 
                 if(Properties.Settings.Default.NGSharedLevel == value)
@@ -87,20 +87,22 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-
-
-
         public ConfigCommentViewModel() : base("コメント") {
 
             //一応通知を飛ばしておく
         }
 
-
-
         public string ToJson() {
 
-            return DynamicJson.Serialize(this);
+            dynamic root = new DynamicJson();
+
+            root.Hide3DSComment = Hide3DSComment;
+            root.HideWiiUComment = HideWiiUComment;
+            root.NGSharedLevel = NGSharedLevel;
+            root.CommentAlpha = CommentAlpha;
+            root.DefaultCommentSize = DefaultCommentSize;
+
+            return root.ToString();
         }
     }
 }

@@ -29,7 +29,10 @@ package comment {
 		//コメントのコマンド
 		public var command:CommentCommand;
 		
-		public function CommentEntry(no:uint, vpos:Number, mail:String, content:String, isMe:Boolean) {
+		//NGスコア
+		public var score:int;
+		
+		public function CommentEntry(no:uint, vpos:Number, mail:String, content:String, isMe:Boolean, score:int) {
 		
 			//値指定
 			this.no = no;									//コメントナンバー
@@ -57,6 +60,8 @@ package comment {
 				this.border = true;
 				this.borderColor = 0xFFFF00;
 			}
+			
+			this.score = score;
 			
 			
 			CommentSizeCalculator.calcScale(this, this.numLines);

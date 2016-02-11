@@ -724,6 +724,7 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case "Initialized": //動画が再生される直前に呼ばれる
                     Volume = Properties.Settings.Default.Volume;    //保存された値をFlash側に伝える
+                    ApplyChanges();
                     break;
                 case "Stop": //動画が最後まで行ったらリピートしたりフルスクリーンから復帰したりする
                     if(IsRepeat) {
@@ -738,6 +739,13 @@ namespace SRNicoNico.ViewModels {
                     Console.WriteLine("Invoked From Actionscript:" + func);
                     break;
             }
+        }
+
+        //コメント設定をFlashに反映させる
+        public void ApplyChanges() {
+
+            var a = App.ViewModelRoot.Config.Comment.ToJson();
+            ;
         }
 
         //Flashに一時停止命令を送る

@@ -310,6 +310,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 entry.UserId = attr.Contains("user_id") ? attr["user_id"].Value : "contributor";
                 entry.Mail = attr.Contains("mail") ? attr["mail"].Value : "";
                 entry.Content = HttpUtility.HtmlDecode(node.InnerText);
+                entry.Score = attr.Contains("score") ? int.Parse(attr["score"].Value) : 0;
                 
                 list.Add(entry);
             }
@@ -337,6 +338,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//投稿日時 Unixタイム
 		public long Date { get; set; }
 
+        //NGスコア
+        public int Score { get; set; }
         
 		//Vposでソートする
 		public int CompareTo(NicoNicoCommentEntry obj) {

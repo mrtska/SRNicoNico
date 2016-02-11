@@ -32,7 +32,7 @@ package comment {
 		public function loadMyComment(string:String):void {
 			
 			var obj:Object = JSON.parse(string);
-			commentList.push(new CommentEntry(obj.No, obj.Vpos, obj.Mail, obj.Content, true));
+			commentList.push(new CommentEntry(obj.No, obj.Vpos, obj.Mail, obj.Content, true, obj.Score));
 			
 		}
 		
@@ -43,7 +43,7 @@ package comment {
 			
 			for each(var obj:Object in json.array) {
 				
-				commentList.push(new CommentEntry(obj.No, obj.Vpos, obj.Mail, obj.Content, false));
+				commentList.push(new CommentEntry(obj.No, obj.Vpos, obj.Mail, obj.Content, false, obj.Score));
 			}
 		}
 
@@ -74,7 +74,6 @@ package comment {
 						
 						addChild(target);
 					}
-					
 				}
 			}
 			
@@ -97,12 +96,16 @@ package comment {
 			
 			for each(var obj:Object in json.array) {
 				
-				var entry:CommentEntry = new CommentEntry(obj.No, obj.Vpos, obj.Mail, obj.Content, false);
+				var entry:CommentEntry = new CommentEntry(obj.No, obj.Vpos, obj.Mail, obj.Content, false, obj.Score);
 				entry.fork = true;	//投稿者コメントなので
 				
 				
 				commentList.push(entry);
 			}
+		}
+		public function applyChanges(json:String):void {
+			
+			
 		}
 	}
 }
