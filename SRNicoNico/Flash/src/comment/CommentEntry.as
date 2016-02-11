@@ -23,6 +23,9 @@ package comment {
 		//コメント
 		public var content:String;
 		
+		//投稿者コメントか否か
+		public var fork:Boolean;
+		
 		//コメントのコマンド
 		public var command:CommentCommand;
 		
@@ -58,5 +61,12 @@ package comment {
 			
 			CommentSizeCalculator.calcScale(this, this.numLines);
 		}
+		
+		
+		
+		
+		
+		
+		
 	}
 }

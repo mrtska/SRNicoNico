@@ -1,5 +1,4 @@
 package {
-	import comment.UploaderCommentRasterizer;
 	import flash.display.Sprite;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
@@ -21,7 +20,6 @@ package {
 		//コメントラスタライザ
 		public var rasterizer:CommentRasterizer;
 		
-		public var uploaderRastarizer:UploaderCommentRasterizer;
 		
 		public function NicoNicoPlayerBase() {
 			
@@ -31,7 +29,6 @@ package {
 			stage.frameRate = 30;
 			
 			rasterizer = new CommentRasterizer();
-			uploaderRastarizer = new UploaderCommentRasterizer();
 			
 			//JSコールバック登録
 			if(ExternalInterface.available) {
@@ -49,29 +46,9 @@ package {
 				
 				ExternalInterface.marshallExceptions = true;
 			}
-			
-
-			
 			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
-			uploaderRastarizer.updateBounds(stage.stageWidth, stage.stageHeight);
 			
 			
-			//OpenVideo("Z:/smile.flv");
-			
-			//OpenVideo("Z:/smile (1).mp4");
-			//var now:Date = new Date();
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
-			
-			/*var loader:URLLoader = new URLLoader();
-			var req:URLRequest = new URLRequest("Z:/msg.txt");
-			
-			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
-			
-			InjectComment(loader.data);
-			});
-			loader.load(req);*/
 			timer = new Timer(1200);
 			timer.addEventListener(TimerEvent.TIMER, tick);
 			timer.start();
@@ -97,7 +74,6 @@ package {
 
 				stage.addEventListener(Event.MOUSE_LEAVE, leave);
 			}
-			
 				
 			CallCSharp("ShowController");
 
@@ -121,12 +97,6 @@ package {
 		}
 		
 		
-		
-		
-		
-		
-		
-		
 		//指定したURLをストリーミング再生する オーバーライドして使う
 		public function OpenVideo(videoUrl:String):void {}
 		public function Pause():void {}
@@ -135,7 +105,7 @@ package {
 		public function InjectComment(json:String):void {
 		
 				
-			rasterizer.load(json);
+			rasterizer.loadComment(json);
 		}
 		public function InjectMyComment(json:String):void {
 		
@@ -150,7 +120,7 @@ package {
 		public function InjectUploaderComment(json:String):void {
 		
 				
-			uploaderRastarizer.load(json);
+			rasterizer.loadUploaderComment(json);
 		}
 		
 		

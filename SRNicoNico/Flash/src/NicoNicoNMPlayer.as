@@ -97,6 +97,7 @@ package  {
 			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
 			addChild(rasterizer);
 			movie.addEventListener(Event.ENTER_FRAME, onFrame);
+			CallCSharp("Initialized");
 		}
 		
 		

@@ -215,7 +215,7 @@ package rtmp  {
 
 				}
 				addChild(rasterizer);
-
+				
 				
 				addEventListener(Event.ENTER_FRAME, onFrame);
 			}
@@ -225,10 +225,11 @@ package rtmp  {
 			
 			stream.checkPolicyFile = true;
 			stream.bufferTime = 1;
-			//stream.soundTransform = new SoundTransform(0.1);
 			//イベントリスナ登録
 			
 			stream.play(NicoNicoRTMPPlayer.videoUrl.substr(NicoNicoRTMPPlayer.videoUrl.indexOf("=") + 1));
+			CallCSharp("Initialized");
+			
 		}
 		
 		private function onSecurityError(e:SecurityErrorEvent):void {
@@ -270,8 +271,6 @@ package rtmp  {
 			CallCSharp(e.info.code);
 			switch(e.info.code) {
 			case "NetStream.Play.Start":
-				
-				
 				
 				break;
 			case "NetStream.Buffer.Full":

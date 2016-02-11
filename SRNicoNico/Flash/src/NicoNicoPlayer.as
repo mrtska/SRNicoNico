@@ -28,11 +28,6 @@ package  {
 		//コネクション 正直何に使ってるのかわからない
 		private var connection:NetConnection;
 		
-		//指定したシークポジション
-		private var wantSeekPos:Number;
-		
-		private var diff:Number = 0;
-		
 		//動画メタデータ
 		private var metadata:Object;
 		
@@ -108,7 +103,6 @@ package  {
 		
 		public override function Seek(pos:Number):void {
 			
-			wantSeekPos = pos;
 			stream.seek(pos);
 		}
 		public override function ChangeVolume(vol:Number):void {
@@ -178,13 +172,14 @@ package  {
 
 				}
 				addChild(rasterizer);
-
 				
 				addEventListener(Event.ENTER_FRAME, onFrame);
 			}
 			stream.client = obj;
 			
 			stream.play(videoUrl);
+			CallCSharp("Initialized");
+			
 		}
 		
 		
@@ -224,34 +219,6 @@ package  {
 			switch(e.info.code) {
 			case "NetStream.Play.Start":
 
-				break;
-			
-			case "NetStream.Seek.Notify":				
-				
-				trace("Seek.Notify");
-				
-				var diff:Number;
-				
-				if(stream.time < wantSeekPos) {
-					
-					diff = stream.time - wantSeekPos;
-				} else {
-					
-					diff = wantSeekPos - stream.time;
-				}
-				this.diff = diff;
-				
-				trace("Seek:" + stream.time);
-				
-				break;
-			case "NetStream.Seek.Complete":
-				
-				trace("Seek.Complete");
-				
-				//stream.step(diff * stage.frameRate);
-				
-				
-				
 				break;
 			case "NetStream.Buffer.Full":
 				

@@ -96,7 +96,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 VerifyRequest(request);
 
-                HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                 VerifyResponse(response);
 
@@ -119,7 +119,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 VerifyRequest(request);
 
-                HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                 VerifyResponse(response);
 
@@ -142,7 +142,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             try {
                 VerifyRequest(request);
 
-                HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                 VerifyResponse(response);
 
@@ -191,9 +191,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		public SigninStatus SignInInternal() {
 
 			//ニコニコTOPにレスポンスヘッダを要求する
-			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
+			var message = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
 
-			HttpResponseMessage response = HttpClient.SendAsync(message).Result;
+			var response = HttpClient.SendAsync(message).Result;
 
 			//成功したら
 			if(response.StatusCode == HttpStatusCode.OK) {

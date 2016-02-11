@@ -145,10 +145,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     var request2 = new HttpRequestMessage(HttpMethod.Post, GetFlv.CommentServerUrl);
                     
-
                     request2.Content = new StringContent(root.InnerXml);
                     request2.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
-
 
                     a = NicoNicoWrapperMain.GetSession().GetAsync(request2).Result;
                     doc.LoadHtml2(a);
@@ -201,12 +199,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var request = new HttpRequestMessage(HttpMethod.Post, GetFlv.CommentServerUrl);
                 request.Content = new StringContent(root.InnerXml);
                 request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
-
+                
                 var a = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
-
+                
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);
-
+                
                 StoreEntry(doc, list);
                 //------
 
@@ -216,6 +214,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     return null;
                 }
                 list.Sort();
+
+                Video.CommentStatus = "投稿者コメント取得完了";
 
                 return list;
             } catch(RequestTimeout) {

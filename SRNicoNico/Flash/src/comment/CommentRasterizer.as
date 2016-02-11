@@ -37,7 +37,7 @@ package comment {
 		}
 		
 		//コメントリストをC#からもらう
-		public function load(string:String):void {
+		public function loadComment(string:String):void {
 			
 			var json:Object = JSON.parse(string);
 			
@@ -66,7 +66,15 @@ package comment {
 					target.y = positioner.getY(target);
 					drawingList.push(target);
 					
-					addChild(target);
+					//投稿者コメントだったら
+					if (target.fork) {
+						
+						addChild(target);
+					} else {
+						
+						addChild(target);
+					}
+					
 				}
 			}
 			
@@ -79,6 +87,21 @@ package comment {
 					drawingList.splice(drawingList.indexOf(entry), 1);
 					removeChild(entry);
 				}
+			}
+		}
+		
+		public function loadUploaderComment(string:String):void {
+			
+			
+			var json:Object = JSON.parse(string);
+			
+			for each(var obj:Object in json.array) {
+				
+				var entry:CommentEntry = new CommentEntry(obj.No, obj.Vpos, obj.Mail, obj.Content, false);
+				entry.fork = true;	//投稿者コメントなので
+				
+				
+				commentList.push(entry);
 			}
 		}
 	}

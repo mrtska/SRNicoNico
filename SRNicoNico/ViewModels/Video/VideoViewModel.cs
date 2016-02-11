@@ -496,6 +496,16 @@ namespace SRNicoNico.ViewModels {
 
                     InjectComment(json.ToString());
                     Comment.CanComment = true;
+
+                    //投稿者コメントがあったら取得する
+                    if(VideoData.ApiData.HasOwnerThread) {
+
+                        var ulist = CommentInstance.GetUploaderComment();
+                        dynamic ujson = new DynamicJson();
+                        json.array = ulist;
+
+                        InjectUploaderComment(json.ToString());
+                    }
                 }
 
                 if(!Properties.Settings.Default.CommentVisibility) {
@@ -641,12 +651,12 @@ namespace SRNicoNico.ViewModels {
 
             if(prevTime != (int)time) {
                
-                double comp = sumBPS / 1000;
+                double comp = sumBPS / 1024;
 
                 //大きいから単位を変える
                 if(comp > 1000) {
 
-                    BPS = Math.Floor((comp / 1000) * 100) / 100 + "MiB/秒";
+                    BPS = Math.Floor((comp / 1024) * 100) / 100 + "MiB/秒";
                 } else {
 
                     BPS = Math.Floor(comp * 100) / 100 + "KiB/秒";
@@ -688,7 +698,6 @@ namespace SRNicoNico.ViewModels {
                 InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
             }
             
-            Volume = Properties.Settings.Default.Volume;
             IsRepeat = Properties.Settings.Default.IsRepeat;
         }
         
@@ -712,6 +721,9 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case "HideController":  //マウスを数秒動画の上で静止させたら呼ばれる
                     HideFullScreenPopup();
+                    break;
+                case "Initialized": //動画が再生される直前に呼ばれる
+                    Volume = Properties.Settings.Default.Volume;    //保存された値をFlash側に伝える
                     break;
                 case "Stop": //動画が最後まで行ったらリピートしたりフルスクリーンから復帰したりする
                     if(IsRepeat) {
@@ -753,6 +765,12 @@ namespace SRNicoNico.ViewModels {
             
            InvokeScript("AsInjectComment", json);
         }
+        //Flashに投稿者コメントリストを送る
+        public void InjectUploaderComment(string json) {
+
+            InvokeScript("AsInjectUploaderComment", json);
+        }
+
 
         //JSを呼ぶ
         private void InvokeScript(string func, params object[] args) {
@@ -774,7 +792,6 @@ namespace SRNicoNico.ViewModels {
 
             var cur = System.IO.Directory.GetCurrentDirectory();
             return cur + "./Flash/NicoNicoPlayer.swf";
-
         }
 
         public string GetNMPlayerPath() {
