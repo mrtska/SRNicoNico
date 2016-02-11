@@ -21,7 +21,7 @@ package rtmp  {
 	import flash.utils.Timer;
 	import flash.external.ExternalInterface;
 	
-	[SWF(width="672", height="384")]
+	[SWF(width="640", height="360")]
 	public class NicoNicoRTMPPlayer extends NicoNicoPlayerBase {
 		
 		//ストリーミングURL そのまんま
@@ -50,8 +50,10 @@ package rtmp  {
 		public function NicoNicoRTMPPlayer() {
 			
 			super();
+			
+			Security.allowDomain("*");
 
-			//OpenVideo("rtmpe://smile-chefsf.nicovideo.jp/smile?m=mp4:26673741.16641^1442928807:ca8cce63df646096080443cb50c195c4f73335a4");
+			//OpenVideo("rtmpe://smile-chefsf.nicovideo.jp/smile?m=mp4:26673741.16641^1455159335:09a07863b3c274dfc84879d4bb90f51e9bc10036");
 			/*//OpenVideo("Z:/smile.swf");
 			//OpenVideo("Z:/smile.mp4");
 			//OpenVideo("Z:/smile (1).mp4");
@@ -110,7 +112,7 @@ package rtmp  {
 				
 				connection.addEventListener(NetStatusEvent.NET_STATUS, onConnect);
 				connection.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
-				
+				trace(videoUrl);
 				var tokenTime:String = fmsToken.substr(0,fmsToken.indexOf(":"));
 				var tokenHash:String = fmsToken.substr(fmsToken.indexOf(":") + 1);
 				connection.connect(NicoNicoRTMPPlayer.videoUrl.substr(0, NicoNicoRTMPPlayer.videoUrl.indexOf("?")), tokenHash, tokenTime, NicoNicoRTMPPlayer.videoUrl.substr(NicoNicoRTMPPlayer.videoUrl.indexOf("=") + 1));
@@ -133,7 +135,6 @@ package rtmp  {
 				
 				stream.pause();
 			}
-			
 		}
 		public override function Resume():void {
 			
@@ -141,7 +142,6 @@ package rtmp  {
 				
 				stream.resume();
 			}
-			
 		}
 		public override function Seek(pos:Number):void {
 			
@@ -150,7 +150,6 @@ package rtmp  {
 				wantSeekPos = pos;
 				stream.seek(pos);
 			}
-
 		}
 		public override function ChangeVolume(vol:Number):void {
 			
@@ -160,13 +159,12 @@ package rtmp  {
 			}
 		}
 		
-		
-		//ビデオコントロールにストリームを繋ぐ
+			//ビデオコントロールにストリームを繋ぐ
 		private function ConnectStream():void {
 			
 			if(connection == null) {
 				
-				ExternalInterface.call("ConnectionError", "");
+				CallCSharp("ConnectionError");
 				return;
 			}
 			//インスタンス作成
@@ -181,6 +179,45 @@ package rtmp  {
 				for(var propName:String in param){
 					trace(propName + "=" + param[propName]);
 				}
+				var stageW:int = stage.stageWidth;
+				var stageH:int = stage.stageHeight;
+				var videoW:int = param.width;
+				var videoH:int = param.height;
+				
+				//動画アスペクト比
+				var AR:* = videoW / videoH;
+				
+				var aspectW:int = stageH * AR;
+				
+				//アスペクト比を考慮したときに両端に出る黒い部分の位置　両端からのオフセット
+				var x:* = (stageW - aspectW) / 2;
+				
+				var vec:Vector.<StageVideo> = stage.stageVideos;
+				if(vec.length >= 1) {
+					;
+					var stageVideo:StageVideo = vec[0];
+					
+					stageVideo.viewPort = new Rectangle(x, 0, aspectW, stageH);
+
+					
+					stageVideo.attachNetStream(stream);
+					
+				} else {
+					
+					var video:Video = new Video(aspectW, stageH);
+					video.smoothing = true;
+					
+					video.x = x;
+					
+					
+					video.attachNetStream(stream);
+					addChild(video);
+
+				}
+				addChild(rasterizer);
+
+				
+				addEventListener(Event.ENTER_FRAME, onFrame);
 			}
 			stream.client = obj;
 			
@@ -191,34 +228,12 @@ package rtmp  {
 			//stream.soundTransform = new SoundTransform(0.1);
 			//イベントリスナ登録
 			
-			var vec:Vector.<StageVideo> = stage.stageVideos;
-			if(vec.length >= 1) {
-				;
-				var stageVideo:StageVideo = vec[0];
-				
-				stageVideo.viewPort = new  Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
-				
-				stageVideo.attachNetStream(stream);
-				
-			} else {
-				
-				var video:Video = new Video(stage.stageWidth, stage.stageHeight);
-				video.smoothing = true;
-				
-				video.attachNetStream(stream);
-				addChild(video);
-			}
-		
 			stream.play(NicoNicoRTMPPlayer.videoUrl.substr(NicoNicoRTMPPlayer.videoUrl.indexOf("=") + 1));
-			
-			addEventListener(Event.ENTER_FRAME, onFrame);
-			
-			
 		}
 		
 		private function onSecurityError(e:SecurityErrorEvent):void {
 			
-			ExternalInterface.call(e.toString());
+			CallCSharp(e.toString());
 		}
 		
 		private var prevTime:int = 0;
@@ -245,44 +260,16 @@ package rtmp  {
 		private function onAsyncError(e:AsyncErrorEvent):void {
 			
 			trace("onAsyncError");
-			ExternalInterface.call("onAsyncError2", e.text);
+			CallCSharp("onAsyncError2", e.text);
 			trace(e.text);
 		}
 		
 		public override function onNetStatus(e:NetStatusEvent):void {
 			
 			trace("onNetStatus");
-			ExternalInterface.call("onNetStatus", e.info.code);
+			CallCSharp(e.info.code);
 			switch(e.info.code) {
 			case "NetStream.Play.Start":
-				
-				
-				
-				break;
-			
-			case "NetStream.Seek.Notify":				
-				
-				trace("Seek.Notify");
-				
-				var diff:Number;
-				
-				if(stream.time < wantSeekPos) {
-					
-					diff = stream.time - wantSeekPos;
-				} else {
-					
-					diff = wantSeekPos - stream.time;
-				}
-				this.diff = diff;
-				
-				trace("Seek:" + stream.time);
-				
-				break;
-			case "NetStream.Seek.Complete":
-				
-				trace("Seek.Complete");
-				
-				//stream.step(diff * stage.frameRate);
 				
 				
 				
@@ -302,9 +289,8 @@ package rtmp  {
 		
 		private function onConnect(e:NetStatusEvent):void {
 			
-			ExternalInterface.call(e.info.code, e.info.level);
+			ExternalInterface.call(e.info.code);
 			trace("onConnect:" + e.info.level);
-			trace(e.info.code);
 		
 			switch(e.info.code) {
 			case "NetConnection.Connect.Success":

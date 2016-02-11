@@ -30,6 +30,9 @@ package {
 			stage.scaleMode = StageScaleMode.SHOW_ALL;
 			stage.frameRate = 30;
 			
+			rasterizer = new CommentRasterizer();
+			uploaderRastarizer = new UploaderCommentRasterizer();
+			
 			//JSコールバック登録
 			if(ExternalInterface.available) {
 				
@@ -47,8 +50,7 @@ package {
 				ExternalInterface.marshallExceptions = true;
 			}
 			
-			rasterizer = new CommentRasterizer();
-			uploaderRastarizer = new UploaderCommentRasterizer();
+
 			
 			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
 			uploaderRastarizer.updateBounds(stage.stageWidth, stage.stageHeight);
@@ -97,7 +99,7 @@ package {
 			}
 			
 				
-			ExternalInterface.call("ShowController");
+			CallCSharp("ShowController");
 
 		}
 		
@@ -112,7 +114,7 @@ package {
 			if (isRollOver) {
 			
 				Mouse.hide();
-				ExternalInterface.call("HideController");
+				CallCSharp("HideController");
 				
 			}
 			
@@ -172,7 +174,16 @@ package {
 				rasterizer.visible = true;
 			}
 		}
-		public function ChangeVolume(vol:Number):void {}		
+		public function ChangeVolume(vol:Number):void { }		
+		
+		
+		public function CallCSharp(func:String):void {
+		
+			if (ExternalInterface.available) {
+				
+				ExternalInterface.call(func);
+			}
+		}
 		
 		
 	}

@@ -52,8 +52,8 @@
                 <Button Content="再読み込み" Margin="10">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Reflesh" />
                             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CloseDialog" />
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Reflesh" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>

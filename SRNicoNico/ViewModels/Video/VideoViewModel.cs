@@ -455,30 +455,27 @@ namespace SRNicoNico.ViewModels {
                         } else {
 
                             VideoData.VideoType = NicoNicoVideoType.MP4;
-
                         }
                         ShockwaveFlash.LoadMovie(0, GetPlayerPath());
                     }
                     Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
+                    IsActive = false;
 
+                    Task.Run(() => {
+
+                        OpenVideo();
+                    });
 
                 }));
-                IsActive = false;
-
                 Time = new VideoTime();
-
                 //動画時間
                 Time.VideoTimeString = NicoNicoUtil.ConvertTime(VideoData.ApiData.Length);
-
 
                 if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
 
                     Task.Run(() => {
 
                         StoryBoardStatus = "取得中";
-
-                        //少し待ったほうがちゃんとデータを返してくれるっぽい？
-                        Thread.Sleep(1000);
 
                         var sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
                         VideoData.StoryBoardData = sb.GetStoryBoardData();
@@ -496,35 +493,28 @@ namespace SRNicoNico.ViewModels {
                     StoryBoardStatus = "データ無し";
                 }
 
-                OpenVideo();
+                CommentInstance = new NicoNicoComment(VideoData.ApiData, this);
+                var list = CommentInstance.GetComment();
+                if(list != null) {
 
-                Task.Run(() => {
+                    foreach(var entry in list) {
 
-                    CommentInstance = new NicoNicoComment(VideoData.ApiData, this);
-                    var list = CommentInstance.GetComment();
-                    if(list != null) {
-
-                        foreach(var entry in list) {
-
-                            VideoData.CommentData.Add(new CommentEntryViewModel(entry));
-                        }
-
-                        dynamic json = new DynamicJson();
-                        json.array = list;
-
-                        InjectComment(json.ToString());
-                        Comment.CanComment = true;
+                        VideoData.CommentData.Add(new CommentEntryViewModel(entry));
                     }
+                    dynamic json = new DynamicJson();
+                    json.array = list;
 
-                    if(!Properties.Settings.Default.CommentVisibility) {
+                    InjectComment(json.ToString());
+                    Comment.CanComment = true;
+                }
 
-                        InvokeScript("AsToggleComment");
-                    } else {
+                if(!Properties.Settings.Default.CommentVisibility) {
 
-                        CommentVisibility = true;
-                    }
-                });
-               
+                    InvokeScript("AsToggleComment");
+                } else {
+
+                    CommentVisibility = true;
+                }
             });
         }
 
@@ -640,14 +630,11 @@ namespace SRNicoNico.ViewModels {
 
             if(IsPlaying) {
 
-                IsPlaying = false;
                 Pause();
             } else {
 
-                IsPlaying = true;
                 Resume();
             }
-            
         }
         
         //最初から
@@ -664,12 +651,12 @@ namespace SRNicoNico.ViewModels {
 
             if(prevTime != (int)time) {
                
-                double comp = sumBPS / 1024;
+                double comp = sumBPS / 1000;
 
                 //大きいから単位を変える
-                if(comp > 1024) {
+                if(comp > 1000) {
 
-                    BPS = Math.Floor((comp / 1024) * 100) / 100 + "MiB/秒";
+                    BPS = Math.Floor((comp / 1000) * 100) / 100 + "MiB/秒";
                 } else {
 
                     BPS = Math.Floor(comp * 100) / 100 + "KiB/秒";
@@ -712,35 +699,25 @@ namespace SRNicoNico.ViewModels {
             Time.CurrentTimeString = NicoNicoUtil.ConvertTime(Time.CurrentTime);
         }
         
-        //このメソッド以降はWebBrowserプロパティはnullではない
         public void OpenVideo() {
 
-			while(VideoData.ApiData == null) {
-
-				Thread.Sleep(50);
-			} 
-            
             //ここからInvoke可能
             IsPlaying = true;
             IsInitialized = true;
             Mylist.EnableButtons();
-            
 
             if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
                 InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken);
-                
             } else {
 
                 InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
             }
             
-            
             Volume = Properties.Settings.Default.Volume;
             ChangeVolume(Volume);
             IsRepeat = Properties.Settings.Default.IsRepeat;
         }
-        
         
         private object ExternalInterfaceHandler(object sender, ExternalInterfaceCallEventArgs e) {
 
@@ -776,18 +753,20 @@ namespace SRNicoNico.ViewModels {
         //Flashに一時停止命令を送る
         public void Pause() {
 
+            IsPlaying = false;
             InvokeScript("AsPause");
         }
 
         //Flashに再生再開命令を送る
         public void Resume() {
 
+            IsPlaying = true;
             InvokeScript("AsResume");
         }
-
+        
         //Flashにシーク命令を送る
         public void Seek(float pos) {
-
+            
             InvokeScript("AsSeek", pos.ToString());
         }
 
@@ -813,7 +792,6 @@ namespace SRNicoNico.ViewModels {
                 try {
                     
                     Proxy.Call(func, args);
-                    
                 } catch(COMException) {
 
                     Console.WriteLine("COMException：" + func);
@@ -852,16 +830,19 @@ namespace SRNicoNico.ViewModels {
             DisposeViewModel();
             new VideoViewModel(VideoUrl);
         }
-
+        
         public void DisposeViewModel() {
 
             //ウェブブラウザ開放
-            ShockwaveFlash.Dispose();
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-            App.ViewModelRoot.RemoveTabAndLastSet(this);
-            Dispose();
+                //UIスレッドじゃないとAccessViolationになる時がある
+                ShockwaveFlash.Dispose();
+
+                App.ViewModelRoot.RemoveTabAndLastSet(this);
+                Dispose();
+            }));
         }
-
 
         public override void KeyDown(KeyEventArgs e) {
 
@@ -874,15 +855,13 @@ namespace SRNicoNico.ViewModels {
 
                         Comment.AcceptEnter = true;
                     } else {
+
                         Comment.AcceptEnter = false;
                         Comment.Post();
-
                     }
                 }
-
                 return;
             }
-
             if(IsFullScreen) {
 
                 switch(e.Key) {

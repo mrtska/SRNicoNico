@@ -10,7 +10,7 @@ package  {
 	
 	import org.libspark.utils.ForcibleLoader;
 	
-	[SWF(width="672", height="384")]
+	[SWF(width="640", height="360")]
 	public class NicoNicoNMPlayer extends NicoNicoPlayerBase {
 		
 		//ストリーミングURL そのまんま
