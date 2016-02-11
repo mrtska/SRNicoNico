@@ -26,7 +26,7 @@ package  {
 			
 			super();
 			
-			//OpenVideo("Z:/smile.swf");
+			//("Z:/smile.swf");
 			//OpenVideo("Z:/smile.mp4");
 			//OpenVideo("Z:/smile (1).mp4");
 			//var now:Date = new Date();
@@ -53,6 +53,7 @@ package  {
 			loader.contentLoaderInfo.addEventListener(Event.INIT, onInit);
 			var fLoader:ForcibleLoader = new ForcibleLoader(loader);
 			fLoader.load(req);
+			
 			
 		}
 		
@@ -92,9 +93,10 @@ package  {
 			addChild(loader);
 			
 			movie = loader.content as MovieClip;
+			
 			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
 			addChild(rasterizer);
-			addEventListener(Event.ENTER_FRAME, onFrame);
+			movie.addEventListener(Event.ENTER_FRAME, onFrame);
 		}
 		
 		
@@ -118,6 +120,12 @@ package  {
 			prevTime = (int) (value);
 			
 			rasterizer.render(vpos);
+			
+			if (frame == movie.totalFrames) {
+				
+				Pause();
+				CallCSharp("Stop");
+			}
 		}
 		
 		

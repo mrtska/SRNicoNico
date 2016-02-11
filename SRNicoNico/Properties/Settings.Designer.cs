@@ -190,5 +190,29 @@ namespace SRNicoNico.Properties {
                 this["NGSharedLevel"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public float CommentAlpha {
+            get {
+                return ((float)(this["CommentAlpha"]));
+            }
+            set {
+                this["CommentAlpha"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("標準")]
+        public string CommentSize {
+            get {
+                return ((string)(this["CommentSize"]));
+            }
+            set {
+                this["CommentSize"] = value;
+            }
+        }
     }
 }

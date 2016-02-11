@@ -65,8 +65,6 @@ namespace SRNicoNico.ViewModels {
             Status = "コメント:" + CommentStatus + " ストーリーボード:" + StoryBoardStatus;
         }
 
-
-
         //API結果
         #region VideoData変更通知プロパティ
         private VideoData _VideoData;
@@ -186,20 +184,17 @@ namespace SRNicoNico.ViewModels {
         
 
         #region Volume変更通知プロパティ
-        private int _Volume = -1;
-
         public int Volume {
-            get { return _Volume; }
+            get { return Properties.Settings.Default.Volume; }
             set { 
-                if(_Volume == value)
-                    return;
-                _Volume = value;
-                ChangeVolume(value);
+                Properties.Settings.Default.Volume = value;
                 RaisePropertyChanged();
                 if(value != 0) {
 
                     IsMute = false;
                 }
+                Properties.Settings.Default.Save();
+                InvokeScript("AsChangeVolume", (value / 100.0).ToString());
             }
         }
         #endregion
@@ -233,7 +228,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region FullScreenVideoFlash変更通知プロパティ
         private VideoFlash _FullScreenVideoFlash;
 
@@ -247,7 +241,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region Controller変更通知プロパティ
         private VideoController _Controller;
@@ -399,13 +392,10 @@ namespace SRNicoNico.ViewModels {
                 Controller = new VideoController() { DataContext = this };
             }));
 
-
-
             Initialize(videoUrl + "?watch_harmful=1");
         }
 
         private void Initialize(string videoUrl) {
-
 
             IsActive = true;
             Task.Run(() => {
@@ -674,22 +664,6 @@ namespace SRNicoNico.ViewModels {
             //Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + buffer + " vpos:" + vpos);
 
             SetSeekCursor(time);
-
-            if(time >= (float)(VideoData.ApiData.Length - 0.3)) {
-                
-                if(IsRepeat) {
-
-                    Seek(0);
-                }
-            }
-
-            if((int)time == VideoData.ApiData.Length) {
-
-                if(IsFullScreen) {
-
-                    ReturnFromFullScreen();
-                }
-            }
         }
 
         //指定した時間でシークバーを移動する
@@ -715,7 +689,6 @@ namespace SRNicoNico.ViewModels {
             }
             
             Volume = Properties.Settings.Default.Volume;
-            ChangeVolume(Volume);
             IsRepeat = Properties.Settings.Default.IsRepeat;
         }
         
@@ -728,27 +701,32 @@ namespace SRNicoNico.ViewModels {
         public void InvokeFromActionScript(string func, params string[] args) {
 
             switch(func) {
-                case "CsFrame":
-                    
+                case "CsFrame": //毎フレーム呼ばれる
                     CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]), args[3]);
                     break;
-                case "NetConnection.Connect.Closed":
-                    
+                case "NetConnection.Connect.Closed":    //RTMP動画再生時にタイムアウトになったら
                     RTMPTimeOut();
                     break;
-                case "ShowController":
+                case "ShowController":  //マウスを動かしたら呼ばれる
                     ShowFullScreenPopup();
                     break;
-                case "HideController":
+                case "HideController":  //マウスを数秒動画の上で静止させたら呼ばれる
                     HideFullScreenPopup();
+                    break;
+                case "Stop": //動画が最後まで行ったらリピートしたりフルスクリーンから復帰したりする
+                    if(IsRepeat) {
+                        
+                        Restart();
+                    } else if(IsFullScreen) {
+
+                        ReturnFromFullScreen();
+                    }
                     break;
                 default:
                     Console.WriteLine("Invoked From Actionscript:" + func);
                     break;
             }
         }
-
-
 
         //Flashに一時停止命令を送る
         public void Pause() {
@@ -776,13 +754,6 @@ namespace SRNicoNico.ViewModels {
            InvokeScript("AsInjectComment", json);
         }
 
-        public void ChangeVolume(int vol) {
-
-            Properties.Settings.Default.Volume = vol;
-            Properties.Settings.Default.Save();
-            InvokeScript("AsChangeVolume", (vol / 100.0).ToString());
-        }
-        
         //JSを呼ぶ
         private void InvokeScript(string func, params object[] args) {
             
@@ -885,7 +856,6 @@ namespace SRNicoNico.ViewModels {
                         break;
                 }
             } else {
-
                 switch(e.Key) {
                     case Key.Space:
                         PlayOrPauseOrResume();
@@ -909,7 +879,6 @@ namespace SRNicoNico.ViewModels {
                         Reflesh();
                         break;
                 }
-
                 //Ctrl+Wで閉じる
                 if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
 
@@ -924,7 +893,6 @@ namespace SRNicoNico.ViewModels {
         public void ToggleFavorite() {
 
             Task.Run(() => {
-
 
                 if(!VideoData.ApiData.UploaderIsFavorited) {
 
@@ -941,7 +909,6 @@ namespace SRNicoNico.ViewModels {
                         VideoData.ApiData.UploaderIsFavorited = false;
                     }
                 }
-
             });
         }
 
@@ -958,6 +925,5 @@ namespace SRNicoNico.ViewModels {
 
             FullScreenPopup = true;
         }
-
     }
 }

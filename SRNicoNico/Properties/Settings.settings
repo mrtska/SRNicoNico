@@ -44,5 +44,11 @@
     <Setting Name="NGSharedLevel" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="CommentAlpha" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">80</Value>
+    </Setting>
+    <Setting Name="CommentSize" Type="System.String" Scope="User">
+      <Value Profile="(Default)">標準</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -159,7 +159,6 @@ package {
 		}
 		public function onNetStatus(e:NetStatusEvent):void {
 		
-			ExternalInterface.call("NetStatus", e.info.code);
 		}
 		
 		

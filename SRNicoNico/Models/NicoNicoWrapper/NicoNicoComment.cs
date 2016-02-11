@@ -51,13 +51,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //コメント取得
         public List<NicoNicoCommentEntry> GetComment() {
 
-            /**string threadKey = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(GetThreadKeyApiUrl + ThreadId).Result;
-
-			if(IsPremium) {
-
-				string waybackKey = NicoNicoWrapperMain.GetSession().HttpClient.GetStringAsync(GetWayBackKeyApiUrl + ThreadId).Result;
-			}*/
-            
             Video.CommentStatus = "取得中";
             var list = new List<NicoNicoCommentEntry>();
 
@@ -194,13 +187,22 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 Video.CommentStatus = "投稿者コメント取得中";
 
                 //---投稿者コメント取得---
-                var thread = new GetRequestQuery(GetFlv.CommentServerUrl + "thread");
-                thread.AddQuery("version", "20090904");
-                thread.AddQuery("thread", GetFlv.ThreadID);
-                thread.AddQuery("res_From", "-1000");
-                thread.AddQuery("fork", "1");
+                var root = new XmlDocument();
+                var packet = root.CreateElement("packet");
+                var thread = root.CreateElement("thread");
+                thread.SetAttribute("thread", GetFlv.ThreadID);
+                thread.SetAttribute("version", "20090904");
+                thread.SetAttribute("res_from", "-1000");
+                thread.SetAttribute("fork", "1");
 
-                var a = NicoNicoWrapperMain.GetSession().GetAsync(GetFlv.CommentServerUrl + thread.TargetUrl).Result;
+                packet.AppendChild(thread);
+                root.AppendChild(packet);
+
+                var request = new HttpRequestMessage(HttpMethod.Post, GetFlv.CommentServerUrl);
+                request.Content = new StringContent(root.InnerXml);
+                request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
+
+                var a = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);

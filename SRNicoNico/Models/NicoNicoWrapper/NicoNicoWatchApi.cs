@@ -21,25 +21,17 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
-
-
-    //動画を見るうえで必要な情報をこのAPIだけで全て取得できるヤバいAPI
     public sealed class NicoNicoWatchApi : NotificationObject {
 
         private string VideoPage;
 
         private VideoViewModel Owner;
 
-
         public NicoNicoWatchApi(string videoPage, VideoViewModel vm) {
 
             VideoPage = videoPage;
             Owner = vm;
-
         }
-
-
-
 
         //動画ページを指定
         public WatchApiData GetWatchApiData() {
@@ -118,6 +110,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.HighestRank = videoDetail.highest_rank == null ? "圏外" : videoDetail.highest_rank + "位";
             ret.IsOfficial = videoDetail.is_official;
             ret.Token = json.flashvars.csrfToken;
+            ret.HasOwnerThread = json.flashvars.has_owner_thread();
 
             if(json.uploaderInfo()) {
 
@@ -340,6 +333,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //公式か否か チャンネル動画は公式扱いっぽい
         public bool IsOfficial { get; set; }
+
+        //投稿者コメントがあるか否か
+        public bool HasOwnerThread { get; set; }
 
     }
 

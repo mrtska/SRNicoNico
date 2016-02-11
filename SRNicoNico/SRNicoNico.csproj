@@ -207,7 +207,6 @@
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
     <Compile Include="Models\NicoNicoViewer\UpdateCheck.cs" />
     <Compile Include="Models\NicoNicoViewer\VerifyEmptyText.cs" />
-    <Compile Include="Models\NicoNicoViewer\VIdeoCommentConfig.cs" />
     <Compile Include="Models\NicoNicoViewer\VideoCommentDecoration.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteCommunity.cs" />

@@ -278,6 +278,9 @@ package rtmp  {
 				
 				trace("Buffer.Full:");
 				break;
+			case "NetStream.Play.Stop":
+				CallCSharp("Stop");
+				break;
 			default:
 				
 				trace("default:" + e.info.code);

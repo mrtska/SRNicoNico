@@ -13,6 +13,7 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models;
 using System.Windows;
+using Codeplex.Data;
 
 namespace SRNicoNico.ViewModels {
     public class ConfigCommentViewModel : TabItemViewModel {
@@ -59,13 +60,47 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        #region CommentAlpha変更通知プロパティ
+        public float CommentAlpha {
+            get { return Properties.Settings.Default.CommentAlpha; }
+            set { 
+                if(Properties.Settings.Default.CommentAlpha == value)
+                    return;
+                Properties.Settings.Default.CommentAlpha = value;
+                Properties.Settings.Default.Save();
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region DefaultCommentSize変更通知プロパティ
+        public string DefaultCommentSize {
+            get { return Properties.Settings.Default.CommentSize; }
+            set { 
+                if(Properties.Settings.Default.CommentSize == value)
+                    return;
+                Properties.Settings.Default.CommentSize = value;
+                Properties.Settings.Default.Save();
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
 
 
 
         public ConfigCommentViewModel() : base("コメント") {
 
             //一応通知を飛ばしておく
-            RaisePropertyChanged("NGSharedLevel");
+        }
+
+
+
+        public string ToJson() {
+
+            return DynamicJson.Serialize(this);
         }
     }
 }

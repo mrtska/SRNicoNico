@@ -9,9 +9,9 @@ package comment {
 		public static const PLACE_SHITA:String = "shita";
 		
 		//フォントサイズ
-		public static const BIG_FONT_SIZE:Number = 39;
-		public static const MEDIUM_FONT_SIZE:Number = 24;
-		public static const SMALL_FONT_SIZE:Number = 15;
+		public static var BIG_FONT_SIZE:Number = 39;
+		public static var MEDIUM_FONT_SIZE:Number = 24;
+		public static var SMALL_FONT_SIZE:Number = 15;
 		
 		
 		//ニコニコ上で使える一般的なカラーマップ（#指定除く）

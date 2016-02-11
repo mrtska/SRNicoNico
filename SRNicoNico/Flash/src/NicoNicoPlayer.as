@@ -221,7 +221,6 @@ package  {
 		public override function onNetStatus(e:NetStatusEvent):void {
 			
 			trace("onNetStatus");
-			super.onNetStatus(e);
 			switch(e.info.code) {
 			case "NetStream.Play.Start":
 
@@ -257,6 +256,9 @@ package  {
 			case "NetStream.Buffer.Full":
 				
 				trace("Buffer.Full:");
+				break;
+			case "NetStream.Play.Stop":
+				CallCSharp("Stop");
 				break;
 			default:
 				
