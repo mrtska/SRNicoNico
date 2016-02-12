@@ -28,6 +28,7 @@ namespace SRNicoNico.ViewModels {
                 Properties.Settings.Default.Hide3DSComment = value;
                 Properties.Settings.Default.Save();
                 RaisePropertyChanged();
+                ApplyConfig();
             }
         }
         #endregion
@@ -42,6 +43,7 @@ namespace SRNicoNico.ViewModels {
                 Properties.Settings.Default.HideWiiUComment = value;
                 Properties.Settings.Default.Save();
                 RaisePropertyChanged();
+                ApplyConfig();
             }
         }
         #endregion
@@ -56,6 +58,7 @@ namespace SRNicoNico.ViewModels {
                 Properties.Settings.Default.NGSharedLevel = value;
                 Properties.Settings.Default.Save();
                 RaisePropertyChanged();
+                ApplyConfig();
             }
         }
         #endregion
@@ -69,6 +72,7 @@ namespace SRNicoNico.ViewModels {
                 Properties.Settings.Default.CommentAlpha = value;
                 Properties.Settings.Default.Save();
                 RaisePropertyChanged();
+                ApplyConfig();
             }
         }
         #endregion
@@ -83,6 +87,7 @@ namespace SRNicoNico.ViewModels {
                 Properties.Settings.Default.CommentSize = value;
                 Properties.Settings.Default.Save();
                 RaisePropertyChanged();
+                ApplyConfig();
             }
         }
         #endregion
@@ -92,6 +97,20 @@ namespace SRNicoNico.ViewModels {
             //一応通知を飛ばしておく
         }
 
+        //開いてる動画があれば設定を反映させる
+        public void ApplyConfig() {
+            
+            foreach(var tab in App.ViewModelRoot.TabItems) {
+
+                if(tab is VideoViewModel) {
+
+                    var vm = (VideoViewModel) tab;
+                    vm.ApplyChanges();
+                }
+            }
+        }
+
+
         public string ToJson() {
 
             dynamic root = new DynamicJson();
@@ -99,7 +118,7 @@ namespace SRNicoNico.ViewModels {
             root.Hide3DSComment = Hide3DSComment;
             root.HideWiiUComment = HideWiiUComment;
             root.NGSharedLevel = NGSharedLevel;
-            root.CommentAlpha = CommentAlpha;
+            root.CommentAlpha = CommentAlpha / 100; //%から小数点に
             root.DefaultCommentSize = DefaultCommentSize;
 
             return root.ToString();

@@ -29,7 +29,7 @@ package comment {
 			entry.scaleX = entry.scaleY = isOverflowheight(entry, offsetY) ? 0.5 : 1;
 			if(entry.command.pos != CommentCommand.PLACE_NAKA) {
 				
-				var width:* = entry.command.full ? 672 : 544;
+				var width:* = entry.command.full ? 640 : 544;
 				if(entry.width > width) {
 					
 					entry.scaleX = entry.scaleY = width / entry.width;

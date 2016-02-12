@@ -14,6 +14,30 @@ package comment {
 		public static var SMALL_FONT_SIZE:Number = 15;
 		
 		
+		public static function UpdateFontSize(size:String):void {
+			
+			
+			switch (size) {
+			case "標準":
+				MEDIUM_FONT_SIZE = 24;
+			break;
+			case "大":
+				MEDIUM_FONT_SIZE = 30;
+				break;
+			case "小":
+				MEDIUM_FONT_SIZE = 18;
+				break;
+			case "極小":
+				MEDIUM_FONT_SIZE = 14;
+				default:
+			}
+			
+			BIG_FONT_SIZE = MEDIUM_FONT_SIZE + 15;
+			SMALL_FONT_SIZE = MEDIUM_FONT_SIZE - 9;
+			
+		}
+		
+		
 		//ニコニコ上で使える一般的なカラーマップ（#指定除く）
 		private static const NicoNicoColorMap:Dictionary = new Dictionary();
 		

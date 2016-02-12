@@ -506,6 +506,9 @@ namespace SRNicoNico.ViewModels {
 
                         InjectUploaderComment(json.ToString());
                     }
+
+                    //コメント設定を反映
+                    ApplyChanges();
                 }
 
                 if(!Properties.Settings.Default.CommentVisibility) {
@@ -724,7 +727,6 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case "Initialized": //動画が再生される直前に呼ばれる
                     Volume = Properties.Settings.Default.Volume;    //保存された値をFlash側に伝える
-                    ApplyChanges();
                     break;
                 case "Stop": //動画が最後まで行ったらリピートしたりフルスクリーンから復帰したりする
                     if(IsRepeat) {
@@ -745,7 +747,7 @@ namespace SRNicoNico.ViewModels {
         public void ApplyChanges() {
 
             var a = App.ViewModelRoot.Config.Comment.ToJson();
-            ;
+            InvokeScript("AsApplyChanges", a);
         }
 
         //Flashに一時停止命令を送る
@@ -778,8 +780,7 @@ namespace SRNicoNico.ViewModels {
 
             InvokeScript("AsInjectUploaderComment", json);
         }
-
-
+        
         //JSを呼ぶ
         private void InvokeScript(string func, params object[] args) {
             

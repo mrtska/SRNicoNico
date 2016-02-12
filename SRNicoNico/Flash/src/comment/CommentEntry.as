@@ -29,6 +29,9 @@ package comment {
 		//コメントのコマンド
 		public var command:CommentCommand;
 		
+		//コメントデコレーション
+		public var mail:String;
+		
 		//NGスコア
 		public var score:int;
 		
@@ -37,6 +40,7 @@ package comment {
 			//値指定
 			this.no = no;									//コメントナンバー
 			this.content = content;							//コメント
+			this.mail = mail;
 			this.command = new CommentCommand(mail);		//コメントコマンド
 			this.vpos = vpos;// - (command.pos == CommentCommand.PLACE_NAKA ? 1000 : 0);			//コメント表示開始時間
 			this.vend = this.vpos + this.command.duration;	//コメント表示時間
@@ -45,8 +49,7 @@ package comment {
 			super();
 			
 			//テキストフィールドの設定
-			var format:TextFormat = new TextFormat("Arial", command.size, command.color, true);
-			this.defaultTextFormat = format;
+			this.defaultTextFormat = new TextFormat("Arial", command.size, command.color, true);
 			
 			this.alpha = 0.8;
 			this.multiline = true;
