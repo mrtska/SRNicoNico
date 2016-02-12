@@ -21,6 +21,7 @@ package comment {
 		private var Hide3DS:Boolean;
 		private var HideWiiU:Boolean;
 		private var NGLevel:String;
+		private var NGLevelThreshold:int;
 		
 		
 		public function CommentRasterizer() {
@@ -63,7 +64,25 @@ package comment {
 				//描画時間になったら
 				if(vpos >= target.vpos && vpos < target.vend) {
 					
+					//3DSからのコメントを弾く
+					if (Hide3DS && target.mail.indexOf("device:3DS") >= 0) {
+						
+						continue;
+					}
+					//WiiUからのコメントを弾く
+					if (HideWiiU && target.mail.indexOf("device:WiiU") >= 0) {
+						
+						continue;
+					}
+					//0だったらそもそもNGスコアが無いのでそのまま
+					if (target.score != 0) {
 					
+						//NGレベル該当コメントなので弾く
+						if (target.score <= NGLevelThreshold) {
+							
+							continue;
+						}
+					}
 					
 					target.x = positioner.getX(target, vpos);
 					
@@ -120,6 +139,25 @@ package comment {
 			HideWiiU = obj.HideWiiUComment;
 			NGLevel = obj.NGSharedLevel;
 			
+			switch(NGLevel) {
+				case "無":
+					NGLevelThreshold = int.MAX_VALUE;
+					break;
+				case "弱":
+					NGLevelThreshold = -10000;
+					break;
+				case "中":
+					NGLevelThreshold = -4800;
+					break;
+				case "強":
+					NGLevelThreshold = -1000;
+					break;
+				case "最強":
+					NGLevelThreshold = 0;
+					break;
+			}
+			
+			
 			CommentCommand.UpdateFontSize(obj.DefaultCommentSize);
 			//コメントリストを走査して設定を反映させる 実装がキモいので後で直すかも
 			for each(var entry:CommentEntry in commentList) {
@@ -129,6 +167,8 @@ package comment {
 				entry.setTextFormat(new TextFormat("Arial", entry.command.size, entry.command.color, true));
 				
 			}
+			
+		
 		}
 	}
 }

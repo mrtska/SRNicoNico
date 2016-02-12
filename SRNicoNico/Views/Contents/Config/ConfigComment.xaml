@@ -32,10 +32,11 @@
             <StackPanel Grid.Row="1">
                 <TextBlock Text="NG共有レベル" FontSize="20" />
                 <ComboBox Width="200" HorizontalAlignment="Left" Margin="10" Text="{Binding NGSharedLevel,Mode=TwoWay}">
-                    <ComboBoxItem Content="無" />
-                    <ComboBoxItem Content="弱" />
-                    <ComboBoxItem Content="中" />
-                    <ComboBoxItem Content="強" />
+                    <ComboBoxItem Content="無" ToolTip="コメントをフィルタリングしません。"/>
+                    <ComboBoxItem Content="弱" ToolTip="とても悪質なコメントのみフィルタリングします。"/>
+                    <ComboBoxItem Content="中" ToolTip="悪質なコメントをフィルタリングします。"/>
+                    <ComboBoxItem Content="強" ToolTip="少数のプレミアムユーザーにNG登録されたコメントもフィルタリングします。"/>
+                    <ComboBoxItem Content="最強" ToolTip="NGスコアが付いている時点でフィルタリングします。"/>
                 </ComboBox>
                 <TextBlock Text="デフォルトコメント透明度" FontSize="20"  Margin="0,10,0,0"/>
                 <ComboBox Width="200" HorizontalAlignment="Left" IsEditable="True" Margin="10" ToolTip="デフォルトのコメントの透明度を設定できます。(単位:%)" Text="{Binding CommentAlpha,Mode=TwoWay}" >
