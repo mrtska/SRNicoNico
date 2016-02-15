@@ -21,10 +21,5 @@ namespace SRNicoNico.Views.Contents.Video {
         public VideoComment() {
             InitializeComponent();
         }
-
-        public void FocusComment() {
-
-            comment.Focus();
-        }
     }
 }

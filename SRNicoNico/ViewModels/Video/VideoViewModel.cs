@@ -629,8 +629,8 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        //一時停止切り替え いいメソッド名ないかな 
-        public void PlayOrPauseOrResume() {
+        //一時停止切り替え
+        public void TogglePlay() {
 
             if(IsPlaying) {
 
@@ -742,7 +742,7 @@ namespace SRNicoNico.ViewModels {
                 case "Click":   //Flash部分がクリックされた時に呼ばれる
                     if(App.ViewModelRoot.Config.Video.ClickOnPause) {   //クリックしたら一時停止する設定になっていたら
 
-                        PlayOrPauseOrResume();
+                        TogglePlay();
                     }
                     break;
                 default:
@@ -871,7 +871,7 @@ namespace SRNicoNico.ViewModels {
 
                 switch(e.Key) {
                     case Key.Space:
-                        PlayOrPauseOrResume();
+                        TogglePlay();
                         break;
                     case Key.Escape:
                         ToggleFullScreen();
@@ -888,11 +888,15 @@ namespace SRNicoNico.ViewModels {
                     case Key.M:
                         ToggleMute();
                         break;
+                    case Key.Enter:
+                        FocusComment();
+
+                        break;
                 }
             } else {
                 switch(e.Key) {
                     case Key.Space:
-                        PlayOrPauseOrResume();
+                        TogglePlay();
                         break;
                     case Key.F:
                         ToggleFullScreen();
@@ -912,6 +916,9 @@ namespace SRNicoNico.ViewModels {
                     case Key.F5:
                         Reflesh();
                         break;
+                    case Key.Enter:
+                        FocusComment();
+                        break;
                 }
                 //Ctrl+Wで閉じる
                 if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
@@ -923,7 +930,22 @@ namespace SRNicoNico.ViewModels {
                 }
             }
         }
-       
+       public void FocusComment() {
+
+            if(Comment.CanComment) {
+
+                if(IsFullScreen) {
+
+                    Comment.IsPopupOpen = true;
+                    FullScreenContoller.FocusComment();
+                } else {
+
+                    Comment.IsPopupOpen = true;
+                    Controller.FocusComment();
+                }
+            }
+        }
+
         public void ToggleFavorite() {
 
             Task.Run(() => {

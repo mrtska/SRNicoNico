@@ -42,9 +42,9 @@
 
         </Popup>
 
-        <TextBox x:Name="comment" Grid.Column="1" BorderThickness="1,0,1,0" FontSize="15" AcceptsReturn="{Binding AcceptEnter,Mode=TwoWay}" Text="{Binding Text,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox x:Name="comment" Grid.Column="1" BorderThickness="1,0,1,0" FontSize="15" AcceptsReturn="{Binding AcceptEnter,Mode=TwoWay}" Text="{Binding Text,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 
-        <Button Grid.Column="2" Content="コメント" Focusable="False">
+        <Button Grid.Column="2" Content="コメント" Focusable="False"  IsEnabled="{Binding IsTextBoxEnabled}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                     <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Post" />

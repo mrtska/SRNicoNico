@@ -7,6 +7,7 @@ using Livet;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Models.NicoNicoViewer;
+using System.Threading;
 
 namespace SRNicoNico.ViewModels {
 
@@ -57,6 +58,21 @@ namespace SRNicoNico.ViewModels {
                 if(_CanComment == value)
                     return;
                 _CanComment = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region IsTextBoxEnabled変更通知プロパティ
+        private bool _IsTextBoxEnabled = true;
+
+        public bool IsTextBoxEnabled {
+            get { return _IsTextBoxEnabled; }
+            set { 
+                if(_IsTextBoxEnabled == value)
+                    return;
+                _IsTextBoxEnabled = value;
                 RaisePropertyChanged();
             }
         }
@@ -179,14 +195,21 @@ namespace SRNicoNico.ViewModels {
 
         public void Post() {
             
-            if(Text.Length == 0) {
+            if(Text.Length == 0 || !IsTextBoxEnabled) {
 
                 return;
             }
 
+            IsTextBoxEnabled = false;
             Task.Run(() => {
 
-                var no = Owner.CommentInstance.Post(Text, Mail, Vpos);
+                var mail = Mail;
+
+                if(Use184) {
+
+                    mail += " 184";
+                }
+                var no = Owner.CommentInstance.Post(Text, mail, Vpos);
 
                 if(no != null) {
 
@@ -199,7 +222,9 @@ namespace SRNicoNico.ViewModels {
 
                     Owner.Proxy.Call("AsInjectMyComment", entry.ToJson());
                     Text = "";
+                   
                 }
+                IsTextBoxEnabled = true;
             });
         }
 	}

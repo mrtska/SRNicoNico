@@ -128,5 +128,11 @@ namespace SRNicoNico.Views.Contents.Video {
             var handle = GetHwnd(popup);
             SetFocus(handle);
         }
+
+        public void FocusComment() {
+
+            //TextBoxにフォーカスを移す
+            comment.comment.Focus();
+        }
     }
 }

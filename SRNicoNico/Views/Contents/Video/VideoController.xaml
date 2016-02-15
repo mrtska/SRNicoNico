@@ -41,7 +41,7 @@
                 </mui:ModernButton.Style>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodName="PlayOrPauseOrResume" MethodTarget="{Binding}" />
+                        <l:LivetCallMethodAction MethodName="TogglePlay" MethodTarget="{Binding}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </mui:ModernButton>
@@ -103,7 +103,7 @@
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <ei:ChangePropertyAction TargetName="popup" PropertyName="IsOpen" Value="True"/>
-                        <l:LivetCallMethodAction MethodTarget="{Binding ElementName=comment}" MethodName="FocusComment"/>
+                        <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:VideoController}}}" MethodName="FocusComment"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Button>

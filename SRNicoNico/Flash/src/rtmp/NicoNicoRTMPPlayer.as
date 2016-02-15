@@ -212,6 +212,7 @@ package rtmp  {
 					
 					video.attachNetStream(stream);
 					addChild(video);
+
 				}
 				addChild(rasterizer);
 				
