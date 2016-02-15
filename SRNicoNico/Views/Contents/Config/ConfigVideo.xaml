@@ -29,11 +29,10 @@
                     <local:ConfigVideoRect Placement="{Binding VideoPlacement}" Width="400"/>
                 </StackPanel>
                 
-                <TextBlock Text="フルスクリーン" FontSize="20" Margin="0,10,0,0"/>
-                <StackPanel Margin="10">
-                    <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding AlwaysShowSeekBar}" />
+                <TextBlock Text="その他" FontSize="20" Margin="0,10,0,0"/>
+                <CheckBox Margin="10,0" Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding AlwaysShowSeekBar}" />
+                <CheckBox Margin="10,5" Content="動画をクリックしたら一時停止/再生する" IsChecked="{Binding ClickOnPause}" />
 
-                </StackPanel>
 
 
             </StackPanel>

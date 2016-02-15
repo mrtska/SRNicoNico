@@ -602,7 +602,7 @@ namespace SRNicoNico.ViewModels {
 
             //Flash部分をフルスクリーンウィンドウから消去
             //Messenger.Raise(new WindowActionMessage(WindowAction.Close));
-            Window.GetWindow(FullScreenVideoFlash).Close();
+            Window.GetWindow(FullScreenVideoFlash).Close(); //消えない時があるから強引に
 
             //ウィンドウを閉じる
             App.ViewModelRoot.Visibility = Visibility.Visible;
@@ -629,7 +629,7 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        //一時停止切り替え
+        //一時停止切り替え いいメソッド名ないかな 
         public void PlayOrPauseOrResume() {
 
             if(IsPlaying) {
@@ -737,6 +737,12 @@ namespace SRNicoNico.ViewModels {
                     } else if(IsFullScreen) {
 
                         ReturnFromFullScreen();
+                    }
+                    break;
+                case "Click":   //Flash部分がクリックされた時に呼ばれる
+                    if(App.ViewModelRoot.Config.Video.ClickOnPause) {   //クリックしたら一時停止する設定になっていたら
+
+                        PlayOrPauseOrResume();
                     }
                     break;
                 default:

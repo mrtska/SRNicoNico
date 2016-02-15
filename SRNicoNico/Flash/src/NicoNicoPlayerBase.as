@@ -57,7 +57,7 @@ package {
 			
 			
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, move);
-			
+			stage.addEventListener(MouseEvent.CLICK, click);
 		}
 		
 		private var timer:Timer;
@@ -98,6 +98,10 @@ package {
 			
 		}
 		
+		private function click(e:MouseEvent):void {
+			
+			CallCSharp("Click");
+		}
 		
 		//指定したURLをストリーミング再生する オーバーライドして使う
 		public function OpenVideo(videoUrl:String):void {}

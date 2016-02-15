@@ -65,6 +65,21 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region ClickOnPause変更通知プロパティ
+        public bool ClickOnPause {
+            get { return Properties.Settings.Default.ClickOnPause; }
+            set { 
+                if(Properties.Settings.Default.ClickOnPause == value)
+                    return;
+                Properties.Settings.Default.ClickOnPause = value;
+                Properties.Settings.Default.Save();
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
         public ConfigVideoViewModel() : base("動画") {
 
         }

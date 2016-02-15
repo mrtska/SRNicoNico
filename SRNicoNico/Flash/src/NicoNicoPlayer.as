@@ -3,6 +3,7 @@ package  {
 	import flash.events.AsyncErrorEvent;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
 	import flash.events.NetStatusEvent;
 	import flash.geom.Rectangle;
 	import flash.media.SoundTransform;
@@ -163,7 +164,6 @@ package  {
 					
 					var video:Video = new Video(aspectW, stageH);
 					video.smoothing = true;
-					
 					video.x = x;
 					
 					
@@ -172,7 +172,6 @@ package  {
 
 				}
 				addChild(rasterizer);
-				
 				addEventListener(Event.ENTER_FRAME, onFrame);
 			}
 			stream.client = obj;

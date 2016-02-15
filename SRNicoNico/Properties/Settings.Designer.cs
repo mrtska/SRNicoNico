@@ -214,5 +214,17 @@ namespace SRNicoNico.Properties {
                 this["CommentSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ClickOnPause {
+            get {
+                return ((bool)(this["ClickOnPause"]));
+            }
+            set {
+                this["ClickOnPause"] = value;
+            }
+        }
     }
 }
