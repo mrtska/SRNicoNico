@@ -19,6 +19,7 @@
              BorderThickness="1"
              BorderBrush="{StaticResource AccentBrushKey}"
              >
+
     <UserControl.Resources>
         <nnv:VerifyEmptyText x:Key="verifytext"/>
     </UserControl.Resources>

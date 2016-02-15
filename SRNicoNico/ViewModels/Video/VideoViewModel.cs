@@ -601,7 +601,8 @@ namespace SRNicoNico.ViewModels {
             IsFullScreen = false;
 
             //Flash部分をフルスクリーンウィンドウから消去
-            Messenger.Raise(new WindowActionMessage(WindowAction.Close));
+            //Messenger.Raise(new WindowActionMessage(WindowAction.Close));
+            Window.GetWindow(FullScreenVideoFlash).Close();
 
             //ウィンドウを閉じる
             App.ViewModelRoot.Visibility = Visibility.Visible;
@@ -693,6 +694,7 @@ namespace SRNicoNico.ViewModels {
             IsInitialized = true;
             Mylist.EnableButtons();
 
+            //RTMPの時はサーバートークンも一緒にFlashに渡す
             if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
                 InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken);
@@ -747,7 +749,7 @@ namespace SRNicoNico.ViewModels {
         public void ApplyChanges() {
 
             var a = App.ViewModelRoot.Config.Comment.ToJson();
-            InvokeScript("AsApplyChanges", a);
+            //InvokeScript("AsApplyChanges", a);
         }
 
         //Flashに一時停止命令を送る
@@ -940,6 +942,7 @@ namespace SRNicoNico.ViewModels {
 
         public void HideFullScreenPopup() {
 
+            //常に表示の時は隠さない
             if(Properties.Settings.Default.AlwaysShowSeekBar) {
 
                 return;

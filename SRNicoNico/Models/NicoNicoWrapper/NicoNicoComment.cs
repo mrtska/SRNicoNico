@@ -72,6 +72,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             leaves.SetAttribute("scores", "1");
             leaves.InnerText = "0-" + ((GetFlv.Length / 60) + 1) + ":100,1000";
 
+            //公式動画だったらThreadkeyも取得する
             if(ApiData.IsOfficial) {
 
                 try {
@@ -96,15 +97,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     Video.CommentStatus = "取得失敗";
                 }
-
             }
-
             packet.AppendChild(thread);
             packet.AppendChild(leaves);
             root.AppendChild(packet);
-
-            //コメント取得APIに渡すGETパラメーター
-            //leaves.AddQuery("userkey", GetFlv.UserKey);
 
             try {
 
@@ -119,8 +115,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var resultcode = doc.DocumentNode.SelectSingleNode("/packet/thread").Attributes["resultcode"].Value;
 
-
-                //thread_leavesが失敗したら（コメント数が少ないと失敗しやすいっぽい？）
                 if(resultcode == "11") {
 
                     Video.Status = "取得失敗（復帰中）";
@@ -134,24 +128,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     doc.LoadHtml2(a);
                 }
 
-                //公式動画
-                if(resultcode == "9") {
-
-                    var threadKey = NicoNicoWrapperMain.Session.GetAsync(GetThreadKeyApiUrl + GetFlv.ThreadID).Result;
-
-
-                    // var rec = new GetRequestQuery(leaves.TargetUrl);
-                    // rec.AddRawQuery(threadKey);
-
-                    var request2 = new HttpRequestMessage(HttpMethod.Post, GetFlv.CommentServerUrl);
-                    
-                    request2.Content = new StringContent(root.InnerXml);
-                    request2.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
-
-                    a = NicoNicoWrapperMain.GetSession().GetAsync(request2).Result;
-                    doc.LoadHtml2(a);
-
-                }
                 StoreEntry(doc, list);
                 //------
 
@@ -168,7 +144,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 Video.CommentStatus = "取得完了";
 
                 return list;
-
             } catch(RequestTimeout) {
 
                 Video.CommentStatus = "取得失敗（タイムアウト）";

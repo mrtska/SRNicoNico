@@ -13,8 +13,8 @@
              DataContextChanged="UserControl_DataContextChanged"
 			 >
     <Grid>
-        <WindowsFormsHost >
-            <a:AxShockwaveFlash x:Name="flash" />
+        <WindowsFormsHost Focusable="False">
+            <a:AxShockwaveFlash x:Name="flash"/>
         </WindowsFormsHost>
     </Grid>
 </UserControl>

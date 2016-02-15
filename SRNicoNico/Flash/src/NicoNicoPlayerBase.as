@@ -29,6 +29,7 @@ package {
 			stage.frameRate = 30;
 			
 			rasterizer = new CommentRasterizer();
+			stage.showDefaultContextMenu = false;
 			
 			//JSコールバック登録
 			if(ExternalInterface.available) {

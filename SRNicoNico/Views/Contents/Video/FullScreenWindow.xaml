@@ -10,7 +10,7 @@
                  xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
                  xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
 		         xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-                 Title="{Binding VideoData.ApiData.Title}" 
+                 Title="{Binding VideoData.ApiData.Title}"
                  WindowState="Maximized"
                  WindowStyle="None"
                  mc:Ignorable="d" 
@@ -25,9 +25,6 @@
         <i:EventTrigger EventName="Closed">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ReturnFromFullScreen" />
         </i:EventTrigger>
-        <l:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}">
-            <l:WindowInteractionMessageAction />
-        </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
 
     <Grid>
