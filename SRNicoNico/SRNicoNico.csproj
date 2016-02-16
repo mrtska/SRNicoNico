@@ -244,6 +244,8 @@
     <Compile Include="ViewModels\Mylist\MylistViewModel.cs" />
     <Compile Include="ViewModels\Mylist\NewMylistViewModel.cs" />
     <Compile Include="ViewModels\Mylist\PublicMylistViewModel.cs" />
+    <Compile Include="ViewModels\PlayList\PlayListEntryViewModel.cs" />
+    <Compile Include="ViewModels\PlayList\PlayListViewModel.cs" />
     <Compile Include="ViewModels\SignIn\TwitterSignInViewModel.cs" />
     <Compile Include="ViewModels\StartViewModel.cs" />
     <Compile Include="ViewModels\TabItemViewModel.cs" />
@@ -303,6 +305,9 @@
     </Compile>
     <Compile Include="Views\Contents\Misc\TweetDialog.xaml.cs">
       <DependentUpon>TweetDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\PlayList\PlayList.xaml.cs">
+      <DependentUpon>PlayList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Video\VolumeBar.xaml.cs">
       <DependentUpon>VolumeBar.xaml</DependentUpon>
@@ -529,6 +534,10 @@
     <Page Include="Views\Contents\Misc\TweetDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\PlayList\PlayList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Contents\Video\VolumeBar.xaml">
       <SubType>Designer</SubType>
@@ -804,7 +813,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Contents\PlayList\" />
     <Folder Include="Views\Styles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

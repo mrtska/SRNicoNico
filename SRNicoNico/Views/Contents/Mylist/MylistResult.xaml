@@ -28,9 +28,20 @@
                     <ColumnDefinition Width="38*"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding Name}" FontSize="18" Margin="10,3,0,3" VerticalAlignment="Center"  />
-                <ComboBox Grid.Column="1" SelectedIndex="{Binding SortIndex}" Width="140" Margin="10,0" Height="20">
+                <Button Grid.Column="1" Content="連続再生" Height="20">
+                    <i:Interaction.Triggers>
+                        <l:LivetDataTrigger Binding="{Binding Mylist.Count,NotifyOnSourceUpdated=True,Mode=OneWay}" Comparison="Equal" Value="0">
+                            <ei:ChangePropertyAction PropertyName="IsEnabled" Value="False"/>
+                        </l:LivetDataTrigger>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="MakePlayList"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <ComboBox Grid.Column="2" SelectedIndex="{Binding SortIndex}" Width="140" Margin="10,0" Height="20">
 
                     <ComboBoxItem Content="登録が新しい順" />
                     <ComboBoxItem Content="登録が古い順" />
@@ -50,7 +61,7 @@
                     <ComboBoxItem Content="マイリスト登録が少ない順" />
                 </ComboBox>
                 
-                <StackPanel HorizontalAlignment="Right" Grid.Column="2" >
+                <StackPanel HorizontalAlignment="Right" Grid.Column="3" >
                     <StackPanel Orientation="Horizontal" >
                         <ContentControl>
                             <ContentControl.Resources>

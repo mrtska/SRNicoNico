@@ -248,6 +248,12 @@ namespace SRNicoNico.ViewModels {
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Mylist.DeleteMylistDialog), this, TransitionMode.Modal));
         }
 
+        //プレイリストをこのマイリストから作る
+        public void MakePlayList() {
+
+            App.ViewModelRoot.AddTabAndSetCurrent(new PlayListViewModel(Mylist.ToList(), Name));
+        }
+
         //マイリスト削除
         public void DeleteMylist() {
             
