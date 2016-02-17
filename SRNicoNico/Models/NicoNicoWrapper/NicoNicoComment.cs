@@ -14,6 +14,7 @@ using System.Xml;
 using SRNicoNico.ViewModels;
 using SRNicoNico.Models.NicoNicoViewer;
 using System.Web;
+using System.Linq;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoComment : NotificationObject {
@@ -217,22 +218,28 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 query.AddQuery("thread", GetFlv.ThreadID);
 
                 var postkey = NicoNicoWrapperMain.Session.GetAsync(query.TargetUrl).Result;
-                postkey = HttpUtility.UrlDecode(postkey);
+                postkey = HttpUtility.UrlDecode(postkey).Split('=')[1];
 
-                var chat = new GetRequestQuery(GetFlv.CommentServerUrl + "chat");
-                chat.AddQuery("thread", GetFlv.ThreadID);
-                chat.AddQuery("vpos", vpos);
-                chat.AddQuery("mail", mail);
-                chat.AddQuery("ticket", Ticket);
-                chat.AddQuery("user_id", GetFlv.UserId);
-                chat.AddRawQuery(postkey);
+                var root = new XmlDocument();
+                var chat = root.CreateElement("chat");
+                chat.SetAttribute("thread", GetFlv.ThreadID);
+                chat.SetAttribute("vpos", vpos);
+                chat.SetAttribute("mail", mail);
+                chat.SetAttribute("ticket", Ticket);
+                chat.SetAttribute("user_id", GetFlv.UserId);
+                chat.SetAttribute("postkey", postkey);
                 if(GetFlv.IsPremium) {
 
-                    chat.AddQuery("premium", "1");
+                    chat.SetAttribute("premium", "1");
                 }
-                chat.AddQuery("body", comment);
+                chat.InnerText = comment;
+                root.AppendChild(chat);
 
-                var a = NicoNicoWrapperMain.Session.GetAsync(chat.TargetUrl).Result;
+                var request = new HttpRequestMessage(HttpMethod.Post, GetFlv.CommentServerUrl);
+                request.Content = new StringContent(root.InnerXml);
+                request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
+
+                var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);
@@ -241,12 +248,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 if(status != "0") {
 
                     Video.Status = "コメントの投稿に失敗しました";
+                    return null;
                 } else {
 
                     Video.Status = "コメントを投稿しました";
+                    return doc.DocumentNode.SelectSingleNode("packet/chat_result").Attributes["no"].Value;
                 }
-
-                return doc.DocumentNode.SelectSingleNode("packet/chat_result").Attributes["no"].Value;
             } catch(RequestTimeout) {
 
                 Video.Status = "コメントの投稿に失敗しました（タイムアウト）";

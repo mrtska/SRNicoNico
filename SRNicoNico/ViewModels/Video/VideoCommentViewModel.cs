@@ -205,7 +205,8 @@ namespace SRNicoNico.ViewModels {
 
                 var mail = Mail;
 
-                if(Use184) {
+                //公式動画は184を付けて投稿出来ない
+                if(Use184 && !Owner.VideoData.ApiData.IsOfficial) {
 
                     mail += " 184";
                 }
