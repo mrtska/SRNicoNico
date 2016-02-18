@@ -27,8 +27,8 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Grid>
-        <ContentControl Content="{Binding FullScreenVideoFlash,Mode=TwoWay}" />
+    <Grid Background="Black">
+        <ContentControl Content="{Binding FullScreenVideoFlash}" />
 
         <Popup AllowsTransparency="True" IsOpen="{Binding FullScreenPopup}" StaysOpen="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" HorizontalAlignment="Center">
             

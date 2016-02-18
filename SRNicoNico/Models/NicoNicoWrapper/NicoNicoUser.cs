@@ -174,7 +174,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     entry.Url = "http://www.nicovideo.jp/" + h4.SelectSingleNode("child::a").Attributes["href"].Value;
 
                     //名前取得
-                    entry.Name = h4.SelectSingleNode("child::a").InnerText.Trim();
+                    entry.Name = HttpUtility.HtmlDecode(h4.SelectSingleNode("child::a").InnerText.Trim());
 
                     //説明文取得
                     var desc = node.SelectSingleNode("child::div/p[@data-nico-mylist-desc-full='true']");

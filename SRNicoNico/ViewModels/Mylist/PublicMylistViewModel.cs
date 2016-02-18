@@ -167,6 +167,12 @@ namespace SRNicoNico.ViewModels {
             System.Diagnostics.Process.Start("http://www.nicovideo.jp/mylist/" + MylistId);
         }
 
+        //プレイリストをこのマイリストから作る
+        public void MakePlayList() {
+
+            App.ViewModelRoot.AddTabAndSetCurrent(new PlayListViewModel(Mylist.ToList(), Name));
+        }
+
         public void Initialize() {
 
             Task.Run(() => {

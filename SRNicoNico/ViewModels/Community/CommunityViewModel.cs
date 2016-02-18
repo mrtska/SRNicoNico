@@ -59,17 +59,22 @@ namespace SRNicoNico.ViewModels {
 
             TabItems = new ObservableCollection<TabItemViewModel>();
             TabItems.Add(new CommunityTopViewModel(this));
-
             Community = new NicoNicoCommunity(url);
             App.ViewModelRoot.AddTabAndSetCurrent(this);
 
             IsActive = true;
             Status = "コミュニティ情報を取得中";
-            Content = Community.GetCommunity();
-            IsActive = false;
-            Status = "";
 
-            Name = Content.CommunityTitle;
+            Task.Run(() => {
+
+
+                Content = Community.GetCommunity();
+                IsActive = false;
+                Status = "";
+
+                Name = Content.CommunityTitle;
+            });
+
         }
 
         public override void KeyDown(KeyEventArgs e) {

@@ -73,7 +73,7 @@ namespace SRNicoNico.ViewModels {
             UserPageUrl = url;
             App.ViewModelRoot.AddTabAndSetCurrent(this);
 
-            Initialize();
+            Task.Run(() => Initialize());
         }
 
         public void Initialize() {

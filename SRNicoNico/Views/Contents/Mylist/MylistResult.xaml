@@ -32,10 +32,16 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding Name}" FontSize="18" Margin="10,3,0,3" VerticalAlignment="Center"  />
                 <Button Grid.Column="1" Content="連続再生" Height="20">
+                    <Button.Resources>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Mylist.Count}" Value="0">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Resources>
                     <i:Interaction.Triggers>
-                        <l:LivetDataTrigger Binding="{Binding Mylist.Count}" Comparison="Equal" Value="0">
-                            <ei:ChangePropertyAction PropertyName="IsEnabled" Value="False"/>
-                        </l:LivetDataTrigger>
                         <i:EventTrigger EventName="Click">
                             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="MakePlayList"/>
                         </i:EventTrigger>

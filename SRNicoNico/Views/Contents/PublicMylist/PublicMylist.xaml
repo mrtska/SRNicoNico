@@ -45,6 +45,23 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock FontSize="24" TextWrapping="Wrap" Text="{Binding MylistData.MylistName}" />
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Grid.Column="1" Content="連続再生" Height="20">
+                        <Button.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Mylist.Count}" Value="0">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Resources>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="MakePlayList"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+
                     <ComboBox SelectedIndex="{Binding SortIndex}" Width="140" Margin="10,0" Height="20">
 
                         <ComboBoxItem Content="登録が新しい順" />

@@ -42,16 +42,42 @@ namespace SRNicoNico.ViewModels {
             set { 
                 if(_SelectedPlayList == value)
                     return;
-                _SelectedPlayList?.Video?.DisposeViewModel();
+                Video?.Jump(value);
                 _SelectedPlayList = value;
                 RaisePropertyChanged();
-                value.Video = new VideoViewModel(value);
-                value.Video.Initialize();
             }
         }
         #endregion
 
 
+        #region IsRepeat変更通知プロパティ
+        private bool _IsRepeat;
+
+        public bool IsRepeat {
+            get { return _IsRepeat; }
+            set { 
+                if(_IsRepeat == value)
+                    return;
+                _IsRepeat = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region Video変更通知プロパティ
+        private VideoViewModel _Video;
+
+        public VideoViewModel Video {
+            get { return _Video; }
+            set {
+                if(_Video == value)
+                    return;
+                _Video = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         public PlayListViewModel(IList<MylistListEntryViewModel> list, string title) : base(title) {
 
@@ -63,7 +89,7 @@ namespace SRNicoNico.ViewModels {
                     PlayList.Add(new PlayListEntryViewModel(entry).RegisterOwner(this));
                 }
             }
-            SelectedPlayList = PlayList.First();
+            Initialize();
         }
         public PlayListViewModel(IList<PlayListEntryViewModel> list, string title) : base(title) {
 
@@ -71,15 +97,67 @@ namespace SRNicoNico.ViewModels {
 
                 PlayList.Add(entry.RegisterOwner(this));
             }
-            SelectedPlayList = PlayList.First();
+            Initialize();
         }
+
+        private void Initialize() {
+
+            SelectedPlayList = PlayList.First();
+            Video = new VideoViewModel(this);
+            Video.Initialize();
+
+        }
+
 
         public override void KeyDown(KeyEventArgs e) {
             base.KeyDown(e);
-            SelectedPlayList?.Video?.KeyDown(e);
+            Video?.KeyDown(e);
         }
 
+        public void ToggleRepeat() {
 
+            IsRepeat ^= true;
+        }
+
+        //次の動画へ
+        public void Next() {
+
+            if(PlayList.Count == 1) {
+
+                return;
+            }
+
+            var index = PlayList.IndexOf(SelectedPlayList);
+
+            if(index + 1 >= PlayList.Count) {
+
+                if(IsRepeat) {
+
+                    SelectedPlayList = PlayList.First();
+                }
+            } else {
+
+                SelectedPlayList = PlayList[index + 1];
+            }
+
+        }
+        //前の動画へ
+        public void Prev() {
+
+            if(PlayList.Count == 1) {
+
+                return;
+            }
+
+            var index = PlayList.IndexOf(SelectedPlayList);
+            if(index <= 0) {
+
+                SelectedPlayList = PlayList.Last();
+            } else {
+
+                SelectedPlayList = PlayList[index - 1];
+            }
+        }
 
 
     }

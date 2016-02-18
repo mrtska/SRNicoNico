@@ -39,7 +39,7 @@ namespace SRNicoNico.ViewModels {
                     return;
                 base.Status = value;
                 RaisePropertyChanged();
-                if(IsPlayListEntry) {
+                if(IsPlayList) {
 
                     Entry.Status = value;
                 }
@@ -171,7 +171,7 @@ namespace SRNicoNico.ViewModels {
 
         //フルスクリーンかどうか
         #region IsFullScreen変更通知プロパティ
-        private bool _IsFullScreen;
+        private bool _IsFullScreen = false;
 
         public bool IsFullScreen {
             get { return _IsFullScreen; }
@@ -396,8 +396,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        internal bool IsPlayListEntry = false;
-        internal PlayListEntryViewModel Entry;
 
         public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
@@ -405,21 +403,20 @@ namespace SRNicoNico.ViewModels {
             Cmsid = Name;
         }
 
-        public VideoViewModel(PlayListEntryViewModel entry) : base(entry.VideoUrl.Substring(30)) {
-
-            VideoUrl = entry.VideoUrl;
-            Cmsid = Name;
-
-            IsPlayListEntry = true;
-            Entry = entry;
-        }
-
         public void Initialize() {
 
             DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                VideoFlash = new VideoFlash() { DataContext = this };
-                Controller = new VideoController() { DataContext = this };
+                if(IsFullScreen) {
+
+                    FullScreenVideoFlash = new VideoFlash() { DataContext = this };
+                    FullScreenContoller = new VideoController() { DataContext = this };
+                } else {
+
+                    VideoFlash = new VideoFlash() { DataContext = this };
+                    Controller = new VideoController() { DataContext = this };
+                }
+
             }));
 
             var videoUrl = VideoUrl + "?watch_harmful=1";
@@ -612,7 +609,7 @@ namespace SRNicoNico.ViewModels {
             Controller = null;
             FullScreenContoller = temp2;
 
-            App.ViewModelRoot.Visibility = Visibility.Hidden;
+            //App.ViewModelRoot.Visibility = Visibility.Hidden;
             //フルスクリーンウィンドウ表示
             Messenger.Raise(message);
 
@@ -764,8 +761,21 @@ namespace SRNicoNico.ViewModels {
                         Restart();
                     } else if(IsFullScreen) {
 
-                        ReturnFromFullScreen();
+                        if(IsPlayList) {
+
+                            PlayList.Next();
+                        } else {
+
+                            ReturnFromFullScreen();
+                        }
+                    } else {
+
+                        if(IsPlayList) {
+
+                            PlayList.Next();
+                        }
                     }
+                   
                     break;
                 case "Click":   //Flash部分がクリックされた時に呼ばれる
                     if(App.ViewModelRoot.Config.Video.ClickOnPause) {   //クリックしたら一時停止する設定になっていたら
@@ -782,8 +792,7 @@ namespace SRNicoNico.ViewModels {
         //コメント設定をFlashに反映させる
         public void ApplyChanges() {
 
-            var a = App.ViewModelRoot.Config.Comment.ToJson();
-            InvokeScript("AsApplyChanges", a);
+            InvokeScript("AsApplyChanges", App.ViewModelRoot.Config.Comment.ToJson());
         }
 
         //Flashに一時停止命令を送る
@@ -861,7 +870,25 @@ namespace SRNicoNico.ViewModels {
         public void Reflesh() {
 
             DisposeViewModel();
-            NicoNicoOpener.Open(VideoUrl);
+
+            if(IsPlayList) {
+
+                Initialize();
+            } else {
+
+                NicoNicoOpener.Open(VideoUrl);
+            }
+
+        }
+
+        public void Close() {
+
+            DisposeViewModel();
+            if(IsPlayList) {
+
+                App.ViewModelRoot.RemoveTabAndLastSet(PlayList);
+                PlayList.Dispose();
+            }
         }
         
         public void DisposeViewModel() {
@@ -871,10 +898,15 @@ namespace SRNicoNico.ViewModels {
 
                 //UIスレッドじゃないとAccessViolationになる時がある
                 ShockwaveFlash.Dispose();
+                VideoFlash = null;
+                Controller = null;
+                FullScreenVideoFlash = null;
+                FullScreenContoller = null;
 
                 App.ViewModelRoot.RemoveTabAndLastSet(this);
                 Dispose();
             }));
+
         }
 
         public override void KeyDown(KeyEventArgs e) {
@@ -918,7 +950,18 @@ namespace SRNicoNico.ViewModels {
                         break;
                     case Key.Enter:
                         FocusComment();
+                        break;
+                    case Key.N:
+                        if(IsPlayList) {
 
+                            PlayList.Next();
+                        }
+                        break;
+                    case Key.P:
+                        if(IsPlayList) {
+
+                            PlayList.Prev();
+                        }
                         break;
                 }
             } else {
@@ -947,13 +990,26 @@ namespace SRNicoNico.ViewModels {
                     case Key.Enter:
                         FocusComment();
                         break;
+                    case Key.N:
+                        if(IsPlayList) {
+
+                            PlayList.Next();
+                        }
+                        break;
+                    case Key.P:
+                        if(IsPlayList) {
+
+                            PlayList.Prev();
+                        }
+                        break;
+
                 }
                 //Ctrl+Wで閉じる
                 if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
 
                     if(e.Key == Key.W) {
 
-                        DisposeViewModel();
+                        Close();
                     }
                 }
             }
@@ -1010,5 +1066,32 @@ namespace SRNicoNico.ViewModels {
 
             FullScreenPopup = true;
         }
+
+
+        //以下プレイリスト時
+        internal bool IsPlayList = false;
+        internal PlayListViewModel PlayList;
+        internal PlayListEntryViewModel Entry;
+
+        public VideoViewModel(PlayListViewModel list) {
+
+            var entry = list.SelectedPlayList;
+            VideoUrl = entry.VideoUrl;
+            Cmsid = Name;
+
+            IsPlayList = true;
+            PlayList = list;
+            Entry = entry;
+        }
+
+        //指定したプレイリストエントリに飛ぶ
+        public void Jump(PlayListEntryViewModel entry) {
+
+            DisposeViewModel();
+            VideoUrl = entry.VideoUrl;
+            Initialize();
+        }
+
+
     }
 }

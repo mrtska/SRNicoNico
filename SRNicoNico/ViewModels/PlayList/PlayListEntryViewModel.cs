@@ -66,20 +66,6 @@ namespace SRNicoNico.ViewModels {
         public string VideoUrl;
 
 
-        #region Video変更通知プロパティ
-        private VideoViewModel _Video;
-
-        public VideoViewModel Video {
-            get { return _Video; }
-            set { 
-                if(_Video == value)
-                    return;
-                _Video = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
         private PlayListViewModel Owner;
 
         public PlayListEntryViewModel(string title, string thumbnail, string videoUrl) {
