@@ -11,7 +11,8 @@ using Livet.Messaging.IO;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
-using SRNicoNico.Models;
+using SRNicoNico.Models.NicoNicoViewer;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class PlayListViewModel : TabItemViewModel {
@@ -33,22 +34,50 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region SelectedPlayList変更通知プロパティ
+        private PlayListEntryViewModel _SelectedPlayList;
+
+        public PlayListEntryViewModel SelectedPlayList {
+            get { return _SelectedPlayList; }
+            set { 
+                if(_SelectedPlayList == value)
+                    return;
+                _SelectedPlayList?.Video?.DisposeViewModel();
+                _SelectedPlayList = value;
+                RaisePropertyChanged();
+                value.Video = new VideoViewModel(value);
+                value.Video.Initialize();
+            }
+        }
+        #endregion
+
+
 
         public PlayListViewModel(IList<MylistListEntryViewModel> list, string title) : base(title) {
 
             foreach(var entry in list) {
 
-                PlayList.Add(new PlayListEntryViewModel(entry));
+                //ブロマガとかプレイリストに突っ込まれても困るので弾く
+                if(entry.Entry.Type == 0) {
+
+                    PlayList.Add(new PlayListEntryViewModel(entry).RegisterOwner(this));
+                }
             }
+            SelectedPlayList = PlayList.First();
         }
         public PlayListViewModel(IList<PlayListEntryViewModel> list, string title) : base(title) {
 
             foreach(var entry in list) {
 
-                PlayList.Add(entry);
+                PlayList.Add(entry.RegisterOwner(this));
             }
+            SelectedPlayList = PlayList.First();
         }
 
+        public override void KeyDown(KeyEventArgs e) {
+            base.KeyDown(e);
+            SelectedPlayList?.Video?.KeyDown(e);
+        }
 
 
 

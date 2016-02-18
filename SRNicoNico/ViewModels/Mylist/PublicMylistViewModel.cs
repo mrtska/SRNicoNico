@@ -12,6 +12,7 @@ using Livet.Messaging.IO;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
+using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Windows.Input;
 
@@ -189,7 +190,7 @@ namespace SRNicoNico.ViewModels {
 
                 if(SelectedItem.Entry.Type == 0) {
 
-                    new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Entry.Id);
+                    NicoNicoOpener.Open("http://www.nicovideo.jp/watch/" + SelectedItem.Entry.Id);
                 } else if(SelectedItem.Entry.Type == 5) {
 
                     System.Diagnostics.Process.Start("http://seiga.nicovideo.jp/watch/mg" + SelectedItem.Entry.Id);

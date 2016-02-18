@@ -13,7 +13,7 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using SRNicoNico.Models;
-using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
 	public class SearchResultViewModel : ViewModel {
@@ -104,7 +104,7 @@ namespace SRNicoNico.ViewModels {
 
             if(SelectedItem != null) {
 
-                new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Node.Cmsid);
+                NicoNicoOpener.Open("http://www.nicovideo.jp/watch/" + SelectedItem.Node.Cmsid);
                 SelectedItem = null;
             }
 		}

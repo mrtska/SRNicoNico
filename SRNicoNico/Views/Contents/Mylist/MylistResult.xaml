@@ -33,7 +33,7 @@
                 <TextBlock Text="{Binding Name}" FontSize="18" Margin="10,3,0,3" VerticalAlignment="Center"  />
                 <Button Grid.Column="1" Content="連続再生" Height="20">
                     <i:Interaction.Triggers>
-                        <l:LivetDataTrigger Binding="{Binding Mylist.Count,NotifyOnSourceUpdated=True,Mode=OneWay}" Comparison="Equal" Value="0">
+                        <l:LivetDataTrigger Binding="{Binding Mylist.Count}" Comparison="Equal" Value="0">
                             <ei:ChangePropertyAction PropertyName="IsEnabled" Value="False"/>
                         </l:LivetDataTrigger>
                         <i:EventTrigger EventName="Click">

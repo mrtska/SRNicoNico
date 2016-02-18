@@ -66,11 +66,7 @@
         
         <ScrollViewer Grid.Row="2">
             <Grid Background="#FF252627" >
-                <Grid.Resources>
-
-                </Grid.Resources>
                 <metro:TabView dd:DragDrop.DropHandler="{Binding}" dd:DragDrop.IsDropTarget="True" dd:DragDrop.UseDefaultDragAdorner="True" ItemsSource="{Binding MylistListCollection}" SelectedValue="{Binding SelectedList,Mode=TwoWay}" />
-
             </Grid>
 
         </ScrollViewer>

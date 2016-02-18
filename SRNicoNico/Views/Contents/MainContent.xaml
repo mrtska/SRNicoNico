@@ -19,6 +19,7 @@
              xmlns:config="clr-namespace:SRNicoNico.Views.Contents.Config"
              xmlns:user="clr-namespace:SRNicoNico.Views.Contents.User"
              xmlns:community="clr-namespace:SRNicoNico.Views.Contents.Community"
+             xmlns:playlist="clr-namespace:SRNicoNico.Views.Contents.PlayList"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600"
@@ -74,6 +75,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:CommunityViewModel}">
                     <community:Community />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:PlayListViewModel}">
+                    <playlist:PlayList />
                 </DataTemplate>
             </ItemsControl.Resources>
             

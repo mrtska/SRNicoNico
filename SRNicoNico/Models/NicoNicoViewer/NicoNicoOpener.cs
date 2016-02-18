@@ -24,7 +24,10 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
             if(url.StartsWith("http://www.nicovideo.jp/watch/")) {
 
-                return new VideoViewModel(url);
+                var vm = new VideoViewModel(url);
+                App.ViewModelRoot.AddTabAndSetCurrent(vm);
+                vm.Initialize();
+                return vm;
             } else if(url.StartsWith("http://www.nicovideo.jp/user/")) {
 
                 return new UserViewModel(url);

@@ -14,25 +14,54 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:PlayListViewModel}}"
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             Background="{DynamicResource ThemeBrushKey}"
              >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <metro:TabView >
-            
-        </metro:TabView>
-        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="プレイリスト" FontSize="20" Height="30" Margin="5,0"/>
+            <ScrollViewer Grid.Row="1">
+                <metro:TabView ItemsSource="{Binding PlayList}" SelectedValue="{Binding SelectedPlayList}" Focusable="False" Background="#FF252627">
+                    <metro:TabView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource DefaultItemContainerStyle}">
+                            <Setter Property="Height" Value="auto"/>
+                        </Style>
+                    </metro:TabView.ItemContainerStyle>
+                    <metro:TabView.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:PlayListViewModel}">
+                            <StackPanel>
+                                <Image Source="{Binding ThumbNailUrl}" Height="90" Margin="5"/>
+                                <TextBlock Text="{Binding Title}" FontSize="10" TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </metro:TabView.ItemTemplate>
+                </metro:TabView>
+            </ScrollViewer>
 
-        <ItemsControl Grid.Column="1" ItemsSource="{Binding NicoRepoListCollection}">
+        </Grid>
+
+
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding PlayList}" >
 
             <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type vm:VideoViewModel}">
-                    <video:Video />
+                <DataTemplate DataType="{x:Type vm:PlayListEntryViewModel}">
+                    <video:Video DataContext="{Binding Video}" />
                 </DataTemplate>
             </ItemsControl.Resources>
 
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
                     <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />

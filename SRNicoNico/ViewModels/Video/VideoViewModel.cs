@@ -31,6 +31,23 @@ namespace SRNicoNico.ViewModels {
         public NicoNicoComment CommentInstance;
 
 
+        #region Status変更通知プロパティ
+        public new string Status {
+            get { return base.Status; }
+            set { 
+                if(base.Status == value)
+                    return;
+                base.Status = value;
+                RaisePropertyChanged();
+                if(IsPlayListEntry) {
+
+                    Entry.Status = value;
+                }
+            }
+        }
+        #endregion
+
+
         #region CommentStatus変更通知プロパティ
         private string _CommentStatus;
 
@@ -379,23 +396,34 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        internal bool IsPlayListEntry = false;
+        internal PlayListEntryViewModel Entry;
 
         public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
-            App.ViewModelRoot.AddTabAndSetCurrent(this);
-
             VideoUrl = videoUrl;
             Cmsid = Name;
+        }
+
+        public VideoViewModel(PlayListEntryViewModel entry) : base(entry.VideoUrl.Substring(30)) {
+
+            VideoUrl = entry.VideoUrl;
+            Cmsid = Name;
+
+            IsPlayListEntry = true;
+            Entry = entry;
+        }
+
+        public void Initialize() {
+
             DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
                 VideoFlash = new VideoFlash() { DataContext = this };
                 Controller = new VideoController() { DataContext = this };
             }));
 
-            Initialize(videoUrl + "?watch_harmful=1");
-        }
+            var videoUrl = VideoUrl + "?watch_harmful=1";
 
-        private void Initialize(string videoUrl) {
 
             IsActive = true;
             Task.Run(() => {
@@ -755,7 +783,7 @@ namespace SRNicoNico.ViewModels {
         public void ApplyChanges() {
 
             var a = App.ViewModelRoot.Config.Comment.ToJson();
-            //InvokeScript("AsApplyChanges", a);
+            InvokeScript("AsApplyChanges", a);
         }
 
         //Flashに一時停止命令を送る
@@ -833,7 +861,7 @@ namespace SRNicoNico.ViewModels {
         public void Reflesh() {
 
             DisposeViewModel();
-            new VideoViewModel(VideoUrl);
+            NicoNicoOpener.Open(VideoUrl);
         }
         
         public void DisposeViewModel() {

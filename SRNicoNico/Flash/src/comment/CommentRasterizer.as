@@ -64,6 +64,9 @@ package comment {
 				//描画時間になったら
 				if(vpos >= target.vpos && vpos < target.vend) {
 					
+
+					target.x = positioner.getX(target, vpos);
+					
 					//3DSからのコメントを弾く
 					if (Hide3DS && target.mail.indexOf("device:3DS") >= 0) {
 						
@@ -84,7 +87,6 @@ package comment {
 						}
 					}
 					
-					target.x = positioner.getX(target, vpos);
 					
 					if(drawingList.indexOf(target) >= 0) {
 						

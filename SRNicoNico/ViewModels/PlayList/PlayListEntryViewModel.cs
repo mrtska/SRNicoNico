@@ -14,7 +14,24 @@ using Livet.Messaging.Windows;
 using SRNicoNico.Models;
 
 namespace SRNicoNico.ViewModels {
-    public class PlayListEntryViewModel : ViewModel {
+    public class PlayListEntryViewModel : TabItemViewModel {
+
+
+        #region Status変更通知プロパティ
+        public new string Status {
+            get { return base.Status; }
+            set { 
+                if(base.Status == value)
+                    return;
+                base.Status = value;
+                if(Owner != null) {
+
+                    Owner.Status = value;
+                }
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
 
         #region ThumbNailUrl変更通知プロパティ
@@ -46,16 +63,42 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        public PlayListEntryViewModel(string title, string thumbnail) {
+        public string VideoUrl;
+
+
+        #region Video変更通知プロパティ
+        private VideoViewModel _Video;
+
+        public VideoViewModel Video {
+            get { return _Video; }
+            set { 
+                if(_Video == value)
+                    return;
+                _Video = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        private PlayListViewModel Owner;
+
+        public PlayListEntryViewModel(string title, string thumbnail, string videoUrl) {
 
             Title = title;
             ThumbNailUrl = thumbnail;
+            VideoUrl = videoUrl;
         }
         public PlayListEntryViewModel(MylistListEntryViewModel entry) {
 
             Title = entry.Entry.Title;
             ThumbNailUrl = entry.Entry.ThumbNailUrl;
+            VideoUrl = "http://www.nicovideo.jp/watch/" + entry.Entry.Id;
         }
 
+        public PlayListEntryViewModel RegisterOwner(PlayListViewModel vm) {
+
+            Owner = vm;
+            return this;
+        }
     }
 }

@@ -11,7 +11,7 @@ using Livet.Messaging.IO;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
-using SRNicoNico.Models;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class HistoryResultViewModel : ViewModel {
@@ -66,7 +66,7 @@ namespace SRNicoNico.ViewModels {
 
             if(SelectedItem != null) {
 
-                new VideoViewModel("http://www.nicovideo.jp/watch/" + SelectedItem.Data.Id);
+                NicoNicoOpener.Open("http://www.nicovideo.jp/watch/" + SelectedItem.Data.Id);
                 SelectedItem = null;
             }
         }
