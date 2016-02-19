@@ -25,6 +25,11 @@ namespace SRNicoNico.Views.Contents.PlayList {
         private void TabView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
             var listbox = sender as TabView;
+            if(e.AddedItems.Count == 0) {
+
+                return;
+            }
+
             listbox.ScrollIntoView(e.AddedItems[0]);
         }
     }

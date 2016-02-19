@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.IO;
 using System.IO.Compression;
@@ -91,7 +91,7 @@ namespace Updater.ViewModels {
                     File.Delete("./tmp/data");
                     Directory.Delete("./tmp");
                     Progress = 100;
-                    System.Diagnostics.Process.Start("SRNicoNico.exe");
+                    Process.Start("SRNicoNico.exe");
 
                     Environment.Exit(0);
                 } else {
@@ -120,7 +120,7 @@ namespace Updater.ViewModels {
                     }
                     Progress = 100;
 
-                    System.Diagnostics.Process.Start(Environment.CurrentDirectory + "/backup/Updater.exe", App.DownloadUrl);
+                    Process.Start(Environment.CurrentDirectory + "/backup/Updater.exe", Process.GetCurrentProcess().Id + " " + App.DownloadUrl);
                     Environment.Exit(0);
                 }
 

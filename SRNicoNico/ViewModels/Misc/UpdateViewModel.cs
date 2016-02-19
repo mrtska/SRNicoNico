@@ -13,6 +13,7 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoViewer;
+using System.Diagnostics;
 
 namespace SRNicoNico.ViewModels {
     public class UpdateViewModel : TabItemViewModel {
@@ -69,7 +70,7 @@ namespace SRNicoNico.ViewModels {
 
             Task.Run(() => {
 
-                System.Diagnostics.Process.Start("Updater.exe", "prepare " + Url);
+                Process.Start("Updater.exe", Process.GetCurrentProcess().Id + " prepare " + Url);
                 
                 Environment.Exit(0);
             });

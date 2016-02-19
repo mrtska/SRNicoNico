@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 
 using Livet;
+using System.Diagnostics;
 
 namespace Updater {
     /// <summary>
@@ -29,12 +30,17 @@ namespace Updater {
                 return;
             }
 
-            var url = lines[1];
+
+            //プロセスが死ぬまで待つ
+            
+            //Process.GetProcessById(int.Parse(lines[1])).WaitForExit();
+
+            var url = lines[2];
 
             if(url == "prepare") {
 
                 ProductionMode = false;
-                DownloadUrl = lines[2];
+                DownloadUrl = lines[3];
                 return;
             }
 
@@ -53,7 +59,7 @@ namespace Updater {
         {
             //TODO:ロギング処理など
             MessageBox.Show(
-                "不明なエラーが発生しました。アプリケーションを終了します。",
+                "不明なエラーが発生しました。アプリケーションを終了します。" + e.ExceptionObject,
                 "エラー",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);

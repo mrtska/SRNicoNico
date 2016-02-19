@@ -42,9 +42,9 @@ namespace SRNicoNico.Views.Contents.Video {
                 if(DataContext is VideoViewModel) {
 
                     var vm = (VideoViewModel) DataContext;
-                    NicoNicoOpener.Open(e.Uri.OriginalString);
+                    var ret = NicoNicoOpener.Open(e.Uri.OriginalString);
 
-                    if(!(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftShift))) {
+                    if(ret is VideoViewModel && !(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftShift))) {
 
                         vm.DisposeViewModel();
                     }
