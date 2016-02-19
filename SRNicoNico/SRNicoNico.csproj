@@ -469,6 +469,7 @@
       <DependentUpon>VideoToolTip.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\SeekBar.cs" />
+    <Compile Include="Views\Converter\ListCountConverter.cs" />
     <Compile Include="Views\Converter\FontFamilyToLocalizedNameConverter.cs" />
     <Compile Include="Views\Extentions\DictionaryExtentions.cs" />
     <Compile Include="Views\Extentions\HtmlToXamlConverter.cs" />

@@ -49,7 +49,7 @@
                         <Button.Resources>
                             <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Mylist.Count}" Value="0">
+                                    <DataTrigger Binding="{Binding Mylist,Converter={StaticResource listcount}}" Value="0">
                                         <Setter Property="IsEnabled" Value="False"/>
                                     </DataTrigger>
                                 </Style.Triggers>

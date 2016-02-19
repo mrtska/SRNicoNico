@@ -3,6 +3,7 @@
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:converter="clr-namespace:SRNicoNico.Views.Converter"
              >
 	<Application.Resources>
 		<ResourceDictionary>
@@ -15,6 +16,9 @@
                 <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Themes/Accents/Blue.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
+
+            <converter:ListCountConverter x:Key="listcount"/>
+
 
 
             <Style x:Key="DefaultItemContainerStyle" TargetType="ListBoxItem">
