@@ -1,0 +1,53 @@
+﻿<metro:MetroWindow x:Class="SRNicoNico.Views.Contents.Video.WindowedWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+                 xmlns:v="clr-namespace:SRNicoNico.Views"
+                 xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+                 xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
+		         xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                 Title="{Binding VideoData.ApiData.Title}"
+                 IsRestoringWindowPlacement="True"
+                 mc:Ignorable="d" 
+		         Background="{DynamicResource ThemeBrushKey}"
+                 Foreground="{DynamicResource ActiveForegroundBrushKey}"
+                 InputMethod.PreferredImeState="Off"
+                 KeyboardNavigation.IsTabStop="False"
+                 KeyDown="screen_KeyDown"
+                 d:DataContext="{d:DesignInstance vm:VideoViewModel}"
+                >
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ReturnFromFullScreen" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Border metro:MetroWindow.IsCaptionBar="True" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1"  Text="{Binding VideoData.ApiData.Title}" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource ForegroundBrushKey}" FontSize="18" Margin="3,0,0,0" VerticalAlignment="Center" />
+                <metro:SystemButtons Grid.Column="2" VerticalAlignment="Top" />
+            </Grid>
+        </Border>
+
+        <ContentControl Content="{Binding FullScreenVideoFlash}" Grid.Row="1" Background="Black" />
+
+        <ContentControl Grid.Row="2" Content="{Binding FullScreenContoller}" />
+    </Grid>
+</metro:MetroWindow>

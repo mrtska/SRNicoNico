@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using MetroRadiance.Controls;
 
 namespace SRNicoNico.Views.Contents.PlayList {
     /// <summary>
@@ -20,6 +20,12 @@ namespace SRNicoNico.Views.Contents.PlayList {
     public partial class PlayList : UserControl {
         public PlayList() {
             InitializeComponent();
+        }
+
+        private void TabView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            var listbox = sender as TabView;
+            listbox.ScrollIntoView(e.AddedItems[0]);
         }
     }
 }

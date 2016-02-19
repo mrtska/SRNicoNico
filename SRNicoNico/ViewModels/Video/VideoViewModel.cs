@@ -598,8 +598,18 @@ namespace SRNicoNico.ViewModels {
             }
             IsFullScreen = true;
 
+            Type type;
+            if(App.ViewModelRoot.Config.Video.UseWindowFullScreen) {
+
+                type = typeof(WindowedWindow);
+            } else {
+
+                type = typeof(FullScreenWindow);
+            }
+
+
             //リソースに登録
-            var message = new TransitionMessage(typeof(FullScreenWindow), this, TransitionMode.NewOrActive);
+            var message = new TransitionMessage(type, this, TransitionMode.NewOrActive);
 
             //ウィンドウからFlash部分を消去
             var temp = VideoFlash;
@@ -609,7 +619,7 @@ namespace SRNicoNico.ViewModels {
             Controller = null;
             FullScreenContoller = temp2;
 
-            //App.ViewModelRoot.Visibility = Visibility.Hidden;
+            App.ViewModelRoot.Visibility = Visibility.Hidden;
             //フルスクリーンウィンドウ表示
             Messenger.Raise(message);
 

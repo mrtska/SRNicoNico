@@ -309,6 +309,9 @@
     <Compile Include="Views\Contents\PlayList\PlayList.xaml.cs">
       <DependentUpon>PlayList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\Video\WindowedWindow.xaml.cs">
+      <DependentUpon>WindowedWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Video\VolumeBar.xaml.cs">
       <DependentUpon>VolumeBar.xaml</DependentUpon>
     </Compile>
@@ -538,6 +541,10 @@
     <Page Include="Views\Contents\PlayList\PlayList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\WindowedWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Video\VolumeBar.xaml">
       <SubType>Designer</SubType>

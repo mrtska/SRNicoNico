@@ -226,5 +226,17 @@ namespace SRNicoNico.Properties {
                 this["ClickOnPause"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseWindowModeFullScreen {
+            get {
+                return ((bool)(this["UseWindowModeFullScreen"]));
+            }
+            set {
+                this["UseWindowModeFullScreen"] = value;
+            }
+        }
     }
 }

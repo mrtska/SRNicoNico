@@ -79,6 +79,20 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region UseWindowFullScreen変更通知プロパティ
+        public bool UseWindowFullScreen {
+            get { return Properties.Settings.Default.UseWindowModeFullScreen; }
+            set { 
+                if(Properties.Settings.Default.UseWindowModeFullScreen == value)
+                    return;
+                Properties.Settings.Default.UseWindowModeFullScreen = value;
+                Properties.Settings.Default.Save();
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
 
         public ConfigVideoViewModel() : base("動画") {
 
