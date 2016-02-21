@@ -14,6 +14,7 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoViewer;
 using System.Diagnostics;
+using System.Threading;
 
 namespace SRNicoNico.ViewModels {
     public class UpdateViewModel : TabItemViewModel {
@@ -71,20 +72,18 @@ namespace SRNicoNico.ViewModels {
             Task.Run(() => {
 
                 App.ViewModelRoot.Visibility = Visibility.Hidden;
-                App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Updater.DownloadDialog), this, TransitionMode.Modal));
 
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
+                    //メインウィンドウ
+                    var metro = App.Current.MainWindow as MetroRadiance.UI.Controls.MetroWindow;
 
+                    //Hiddenにしても周りのGlowWindowが出たままなので消す
+                    metro.MetroChrome.OverrideDefaultEdge = true;
 
-
-
-                //Process.Start("Updater.exe", Process.GetCurrentProcess().Id + " prepare " + Url);
-
-                //Environment.Exit(0);
+                    App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Updater.DownloadDialog), new DownloadViewModel(Url), TransitionMode.NewOrActive));
+                }));
             });
-
         }
-
-
     }
 }

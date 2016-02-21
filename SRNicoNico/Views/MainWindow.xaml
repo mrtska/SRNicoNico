@@ -33,14 +33,14 @@
                    KeyDown="Root_KeyDown"
                    FontFamily="{Binding  UserSelectedFont,Mode=TwoWay}"
                    Visibility="{Binding Visibility,Mode=TwoWay}"
-                   
+
                    mc:Ignorable="d"
                    d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
 				  >
 
     <i:Interaction.Triggers>
         <l:InteractionMessageTrigger Messenger="{Binding Messenger}">
-            <l:TransitionInteractionMessageAction/>
+            <l:TransitionInteractionMessageAction/> 
         </l:InteractionMessageTrigger>
 
 

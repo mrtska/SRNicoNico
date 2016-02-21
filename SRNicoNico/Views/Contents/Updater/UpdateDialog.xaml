@@ -3,7 +3,7 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-                   xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
+                   xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Updater"
                    xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
                    xmlns:mui="http://firstfloorsoftware.com/ModernUI"
                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
@@ -24,7 +24,7 @@
                    WindowStyle="None"
                    >
     <i:Interaction.Triggers>
-        <l:InteractionMessageTrigger MessageKey="WindowAction" Messenger="{Binding Messenger, Mode=OneWay}">
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger}" >
             <l:WindowInteractionMessageAction />
         </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
@@ -48,19 +48,18 @@
 
         <Grid Grid.Row="1" Margin="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="174*"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <StackPanel HorizontalAlignment="Center">
-                <TextBlock FontSize="20" Text="新しいアップデートがあります。" />
+                <TextBlock FontSize="20" Text="新しいアップデートがあります。"  HorizontalAlignment="Center"/>
 
-            </StackPanel>
 
-            <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,10,0,-10">
                 <Button Content="アップデート">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Update" />
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CloseDialog" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>

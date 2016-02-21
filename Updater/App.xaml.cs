@@ -14,44 +14,19 @@ namespace Updater {
     /// </summary>
     public partial class App : Application {
 
-        public static string DownloadUrl { get; set; }
-
-        public static bool ProductionMode;
-
         private void Application_Startup(object sender, StartupEventArgs e) {
+
+            if(!Environment.CommandLine.Contains("iris")) {
+
+                Environment.Exit(0);
+            }
+
             DispatcherHelper.UIDispatcher = Dispatcher;
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
-            var lines = Environment.GetCommandLineArgs();
-
-            if(lines.Length == 1) {
-
-                Environment.Exit(-1);
-                return;
-            }
 
 
-            //プロセスが死ぬまで待つ
-            
-            //Process.GetProcessById(int.Parse(lines[1])).WaitForExit();
 
-            var url = lines[2];
-
-            if(url == "prepare") {
-
-                ProductionMode = false;
-                DownloadUrl = lines[3];
-                return;
-            }
-
-            if(url.StartsWith("http://")) {
-
-                ProductionMode = true;
-                DownloadUrl = url;
-                return;
-            }
-
-            Environment.Exit(-1);
         }
 
         //集約エラーハンドラ

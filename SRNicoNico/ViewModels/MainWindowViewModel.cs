@@ -25,8 +25,6 @@ using System.Windows.Media;
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
 
-
-
         //現在のバージョン
         public double CurrentVersion {
 
