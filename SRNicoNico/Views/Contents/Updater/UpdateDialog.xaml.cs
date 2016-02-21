@@ -1,4 +1,4 @@
-﻿using MetroRadiance.Controls;
+﻿using MetroRadiance.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SRNicoNico.Views.Contents.Misc {
+namespace SRNicoNico.Views.Contents.Updater {
     /// <summary>
     /// VideoTimeOutDialog.xaml の相互作用ロジック
     /// </summary>

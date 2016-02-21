@@ -1,4 +1,4 @@
-﻿using MetroRadiance.Controls;
+﻿using MetroRadiance.UI.Controls;
 using SRNicoNico.ViewModels;
 using System;
 using System.Collections.Generic;

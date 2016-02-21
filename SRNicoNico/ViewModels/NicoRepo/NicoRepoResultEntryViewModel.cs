@@ -128,7 +128,7 @@ namespace SRNicoNico.ViewModels {
         //ダイアログクローズ
         public void Close() {
 
-            Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
+            Messenger.Raise(new WindowActionMessage(Livet.Messaging.Windows.WindowAction.Close, "WindowAction"));
         }
 
         public void ShowInfomation() {

@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using MetroRadiance.Controls;
+using MetroRadiance.UI.Controls;
 
 namespace SRNicoNico.Views.Contents.PlayList {
     /// <summary>

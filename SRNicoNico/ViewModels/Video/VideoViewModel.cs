@@ -387,7 +387,7 @@ namespace SRNicoNico.ViewModels {
 
         public bool FullScreenPopup {
             get { return _FullScreenPopup; }
-            private set { 
+            set { 
                 if(_FullScreenPopup == value)
                     return;
                 _FullScreenPopup = value;

@@ -28,11 +28,11 @@
     </i:Interaction.Triggers>
 
     <Grid Background="Black">
-        <ContentControl Content="{Binding FullScreenVideoFlash}" />
+        <ContentControl Content="{Binding FullScreenVideoFlash,Mode=OneWay}" />
 
         <Popup AllowsTransparency="True" IsOpen="{Binding FullScreenPopup}" StaysOpen="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" HorizontalAlignment="Center">
             
-            <ContentControl Content="{Binding FullScreenContoller}" Opacity="0.5" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualWidth}"/>
+            <ContentControl Content="{Binding FullScreenContoller,Mode=OneWay}" Opacity="0.5" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualWidth}"/>
         </Popup>
     </Grid>
 </Window>

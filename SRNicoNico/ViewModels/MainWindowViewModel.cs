@@ -33,7 +33,7 @@ namespace SRNicoNico.ViewModels {
             get { return 0.6; }
         }
 
-
+        
 		#region Title変更通知プロパティ
 		private string _Title = "NicoNicoViewer ";
 

@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MetroRadiance.Controls;
+using MetroRadiance.UI.Controls;
 using SRNicoNico.ViewModels;
 using System.Windows.Markup;
 using System.Threading;

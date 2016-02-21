@@ -13,7 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using FirstFloor.ModernUI.Windows.Controls;
-using MetroRadiance.Controls;
+using MetroRadiance.UI.Controls;
 
 namespace SRNicoNico.Views.Contents.Signin {
 	/* 

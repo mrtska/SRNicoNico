@@ -12,7 +12,7 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using SRNicoNico.Models;
-using MetroRadiance.Controls;
+using MetroRadiance.UI.Controls;
 using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {

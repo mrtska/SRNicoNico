@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Windows;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
@@ -61,7 +61,7 @@ namespace SRNicoNico.ViewModels {
                 if(UpdateCheck.IsUpdateAvailable(CurrentVersion, ref url)) {
 
                     Url = url;
-                    App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Misc.UpdateDialog), this, TransitionMode.Modal));
+                    App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Updater.UpdateDialog), this, TransitionMode.Modal));
                 }
             });
         }
@@ -70,9 +70,17 @@ namespace SRNicoNico.ViewModels {
 
             Task.Run(() => {
 
-                Process.Start("Updater.exe", Process.GetCurrentProcess().Id + " prepare " + Url);
-                
-                Environment.Exit(0);
+                App.ViewModelRoot.Visibility = Visibility.Hidden;
+                App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Updater.DownloadDialog), this, TransitionMode.Modal));
+
+
+
+
+
+
+                //Process.Start("Updater.exe", Process.GetCurrentProcess().Id + " prepare " + Url);
+
+                //Environment.Exit(0);
             });
 
         }
