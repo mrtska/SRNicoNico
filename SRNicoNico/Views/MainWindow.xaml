@@ -33,7 +33,7 @@
                    KeyDown="Root_KeyDown"
                    FontFamily="{Binding  UserSelectedFont,Mode=TwoWay}"
                    Visibility="{Binding Visibility,Mode=TwoWay}"
-
+                   WindowStyle="None"
                    mc:Ignorable="d"
                    d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
 				  >

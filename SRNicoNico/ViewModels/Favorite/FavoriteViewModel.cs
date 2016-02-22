@@ -66,7 +66,7 @@ namespace SRNicoNico.ViewModels {
 
         public override void KeyDown(KeyEventArgs e) {
 
-            SelectedList.KeyDown(e);
+            SelectedList?.KeyDown(e);
         }
     }
 }

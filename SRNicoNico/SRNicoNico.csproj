@@ -286,6 +286,7 @@
     <Compile Include="Views\Contents\Favorite\FavoriteUser.xaml.cs">
       <DependentUpon>FavoriteUser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\Live\NotifyLiveViewModel.cs" />
     <Compile Include="Views\Contents\Log\AccessLog.xaml.cs">
       <DependentUpon>AccessLog.xaml</DependentUpon>
     </Compile>
@@ -828,7 +829,6 @@
   <ItemGroup>
     <Folder Include="ViewModels\Live\" />
     <Folder Include="ViewModels\TimeShift\" />
-    <Folder Include="Views\Contents\Live\" />
     <Folder Include="Views\Styles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
