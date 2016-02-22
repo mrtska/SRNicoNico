@@ -206,6 +206,8 @@
     <Compile Include="Models\NicoNicoWrapper\NicoNicoCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteUser.cs" />
+    <Compile Include="Models\NicoNicoWrapper\NicoNicoTimeShift.cs" />
+    <Compile Include="Models\NicoNicoWrapper\NicoNicoLive.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylist.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylistGroup.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoPublicMylist.cs" />
@@ -824,6 +826,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ViewModels\Live\" />
+    <Folder Include="ViewModels\TimeShift\" />
+    <Folder Include="Views\Contents\Live\" />
     <Folder Include="Views\Styles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
