@@ -2,7 +2,10 @@ package  {
 	
 	
 	import flash.display.Loader;
+	import flash.display.LoaderInfo;
 	import flash.display.MovieClip;
+	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.media.SoundTransform;
 	import flash.net.URLRequest;
@@ -19,15 +22,32 @@ package  {
 		
 		private var loader:Loader = new Loader();
 
+		private var videoW:int;
+		private	var videoH:int;
 		private var movie:MovieClip;
 		
 		//コンストラクタ
 		public function NicoNicoNMPlayer() {
 			
 			super();
+			stage.frameRate = 25;
+			
+			
+			stage.align = StageAlign.TOP_LEFT;
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			
+			stage.addEventListener(Event.RESIZE, function(e:Event):void {
+				
+				trace(stage.stageWidth);
+				resize(stage.stageWidth, stage.stageHeight);
+				if (rasterizer) {
+					
+					rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
+				}
+			});
 			
 			//("Z:/smile.swf");
-			//OpenVideo("Z:/smile.mp4");
+			//OpenVideo("Z:/smile1.swf");
 			//OpenVideo("Z:/smile (1).mp4");
 			//var now:Date = new Date();
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
@@ -48,12 +68,13 @@ package  {
 		//指定したURLをストリーミング再生する
 		public override function OpenVideo(videoUrl:String):void {
 			
+			
+			
 			var req:URLRequest = new URLRequest(videoUrl);
 			
 			loader.contentLoaderInfo.addEventListener(Event.INIT, onInit);
 			var fLoader:ForcibleLoader = new ForcibleLoader(loader);
 			fLoader.load(req);
-			
 			
 		}
 		
@@ -92,7 +113,39 @@ package  {
 			
 			addChild(loader);
 			
+			loader.width = 512;
+			loader.height = 384;
 			movie = loader.content as MovieClip;
+			movie.soundTransform = new SoundTransform(0.1);
+			
+			var stageW:int = stage.stageWidth;
+			var stageH:int = stage.stageHeight;
+
+			videoW = loader.contentLoaderInfo.width;
+			videoH = loader.contentLoaderInfo.height;
+			
+			
+			trace("stageWidth:" + stageW + " stageHeight:" + stageH);
+			trace("videoWidth:" + videoW + " videoHeight:" + videoH);
+
+			//動画アスペクト比
+			var AR:Number = videoW / videoH;
+			
+			trace(AR);
+			
+			var aspectW:Number = stageH * AR;
+			
+			trace("apectWidth:" + movie.width);
+			
+			//アスペクト比を考慮したときに両端に出る黒い部分の位置　両端からのオフセット
+			var x:* = (stageW - videoW) / 2;
+			
+			trace(x);
+			
+			var _loc3_:Number = 1;
+			//movie.x = x;
+
+			resize(stageW, stageH);
 			
 			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
 			addChild(rasterizer);
@@ -101,6 +154,24 @@ package  {
 		}
 		
 		
+		public function resize(width:Number, height:Number) : void {
+			
+			var scale:Number = 1;
+			if (this.videoH / this.videoW < height / width) {
+				
+				scale = width / this.videoW;
+				this.loader.scaleX = this.loader.scaleY = scale;
+				this.loader.x = 0;
+				this.loader.y = (height - this.videoH * scale) / 2;
+			} else {
+				
+				scale = height / this.videoH;
+				this.loader.scaleX = this.loader.scaleY = scale;
+				this.loader.x = (width - this.videoW * scale) / 2;
+				this.loader.y = 0;
+			}
+      }
+
 		private var prevTime:int = 0;
 		private var prevLoaded:uint = 0;
 		
@@ -116,7 +187,10 @@ package  {
 			var buffer:Number = (loader.contentLoaderInfo.bytesLoaded) / (loader.contentLoaderInfo.bytesTotal);
 			
 			
-			ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (loader.contentLoaderInfo.bytesLoaded - prevLoaded).toString(), vpos.toString());
+			if (ExternalInterface.available) {
+
+				ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (loader.contentLoaderInfo.bytesLoaded - prevLoaded).toString(), vpos.toString());
+			}
 			prevLoaded = loader.contentLoaderInfo.bytesLoaded;
 			prevTime = (int) (value);
 			

@@ -60,8 +60,8 @@ namespace SRNicoNico.ViewModels {
         }
 
         public void Reflesh() {
-
-
+            
+                
         }
 
         public override void KeyDown(KeyEventArgs e) {
