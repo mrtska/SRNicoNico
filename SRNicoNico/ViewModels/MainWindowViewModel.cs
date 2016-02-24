@@ -171,6 +171,7 @@ namespace SRNicoNico.ViewModels {
             TabItems.Add(new FavoriteViewModel());
             TabItems.Add(new NicoRepoViewModel());
             TabItems.Add(new MylistViewModel());
+            TabItems.Add(new NotifyLiveViewModel());
             TabItems.Add(new HistoryViewModel());
             TabItems.Add(new OtherViewModel());
             TabItems.Add(Config = new ConfigViewModel());

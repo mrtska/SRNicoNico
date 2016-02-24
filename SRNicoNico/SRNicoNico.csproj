@@ -205,6 +205,7 @@
     <Compile Include="Models\NicoNicoViewer\VideoCommentDecoration.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteCommunity.cs" />
+    <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteLive.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteUser.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoTimeShift.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoLive.cs" />
@@ -286,7 +287,13 @@
     <Compile Include="Views\Contents\Favorite\FavoriteUser.xaml.cs">
       <DependentUpon>FavoriteUser.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Contents\Live\NotifyLiveViewModel.cs" />
+    <Compile Include="ViewModels\Live\NotifyLiveViewModel.cs" />
+    <Compile Include="Views\Contents\Live\NotifyEntry.xaml.cs">
+      <DependentUpon>NotifyEntry.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Live\Notify.xaml.cs">
+      <DependentUpon>Notify.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Log\AccessLog.xaml.cs">
       <DependentUpon>AccessLog.xaml</DependentUpon>
     </Compile>
@@ -514,6 +521,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Favorite\FavoriteUser.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Live\NotifyEntry.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Live\Notify.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -827,7 +842,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\Live\" />
     <Folder Include="ViewModels\TimeShift\" />
     <Folder Include="Views\Styles\" />
   </ItemGroup>
