@@ -40,7 +40,7 @@
         </Grid>
         
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding NowLiveList}" Margin="3">
+        <ListBox Grid.Row="1" ItemsSource="{Binding NowLiveList}" SelectedItem="{Binding SelectedLive}" Margin="3">
             <ListBox.Resources>
                 <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource {x:Type ListBox}}">
                     <Style.Triggers>
@@ -64,6 +64,12 @@
                     <local:NotifyEntry />
                 </DataTemplate>
             </ListBox.Resources>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Style.Resources>

@@ -97,7 +97,13 @@ package  {
 			
 			if(movie) {
 				
-				movie.gotoAndPlay(pos * movie.loaderInfo.frameRate);
+				if (movie.isPlaying) {
+					
+					movie.gotoAndPlay(pos * movie.loaderInfo.frameRate);
+				} else {
+					
+					movie.gotoAndStop(pos * movie.loaderInfo.frameRate);
+				}
 			}
 		}
 		

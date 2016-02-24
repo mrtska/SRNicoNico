@@ -54,7 +54,8 @@
                     v0.44<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.5<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.6<LineBreak /><LineBreak /><LineBreak /><LineBreak />
-                    v0.7
+                    v0.7<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
+                    v0.71
 
                 </TextBlock>
                 <TextBlock Grid.Column="1">
@@ -104,7 +105,10 @@
                     コメント各種機能実装<LineBreak />
                     マイリスト連続再生機能実装<LineBreak />
                     ウィンドウフルスクリーン実装<LineBreak />
-                    コメント各種設定項目追加<LineBreak />
+                    コメント各種設定項目追加<LineBreak /><LineBreak />
+                    各種不具合を修正<LineBreak />
+                    生放送通知機能実装<LineBreak />
+                    SWFの動画が左に寄らないように<LineBreak />
 
 
 
