@@ -23,7 +23,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             var json = DynamicJson.Parse(result);
             var response = json.nicovideo_video_response;
 
-            NicoNicoVitaApiVideoData ret = new NicoNicoVitaApiVideoData();
+            var ret = new NicoNicoVitaApiVideoData();
 
             if(!response.video()) {
 

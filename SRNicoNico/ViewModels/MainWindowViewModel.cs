@@ -175,9 +175,10 @@ namespace SRNicoNico.ViewModels {
             TabItems.Add(new OtherViewModel());
             TabItems.Add(Config = new ConfigViewModel());
 
-
+#if !DEBUG
             Update.CheckUpdate();
-        }
+#endif
+            }
 
 		public void Initialize() {
             

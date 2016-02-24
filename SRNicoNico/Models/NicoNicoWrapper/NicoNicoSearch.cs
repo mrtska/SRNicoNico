@@ -69,25 +69,32 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             NicoNicoSearchResult result = new NicoNicoSearchResult();
 
             //テキスト検索のとき、urlの場合はそれも検索結果に表示する
-            if(Type == SearchType.Keyword) {
+            if(Type == SearchType.Keyword && CurrentPage == 0) {
 
                 Match match = Regex.Match(Keyword, @"^(:?http://(:?www.nicovideo.jp/watch/|nico.ms/))?(?<cmsid>\w{0,2}\d+).*?$");
                 if(match.Success) {
 
-                    NicoNicoVitaApiVideoData data = NicoNicoVitaApi.GetVideoData(match.Groups["cmsid"].Value);
-                    NicoNicoVideoInfoEntry node = new NicoNicoVideoInfoEntry();
-                    node.Cmsid = data.Id;
-                    node.Title = HttpUtility.HtmlDecode(data.Title);
-                    node.ViewCounter = data.ViewCounter;
-                    node.CommentCounter = data.CommentCounter;
-                    node.MylistCounter = data.MylistCounter;
-                    node.ThumbnailUrl = data.ThumbnailUrl;
-                    node.Length = data.Length;
-                    node.FirstRetrieve = data.FirstRetrieve.Replace('-', '/');
+                    var data = NicoNicoVitaApi.GetVideoData(match.Groups["cmsid"].Value);
 
-                    result.List.Add(node);
+                    if(data.Success) {
 
-                    result.Total++;
+
+                        var node = new NicoNicoVideoInfoEntry();
+
+                        node.Cmsid = data.Id;
+                        node.Title = HttpUtility.HtmlDecode(data.Title);
+                        node.ViewCounter = data.ViewCounter;
+                        node.CommentCounter = data.CommentCounter;
+                        node.MylistCounter = data.MylistCounter;
+                        node.ThumbnailUrl = data.ThumbnailUrl;
+                        node.Length = data.Length;
+                        node.FirstRetrieve = data.FirstRetrieve.Replace('-', '/');
+
+                        result.List.Add(node);
+
+                        result.Total++;
+                    }
+
                 }
             }
 
