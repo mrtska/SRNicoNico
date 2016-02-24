@@ -27,9 +27,6 @@
         <i:EventTrigger EventName="ToolTipOpening">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ShowInfomation"/>
         </i:EventTrigger>
-        <i:EventTrigger EventName="MouseRightButtonDown">
-            <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="ContextMenuVisibility" Value="True" />
-        </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.ToolTip>
         <ToolTip Visibility="{Binding ToolTipVisibility}">

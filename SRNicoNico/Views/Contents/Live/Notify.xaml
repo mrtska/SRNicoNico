@@ -42,7 +42,6 @@
 
         <ListBox Grid.Row="1" ItemsSource="{Binding NowLiveList}" Margin="3">
             <ListBox.Resources>
-                
                 <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource {x:Type ListBox}}">
                     <Style.Triggers>
                         

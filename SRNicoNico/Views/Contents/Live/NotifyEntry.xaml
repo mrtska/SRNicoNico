@@ -29,6 +29,12 @@
         <Image Source="{Binding ThumbNailUrl}" Width="50" Height="50"/>
 
         <Grid Grid.Column="1">
+            <Grid.Resources>
+                <Style TargetType="Hyperlink">
+                    <EventSetter Event="RequestNavigate" Handler="OpenHyperLink"/>
+                    <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -37,12 +43,6 @@
             <TextBlock  b:HtmlTextBoxProperties.HtmlText="{Binding CommunityName}" />
             <TextBlock Text="{Binding Title}" Grid.Row="1"/>
             <TextBlock Text="{Binding StartTime}" Grid.Row="2"/>
-
-
         </Grid>
-
-
-
-
     </Grid>
 </UserControl>
