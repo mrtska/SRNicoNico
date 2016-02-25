@@ -65,9 +65,34 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        private ConfigViewModel Owner;
 
-        public ConfigGeneralViewModel() : base("一般") {
+        public ConfigGeneralViewModel(ConfigViewModel vm) : base("一般") {
 
+            Owner = vm;
         }
+
+        public void OpenResetConfig() {
+
+            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Config.ConfigResetDialog), this, TransitionMode.Modal));
+        }
+
+        public void Reset() {
+
+            Properties.Settings.Default.Reset();
+            RaisePropertyChanged(nameof(EnableUrlLink));
+            RaisePropertyChanged(nameof(EnableTwitterLink));
+            RaisePropertyChanged(nameof(UserSelectedFont));
+            App.ViewModelRoot.ApplyFont();
+            Close();
+
+            Owner.Reset();
+        }
+        public void Close() {
+
+            Messenger.Raise(new WindowActionMessage(WindowAction.Close));
+        }
+
+
     }
 }

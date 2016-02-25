@@ -278,6 +278,9 @@
     <Compile Include="Views\Contents\Config\ConfigVideoRect.xaml.cs">
       <DependentUpon>ConfigVideoRect.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\Config\ConfigResetDialog.xaml.cs">
+      <DependentUpon>ConfigResetDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Favorite\Favorite.xaml.cs">
       <DependentUpon>Favorite.xaml</DependentUpon>
     </Compile>
@@ -511,6 +514,10 @@
     <Page Include="Views\Contents\Config\ConfigVideoRect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Config\ConfigResetDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Favorite\Favorite.xaml">
       <Generator>MSBuild:Compile</Generator>

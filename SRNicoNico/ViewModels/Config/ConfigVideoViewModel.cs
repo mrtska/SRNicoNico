@@ -97,5 +97,16 @@ namespace SRNicoNico.ViewModels {
         public ConfigVideoViewModel() : base("動画") {
 
         }
+
+        public void Reset() {
+
+            RaisePropertyChanged(nameof(VideoPlacement));
+            RaisePropertyChanged(nameof(AlwaysShowSeekBar));
+            RaisePropertyChanged(nameof(ClickOnPause));
+            RaisePropertyChanged(nameof(UseWindowFullScreen));
+            
+        }
+
+
     }
 }

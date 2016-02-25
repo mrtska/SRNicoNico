@@ -18,10 +18,14 @@
     <UserControl.Resources>
         <converter:FontFamilyToNameConverter x:Key="FontFamilyToNameConverter" />
     </UserControl.Resources>
-    
+
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
 
         <Grid Margin="10" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
             <StackPanel>
                 <TextBlock FontSize="20" Text="フォントの設定"/>
                 <ComboBox  Margin="15,5" HorizontalAlignment="Left" Width="300" SelectedValue="{Binding UserSelectedFont,Mode=TwoWay}" ItemsSource="{x:Static Fonts.SystemFontFamilies}">
@@ -40,9 +44,16 @@
                 </StackPanel>
             </StackPanel>
 
+            <Button Grid.Row="1" Content="設定を初期化する" HorizontalAlignment="Right" Margin="10">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenResetConfig" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
         </Grid>
 
-    </ScrollViewer>    
-        
+    </ScrollViewer>
+
 
 </UserControl>

@@ -110,6 +110,14 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        public void Reset() {
+
+            RaisePropertyChanged(nameof(Hide3DSComment));
+            RaisePropertyChanged(nameof(HideWiiUComment));
+            RaisePropertyChanged(nameof(NGSharedLevel));
+            RaisePropertyChanged(nameof(CommentAlpha));
+            RaisePropertyChanged(nameof(DefaultCommentSize));
+        }
 
         public string ToJson() {
 
