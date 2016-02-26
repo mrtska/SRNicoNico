@@ -104,6 +104,8 @@ namespace SRNicoNico.ViewModels {
 
         public SearchViewModel Search { get; private set; }
 
+        public NotifyLiveViewModel NotifyLive { get; private set; }
+
         public ConfigViewModel Config { get; private set; }
 
         public AccessLogViewModel AccessLog { get; private set; }
@@ -171,7 +173,7 @@ namespace SRNicoNico.ViewModels {
             TabItems.Add(new FavoriteViewModel());
             TabItems.Add(new NicoRepoViewModel());
             TabItems.Add(new MylistViewModel());
-            TabItems.Add(new NotifyLiveViewModel());
+            TabItems.Add(NotifyLive = new NotifyLiveViewModel());
             TabItems.Add(new HistoryViewModel());
             TabItems.Add(new OtherViewModel());
             TabItems.Add(Config = new ConfigViewModel());

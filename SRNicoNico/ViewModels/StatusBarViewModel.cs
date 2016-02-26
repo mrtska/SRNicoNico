@@ -49,11 +49,18 @@ namespace SRNicoNico.ViewModels {
 
             Task.Run(() => {
 
+                Timer timer = new Timer(new TimerCallback(o => {
+
+                    App.ViewModelRoot.NotifyLive.Reflesh();
+                    Console.WriteLine("Reflesh Live");
+                }), null, 50000, 50000);
+
                 for(;;) {
 
                     Time = DateTime.Now.ToString();
 
                     Thread.Sleep(1000);
+
                 }
             });
         }
