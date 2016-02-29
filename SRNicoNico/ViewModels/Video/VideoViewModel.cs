@@ -934,6 +934,9 @@ namespace SRNicoNico.ViewModels {
                         Comment.AcceptEnter = false;
                         Comment.Post();
                     }
+                } else if(e.Key == Key.Escape) {
+
+                    Comment.IsPopupOpen = false;
                 }
                 return;
             }

@@ -99,7 +99,7 @@
             <Popup x:Name="popup" Focusable="False" DataContext="{Binding Comment}" d:DataContext="{d:DesignInstance {x:Type vm:VideoCommentViewModel}}" AllowsTransparency="True" PopupAnimation="Slide" IsOpen="{Binding IsPopupOpen,Mode=TwoWay}" Placement="Bottom" StaysOpen="False" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}" Opened="popup_Opened">
                 <local:VideoComment x:Name="comment" Opacity="0.8" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=ActualWidth}"/>
             </Popup>
-            <Button Content="コメントする" VerticalAlignment="Center" Margin="10,0,0,0" IsEnabled="{Binding Comment.CanComment}" Focusable="False">
+            <Button Content="コメントする" ToolTip="コメントする (Enter)" VerticalAlignment="Center" Margin="10,0,0,0" IsEnabled="{Binding Comment.CanComment}" Focusable="False">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <ei:ChangePropertyAction TargetName="popup" PropertyName="IsOpen" Value="True"/>
