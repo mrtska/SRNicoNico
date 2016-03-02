@@ -12,9 +12,13 @@ using Livet;
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoLive : NotificationObject {
 
-        public NicoNicoLive() {
+        private const string GetPlayerStatusApiUrl = "http://live.nicovideo.jp/api/getplayerstatus";
+
+
+        public NicoNicoLive(string url) {
 
         }
+
 
 
 

@@ -228,6 +228,7 @@
     <Compile Include="ViewModels\Favorite\FavoriteCommunityViewModel.cs" />
     <Compile Include="ViewModels\Favorite\FavoriteUserViewModel.cs" />
     <Compile Include="ViewModels\Favorite\FavoriteViewModel.cs" />
+    <Compile Include="ViewModels\Live\LiveViewModel.cs" />
     <Compile Include="ViewModels\Log\AccessLogEntryViewModel.cs" />
     <Compile Include="ViewModels\Log\AccessLogViewModel.cs" />
     <Compile Include="ViewModels\History\HistoryViewModel.cs" />

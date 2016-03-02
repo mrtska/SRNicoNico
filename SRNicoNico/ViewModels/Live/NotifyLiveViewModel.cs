@@ -80,7 +80,11 @@ namespace SRNicoNico.ViewModels {
                     }
 
                     Badge = list.Count;
+                } else {
+
+                    Badge = null;
                 }
+
                 IsActive = false;
                 Status = "";
             });
