@@ -14,6 +14,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         private const string GetPlayerStatusApiUrl = "http://live.nicovideo.jp/api/getplayerstatus";
 
+        private const string GetThreadsApiUrl = "http://watch.live.nicovideo.jp/api/getthreads";
+
+        private const string HeartBeatApiUrl = "http://watch.live.nicovideo.jp/api/heartbeat";
 
         public NicoNicoLive(string url) {
 

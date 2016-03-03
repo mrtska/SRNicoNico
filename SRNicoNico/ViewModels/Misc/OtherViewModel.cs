@@ -55,5 +55,12 @@ namespace SRNicoNico.ViewModels {
 
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Log.AccessLogDialog), App.ViewModelRoot.AccessLog, TransitionMode.NewOrActive));
         }
+
+        public void CheckUpdate() {
+
+            App.ViewModelRoot.Update.CheckUpdate();
+        }
+
+
     }
 }

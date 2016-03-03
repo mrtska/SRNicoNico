@@ -13,15 +13,21 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 
-namespace SRNicoNico.ViewModels.Live {
+namespace SRNicoNico.ViewModels {
     public class LiveViewModel : TabItemViewModel {
 
 
 
+        private string LiveUrl;
 
         public LiveViewModel(string url) {
 
+            LiveUrl = url;
         }
+
+
+
+
 
 
     }

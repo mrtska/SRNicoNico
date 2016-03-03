@@ -30,13 +30,24 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 return vm;
             } else if(url.StartsWith("http://www.nicovideo.jp/user/")) {
 
-                return new UserViewModel(url);
+                var vm = new UserViewModel(url);
+                App.ViewModelRoot.AddTabAndSetCurrent(vm);
+                return vm;
             } else if(url.StartsWith("http://www.nicovideo.jp/mylist/")) {
 
-                return new PublicMylistViewModel(url);
+                var vm = new PublicMylistViewModel(url);
+                App.ViewModelRoot.AddTabAndSetCurrent(vm);
+                return vm;
             } else if(url.StartsWith("http://com.nicovideo.jp/community/")) {
 
-                return new CommunityViewModel(url);
+                var vm = new CommunityViewModel(url);
+                App.ViewModelRoot.AddTabAndSetCurrent(vm);
+                return vm;
+            } else if(url.StartsWith("http://live.nicovideo.jp/watch/")) {
+
+                var vm = new LiveViewModel(url);
+                App.ViewModelRoot.AddTabAndSetCurrent(vm);
+                return vm;
             } else {
 
                 System.Diagnostics.Process.Start(url);

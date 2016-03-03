@@ -87,9 +87,6 @@ namespace SRNicoNico.ViewModels {
 
             MylistId = url.Substring(31);
             PublicMylist = new NicoNicoPublicMylist(url);
-
-            App.ViewModelRoot.TabItems.Add(this);
-            App.ViewModelRoot.SelectedTab = this;
         }
         public void Sort(int index) {
 

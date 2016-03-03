@@ -292,6 +292,9 @@
       <DependentUpon>FavoriteUser.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\Live\NotifyLiveViewModel.cs" />
+    <Compile Include="Views\Contents\Live\Live.xaml.cs">
+      <DependentUpon>Live.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Live\NotifyEntry.xaml.cs">
       <DependentUpon>NotifyEntry.xaml</DependentUpon>
     </Compile>
@@ -529,6 +532,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Favorite\FavoriteUser.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Live\Live.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

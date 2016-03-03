@@ -25,6 +25,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var content = doc.DocumentNode.SelectSingleNode("//div[@class='content']");
 
+                if(content == null) {
+
+                    return null;
+                }
+
                 var outers = content.SelectNodes("child::div[@id='ch']/div/div[@class='outer']");
 
                 //終了

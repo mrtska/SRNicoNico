@@ -60,7 +60,6 @@ namespace SRNicoNico.ViewModels {
             TabItems = new ObservableCollection<TabItemViewModel>();
             TabItems.Add(new CommunityTopViewModel(this));
             Community = new NicoNicoCommunity(url);
-            App.ViewModelRoot.AddTabAndSetCurrent(this);
 
             IsActive = true;
             Status = "コミュニティ情報を取得中";
