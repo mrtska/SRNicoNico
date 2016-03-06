@@ -124,6 +124,79 @@ namespace SRNicoNico.ViewModels {
         public DispatcherCollection<TabItemViewModel> TabItems { get; set; }
 
 
+        #region VideoTabs変更通知プロパティ
+        private DispatcherCollection<TabItemViewModel> _VideoTabs;
+
+        public DispatcherCollection<TabItemViewModel> VideoTabs {
+            get { return _VideoTabs; }
+            set { 
+                if(_VideoTabs == value)
+                    return;
+                _VideoTabs = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region UserTabs変更通知プロパティ
+        private DispatcherCollection<TabItemViewModel> _UserTabs;
+
+        public DispatcherCollection<TabItemViewModel> UserTabs {
+            get { return _UserTabs; }
+            set { 
+                if(_UserTabs == value)
+                    return;
+                _UserTabs = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region MylistTabs変更通知プロパティ
+        private DispatcherCollection<TabItemViewModel> _MylistTabs;
+
+        public DispatcherCollection<TabItemViewModel> MylistTabs {
+            get { return _MylistTabs; }
+            set { 
+                if(_MylistTabs == value)
+                    return;
+                _MylistTabs = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region CommunityTabs変更通知プロパティ
+        private DispatcherCollection<TabItemViewModel> _CommunityTabs;
+
+        public DispatcherCollection<TabItemViewModel> CommunityTabs {
+            get { return _CommunityTabs; }
+            set { 
+                if(_CommunityTabs == value)
+                    return;
+                _CommunityTabs = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region LiveTabs変更通知プロパティ
+        private DispatcherCollection<TabItemViewModel> _LiveTabs;
+
+        public DispatcherCollection<TabItemViewModel> LiveTabs {
+            get { return _LiveTabs; }
+            set { 
+                if(_LiveTabs == value)
+                    return;
+                _LiveTabs = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
+
         #region SelectedTab変更通知プロパティ
         private TabItemViewModel _SelectedTab;
 
@@ -153,6 +226,12 @@ namespace SRNicoNico.ViewModels {
 
                 (SelectedTab = new StartViewModel())
             };
+
+            VideoTabs = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
+            UserTabs = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
+            MylistTabs = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
+            CommunityTabs = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
+            LiveTabs = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
 
             AccessLog = new AccessLogViewModel();
 
@@ -262,12 +341,49 @@ namespace SRNicoNico.ViewModels {
 
         public void RemoveTab(TabItemViewModel vm) {
 
-            TabItems.Remove(vm);
+            if(vm is VideoViewModel) {
+
+                VideoTabs.Remove(vm);
+            } else if(vm is UserViewModel) {
+
+                UserTabs.Remove(vm);
+            } else if(vm is PublicMylistViewModel) {
+
+                MylistTabs.Remove(vm);
+            } else if(vm is CommunityViewModel) {
+
+                CommunityTabs.Remove(vm);
+            } else if(vm is LiveViewModel) {
+
+                LiveTabs.Remove(vm);
+            } else {
+
+                TabItems.Remove(vm);
+            }
         }
 
         public void AddTab(TabItemViewModel vm) {
 
-            TabItems.Add(vm);
+            if(vm is VideoViewModel) {
+
+                VideoTabs.Add(vm);
+            } else if(vm is UserViewModel) {
+
+                UserTabs.Add(vm);
+            } else if(vm is PublicMylistViewModel) {
+
+                MylistTabs.Add(vm);
+            } else if(vm is CommunityViewModel) {
+
+                CommunityTabs.Add(vm);
+            } else if(vm is LiveViewModel) {
+
+                LiveTabs.Add(vm);
+            } else {
+
+                TabItems.Add(vm);
+            }
+
         }
         public void SetCurrent(TabItemViewModel vm) {
 
@@ -276,13 +392,32 @@ namespace SRNicoNico.ViewModels {
 
         public void RemoveTabAndLastSet(TabItemViewModel vm) {
 
-            TabItems.Remove(vm);
-            SelectedTab = App.ViewModelRoot.TabItems.Last();
+            RemoveTab(vm);
+            if(vm is VideoViewModel && VideoTabs.Count > 0) {
+
+                SelectedTab = VideoTabs.FirstOrDefault();
+            } else if(vm is UserViewModel && UserTabs.Count > 0) {
+
+                SelectedTab = UserTabs.FirstOrDefault();
+            } else if(vm is PublicMylistViewModel && MylistTabs.Count > 0) {
+
+                SelectedTab = MylistTabs.FirstOrDefault();
+            } else if(vm is CommunityViewModel && CommunityTabs.Count > 0) {
+
+                SelectedTab = CommunityTabs.FirstOrDefault();
+            } else if(vm is LiveViewModel && LiveTabs.Count > 0) {
+
+                SelectedTab = LiveTabs.FirstOrDefault();
+            } else {
+
+                SelectedTab = App.ViewModelRoot.TabItems.Last();
+            }
+
         }
 
         public void AddTabAndSetCurrent(TabItemViewModel vm) {
 
-            TabItems.Add(vm);
+            AddTab(vm);
             SelectedTab = vm;
         }
 

@@ -102,7 +102,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 return await response.Content.ReadAsStringAsync();
 
-            } catch(AggregateException e) {
+            } catch(Exception e) when (e is AggregateException || e is HttpRequestException) {
 
                 throw new RequestTimeout(e);
             }
@@ -125,7 +125,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 return response;
 
-            } catch(AggregateException e) {
+            } catch(Exception e) when(e is AggregateException || e is HttpRequestException) {
 
                 throw new RequestTimeout(e);
             }
@@ -148,7 +148,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 return await response.Content.ReadAsStreamAsync();
 
-            } catch(AggregateException e) {
+            } catch(Exception e) when(e is AggregateException || e is HttpRequestException) {
 
                 throw new RequestTimeout(e);
             }

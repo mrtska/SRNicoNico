@@ -443,6 +443,7 @@ namespace SRNicoNico.ViewModels {
                     Status = "動画の読み込みに失敗しました。";
                     return;
                 }
+                Name = VideoData.ApiData.Title;
 
                 //有料動画なら
                 if(VideoData.ApiData.IsPaidVideo) {

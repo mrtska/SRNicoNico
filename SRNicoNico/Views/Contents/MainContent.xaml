@@ -23,17 +23,133 @@
              xmlns:live="clr-namespace:SRNicoNico.Views.Contents.Live"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              mc:Ignorable="d" 
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
              d:DesignHeight="500" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
              >
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="130"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <ScrollViewer>
-            <metro:TabView Width="130" Focusable="False" Background="{DynamicResource ActiveBackgroundBrushKey}" ItemsSource="{Binding TabItems}" SelectedValue="{Binding SelectedTab}" />
+            <StackPanel Background="{DynamicResource ActiveBackgroundBrushKey}">
+                <metro:TabView Focusable="False" ItemsSource="{Binding TabItems}" SelectedValue="{Binding SelectedTab}" />
+                
+                <ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VideoTabs.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                    <StackPanel>
+                        <TextBlock Text="~動画~" HorizontalAlignment="Center" FontSize="18"/>
+                        <metro:TabView Focusable="False" ItemsSource="{Binding VideoTabs}" SelectedValue="{Binding SelectedTab}">
+                            <metro:TabView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type metro:ITabItem}">
+                                    <TextBlock Text="{Binding Name}" FontSize="14" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+                                </DataTemplate>
+                            </metro:TabView.ItemTemplate>
+                        </metro:TabView>
+                    </StackPanel>
+
+                </ContentControl>
+                
+                <ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding UserTabs.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                    <StackPanel>
+                        <TextBlock Text="~ユーザー~" HorizontalAlignment="Center" FontSize="18"/>
+                        <metro:TabView Focusable="False" ItemsSource="{Binding UserTabs}" SelectedValue="{Binding SelectedTab}">
+                            <metro:TabView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type metro:ITabItem}">
+                                    <TextBlock Text="{Binding Name}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+                                </DataTemplate>
+                            </metro:TabView.ItemTemplate>
+                        </metro:TabView>
+                    </StackPanel>
+                </ContentControl>
+
+                <ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MylistTabs.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                    <StackPanel>
+                        <TextBlock Text="~公開マイリスト~" HorizontalAlignment="Center" FontSize="18"/>
+                        <metro:TabView Focusable="False" ItemsSource="{Binding MylistTabs}" SelectedValue="{Binding SelectedTab}">
+                            <metro:TabView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type metro:ITabItem}">
+                                    <TextBlock Text="{Binding Name}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+                                </DataTemplate>
+                            </metro:TabView.ItemTemplate>
+                        </metro:TabView>
+                    </StackPanel>
+                </ContentControl>
+
+                <ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CommunityTabs.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                    <StackPanel>
+                        <TextBlock Text="~コミュニティ~" HorizontalAlignment="Center" FontSize="18"/>
+                        <metro:TabView Focusable="False" ItemsSource="{Binding CommunityTabs}" SelectedValue="{Binding SelectedTab}">
+                            <metro:TabView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type metro:ITabItem}">
+                                    <TextBlock Text="{Binding Name}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+                                </DataTemplate>
+                            </metro:TabView.ItemTemplate>
+                        </metro:TabView>
+                    </StackPanel>
+                </ContentControl>
+
+                <ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding LiveTabs.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                    <StackPanel>
+                        <TextBlock Text="~生放送~" HorizontalAlignment="Center" FontSize="18"/>
+                        <metro:TabView Focusable="False" ItemsSource="{Binding LiveTabs}" SelectedValue="{Binding SelectedTab}">
+                            <metro:TabView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type metro:ITabItem}">
+                                    <TextBlock Text="{Binding Name}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+                                </DataTemplate>
+                            </metro:TabView.ItemTemplate>
+                        </metro:TabView>
+                    </StackPanel>
+                </ContentControl>
+
+            </StackPanel>
+        
         </ScrollViewer>
 
 
@@ -59,9 +175,6 @@
                 <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
                     <history:HistoryResult />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:VideoViewModel}">
-                    <video:Video />
-                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:MylistViewModel}">
                     <mylist:Mylist />
                 </DataTemplate>
@@ -83,8 +196,110 @@
                 <DataTemplate DataType="{x:Type vm:NotifyLiveViewModel}">
                     <live:Notify />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:LiveViewModel}">
+                    <live:Live />
+                </DataTemplate>
             </ItemsControl.Resources>
             
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                    <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding VideoTabs}">
+
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type vm:VideoViewModel}">
+                    <video:Video />
+                </DataTemplate>
+            </ItemsControl.Resources>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                    <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding UserTabs}">
+
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type vm:UserViewModel}">
+                    <user:UserInformation />
+                </DataTemplate>
+            </ItemsControl.Resources>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                    <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding MylistTabs}">
+
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type vm:PublicMylistViewModel}">
+                    <publicmylist:PublicMylist />
+                </DataTemplate>
+            </ItemsControl.Resources>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                    <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding CommunityTabs}">
+
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type vm:CommunityViewModel}">
+                    <community:Community />
+                </DataTemplate>
+            </ItemsControl.Resources>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                    <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding LiveTabs}">
+
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type vm:LiveViewModel}">
+                    <live:Live />
+                </DataTemplate>
+            </ItemsControl.Resources>
+
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid />
