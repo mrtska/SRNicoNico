@@ -10,7 +10,7 @@ using Livet;
 using Livet.Commands;
 using Livet.Messaging;
 using Livet.Messaging.IO;
-using Livet.EventListeners; 
+using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using SRNicoNico.Views.Contents.Search;
@@ -21,6 +21,7 @@ using System.Collections.ObjectModel;
 using SRNicoNico.Views.Contents.SignIn;
 using System.Windows.Input;
 using System.Windows.Media;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
@@ -260,6 +261,8 @@ namespace SRNicoNico.ViewModels {
 #if !DEBUG
             Update.CheckUpdate();
 #endif
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoNicoOpener.Open("http://live.nicovideo.jp/watch/lv246285039?ref=zero_mynicorepo")));
+            ;
             }
 
 		public void Initialize() {

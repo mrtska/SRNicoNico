@@ -3417,9 +3417,29 @@ namespace SRNicoNico.Views.Extentions {
         // Images
         //
         // .............................................................
+        private static List<string> BlockContainers = new List<string> { Xaml_FlowDocument, Xaml_TableCell, Xaml_ListItem, Xaml_Section };
 
         private static void AddImage(XmlElement xamlParentElement, XmlElement htmlElement, Hashtable inheritedProperties, CssStylesheet stylesheet, List<XmlElement> sourceContext) {
-            //  Implement images
+
+            // Create currentProperties as a compilation of local and inheritedProperties, set localProperties
+            Hashtable localProperties;
+            Hashtable currentProperties = GetElementProperties(htmlElement, inheritedProperties, out localProperties, stylesheet, sourceContext);
+
+            // Create a XAML element corresponding to this html element
+            XmlElement xamlElement = xamlParentElement.OwnerDocument.CreateElement(/*prefix:*/null, /*localName:*/Xaml_Image, _xamlNamespace);
+            ApplyLocalProperties(xamlElement, localProperties, /*isBlock:*/false);
+
+            if(!xamlElement.HasAttribute(Xaml_MaxHeight) && !xamlElement.HasAttribute(Xaml_MaxWidth)) {
+                xamlElement.SetAttribute("Stretch", BlockContainers.Contains(xamlParentElement.Name) ? "UniformToFill" : "None");
+            }
+
+            XmlElement container = xamlParentElement.OwnerDocument.CreateElement(
+                null,
+                BlockContainers.Contains(xamlParentElement.Name) ? "BlockUIContainer" : "InlineUIContainer",
+                _xamlNamespace);
+            container.AppendChild(xamlElement);
+
+            xamlParentElement.AppendChild(container);
         }
 
         // .............................................................
@@ -5096,6 +5116,7 @@ namespace SRNicoNico.Views.Extentions {
         public const string Xaml_LineBreak = "LineBreak";
 
         public const string Xaml_Paragraph = "Paragraph";
+        public const string Xaml_Image = "Image";
 
         public const string Xaml_Margin = "Margin";
         public const string Xaml_Padding = "Padding";
@@ -5116,6 +5137,10 @@ namespace SRNicoNico.Views.Extentions {
         public const string Xaml_TableCell_RowSpan = "RowSpan";
 
         public const string Xaml_Width = "Width";
+        public const string Xaml_Height = "Height";
+        public const string Xaml_MaxWidth = "MaxWidth";
+        public const string Xaml_MaxHeight = "MaxHeight";
+
         public const string Xaml_Brushes_Black = "Black";
         public const string Xaml_FontFamily = "FontFamily";
 
