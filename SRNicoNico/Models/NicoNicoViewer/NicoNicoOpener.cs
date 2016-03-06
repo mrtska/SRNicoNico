@@ -12,6 +12,10 @@ using System.Windows.Input;
 namespace SRNicoNico.Models.NicoNicoViewer {
     public class NicoNicoOpener : NotificationObject {
 
+        public static TabItemViewModel Open(Uri uri) {
+
+            return Open(uri.OriginalString);
+        }
 
         //URLから適当なViewを開く
         public static TabItemViewModel Open(string url) {

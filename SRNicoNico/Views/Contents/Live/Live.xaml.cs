@@ -13,6 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.ViewModels;
+
 namespace SRNicoNico.Views.Contents.Live
 {
     /// <summary>
@@ -23,6 +26,27 @@ namespace SRNicoNico.Views.Contents.Live
         public Live()
         {
             InitializeComponent();
+        }
+
+        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+
+            if(DataContext is LiveViewModel) {
+
+                var vm = (LiveViewModel)DataContext;
+
+                vm.DescriptionBrowser = desc;
+
+            }
+        }
+
+        private void desc_Navigating(object sender, NavigatingCancelEventArgs e) {
+
+            if(e.Uri != null) {
+
+                NicoNicoOpener.Open(e.Uri);
+                e.Cancel = true;
+            }
+            ;
         }
     }
 }
