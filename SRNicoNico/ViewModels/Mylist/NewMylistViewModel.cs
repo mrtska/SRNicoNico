@@ -75,7 +75,7 @@ namespace SRNicoNico.ViewModels {
 
                 MylistViewModel.MylistGroupInstance.CreateMylistGroup(NewMylistName, NewMylistDescription);
 
-                Mylist.Reflesh();
+                Mylist.Refresh();
                 Mylist.Status = "新しいマイリスト " + NewMylistName + " を作成しました";
                 Mylist.CloseDialog();
 

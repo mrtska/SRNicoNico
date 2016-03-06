@@ -223,7 +223,7 @@ namespace SRNicoNico.ViewModels {
         }
 
         //更新
-        public void Reflesh() {
+        public void Refresh() {
 
             IsActive = true;
 
@@ -263,7 +263,7 @@ namespace SRNicoNico.ViewModels {
 
                 MylistViewModel.MylistGroupInstance.DeleteMylistGroup(Group.Id);
                 CloseDialog();
-                Owner.Reflesh();
+                Owner.Refresh();
                 Owner.Status = Group.Name + " を削除しました";
 
             });

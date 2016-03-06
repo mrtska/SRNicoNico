@@ -99,7 +99,7 @@ namespace SRNicoNico.ViewModels {
             App.ViewModelRoot.RemoveTabAndLastSet(this);
         }
 
-        public void Reflesh() {
+        public void Refresh() {
 
             Task.Run(() => {
 
@@ -116,7 +116,7 @@ namespace SRNicoNico.ViewModels {
                 Close();
             } else if(e.Key == Key.F5) {
 
-                Reflesh();
+                Refresh();
             }
         }
 

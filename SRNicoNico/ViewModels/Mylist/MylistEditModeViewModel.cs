@@ -176,11 +176,11 @@ namespace SRNicoNico.ViewModels {
                 //削除なら削除したマイリストのみ更新 その他はソースとディスティネーションを更新
                 if(Process == "削除") {
 
-                    List.Reflesh();
+                    List.Refresh();
                 } else {
 
-                    List.Reflesh();
-                    list.Reflesh();
+                    List.Refresh();
+                    list.Refresh();
                 }
 
                 Status = "マイリストを" + Process + "しました";

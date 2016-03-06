@@ -63,7 +63,7 @@ namespace SRNicoNico.ViewModels {
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Mylist.NewMylistDialog), newlist, TransitionMode.Modal));
         }
 
-        public void Reflesh() {
+        public void Refresh() {
 
             IsActive = true;
 
@@ -97,13 +97,13 @@ namespace SRNicoNico.ViewModels {
 
                 if(e.KeyboardDevice.Modifiers == ModifierKeys.Control || e.KeyboardDevice.Modifiers == ModifierKeys.Shift) {
 
-                    Reflesh();
+                    Refresh();
                 } else if(SelectedList != null) {
 
-                    SelectedList.Reflesh();
+                    SelectedList.Refresh();
                 } else {
 
-                    Reflesh();
+                    Refresh();
                 }
             }
         }
@@ -147,8 +147,8 @@ namespace SRNicoNico.ViewModels {
 
                     MylistInstance.MoveMylist(item, target);
                     Status = item.Entry.Title + " を " + item.Owner.Name + " から " + target.Name + " に移動しました";
-                    target.Reflesh();
-                    item.Owner.Reflesh();
+                    target.Refresh();
+                    item.Owner.Refresh();
                 });
             }
         }

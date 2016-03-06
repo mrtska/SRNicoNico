@@ -58,7 +58,7 @@ namespace SRNicoNico.ViewModels {
         
         public NicoRepoViewModel() : base("ニコレポ") {}
 
-        public void Reflesh() {
+        public void Refresh() {
 
             Status = "ニコレポ取得中";
             IsActive = true;
@@ -86,7 +86,7 @@ namespace SRNicoNico.ViewModels {
 
         public void InitNicoRepo() {
 
-            Reflesh();
+            Refresh();
         }
 
         public override void KeyDown(KeyEventArgs e) {
@@ -95,13 +95,13 @@ namespace SRNicoNico.ViewModels {
 
                 if(e.KeyboardDevice.Modifiers == ModifierKeys.Control || e.KeyboardDevice.Modifiers == ModifierKeys.Shift) {
 
-                    Reflesh();
+                    Refresh();
                 } else if(SelectedList != null) {
 
-                    SelectedList.Reflesh();
+                    SelectedList.Refresh();
                 } else {
 
-                    Reflesh();
+                    Refresh();
                 }
             }
         }

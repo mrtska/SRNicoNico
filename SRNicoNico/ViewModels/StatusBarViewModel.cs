@@ -51,8 +51,8 @@ namespace SRNicoNico.ViewModels {
 
                 Timer timer = new Timer(new TimerCallback(o => {
 
-                    App.ViewModelRoot.NotifyLive.Reflesh();
-                    Console.WriteLine("Reflesh Live");
+                    App.ViewModelRoot.NotifyLive.Refresh();
+                    Console.WriteLine("Refresh Live");
                 }), null, 50000, 50000);
 
                 for(;;) {

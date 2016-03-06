@@ -121,7 +121,7 @@ namespace SRNicoNico.ViewModels {
                 Close();
 
 
-                Owner?.Reflesh();
+                Owner?.Refresh();
             });
         }
 

@@ -58,11 +58,11 @@ namespace SRNicoNico.ViewModels {
 
             LiveInstance = new NicoNicoFavoriteLive();
 
-            Reflesh();
+            Refresh();
 
         }
 
-        public void  Reflesh() {
+        public void  Refresh() {
 
             Task.Run(() => {
 
@@ -104,7 +104,7 @@ namespace SRNicoNico.ViewModels {
 
             if(e.Key == Key.F5) {
 
-                Reflesh();
+                Refresh();
             }
         }
 

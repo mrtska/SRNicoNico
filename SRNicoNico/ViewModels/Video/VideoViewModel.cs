@@ -878,7 +878,7 @@ namespace SRNicoNico.ViewModels {
         }
         
 
-        public void Reflesh() {
+        public void Refresh() {
 
             DisposeViewModel();
 
@@ -999,7 +999,7 @@ namespace SRNicoNico.ViewModels {
                         ToggleMute();
                         break;
                     case Key.F5:
-                        Reflesh();
+                        Refresh();
                         break;
                     case Key.Enter:
                         FocusComment();

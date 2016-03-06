@@ -59,7 +59,7 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        public void Reflesh() {
+        public void Refresh() {
             
                 
         }

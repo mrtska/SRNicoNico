@@ -212,7 +212,7 @@ namespace SRNicoNico.ViewModels {
 
             App.ViewModelRoot.RemoveTabAndLastSet(this);
         }
-        public void Reflesh() {
+        public void Refresh() {
 
             Initialize();
         }
@@ -224,7 +224,7 @@ namespace SRNicoNico.ViewModels {
                 Close();
             } else if(e.Key == Key.F5) {
 
-                Reflesh();
+                Refresh();
             }
 
         }

@@ -80,7 +80,7 @@ namespace SRNicoNico.ViewModels {
 
 
         //情報再取得
-        public void Reflesh() {
+        public void Refresh() {
 
             FavoriteInstance.ResetFavoriteUser();
             IsEnd = false;
@@ -129,7 +129,7 @@ namespace SRNicoNico.ViewModels {
 
             if(e.Key == Key.F5) {
 
-                Reflesh();
+                Refresh();
             }
 
         }
