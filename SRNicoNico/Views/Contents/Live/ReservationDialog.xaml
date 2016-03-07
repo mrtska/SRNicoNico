@@ -1,0 +1,55 @@
+﻿<metro:MetroWindow x:Class="SRNicoNico.Views.Contents.Live.ReservationDialog"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                   xmlns:local="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
+                   xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+                   xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
+                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+                   xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+                   xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                   mc:Ignorable="d" 
+                   d:DataContext="{d:DesignInstance {x:Type vm:LiveViewModel}}"
+                   WindowStartupLocation="CenterOwner"
+                   ResizeMode="NoResize"
+                   Topmost="True"
+                   Width="400"
+                   SizeToContent="Height"
+                   Background="{DynamicResource ThemeBrushKey}"
+                   Foreground="{DynamicResource ForegroundBrushKey}" ShowInTaskbar="False"
+                   
+                   >
+
+    <i:Interaction.Triggers>
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}">
+            <l:WindowInteractionMessageAction/>
+        </l:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" metro:MetroWindow.IsCaptionBar="True">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="確認" TextTrimming="CharacterEllipsis" FontSize="18" Margin="10,0,0,0" VerticalAlignment="Center" />
+                <metro:SystemButtons Grid.Column="1" HorizontalAlignment="Right"/>
+            </Grid>
+        </Border>
+        <StackPanel Grid.Row="1" Margin="50,0">
+            <TextBlock Text="{Binding Title}" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding Expires}" HorizontalAlignment="Center"/>
+            <Button Content="視聴する"  HorizontalAlignment="Center">
+                
+            </Button>
+        </StackPanel>
+    </Grid>
+</metro:MetroWindow>

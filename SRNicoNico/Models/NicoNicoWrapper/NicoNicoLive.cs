@@ -9,6 +9,8 @@ using Codeplex.Data;
 
 using Livet;
 
+using SRNicoNico.Models.NicoNicoViewer;
+
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoLive : NotificationObject {
 
@@ -17,6 +19,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private const string GetThreadsApiUrl = "http://live.nicovideo.jp/api/getthreads";
 
         private const string HeartBeatApiUrl = "http://live.nicovideo.jp/api/heartbeat";
+
+        private const string WatchingReservationApiUrl = "http://live.nicovideo.jp/api/watchingreservation";
 
         private const string SetEncodeHtml = @"<head>
                                                                         <meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"">
@@ -92,10 +96,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 return null;
             }
+        }
 
+        public void MakeReservation(string id) {
 
 
         }
+
 
         //正規表現でhtmlからいろいろと抜き出す
         private string GetValue(string field, string input) {
@@ -140,10 +147,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
     public enum LivePageType {
 
-        Live,
-        Gate,
-        TimeShift,
-        TimeShiftGate
+        Live,               //生放送中
+        Gate,              //生放送が始まる前のゲート
+        TimeShift,       //タイムシフト
+        TimeShiftGate //タイムシフトを見る時にでるゲート
+
+    }
+
+    public class ConfirmReservation : NotificationObject {
+
+        //視聴期限
+        public string Expires { get; set; }
+
+        //タイトル
+        public string Title { get; set; }
 
     }
 

@@ -80,6 +80,13 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+        public void ShowReservationDialog() {
+
+            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Live.ReservationDialog), this, TransitionMode.Modal));
+        }
+
+
+
         public void Refresh() {
 
             Task.Run(() => Initialize());
