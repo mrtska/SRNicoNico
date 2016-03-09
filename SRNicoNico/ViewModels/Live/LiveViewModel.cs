@@ -37,6 +37,22 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region ReservationDialog変更通知プロパティ
+        private ConfirmReservation _ReservationDialog;
+
+        public ConfirmReservation ReservationDialog {
+            get { return _ReservationDialog; }
+            set { 
+                if(_ReservationDialog == value)
+                    return;
+                _ReservationDialog = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
         #region DescriptionBrowser変更通知プロパティ
         private WebBrowser _DescriptionBrowser;
 
@@ -82,9 +98,29 @@ namespace SRNicoNico.ViewModels {
 
         public void ShowReservationDialog() {
 
-            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Live.ReservationDialog), this, TransitionMode.Modal));
+            ReservationDialog = new ConfirmReservation();
+            ReservationDialog.IsActive = true;
+            Task.Run(() => {
+
+                LiveInstance.ConfirmReservation(Content.Id, ReservationDialog);
+                ReservationDialog.IsActive = false;
+
+                App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Live.ReservationDialog), this, TransitionMode.Modal));
+
+            });
+
         }
 
+
+        public void MakeReservation() {
+
+            Messenger.Raise(new WindowActionMessage(WindowAction.Close));
+            Task.Run(() => {
+
+                LiveInstance.MakeReservation(ReservationDialog);
+                Refresh();
+            });
+        }
 
 
         public void Refresh() {

@@ -40,16 +40,23 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="確認" TextTrimming="CharacterEllipsis" FontSize="18" Margin="10,0,0,0" VerticalAlignment="Center" />
-                <metro:SystemButtons Grid.Column="1" HorizontalAlignment="Right"/>
+                <TextBlock Text="視聴確認" TextTrimming="CharacterEllipsis" FontSize="18" Margin="10,0,0,0" VerticalAlignment="Center" />
+                <metro:CaptionButton  Grid.Column="1" HorizontalAlignment="Right" WindowAction="Close"/>
             </Grid>
         </Border>
-        <StackPanel Grid.Row="1" Margin="50,0">
-            <TextBlock Text="{Binding Title}" HorizontalAlignment="Center"/>
-            <TextBlock Text="{Binding Expires}" HorizontalAlignment="Center"/>
-            <Button Content="視聴する"  HorizontalAlignment="Center">
-                
+        <StackPanel Grid.Row="1" Margin="0,20,0,15">
+            <TextBlock Text="{Binding ReservationDialog.Title}" FontSize="16" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+            <TextBlock Text="{Binding ReservationDialog.Expires}" FontSize="16" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+            <Button Content="視聴する" FontSize="16" HorizontalAlignment="Center" Margin="5,10">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="MakeReservation" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </Button>
         </StackPanel>
+
+        <mui:ModernProgressRing Grid.RowSpan="2" HorizontalAlignment="Center" Foreground="#FFAAAAAA" Panel.ZIndex="2" Width="59" Height="50" IsActive="{Binding ReservationDialog.IsActive}"  />
+
     </Grid>
 </metro:MetroWindow>

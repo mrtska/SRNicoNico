@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 
 using HtmlAgilityPack;
@@ -51,7 +52,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 if(hide != null) {
 
-
+                    var json = DynamicJson.Parse(Regex.Match(a, "Nicolive_JS_Conf.Watch = ({.*})").Groups[1].Value);
+                    
                     return null;
                 }
 
@@ -98,9 +100,65 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
 
-        public void MakeReservation(string id) {
+
+        public void ConfirmReservation(string id, ConfirmReservation conf) {
+
+            if(conf == null) {
+
+                return;
+            }
+            //lvを消す
+            id = id.Replace("lv", "");
+
+            try {
+
+                var request = new GetRequestQuery(WatchingReservationApiUrl);
+                request.AddQuery("mode", "confirm_watch_my");
+                request.AddQuery("vid", id);
+
+                var a = NicoNicoWrapperMain.Session.GetAsync(request.TargetUrl).Result;
+
+                var doc = new HtmlDocument();
+                doc.LoadHtml2(a);
+
+                conf.Id = id;
+                conf.Expires = doc.DocumentNode.SelectSingleNode("//div[@class='info']/div[1]/p").InnerText;
+                conf.Title = doc.DocumentNode.SelectSingleNode("//div[@class='info']/div/strong").InnerText;
+
+                conf.Token = Regex.Match(a, "confirmToWatch[^,]+,[ ]'(.*)'").Groups[1].Value;
+            }catch(RequestTimeout) {
+
+                conf.Expires = null;
+                conf.Title = null;
+                conf.Token = null;
+                return;
+            }
 
 
+        }
+
+        public void MakeReservation(ConfirmReservation conf) {
+
+            try {
+
+                var param = new Dictionary<string, string>();
+                param["accept"] = "true";
+                param["mode"] = "use";
+                param["vid"] = conf.Id;
+                param["token"] = conf.Token;
+
+                var request = new HttpRequestMessage(HttpMethod.Post, WatchingReservationApiUrl);
+
+                request.Content = new FormUrlEncodedContent(param);
+
+                var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
+
+                
+
+            } catch(RequestTimeout) {
+
+
+            }
         }
 
 
@@ -156,11 +214,32 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
     public class ConfirmReservation : NotificationObject {
 
+        //生放送ID lvを除いたもの
+        public string Id { get; set; }
+
         //視聴期限
         public string Expires { get; set; }
 
         //タイトル
         public string Title { get; set; }
+
+        //タイムシフト予約するのに必要なトークン
+        public string Token { get; set; }
+
+        #region IsActive変更通知プロパティ
+        private bool _IsActive;
+
+        public bool IsActive {
+            get { return _IsActive; }
+            set { 
+                if(_IsActive == value)
+                    return;
+                _IsActive = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
     }
 
