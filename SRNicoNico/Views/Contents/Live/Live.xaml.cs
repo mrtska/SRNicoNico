@@ -16,37 +16,14 @@ using System.Windows.Shapes;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.ViewModels;
 
-namespace SRNicoNico.Views.Contents.Live
-{
+namespace SRNicoNico.Views.Contents.Live {
     /// <summary>
-    /// MylistToolTip.xaml の相互作用ロジック
+    /// Live.xaml の相互作用ロジック
     /// </summary>
-    public partial class Live : UserControl
-    {
-        public Live()
-        {
+    public partial class Live : UserControl {
+        public Live() {
             InitializeComponent();
         }
 
-        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-
-            if(DataContext is LiveViewModel) {
-
-                var vm = (LiveViewModel)DataContext;
-
-                vm.DescriptionBrowser = desc;
-
-            }
-        }
-
-        private void desc_Navigating(object sender, NavigatingCancelEventArgs e) {
-
-            if(e.Uri != null) {
-
-                NicoNicoOpener.Open(e.Uri);
-                e.Cancel = true;
-            }
-            ;
-        }
     }
 }

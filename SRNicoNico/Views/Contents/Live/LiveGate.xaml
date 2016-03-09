@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.Live.LiveGate"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Live"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
+             mc:Ignorable="d" 
+             Background="{DynamicResource ThemeBrushKey}"
+		  	 Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             d:DesignWidth="600"
+             d:DesignHeight="600"
+             d:DataContext="{d:DesignInstance {x:Type vm:LiveViewModel}}"
+             DataContextChanged="UserControl_DataContextChanged"
+             >
+
+    <Grid>
+        <ContentControl Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="150"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <mui:ModernProgressRing  HorizontalAlignment="Center" Foreground="#FFAAAAAA" Panel.ZIndex="2" Width="80" Height="80" IsActive="{Binding IsActive}"  />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="{Binding Content.ThumbNailUrl}" Width="140" Height="140"/>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="35"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Margin="5,0">
+                            <TextBlock FontSize="18" b:HtmlTextBoxProperties.HtmlText="{Binding Content.StartTime}"/>
+                            <TextBlock FontSize="18" b:HtmlTextBoxProperties.HtmlText="{Binding Content.EndTime}"/>
+                            <TextBlock FontSize="18" b:HtmlTextBoxProperties.HtmlText="{Binding Content.VisitorsAndComments}"/>
+                        </StackPanel>
+                        <Button Grid.Row="1" Margin="5" Content="タイムシフト試聴" Width="150"  FontSize="16" HorizontalAlignment="Left">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ShowReservationDialog"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </Grid>
+                </Grid>
+                <WebBrowser Grid.Row="1" x:Name="desc" Navigating="desc_Navigating" />
+            </Grid>
+        </ContentControl>
+    </Grid>
+</UserControl>

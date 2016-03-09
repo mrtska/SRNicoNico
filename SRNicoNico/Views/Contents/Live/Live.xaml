@@ -18,7 +18,7 @@
              d:DesignWidth="600"
              d:DesignHeight="600"
              d:DataContext="{d:DesignInstance {x:Type vm:LiveViewModel}}"
-             DataContextChanged="UserControl_DataContextChanged"
+             
              >
     <Grid>
         <Grid.RowDefinitions>
@@ -69,7 +69,34 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ContentControl">
-
+                                        <local:LiveGate />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Content.Type}" Value="TimeShiftGate">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ContentControl">
+                                        <local:LiveGate />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Content.Type}" Value="Live">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ContentControl">
+                                        <local:LiveWatch />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Content.Type}" Value="TimeShift">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ContentControl">
+                                        <local:LiveWatch />
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -77,46 +104,6 @@
                     </Style.Triggers>
                 </Style>
             </ContentControl.Style>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="150"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Image Source="{Binding Content.ThumbNailUrl}" Width="140" Height="140"/>
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="35"/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Margin="5,0">
-                            <TextBlock FontSize="18" b:HtmlTextBoxProperties.HtmlText="{Binding Content.StartTime}"/>
-                            <TextBlock FontSize="18" b:HtmlTextBoxProperties.HtmlText="{Binding Content.EndTime}"/>
-                            <TextBlock FontSize="18" b:HtmlTextBoxProperties.HtmlText="{Binding Content.VisitorsAndComments}"/>
-                        </StackPanel>
-                        <Button Grid.Row="1" Margin="5" Content="タイムシフト試聴" Width="150"  FontSize="16" HorizontalAlignment="Left">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ShowReservationDialog"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Button>
-                    </Grid>
-
-                </Grid>
-                <WebBrowser Grid.Row="1" x:Name="desc" Navigating="desc_Navigating" />
-
-
-
-            </Grid>
         </ContentControl>
-
-
-        <mui:ModernProgressRing Grid.RowSpan="2" HorizontalAlignment="Center" Foreground="#FFAAAAAA" Panel.ZIndex="2" Width="80" Height="80" IsActive="{Binding IsActive}"  />
-
     </Grid>
 </UserControl>

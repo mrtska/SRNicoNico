@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.Live.LiveFlash"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2015/personal/controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="208" d:DesignWidth="401"
+             d:DataContext="{d:DesignInstance vm:VideoViewModel}"
+             xmlns:a="clr-namespace:AxShockwaveFlashObjects;assembly=AxInterop.ShockwaveFlashObjects"
+             DataContextChanged="UserControl_DataContextChanged"
+			 >
+    <Grid>
+        <WindowsFormsHost Focusable="False">
+            <a:AxShockwaveFlash x:Name="flash"/>
+        </WindowsFormsHost>
+    </Grid>
+</UserControl>

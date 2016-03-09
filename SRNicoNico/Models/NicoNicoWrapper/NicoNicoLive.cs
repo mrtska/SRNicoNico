@@ -67,7 +67,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     status.Id = stream.SelectSingleNode("child::id").InnerText;
                     status.Title = json.Player.videoTitle;
                     status.Description = stream.SelectSingleNode("child::description").InnerText;
-                    status.Description = HttpUtility.HtmlDecode(status.Description);
+                    status.Description = SetEncodeHtml + HttpUtility.HtmlDecode(status.Description) + "</body>";
                     status.ProviderType = stream.SelectSingleNode("child::provider_type").InnerText;
                     status.DefaultCommunity = stream.SelectSingleNode("child::default_community").InnerText;
 
@@ -99,6 +99,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
                     content.GetPlayerStatus = status;
+
+                    content.Title = status.Title;
+                    content.Description = status.Description;
                     
                     return content;
                 }
