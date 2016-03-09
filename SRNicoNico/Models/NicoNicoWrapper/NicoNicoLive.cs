@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 
@@ -53,8 +54,53 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 if(hide != null) {
 
                     var json = DynamicJson.Parse(Regex.Match(a, "Nicolive_JS_Conf.Watch = ({.*})").Groups[1].Value);
+
+                    string xml = HttpUtility.UrlDecode(json.GPS.value_by_gps);
+
+                    var xmldoc = new HtmlDocument();
+                    xmldoc.LoadHtml2(xml);
+
+                    var stream = xmldoc.DocumentNode.SelectSingleNode("//stream");
+
+                    var status = new NicoNicoGetPlayerStatus();
+
+                    status.Id = stream.SelectSingleNode("child::id").InnerText;
+                    status.Title = json.Player.videoTitle;
+                    status.Description = stream.SelectSingleNode("child::description").InnerText;
+                    status.Description = HttpUtility.HtmlDecode(status.Description);
+                    status.ProviderType = stream.SelectSingleNode("child::provider_type").InnerText;
+                    status.DefaultCommunity = stream.SelectSingleNode("child::default_community").InnerText;
+
+                    status.IsOwner = stream.SelectSingleNode("child::is_owner").InnerText == "1";
+                    status.OwnerId = stream.SelectSingleNode("child::owner_id").InnerText;
+                    status.OwnerName = stream.SelectSingleNode("child::owner_name").InnerText;
+                    status.WatchCount = stream.SelectSingleNode("child::watch_count").InnerText;
+                    status.CommentCount = stream.SelectSingleNode("child::comment_count").InnerText;
+
+                    status.Archive = stream.SelectSingleNode("child::archive").InnerText == "1";
+                    if(status.Archive) {
+
+                        content.Type = LivePageType.TimeShift;
+                    } else {
+
+                        content.Type = LivePageType.Live;
+                    }
+                    status.ThumbNailUrl = stream.SelectSingleNode("child::picture_url").InnerText;
+
+                    status.RoomLabel = xmldoc.DocumentNode.SelectSingleNode("//user/room_label").InnerText;
+                    status.SeetNumber = xmldoc.DocumentNode.SelectSingleNode("//user/room_seetno").InnerText;
+
+                    status.RtmpUrl = xmldoc.DocumentNode.SelectSingleNode("//rtmp/url").InnerText;
+                    status.Ticket = xmldoc.DocumentNode.SelectSingleNode("//rtmp/ticket").InnerText;
+
+                    status.MesseageServerUrl = xmldoc.DocumentNode.SelectSingleNode("//ms/addr").InnerText;
+                    status.MesseageServerPort = xmldoc.DocumentNode.SelectSingleNode("//ms/port").InnerText;
+                    status.ThumbNailUrl = xmldoc.DocumentNode.SelectSingleNode("//ms/thread").InnerText;
+
+
+                    content.GetPlayerStatus = status;
                     
-                    return null;
+                    return content;
                 }
 
 
@@ -161,6 +207,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
 
+        public  void HeartBeat() {
+
+
+        }
 
         //正規表現でhtmlからいろいろと抜き出す
         private string GetValue(string field, string input) {
@@ -201,6 +251,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //登録タグ
         public IList<string> TagEntries { get; set; }
 
+        //ゲートではnull
+        public NicoNicoGetPlayerStatus GetPlayerStatus { get; set; }
     }
 
     public enum LivePageType {

@@ -67,6 +67,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //生放送スレッドID
         public string ThreadId { get; set; }
 
-
+        
     }
 }
