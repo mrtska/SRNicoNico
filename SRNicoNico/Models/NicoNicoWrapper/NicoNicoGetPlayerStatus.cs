@@ -5,6 +5,8 @@ using System.Text;
 
 using Livet;
 
+using Codeplex.Data;
+
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoGetPlayerStatus : NotificationObject {
 
@@ -67,6 +69,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //生放送スレッドID
         public string ThreadId { get; set; }
 
-        
+        public string ToJson() {
+            return DynamicJson.Serialize(this);
+        }
     }
 }

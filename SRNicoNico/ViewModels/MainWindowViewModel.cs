@@ -261,7 +261,7 @@ namespace SRNicoNico.ViewModels {
 #if !DEBUG
             Update.CheckUpdate();
 #endif
-            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoNicoOpener.Open("http://live.nicovideo.jp/watch/lv246285039?ref=zero_mynicorepo")));
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoNicoOpener.Open("http://live.nicovideo.jp/watch/lv254486518?ref=zero_mytimeshift")));
             ;
             }
 

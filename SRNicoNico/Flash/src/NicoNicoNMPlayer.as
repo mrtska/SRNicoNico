@@ -66,7 +66,7 @@ package  {
 		}
 		
 		//指定したURLをストリーミング再生する
-		public override function OpenVideo(videoUrl:String):void {
+		public override function OpenVideo(videoUrl:String, config:String):void {
 			
 			
 			

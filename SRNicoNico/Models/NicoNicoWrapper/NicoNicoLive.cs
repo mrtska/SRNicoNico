@@ -51,6 +51,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var hide = doc.DocumentNode.SelectSingleNode("//div[@class='hide']");
 
+                //ゲートじゃない
                 if(hide != null) {
 
                     var json = DynamicJson.Parse(Regex.Match(a, "Nicolive_JS_Conf.Watch = ({.*})").Groups[1].Value);
@@ -64,20 +65,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     var status = new NicoNicoGetPlayerStatus();
 
-                    status.Id = stream.SelectSingleNode("child::id").InnerText;
+                    status.Id = stream.SelectSingleNode("id").InnerText;
                     status.Title = json.Player.videoTitle;
                     status.Description = stream.SelectSingleNode("child::description").InnerText;
                     status.Description = SetEncodeHtml + HttpUtility.HtmlDecode(status.Description) + "</body>";
-                    status.ProviderType = stream.SelectSingleNode("child::provider_type").InnerText;
-                    status.DefaultCommunity = stream.SelectSingleNode("child::default_community").InnerText;
+                    status.ProviderType = stream.SelectSingleNode("provider_type").InnerText;
+                    status.DefaultCommunity = stream.SelectSingleNode("default_community").InnerText;
 
-                    status.IsOwner = stream.SelectSingleNode("child::is_owner").InnerText == "1";
-                    status.OwnerId = stream.SelectSingleNode("child::owner_id").InnerText;
-                    status.OwnerName = stream.SelectSingleNode("child::owner_name").InnerText;
-                    status.WatchCount = stream.SelectSingleNode("child::watch_count").InnerText;
-                    status.CommentCount = stream.SelectSingleNode("child::comment_count").InnerText;
+                    status.IsOwner = stream.SelectSingleNode("is_owner").InnerText == "1";
+                    status.OwnerId = stream.SelectSingleNode("owner_id").InnerText;
+                    status.OwnerName = stream.SelectSingleNode("owner_name").InnerText;
+                    status.WatchCount = stream.SelectSingleNode("watch_count").InnerText;
+                    status.CommentCount = stream.SelectSingleNode("comment_count").InnerText;
 
-                    status.Archive = stream.SelectSingleNode("child::archive").InnerText == "1";
+                    status.Archive = stream.SelectSingleNode("archive").InnerText == "1";
                     if(status.Archive) {
 
                         content.Type = LivePageType.TimeShift;
@@ -85,7 +86,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                         content.Type = LivePageType.Live;
                     }
-                    status.ThumbNailUrl = stream.SelectSingleNode("child::picture_url").InnerText;
+                    status.ThumbNailUrl = stream.SelectSingleNode("picture_url").InnerText;
 
                     status.RoomLabel = xmldoc.DocumentNode.SelectSingleNode("//user/room_label").InnerText;
                     status.SeetNumber = xmldoc.DocumentNode.SelectSingleNode("//user/room_seetno").InnerText;
@@ -95,7 +96,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     status.MesseageServerUrl = xmldoc.DocumentNode.SelectSingleNode("//ms/addr").InnerText;
                     status.MesseageServerPort = xmldoc.DocumentNode.SelectSingleNode("//ms/port").InnerText;
-                    status.ThumbNailUrl = xmldoc.DocumentNode.SelectSingleNode("//ms/thread").InnerText;
+                    status.ThreadId = xmldoc.DocumentNode.SelectSingleNode("//ms/thread").InnerText;
 
 
                     content.GetPlayerStatus = status;
@@ -250,7 +251,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //来場者数とコメント数
         public string VisitorsAndComments { get; set; }
-
+        
+        //その放送が見れるか (タイムシフト予約できるか)
+        public bool CanWatch { get; set; }
+        
         //登録タグ
         public IList<string> TagEntries { get; set; }
 

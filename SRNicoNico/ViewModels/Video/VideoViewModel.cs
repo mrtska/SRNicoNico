@@ -733,10 +733,10 @@ namespace SRNicoNico.ViewModels {
             //RTMPの時はサーバートークンも一緒にFlashに渡す
             if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
-                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken);
+                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, "");
             } else {
 
-                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl);
+                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, "");
             }
             
             IsRepeat = Properties.Settings.Default.IsRepeat;
@@ -837,7 +837,7 @@ namespace SRNicoNico.ViewModels {
             InvokeScript("AsInjectUploaderComment", json);
         }
         
-        //JSを呼ぶ
+        //ASを呼ぶ
         private void InvokeScript(string func, params object[] args) {
             
             //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように

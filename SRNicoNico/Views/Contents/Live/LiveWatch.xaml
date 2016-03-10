@@ -21,19 +21,46 @@
              DataContextChanged="UserControl_DataContextChanged"
              >
     <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="250"/>
-            </Grid.ColumnDefinitions>
-            <Grid DataContextChanged="UserControl_DataContextChanged">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <local:LiveFlash Grid.Row="1"/>
-                <WebBrowser Grid.Row="2" x:Name="desc" Navigating="desc_Navigating" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Background="#FF222222">
+                <TextBlock Text="ニコニコ生放送" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
+
+            <ContentControl Grid.Row="1" Content="{Binding LiveFlash}"/>
+            <WebBrowser Grid.Row="2" x:Name="desc" Navigating="desc_Navigating" />
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Background="#222222" >
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,3">
+                        <TextBlock Text="{Binding Content.GetPlayerStatus.RoomLabel}"  Margin="0,0,10,0"/>
+                        <TextBlock Text="{Binding Content.GetPlayerStatus.SeetNumber}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding Content.GetPlayerStatus.WatchCount,StringFormat=来場者数:{0}}"  Margin="0,0,10,0"/>
+                        <TextBlock Text="{Binding Content.GetPlayerStatus.CommentCount,StringFormat=コメント数:{0}}" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+            <StackPanel>
+
+            </StackPanel>
+
+        </Grid>
+        
         </Grid>
 </UserControl>

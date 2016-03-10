@@ -41,8 +41,7 @@ namespace SRNicoNico.Views.Contents.Live {
                 }
 
                 //インスタンスを設定
-                vm.ShockwaveFlash = flash;
-                vm.Proxy = new ExternalInterfaceProxy(flash);
+                vm.Handler = new LiveFlashHandler(vm, flash);
             }
         }
     }

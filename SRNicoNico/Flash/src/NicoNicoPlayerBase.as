@@ -104,7 +104,7 @@ package {
 		}
 		
 		//指定したURLをストリーミング再生する オーバーライドして使う
-		public function OpenVideo(videoUrl:String):void {}
+		public function OpenVideo(videoUrl:String, config:String):void {}
 		public function Pause():void {}
 		public function Resume():void {}
 		public function Seek(pos:Number):void {}

@@ -19,11 +19,14 @@ using SRNicoNico.Views.Contents.Live;
 using AxShockwaveFlashObjects;
 using Flash.External;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace SRNicoNico.ViewModels {
     public class LiveViewModel : TabItemViewModel {
 
         private NicoNicoLive LiveInstance;
+
+        public LiveFlashHandler Handler;
 
 
         #region Content変更通知プロパティ
@@ -102,23 +105,6 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-        #region ShockWaveFlash変更通知プロパティ
-        private AxShockwaveFlash _ShockwaveFlash;
-
-        public AxShockwaveFlash ShockwaveFlash {
-            get { return _ShockwaveFlash; }
-            set { 
-                if(_ShockwaveFlash == value)
-                    return;
-                _ShockwaveFlash = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        //Flashの関数を呼ぶためのもの
-        public ExternalInterfaceProxy Proxy;
-
 
 
         public string LiveUrl { get; set; }
@@ -127,6 +113,8 @@ namespace SRNicoNico.ViewModels {
 
             LiveUrl = url;
 
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => LiveFlash = new LiveFlash() { DataContext = this }));
+
             Task.Run(() => Initialize());
         }
 
@@ -134,6 +122,9 @@ namespace SRNicoNico.ViewModels {
 
             Status = "読込中";
             IsActive = true;
+
+
+
             LiveInstance = new NicoNicoLive(LiveUrl);
 
 
@@ -149,6 +140,8 @@ namespace SRNicoNico.ViewModels {
 
             IsActive = false;
             Status = "";
+
+            Handler.InvokeScript("AsOpenVideo", Content.GetPlayerStatus.RtmpUrl, Content.GetPlayerStatus.ToJson());
 
         }
 
