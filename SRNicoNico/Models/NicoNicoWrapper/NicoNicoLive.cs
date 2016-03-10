@@ -82,9 +82,37 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     if(status.Archive) {
 
                         content.Type = LivePageType.TimeShift;
+                        status.QueSheet = new List<QueSheet>();
+
+                        foreach(var que in stream.SelectNodes("quesheet/que")) {
+
+                            var sheet = new QueSheet();
+
+                            sheet.Vpos = que.Attributes["vpos"].Value;
+                            sheet.Mail = que.Attributes["mail"].Value;
+                            sheet.Content = que.InnerText;
+
+                            status.QueSheet.Add(sheet);
+                        }
                     } else {
 
                         content.Type = LivePageType.Live;
+                        status.ContentsList = new List<Contents>();
+
+                        foreach(var que in stream.SelectNodes("contents_list/contents")) {
+
+                            var contents = new Contents();
+
+                            contents.Id = que.Attributes["id"].Value;
+                            contents.DisableAudio = que.Attributes["disableAudio"].Value == "1";
+                            contents.DisableVideo = que.Attributes["disableVideo"].Value == "1";
+                            contents.StartTime = que.Attributes["start_time"].Value;
+
+                            contents.Content = que.InnerText;
+
+                            status.ContentsList.Add(contents);
+                        }
+                        ;
                     }
                     status.ThumbNailUrl = stream.SelectSingleNode("picture_url").InnerText;
 

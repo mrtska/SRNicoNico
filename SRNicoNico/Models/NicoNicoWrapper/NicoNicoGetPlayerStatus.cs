@@ -68,9 +68,43 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
         //生放送スレッドID
         public string ThreadId { get; set; }
+        
+        //オンエア時のみ
+        public IList<Contents> ContentsList { get; set; }
+
+        //タイムシフト時のみ
+        public IList<QueSheet> QueSheet { get; set; }
 
         public string ToJson() {
             return DynamicJson.Serialize(this);
         }
+    }
+
+    public class Contents {
+
+        //コンテンツID main か sub
+        public string Id { get; set; }
+
+        public bool DisableVideo { get; set; }
+
+        public bool DisableAudio { get; set; }
+
+        //開始時刻 UnixTime
+        public string StartTime { get; set; }
+
+        public string Content { get; set; }
+    }
+
+    //タイムシフトのタイムテーブル的な
+    public class QueSheet {
+
+        //開始位置
+        public string Vpos { get; set; }
+
+        //属性
+        public string Mail { get; set; }
+
+        //コマンド
+        public string Content { get; set; }
     }
 }
