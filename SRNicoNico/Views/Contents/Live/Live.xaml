@@ -69,7 +69,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ContentControl">
-                                        <local:LiveGate />
+                                        <local:LiveGate DataContext="{Binding ContentViewModel}" />
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -78,7 +78,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ContentControl">
-                                        <local:LiveGate />
+                                        <local:LiveGate DataContext="{Binding ContentViewModel}"/>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -87,7 +87,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ContentControl">
-                                        <local:LiveWatch />
+                                        <local:LiveWatch DataContext="{Binding ContentViewModel}"/>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -96,7 +96,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ContentControl">
-                                        <local:LiveWatch />
+                                        <local:LiveWatch DataContext="{Binding ContentViewModel}" />
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>

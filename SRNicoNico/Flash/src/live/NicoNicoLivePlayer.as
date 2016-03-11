@@ -1,34 +1,50 @@
 package live {
+	import flash.events.AsyncErrorEvent;
 	import flash.events.Event;
 	import flash.events.NetStatusEvent;
-	import flash.events.AsyncErrorEvent;
+	import flash.events.TimerEvent;
+	import flash.external.ExternalInterface;
 	import flash.geom.Rectangle;
 	import flash.media.StageVideo;
 	import flash.media.Video;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
-	import flash.external.ExternalInterface;
 	import flash.net.ObjectEncoding;
+	import flash.utils.Timer;
 	/**
 	 * ...
 	 * @author mrtska
 	 */
 	public class NicoNicoLivePlayer extends NicoNicoPlayerBase {
 		
+		//放送URL rtmp
 		private var videoUrl:String;
 		
+		//ストリーム
 		private var stream:NetStream;
 		
+		//こねくしょん
 		private var connection:NetConnection;
 		
+		//API結果
 		private var getPlayerStatus:Object;
+		
+		//vpos最大最小値
+		private var maxVpos:int;
+		private var minVpos:int;
+		
+		private var baseTime:Number;
+		
+		private var vpos:int;
+		
+		private var vposTimer:Timer;
 		
 		//動画メタデータ
 		private var metadata:Object;
 		
 		public function NicoNicoLivePlayer() {
 			
-			
+			//OpenVideo("rtmp://nlaoe115.live.nicovideo.jp:1935/fileorigin/04", "{\"Ticket\": \"23425727:lv254486518:0:1457695076:725986265f52e95e\"}");
 		}
 		
 		
@@ -106,16 +122,31 @@ package live {
 				addChild(rasterizer);
 			}
 			stream.client = obj;
-	
-			addEventListener(Event.ENTER_FRAME, onFrame);
 			
+			this.maxVpos = (int(getPlayerStatus.EndTime) - int(getPlayerStatus.StartTime)) * 100;
+			this.minVpos = 0;
+			
+			this.baseTime = new Date().getTime();
+			
+			ExternalInterface.call("hoge" + this.maxVpos);
+	
+
+			this.vposTimer = new Timer(25);
+			this.vposTimer.addEventListener(TimerEvent.TIMER, onTick);
+			this.vposTimer.start();
 			
 			
 			//タイムシフト
 			if (getPlayerStatus.Archive) {
 				
 				
-				stream.play("lv255589164_23425727");
+				for each(var que:Object in getPlayerStatus.QueSheet) {
+					
+					if (String(que.Content).indexOf("/publish") === 0) {
+						
+						
+					}
+				}
 			} else {
 				
 				
@@ -126,28 +157,37 @@ package live {
 
 
 		}
+		public override function Pause():void {
+			
+			vposTimer.stop();
+		}
+		public override function Resume():void {
+			
+			vposTimer.start();
+			
+		}
 		
 		
 		private var prevTime:int = 0;
 		private var prevLoaded:uint = 0;
 		
-		public override function onFrame(e:Event):void {
+		private function onTick(e:TimerEvent):void {
 			
-			// 再生時間を取得
-			var value:Number = stream.time;
 			
-			// バッファの計算
-			var buffer:Number = (stream.bytesLoaded) / (stream.bytesTotal);
-			
-			//コメントのアレ
+			/*コメントのアレ
 			var vpos:Number = Math.floor(value * 100);
 
-			ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString(), vpos.toString());
 			prevLoaded = stream.bytesLoaded;
 			prevTime = (int) (value);
 			
 			
-			//タイムシフト
+			*///タイムシフト
+			
+			var now:Date = new Date();
+			var vpos:int = (now.getTime() - this.baseTime) / 10;
+			ExternalInterface.call("CsFrame", vpos.toString());
+
+			
 			if (getPlayerStatus.Archive) {
 				
 				for each(var que:Object in getPlayerStatus.QueSheet) {
@@ -156,15 +196,16 @@ package live {
 				}
 				
 				
-				stream.play("lv255589164_23425727");
+				//stream.play("lv255589164_23425727");
 			} else {
 				
 				
 			}
 			
 			
-			rasterizer.render(vpos);
+			//rasterizer.render(vpos);
 		}
+		
 		
 		
 		
@@ -207,7 +248,6 @@ package live {
 				break;
 			// その他
 			default:
-				trace(e.info.code);
 			}
 		}
 		

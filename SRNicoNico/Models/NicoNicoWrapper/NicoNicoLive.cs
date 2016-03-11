@@ -64,7 +64,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     var stream = xmldoc.DocumentNode.SelectSingleNode("//stream");
 
                     var status = new NicoNicoGetPlayerStatus();
-
+                    
                     status.Id = stream.SelectSingleNode("id").InnerText;
                     status.Title = json.Player.videoTitle;
                     status.Description = stream.SelectSingleNode("child::description").InnerText;
@@ -77,6 +77,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     status.OwnerName = stream.SelectSingleNode("owner_name").InnerText;
                     status.WatchCount = stream.SelectSingleNode("watch_count").InnerText;
                     status.CommentCount = stream.SelectSingleNode("comment_count").InnerText;
+                    status.BaseTime = stream.SelectSingleNode("base_time").InnerText;
+                    status.StartTime = stream.SelectSingleNode("start_time").InnerText;
+                    status.EndTime = stream.SelectSingleNode("end_time").InnerText;
 
                     status.Archive = stream.SelectSingleNode("archive").InnerText == "1";
                     if(status.Archive) {
@@ -149,7 +152,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         content.Type = LivePageType.TimeShiftGate;
                         content.EndTime = lefcom.InnerHtml.Replace("<br>", "").Trim();
                     } else {
-
+                        
                         content.Type = LivePageType.Gate;
                     }
 

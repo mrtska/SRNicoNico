@@ -20,14 +20,10 @@ using AxShockwaveFlashObjects;
 using Flash.External;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace SRNicoNico.ViewModels {
     public class LiveViewModel : TabItemViewModel {
-
-        private NicoNicoLive LiveInstance;
-
-        public LiveFlashHandler Handler;
-
 
         #region Content変更通知プロパティ
         private NicoNicoLiveContent _Content;
@@ -44,67 +40,19 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-        #region ReservationDialog変更通知プロパティ
-        private ConfirmReservation _ReservationDialog;
+        #region ContentViewModel変更通知プロパティ
+        private TabItemViewModel _ContentViewModel;
 
-        public ConfirmReservation ReservationDialog {
-            get { return _ReservationDialog; }
+        public TabItemViewModel ContentViewModel {
+            get { return _ContentViewModel; }
             set { 
-                if(_ReservationDialog == value)
+                if(_ContentViewModel == value)
                     return;
-                _ReservationDialog = value;
+                _ContentViewModel = value;
                 RaisePropertyChanged();
             }
         }
         #endregion
-
-
-
-        #region DescriptionBrowser変更通知プロパティ
-        private WebBrowser _DescriptionBrowser;
-
-        public WebBrowser DescriptionBrowser {
-            get { return _DescriptionBrowser; }
-            set { 
-                if(_DescriptionBrowser == value)
-                    return;
-                _DescriptionBrowser = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region LiveFlash変更通知プロパティ
-        private LiveFlash _LiveFlash;
-
-        public LiveFlash LiveFlash {
-            get { return _LiveFlash; }
-            set { 
-                if(_LiveFlash == value)
-                    return;
-                _LiveFlash = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region FullScreenLiveFlash変更通知プロパティ
-        private LiveFlash _FullScreenLiveFlash;
-
-        public LiveFlash FullScreenLiveFlash {
-            get { return _FullScreenLiveFlash; }
-            set { 
-                if(_FullScreenLiveFlash == value)
-                    return;
-                _FullScreenLiveFlash = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
 
 
         public string LiveUrl { get; set; }
@@ -112,8 +60,6 @@ namespace SRNicoNico.ViewModels {
         public LiveViewModel(string url) : base("読込中") {
 
             LiveUrl = url;
-
-            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => LiveFlash = new LiveFlash() { DataContext = this }));
 
             Task.Run(() => Initialize());
         }
@@ -123,82 +69,41 @@ namespace SRNicoNico.ViewModels {
             Status = "読込中";
             IsActive = true;
 
-
-
-            LiveInstance = new NicoNicoLive(LiveUrl);
-
+            var LiveInstance = new NicoNicoLive(LiveUrl);
 
             Content = LiveInstance.GetPage();
             Name = Content.Title;
 
+            if(Content.Type == LivePageType.Gate || Content.Type == LivePageType.TimeShiftGate) {
 
-            while(DescriptionBrowser == null) {
+                ContentViewModel = new LiveGateViewModel(this, LiveInstance, Content);
+            } else {
 
-                Thread.Sleep(1);
+                ContentViewModel = new LiveWatchViewModel(this, LiveInstance, Content);
             }
-            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => DescriptionBrowser.NavigateToString(Content.Description)));
 
             IsActive = false;
             Status = "";
-
-            Handler.InvokeScript("AsOpenVideo", Content.GetPlayerStatus.RtmpUrl, Content.GetPlayerStatus.ToJson());
-
         }
-
-        public void ShowReservationDialog() {
-
-            ReservationDialog = new ConfirmReservation();
-            ReservationDialog.IsActive = true;
-            Task.Run(() => {
-
-                LiveInstance.ConfirmReservation(Content.Id, ReservationDialog);
-                ReservationDialog.IsActive = false;
-
-                App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Live.ReservationDialog), this, TransitionMode.Modal));
-
-            });
-
-        }
-
-
-        public void MakeReservation() {
-
-            Messenger.Raise(new WindowActionMessage(WindowAction.Close));
-            Task.Run(() => {
-
-                LiveInstance.MakeReservation(ReservationDialog);
-                Refresh();
-            });
-        }
-
 
         public void Refresh() {
 
-            Task.Run(() => Initialize());
-        }
+            Task.Run(() => {
 
-        public void DisposeViewModel() {
-
-            Handler.DisposeHandler();
-            DescriptionBrowser.Dispose();
-            Dispose();
-            App.ViewModelRoot.RemoveTabAndLastSet(this);
+                ContentViewModel?.Dispose();
+                Initialize();
+            });
         }
 
         public void Close() {
 
-            DisposeViewModel();
+            ContentViewModel?.Dispose();
+            Dispose();
         }
 
         public override void KeyDown(KeyEventArgs e) {
 
-            if(e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.W) {
-
-                DisposeViewModel();
-            } else if(e.Key == Key.F5) {
-
-                Refresh();
-            }
+            ContentViewModel?.KeyDown(e);
         }
 
 

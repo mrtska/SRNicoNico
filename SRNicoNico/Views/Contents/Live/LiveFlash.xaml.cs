@@ -32,15 +32,12 @@ namespace SRNicoNico.Views.Contents.Live {
         
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
-            if(DataContext is LiveViewModel) {
+            if(DataContext is LiveWatchViewModel) {
 
-                var vm = (LiveViewModel) DataContext;
-                if(vm.LiveFlash == this && vm.FullScreenLiveFlash == this) {
-
-                    return;
-                }
+                var vm = (LiveWatchViewModel) DataContext;
 
                 //インスタンスを設定
+                
                 vm.Handler = new LiveFlashHandler(vm, flash);
             }
         }

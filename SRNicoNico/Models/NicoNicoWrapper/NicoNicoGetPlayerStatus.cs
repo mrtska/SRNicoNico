@@ -34,6 +34,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //コミュニティ放送のみ
         public string OwnerName { get; set; }
 
+        //放送作成時間 放送開始時間 放送終了時間
+        public string BaseTime { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+
         //APIを叩いた時の視聴回数
         public string WatchCount { get; set; }
 

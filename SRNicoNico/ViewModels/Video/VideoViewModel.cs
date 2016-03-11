@@ -477,10 +477,7 @@ namespace SRNicoNico.ViewModels {
                     Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
                     IsActive = false;
 
-                    Task.Run(() => {
-
-                        OpenVideo();
-                    });
+                    OpenVideo();
 
                 }));
                 Time = new VideoTime();

@@ -27,9 +27,9 @@ namespace SRNicoNico.Views.Contents.Live {
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
-            if(DataContext is LiveViewModel) {
+            if(DataContext is LiveWatchViewModel) {
 
-                var vm = (LiveViewModel)DataContext;
+                var vm = (LiveWatchViewModel)DataContext;
 
                 vm.DescriptionBrowser = desc;
                 

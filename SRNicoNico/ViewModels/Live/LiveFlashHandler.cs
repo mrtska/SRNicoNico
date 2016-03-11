@@ -30,22 +30,28 @@ namespace SRNicoNico.ViewModels {
 
         //Flashの関数を呼ぶためのもの
         public ExternalInterfaceProxy Proxy;
-        
-        private LiveViewModel Owner;
-        
-        public LiveFlashHandler(LiveViewModel vm, AxShockwaveFlash flash)  {
-            
+
+        private LiveWatchViewModel Owner;
+
+        public bool IsInitialized;
+
+        public LiveFlashHandler(LiveWatchViewModel vm, AxShockwaveFlash flash)  {
+
             Owner = vm;
-            
+
             ShockwaveFlash = flash;
-            Proxy = new ExternalInterfaceProxy(flash);
-            Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
+            Proxy = new ExternalInterfaceProxy(ShockwaveFlash);
             
-            flash.LoadMovie(0, Directory.GetCurrentDirectory() + "./Flash/NicoNicoLivePlayer.swf");
+        }
+
+        public void LoadMovie() {
+
+            ShockwaveFlash.LoadMovie(0, Directory.GetCurrentDirectory() + "./Flash/NicoNicoLivePlayer.swf");
+            Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
         }
 
         public void DisposeHandler() {
-
+            
             ShockwaveFlash.Dispose();
         }
 
@@ -56,14 +62,17 @@ namespace SRNicoNico.ViewModels {
         }
         //ExternalIntarface.callでActionscriptから呼ばれる
         public void InvokeFromActionScript(string func, params string[] args) {
-            
+
             switch(func) {
                 case "CsFrame": //毎フレーム呼ばれる
-                    CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]), args[3]);
+                    CsFrame(args[0]);
                     break;
                 case "NetConnection.Connect.Closed":    //RTMP動画再生時にタイムアウトになったら
                     break;
                 case "ShowController":
+
+                    break;
+                case "HideController":
 
                     break;
                 default:
@@ -72,9 +81,9 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public void CsFrame(float time, float buffer, long bps, string vpos) {
+        public void CsFrame(string vpos) {
 
-            Console.WriteLine("hogehoge frame");
+            Console.WriteLine("hogehoge frame: " + vpos);
         }
 
 

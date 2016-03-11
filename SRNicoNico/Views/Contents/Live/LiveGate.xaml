@@ -17,7 +17,7 @@
 		  	 Foreground="{DynamicResource ActiveForegroundBrushKey}"
              d:DesignWidth="600"
              d:DesignHeight="600"
-             d:DataContext="{d:DesignInstance {x:Type vm:LiveViewModel}}"
+             d:DataContext="{d:DesignInstance {x:Type vm:LiveGateViewModel}}"
              DataContextChanged="UserControl_DataContextChanged"
              >
 
