@@ -45,16 +45,16 @@ namespace SRNicoNico.ViewModels {
         }
 
         public void LoadMovie() {
-
+            
             ShockwaveFlash.LoadMovie(0, Directory.GetCurrentDirectory() + "./Flash/NicoNicoLivePlayer.swf");
             Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
         }
 
         public void DisposeHandler() {
-            
+
             ShockwaveFlash.Dispose();
         }
-
+        
         private object ExternalInterfaceHandler(object sender, ExternalInterfaceCallEventArgs e) {
 
             InvokeFromActionScript(e.FunctionCall.FunctionName, e.FunctionCall.Arguments);
@@ -80,11 +80,11 @@ namespace SRNicoNico.ViewModels {
                     break;
             }
         }
-
+        
         public void CsFrame(string vposs) {
-
+            
             var vpos = int.Parse(vposs);
-
+            Owner.Status = vposs;
             if(Owner.Content.Type == LivePageType.TimeShift) {
 
                 foreach(var que in Owner.Content.GetPlayerStatus.QueSheet) {
@@ -94,18 +94,31 @@ namespace SRNicoNico.ViewModels {
 
                         continue;
                     }
-
+                    
                     var quepos = int.Parse(que.Vpos);
-
+                    
                     if(quepos <= vpos) {
                         
                         var list = que.Content.Split(new char[] { ' ' }, 2);
                         var command = list[0];
                         var args = list.Length == 2 ? list[1] : "";
-
+                        
                         que.Done = true;
+                        switch(command) {
+                            case "/perm":
+                                Owner.PermAria = args;
+                                break;
+                            case "/cls":
+                            case "/clear":
+                                Owner.PermAria = "ニコニコ生放送";
+                                break;
 
-                        InvokeScript("AsCommandExcute", command, que.Vpos, args);
+                            default:
+                                InvokeScript("AsCommandExcute", command, que.Vpos, args);
+                                break;
+                        }
+                        Console.WriteLine("Command:" + que.Content);
+
                     }
                 }
             }

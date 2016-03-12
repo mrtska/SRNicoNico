@@ -48,6 +48,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //タイムシフト試聴か否か
         public bool Archive { get; set; }
 
+        //視聴者のユーザーID
+        public string UserId { get; set; }
+
         //生放送サムネイル チャンネル/コミュニティのサムネイルとは限らないかも？
         public string ThumbNailUrl { get; set; }
 
@@ -65,7 +68,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //コメントサーバーURL
         public string MesseageServerUrl { get; set; }
-        public string MesseageServerPort { get; set; }
+        public int MesseageServerPort { get; set; }
         public string CommentServerUrl {
             get {
                 return MesseageServerUrl + ":" + MesseageServerPort;

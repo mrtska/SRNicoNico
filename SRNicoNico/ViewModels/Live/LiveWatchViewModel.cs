@@ -27,7 +27,24 @@ namespace SRNicoNico.ViewModels {
 
         private NicoNicoLive LiveInstance;
 
+        private NicoNicoLiveComment LiveCommentInstance;
+
         public LiveFlashHandler Handler;
+
+
+        #region PermAria変更通知プロパティ
+        private string _PermAria = "ニコニコ生放送";
+
+        public string PermAria {
+            get { return _PermAria; }
+            set { 
+                if(_PermAria == value)
+                    return;
+                _PermAria = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
 
         #region Content変更通知プロパティ
@@ -107,6 +124,18 @@ namespace SRNicoNico.ViewModels {
 
         private LiveViewModel Owner;
 
+        public new string Status {
+
+            get {
+                return Owner.Status;
+            }
+            set {
+
+                Owner.Status = value;
+            }
+
+        }
+
 
         public LiveWatchViewModel(LiveViewModel vm, NicoNicoLive instance, NicoNicoLiveContent content) {
 
@@ -121,11 +150,18 @@ namespace SRNicoNico.ViewModels {
 
         public async void Initialize() {
 
+            while(DescriptionBrowser == null) {
+
+                Thread.Sleep(1);
+            }
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
+                DescriptionBrowser.NavigateToString(Content.Description);
                 Handler.LoadMovie();
                 
             }));
+            LiveCommentInstance = new NicoNicoLiveComment(Content.GetPlayerStatus.MesseageServerUrl, Content.GetPlayerStatus.MesseageServerPort, Content.GetPlayerStatus);
+
            OpenVideo();
         }
         
@@ -134,20 +170,17 @@ namespace SRNicoNico.ViewModels {
             var json = Content.GetPlayerStatus.ToJson();
             Handler.InvokeScript("AsOpenVideo", Content.GetPlayerStatus.RtmpUrl, json);
         }
-
-        public void Refresh() {
-
-            Task.Run(() => Initialize());
-        }
-
+    
         protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
 
             if(disposing) {
 
-                Handler.DisposeHandler();
-                DescriptionBrowser.Dispose();
-                App.ViewModelRoot.RemoveTabAndLastSet(this);
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+                    Handler.DisposeHandler();
+                    App.ViewModelRoot.RemoveTabAndLastSet(Owner);
+                }));
             }
         }
 
@@ -163,7 +196,7 @@ namespace SRNicoNico.ViewModels {
                 Dispose();
             } else if(e.Key == Key.F5) {
 
-                Refresh();
+                Owner.Refresh();
             }
         }
 

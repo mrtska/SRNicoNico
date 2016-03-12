@@ -32,7 +32,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Background="#FF222222">
-                <TextBlock Text="ニコニコ生放送" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding PermAria}" TextWrapping="Wrap" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
 
             <ContentControl Grid.Row="1" Content="{Binding LiveFlash}"/>

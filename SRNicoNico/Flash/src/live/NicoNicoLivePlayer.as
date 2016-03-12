@@ -35,6 +35,10 @@ package live {
 		
 		private var baseTime:Number;
 		
+		private var publishUrl:String;
+		private var publishVpos:int;
+		
+		private var offset:int;
 		private var vpos:int;
 		
 		private var vposTimer:Timer;
@@ -130,16 +134,13 @@ package live {
 			
 			this.maxVpos = (int(getPlayerStatus.EndTime) - int(getPlayerStatus.StartTime)) * 100;
 			this.minVpos = 0;
-			
+			this.offset = int(getPlayerStatus.StartTime) - int(getPlayerStatus.BaseTime);
 			this.baseTime = new Date().getTime();
 			
-			ExternalInterface.call("hoge" + this.maxVpos);
-	
 
 			this.vposTimer = new Timer(25);
 			this.vposTimer.addEventListener(TimerEvent.TIMER, onTick);
 			this.vposTimer.start();
-			
 			
 		}
 		
@@ -149,17 +150,26 @@ package live {
 			var vpos:int = int(vposs);
 			
 			switch(cmd) {
-				case "/publish":
+				case "/publish":	//URLを指定
 					var id:String = args[0];
 					var url:String = args[1];
 					
 					if (url.match(/(.*)\.(f4v|mp4)$/i)) {
 						
-						ExternalInterface.call("funge"  + url);
-						stream.play("mp4:" + url, -2);
-						stream.seek(300);
+						publishUrl = "mp4:" + url;
+						publishVpos = vpos;
 					}
 					
+					break;
+				case "/play":	//以前またはその後にpublishコマンドで指定されたURLを再生する
+					
+					var offset:int = (this.vpos - publishVpos) / 100;
+					if (offset < 0) {
+						
+						offset = 0;
+					}
+7
+					stream.play(publishUrl, this.offset + offset);
 					break;
 				
 			}
@@ -167,6 +177,7 @@ package live {
 		}
 		
 		public override function Pause():void {
+			
 			
 			vposTimer.stop();
 		}
@@ -194,7 +205,7 @@ package live {
 			
 			var now:Date = new Date();
 			vpos = (now.getTime() - this.baseTime) / 10;
-			ExternalInterface.call("CsFrame", vpos.toString());
+			ExternalInterface.call("CsFrame", int(stream.time * 100 + offset * 100).toString());
 
 			
 			//rasterizer.render(vpos);

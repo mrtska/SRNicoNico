@@ -62,7 +62,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     xmldoc.LoadHtml2(xml);
 
                     var stream = xmldoc.DocumentNode.SelectSingleNode("//stream");
-
+                    
                     var status = new NicoNicoGetPlayerStatus();
                     
                     status.Id = stream.SelectSingleNode("id").InnerText;
@@ -121,12 +121,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     status.RoomLabel = xmldoc.DocumentNode.SelectSingleNode("//user/room_label").InnerText;
                     status.SeetNumber = xmldoc.DocumentNode.SelectSingleNode("//user/room_seetno").InnerText;
+                    status.UserId = xmldoc.DocumentNode.SelectSingleNode("//user/user_id").InnerText;
 
                     status.RtmpUrl = xmldoc.DocumentNode.SelectSingleNode("//rtmp/url").InnerText;
                     status.Ticket = xmldoc.DocumentNode.SelectSingleNode("//rtmp/ticket").InnerText;
 
                     status.MesseageServerUrl = xmldoc.DocumentNode.SelectSingleNode("//ms/addr").InnerText;
-                    status.MesseageServerPort = xmldoc.DocumentNode.SelectSingleNode("//ms/port").InnerText;
+                    status.MesseageServerPort = int.Parse(xmldoc.DocumentNode.SelectSingleNode("//ms/port").InnerText);
                     status.ThreadId = xmldoc.DocumentNode.SelectSingleNode("//ms/thread").InnerText;
 
 
