@@ -111,5 +111,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //コマンド
         public string Content { get; set; }
+
+        //そのコマンドを叩き終わったかどうか
+        public bool Done { get; set; }
     }
 }

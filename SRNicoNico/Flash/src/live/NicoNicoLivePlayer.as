@@ -44,6 +44,11 @@ package live {
 		
 		public function NicoNicoLivePlayer() {
 			
+			if (ExternalInterface.available) {
+				
+				ExternalInterface.addCallback("AsCommandExcute", CommandExcute);
+			}
+			
 			//OpenVideo("rtmp://nlaoe115.live.nicovideo.jp:1935/fileorigin/04", "{\"Ticket\": \"23425727:lv254486518:0:1457695076:725986265f52e95e\"}");
 		}
 		
@@ -136,27 +141,31 @@ package live {
 			this.vposTimer.start();
 			
 			
-			//タイムシフト
-			if (getPlayerStatus.Archive) {
-				
-				
-				for each(var que:Object in getPlayerStatus.QueSheet) {
+		}
+		
+		private function CommandExcute(cmd:String, vposs:String, arg:String):void {
+			
+			var args:Array = arg.split(" ");
+			var vpos:int = int(vposs);
+			
+			switch(cmd) {
+				case "/publish":
+					var id:String = args[0];
+					var url:String = args[1];
 					
-					if (String(que.Content).indexOf("/publish") === 0) {
+					if (url.match(/(.*)\.(f4v|mp4)$/i)) {
 						
-						
+						ExternalInterface.call("funge"  + url);
+						stream.play("mp4:" + url, -2);
+						stream.seek(300);
 					}
-				}
-			} else {
-				
+					
+					break;
 				
 			}
 			
-			
-			
-
-
 		}
+		
 		public override function Pause():void {
 			
 			vposTimer.stop();
@@ -184,24 +193,9 @@ package live {
 			*///タイムシフト
 			
 			var now:Date = new Date();
-			var vpos:int = (now.getTime() - this.baseTime) / 10;
+			vpos = (now.getTime() - this.baseTime) / 10;
 			ExternalInterface.call("CsFrame", vpos.toString());
 
-			
-			if (getPlayerStatus.Archive) {
-				
-				for each(var que:Object in getPlayerStatus.QueSheet) {
-					
-					
-				}
-				
-				
-				//stream.play("lv255589164_23425727");
-			} else {
-				
-				
-			}
-			
 			
 			//rasterizer.render(vpos);
 		}
@@ -225,7 +219,6 @@ package live {
 				break;
 			default:
 				
-				trace("default:" + e.info.code);
 				break;
 			}
 			
@@ -236,7 +229,6 @@ package live {
 			ExternalInterface.call("AsyncError");
 			trace("onAsyncError");
 			
-			trace(e.text);
 		}
 		
 		private function onConnect(e:NetStatusEvent):void {

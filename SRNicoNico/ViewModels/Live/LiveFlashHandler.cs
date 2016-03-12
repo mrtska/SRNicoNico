@@ -81,9 +81,36 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public void CsFrame(string vpos) {
+        public void CsFrame(string vposs) {
 
-            Console.WriteLine("hogehoge frame: " + vpos);
+            var vpos = int.Parse(vposs);
+
+            if(Owner.Content.Type == LivePageType.TimeShift) {
+
+                foreach(var que in Owner.Content.GetPlayerStatus.QueSheet) {
+                    
+                    //終わってたら次へ
+                    if(que.Done) {
+
+                        continue;
+                    }
+
+                    var quepos = int.Parse(que.Vpos);
+
+                    if(quepos <= vpos) {
+                        
+                        var list = que.Content.Split(new char[] { ' ' }, 2);
+                        var command = list[0];
+                        var args = list.Length == 2 ? list[1] : "";
+
+                        que.Done = true;
+
+                        InvokeScript("AsCommandExcute", command, que.Vpos, args);
+                    }
+                }
+            }
+
+            //Console.WriteLine("hogehoge frame: " + vposs);
         }
 
 
