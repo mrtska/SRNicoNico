@@ -27,7 +27,7 @@ namespace SRNicoNico.ViewModels {
 
         private NicoNicoLive LiveInstance;
 
-        private NicoNicoLiveComment LiveCommentInstance;
+        internal NicoNicoLiveComment LiveCommentInstance;
 
         public LiveFlashHandler Handler;
 
@@ -160,7 +160,7 @@ namespace SRNicoNico.ViewModels {
                 Handler.LoadMovie();
                 
             }));
-            LiveCommentInstance = new NicoNicoLiveComment(Content.GetPlayerStatus.MesseageServerUrl, Content.GetPlayerStatus.MesseageServerPort, Content.GetPlayerStatus);
+            LiveCommentInstance = new NicoNicoLiveComment(Content.GetPlayerStatus.MesseageServerUrl, Content.GetPlayerStatus.MesseageServerPort, this);
 
            OpenVideo();
         }

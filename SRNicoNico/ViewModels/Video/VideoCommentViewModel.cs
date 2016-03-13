@@ -207,7 +207,7 @@ namespace SRNicoNico.ViewModels {
 
                 //公式動画は184を付けて投稿出来ない
                 if(Use184 && !Owner.VideoData.ApiData.IsOfficial) {
-
+                    
                     mail += " 184";
                 }
                 var no = Owner.CommentInstance.Post(Text, mail, Vpos);
@@ -219,7 +219,6 @@ namespace SRNicoNico.ViewModels {
                     entry.Mail = Mail;
                     entry.Vpos = Vpos;
                     entry.Content = Text;
-                    var json = entry.ToJson();
 
                     Owner.Proxy.Call("AsInjectMyComment", entry.ToJson());
                     Text = "";

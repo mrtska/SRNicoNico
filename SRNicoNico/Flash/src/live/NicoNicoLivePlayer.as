@@ -15,6 +15,7 @@ package live {
 	 * ...
 	 * @author mrtska
 	 */
+	[SWF(width="640", height="360")]
 	public class NicoNicoLivePlayer extends NicoNicoPlayerBase {
 		
 		//放送URL rtmp
@@ -169,7 +170,7 @@ package live {
 						offset = 0;
 					}
 7
-					stream.play(publishUrl, this.offset + offset);
+					stream.play(publishUrl, offset);
 					break;
 				
 			}
@@ -204,11 +205,11 @@ package live {
 			*///タイムシフト
 			
 			var now:Date = new Date();
-			vpos = (now.getTime() - this.baseTime) / 10;
-			ExternalInterface.call("CsFrame", int(stream.time * 100 + offset * 100).toString());
+			vpos = int(stream.time * 100 + offset * 100);
+			ExternalInterface.call("CsFrame", int((stream.time * 1000 + offset * 1000) / 10).toString());
 
 			
-			//rasterizer.render(vpos);
+			rasterizer.render(vpos);
 		}
 		
 		

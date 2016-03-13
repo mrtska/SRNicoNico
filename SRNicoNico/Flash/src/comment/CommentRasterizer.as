@@ -53,11 +53,20 @@ package comment {
 				commentList.push(new CommentEntry(obj.No, obj.Vpos, obj.Mail, obj.Content, false, obj.Score));
 			}
 		}
+		public function loadOneComment(string:String):void {
+			
+			var obj:Object = JSON.parse(string);
+			commentList.push(new CommentEntry(obj.No, obj.Vpos, obj.Mail, obj.Content, false, obj.Score));
+			
+		}
+		
+		
+		
 
 		public function render(vpos:Number):void {
 			
 			
-			for(var i:int = nextIndex; i < commentList.length; i++) {
+			for(var i:int = 0; i < commentList.length; i++) {
 				
 				var target:CommentEntry = commentList[i];
 				

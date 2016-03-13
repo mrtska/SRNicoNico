@@ -40,6 +40,7 @@ package {
 				ExternalInterface.addCallback("AsResume", Resume);
 				ExternalInterface.addCallback("AsSeek", Seek);
 				ExternalInterface.addCallback("AsInjectComment", InjectComment);
+				ExternalInterface.addCallback("AsInjectOneComment", InjectOneComment);
 				ExternalInterface.addCallback("AsInjectUploaderComment", InjectUploaderComment);
 				ExternalInterface.addCallback("AsToggleComment", ToggleComment);
 				ExternalInterface.addCallback("AsInjectMyComment", InjectMyComment);
@@ -112,6 +113,11 @@ package {
 		
 				
 			rasterizer.loadComment(json);
+		}
+		public function InjectOneComment(json:String):void {
+		
+				
+			rasterizer.loadOneComment(json);
 		}
 		public function InjectMyComment(json:String):void {
 		

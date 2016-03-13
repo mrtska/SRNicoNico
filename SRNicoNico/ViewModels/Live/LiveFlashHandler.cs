@@ -84,7 +84,9 @@ namespace SRNicoNico.ViewModels {
         public void CsFrame(string vposs) {
             
             var vpos = int.Parse(vposs);
-            Owner.Status = vposs;
+
+            Owner.LiveCommentInstance.Vpos = vpos;
+            Owner.Status = vposs + " " + GetTimeFromVpos(vpos) + " " + (int.Parse(Owner.Content.GetPlayerStatus.BaseTime) + vpos / 100);
             if(Owner.Content.Type == LivePageType.TimeShift) {
 
                 foreach(var que in Owner.Content.GetPlayerStatus.QueSheet) {
@@ -127,6 +129,25 @@ namespace SRNicoNico.ViewModels {
         }
 
 
+        private string GetTimeFromVpos(int vpos) {
+
+            //秒に直す
+            vpos /= 100;
+
+            //マイナス部分
+            var basetime = int.Parse(Owner.Content.GetPlayerStatus.StartTime) - int.Parse(Owner.Content.GetPlayerStatus.BaseTime);
+
+            //マイナス部分を引く
+            vpos -= basetime;
+
+            var time = new TimeSpan(0, 0, vpos);
+
+
+
+
+
+            return time.ToString();
+        }
 
 
         //ASを呼ぶ

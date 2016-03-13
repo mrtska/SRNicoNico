@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 
@@ -15,81 +16,103 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         public event EventHandler<SocketAsyncEventArgs> OnConnect;
         public event EventHandler<XmlSocketReceivedEventArgs> XmlReceive;
 
+        public bool IsConnected {
+            get {
 
+                return Socket.Connected;
+            }
+        }
 
         private string Host;
         private int Port;
 
         public XmlSocket(string host, int port) {
 
-            Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
             Host = host;
             Port = port;
         }
 
         public void Connect() {
 
-            var args = new SocketAsyncEventArgs();
-            
-            args.Completed += OnConnect;
-            args.RemoteEndPoint = new DnsEndPoint(Host, Port);
+            if(Socket != null) {
 
-            Socket.ConnectAsync(args);
+                Socket.Close();
+            }
+            Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            
+            Socket.Connect(Host, Port);
         }
 
 
 
         public void Send(string xml) {
 
-            var args = new SocketAsyncEventArgs();
-            var data = Encoding.UTF8.GetBytes(xml + "\0");
+            var data = Encoding.UTF8.GetBytes(xml + '\0');
 
-            args.SetBuffer(data, 0, data.Length);
-
-            Socket.SendAsync(args);
-
+            Socket.Send(data);
         }
 
         private byte[] Buffer = new byte[1024];
 
-        public void RecursiveReceive(StringBuilder sb) {
+        public void RecursiveReceive(MemoryStream stream) {
+
+            if(!Socket.Connected) {
+
+                return;
+            }
 
             var args = new SocketAsyncEventArgs();
 
-            args.UserToken = sb;
+            args.UserToken = stream;
             args.SetBuffer(Buffer, 0, Buffer.Length);
             args.Completed += OnReceive;
 
-            Socket.ReceiveAsync(args);
+            if(!Socket.ReceiveAsync(args)) {
+
+                ;
+            }
         }
 
         private void OnReceive(object sender, SocketAsyncEventArgs e) {
 
-            var sb = e.UserToken as StringBuilder;
+            var stream = e.UserToken as MemoryStream;
 
             for(int i = 0; i < e.BytesTransferred; i++) {
 
-                char c = (char)e.Buffer[i];
-                if(c != '\0') {
+                
+                var c = e.Buffer[i];
+                if(c != 0) {
 
-                    sb.Append(c);
+                    stream.WriteByte(c);
                 } else {
 
                     if(XmlReceive != null) {
+                        var text = new string(Encoding.UTF8.GetChars(stream.ToArray()));
+                        if(text.StartsWith("<")) {
 
-                        XmlReceive(this, new XmlSocketReceivedEventArgs(sb.ToString()));
+                            XmlReceive(this, new XmlSocketReceivedEventArgs(text));
+                        }
                     }
-                    sb.Clear();
+                    stream.SetLength(0);
                 }
+                e.Buffer[i] = 0;
             }
-            RecursiveReceive(sb);
+            e.Dispose();
+            RecursiveReceive(stream);
+        }
+
+        public void Disconnect() {
+
+            if(Socket.Connected) {
+
+                Socket.Disconnect(true);
+            }
         }
 
 
-
-
         void IDisposable.Dispose() {
-            Socket.Dispose();
+
+            Socket?.Dispose();
         }
     }
 
