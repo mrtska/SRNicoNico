@@ -299,6 +299,9 @@
       <DependentUpon>FavoriteUser.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\Live\NotifyLiveViewModel.cs" />
+    <Compile Include="Views\Contents\Live\FullScreenWindow.xaml.cs">
+      <DependentUpon>FullScreenWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Live\LiveWatch.xaml.cs">
       <DependentUpon>LiveWatch.xaml</DependentUpon>
     </Compile>
@@ -319,6 +322,12 @@
     </Compile>
     <Compile Include="Views\Contents\Live\LiveFlash.xaml.cs">
       <DependentUpon>LiveFlash.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Live\LiveController.xaml.cs">
+      <DependentUpon>LiveController.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Live\WindowedWindow.xaml.cs">
+      <DependentUpon>WindowedWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Log\AccessLog.xaml.cs">
       <DependentUpon>AccessLog.xaml</DependentUpon>
@@ -554,6 +563,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Contents\Live\FullScreenWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Contents\Live\LiveWatch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -579,6 +592,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Live\LiveFlash.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Live\LiveController.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Live\WindowedWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

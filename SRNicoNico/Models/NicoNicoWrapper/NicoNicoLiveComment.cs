@@ -222,9 +222,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //マイナス部分を引く
             vpos -= basetime;
 
-            var time = new TimeSpan(0, 0, vpos);
+            var time = new TimeSpan(0, 0, vpos).ToString();
 
-            return time.ToString();
+            if(time.StartsWith("00:")) {
+
+                time = time.Substring(3);
+            }
+
+            return time;
         }
 
     }

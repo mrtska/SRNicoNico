@@ -20,6 +20,11 @@
              d:DataContext="{d:DesignInstance {x:Type vm:LiveViewModel}}"
              DataContextChanged="UserControl_DataContextChanged"
              >
+    <i:Interaction.Triggers>
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger}">
+            <l:TransitionInteractionMessageAction/>
+        </l:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -29,6 +34,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Background="#FF222222">
@@ -36,7 +42,8 @@
             </Grid>
 
             <ContentControl Grid.Row="1" Content="{Binding LiveFlash}"/>
-            <WebBrowser Grid.Row="2" x:Name="desc" Navigating="desc_Navigating" />
+            <ContentControl Grid.Row="2" Content="{Binding Controller}"/>
+            <WebBrowser Grid.Row="3" x:Name="desc" Navigating="desc_Navigating" />
         </Grid>
         <Grid Grid.Column="1">
 

@@ -80,7 +80,11 @@ namespace SRNicoNico.ViewModels {
                     break;
             }
         }
-        
+
+        internal void Seek(int ans) {
+            throw new NotImplementedException();
+        }
+
         public void CsFrame(string vposs) {
             
             var vpos = int.Parse(vposs);
@@ -141,11 +145,6 @@ namespace SRNicoNico.ViewModels {
             vpos -= basetime;
 
             var time = new TimeSpan(0, 0, vpos);
-
-
-
-
-
             return time.ToString();
         }
 
