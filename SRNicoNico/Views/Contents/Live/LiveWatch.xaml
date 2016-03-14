@@ -39,6 +39,12 @@
             <WebBrowser Grid.Row="2" x:Name="desc" Navigating="desc_Navigating" />
         </Grid>
         <Grid Grid.Column="1">
+
+            <Grid.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="TextTrimming" Value="CharacterEllipsis"></Setter>
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
@@ -56,9 +62,38 @@
 
                 </StackPanel>
             </Border>
-            <StackPanel>
 
-            </StackPanel>
+            <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding CommentList}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <i:Interaction.Behaviors>
+                    <b:DataGridAutoScrollBehavior />
+                </i:Interaction.Behaviors>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Content}" IsReadOnly="True" CanUserSort="False" Header="コメント" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                <Setter Property="ToolTipService.ShowDuration" Value="0x7FFFFFFF" />
+                                <Setter Property="ToolTip">
+                                    <Setter.Value>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} ({1})">
+                                                    <Binding Path="Content"/>
+                                                    <Binding Path="Date" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+
+                    </DataGridTextColumn>
+
+                </DataGrid.Columns>
+            </DataGrid>
+
+
 
         </Grid>
         

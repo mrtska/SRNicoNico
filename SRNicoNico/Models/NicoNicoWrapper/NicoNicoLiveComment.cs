@@ -193,19 +193,39 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     comment.Mail = chat.Attributes["mail"] != null ? chat.Attributes["mail"].Value : "";
                     comment.Score = chat.Attributes["score"] != null ? int.Parse(chat.Attributes["score"].Value) : 0;
                     comment.UserId = chat.Attributes["user_id"].Value;
-                    comment.Date = int.Parse(chat.Attributes["date"].Value);
+                    comment.Date = GetTimeFromVpos(comment.Vpos);
                     comment.Content = chat.InnerText;
 
+                    Owner.CommentList.Add(comment);
                     Handler.InvokeScript("AsInjectOneComment", comment.ToJson());
+
                 }
 
             } catch(XmlException) {
 
                 return;
             }
-
-
-
         }
+
+        private string GetTimeFromVpos(string vpos) {
+
+            return GetTimeFromVpos(int.Parse(vpos));
+        }
+        private string GetTimeFromVpos(int vpos) {
+
+            //秒に直す
+            vpos /= 100;
+
+            //マイナス部分
+            var basetime = int.Parse(Owner.Content.GetPlayerStatus.StartTime) - int.Parse(Owner.Content.GetPlayerStatus.BaseTime);
+
+            //マイナス部分を引く
+            vpos -= basetime;
+
+            var time = new TimeSpan(0, 0, vpos);
+
+            return time.ToString();
+        }
+
     }
 }

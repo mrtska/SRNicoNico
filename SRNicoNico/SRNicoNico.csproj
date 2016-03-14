@@ -266,6 +266,7 @@
     <Compile Include="ViewModels\Video\VideoMylistViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoTagViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoViewModel.cs" />
+    <Compile Include="Views\Behaviors\DataGridAutoScrollBehavior.cs" />
     <Compile Include="Views\Behaviors\ListBoxAutoScrollBehavior.cs" />
     <Compile Include="Views\Contents\Community\Community.xaml.cs">
       <DependentUpon>Community.xaml</DependentUpon>

@@ -288,7 +288,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 
                 entry.No = attr["no"].Value;
                 entry.Vpos = attr["vpos"].Value;
-                entry.Date = long.Parse(attr["date"].Value);
+                entry.Date = attr["date"].Value;
                 entry.UserId = attr.Contains("user_id") ? attr["user_id"].Value : "contributor";
                 entry.Mail = attr.Contains("mail") ? attr["mail"].Value : "";
                 entry.Content = HttpUtility.HtmlDecode(node.InnerText);
@@ -318,7 +318,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		public string Content { get; set; }
 
 		//投稿日時 Unixタイム
-		public long Date { get; set; }
+		public string Date { get; set; }
 
         //NGスコア
         public int Score { get; set; }

@@ -47,6 +47,21 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region CommentList変更通知プロパティ
+        private DispatcherCollection<NicoNicoCommentEntry> _CommentList = new DispatcherCollection<NicoNicoCommentEntry>(DispatcherHelper.UIDispatcher);
+
+        public DispatcherCollection<NicoNicoCommentEntry> CommentList {
+            get { return _CommentList; }
+            set { 
+                if(_CommentList == value)
+                    return;
+                _CommentList = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         #region Content変更通知プロパティ
         private NicoNicoLiveContent _Content;
 
