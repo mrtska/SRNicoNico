@@ -76,7 +76,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 NicoNicoHistoryData data = new NicoNicoHistoryData();
 
                 //---各種情報取得---
-                data.ThumbnailUrl = node.SelectSingleNode("child::div[@class='thumbContainer']/a/img").Attributes["src"].Value;
+                data.ThumbnailUrl = node.SelectSingleNode("child::div[@class='thumbContainer']/a/img").Attributes["data-original"].Value;
 
                 //削除されていない動画だったら
                 if(!data.ThumbnailUrl.Contains("deleted")) {

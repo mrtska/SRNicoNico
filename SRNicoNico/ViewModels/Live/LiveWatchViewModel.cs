@@ -258,6 +258,8 @@ namespace SRNicoNico.ViewModels {
 
         private LiveViewModel Owner;
 
+        private LiveCommentViewModel Comment;
+
         public new string Status {
 
             get {
@@ -303,7 +305,14 @@ namespace SRNicoNico.ViewModels {
             Time = new VideoTime();
 
 
-           OpenVideo();
+            Time.VideoTimeString = NicoNicoUtil.GetTimeFromVpos(Content.GetPlayerStatus, (int.Parse(Content.GetPlayerStatus.EndTime) - int.Parse(Content.GetPlayerStatus.BaseTime)) * 100);
+            Time.Length = int.Parse(Content.GetPlayerStatus.EndTime) - int.Parse(Content.GetPlayerStatus.BaseTime);
+            Time.BufferedTime = Time.Length;
+
+            Comment = new LiveCommentViewModel(this);
+
+
+            OpenVideo();
         }
         
         public void OpenVideo() {
@@ -389,6 +398,20 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+
+        private int PrevVolume;
+        public void ToggleMute() {
+            
+            IsMute ^= true;
+            if(IsMute) {
+
+                PrevVolume = Volume;
+                Volume = 0;
+            } else {
+
+                Volume = PrevVolume;
+            }
+        }
         //フルスクリーン切り替え
         public void ToggleFullScreen() {
 
@@ -400,23 +423,129 @@ namespace SRNicoNico.ViewModels {
                 GoToFullScreen();
             }
         }
+        public void FocusComment() {
 
+            if(Comment.CanComment) {
+
+                if(IsFullScreen) {
+
+                    Comment.IsPopupOpen = true;
+                    FullScreenContoller.FocusComment();
+                } else {
+
+                    Comment.IsPopupOpen = true;
+                    Controller.FocusComment();
+                }
+            }
+        }
+
+
+        //一時停止切り替え
+        public void TogglePlay() {
+
+            if(IsPlaying) {
+
+                Handler.Pause();
+            } else {
+
+                Handler.Resume();
+            }
+        }
+
+
+        public void ToggleComment() {
+
+            CommentVisibility ^= true;
+            Properties.Settings.Default.CommentVisibility = CommentVisibility;
+            Properties.Settings.Default.Save();
+            Handler.InvokeScript("AsToggleComment");
+        }
+        //最初から
+        public void Restart() {
+
+            Handler.Seek(0);
+        }
         public void Close() {
 
             Dispose();
         }
-
         public override void KeyDown(KeyEventArgs e) {
 
-            if(e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.W) {
+            Console.WriteLine("KeyDown:" + e.Key);
+            if(Comment.IsPopupOpen) {
 
-                Dispose();
-            } else if(e.Key == Key.F5) {
+                if(e.Key == Key.Enter) {
 
-                Owner.Refresh();
+                    if(e.KeyboardDevice.Modifiers == ModifierKeys.Shift) {
+
+                        Comment.AcceptEnter = true;
+                    } else {
+
+                        Comment.AcceptEnter = false;
+                        Comment.Post();
+                    }
+                } else if(e.Key == Key.Escape) {
+
+                    Comment.IsPopupOpen = false;
+                }
+                return;
+            }
+            if(IsFullScreen) {
+
+                switch(e.Key) {
+                    case Key.Space:
+                        TogglePlay();
+                        break;
+                    case Key.Escape:
+                        ToggleFullScreen();
+                        break;
+                    case Key.S:
+                        Restart();
+                        break;
+                    case Key.C:
+                        ToggleComment();
+                        break;
+                    case Key.M:
+                        ToggleMute();
+                        break;
+                    case Key.Enter:
+                        FocusComment();
+                        break;
+                }
+            } else {
+                switch(e.Key) {
+                    case Key.Space:
+                        TogglePlay();
+                        break;
+                    case Key.F:
+                        ToggleFullScreen();
+                        break;
+                    case Key.S:
+                        Restart();
+                        break;
+                    case Key.C:
+                        ToggleComment();
+                        break;
+                    case Key.M:
+                        ToggleMute();
+                        break;
+                    case Key.F5:
+                        Owner.Refresh();
+                        break;
+                    case Key.Enter:
+                        FocusComment();
+                        break;
+                }
+                //Ctrl+Wで閉じる
+                if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
+
+                    if(e.Key == Key.W) {
+
+                        Close();
+                    }
+                }
             }
         }
-
 
     }
 }

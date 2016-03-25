@@ -60,7 +60,35 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			return munites + ":" + seconds;
 		}
-        
+
+
+        public static string GetTimeFromVpos(NicoNicoGetPlayerStatus status, string vpos) {
+
+            return GetTimeFromVpos(status, int.Parse(vpos));
+        }
+
+
+        public static string GetTimeFromVpos(NicoNicoGetPlayerStatus status, int vpos) {
+
+            //秒に直す
+            vpos /= 100;
+
+            //マイナス部分
+            var basetime = int.Parse(status.StartTime) - int.Parse(status.BaseTime);
+
+            //マイナス部分を引く
+            vpos -= basetime;
+
+            var time = new TimeSpan(0, 0, vpos).ToString();
+
+            if(time.StartsWith("00:")) {
+
+                time = time.Substring(3);
+            }
+
+            return time;
+        }
+
         public static string DateFromVitaFormatDate(string date) {
             return Regex.Replace(date, @"(\d\d\d\d-\d\d-\d\d).(\d\d:\d\d:\d\d).\d\d:\d\d", "$1 $2");
         }

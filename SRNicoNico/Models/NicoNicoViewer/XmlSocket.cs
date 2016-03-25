@@ -13,7 +13,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         private Socket Socket;
 
-        public event EventHandler<SocketAsyncEventArgs> OnConnect;
         public event EventHandler<XmlSocketReceivedEventArgs> XmlReceive;
 
         public bool IsConnected {

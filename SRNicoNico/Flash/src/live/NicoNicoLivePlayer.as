@@ -5,6 +5,7 @@ package live {
 	import flash.events.TimerEvent;
 	import flash.external.ExternalInterface;
 	import flash.geom.Rectangle;
+	import flash.media.SoundTransform;
 	import flash.media.StageVideo;
 	import flash.media.Video;
 	import flash.net.NetConnection;
@@ -187,6 +188,16 @@ package live {
 			vposTimer.start();
 			
 		}
+		
+		
+		public override function ChangeVolume(vol:Number):void {
+			
+			if (stream) {
+				
+				stream.soundTransform = new SoundTransform(vol);
+			}
+		}
+
 		
 		
 		private var prevTime:int = 0;

@@ -53,8 +53,16 @@ namespace SRNicoNico.Views.Contents.Video {
 
             if(IsDrag) {
 
-                VideoViewModel vm = (VideoViewModel)DataContext;
-                vm.Volume = ans;
+                if(DataContext is VideoViewModel) {
+
+                    var vm = (VideoViewModel)DataContext;
+                    vm.Volume = ans;
+                } else if(DataContext is LiveWatchViewModel) {
+
+                    var vm = (LiveWatchViewModel)DataContext;
+                    vm.Volume = ans;
+                }
+
             }
 
         }

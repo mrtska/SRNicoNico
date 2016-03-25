@@ -24,7 +24,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <controls:SeekBar x:Name="Seek" BufferedTime="{Binding Time.BufferedTime}" VideoTime="{Binding VideoData.ApiData.Length}" CurrentTime="{Binding Time.CurrentTime}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter" MouseLeftButtonUp="Seek_MouseLeftButtonUp"  />
+        <controls:SeekBar x:Name="Seek" BufferedTime="{Binding Time.BufferedTime}" VideoTime="{Binding Time.Length}" CurrentTime="{Binding Time.CurrentTime}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter" MouseLeftButtonUp="Seek_MouseLeftButtonUp"  />
         <StackPanel Grid.Row="1" Orientation="Horizontal" >
             <mui:ModernButton Margin="10,0,0,0" EllipseDiameter="36" IconWidth="20" IconHeight="20" Focusable="False">
                 <mui:ModernButton.Style>
@@ -76,7 +76,7 @@
             </mui:ModernButton>
 
             <local:VolumeBar Margin="10,0,0,0"/>
-            <Popup x:Name="popup" Focusable="False" DataContext="{Binding Comment}" d:DataContext="{d:DesignInstance {x:Type vm:VideoCommentViewModel}}" AllowsTransparency="True" PopupAnimation="Slide" IsOpen="{Binding IsPopupOpen,Mode=TwoWay}" Placement="Bottom" StaysOpen="False" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}" Opened="popup_Opened">
+            <Popup x:Name="popup" Focusable="False" DataContext="{Binding Comment}" d:DataContext="{d:DesignInstance {x:Type vm:LiveCommentViewModel}}" AllowsTransparency="True" PopupAnimation="Slide" IsOpen="{Binding IsPopupOpen,Mode=TwoWay}" Placement="Bottom" StaysOpen="False" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}" Opened="popup_Opened">
                 <local:VideoComment x:Name="comment" Opacity="0.8" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=ActualWidth}"/>
             </Popup>
             <Button Content="コメントする" ToolTip="コメントする (Enter)" VerticalAlignment="Center" Margin="10,0,0,0" IsEnabled="{Binding Comment.CanComment}" Focusable="False">

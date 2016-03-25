@@ -235,6 +235,7 @@
     <Compile Include="ViewModels\Live\LiveGateViewModel.cs" />
     <Compile Include="ViewModels\Live\LiveWatchViewModel.cs" />
     <Compile Include="ViewModels\Live\LiveViewModel.cs" />
+    <Compile Include="ViewModels\Live\LiveCommentViewModel.cs" />
     <Compile Include="ViewModels\Log\AccessLogEntryViewModel.cs" />
     <Compile Include="ViewModels\Log\AccessLogViewModel.cs" />
     <Compile Include="ViewModels\History\HistoryViewModel.cs" />

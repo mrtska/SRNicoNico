@@ -38,6 +38,23 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 		}
         #endregion
 
+
+        #region Length変更通知プロパティ
+        private long _Length;
+
+        public long Length {
+            get { return _Length; }
+            set { 
+                if(_Length == value)
+                    return;
+                _Length = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
         //動画時間
         #region VideoTimeString変更通知プロパティ
         private string _VideoTimeString;

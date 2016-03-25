@@ -917,7 +917,7 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        public override void KeyDown(KeyEventArgs e) {
+       public override void KeyDown(KeyEventArgs e) {
 
             Console.WriteLine("KeyDown:" + e.Key);
             if(Comment.IsPopupOpen) {

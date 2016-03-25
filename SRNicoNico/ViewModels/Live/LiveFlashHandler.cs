@@ -81,9 +81,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        internal void Seek(int ans) {
-            throw new NotImplementedException();
-        }
 
         public void CsFrame(string vposs) {
             
@@ -91,6 +88,9 @@ namespace SRNicoNico.ViewModels {
 
             Owner.LiveCommentInstance.Vpos = vpos;
             Owner.Status = vposs + " " + GetTimeFromVpos(vpos) + " " + (int.Parse(Owner.Content.GetPlayerStatus.BaseTime) + vpos / 100);
+            Owner.Time.CurrentTimeString = GetTimeFromVpos(vpos);
+            Owner.Time.CurrentTime = vpos / 100;
+
             if(Owner.Content.Type == LivePageType.TimeShift) {
 
                 foreach(var que in Owner.Content.GetPlayerStatus.QueSheet) {
@@ -146,6 +146,21 @@ namespace SRNicoNico.ViewModels {
 
             var time = new TimeSpan(0, 0, vpos);
             return time.ToString();
+        }
+
+        public void Pause() {
+
+            InvokeScript("");
+        }
+
+        public void Resume() {
+
+            InvokeScript("");
+        }
+
+
+        public void Seek(int vpos) {
+
         }
 
 

@@ -66,23 +66,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             XmlSocket = new XmlSocket(host, port);
             XmlSocket.XmlReceive += OnReceive;
-            XmlSocket.OnConnect += OnConnect;
 
             if(Status.Archive) {
 
                 ResFrom = -1000;
-            }
-        }
-
-
-
-        private void OnConnect(object sender, SocketAsyncEventArgs e) {
-
-            if(e.SocketError == SocketError.Success) {
-
-            } else {
-
-                ;
             }
         }
 
@@ -162,9 +149,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 xml.LoadXml(e.Xml);
 
-                Console.WriteLine(e.Xml);
-
-
                 var thread = xml.SelectSingleNode("/thread");
                 if(thread != null) {
 
@@ -181,22 +165,22 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var chat = xml.SelectSingleNode("/chat");
                 if(chat != null) {
 
-                    //コマンドは弾く
-                    if(chat.InnerText.StartsWith("/")) {
-
-                        return;
-                    }
-
                     var comment = new NicoNicoCommentEntry();
                     comment.No = (++CommentNum).ToString();
                     comment.Vpos = chat.Attributes["vpos"].Value;
                     comment.Mail = chat.Attributes["mail"] != null ? chat.Attributes["mail"].Value : "";
                     comment.Score = chat.Attributes["score"] != null ? int.Parse(chat.Attributes["score"].Value) : 0;
                     comment.UserId = chat.Attributes["user_id"].Value;
-                    comment.Date = GetTimeFromVpos(comment.Vpos);
+                    comment.Date = NicoNicoUtil.GetTimeFromVpos(Status, comment.Vpos);
                     comment.Content = chat.InnerText;
 
                     Owner.CommentList.Add(comment);
+
+                    //コマンドは弾く
+                    if(chat.InnerText.StartsWith("/")) {
+
+                        return;
+                    }
                     Handler.InvokeScript("AsInjectOneComment", comment.ToJson());
 
                 }
@@ -207,30 +191,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
 
-        private string GetTimeFromVpos(string vpos) {
-
-            return GetTimeFromVpos(int.Parse(vpos));
-        }
-        private string GetTimeFromVpos(int vpos) {
-
-            //秒に直す
-            vpos /= 100;
-
-            //マイナス部分
-            var basetime = int.Parse(Owner.Content.GetPlayerStatus.StartTime) - int.Parse(Owner.Content.GetPlayerStatus.BaseTime);
-
-            //マイナス部分を引く
-            vpos -= basetime;
-
-            var time = new TimeSpan(0, 0, vpos).ToString();
-
-            if(time.StartsWith("00:")) {
-
-                time = time.Substring(3);
-            }
-
-            return time;
-        }
 
     }
 }
