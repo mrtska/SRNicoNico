@@ -69,6 +69,10 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case "NetConnection.Connect.Closed":    //RTMP動画再生時にタイムアウトになったら
                     break;
+                case "NetStream.Play.Start":    //再生が開始された
+
+                    Owner.IsPlaying = true;
+                    break;
                 case "ShowController":
 
                     break;
@@ -140,27 +144,30 @@ namespace SRNicoNico.ViewModels {
 
             //マイナス部分
             var basetime = int.Parse(Owner.Content.GetPlayerStatus.StartTime) - int.Parse(Owner.Content.GetPlayerStatus.BaseTime);
-
+            
             //マイナス部分を引く
             vpos -= basetime;
 
             var time = new TimeSpan(0, 0, vpos);
             return time.ToString();
         }
-
+        
         public void Pause() {
-
-            InvokeScript("");
+            
+            Owner.IsPlaying = false;
+            InvokeScript("AsPause");
         }
 
         public void Resume() {
 
-            InvokeScript("");
+            Owner.IsPlaying = true;
+            InvokeScript("AsResume");
         }
 
 
         public void Seek(int vpos) {
 
+            InvokeScript("AsSeek", vpos.ToString());
         }
 
 

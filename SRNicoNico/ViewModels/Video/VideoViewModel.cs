@@ -884,7 +884,7 @@ namespace SRNicoNico.ViewModels {
                 Initialize();
             } else {
 
-                NicoNicoOpener.Open(VideoUrl);
+                NicoNicoOpener.Replace(this, VideoUrl);
             }
 
         }
@@ -897,6 +897,7 @@ namespace SRNicoNico.ViewModels {
                 App.ViewModelRoot.RemoveTabAndLastSet(PlayList);
                 PlayList.Dispose();
             }
+            App.ViewModelRoot.RemoveTabAndLastSet(this);
         }
         
         public void DisposeViewModel() {
@@ -911,7 +912,6 @@ namespace SRNicoNico.ViewModels {
                 FullScreenVideoFlash = null;
                 FullScreenContoller = null;
 
-                App.ViewModelRoot.RemoveTabAndLastSet(this);
                 Dispose();
             }));
 

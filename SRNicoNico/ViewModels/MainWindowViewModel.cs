@@ -261,7 +261,7 @@ namespace SRNicoNico.ViewModels {
 #if !DEBUG
             Update.CheckUpdate();
 #endif
-            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoNicoOpener.Open("http://live.nicovideo.jp/watch/lv254486518?ref=zero_mytimeshift")));
+           //DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoNicoOpener.Open("http://live.nicovideo.jp/watch/lv254486518?ref=zero_mytimeshift")));
             ;
             }
 
@@ -386,8 +386,25 @@ namespace SRNicoNico.ViewModels {
 
                 TabItems.Add(vm);
             }
-
         }
+
+        public void ReplaceTab(TabItemViewModel old, TabItemViewModel current) {
+
+            if(VideoTabs.Contains(old)) {
+
+                VideoTabs[VideoTabs.IndexOf(old)] = current;
+            } else if(LiveTabs.Contains(old)) {
+
+                LiveTabs.Insert(LiveTabs.IndexOf(old), current);
+            }
+        }
+
+        public void ReplaceTabAndSetCurrent(TabItemViewModel old, TabItemViewModel current) {
+
+            ReplaceTab(old, current);
+            SelectedTab = current;
+        }
+
         public void SetCurrent(TabItemViewModel vm) {
 
             SelectedTab = vm;

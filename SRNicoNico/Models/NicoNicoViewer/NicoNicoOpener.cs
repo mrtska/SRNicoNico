@@ -17,6 +17,49 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             return Open(uri.OriginalString);
         }
 
+
+        //URLから適当なViewを開く
+        public static TabItemViewModel Replace(TabItemViewModel old, string url) {
+
+            if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
+
+                System.Diagnostics.Process.Start(url);
+                return null;
+            }
+
+            if(url.StartsWith("http://www.nicovideo.jp/watch/")) {
+
+                var vm = new VideoViewModel(url);
+                App.ViewModelRoot.ReplaceTabAndSetCurrent(old, vm);
+                vm.Initialize();
+                return vm;
+            } else if(url.StartsWith("http://www.nicovideo.jp/user/")) {
+
+                var vm = new UserViewModel(url);
+                App.ViewModelRoot.ReplaceTabAndSetCurrent(old, vm);
+                return vm;
+            } else if(url.StartsWith("http://www.nicovideo.jp/mylist/")) {
+
+                var vm = new PublicMylistViewModel(url);
+                App.ViewModelRoot.ReplaceTabAndSetCurrent(old, vm);
+                return vm;
+            } else if(url.StartsWith("http://com.nicovideo.jp/community/")) {
+
+                var vm = new CommunityViewModel(url);
+                App.ViewModelRoot.ReplaceTabAndSetCurrent(old, vm);
+                return vm;
+            } else if(url.StartsWith("http://live.nicovideo.jp/watch/")) {
+
+                var vm = new LiveViewModel(url);
+                App.ViewModelRoot.ReplaceTabAndSetCurrent(old, vm);
+                return vm;
+            } else {
+
+                System.Diagnostics.Process.Start(url);
+                return null;
+            }
+        }
+
         //URLから適当なViewを開く
         public static TabItemViewModel Open(string url) {
 

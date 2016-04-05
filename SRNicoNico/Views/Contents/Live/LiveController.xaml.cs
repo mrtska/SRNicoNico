@@ -28,11 +28,11 @@ namespace SRNicoNico.Views.Contents.Live {
 
 		private void Seek_MouseMove(object sender, MouseEventArgs e) {
 
-            if(!(DataContext is VideoViewModel)) {
+            if(!(DataContext is LiveWatchViewModel)) {
 
                 return;
             }
-            var vm = (VideoViewModel) DataContext;
+            var vm = (LiveWatchViewModel) DataContext;
 
 			//マウスカーソルX座標
 			double x = e.GetPosition(this).X;
@@ -84,7 +84,7 @@ namespace SRNicoNico.Views.Contents.Live {
                 ans = (int) Seek.VideoTime;
             }
 
-            vm.Handler.Seek(ans);
+            vm.Handler.Seek(ans * 100);
         }
 
         [DllImport("user32.dll")]

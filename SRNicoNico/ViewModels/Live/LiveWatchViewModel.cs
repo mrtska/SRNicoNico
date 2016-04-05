@@ -329,7 +329,6 @@ namespace SRNicoNico.ViewModels {
                 DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
                     Handler.DisposeHandler();
-                    App.ViewModelRoot.RemoveTabAndLastSet(Owner);
                 }));
             }
         }

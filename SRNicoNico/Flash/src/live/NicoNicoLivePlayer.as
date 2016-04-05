@@ -170,7 +170,7 @@ package live {
 						
 						offset = 0;
 					}
-7
+
 					stream.play(publishUrl, offset);
 					break;
 				
@@ -180,15 +180,42 @@ package live {
 		
 		public override function Pause():void {
 			
-			
-			vposTimer.stop();
+			if (stream) {
+				
+				stream.pause();
+				vposTimer.stop();
+				//resetarchive();
+			}
 		}
 		public override function Resume():void {
 			
-			vposTimer.start();
+			if (stream) {
+			
+				stream.resume();
+				vposTimer.start();
+			}
+			
 			
 		}
 		
+		public override function Seek(pos:Number):void {
+			
+			if (stream) {
+				
+				//stream.close();
+				//connection.close();
+				
+				this.vpos = pos;
+				var offset:int = (pos - publishVpos) / 100;
+				if (offset < 0) {
+					
+					offset = 0;
+				}
+
+				stream.play(publishUrl, offset);
+			}
+			
+		}
 		
 		public override function ChangeVolume(vol:Number):void {
 			
@@ -197,8 +224,25 @@ package live {
 				stream.soundTransform = new SoundTransform(vol);
 			}
 		}
-
 		
+		private function disconnect():void {
+			
+			stream.close();
+			connection.close();
+			
+			stream = null;
+			connection = null;
+			
+		}
+
+		private function resetarchive():void {
+			
+			if (connection.connected) {
+				
+				disconnect();
+			}
+			
+		}
 		
 		private var prevTime:int = 0;
 		private var prevLoaded:uint = 0;
@@ -216,8 +260,8 @@ package live {
 			*///タイムシフト
 			
 			var now:Date = new Date();
-			vpos = int(stream.time * 100 + offset * 100);
-			ExternalInterface.call("CsFrame", int((stream.time * 1000 + offset * 1000) / 10).toString());
+			this.vpos = int((stream.time * 1000 + offset * 1000) / 10);
+			ExternalInterface.call("CsFrame", this.vpos.toString());
 
 			
 			rasterizer.render(vpos);
