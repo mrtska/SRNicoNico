@@ -115,7 +115,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public List<NicoNicoMylistData> GetDefMylist() {
 
             //とりあえずマイリスト
-            var json = DynamicJson.Parse(NicoNicoWrapperMain.GetSession().GetAsync(DefListAPI).Result);
+            var json = DynamicJson.Parse(NicoNicoWrapperMain.Session.GetAsync(DefListAPI).Result);
 
             List<NicoNicoMylistData> ret = new List<NicoNicoMylistData>();
 
@@ -134,7 +134,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
 
             //指定したマイリスト
-            var json = DynamicJson.Parse(NicoNicoWrapperMain.GetSession().GetAsync(MylistGetAPI + groupId).Result);
+            var json = DynamicJson.Parse(NicoNicoWrapperMain.Session.GetAsync(MylistGetAPI + groupId).Result);
 
             List<NicoNicoMylistData> ret = new List<NicoNicoMylistData>();
 
@@ -154,7 +154,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             request.Content = new FormUrlEncodedContent(pair);
 
-            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+            var text = NicoNicoWrapperMain.Session.GetAsync(request).Result;
 
             var json = DynamicJson.Parse(text);
 
@@ -192,7 +192,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             request.Content = new FormUrlEncodedContent(pair);
 
-            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+            var text = NicoNicoWrapperMain.Session.GetAsync(request).Result;
 
             var json = DynamicJson.Parse(text);
 
@@ -239,7 +239,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             request.Content = new FormUrlEncodedContent(pair);
 
-            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+            var text = NicoNicoWrapperMain.Session.GetAsync(request).Result;
 
             //移動先がとりあえずマイリストだったら
             if(dest.Group.Id == "0") {
@@ -290,7 +290,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
             } else {
 
-                var ret = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+                var ret = NicoNicoWrapperMain.Session.GetAsync(request).Result;
             }
 
         }
@@ -331,7 +331,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
             } else {
 
-                var ret = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+                var ret = NicoNicoWrapperMain.Session.GetAsync(request).Result;
             }
 
 
@@ -362,7 +362,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             request.Content = new StringContent(text);
             request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-            var ret = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+            var ret = NicoNicoWrapperMain.Session.GetAsync(request).Result;
         }
 
         //マイリストページからCSRFトークンを取得する
@@ -370,7 +370,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             
             var api = "http://www.nicovideo.jp/my/mylist/#/" + Group.Id;
 
-            var result = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
+            var result = NicoNicoWrapperMain.Session.GetAsync(api).Result;
 
             return result.Substring(result.IndexOf("NicoAPI.token = \"") + 17, 60);
         }
@@ -378,7 +378,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             var api = "http://www.nicovideo.jp/my/mylist";
 
-            var result = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
+            var result = NicoNicoWrapperMain.Session.GetAsync(api).Result;
 
             return result.Substring(result.IndexOf("NicoAPI.token = \"") + 17, 60);
         }

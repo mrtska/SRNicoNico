@@ -18,7 +18,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public static NicoNicoVitaApiVideoData GetVideoData(string cmsid) {
 
-            string result = NicoNicoWrapperMain.GetSession().GetAsync(VideoDataApiUrl + cmsid).Result;
+            string result = NicoNicoWrapperMain.Session.GetAsync(VideoDataApiUrl + cmsid).Result;
 
             var json = DynamicJson.Parse(result);
             var response = json.nicovideo_video_response;

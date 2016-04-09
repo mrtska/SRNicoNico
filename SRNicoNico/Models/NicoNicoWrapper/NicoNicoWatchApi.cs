@@ -37,12 +37,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public WatchApiData GetWatchApiData() {
 
             //動画ページのhtml取得
-            var response = NicoNicoWrapperMain.GetSession().GetResponseAsync(VideoPage).Result;
+            var response = NicoNicoWrapperMain.Session.GetResponseAsync(VideoPage).Result;
 
             //チャンネル、公式動画
             if(response.StatusCode == HttpStatusCode.MovedPermanently) {
                 
-                response = NicoNicoWrapperMain.GetSession().GetResponseAsync(response.Headers.Location.OriginalString).Result;
+                response = NicoNicoWrapperMain.Session.GetResponseAsync(response.Headers.Location.OriginalString).Result;
             }
             //削除された動画
             if(response.StatusCode == HttpStatusCode.NotFound) {

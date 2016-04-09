@@ -244,7 +244,7 @@ namespace SRNicoNico.ViewModels {
         public void LogedInInit() {
 
             User = new NicoNicoUserEntry();
-            User.UserId = NicoNicoWrapperMain.GetSession().UserId;
+            User.UserId = NicoNicoWrapperMain.Session.UserId;
             User.UserName = NicoNicoUser.LookupUserName(User.UserId);
 
             App.ViewModelRoot.Title += "(user:" + User.UserName + ")";
@@ -288,9 +288,10 @@ namespace SRNicoNico.ViewModels {
 						//セッションが有効期限切れ
 						SignIn.StateText = "有効期限が切れています。\n再度ログインしてください。";
 						SignIn.AutoLogin = true;
+                        NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession());
 
-						//ログインダイアログ表示
-						Messenger.Raise(new TransitionMessage(typeof(SignInDialog), this.SignIn, TransitionMode.Modal));
+                        //ログインダイアログ表示
+                        Messenger.Raise(new TransitionMessage(typeof(SignInDialog), SignIn, TransitionMode.Modal));
 						return;
 					}
 
@@ -310,8 +311,8 @@ namespace SRNicoNico.ViewModels {
                     //セッション情報を更新
                     StreamWriter writer = new StreamWriter(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
 
-                    writer.WriteLine("Key:" + NicoNicoWrapperMain.GetSession().Key);
-                    writer.WriteLine("Expire:" + NicoNicoWrapperMain.GetSession().Expire);
+                    writer.WriteLine("Key:" + NicoNicoWrapperMain.Session.Key);
+                    writer.WriteLine("Expire:" + NicoNicoWrapperMain.Session.Expire);
 
                     writer.Flush();
                     writer.Close();

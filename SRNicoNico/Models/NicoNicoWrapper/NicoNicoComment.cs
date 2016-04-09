@@ -109,7 +109,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 request.Content = new StringContent(root.InnerXml);
                 request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
 
-                var a = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+                var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);
@@ -125,7 +125,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     recv.AddQuery("thread", GetFlv.ThreadID);
                     recv.AddQuery("res_from", "-1000");
 
-                    a = NicoNicoWrapperMain.GetSession().GetAsync(recv.TargetUrl).Result;
+                    a = NicoNicoWrapperMain.Session.GetAsync(recv.TargetUrl).Result;
                     doc.LoadHtml2(a);
                 }
 
@@ -176,7 +176,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 request.Content = new StringContent(root.InnerXml);
                 request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
                 
-                var a = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+                var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
                 
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);

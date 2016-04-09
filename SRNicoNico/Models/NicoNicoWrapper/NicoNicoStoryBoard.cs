@@ -47,7 +47,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			for(int i = 1; i <= data.Count; i++) {
 
 
-				var response = NicoNicoWrapperMain.GetSession().GetStreamAsync(uri + i).Result;
+				var response = NicoNicoWrapperMain.Session.GetStreamAsync(uri + i).Result;
 
 				var bitmap = new Bitmap(response);
 
@@ -70,7 +70,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//ストーリーボードのデータを取得する
 		private NicoNicoStoryBoardData GetStoryBoardInternalData() {
 
-			var result = NicoNicoWrapperMain.GetSession().GetResponseAsync(StoryBoardApiBaseUrl + "&sb=1").Result;
+			var result = NicoNicoWrapperMain.Session.GetResponseAsync(StoryBoardApiBaseUrl + "&sb=1").Result;
 			
 			//見つからなかったり見せてもらえなかったりしたら
 			if(result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.NotFound || result.Content.Headers.ContentDisposition.FileName.Contains("smile")) {

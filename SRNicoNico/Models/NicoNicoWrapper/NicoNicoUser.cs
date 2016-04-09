@@ -26,7 +26,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 			string uri = UserLookUpURL + userId;
 
-			string json = NicoNicoUtil.XmlToJson(NicoNicoWrapperMain.GetSession().GetAsync(uri).Result);
+			string json = NicoNicoUtil.XmlToJson(NicoNicoWrapperMain.Session.GetAsync(uri).Result);
             
 			return DynamicJson.Parse(json).response.user.nickname;
 		}

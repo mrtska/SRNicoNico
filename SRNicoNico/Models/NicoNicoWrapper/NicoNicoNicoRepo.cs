@@ -53,7 +53,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             try {
 
-                var html = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
+                var html = NicoNicoWrapperMain.Session.GetAsync(api).Result;
 
                 var data = new List<NicoNicoNicoRepoDataEntry>();
 
@@ -102,7 +102,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             var api = PrevUrl = NextUrl;
 
             //html
-            var html = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
+            var html = NicoNicoWrapperMain.Session.GetAsync(api).Result;
 
             IList<NicoNicoNicoRepoDataEntry> data = new List<NicoNicoNicoRepoDataEntry>();
 

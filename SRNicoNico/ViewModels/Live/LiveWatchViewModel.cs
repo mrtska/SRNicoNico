@@ -140,9 +140,9 @@ namespace SRNicoNico.ViewModels {
 
 
         #region Controller変更通知プロパティ
-        private LiveController _Controller;
+        private UserControl _Controller;
 
-        public LiveController Controller {
+        public UserControl Controller {
             get { return _Controller; }
             set {
                 if(_Controller == value)
@@ -155,9 +155,9 @@ namespace SRNicoNico.ViewModels {
 
 
         #region FullScreenContoller変更通知プロパティ
-        private LiveController _FullScreenContoller;
+        private UserControl _FullScreenContoller;
 
-        public LiveController FullScreenContoller {
+        public UserControl FullScreenContoller {
             get { return _FullScreenContoller; }
             set {
                 if(_FullScreenContoller == value)
@@ -293,8 +293,17 @@ namespace SRNicoNico.ViewModels {
 
             DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                 LiveFlash = new LiveFlash() { DataContext = this };
-                Controller = new LiveController() { DataContext = this };
+                LiveFlash = new LiveFlash() { DataContext = this };
+
+                if(Content.GetPlayerStatus.Archive) {
+
+                    Controller = new TimeShiftController() { DataContext = this };
+                } else {
+
+                    Controller = new LiveController() { DataContext = this };
+                }
+
+
             }));
 
             Task.Run(() => Initialize());
@@ -453,11 +462,21 @@ namespace SRNicoNico.ViewModels {
                 if(IsFullScreen) {
 
                     Comment.IsPopupOpen = true;
-                    FullScreenContoller.FocusComment();
+
+                    if(FullScreenContoller is LiveController) {
+
+                        ((LiveController) FullScreenContoller).FocusComment();
+                    } 
+                  
                 } else {
 
                     Comment.IsPopupOpen = true;
-                    Controller.FocusComment();
+
+                    if(Controller is LiveController) {
+
+                        ((LiveController) Controller).FocusComment();
+                    }
+                   
                 }
             }
         }
@@ -495,80 +514,114 @@ namespace SRNicoNico.ViewModels {
         public override void KeyDown(KeyEventArgs e) {
 
             Console.WriteLine("KeyDown:" + e.Key);
-            if(Comment.IsPopupOpen) {
+            if(Content.GetPlayerStatus.Archive) {
 
-                if(e.Key == Key.Enter) {
+                if(IsFullScreen) {
 
-                    if(e.KeyboardDevice.Modifiers == ModifierKeys.Shift) {
-
-                        Comment.AcceptEnter = true;
-                    } else {
-
-                        Comment.AcceptEnter = false;
-                        Comment.Post();
+                    switch(e.Key) {
+                        case Key.Space:
+                            TogglePlay();
+                            break;
+                        case Key.Escape:
+                            ToggleFullScreen();
+                            break;
+                        case Key.S:
+                            Restart();
+                            break;
+                        case Key.C:
+                            ToggleComment();
+                            break;
+                        case Key.M:
+                            ToggleMute();
+                            break;
                     }
-                } else if(e.Key == Key.Escape) {
-
-                    Comment.IsPopupOpen = false;
-                }
-                return;
-            }
-            if(IsFullScreen) {
-
-                switch(e.Key) {
-                    case Key.Space:
-                        TogglePlay();
-                        break;
-                    case Key.Escape:
-                        ToggleFullScreen();
-                        break;
-                    case Key.S:
-                        Restart();
-                        break;
-                    case Key.C:
-                        ToggleComment();
-                        break;
-                    case Key.M:
-                        ToggleMute();
-                        break;
-                    case Key.Enter:
-                        FocusComment();
-                        break;
+                } else {
+                    switch(e.Key) {
+                        case Key.Space:
+                            TogglePlay();
+                            break;
+                        case Key.F:
+                            ToggleFullScreen();
+                            break;
+                        case Key.S:
+                            Restart();
+                            break;
+                        case Key.C:
+                            ToggleComment();
+                            break;
+                        case Key.M:
+                            ToggleMute();
+                            break;
+                        case Key.F5:
+                            Owner.Refresh();
+                            break;
+                    }
                 }
             } else {
-                switch(e.Key) {
-                    case Key.Space:
-                        TogglePlay();
-                        break;
-                    case Key.F:
-                        ToggleFullScreen();
-                        break;
-                    case Key.S:
-                        Restart();
-                        break;
-                    case Key.C:
-                        ToggleComment();
-                        break;
-                    case Key.M:
-                        ToggleMute();
-                        break;
-                    case Key.F5:
-                        Owner.Refresh();
-                        break;
-                    case Key.Enter:
-                        FocusComment();
-                        break;
-                }
-                //Ctrl+Wで閉じる
-                if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
 
-                    if(e.Key == Key.W) {
+                if(IsFullScreen) {
 
-                        Close();
+                    switch(e.Key) {
+                        case Key.Escape:
+                            ToggleFullScreen();
+                            break;
+                        case Key.C:
+                            ToggleComment();
+                            break;
+                        case Key.M:
+                            ToggleMute();
+                            break;
+                        case Key.Enter:
+                            FocusComment();
+                            break;
                     }
+                } else {
+                    switch(e.Key) {
+                        case Key.F:
+                            ToggleFullScreen();
+                            break;
+                        case Key.C:
+                            ToggleComment();
+                            break;
+                        case Key.M:
+                            ToggleMute();
+                            break;
+                        case Key.F5:
+                            Owner.Refresh();
+                            break;
+                        case Key.Enter:
+                            FocusComment();
+                            break;
+                    }
+                }
+                if(Comment.IsPopupOpen) {
+
+                    if(e.Key == Key.Enter) {
+
+                        if(e.KeyboardDevice.Modifiers == ModifierKeys.Shift) {
+
+                            Comment.AcceptEnter = true;
+                        } else {
+
+                            Comment.AcceptEnter = false;
+                            Comment.Post();
+                        }
+                    } else if(e.Key == Key.Escape) {
+
+                        Comment.IsPopupOpen = false;
+                    }
+                    return;
+                }
+            }
+
+            //Ctrl+Wで閉じる
+            if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
+
+                if(e.Key == Key.W) {
+
+                    Close();
                 }
             }
         }
-
     }
 }

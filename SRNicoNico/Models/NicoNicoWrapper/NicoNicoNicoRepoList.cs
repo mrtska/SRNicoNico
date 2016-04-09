@@ -43,12 +43,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private List<NicoNicoNicoRepoListEntry> GetUserDefinitionNicoRepoList() {
 
             //htmlからCSRFトークンを抜き出す
-            string html = NicoNicoWrapperMain.GetSession().GetAsync(NicoRepoWebUrl).Result;
+            string html = NicoNicoWrapperMain.Session.GetAsync(NicoRepoWebUrl).Result;
 
             //CSRFトークン
             string token = html.Substring(html.IndexOf("Mypage_globals.hash = \"") + 23, 60);
 
-            string response = NicoNicoWrapperMain.GetSession().GetAsync(NicoRepoListApiUrl + token).Result;
+            string response = NicoNicoWrapperMain.Session.GetAsync(NicoRepoListApiUrl + token).Result;
             Console.WriteLine(NicoRepoListApiUrl + token);
             var json = DynamicJson.Parse(response);
 

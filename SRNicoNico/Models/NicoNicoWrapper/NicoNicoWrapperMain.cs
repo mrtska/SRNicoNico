@@ -18,17 +18,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 return _Session;
             }
         }
-
-        //現在のセッションを取得
-        public static NicoNicoSession GetSession() {
-
-			if(Instance == null) {
-
-				throw new SystemException("NicoNicoWrapperMainインスタンスがnullになりました。");
-			}
-
-			return Session;
-		}
+        
 
         public NicoNicoWrapperMain(NicoNicoSession session) {
 

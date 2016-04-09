@@ -30,7 +30,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             var api = "http://www.nicovideo.jp/my/mylist/#/" + Group.Id;
 
-            var result = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
+            var result = NicoNicoWrapperMain.Session.GetAsync(api).Result;
 
             return result.Substring(result.IndexOf("NicoAPI.token = \"") + 17, 60);
         }
@@ -38,7 +38,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             var api = "http://www.nicovideo.jp/my/mylist";
 
-            var result = NicoNicoWrapperMain.GetSession().GetAsync(api).Result;
+            var result = NicoNicoWrapperMain.Session.GetAsync(api).Result;
 
             return result.Substring(result.IndexOf("NicoAPI.token = \"") + 17, 60);
         }
@@ -88,7 +88,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             request.Content = new FormUrlEncodedContent(pair);
 
-            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+            var text = NicoNicoWrapperMain.Session.GetAsync(request).Result;
 
         }
         public void CreateMylistGroup(string name, string desc) {
@@ -110,7 +110,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             request.Content = new FormUrlEncodedContent(pair);
 
-            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+            var text = NicoNicoWrapperMain.Session.GetAsync(request).Result;
         }
         public void UpdateMylistGroup(NicoNicoMylistGroupData group) {
 
@@ -129,7 +129,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             request.Content = new FormUrlEncodedContent(pair);
 
-            var text = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+            var text = NicoNicoWrapperMain.Session.GetAsync(request).Result;
         }
         public void DeleteMylistGroup(string groupId) {
 

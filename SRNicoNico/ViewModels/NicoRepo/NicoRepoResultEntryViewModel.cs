@@ -116,7 +116,7 @@ namespace SRNicoNico.ViewModels {
 
                 request.Content = new FormUrlEncodedContent(form);
 
-                var response = NicoNicoWrapperMain.GetSession().GetAsync(request).Result;
+                var response = NicoNicoWrapperMain.Session.GetAsync(request).Result;
 
                 Close();
 

@@ -48,7 +48,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             start:
             //たまに失敗する
             
-            HttpResponseMessage result = NicoNicoWrapperMain.GetSession().GetResponseAsync(HistoryUrl).Result;
+            HttpResponseMessage result = NicoNicoWrapperMain.Session.GetResponseAsync(HistoryUrl).Result;
 
             //失敗
             if(result.StatusCode == HttpStatusCode.ServiceUnavailable) {

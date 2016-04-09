@@ -92,7 +92,7 @@ namespace SRNicoNico.ViewModels {
 
 			Task.Run(new Action(() => {
 
-				SigninStatus status = NicoNicoWrapperMain.GetSession().SignIn(MailAddress, Password);
+				SigninStatus status = NicoNicoWrapperMain.Session.SignIn(MailAddress, Password);
 
 				//サインイン失敗
 				if(status != SigninStatus.Success) {
@@ -117,8 +117,8 @@ namespace SRNicoNico.ViewModels {
 
 					StreamWriter writer = new StreamWriter(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
 
-					writer.WriteLine("Key:" + NicoNicoWrapperMain.GetSession().Key);
-					writer.WriteLine("Expire:" + NicoNicoWrapperMain.GetSession().Expire);
+					writer.WriteLine("Key:" + NicoNicoWrapperMain.Session.Key);
+					writer.WriteLine("Expire:" + NicoNicoWrapperMain.Session.Expire);
 
 					writer.Flush();
 					writer.Close();

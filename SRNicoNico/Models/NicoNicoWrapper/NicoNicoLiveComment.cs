@@ -33,19 +33,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 _Vpos = value;
 
 
-                if(LastRequestTime + 30 <= int.Parse(Status.BaseTime) + value / 100) {
-                    
-                    LastRequestTime = int.Parse(Status.BaseTime) + value / 100;
+                if(Status.Archive) {
 
-                    Task.Run(() => {
+                    if(LastRequestTime + 30 <= int.Parse(Status.BaseTime) + value / 100) {
 
-                        XmlSocket.Connect();
-                        RequestComment();
-                        
-                    });
-                    
+                        LastRequestTime = int.Parse(Status.BaseTime) + value / 100;
 
+                        Task.Run(() => {
+
+                            XmlSocket.Connect();
+                            RequestComment();
+
+                        });
+                    }
                 }
+
 
             }
         }
@@ -70,6 +72,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             if(Status.Archive) {
 
                 ResFrom = -1000;
+            } else {
+
+                XmlSocket.Connect();
+                RequestComment();
             }
         }
 

@@ -12,7 +12,7 @@
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-             x:Class="SRNicoNico.Views.Contents.Live.LiveController"
+             x:Class="SRNicoNico.Views.Contents.Live.TimeShiftController"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type vm:LiveWatchViewModel}}"
              d:DesignWidth="900"
@@ -21,14 +21,44 @@
              >
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
+        <controls:SeekBar x:Name="Seek" BufferedTime="{Binding Time.BufferedTime}" VideoTime="{Binding Time.Length}" CurrentTime="{Binding Time.CurrentTime}" MouseMove="Seek_MouseMove" MouseLeave="Seek_MouseLeave" MouseEnter="Seek_MouseEnter" MouseLeftButtonUp="Seek_MouseLeftButtonUp"  />
         <StackPanel Grid.Row="1"  Orientation="Horizontal" >
+            <mui:ModernButton Margin="10,0,0,0" EllipseDiameter="36" IconWidth="20" IconHeight="20" Focusable="False">
+                <mui:ModernButton.Style>
+                    <Style TargetType="{x:Type mui:ModernButton}">
+                        <Style.Triggers>
+                            <DataTrigger  Binding="{Binding IsPlaying}" Value="true" >
+                                <Setter Property="IconData" Value="F1 M 26.9167,23.75L 33.25,23.75L 33.25,52.25L 26.9167,52.25L 26.9167,23.75 Z M 42.75,23.75L 49.0833,23.75L 49.0833,52.25L 42.75,52.25L 42.75,23.75 Z" />
+                            </DataTrigger>
+                            <DataTrigger  Binding="{Binding IsPlaying}" Value="false" >
+                                <Setter Property="IconData" Value="F1 M 30.0833,22.1667L 50.6665,37.6043L 50.6665,38.7918L 30.0833,53.8333L 30.0833,22.1667 Z" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </mui:ModernButton.Style>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodName="TogglePlay" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </mui:ModernButton>
+            <mui:ModernButton ToolTip="最初から(S)" Margin="2,0,0,0" Focusable="False" EllipseDiameter="36" IconWidth="20" IconHeight="20" IconData="F1 M 57,27.7083L 57,48.2917L 43.5417,38L 57,27.7083 Z M 39.5833,27.7083L 39.5833,48.2917L 26.125,38L 39.5833,27.7083 Z M 23.75,28.5L 23.75,47.5L 19,47.5L 19,28.5L 23.75,28.5 Z">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodName="Restart" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </mui:ModernButton>
+
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Height="25"  FontSize="16" Margin="10,0,0,0">
                 <Run Text="{Binding Time.CurrentTimeString}" />
+                <Run Text="/"/>
+                <Run Text="{Binding Time.VideoTimeString}" />
             </TextBlock>
-
 
             <mui:ModernButton ToolTip="コメント切替(C)" EllipseDiameter="36" IconWidth="20" IconHeight="20" Focusable="False">
                 <mui:ModernButton.Style>
@@ -51,18 +81,6 @@
             </mui:ModernButton>
 
             <video:VolumeBar Margin="10,0,0,0"/>
-            <Popup x:Name="popup" Focusable="False" DataContext="{Binding Comment}" d:DataContext="{d:DesignInstance {x:Type vm:LiveCommentViewModel}}" AllowsTransparency="True" PopupAnimation="Slide" IsOpen="{Binding IsPopupOpen,Mode=TwoWay}" Placement="Bottom" StaysOpen="False" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}" Opened="popup_Opened">
-                <video:VideoComment x:Name="comment" Opacity="0.8" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:LiveController},Path=ActualWidth}"/>
-            </Popup>
-            <Button Content="コメントする" ToolTip="コメントする (Enter)" VerticalAlignment="Center" Margin="10,0,0,0" IsEnabled="{Binding Comment.CanComment}" Focusable="False">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <ei:ChangePropertyAction TargetName="popup" PropertyName="IsOpen" Value="True"/>
-                        <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:LiveController}}}" MethodName="FocusComment"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
 

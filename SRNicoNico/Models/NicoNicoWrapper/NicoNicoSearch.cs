@@ -101,7 +101,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //URLに検索キーワードやその他いろいろをGETリクエストする
             string search = SearchURL + type + "/" + Keyword + "?mode=watch" + Sort + Order + "&page=" + CurrentPage++;
 
-            string jsonString = NicoNicoWrapperMain.GetSession().GetAsync(search).Result;
+            string jsonString = NicoNicoWrapperMain.Session.GetAsync(search).Result;
 
             //取得したJsonの全体
             var json = DynamicJson.Parse(jsonString);

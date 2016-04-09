@@ -16,10 +16,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper
         private const string MylistDataApiUrl = "http://api.ce.nicovideo.jp/nicoapi/v1/mylistgroup.get?__format=json&detail=";
 
 
-        public static NicoNicoVitaApiMylistData GetMylistData(string mylistId)
-        {
+        public static NicoNicoVitaApiMylistData GetMylistData(string mylistId) {
             string detail = "0"; //より細かい1も存在
-            string result = NicoNicoWrapperMain.GetSession().GetAsync(MylistDataApiUrl + detail + "&group_id=" + mylistId).Result;
+            string result = NicoNicoWrapperMain.Session.GetAsync(MylistDataApiUrl + detail + "&group_id=" + mylistId).Result;
 
             var json = DynamicJson.Parse(result);
             var response = json.nicovideo_mylistgroup_response;
@@ -48,8 +47,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper
         }
     }
 
-    public class NicoNicoVitaApiMylistData : NotificationObject
-    {
+    public class NicoNicoVitaApiMylistData : NotificationObject {
 
         //MylistID
         public string Id { get; set; }

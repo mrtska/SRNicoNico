@@ -303,6 +303,9 @@
     <Compile Include="Views\Contents\Live\FullScreenWindow.xaml.cs">
       <DependentUpon>FullScreenWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\Live\TimeShiftController.xaml.cs">
+      <DependentUpon>TimeShiftController.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Live\LiveWatch.xaml.cs">
       <DependentUpon>LiveWatch.xaml</DependentUpon>
     </Compile>
@@ -565,6 +568,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Live\FullScreenWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Live\TimeShiftController.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
