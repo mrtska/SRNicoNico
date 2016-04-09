@@ -29,7 +29,7 @@ namespace SRNicoNico.ViewModels {
         //現在のバージョン
         public double CurrentVersion {
 
-            get { return 0.71; }
+            get { return 0.72; }
         }
 
         
@@ -181,6 +181,20 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        #region PlayListTabs変更通知プロパティ
+        private DispatcherCollection<TabItemViewModel> _PlayListTabs;
+
+        public DispatcherCollection<TabItemViewModel> PlayListTabs {
+            get { return _PlayListTabs; }
+            set {
+                if(_PlayListTabs == value)
+                    return;
+                _PlayListTabs = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
         #region LiveTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _LiveTabs;
 
@@ -233,6 +247,8 @@ namespace SRNicoNico.ViewModels {
             MylistTabs = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
             CommunityTabs = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
             LiveTabs = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
+            PlayListTabs = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
+
 
             AccessLog = new AccessLogViewModel();
 
@@ -369,6 +385,9 @@ namespace SRNicoNico.ViewModels {
             } else if(vm is LiveViewModel) {
 
                 LiveTabs.Remove(vm);
+            } else if(vm is PlayListViewModel) {
+
+                PlayListTabs.Remove(vm);
             } else {
 
                 TabItems.Remove(vm);
@@ -392,6 +411,9 @@ namespace SRNicoNico.ViewModels {
             } else if(vm is LiveViewModel) {
 
                 LiveTabs.Add(vm);
+            } else if(vm is PlayListViewModel) {
+
+                PlayListTabs.Add(vm);
             } else {
 
                 TabItems.Add(vm);
@@ -438,9 +460,12 @@ namespace SRNicoNico.ViewModels {
             } else if(vm is LiveViewModel && LiveTabs.Count > 0) {
 
                 SelectedTab = LiveTabs.FirstOrDefault();
+            } else if(vm is PlayListViewModel && PlayListTabs.Count > 0) {
+
+                SelectedTab = PlayListTabs.FirstOrDefault();
             } else {
 
-                SelectedTab = App.ViewModelRoot.TabItems.Last();
+                SelectedTab = TabItems.Last();
             }
 
         }

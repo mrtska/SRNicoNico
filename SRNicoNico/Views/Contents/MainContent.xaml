@@ -103,7 +103,27 @@
                         </metro:TabView>
                     </StackPanel>
                 </ContentControl>
-
+                <ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PlayListTabs.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                    <StackPanel>
+                        <TextBlock Text="~プレイリスト~" HorizontalAlignment="Center" FontSize="18"/>
+                        <metro:TabView Focusable="False" ItemsSource="{Binding PlayListTabs}" SelectedValue="{Binding SelectedTab}">
+                            <metro:TabView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type metro:ITabItem}">
+                                    <TextBlock Text="{Binding Name}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+                                </DataTemplate>
+                            </metro:TabView.ItemTemplate>
+                        </metro:TabView>
+                    </StackPanel>
+                </ContentControl>
                 <ContentControl>
                     <ContentControl.Style>
                         <Style TargetType="ContentControl">
@@ -311,6 +331,24 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding PlayListTabs}">
 
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type vm:PlayListViewModel}">
+                    <playlist:PlayList />
+                </DataTemplate>
+            </ItemsControl.Resources>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                    <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>

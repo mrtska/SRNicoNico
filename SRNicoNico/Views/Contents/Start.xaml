@@ -56,7 +56,7 @@
                     v0.6<LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.7<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.71<LineBreak /><LineBreak /><LineBreak /><LineBreak />
-                    v0.8
+                    v0.72<LineBreak /><LineBreak /><LineBreak /><LineBreak />
 
                 </TextBlock>
                 <TextBlock Grid.Column="1">
@@ -111,8 +111,8 @@
                     生放送通知機能実装<LineBreak />
                     SWFの動画が左に寄らないように<LineBreak /><LineBreak />
                     動画などのタブを見やすいように<LineBreak />
-                    生放送暫定対応<LineBreak />
                     設定の初期化ボタン実装<LineBreak />
+                    ログイン時の不具合を修正<LineBreak />
                     
 
 
