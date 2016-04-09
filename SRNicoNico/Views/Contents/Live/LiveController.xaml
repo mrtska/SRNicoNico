@@ -7,7 +7,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Live"
+         xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
@@ -75,15 +76,15 @@
                 </i:Interaction.Triggers>
             </mui:ModernButton>
 
-            <local:VolumeBar Margin="10,0,0,0"/>
+            <video:VolumeBar Margin="10,0,0,0"/>
             <Popup x:Name="popup" Focusable="False" DataContext="{Binding Comment}" d:DataContext="{d:DesignInstance {x:Type vm:LiveCommentViewModel}}" AllowsTransparency="True" PopupAnimation="Slide" IsOpen="{Binding IsPopupOpen,Mode=TwoWay}" Placement="Bottom" StaysOpen="False" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}" Opened="popup_Opened">
-                <local:VideoComment x:Name="comment" Opacity="0.8" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=ActualWidth}"/>
+                <video:VideoComment x:Name="comment" Opacity="0.8" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:LiveController},Path=ActualWidth}"/>
             </Popup>
             <Button Content="コメントする" ToolTip="コメントする (Enter)" VerticalAlignment="Center" Margin="10,0,0,0" IsEnabled="{Binding Comment.CanComment}" Focusable="False">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <ei:ChangePropertyAction TargetName="popup" PropertyName="IsOpen" Value="True"/>
-                        <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:VideoController}}}" MethodName="FocusComment"/>
+                        <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:LiveController}}}" MethodName="FocusComment"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Button>

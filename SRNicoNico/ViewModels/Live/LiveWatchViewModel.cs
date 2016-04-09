@@ -258,7 +258,19 @@ namespace SRNicoNico.ViewModels {
 
         private LiveViewModel Owner;
 
-        private LiveCommentViewModel Comment;
+        #region Comment変更通知プロパティ
+        private LiveCommentViewModel _Comment;
+
+        public LiveCommentViewModel Comment {
+            get { return _Comment; }
+            set { 
+                if(_Comment == value)
+                    return;
+                _Comment = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         public new string Status {
 
@@ -313,6 +325,18 @@ namespace SRNicoNico.ViewModels {
 
 
             OpenVideo();
+
+            //タイムシフトじゃなかったらすぐに再生
+            if(!Content.GetPlayerStatus.Archive) {
+
+                foreach(var content in Content.GetPlayerStatus.ContentsList) {
+
+                    Handler.InvokeScript("AsCommandExcute", "/liveplay", "0", content.Content);
+                }
+
+  
+
+            }
         }
         
         public void OpenVideo() {

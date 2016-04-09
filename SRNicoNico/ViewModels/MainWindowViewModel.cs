@@ -306,6 +306,15 @@ namespace SRNicoNico.ViewModels {
 						Messenger.Raise(new TransitionMessage(typeof(SignInDialog), SignIn, TransitionMode.Modal));
 						return;
 					}
+
+                    //セッション情報を更新
+                    StreamWriter writer = new StreamWriter(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
+
+                    writer.WriteLine("Key:" + NicoNicoWrapperMain.GetSession().Key);
+                    writer.WriteLine("Expire:" + NicoNicoWrapperMain.GetSession().Expire);
+
+                    writer.Flush();
+                    writer.Close();
                     //ログイン成功
                     StatusBar.Status = "ログイン完了";
 				//手動ログイン

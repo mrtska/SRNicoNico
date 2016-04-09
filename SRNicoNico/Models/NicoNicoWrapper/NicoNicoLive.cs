@@ -115,7 +115,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                             status.ContentsList.Add(contents);
                         }
-                        ;
                     }
                     status.ThumbNailUrl = stream.SelectSingleNode("picture_url").InnerText;
 

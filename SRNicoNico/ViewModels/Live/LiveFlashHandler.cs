@@ -176,7 +176,7 @@ namespace SRNicoNico.ViewModels {
 
             //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
             if(ShockwaveFlash != null && !ShockwaveFlash.IsDisposed) {
-
+                
                 try {
 
                     Proxy.Call(func, args);
@@ -185,8 +185,8 @@ namespace SRNicoNico.ViewModels {
                     Console.WriteLine("COMException：" + func);
                 }
             }
-        }
-
+        }   
+        
 
 
     }

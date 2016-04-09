@@ -109,6 +109,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             } else {
 
                 var xml = BuildThread();
+
+                XmlSocket.Send(xml);
+                Task.Run(() => {
+
+                    XmlSocket.RecursiveReceive(new MemoryStream());
+                });
             }
 
         }
@@ -148,6 +154,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             try {
 
                 xml.LoadXml(e.Xml);
+
+                Console.WriteLine(e.Xml);
 
                 var thread = xml.SelectSingleNode("/thread");
                 if(thread != null) {

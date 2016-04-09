@@ -11,6 +11,7 @@ package live {
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	import flash.net.ObjectEncoding;
+	import flash.net.Responder;
 	import flash.utils.Timer;
 	/**
 	 * ...
@@ -30,6 +31,9 @@ package live {
 		
 		//API結果
 		private var getPlayerStatus:Object;
+		
+		//タイムシフトか否か
+		private var archive:Boolean;
 		
 		//vpos最大最小値
 		private var maxVpos:int;
@@ -65,6 +69,7 @@ package live {
 			this.videoUrl = videoUrl;
 			var json:Object = JSON.parse(config);
 			getPlayerStatus = json;
+			archive = getPlayerStatus.Archive;
 			
 			connection = new NetConnection();
 			connection.objectEncoding = ObjectEncoding.AMF3;
@@ -172,6 +177,38 @@ package live {
 					}
 
 					stream.play(publishUrl, offset);
+					break;
+				case "/liveplay":
+					
+					var liveurl:String = args[0];
+					
+					var array:Array = liveurl.split(",");
+
+					
+					if (array.length >= 2) {
+						var origin:String = array[0];
+						liveurl = array[1];
+						
+						var qarray:Array = liveurl.split("?");
+						var name:String = qarray[0];
+						var query:String = qarray[1];
+						
+						connection.call("nlPlayNotice", new Responder(function (... rest):void {
+							
+							ExternalInterface.call("nlPlayNotice Successs");
+							stream.play(name);
+						}, function (... rest):void {
+							
+							ExternalInterface.call("nlPlayNotice Failed");
+							
+						}
+						), origin, name + "?" + query, name, -2);
+					} else {
+						
+						
+					}
+					
+					
 					break;
 				
 			}
