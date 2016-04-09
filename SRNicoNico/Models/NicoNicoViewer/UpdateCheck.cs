@@ -13,8 +13,12 @@ using System.Xml;
 namespace SRNicoNico.Models.NicoNicoViewer {
     public class UpdateCheck : NotificationObject {
 
+#if DEBUG
+        private static string CheckUrl = "https://mrtska.net/niconicowrapper/update";
+#elif RELEASE
         private static string CheckUrl = "http://download.mrtska.net/DownloadCounter/Download?file=NicoNicoViewer/update";
-        
+#endif
+
         public static bool IsUpdateAvailable(double cur, ref string url) {
 
             try {

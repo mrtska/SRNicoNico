@@ -7,6 +7,7 @@ using System.Windows;
 
 using Livet;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Updater {
     /// <summary>
@@ -21,9 +22,18 @@ namespace Updater {
                 Environment.Exit(0);
             }
 
+
+
             DispatcherHelper.UIDispatcher = Dispatcher;
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
+            var pid = int.Parse(Regex.Match(Environment.CommandLine, @"\d+$").Value);
+
+            var process = Process.GetProcessById(pid);
+            if(process != null) {
+
+                process.Kill();
+            }
 
 
 

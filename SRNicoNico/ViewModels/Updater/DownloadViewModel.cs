@@ -85,8 +85,8 @@ namespace SRNicoNico.ViewModels {
                 Thread.Sleep(200);
 
                 //直接起動されたら困っちゃうのでコマンドライン引数にいれちゃう
-                Process.Start(Environment.CurrentDirectory + "/backup/Updater.exe", "iris");
-                Environment.Exit(0);
+                Process.Start(Environment.CurrentDirectory + "/backup/Updater.exe", "iris " + Process.GetCurrentProcess().Id);
+                //Environment.Exit(0);
             });
         }
     }

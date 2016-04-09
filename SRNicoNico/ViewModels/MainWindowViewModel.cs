@@ -29,7 +29,7 @@ namespace SRNicoNico.ViewModels {
         //現在のバージョン
         public double CurrentVersion {
 
-            get { return 0.72; }
+            get { return 0.71; }
         }
 
         
@@ -274,9 +274,7 @@ namespace SRNicoNico.ViewModels {
             TabItems.Add(new OtherViewModel());
             TabItems.Add(Config = new ConfigViewModel());
 
-#if !DEBUG
             Update.CheckUpdate();
-#endif
            //DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoNicoOpener.Open("http://live.nicovideo.jp/watch/lv254486518?ref=zero_mytimeshift")));
             ;
             }
