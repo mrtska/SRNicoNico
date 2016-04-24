@@ -48,12 +48,12 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 var vm = new CommunityViewModel(url);
                 App.ViewModelRoot.ReplaceTabAndSetCurrent(old, vm);
                 return vm;
-            } /*else if(url.StartsWith("http://live.nicovideo.jp/watch/")) {
+            } else if(url.StartsWith("http://live.nicovideo.jp/watch/")) {
 
                 var vm = new LiveViewModel(url);
                 App.ViewModelRoot.ReplaceTabAndSetCurrent(old, vm);
                 return vm;
-            }*/ else {
+            } else {
 
                 System.Diagnostics.Process.Start(url);
                 return null;
@@ -90,12 +90,12 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 var vm = new CommunityViewModel(url);
                 App.ViewModelRoot.AddTabAndSetCurrent(vm);
                 return vm;
-            } /*else if(url.StartsWith("http://live.nicovideo.jp/watch/")) {
+            } else if(url.StartsWith("http://live.nicovideo.jp/watch/")) {
 
                 var vm = new LiveViewModel(url);
                 App.ViewModelRoot.AddTabAndSetCurrent(vm);
                 return vm;
-            }*/ else {
+            } else {
 
                 System.Diagnostics.Process.Start(url);
                 return null;

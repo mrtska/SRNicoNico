@@ -15,7 +15,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
 #if DEBUG
         private static string CheckUrl = "https://mrtska.net/niconicowrapper/update";
-#elif RELEASE
+#else
         private static string CheckUrl = "http://download.mrtska.net/DownloadCounter/Download?file=NicoNicoViewer/update";
 #endif
 
