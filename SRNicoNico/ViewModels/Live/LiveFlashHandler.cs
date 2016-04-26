@@ -21,6 +21,7 @@ using Flash.External;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.IO;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class LiveFlashHandler : ViewModel {
@@ -84,15 +85,16 @@ namespace SRNicoNico.ViewModels {
                     break;
             }
         }
-
+        
 
         public void CsFrame(string vposs) {
             
-            var vpos = int.Parse(vposs);
-
-            Owner.LiveCommentInstance.Vpos = vpos;
-            Owner.Status = vposs + " " + GetTimeFromVpos(vpos) + " " + (int.Parse(Owner.Content.GetPlayerStatus.BaseTime) + vpos / 100);
-            Owner.Time.CurrentTimeString = GetTimeFromVpos(vpos);
+            var vpos = long.Parse(vposs);
+            
+            Owner.LiveCommentInstance.Vpos = (int)vpos;
+            Owner.Status = vposs + " " + GetTimeFromVpos((int)vpos) + " " + (int.Parse(Owner.Content.GetPlayerStatus.BaseTime) + vpos / 100);
+            var unix = UnixTime.ToUnixTime(DateTime.Now);
+            Owner.Time.CurrentTimeString = GetTimeFromVpos((int)(unix - long.Parse(Owner.Content.GetPlayerStatus.BaseTime)) * 100);
             Owner.Time.CurrentTime = vpos / 100;
 
             if(Owner.Content.Type == LivePageType.TimeShift) {

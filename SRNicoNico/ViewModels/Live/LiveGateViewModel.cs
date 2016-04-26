@@ -138,7 +138,7 @@ namespace SRNicoNico.ViewModels {
 
             DescriptionBrowser.Dispose();
             Dispose();
-            App.ViewModelRoot.RemoveTabAndLastSet(this);
+            App.ViewModelRoot.RemoveTabAndLastSet(Owner);
         }
 
         public void Close() {

@@ -359,9 +359,11 @@ namespace SRNicoNico.ViewModels {
 
             if(disposing) {
 
+
                 DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
                     Handler.DisposeHandler();
+                   
                 }));
             }
         }
@@ -493,8 +495,8 @@ namespace SRNicoNico.ViewModels {
                 Handler.Resume();
             }
         }
-
-
+        
+        
         public void ToggleComment() {
 
             CommentVisibility ^= true;
@@ -508,7 +510,8 @@ namespace SRNicoNico.ViewModels {
             Handler.Seek(0);
         }
         public void Close() {
-
+            
+            App.ViewModelRoot.RemoveTabAndLastSet(Owner);
             Dispose();
         }
         public override void KeyDown(KeyEventArgs e) {

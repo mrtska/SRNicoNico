@@ -297,11 +297,11 @@ package live {
 			*///タイムシフト
 			
 			var now:Date = new Date();
-			this.vpos = int((stream.time * 1000 + offset * 1000) / 10);
+			this.vpos = int(int((now.getTime() / 10) - getPlayerStatus.BaseTime * 100));
 			ExternalInterface.call("CsFrame", this.vpos.toString());
 
 			
-			rasterizer.render(vpos);
+			rasterizer.render(vpos - 100);
 		}
 		
 		

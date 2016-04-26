@@ -84,9 +84,10 @@
                                     <Setter.Value>
                                         <TextBlock>
                                             <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} ({1})">
+                                                <MultiBinding StringFormat="{}{0} ({1}) (vpos:{2})">
                                                     <Binding Path="Content"/>
                                                     <Binding Path="Date" />
+                                                    <Binding Path="Vpos"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>
