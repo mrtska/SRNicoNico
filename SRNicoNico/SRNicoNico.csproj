@@ -871,6 +871,8 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Icons\Category.png" />
+    <Resource Include="Icons\DaihyakkaAri.png" />
     <Content Include="InfrastructureAssemblies\Design\Livet.Design.dll" />
     <Content Include="InfrastructureAssemblies\ExternalInterfaceProxy.dll" />
     <Content Include="InfrastructureAssemblies\Livet.dll" />

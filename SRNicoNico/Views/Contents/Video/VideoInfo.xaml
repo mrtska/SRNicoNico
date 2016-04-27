@@ -12,6 +12,7 @@
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              mc:Ignorable="d" 
              d:DesignHeight="600" 
+             d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              Focusable="False"
              >
@@ -26,19 +27,25 @@
                 <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+            
+            <Border  BorderBrush="#FF444444" BorderThickness="1" Margin="10,10,10,10" >
+                <StackPanel Margin="3">
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.Cmsid, StringFormat=動画ID : {0}}" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.ViewCounter, StringFormat=再生数 : {0:N0}}" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.CommentCounter, StringFormat=コメント数 : {0:N0}}" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.MylistCounter, StringFormat=マイリスト数 : {0:N0}}" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.HighestRank, StringFormat=過去最高順位 : {0}}" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.YesterdayRank, StringFormat=前日総合順位 : {0}}" />
+                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.VideoType, StringFormat=動画タイプ : {0}, TargetNullValue=読込中}" />
+                </StackPanel>
+            </Border>
 
-            <StackPanel  Margin="10" >
+            <StackPanel  Grid.Column="1" Margin="0,10,10,10" >
                 <Image Width="130" Height="90" Source="{Binding VideoData.ApiData.Thumbnail}" Margin="5" />
 
                 <Border BorderBrush="#FF444444" BorderThickness="1">
                     <StackPanel Margin="3">
-                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.Cmsid, StringFormat=動画ID : {0}}" />
-                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.ViewCounter, StringFormat=再生数 : {0:N0}}" />
-                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.CommentCounter, StringFormat=コメント数 : {0:N0}}" />
-                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.MylistCounter, StringFormat=マイリスト数 : {0:N0}}" />
-                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.HighestRank, StringFormat=過去最高順位 : {0}}" />
-                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.YesterdayRank, StringFormat=前日総合順位 : {0}}" />
-                        <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.VideoType, StringFormat=動画タイプ : {0}, TargetNullValue=読込中}" />
+
                         <Button Content="ツイートする" Margin="4,0" IsEnabled="{Binding IsInitialized}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
@@ -64,31 +71,6 @@
                 </Border>
             </StackPanel>
 
-            <Border Grid.Column="1"  BorderBrush="#FF444444" BorderThickness="1" Margin="0,10,10,10" >
-                <StackPanel Margin="3">
-
-                    <TextBlock Text="タグ" Margin="10" FontSize="16" />
-                    <Rectangle Stroke="#FF444444" Margin="10,-5,10,5" />
-
-                    <ListBox   Margin="3" ItemsSource="{Binding VideoData.ApiData.TagList}" Focusable="False" >
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}">
-
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="Focusable" Value="False" />
-                                <Setter Property="Foreground" Value="#FFAAAAAA" />
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-
-                        <ListBox.Resources>
-                            <DataTemplate DataType="{x:Type vm:VideoTagViewModel}">
-                                <local:VideoTag />
-                            </DataTemplate>
-                        </ListBox.Resources>
-                    </ListBox>
-                </StackPanel>
-            </Border>
 
             <Border Grid.Row="1" Grid.ColumnSpan="2"  BorderBrush="#FF444444" BorderThickness="1" Margin="10,0,10,10">
                 <StackPanel>
