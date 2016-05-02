@@ -16,154 +16,182 @@
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              Focusable="False"
              >
-    <ScrollViewer>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            
-            <Border  BorderBrush="#FF444444" BorderThickness="1" Margin="10,10,10,10" >
-                <StackPanel Margin="3">
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.Cmsid, StringFormat=動画ID : {0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.ViewCounter, StringFormat=再生数 : {0:N0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.CommentCounter, StringFormat=コメント数 : {0:N0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.MylistCounter, StringFormat=マイリスト数 : {0:N0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.HighestRank, StringFormat=過去最高順位 : {0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.YesterdayRank, StringFormat=前日総合順位 : {0}}" />
-                    <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.VideoType, StringFormat=動画タイプ : {0}, TargetNullValue=読込中}" />
-                </StackPanel>
-            </Border>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <DataGrid d:DataContext="{d:DesignInstance {x:Type vm:CommentEntryViewModel}}" AutoGenerateColumns="False" ItemsSource="{Binding VideoData.CommentData}" HeadersVisibility="None" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Entry.Content}" IsReadOnly="True" CanUserSort="False"   Width="*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                            <Setter Property="ToolTipService.ShowDuration" Value="0x7FFFFFFF" />
+                            <Setter Property="ToolTip">
+                                <Setter.Value>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} ({1})">
+                                                <Binding Path="Entry.Content"/>
+                                                <Binding Path="Entry.Date"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
 
-            <StackPanel  Grid.Column="1" Margin="0,10,10,10" >
-                <Image Width="130" Height="90" Source="{Binding VideoData.ApiData.Thumbnail}" Margin="5" />
+                </DataGridTextColumn>
 
-                <Border BorderBrush="#FF444444" BorderThickness="1">
-                    <StackPanel Margin="3">
+            </DataGrid.Columns>
+        </DataGrid>
 
-                        <Button Content="ツイートする" Margin="4,0" IsEnabled="{Binding IsInitialized}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenTweetDialog"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Button>
-                        <Button Content="とりあえずマイリスト&#10;        に登録" Margin="4,10,4,0" IsEnabled="{Binding Mylist.IsDeflistButtonEnabled}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <l:LivetCallMethodAction MethodTarget="{Binding Mylist}" MethodName="AddDeflist"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Button>
-                        <Button Content="マイリストに登録" Margin="4,10,4,0" IsEnabled="{Binding Mylist.IsDeflistButtonEnabled}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <l:LivetCallMethodAction MethodTarget="{Binding Mylist}" MethodName="OpenMylistDialog"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Button>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Border  BorderBrush="#FF444444" BorderThickness="1" Margin="10,10,10,10" >
+                        <StackPanel Margin="3" >
+                            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.Cmsid, StringFormat=動画ID : {0}}" />
+                            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.ViewCounter, StringFormat=再生数 : {0:N0}}" />
+                            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.CommentCounter, StringFormat=コメント数 : {0:N0}}" />
+                            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.MylistCounter, StringFormat=マイリスト数 : {0:N0}}" />
+                            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.HighestRank, StringFormat=過去最高順位 : {0}}" />
+                            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.YesterdayRank, StringFormat=前日総合順位 : {0}}" />
+                            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.VideoType, StringFormat=動画タイプ : {0}, TargetNullValue=読込中}" />
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel  Grid.Column="1" Margin="0,10,10,10" >
+                        <Image Width="130" Height="90" Source="{Binding VideoData.ApiData.Thumbnail}" Margin="5" />
+
+                        <Border BorderBrush="#FF444444" BorderThickness="1">
+                            <StackPanel Margin="3">
+
+                                <Button Content="ツイートする" Margin="4,0" IsEnabled="{Binding IsInitialized}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenTweetDialog"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Button>
+                                <Button Content="とりあえずマイリスト&#10;        に登録" Margin="4,10,4,0" IsEnabled="{Binding Mylist.IsDeflistButtonEnabled}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <l:LivetCallMethodAction MethodTarget="{Binding Mylist}" MethodName="AddDeflist"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Button>
+                                <Button Content="マイリストに登録" Margin="4,10,4,0" IsEnabled="{Binding Mylist.IsDeflistButtonEnabled}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <l:LivetCallMethodAction MethodTarget="{Binding Mylist}" MethodName="OpenMylistDialog"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+
                     </StackPanel>
-                </Border>
-            </StackPanel>
+                </Grid>
+                <Border  BorderBrush="#FF444444" BorderThickness="1" Margin="10,0,10,10">
+                    <StackPanel>
+                        <TextBlock  Margin="10" FontSize="16">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="投稿者情報"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding VideoData.ApiData.IsChannelVideo}" Value="true">
+                                            <Setter Property="Text" Value="チャンネル情報"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <Rectangle Stroke="#FF444444" Margin="10,-5,10,5" />
 
 
-            <Border Grid.Row="1" Grid.ColumnSpan="2"  BorderBrush="#FF444444" BorderThickness="1" Margin="10,0,10,10">
-                <StackPanel>
-                    <TextBlock  Margin="10" FontSize="16">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Text" Value="投稿者情報"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding VideoData.ApiData.IsChannelVideo}" Value="true">
-                                        <Setter Property="Text" Value="チャンネル情報"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>   
-                    </TextBlock>
-                    <Rectangle Stroke="#FF444444" Margin="10,-5,10,5" />
-
-
-                    <Grid VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Image Source="{Binding VideoData.ApiData.UploaderIconUrl}" Width="65" Height="50" />
-                        <Grid Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock TextWrapping="Wrap" FontSize="16" Margin="5" >
-                                <TextBlock.ToolTip>
-                                    <ContentControl>
-                                        <TextBlock FontSize="12" >
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Text" Value="{Binding VideoData.ApiData.UploaderId,StringFormat='http://www.nicovideo.jp/user/{0}'}"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding VideoData.ApiData.IsChannelVideo}" Value="true">
-                                                            <Setter Property="Text" Value="{Binding VideoData.ApiData.UploaderId,StringFormat='http://ch.nicovideo.jp/channel/ch{0}'}"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </ContentControl>
-                                </TextBlock.ToolTip>
+                        <Grid VerticalAlignment="Top">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding VideoData.ApiData.UploaderIconUrl}" Width="65" Height="50" />
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock TextWrapping="Wrap" FontSize="16" Margin="5" >
+                                    <TextBlock.ToolTip>
+                                        <ContentControl>
+                                            <TextBlock FontSize="12" >
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Text" Value="{Binding VideoData.ApiData.UploaderId,StringFormat='http://www.nicovideo.jp/user/{0}'}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding VideoData.ApiData.IsChannelVideo}" Value="true">
+                                                                <Setter Property="Text" Value="{Binding VideoData.ApiData.UploaderId,StringFormat='http://ch.nicovideo.jp/channel/ch{0}'}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </ContentControl>
+                                    </TextBlock.ToolTip>
                                 <Hyperlink RequestNavigate="OpenHyperLink" NavigateUri="{Binding VideoData.ApiData.UploaderId}">
                                     <Run Text="{Binding VideoData.ApiData.UploaderName}" />
                                 </Hyperlink>
                             </TextBlock>
 
-                            <Button x:Name="favorite" Grid.Row="1" Focusable="False" HorizontalAlignment="Left" Margin="5,0,0,10" IsEnabled="{Binding IsInitialized}" >
-                                <ContentControl>
+                                <Button x:Name="favorite" Grid.Row="1" Focusable="False" HorizontalAlignment="Left" Margin="5,0,0,10" IsEnabled="{Binding IsInitialized}" >
+                                    <ContentControl>
+                                        <i:Interaction.Triggers>
+                                            <ei:DataTrigger Binding="{Binding VideoData.ApiData.IsChannelVideo}" Value="True">
+                                                <ei:ChangePropertyAction TargetName="favorite" PropertyName="Visibility" Value="Hidden"/>
+                                            </ei:DataTrigger>
+                                        </i:Interaction.Triggers>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Setter Property="Content" Value="お気に入り登録"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding VideoData.ApiData.UploaderIsFavorited}" Value="True">
+                                                        <Setter Property="Content" Value="お気に入り登録済み" />
+                                                        <Setter Property="Width" Value="100"/>
+                                                    </DataTrigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding VideoData.ApiData.UploaderIsFavorited}" Value="True" />
+                                                            <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}, Path=IsMouseOver}" Value="True"/>
+
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Content" Value="お気入り登録を解除する" />
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
                                     <i:Interaction.Triggers>
-                                        <ei:DataTrigger Binding="{Binding VideoData.ApiData.IsChannelVideo}" Value="True">
-                                            <ei:ChangePropertyAction TargetName="favorite" PropertyName="Visibility" Value="Hidden"/>
-                                        </ei:DataTrigger>
+                                        <i:EventTrigger EventName="Click">
+                                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleFavorite"/>
+                                        </i:EventTrigger>
                                     </i:Interaction.Triggers>
-                                    <ContentControl.Style>
-                                        <Style TargetType="ContentControl">
-                                            <Setter Property="Content" Value="お気に入り登録"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding VideoData.ApiData.UploaderIsFavorited}" Value="True">
-                                                    <Setter Property="Content" Value="お気に入り登録済み" />
-                                                    <Setter Property="Width" Value="100"/>
-                                                </DataTrigger>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding VideoData.ApiData.UploaderIsFavorited}" Value="True" />
-                                                        <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}, Path=IsMouseOver}" Value="True"/>
-
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter Property="Content" Value="お気入り登録を解除する" />
-                                                </MultiDataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ContentControl.Style>
-                                </ContentControl>
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Click">
-                                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleFavorite"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </Button>
+                                </Button>
+                            </Grid>
                         </Grid>
-                    </Grid>
 
-                </StackPanel>
+                    </StackPanel>
 
 
-            </Border>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
 
-        </Grid>
-    </ScrollViewer>
 
+    </Grid>
 </UserControl>

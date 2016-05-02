@@ -150,7 +150,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     Lck = tag.lck == "1" ? true : false,
                     Cat = tag.cat()
                 };
-                ret.TagList.Add(new VideoTagViewModel(entry)); 
+                entry.Url = "http://dic.nicovideo.jp/a/" + entry.Tag;
+                ret.TagList.Add(new VideoTagViewModel(entry, Owner)); 
             }
             //------
 
@@ -348,6 +349,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //タグ名
         public string Tag { get; set; }
 
+        //大百科URL
+        public string Url { get; set; }
+
         //大百科が存在するか
         public bool Dic { get; set; }
 
@@ -356,6 +360,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //カテゴリタグか否か
         public bool Cat { get; set; }
+
+
     }
 
 

@@ -106,8 +106,19 @@
                                             <DropShadowEffect Color="Black" RenderingBias="Quality"/>
                                         </Image.Effect>
                                     </Image>
-                                    <TextBlock TextWrapping="Wrap" Text="{Binding Tag.Tag}" Margin="5,2"/>
-                                    <Image Width="16" Height="16" Source="/SRNicoNico;component/Icons/DaihyakkaAri.png" Margin="0,2">
+                                    <TextBlock TextWrapping="Wrap" Text="{Binding Tag.Tag}" Margin="5,2" ToolTip="Ctrlを押しながらクリックでタグ検索">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="TagClick" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBlock>
+                                    <Image Width="14" Height="14" Source="/SRNicoNico;component/Icons/DaihyakkaAri.png" Margin="0,2" ToolTip="{Binding Tag.Url}" Cursor="Hand">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseRightButtonDown">
+                                                <ei:LaunchUriOrFileAction Path="{Binding Tag.Url}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
                                         <Image.Resources>
                                             <Style TargetType="Image">
                                                 <Style.Triggers>

@@ -13,6 +13,7 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class VideoTagViewModel : ViewModel {
@@ -31,14 +32,23 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        public VideoTagViewModel(NicoNicoTag tag) {
+        private VideoViewModel Owner;
+
+        public VideoTagViewModel(NicoNicoTag tag, VideoViewModel vm) {
 
             Tag = tag;
+            Owner = vm;
         }
+
 
         public void TagClick() {
 
-            App.ViewModelRoot.SearchText(SearchType.Tag, Tag.Tag);
+            if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
+
+                Owner.Pause();
+                App.ViewModelRoot.SearchText(SearchType.Tag, Tag.Tag);
+            }
+            
         }
     }
 }

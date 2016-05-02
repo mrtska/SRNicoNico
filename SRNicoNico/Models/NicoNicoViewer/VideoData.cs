@@ -35,9 +35,9 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 		//コメントデータ
 
 		#region CommentData変更通知プロパティ
-		private ObservableCollection<CommentEntryViewModel> _CommentData = new ObservableCollection<CommentEntryViewModel>();
+		private DispatcherCollection<CommentEntryViewModel> _CommentData = new DispatcherCollection<CommentEntryViewModel>(DispatcherHelper.UIDispatcher);
 
-		public ObservableCollection<CommentEntryViewModel> CommentData {
+		public DispatcherCollection<CommentEntryViewModel> CommentData {
 			get { return _CommentData; }
 			set { 
 				if(_CommentData == value)
