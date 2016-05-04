@@ -1,15 +1,16 @@
-﻿<Application x:Class="SRNicoNico.App"
+﻿<Application
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:converter="clr-namespace:SRNicoNico.Views.Converter"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI" x:Class="SRNicoNico.App"
              >
-	<Application.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.xaml" />
-				<ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.Dark.xaml"/>
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.xaml" />
+                <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.Dark.xaml"/>
 
                 <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Themes/Dark.xaml" />
@@ -21,31 +22,31 @@
 
 
 
-            <Style x:Key="DefaultItemContainerStyle" TargetType="ListBoxItem">
-					<Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
-					<Setter Property="Height" Value="38" />
-					<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWay}" />
-					<Setter Property="Template">
-						<Setter.Value>
-							<ControlTemplate TargetType="{x:Type ListBoxItem}">
-								<Border Background="{TemplateBinding Background}">
-									<ContentPresenter />
-								</Border>
-							</ControlTemplate>
-						</Setter.Value>
-					</Setter>
-					<Setter Property="FocusVisualStyle" Value="{DynamicResource {x:Static SystemParameters.FocusVisualStyleKey}}" />
-					<Style.Triggers>
-						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Background" Value="{DynamicResource AccentHighlightBrushKey}" />
-							<Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrushKey}" />
-						</Trigger>
-           
-                        <Trigger Property="IsSelected" Value="True">
-							<Setter Property="Background" Value="{DynamicResource AccentBrushKey}" />
-							<Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrushKey}" />
-						</Trigger>
-					</Style.Triggers>
+            <Style x:Key="DefaultItemContainerStyle" TargetType="{x:Type ListBoxItem}">
+                <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                <Setter Property="Height" Value="38" />
+                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWay}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="FocusVisualStyle" Value="{DynamicResource {x:Static SystemParameters.FocusVisualStyleKey}}" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource AccentHighlightBrushKey}" />
+                        <Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrushKey}" />
+                    </Trigger>
+
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource AccentBrushKey}" />
+                        <Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrushKey}" />
+                    </Trigger>
+                </Style.Triggers>
             </Style>
 
             <Style x:Key="HorizontalViewStyle" TargetType="{x:Type metro:TabView}">
@@ -106,14 +107,73 @@
                 </Setter>
             </Style>
 
-            <ScrollUnit x:Key="ScrollMethod" >
-                Pixel
-            </ScrollUnit>
+            <ScrollUnit x:Key="ScrollMethod" >Pixel</ScrollUnit>
             <GridLength x:Key="GridWidth1"/>
             <GridLength x:Key="GridWidth2"/>
             <s:Int32 x:Key="VideoColumn">0</s:Int32>
             <s:Int32 x:Key="InfoColumn">0</s:Int32>
 
+            <Style x:Key="ModernButtonStyle1" TargetType="{x:Type mui:ModernButton}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="{DynamicResource ModernButtonText}"/>
+                <Setter Property="Padding" Value="1"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type mui:ModernButton}">
+                            <Grid x:Name="grid" Background="Transparent" Margin="{TemplateBinding Padding}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Height="{TemplateBinding EllipseDiameter}" Width="{TemplateBinding EllipseDiameter}">
+                                    <Ellipse x:Name="ellipse" Stroke="{DynamicResource ModernButtonBorder}" StrokeThickness="{TemplateBinding EllipseStrokeThickness}" VerticalAlignment="Stretch"/>
+                                    <Path x:Name="icon" Data="{TemplateBinding IconData}" Fill="{TemplateBinding Foreground}" HorizontalAlignment="Center" Height="{TemplateBinding IconHeight}" Stretch="Uniform" VerticalAlignment="Center" Width="{TemplateBinding IconWidth}"/>
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <TextBlock Foreground="{TemplateBinding Foreground}" Margin="4,-1,0,0" TextTrimming="CharacterEllipsis" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                        <TextBlock.Text>
+                                            <Binding>
+                                                <Binding.Converter>
+                                                    <mui:ToLowerConverter/>
+                                                </Binding.Converter>
+                                            </Binding>
+                                        </TextBlock.Text>
+                                        <TextBlock.Visibility>
+                                            <Binding ConverterParameter="inverse">
+                                                <Binding.Converter>
+                                                    <mui:NullOrEmptyStringToVisibilityConverter/>
+                                                </Binding.Converter>
+                                            </Binding>
+                                        </TextBlock.Visibility>
+                                    </TextBlock>
+                                </Grid>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource ModernButtonTextHover}"/>
+                                    <Setter Property="Stroke" TargetName="ellipse" Value="{DynamicResource ModernButtonBorderHover}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource ModernButtonTextPressed}"/>
+                                    <Setter Property="Stroke" TargetName="ellipse" Value="{DynamicResource ModernButtonBorderPressed}"/>
+                                    <Setter Property="Fill" TargetName="ellipse" Value="{DynamicResource ModernButtonIconBackgroundPressed}"/>
+                                    <Setter Property="Fill" TargetName="icon" Value="{DynamicResource ModernButtonIconForegroundPressed}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Foreground" Value="{DynamicResource ModernButtonTextDisabled}"/>
+                                    <Setter Property="Stroke" TargetName="ellipse" Value="{DynamicResource ModernButtonBorderDisabled}"/>
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter Property="Stroke" TargetName="ellipse" Value="{DynamicResource Accent}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
         </ResourceDictionary>
-	</Application.Resources>
+    </Application.Resources>
 </Application>

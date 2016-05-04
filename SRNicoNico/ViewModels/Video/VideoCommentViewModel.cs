@@ -171,6 +171,20 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        #region AutoScroll変更通知プロパティ
+        private bool _AutoScroll = true;
+
+        public bool AutoScroll {
+            get { return _AutoScroll; }
+            set { 
+                if(_AutoScroll == value)
+                    return;
+                _AutoScroll = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
         //位置
         public string Vpos { get; set; }
 
@@ -180,6 +194,11 @@ namespace SRNicoNico.ViewModels {
 
             Owner = vm;
 		}
+
+        public void ToggleScroll() {
+
+            AutoScroll ^= true;
+        }
 
         public void UpdateMail() {
 

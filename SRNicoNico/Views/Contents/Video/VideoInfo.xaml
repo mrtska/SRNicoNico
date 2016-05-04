@@ -23,6 +23,70 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="コメント" HorizontalAlignment="Center" FontSize="20"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <mui:ModernButton DataContext="{Binding Comment}" ToolTip="オートスクロール" Margin="0,0,10,0" Focusable="False">
+                    <mui:ModernButton.Style>
+                        <Style TargetType="{x:Type mui:ModernButton}">
+                            <Style.Triggers>
+                                <DataTrigger  Binding="{Binding AutoScroll}" Value="True" >
+                                    <Setter Property="IconData" Value="M12,17L7,12H10V8H14V12H17L12,17Z" />
+                                </DataTrigger>
+                                <DataTrigger  Binding="{Binding AutoScroll}" Value="False" >
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="mui:ModernButton">
+                                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1" Width="{TemplateBinding EllipseDiameter}" Height="{TemplateBinding EllipseDiameter}">
+                                                    <Ellipse x:Name="ellipse" Stroke="{DynamicResource ModernButtonBorder}" StrokeThickness="{TemplateBinding EllipseStrokeThickness}" VerticalAlignment="Stretch"/>
+                                                    <Path Fill="{TemplateBinding Foreground}"  HorizontalAlignment="Center" Height="{TemplateBinding IconHeight}" Stretch="Uniform" VerticalAlignment="Center" Width="{TemplateBinding IconWidth}" Data="M12,17L7,12H10V8H14V12H17L12,17 Z"/>
+                                                    <Path Fill="Red" Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" Stretch="Uniform"/>
+                                                </Grid>
+                                                
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsFocused" Value="True">
+                                                        <Setter Property="Stroke" TargetName="ellipse" Value="{DynamicResource Accent}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Foreground" Value="{DynamicResource ModernButtonTextHover}"/>
+                                                        <Setter Property="Stroke" TargetName="ellipse" Value="{DynamicResource ModernButtonBorderHover}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter Property="Foreground" Value="{DynamicResource ModernButtonTextPressed}"/>
+                                                        <Setter Property="Stroke" TargetName="ellipse" Value="{DynamicResource ModernButtonBorderPressed}"/>
+                                                        <Setter Property="Fill" TargetName="ellipse" Value="{DynamicResource ModernButtonIconBackgroundPressed}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter> 
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </mui:ModernButton.Style>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodName="ToggleScroll" MethodTarget="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </mui:ModernButton>
+
+                <mui:ModernButton ToolTip="新しいウィンドウでコメントを見る" HorizontalAlignment="Right" IconData="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" Margin="0,0,5,0" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenCommentWindow" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </mui:ModernButton>
+
+            </StackPanel>
+        </Grid>
+
 
         <DataGrid Grid.Row="1" d:DataContext="{d:DesignInstance {x:Type vm:CommentEntryViewModel}}" AutoGenerateColumns="False" ItemsSource="{Binding VideoData.CommentData}" HeadersVisibility="None" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
@@ -202,14 +266,9 @@
                                 </Button>
                             </Grid>
                         </Grid>
-
                     </StackPanel>
-
-
                 </Border>
             </StackPanel>
         </ScrollViewer>
-
-
     </Grid>
 </UserControl>
