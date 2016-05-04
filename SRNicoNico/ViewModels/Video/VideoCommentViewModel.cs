@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Livet;
+using Livet.Messaging;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Models.NicoNicoViewer;
@@ -186,7 +187,19 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
         //位置
-        public string Vpos { get; set; }
+        #region Vpos変更通知プロパティ
+        private string _Vpos;
+
+        public string Vpos {
+            get { return _Vpos; }
+            set { 
+                if(_Vpos == value)
+                    return;
+                _Vpos = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         private VideoViewModel Owner;
 
@@ -198,6 +211,11 @@ namespace SRNicoNico.ViewModels {
         public void ToggleScroll() {
 
             AutoScroll ^= true;
+        }
+
+        public void OpenCommentWindow() {
+
+            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Video.CommentView), Owner, TransitionMode.NewOrActive));
         }
 
         public void UpdateMail() {
