@@ -218,6 +218,7 @@ namespace SRNicoNico.ViewModels {
                     entry.No = no;
                     entry.Mail = Mail;
                     entry.Vpos = Vpos;
+                   
                     entry.Content = Text;
 
                     Owner.Proxy.Call("AsInjectMyComment", entry.ToJson());

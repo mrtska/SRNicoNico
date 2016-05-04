@@ -89,6 +89,27 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             return time;
         }
 
+
+        public static string GetTimeFromVpos(string vpos) {
+
+            return GetTimeFromVpos(int.Parse(vpos));
+        }
+
+        public static string GetTimeFromVpos(int vpos) {
+
+            //秒に直す
+            vpos /= 100;
+
+            var time = new TimeSpan(0, 0, vpos).ToString();
+
+            if (time.StartsWith("00:")) {
+
+                time = time.Substring(3);
+            }
+
+            return time;
+        }
+
         public static string DateFromVitaFormatDate(string date) {
             return Regex.Replace(date, @"(\d\d\d\d-\d\d-\d\d).(\d\d:\d\d:\d\d).\d\d:\d\d", "$1 $2");
         }

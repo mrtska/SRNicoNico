@@ -18,11 +18,29 @@
              >
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition />
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <DataGrid d:DataContext="{d:DesignInstance {x:Type vm:CommentEntryViewModel}}" AutoGenerateColumns="False" ItemsSource="{Binding VideoData.CommentData}" HeadersVisibility="None" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+        <TextBlock Text="コメント" HorizontalAlignment="Center" FontSize="20"/>
+
+        <DataGrid Grid.Row="1" d:DataContext="{d:DesignInstance {x:Type vm:CommentEntryViewModel}}" AutoGenerateColumns="False" ItemsSource="{Binding VideoData.CommentData}" HeadersVisibility="None" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Entry.RenderTime}" IsReadOnly="True" CanUserSort="False"   Width="40">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                            <Setter Property="ToolTipService.ShowDuration" Value="0x7FFFFFFF" />
+                            <Setter Property="ToolTip">
+                                <Setter.Value>
+                                    <TextBlock Text="{Binding Entry.RenderTime}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+
+                </DataGridTextColumn>
+
                 <DataGridTextColumn Binding="{Binding Entry.Content}" IsReadOnly="True" CanUserSort="False"   Width="*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -48,8 +66,8 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <ScrollViewer Grid.Row="1">
-            <StackPanel Grid.Row="1">
+        <ScrollViewer Grid.Row="2">
+            <StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />

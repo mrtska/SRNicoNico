@@ -510,10 +510,12 @@ namespace SRNicoNico.ViewModels {
                 var list = CommentInstance.GetComment();
                 if(list != null) {
 
+
                     foreach(var entry in list) {
 
                         VideoData.CommentData.Add(new CommentEntryViewModel(entry));
                     }
+
                     dynamic json = new DynamicJson();
                     json.array = list;
 

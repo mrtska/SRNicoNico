@@ -139,6 +139,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
                 list.Sort();
 
+
                 Ticket = doc.DocumentNode.SelectSingleNode("packet/thread").Attributes["ticket"].Value;
                 LastRes = int.Parse(doc.DocumentNode.SelectSingleNode("packet/thread").Attributes["last_res"].Value);
 
@@ -288,7 +289,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 
                 entry.No = attr["no"].Value;
                 entry.Vpos = attr["vpos"].Value;
-
+                entry.RenderTime = NicoNicoUtil.GetTimeFromVpos(entry.Vpos);
                 var unix = UnixTime.FromUnixTime(long.Parse(attr["date"].Value));
 
                 entry.Date = unix.ToLongDateString() + " " + unix.ToLongTimeString();
@@ -311,6 +312,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//コメント再生位置
 		public string Vpos { get; set; }
 
+        //コメント再生時間
+        public string RenderTime { get; set; }
+
 		//コマンド
 		public string Mail { get; set; }
 
@@ -329,12 +333,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		//Vposでソートする
 		public int CompareTo(NicoNicoCommentEntry obj) {
 
-            if(Vpos == obj.Vpos) {
+            if(int.Parse(Vpos) == int.Parse(obj.Vpos)) {
 
-                return No.CompareTo(obj.No);
+                return int.Parse(No).CompareTo(int.Parse(obj.No));
             }
 
-			return Vpos.CompareTo(obj.Vpos);
+			return int.Parse(Vpos).CompareTo(int.Parse(obj.Vpos));
 		}
 
         public string ToJson() {
