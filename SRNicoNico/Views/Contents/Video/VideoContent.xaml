@@ -113,6 +113,36 @@
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </TextBlock>
+                                    <Canvas Background="Transparent" Width="14" Height="14" ToolTip="{Binding Tag.Url}" Cursor="Hand">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseRightButtonDown">
+                                                <ei:LaunchUriOrFileAction Path="{Binding Tag.Url}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                        <Path Width="14" Height="14" Stretch="Uniform" Data="M10,10v7H90v-7ZM50,17l-5,13h3l5,-13ZM20,30h60v60h-5v-55h-50v55h-5ZM25,58h50v5h-50ZM25,83h50v5h-50Z" >
+                                            <Path.Resources>
+                                                <Style TargetType="Path">
+                                                    <Setter Property="Fill" Value="Orange"/>
+                                                    <Setter Property="Effect">
+                                                        <Setter.Value>
+                                                            <DropShadowEffect Color="Black" RenderingBias="Quality"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Tag.Dic}" Value="False">
+                                                            <Setter Property="Fill" Value="Gray"/>
+                                                            <Setter Property="Effect">
+                                                                <Setter.Value>
+                                                                    <DropShadowEffect Color="Gray" RenderingBias="Quality"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Path.Resources>
+                                        </Path>
+                                    </Canvas>
+                                    <!--
                                     <Image Width="14" Height="14" Source="/SRNicoNico;component/Icons/DaihyakkaAri.png" Margin="0,2" ToolTip="{Binding Tag.Url}" Cursor="Hand">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseRightButtonDown">
@@ -132,6 +162,7 @@
                                             <DropShadowEffect Color="Gray" RenderingBias="Quality"/>
                                         </Image.Effect>
                                     </Image>
+                               -->
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.Resources>
@@ -147,6 +178,9 @@
                 </Grid>
             </ScrollViewer>
         </Grid>
+
+        <Path Margin="0,0,250,-1000" Fill="Gray" Data="M10,10v7H90v-7ZM50,17l-5,13h3l5,-13ZM20,30h60v60h-5v-55h-50v55h-5ZM25,58h50v5h-50ZM25,83h50v5h-50Z" Width="100" Height="100" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
     </Grid>
+
 
 </UserControl>
