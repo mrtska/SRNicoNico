@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Contents.Config.ConfigLive"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Config"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance {x:Type vm:ConfigLiveViewModel}}"
+             Background="{DynamicResource ThemeBrushKey}"
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             >
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+        <Grid Margin="10">
+            <StackPanel >
+                <TextBox Width="50" Text="{Binding RefreshInterval,Mode=TwoWay}">
+                    <i:Interaction.Behaviors>
+                        <b:TextBoxNumericOnlyBehavior />
+                    </i:Interaction.Behaviors>
+                </TextBox>
+
+
+                <HeaderedContentControl>
+                    <HeaderedContentControl.Header>
+                        <TextBlock Text="その他" FontSize="20" />
+                    </HeaderedContentControl.Header>
+                    <StackPanel>
+                        
+                        <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding AlwaysShowSeekBar}" />
+                        <CheckBox Content="常にウィンドウモードのフルスクリーンを使う" IsChecked="{Binding UseWindowFullScreen}" />
+                        
+                    </StackPanel>
+                </HeaderedContentControl>
+
+
+
+            </StackPanel>
+            
+            
+        </Grid>
+
+    </ScrollViewer>    
+        
+
+</UserControl>

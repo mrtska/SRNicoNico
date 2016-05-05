@@ -45,15 +45,20 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        public Timer RefreshTimer;
+
+        public void StartRefreshTimer() {
+
+            RefreshTimer = new Timer(new TimerCallback(o => {
+
+                App.ViewModelRoot.NotifyLive.Refresh();
+                Console.WriteLine("Refresh Live");
+            }), null, App.ViewModelRoot.Config.Live.RefreshInterval, App.ViewModelRoot.Config.Live.RefreshInterval);
+        }
+
         public void TimerStart() {
 
             Task.Run(() => {
-
-                Timer timer = new Timer(new TimerCallback(o => {
-
-                    App.ViewModelRoot.NotifyLive.Refresh();
-                    Console.WriteLine("Refresh Live");
-                }), null, 50000, 50000);
 
                 for(;;) {
 
@@ -64,5 +69,6 @@ namespace SRNicoNico.ViewModels {
                 }
             });
         }
+
     }
 }

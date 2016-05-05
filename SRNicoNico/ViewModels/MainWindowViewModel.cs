@@ -274,9 +274,11 @@ namespace SRNicoNico.ViewModels {
             TabItems.Add(new OtherViewModel());
             TabItems.Add(Config = new ConfigViewModel());
 
+            //生放送通知を更新するタイマーを動かす
+            StatusBar.StartRefreshTimer();
+
+            //サーバーからアップデートがあるか確認してあったらアップデートダイアログを出す
             Update.CheckUpdate();
-           //DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => NicoNicoOpener.Open("http://live.nicovideo.jp/watch/lv254486518?ref=zero_mytimeshift")));
-            ;
             }
 
 		public void Initialize() {

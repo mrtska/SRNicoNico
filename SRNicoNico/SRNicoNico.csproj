@@ -226,6 +226,7 @@
     <Compile Include="ViewModels\Community\CommunityViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigGeneralViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigCommentViewModel.cs" />
+    <Compile Include="ViewModels\Config\ConfigLiveViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigVideoViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigViewModel.cs" />
     <Compile Include="ViewModels\Favorite\FavoriteCommunityViewModel.cs" />
@@ -267,6 +268,7 @@
     <Compile Include="ViewModels\Video\VideoMylistViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoTagViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoViewModel.cs" />
+    <Compile Include="Views\Behaviors\TextBoxNumericOnlyBehavior.cs" />
     <Compile Include="Views\Behaviors\DataGridAutoScrollBehavior.cs" />
     <Compile Include="Views\Behaviors\ListBoxAutoScrollBehavior.cs" />
     <Compile Include="Views\Behaviors\VideoCommentAutoScrollBehavior.cs" />
@@ -281,6 +283,9 @@
     </Compile>
     <Compile Include="Views\Contents\Config\ConfigComment.xaml.cs">
       <DependentUpon>ConfigComment.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Config\ConfigLive.xaml.cs">
+      <DependentUpon>ConfigLive.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Config\ConfigVideo.xaml.cs">
       <DependentUpon>ConfigVideo.xaml</DependentUpon>
@@ -545,6 +550,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Config\ConfigComment.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Config\ConfigLive.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

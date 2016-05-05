@@ -238,5 +238,17 @@ namespace SRNicoNico.Properties {
                 this["UseWindowModeFullScreen"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300000")]
+        public int RefreshInterval {
+            get {
+                return ((int)(this["RefreshInterval"]));
+            }
+            set {
+                this["RefreshInterval"] = value;
+            }
+        }
     }
 }

@@ -132,10 +132,17 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 StoreEntry(doc, list);
                 //------
 
-                if(list.Count == 0) {
+                if(resultcode != "0") {
 
                     Video.CommentStatus = "取得失敗";
                     return null;
+                }
+
+
+                if(list.Count == 0 && resultcode == "0") {
+
+                    Video.CommentStatus = "取得完了(コメント0)";
+                    return list;
                 }
                 list.Sort();
 
