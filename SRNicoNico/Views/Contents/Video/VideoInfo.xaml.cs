@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using SRNicoNico.ViewModels;
+using SRNicoNico.Models.NicoNicoWrapper;
+using Livet;
 
 namespace SRNicoNico.Views.Contents.Video {
     /// <summary>
@@ -42,6 +44,17 @@ namespace SRNicoNico.Views.Contents.Video {
             }
 
 
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e) {
+
+
+            var vm = ((MenuItem)sender).DataContext as CommentEntryViewModel;
+            var time = NicoNicoUtil.ConvertTime(vm.Entry.RenderTime);
+
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => vm.Owner.Seek(time)));
+            
+            ;
         }
     }
 }

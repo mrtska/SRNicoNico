@@ -12,9 +12,12 @@ namespace SRNicoNico.ViewModels {
 
 		public NicoNicoCommentEntry Entry { get; private set; }
 
-		public CommentEntryViewModel(NicoNicoCommentEntry entry) {
+        public VideoViewModel Owner;
+
+		public CommentEntryViewModel(NicoNicoCommentEntry entry, VideoViewModel vm) {
 
 			Entry = entry;
-		}
+            Owner = vm;
+        }
 	}
 }

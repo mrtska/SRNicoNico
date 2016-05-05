@@ -10,6 +10,7 @@
                  xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
                  xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
 		         xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                 xmlns:sc="clr-namespace:SRNicoNico.Views.Controls"
                  Title="{Binding Content.Title}"
                  WindowState="Maximized"
                  WindowStyle="None"
@@ -30,9 +31,9 @@
     <Grid Background="Black">
         <ContentControl Content="{Binding FullScreenLiveFlash,Mode=OneWay}" />
 
-        <Popup AllowsTransparency="True" IsOpen="{Binding FullScreenPopup}" StaysOpen="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" HorizontalAlignment="Center">
+        <sc:ManagedPopup AllowsTransparency="True" IsOpen="{Binding FullScreenPopup}" StaysOpen="True" Placement="Absolute" VerticalAlignment="Bottom" Height="50" HorizontalAlignment="Center">
             
             <ContentControl Content="{Binding FullScreenContoller,Mode=OneWay}" Opacity="0.5" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualWidth}"/>
-        </Popup>
+        </sc:ManagedPopup>
     </Grid>
 </Window>

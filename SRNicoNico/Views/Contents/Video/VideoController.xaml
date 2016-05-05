@@ -10,8 +10,9 @@
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
-    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-    x:Class="SRNicoNico.Views.Contents.Video.VideoController"
+            xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+            xmlns:sc="clr-namespace:SRNicoNico.Views.Controls"
+            x:Class="SRNicoNico.Views.Contents.Video.VideoController"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              d:DesignHeight="54.974" d:DesignWidth="900"
@@ -96,9 +97,9 @@
             </mui:ModernButton>
 
             <local:VolumeBar Margin="10,0,0,0"/>
-            <Popup x:Name="popup" Focusable="False" DataContext="{Binding Comment}" d:DataContext="{d:DesignInstance {x:Type vm:VideoCommentViewModel}}" AllowsTransparency="True" PopupAnimation="Slide" IsOpen="{Binding IsPopupOpen,Mode=TwoWay}" Placement="Bottom" StaysOpen="False" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}" Opened="popup_Opened">
+            <sc:ManagedPopup x:Name="popup" Focusable="False" DataContext="{Binding Comment}" d:DataContext="{d:DesignInstance {x:Type vm:VideoCommentViewModel}}" AllowsTransparency="True" PopupAnimation="Slide" IsOpen="{Binding IsPopupOpen,Mode=TwoWay}" Placement="Bottom" StaysOpen="False" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}" Opened="popup_Opened">
                 <local:VideoComment x:Name="comment" Opacity="0.8" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=ActualWidth}"/>
-            </Popup>
+            </sc:ManagedPopup>
             <Button Content="コメントする" ToolTip="コメントする (Enter)" VerticalAlignment="Center" Margin="10,0,0,0" IsEnabled="{Binding Comment.CanComment}" Focusable="False">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">

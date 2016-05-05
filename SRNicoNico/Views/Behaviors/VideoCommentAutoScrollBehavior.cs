@@ -69,7 +69,12 @@ namespace SRNicoNico.Views.Behaviors {
 
                 return;
             }
-            instance.AssociatedObject.ScrollIntoView(instance.Collection.Where(e => int.Parse(e.Entry.Vpos) <= int.Parse((string)(p.NewValue))).Last());
+            var col = instance.Collection.Where(e => int.Parse(e.Entry.Vpos) <= int.Parse((string)(p.NewValue))).LastOrDefault();
+            if(col == null) {
+
+                return;
+            }
+            instance.AssociatedObject.ScrollIntoView(col);
         }
     }
 }

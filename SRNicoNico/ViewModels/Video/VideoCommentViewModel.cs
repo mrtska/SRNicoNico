@@ -213,6 +213,11 @@ namespace SRNicoNico.ViewModels {
             AutoScroll ^= true;
         }
 
+        public void JumpToCommentTime(string time) {
+
+            ;
+        }
+
         public void OpenCommentWindow() {
 
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Video.CommentView), Owner, TransitionMode.NewOrActive));

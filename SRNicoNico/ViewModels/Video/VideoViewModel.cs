@@ -513,7 +513,7 @@ namespace SRNicoNico.ViewModels {
 
                     foreach(var entry in list) {
 
-                        VideoData.CommentData.Add(new CommentEntryViewModel(entry));
+                        VideoData.CommentData.Add(new CommentEntryViewModel(entry, this));
                     }
 
                     dynamic json = new DynamicJson();
