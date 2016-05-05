@@ -104,7 +104,6 @@
                         <StackPanel Margin="10,0,0,0">
                             <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Content.Videos,StringFormat=コミュニティ動画 : {0}}" FontSize="14"/>
 
-                            <TextBlock  Text="{Binding Content.TotalVisitors,StringFormat=生放送累計来場者数 : {0}人}" FontSize="14"/>
                             <TextBlock Text="獲得した特権:"/>
                             <ItemsControl ItemsSource="{Binding Content.Privilege}" Margin="10,0,0,0" />
                         </StackPanel>

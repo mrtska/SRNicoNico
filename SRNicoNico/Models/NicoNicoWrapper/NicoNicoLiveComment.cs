@@ -12,7 +12,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
-    public class NicoNicoLiveComment : NotificationObject {
+    public class NicoNicoLiveComment : NotificationObject, IDisposable {
 
         private const string GetWayBackKeyApiUrl = "http://live.nicovideo.jp/api/getwaybackkey";
 
@@ -205,6 +205,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
 
+        public void Dispose() {
 
+            XmlSocket.Disconnect();
+        }
     }
 }

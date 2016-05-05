@@ -362,6 +362,7 @@ namespace SRNicoNico.ViewModels {
 
                 DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
+                    LiveCommentInstance.Dispose();
                     Handler.DisposeHandler();
                    
                 }));

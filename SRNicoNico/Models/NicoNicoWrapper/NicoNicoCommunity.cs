@@ -80,9 +80,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 //---特権---
                 ret.Privilege = new List<string>();
-                var privileges = profile.SelectNodes("child::table/tr/td/table/tr[7]/td[2]/div[2]/p");
+                var privileges = profile.SelectNodes("child::table/tr/td/table/tr[6]/td[2]/div[@id='other_privilege']/p");
 
-                ret.Privilege.Add(profile.SelectSingleNode("child::table/tr/td/table/tr[7]/td[2]/div[1]/p").InnerText);
+                ret.Privilege.Add(profile.SelectSingleNode("child::table/tr/td/table/tr[6]/td[2]/div[1]/p").InnerText);
                 if(privileges != null) {
                     foreach(var privilege in privileges) {
 
@@ -91,8 +91,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
                 //------
 
-                ret.TotalVisitors = profile.SelectSingleNode("child::table/tr/td/table/tr[6]/td[2]/strong").InnerText;
-                ret.Videos = profile.SelectSingleNode("child::table/tr/td/table/tr[9]/td[2]").InnerHtml.Trim();
+                ret.Videos = profile.SelectSingleNode("child::table/tr/td/table/tr[8]/td[2]").InnerHtml.Trim();
 
 
                 return ret;
@@ -148,9 +147,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //特権
         public IList<string> Privilege { get; set; }
-
-        //累計来場者数
-        public string TotalVisitors { get; set; }
 
         //投稿動画数
         public string Videos { get; set; }
