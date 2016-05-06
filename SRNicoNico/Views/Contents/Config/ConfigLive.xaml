@@ -21,7 +21,8 @@
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
         <Grid Margin="10">
             <StackPanel >
-                <TextBox Width="50" Text="{Binding RefreshInterval,Mode=TwoWay}">
+                <TextBlock Text="生放送通知の更新間隔" FontSize="18"/>
+                <TextBox Width="50" Text="{Binding RefreshInterval,Mode=TwoWay}" ToolTip="更新間隔をミリ秒で指定">
                     <i:Interaction.Behaviors>
                         <b:TextBoxNumericOnlyBehavior />
                     </i:Interaction.Behaviors>
