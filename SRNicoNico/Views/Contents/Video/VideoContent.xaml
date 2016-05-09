@@ -179,7 +179,6 @@
             </ScrollViewer>
         </Grid>
 
-        <Path Margin="0,0,250,-1000" Fill="Gray" Data="M10,10v7H90v-7ZM50,17l-5,13h3l5,-13ZM20,30h60v60h-5v-55h-50v55h-5ZM25,58h50v5h-50ZM25,83h50v5h-50Z" Width="100" Height="100" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
     </Grid>
 
 
