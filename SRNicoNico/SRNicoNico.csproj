@@ -210,6 +210,7 @@
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteUser.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoGetPlayerStatus.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoLiveComment.cs" />
+    <Compile Include="Models\NicoNicoWrapper\NicoNicoNGComment.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoTimeShift.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoLive.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylist.cs" />

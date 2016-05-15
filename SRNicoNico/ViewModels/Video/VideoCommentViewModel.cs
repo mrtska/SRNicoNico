@@ -64,6 +64,19 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        #region IsCommentLoading変更通知プロパティ
+        private bool _IsCommentLoading;
+
+        public bool IsCommentLoading {
+            get { return _IsCommentLoading; }
+            set { 
+                if(_IsCommentLoading == value)
+                    return;
+                _IsCommentLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         #region IsTextBoxEnabled変更通知プロパティ
         private bool _IsTextBoxEnabled = true;
@@ -213,14 +226,19 @@ namespace SRNicoNico.ViewModels {
             AutoScroll ^= true;
         }
 
-        public void JumpToCommentTime(string time) {
-
-            ;
-        }
-
         public void OpenCommentWindow() {
 
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Video.CommentView), Owner, TransitionMode.NewOrActive));
+        }
+
+        public void RegisterNGComment(NicoNicoCommentEntry entry) {
+
+
+        }
+
+        public void RegisterNGUser(NicoNicoCommentEntry entry) {
+
+
         }
 
         public void UpdateMail() {

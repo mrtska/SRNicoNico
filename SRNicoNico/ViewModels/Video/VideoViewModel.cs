@@ -422,12 +422,15 @@ namespace SRNicoNico.ViewModels {
             var videoUrl = VideoUrl + "?watch_harmful=1";
 
 
-            IsActive = true;
+            
             Task.Run(() => {
 
                 Mylist = new VideoMylistViewModel(this);
                 Comment = new VideoCommentViewModel(this);
                 VideoData = new VideoData();
+
+                IsActive = true;
+                Comment.IsCommentLoading = true;
 
 
                 Status = "動画情報取得中";
@@ -521,6 +524,7 @@ namespace SRNicoNico.ViewModels {
 
                     InjectComment(json.ToString());
                     Comment.CanComment = true;
+                    Comment.IsCommentLoading = false;
 
                     //投稿者コメントがあったら取得する
                     if(VideoData.ApiData.HasOwnerThread) {

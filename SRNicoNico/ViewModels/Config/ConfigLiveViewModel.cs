@@ -73,7 +73,7 @@ namespace SRNicoNico.ViewModels {
             RaisePropertyChanged(nameof(AlwaysShowSeekBar));
             RaisePropertyChanged(nameof(UseWindowFullScreen));
             RaisePropertyChanged(nameof(RefreshInterval));
-
+            
         }
 
 

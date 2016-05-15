@@ -95,6 +95,8 @@
             <DataGrid.Resources>
                 <ContextMenu x:Key="comment">
                     <MenuItem Header="このコメントの時間に飛ぶ" Click="MenuItem_Click"/>
+                    <MenuItem Header="このコメントをNG登録する" Click="NGComment_Click"/>
+                    <MenuItem Header="このコメントをしたユーザーをNG登録する" Click="NGUser_Click"/>
 
                 </ContextMenu>
             </DataGrid.Resources>
@@ -151,7 +153,7 @@
 
             </DataGrid.Columns>
         </DataGrid>
-
+        <mui:ModernProgressRing Grid.Row="1" Panel.ZIndex="1" HorizontalAlignment="Center" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding Comment.IsCommentLoading}" />
         <ScrollViewer Grid.Row="2">
             <StackPanel>
                 <Grid>

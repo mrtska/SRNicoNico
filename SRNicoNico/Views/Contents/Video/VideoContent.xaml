@@ -142,27 +142,6 @@
                                             </Path.Resources>
                                         </Path>
                                     </Canvas>
-                                    <!--
-                                    <Image Width="14" Height="14" Source="/SRNicoNico;component/Icons/DaihyakkaAri.png" Margin="0,2" ToolTip="{Binding Tag.Url}" Cursor="Hand">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseRightButtonDown">
-                                                <ei:LaunchUriOrFileAction Path="{Binding Tag.Url}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                        <Image.Resources>
-                                            <Style TargetType="Image">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Tag.Dic}" Value="False">
-                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Image.Resources>
-                                        <Image.Effect>
-                                            <DropShadowEffect Color="Gray" RenderingBias="Quality"/>
-                                        </Image.Effect>
-                                    </Image>
-                               -->
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.Resources>

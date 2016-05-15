@@ -48,13 +48,24 @@ namespace SRNicoNico.Views.Contents.Video {
 
         private void MenuItem_Click(object sender, RoutedEventArgs e) {
 
-
             var vm = ((MenuItem)sender).DataContext as CommentEntryViewModel;
             var time = NicoNicoUtil.ConvertTime(vm.Entry.RenderTime);
 
             DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => vm.Owner.Seek(time)));
             
-            ;
+        }
+
+        private void NGComment_Click(object sender, RoutedEventArgs e) {
+
+            var vm = ((MenuItem)sender).DataContext as CommentEntryViewModel;
+            vm.Owner.Comment.RegisterNGComment(vm.Entry);
+        }
+
+        private void NGUser_Click(object sender, RoutedEventArgs e) {
+
+
+            var vm = ((MenuItem)sender).DataContext as CommentEntryViewModel;
+            vm.Owner.Comment.RegisterNGUser(vm.Entry);
         }
     }
 }

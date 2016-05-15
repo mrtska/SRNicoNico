@@ -21,12 +21,7 @@
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
         <Grid Margin="10">
             <StackPanel >
-                <TextBlock Text="生放送通知の更新間隔" FontSize="18"/>
-                <TextBox Width="50" Text="{Binding RefreshInterval,Mode=TwoWay}" ToolTip="更新間隔をミリ秒で指定">
-                    <i:Interaction.Behaviors>
-                        <b:TextBoxNumericOnlyBehavior />
-                    </i:Interaction.Behaviors>
-                </TextBox>
+
 
 
                 <HeaderedContentControl>
@@ -37,7 +32,14 @@
                         
                         <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding AlwaysShowSeekBar}" />
                         <CheckBox Content="常にウィンドウモードのフルスクリーンを使う" IsChecked="{Binding UseWindowFullScreen}" />
-                        
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="生放送通知の更新間隔 (ミリ秒)" VerticalAlignment="Center"/>
+                            <TextBox Margin="15,0,0,0" Width="50" Text="{Binding RefreshInterval,Mode=TwoWay}" ToolTip="更新間隔をミリ秒で指定">
+                                <i:Interaction.Behaviors>
+                                    <b:TextBoxNumericOnlyBehavior />
+                                </i:Interaction.Behaviors>
+                            </TextBox>
+                        </StackPanel>
                     </StackPanel>
                 </HeaderedContentControl>
 
