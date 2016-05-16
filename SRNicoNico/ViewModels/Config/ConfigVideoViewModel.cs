@@ -15,7 +15,7 @@ using SRNicoNico.Models;
 using System.Windows;
 
 namespace SRNicoNico.ViewModels {
-    public class ConfigVideoViewModel : TabItemViewModel {
+    public class ConfigVideoViewModel : ConfigViewModelBase {
 
 
 
@@ -98,7 +98,7 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        public void Reset() {
+        public override void Reset() {
 
             RaisePropertyChanged(nameof(VideoPlacement));
             RaisePropertyChanged(nameof(AlwaysShowSeekBar));

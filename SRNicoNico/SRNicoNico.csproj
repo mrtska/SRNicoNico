@@ -220,6 +220,7 @@
     <Compile Include="Models\NicoNicoWrapper\NicoNicoVitaApi.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoVitaMylistApi.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoVitaUserApi.cs" />
+    <Compile Include="Models\NicoNicoWrapper\RequestFailed.cs" />
     <Compile Include="Models\NicoNicoWrapper\RequestTimeout.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\Community\CommunityTopViewModel.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="ViewModels\Config\ConfigLiveViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigVideoViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigViewModel.cs" />
+    <Compile Include="ViewModels\Config\ConfigViewModelBase.cs" />
     <Compile Include="ViewModels\Favorite\FavoriteCommunityViewModel.cs" />
     <Compile Include="ViewModels\Favorite\FavoriteUserViewModel.cs" />
     <Compile Include="ViewModels\Favorite\FavoriteViewModel.cs" />
@@ -278,6 +280,9 @@
     </Compile>
     <Compile Include="Views\Contents\Config\Config.xaml.cs">
       <DependentUpon>Config.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Config\ConfigNGComment.xaml.cs">
+      <DependentUpon>ConfigNGComment.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Config\ConfigGeneral.xaml.cs">
       <DependentUpon>ConfigGeneral.xaml</DependentUpon>
@@ -545,6 +550,10 @@
     <Page Include="Views\Contents\Config\Config.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Config\ConfigNGComment.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Config\ConfigGeneral.xaml">
       <Generator>MSBuild:Compile</Generator>

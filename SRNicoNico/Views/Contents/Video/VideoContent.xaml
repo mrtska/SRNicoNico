@@ -153,7 +153,7 @@
                     </ItemsControl>
                     <TextBlock Grid.Row="1" Padding="5" Text="{Binding VideoData.ApiData.PostedAt,StringFormat={}{0} 投稿}"/>
                     <TextBlock Grid.Row="2"  Padding="5" TextWrapping="Wrap" behaviors:HtmlTextBoxProperties.HtmlText="{Binding VideoData.ApiData.Description, Mode=OneWay}"/>
-                    <mui:ModernProgressRing Panel.ZIndex="1" HorizontalAlignment="Center" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}"  Grid.RowSpan="2" />
+                    <mui:ModernProgressRing Grid.Row="2" Panel.ZIndex="1" HorizontalAlignment="Center" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}" />
                 </Grid>
             </ScrollViewer>
         </Grid>

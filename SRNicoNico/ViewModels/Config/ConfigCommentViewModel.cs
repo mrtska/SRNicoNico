@@ -16,7 +16,7 @@ using System.Windows;
 using Codeplex.Data;
 
 namespace SRNicoNico.ViewModels {
-    public class ConfigCommentViewModel : TabItemViewModel {
+    public class ConfigCommentViewModel : ConfigViewModelBase {
 
 
         #region Hide3DSComment変更通知プロパティ
@@ -110,7 +110,7 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public void Reset() {
+        public override void Reset() {
 
             RaisePropertyChanged(nameof(Hide3DSComment));
             RaisePropertyChanged(nameof(HideWiiUComment));

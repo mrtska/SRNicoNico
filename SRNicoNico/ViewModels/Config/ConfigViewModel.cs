@@ -19,9 +19,9 @@ namespace SRNicoNico.ViewModels {
 
 
         #region ConfigCollection変更通知プロパティ
-        private ObservableCollection<TabItemViewModel> _ConfigCollection = new ObservableCollection<TabItemViewModel>();
+        private ObservableCollection<ConfigViewModelBase> _ConfigCollection = new ObservableCollection<ConfigViewModelBase>();
 
-        public ObservableCollection<TabItemViewModel> ConfigCollection {
+        public ObservableCollection<ConfigViewModelBase> ConfigCollection {
             get { return _ConfigCollection; }
             set {
                 if(_ConfigCollection == value)
@@ -65,9 +65,10 @@ namespace SRNicoNico.ViewModels {
 
         public void Reset() {
 
-            Video.Reset();
-            Comment.Reset();
-            Live.Reset();
+            foreach(var conf in ConfigCollection) {
+
+                conf.Reset();
+            }
 
         }
     }

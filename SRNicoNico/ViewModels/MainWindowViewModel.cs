@@ -230,6 +230,10 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+
+        public NicoNicoNGComment NGCommentInstance;
+
+
         public MainWindowViewModel() {
 
             StatusBar = new StatusBarViewModel();
@@ -279,6 +283,11 @@ namespace SRNicoNico.ViewModels {
 
             //サーバーからアップデートがあるか確認してあったらアップデートダイアログを出す
             Update.CheckUpdate();
+
+            //公式NG機能を初期化
+            NGCommentInstance = new NicoNicoNGComment();
+            NGCommentInstance.GetNGClient();
+
             }
 
 		public void Initialize() {

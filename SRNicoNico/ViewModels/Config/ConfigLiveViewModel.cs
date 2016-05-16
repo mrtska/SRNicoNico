@@ -15,7 +15,7 @@ using SRNicoNico.Models;
 using System.Windows;
 
 namespace SRNicoNico.ViewModels {
-    public class ConfigLiveViewModel : TabItemViewModel {
+    public class ConfigLiveViewModel : ConfigViewModelBase {
 
 
 
@@ -68,7 +68,7 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        public void Reset() {
+        public override void Reset() {
 
             RaisePropertyChanged(nameof(AlwaysShowSeekBar));
             RaisePropertyChanged(nameof(UseWindowFullScreen));

@@ -15,7 +15,7 @@ using SRNicoNico.Models;
 using System.Windows.Media;
 
 namespace SRNicoNico.ViewModels {
-    public class ConfigGeneralViewModel : TabItemViewModel {
+    public class ConfigGeneralViewModel : ConfigViewModelBase {
 
 
 
@@ -77,7 +77,7 @@ namespace SRNicoNico.ViewModels {
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Config.ConfigResetDialog), this, TransitionMode.Modal));
         }
 
-        public void Reset() {
+        public override void Reset() {
 
             Properties.Settings.Default.Reset();
             RaisePropertyChanged(nameof(EnableUrlLink));
