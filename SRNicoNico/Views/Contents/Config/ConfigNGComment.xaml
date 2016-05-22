@@ -28,9 +28,12 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <TextBlock Text="NG機能" FontSize="18"/>
 
             <StackPanel Grid.Row="1">
-                
+                <DataGrid>
+                    
+                </DataGrid>
                 
 
             </StackPanel>

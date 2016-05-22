@@ -20,7 +20,22 @@
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <metro:TabView Background="#FF252627" ItemsSource="{Binding ConfigCollection}" SelectedValue="{Binding SelectedItem}" />
+        <Grid Background="#FF252627">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <metro:TabView ItemsSource="{Binding ConfigCollection}" SelectedValue="{Binding SelectedItem}" />
+
+            <Button Grid.Row="1" Content="設定を初期化する" HorizontalAlignment="Center" Margin="10">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenResetConfig" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+
+        </Grid>
 
 
         <ItemsControl Grid.Column="1" ItemsSource="{Binding ConfigCollection}">

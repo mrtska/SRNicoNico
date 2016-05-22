@@ -72,26 +72,16 @@ namespace SRNicoNico.ViewModels {
             Owner = vm;
         }
 
-        public void OpenResetConfig() {
 
-            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Config.ConfigResetDialog), this, TransitionMode.Modal));
-        }
 
         public override void Reset() {
 
-            Properties.Settings.Default.Reset();
             RaisePropertyChanged(nameof(EnableUrlLink));
             RaisePropertyChanged(nameof(EnableTwitterLink));
             RaisePropertyChanged(nameof(UserSelectedFont));
             App.ViewModelRoot.ApplyFont();
-            Close();
-
-            Owner.Reset();
         }
-        public void Close() {
 
-            Messenger.Raise(new WindowActionMessage(WindowAction.Close));
-        }
 
 
     }
