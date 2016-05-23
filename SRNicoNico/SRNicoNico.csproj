@@ -905,18 +905,22 @@
       <Link>Flash\NicoNicoLivePlayer.swf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Flash\bin\NicoNicoLivePlayer.swf" />
     <Content Include="Flash\bin\NicoNicoNMPlayer.swf">
       <Link>Flash\NicoNicoNMPlayer.swf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Flash\bin\NicoNicoNMPlayer.swf" />
     <Content Include="Flash\bin\NicoNicoPlayer.swf">
       <Link>Flash\NicoNicoPlayer.swf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Flash\bin\NicoNicoPlayer.swf" />
     <Content Include="Flash\bin\NicoNicoRTMPPlayer.swf">
       <Link>Flash\NicoNicoRTMPPlayer.swf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Flash\bin\NicoNicoRTMPPlayer.swf" />
     <Content Include="InfrastructureAssemblies\Design\Livet.Design.dll" />
     <Content Include="InfrastructureAssemblies\ExternalInterfaceProxy.dll" />
     <Content Include="InfrastructureAssemblies\Livet.dll" />

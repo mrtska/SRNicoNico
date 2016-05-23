@@ -62,18 +62,28 @@ namespace SRNicoNico.Views.Behaviors {
 
         private double PrevExtentHeight;
 
+        private bool Pending = false;
+
+
 		void scrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e) {
 
-            
-			//一番下までスクロールしたら
-			if(e.ExtentHeight > 1 && PrevExtentHeight != e.ExtentHeight && e.ExtentHeight == (e.VerticalOffset + e.ViewportHeight) || (e.ExtentHeight < e.ViewportHeight && PrevExtentHeight != e.ExtentHeight)) {
+            if(Pending) {
+
+                return;
+            }
+            //一番下までスクロールしたら
+            if(e.ExtentHeight > 1 && PrevExtentHeight != e.ExtentHeight && e.ExtentHeight == (e.VerticalOffset + e.ViewportHeight) || (e.ExtentHeight < e.ViewportHeight && PrevExtentHeight != e.ExtentHeight)) {
 
                 PrevExtentHeight = e.ExtentHeight;
 #if DEBUG
                 Console.WriteLine(e.ExtentHeight);
                 Console.WriteLine(e.VerticalOffset);
 #endif
+
+
+                Pending = true;
                 InvokeMethod();
+                Pending = false;
 
                 ScrollViewer.ScrollToVerticalOffset(e.ExtentHeight - e.ViewportHeight);
                 

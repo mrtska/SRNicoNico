@@ -20,7 +20,7 @@ namespace SRNicoNico.ViewModels {
 
         private readonly string Id;
 
-
+        private IList<NicoNicoNicoRepoDataEntry> RawData;
 
         #region Result変更通知プロパティ
         private NicoRepoResultViewModel _Result;
@@ -36,6 +36,21 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        #region Filter変更通知プロパティ
+        private string _Filter = "すべて";
+
+        public string Filter {
+            get { return _Filter; }
+            set { 
+                if(_Filter == value)
+                    return;
+                _Filter = value;
+                RaisePropertyChanged();
+                FilterNicoRepo();
+            }
+        }
+        #endregion
+
         private NicoNicoNicoRepo NicoRepo;
 
         private NicoRepoViewModel NicoRepoVM;
@@ -45,6 +60,53 @@ namespace SRNicoNico.ViewModels {
             NicoRepoVM = vm;
             Id = id;
             Result = new NicoRepoResultViewModel(title);
+        }
+        /*
+         * <ComboBoxItem Content="すべて" />
+            <ComboBoxItem Content="動画投稿のみ" />
+            <ComboBoxItem Content="生放送開始のみ" />
+            <ComboBoxItem Content="マイリスト登録のみ" />
+         */
+        public void FilterNicoRepo() {
+
+            switch(Filter) {
+                case "すべて":
+                    Result.NicoRepo.Clear();
+                    foreach(var raw in RawData) {
+
+                        Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(raw, this));
+                    }
+                    break;
+                case "動画投稿のみ":
+
+                    Result.NicoRepo.Clear();
+                    var video = RawData.Where(e => e.Title.Contains("動画を投稿しました。"));
+
+                    foreach(var raw in video) {
+
+                        Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(raw, this));
+                    }
+                    break;
+                case "生放送予約/開始のみ":
+
+                    Result.NicoRepo.Clear();
+                    var live = RawData.Where(e => e.LogId.Contains("log-target-live-program"));
+                    foreach(var raw in live) {
+
+                        Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(raw, this));
+                    }
+                    break;
+                case "マイリスト登録のみ":
+
+                    Result.NicoRepo.Clear();
+                    var mylist = RawData.Where(e => e.Title.Contains("マイリスト登録しました。"));
+
+                    foreach(var raw in mylist) {
+
+                        Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(raw, this));
+                    }
+                    break;
+            }
         }
 
 
@@ -62,16 +124,16 @@ namespace SRNicoNico.ViewModels {
 
             NicoRepo = new NicoNicoNicoRepo(Id);
 
-            var data = NicoRepo.GetNicoRepo();
+            RawData = NicoRepo.GetNicoRepo();
 
-            if(data == null) {
+            if(RawData == null) {
 
                 NicoRepoVM.Status = "ニコレポ(" + Name + ") の取得に失敗しました";
                 Result.IsActive = false;
                 return;
             }
 
-            foreach(NicoNicoNicoRepoDataEntry entry in data) {
+            foreach(var entry in RawData) {
 
                 Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));
             }
@@ -86,7 +148,7 @@ namespace SRNicoNico.ViewModels {
 
             Task.Run(() => {
 
-                IList<NicoNicoNicoRepoDataEntry> data = NicoRepo.NextNicoRepo();
+                var data = NicoRepo.NextNicoRepo();
 
                 if(data == null) {
 
@@ -94,9 +156,31 @@ namespace SRNicoNico.ViewModels {
                     return;
                 }
 
-                foreach(NicoNicoNicoRepoDataEntry entry in data) {
+                foreach(var entry in data) {
 
-                    Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));
+                    RawData.Add(entry);
+
+                    switch(Filter) {
+                        case "すべて":
+                            Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));
+                            break;
+                        case "動画投稿のみ":
+                            if(entry.Title.Contains("動画を投稿しました。")) {
+                                Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));
+                            }
+                            break;
+                        case "生放送開始のみ":
+                            if(entry.LogId.Contains("log-target-live-program")) {
+                                Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));
+                            }
+                            break;
+                        case "マイリスト登録のみ":
+                            if(entry.Title.Contains("マイリスト登録しました。")) {
+                                Result.NicoRepo.Add(new NicoRepoResultEntryViewModel(entry, this));
+                            }
+                            break;
+                    }
+                    
                 }
 
                 Result.IsActive = false;
@@ -107,6 +191,7 @@ namespace SRNicoNico.ViewModels {
 
             Task.Run(() => {
 
+                Filter = "すべて";
                 OpenNicoRepoList();
                 NicoRepoVM.Status = "";
             });

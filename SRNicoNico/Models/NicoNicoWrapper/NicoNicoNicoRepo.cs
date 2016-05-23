@@ -43,6 +43,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             Id = id;
         }
 
+
         //ニコレポ取得
         public IList<NicoNicoNicoRepoDataEntry> GetNicoRepo() {
 
@@ -66,7 +67,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     var entry = new NicoNicoNicoRepoDataEntry();
 
-                    entry.ImageUrl = entry.IconUrl = null;
+                    entry.ImageUrl = entry.IconUrl = entry.Title = entry.Time = entry.LogId = "";
                     entry.Description = "ニコレポが存在しません。";
                     data.Add(entry);
 
@@ -125,24 +126,27 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
 
             //ニコレポタイムライン走査
-            foreach(HtmlNode node in timeline) {
+            foreach(var node in timeline) {
 
-                NicoNicoNicoRepoDataEntry entry = new NicoNicoNicoRepoDataEntry();
+                var entry = new NicoNicoNicoRepoDataEntry();
 
                 entry.IconUrl = node.SelectSingleNode("child::div[contains(@class, 'log-author ')]/a/img").Attributes["data-original"].Value;
-                entry.Title = HttpUtility.HtmlDecode(node.SelectSingleNode("child::div[@class='log-content']/div[@class='log-body']").InnerHtml.Trim());
 
-                HtmlNode thumbnail = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-target-thumbnail']/a/img");
+                var content = node.SelectSingleNode("div[@class='log-content']");
+
+                entry.Title = HttpUtility.HtmlDecode(content.SelectSingleNode("div[@class='log-body']").InnerHtml.Trim());
+                entry.LogId = content.SelectSingleNode("div[contains(@class, 'log-details')]").Attributes["class"].Value;
+                var thumbnail = content.SelectSingleNode("div/div[@class='log-target-thumbnail']/a/img");
 
                 entry.ImageUrl = thumbnail != null ? thumbnail.Attributes["data-original"].Value : entry.IconUrl;
 
-                HtmlNode desc = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-target-info']/a");
+                var desc = content.SelectSingleNode("div/div[@class='log-target-info']/a");
 
                 entry.Description = desc != null ? HttpUtility.HtmlDecode(desc.InnerText.Trim()) : "";
 
                 entry.VideoUrl = desc != null ? desc.Attributes["href"].Value : "";
 
-                HtmlNode time = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-footer']/div/a[contains(@class, 'log-footer-date')]/time");
+                var time = content.SelectSingleNode("div/div[@class='log-footer']/div/a[contains(@class, 'log-footer-date')]/time");
 
                 entry.Time = time.InnerText.Trim();
 
@@ -169,7 +173,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 NicoNicoNicoRepoDataEntry entry = new NicoNicoNicoRepoDataEntry();
 
                 NextUrl = "end";
-                entry.ImageUrl = entry.IconUrl = null;
+                entry.ImageUrl = entry.IconUrl = entry.Title = entry.Time = entry.LogId = "";
                 entry.Description = "これより過去のニコレポは存在しません。";
                 list.Add(entry);
 
