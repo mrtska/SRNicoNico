@@ -105,7 +105,7 @@ namespace SRNicoNico.ViewModels {
                 if(tab is VideoViewModel) {
 
                     var vm = (VideoViewModel) tab;
-                    vm.ApplyChanges();
+                    vm.Handler.ApplyChanges();
                 }
             }
         }

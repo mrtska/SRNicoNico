@@ -281,7 +281,7 @@ namespace SRNicoNico.ViewModels {
                    
                     entry.Content = Text;
 
-                    Owner.Proxy.Call("AsInjectMyComment", entry.ToJson());
+                    Owner.Handler.InvokeScript("AsInjectMyComment", entry.ToJson());
                     Text = "";
                    
                 }

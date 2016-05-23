@@ -35,14 +35,8 @@ namespace SRNicoNico.Views.Contents.Video {
             if(DataContext is VideoViewModel) {
 
                 var vm = (VideoViewModel) DataContext;
-                if(vm.VideoFlash == this && vm.FullScreenVideoFlash == this) {
 
-                    return;
-                }
-
-                //インスタンスを設定
-                vm.ShockwaveFlash = flash;
-                vm.Proxy = new ExternalInterfaceProxy(flash);
+                vm.Handler = new VideoFlashHandler(vm, flash);
             }
         }
     }

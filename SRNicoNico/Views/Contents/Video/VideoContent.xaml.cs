@@ -36,7 +36,7 @@ namespace SRNicoNico.Views.Contents.Video {
                     var vm = (VideoViewModel) DataContext;
                     var time = url.Substring(1);
 
-                    vm.Seek(NicoNicoUtil.ConvertTime((time)));
+                    vm.Handler.Seek(NicoNicoUtil.ConvertTime((time)));
                 }
             } else {
                 if(DataContext is VideoViewModel) {

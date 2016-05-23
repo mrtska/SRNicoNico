@@ -63,6 +63,19 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
         #endregion
 
+        #region Resolution変更通知プロパティ
+        private string _Resolution;
+
+        public string Resolution {
+            get { return _Resolution; }
+            set { 
+                if(_Resolution == value)
+                    return;
+                _Resolution = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
 
     }

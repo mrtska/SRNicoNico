@@ -45,7 +45,7 @@ namespace SRNicoNico.ViewModels {
 
             if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
 
-                Owner.Pause();
+                Owner.Handler.Pause();
                 App.ViewModelRoot.SearchText(SearchType.Tag, Tag.Tag);
             }
             

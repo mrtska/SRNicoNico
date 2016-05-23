@@ -30,6 +30,8 @@ namespace SRNicoNico.ViewModels {
         //コメントバックエンドインスタンス
         public NicoNicoComment CommentInstance;
 
+        public VideoFlashHandler Handler;
+
 
         #region Status変更通知プロパティ
         public new string Status {
@@ -211,7 +213,7 @@ namespace SRNicoNico.ViewModels {
                     IsMute = false;
                 }
                 Properties.Settings.Default.Save();
-                InvokeScript("AsChangeVolume", (value / 100.0).ToString());
+                Handler.InvokeScript("AsChangeVolume", (value / 100.0).ToString());
             }
         }
         #endregion
@@ -290,24 +292,6 @@ namespace SRNicoNico.ViewModels {
 
 
 
-        //Flashの関数を呼ぶためのもの
-        public ExternalInterfaceProxy Proxy;
-
-
-        #region AxShockwaveFlash変更通知プロパティ
-        private AxShockwaveFlash _AxShockwaveFlash;
-
-        public AxShockwaveFlash ShockwaveFlash {
-            get { return _AxShockwaveFlash; }
-            set {
-                if(_AxShockwaveFlash == value)
-                    return;
-                _AxShockwaveFlash = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
         public string VideoInfoPlacement {
             get {
                 return App.ViewModelRoot.Config.Video.VideoPlacement;
@@ -365,7 +349,19 @@ namespace SRNicoNico.ViewModels {
         public VideoMylistViewModel Mylist { get; set; }
 
         //コメント関連
-        public VideoCommentViewModel Comment { get; set; }
+        #region Comment変更通知プロパティ
+        private VideoCommentViewModel _Comment;
+
+        public VideoCommentViewModel Comment {
+            get { return _Comment; }
+            set { 
+                if(_Comment == value)
+                    return;
+                _Comment = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         #region Cmsid変更通知プロパティ
         private string _Cmsid;
@@ -422,134 +418,30 @@ namespace SRNicoNico.ViewModels {
             var videoUrl = VideoUrl + "?watch_harmful=1";
 
 
-            
+            Mylist = new VideoMylistViewModel(this);
+            Comment = new VideoCommentViewModel(this);
+            VideoData = new VideoData();
+
+            IsActive = true;
+            Comment.IsCommentLoading = true;
+
+
+            Status = "動画情報取得中";
+            //動画情報取得
+
             Task.Run(() => {
 
-                Mylist = new VideoMylistViewModel(this);
-                Comment = new VideoCommentViewModel(this);
-                VideoData = new VideoData();
-
-                IsActive = true;
-                Comment.IsCommentLoading = true;
-
-
-                Status = "動画情報取得中";
-                //動画情報取得
                 WatchApi = new NicoNicoWatchApi(videoUrl, this);
                 VideoData.ApiData = WatchApi.GetWatchApiData();
+                Handler.Initialize(VideoData);
 
-                //ロードに失敗したら
-                if(VideoData.ApiData == null) {
-
-                    LoadFailed = true;
-                    IsActive = false;
-                    Status = "動画の読み込みに失敗しました。";
-                    return;
-                }
-                Name = VideoData.ApiData.Title;
-
-                //有料動画なら
-                if(VideoData.ApiData.IsPaidVideo) {
-
-                    App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(PaidVideoDialog), this, TransitionMode.Modal));
-                    return;
-                }
-
-                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-                    if(VideoData.ApiData.Cmsid.Contains("nm")) {
-
-                        VideoData.VideoType = NicoNicoVideoType.SWF;
-                        ShockwaveFlash.LoadMovie(0, GetNMPlayerPath());
-
-                    } else if(VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
-
-                        VideoData.VideoType = NicoNicoVideoType.RTMP;
-                        ShockwaveFlash.LoadMovie(0, GetRTMPPlayerPath());
-                    } else {
-
-                        if(VideoData.ApiData.MovieType == "flv") {
-
-                            VideoData.VideoType = NicoNicoVideoType.FLV;
-                        } else {
-
-                            VideoData.VideoType = NicoNicoVideoType.MP4;
-                        }
-                        ShockwaveFlash.LoadMovie(0, GetPlayerPath());
-                    }
-                    Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
-                    IsActive = false;
-
-                    OpenVideo();
-
-                }));
-                Time = new VideoTime();
-                //動画時間
-                Time.VideoTimeString = NicoNicoUtil.ConvertTime(VideoData.ApiData.Length);
-
-                if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
-
-                    Task.Run(() => {
-
-                        StoryBoardStatus = "取得中";
-
-                        var sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
-                        VideoData.StoryBoardData = sb.GetStoryBoardData();
-
-                        if(VideoData.StoryBoardData == null) {
-
-                            StoryBoardStatus = "データ無し";
-                        } else {
-
-                            StoryBoardStatus = "取得完了";
-                        }
-                    });
-                } else {
-
-                    StoryBoardStatus = "データ無し";
-                }
-
-                CommentInstance = new NicoNicoComment(VideoData.ApiData, this);
-                var list = CommentInstance.GetComment();
-                if(list != null) {
-
-
-                    foreach(var entry in list) {
-
-                        VideoData.CommentData.Add(new CommentEntryViewModel(entry, this));
-                    }
-
-                    dynamic json = new DynamicJson();
-                    json.array = list;
-
-                    InjectComment(json.ToString());
-                    Comment.CanComment = true;
-                    Comment.IsCommentLoading = false;
-
-                    //投稿者コメントがあったら取得する
-                    if(VideoData.ApiData.HasOwnerThread) {
-
-                        var ulist = CommentInstance.GetUploaderComment();
-                        dynamic ujson = new DynamicJson();
-                        json.array = ulist;
-
-                        InjectUploaderComment(json.ToString());
-                    }
-
-                    //コメント設定を反映
-                    ApplyChanges();
-                }
-
-                if(!Properties.Settings.Default.CommentVisibility) {
-
-                    InvokeScript("AsToggleComment");
-                } else {
-
-                    CommentVisibility = true;
-                }
             });
-        }
 
+
+            
+
+        }
+        
         //ツイートダイアログ表示
         public void OpenTweetDialog() {
 
@@ -560,6 +452,13 @@ namespace SRNicoNico.ViewModels {
             System.Diagnostics.Process.Start(url);
             vm.OriginalUri = new Uri(url);
             //App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Misc.TweetDialog), vm, TransitionMode.Modal));
+        }
+
+
+        //最初から
+        public void Restart() {
+
+            Handler.Restart();
         }
 
         //リピート
@@ -575,7 +474,7 @@ namespace SRNicoNico.ViewModels {
             CommentVisibility ^= true;
             Properties.Settings.Default.CommentVisibility = CommentVisibility;
             Properties.Settings.Default.Save();
-            InvokeScript("AsToggleComment");
+            Handler.InvokeScript("AsToggleComment");
         }
 
         private int PrevVolume;
@@ -668,59 +567,16 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+
         //一時停止切り替え
         public void TogglePlay() {
 
-            if(IsPlaying) {
-
-                Pause();
-            } else {
-
-                Resume();
-            }
+            Handler.TogglePlay();
         }
-        
-        //最初から
-        public void Restart() {
-            
-            Seek(0);
-        }
-        
-        private int prevTime;
-        private double sumBPS;
-        
-        //1フレーム毎に呼ばれる
-        public void CsFrame(float time, float buffer, long bps, string vpos) {
 
-            if(prevTime != (int)time) {
-               
-                double comp = sumBPS / 1024;
-
-                //大きいから単位を変える
-                if(comp > 1000) {
-
-                    BPS = Math.Floor((comp / 1024) * 100) / 100 + "MiB/秒";
-                } else {
-
-                    BPS = Math.Floor(comp * 100) / 100 + "KiB/秒";
-                }
-                sumBPS = 0;
-            } else {
-
-                sumBPS += bps;
-            }
-            prevTime = (int)time;
-
-            Time.BufferedTime = buffer;
-            Comment.Vpos = vpos;
-            
-            //Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + buffer + " vpos:" + vpos);
-
-            SetSeekCursor(time);
-        }
 
         //指定した時間でシークバーを移動する
-        private void SetSeekCursor(float time) {
+        public void SetSeekCursor(float time) {
 
             Time.CurrentTime = (int)time;
             Time.CurrentTimeString = NicoNicoUtil.ConvertTime(Time.CurrentTime);
@@ -736,143 +592,15 @@ namespace SRNicoNico.ViewModels {
             //RTMPの時はサーバートークンも一緒にFlashに渡す
             if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
-                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, "");
+                Handler.InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, "");
             } else {
 
-                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, "");
+                Handler.InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, "");
             }
             
             IsRepeat = Properties.Settings.Default.IsRepeat;
         }
         
-        private object ExternalInterfaceHandler(object sender, ExternalInterfaceCallEventArgs e) {
-
-            InvokeFromActionScript(e.FunctionCall.FunctionName, e.FunctionCall.Arguments);
-            return false;
-        }
-        //ExternalIntarface.callでActionscriptから呼ばれる
-        public void InvokeFromActionScript(string func, params string[] args) {
-
-            switch(func) {
-                case "CsFrame": //毎フレーム呼ばれる
-                    CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]), args[3]);
-                    break;
-                case "NetConnection.Connect.Closed":    //RTMP動画再生時にタイムアウトになったら
-                    RTMPTimeOut();
-                    break;
-                case "ShowController":  //マウスを動かしたら呼ばれる
-                    ShowFullScreenPopup();
-                    break;
-                case "HideController":  //マウスを数秒動画の上で静止させたら呼ばれる
-                    HideFullScreenPopup();
-                    break;
-                case "Initialized": //動画が再生される直前に呼ばれる
-                    Volume = Properties.Settings.Default.Volume;    //保存された値をFlash側に伝える
-                    break;
-                case "Stop": //動画が最後まで行ったらリピートしたりフルスクリーンから復帰したりする
-                    if(IsRepeat) {
-                        
-                        Restart();
-                    } else if(IsFullScreen) {
-
-                        if(IsPlayList) {
-
-                            PlayList.Next();
-                        } else {
-
-                            ReturnFromFullScreen();
-                        }
-                    } else {
-
-                        if(IsPlayList) {
-
-                            PlayList.Next();
-                        }
-                    }
-                   
-                    break;
-                case "Click":   //Flash部分がクリックされた時に呼ばれる
-                    if(App.ViewModelRoot.Config.Video.ClickOnPause) {   //クリックしたら一時停止する設定になっていたら
-
-                        TogglePlay();
-                    }
-                    break;
-                default:
-                    Console.WriteLine("Invoked From Actionscript:" + func);
-                    break;
-            }
-        }
-
-        //コメント設定をFlashに反映させる
-        public void ApplyChanges() {
-
-            InvokeScript("AsApplyChanges", App.ViewModelRoot.Config.Comment.ToJson());
-        }
-
-        //Flashに一時停止命令を送る
-        public void Pause() {
-
-            IsPlaying = false;
-            InvokeScript("AsPause");
-        }
-
-        //Flashに再生再開命令を送る
-        public void Resume() {
-
-            IsPlaying = true;
-            InvokeScript("AsResume");
-        }
-        
-        //Flashにシーク命令を送る
-        public void Seek(float pos) {
-            
-            InvokeScript("AsSeek", pos.ToString());
-        }
-
-        //Flashにコメントリストを送る
-        public void InjectComment(string json) {
-            
-           InvokeScript("AsInjectComment", json);
-        }
-        //Flashに投稿者コメントリストを送る
-        public void InjectUploaderComment(string json) {
-
-            InvokeScript("AsInjectUploaderComment", json);
-        }
-        
-        //ASを呼ぶ
-        private void InvokeScript(string func, params object[] args) {
-            
-            //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
-            if(ShockwaveFlash != null && !ShockwaveFlash.IsDisposed) {
-                
-                try {
-                    
-                    Proxy.Call(func, args);
-                } catch(COMException) {
-
-                    Console.WriteLine("COMException：" + func);
-                }
-            }
-        }
-
-        public string GetPlayerPath() {
-
-            var cur = System.IO.Directory.GetCurrentDirectory();
-            return cur + "./Flash/NicoNicoPlayer.swf";
-        }
-
-        public string GetNMPlayerPath() {
-
-            var cur = System.IO.Directory.GetCurrentDirectory();
-            return cur + "./Flash/NicoNicoNMPlayer.swf";
-        }
-
-        private string GetRTMPPlayerPath() {
-
-            var cur = System.IO.Directory.GetCurrentDirectory();
-            return cur + "./Flash/NicoNicoRTMPPlayer.swf";
-        }
 
         //RTMP動画でタイムアウトになった時又は予期せぬ理由でエラーになった時
         public void RTMPTimeOut() {
@@ -912,7 +640,7 @@ namespace SRNicoNico.ViewModels {
             DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
                 //UIスレッドじゃないとAccessViolationになる時がある
-                ShockwaveFlash.Dispose();
+                Handler.DisposeHandler();
                 VideoFlash = null;
                 Controller = null;
                 FullScreenVideoFlash = null;
@@ -948,13 +676,13 @@ namespace SRNicoNico.ViewModels {
 
                 switch(e.Key) {
                     case Key.Space:
-                        TogglePlay();
+                        Handler.TogglePlay();
                         break;
                     case Key.Escape:
                         ToggleFullScreen();
                         break;
                     case Key.S:
-                        Restart();
+                        Handler.Restart();
                         break;
                     case Key.C:
                         ToggleComment();
@@ -984,13 +712,13 @@ namespace SRNicoNico.ViewModels {
             } else {
                 switch(e.Key) {
                     case Key.Space:
-                        TogglePlay();
+                        Handler.TogglePlay();
                         break;
                     case Key.F:
                         ToggleFullScreen();
                         break;
                     case Key.S:
-                        Restart();
+                        Handler.Restart();
                         break;
                     case Key.C:
                         ToggleComment();

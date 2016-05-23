@@ -264,6 +264,7 @@
     <Compile Include="ViewModels\User\UserNicoRepoViewModel.cs" />
     <Compile Include="ViewModels\User\UserVideoViewModel.cs" />
     <Compile Include="ViewModels\User\UserViewModel.cs" />
+    <Compile Include="ViewModels\Video\VideoFlashHandler.cs" />
     <Compile Include="ViewModels\Video\VideoCommentViewModel.cs" />
     <Compile Include="ViewModels\Video\MylistDataViewModel.cs" />
     <Compile Include="ViewModels\Video\UserDataViewModel.cs" />
@@ -900,6 +901,22 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\Category.png" />
+    <Content Include="Flash\bin\NicoNicoLivePlayer.swf">
+      <Link>Flash\NicoNicoLivePlayer.swf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flash\bin\NicoNicoNMPlayer.swf">
+      <Link>Flash\NicoNicoNMPlayer.swf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flash\bin\NicoNicoPlayer.swf">
+      <Link>Flash\NicoNicoPlayer.swf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flash\bin\NicoNicoRTMPPlayer.swf">
+      <Link>Flash\NicoNicoRTMPPlayer.swf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="InfrastructureAssemblies\Design\Livet.Design.dll" />
     <Content Include="InfrastructureAssemblies\ExternalInterfaceProxy.dll" />
     <Content Include="InfrastructureAssemblies\Livet.dll" />
@@ -955,9 +972,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir $(TargetDir)Flash
-
-xcopy /Y  $(ProjectDir)Flash\bin\*.swf  $(TargetDir)Flash</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

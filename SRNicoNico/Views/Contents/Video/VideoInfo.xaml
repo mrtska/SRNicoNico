@@ -33,14 +33,14 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <mui:ModernButton DataContext="{Binding Comment}" ToolTip="オートスクロール" Margin="0,0,10,0" Focusable="False">
+                <mui:ModernButton ToolTip="オートスクロール" Margin="0,0,10,0" Focusable="False">
                     <mui:ModernButton.Style>
                         <Style TargetType="{x:Type mui:ModernButton}">
                             <Style.Triggers>
-                                <DataTrigger  Binding="{Binding AutoScroll}" Value="True" >
+                                <DataTrigger  Binding="{Binding Comment.AutoScroll}" Value="True" >
                                     <Setter Property="IconData" Value="M12,17L7,12H10V8H14V12H17L12,17Z" />
                                 </DataTrigger>
-                                <DataTrigger  Binding="{Binding AutoScroll}" Value="False" >
+                                <DataTrigger  Binding="{Binding Comment.AutoScroll}" Value="False" >
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="mui:ModernButton">
@@ -74,7 +74,7 @@
                     </mui:ModernButton.Style>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodName="ToggleScroll" MethodTarget="{Binding}" />
+                            <l:LivetCallMethodAction MethodName="ToggleScroll" MethodTarget="{Binding Comment}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </mui:ModernButton>
@@ -170,6 +170,7 @@
                             <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.HighestRank, StringFormat=過去最高順位 : {0}}" />
                             <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.YesterdayRank, StringFormat=前日総合順位 : {0}}" />
                             <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.VideoType, StringFormat=動画タイプ : {0}, TargetNullValue=読込中}" />
+                            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.Resolution, StringFormat=解像度 : {0}}" />
                         </StackPanel>
                     </Border>
 

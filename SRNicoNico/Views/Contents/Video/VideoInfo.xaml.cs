@@ -51,7 +51,7 @@ namespace SRNicoNico.Views.Contents.Video {
             var vm = ((MenuItem)sender).DataContext as CommentEntryViewModel;
             var time = NicoNicoUtil.ConvertTime(vm.Entry.RenderTime);
 
-            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => vm.Owner.Seek(time)));
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => vm.Owner.Handler.Seek(time)));
             
         }
 

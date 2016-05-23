@@ -131,10 +131,20 @@ package  {
 			var obj:Object = new Object();
 			obj.onMetaData = function(param:Object):void {
 				
+				
 				metadata = param;
-				for(var propName:String in param){
-					trace(propName + "=" + param[propName]);
-				}						
+				var width:String = param["width"];
+				var height:String = param["height"];
+				
+				ExternalInterface.call("WidthHeight", width + "×" + height);
+				
+				/*for (var propName:String in param){
+					if (propName == "width" || propName == "height") {
+						
+						ExternalInterface.call(propName, param[propName].toString());
+					}
+					
+				}*/						
 				
 				var stageW:int = stage.stageWidth;
 				var stageH:int = stage.stageHeight;

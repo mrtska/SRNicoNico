@@ -111,7 +111,7 @@ namespace SRNicoNico.Views.Contents.Video {
                 ans = (int) Seek.VideoTime;
             }
 
-            vm.Seek(ans);
+            vm.Handler.Seek(ans);
         }
 
         [DllImport("user32.dll")]
