@@ -30,8 +30,8 @@
                     </HeaderedContentControl.Header>
                     <StackPanel>
                         
-                        <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding AlwaysShowSeekBar}" />
-                        <CheckBox Content="常にウィンドウモードのフルスクリーンを使う" IsChecked="{Binding UseWindowFullScreen}" />
+                        <CheckBox IsEnabled="False" Content="フルスクリーン時、シークバーを常に表示する(実装予定)" IsChecked="{Binding AlwaysShowSeekBar}" />
+                        <CheckBox IsEnabled="False" Content="常にウィンドウモードのフルスクリーンを使う(実装予定)" IsChecked="{Binding UseWindowFullScreen}" />
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="生放送通知の更新間隔 (ミリ秒)" VerticalAlignment="Center"/>
                             <TextBox Margin="15,0,0,0" Width="50" Text="{Binding RefreshInterval,Mode=TwoWay}" ToolTip="更新間隔をミリ秒で指定">

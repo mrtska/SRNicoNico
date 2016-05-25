@@ -23,6 +23,9 @@ using System.Threading.Tasks;
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public sealed class NicoNicoWatchApi : NotificationObject {
 
+        private const string UploaderInfoApi = "https://public.api.nicovideo.jp/v1/user/followees/niconico-users/{0}.json";
+
+
         private string VideoPage;
 
         private VideoViewModel Owner;
@@ -120,7 +123,24 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 ret.UploaderId = uploaderInfo.id;
                 ret.UploaderIconUrl = uploaderInfo.icon_url;
                 ret.UploaderName = uploaderInfo.nickname;
-                ret.UploaderIsFavorited = uploaderInfo.is_favorited;
+
+                //投稿者をお気に入り登録しているか調べる
+                Task.Run(() => {
+
+                    try {
+
+                        var a = NicoNicoWrapperMain.Session.GetAsync(string.Format(UploaderInfoApi, ret.UploaderId)).Result;
+
+                        ret.UploaderIsFavorited = DynamicJson.Parse(a).data.following;
+                        
+                    } catch(RequestFailed) {
+
+                        
+                    }
+                });
+
+                //廃止
+                //ret.UploaderIsFavorited = uploaderInfo.is_favorited;
 
             } else if(json.channelInfo()) {
 
