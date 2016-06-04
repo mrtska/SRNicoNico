@@ -11,7 +11,7 @@ using SRNicoNico.Views;
 using SRNicoNico.Models.NicoNicoViewer;
 
 using Livet;
-
+using Microsoft.Win32;
 
 namespace SRNicoNico {
 	/// <summary>
@@ -34,8 +34,7 @@ namespace SRNicoNico {
             DispatcherHelper.UIDispatcher = Dispatcher;
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             
-            Microsoft.Win32.RegistryKey reg = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", true);
-			reg.SetValue("SRNicoNico.exe", 0x00002AF9, Microsoft.Win32.RegistryValueKind.DWord);
+            Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", "SRNicoNico.exe", 0x00002AF9, Microsoft.Win32.RegistryValueKind.DWord);
 
 			ViewModelRoot = new MainWindowViewModel();
 			MainWindow = new MainWindow { DataContext = ViewModelRoot };
@@ -49,7 +48,7 @@ namespace SRNicoNico {
 		{
 		    //TODO:ロギング処理など
 		    MessageBox.Show(
-		        "不明なエラーが発生しました。可能であれば、この文章をコピーして作者に報告していただれば幸いです。\n ExceptionObject:" + e.ExceptionObject,
+		        "不明なエラーが発生しました。可能であれば、この文章をコピーして作者に報告していただれば幸いです。Ctrl+Cでコピーできます。\n ExceptionObject:" + e.ExceptionObject,
 		        "エラー",
 		        MessageBoxButton.OK,
 		        MessageBoxImage.Error);

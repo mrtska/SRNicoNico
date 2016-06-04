@@ -68,7 +68,10 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
             if(!Socket.ReceiveAsync(args)) {
 
-                ;
+                if(args.SocketError != SocketError.NotConnected) {
+
+                    ;
+                }
             }
         }
 
