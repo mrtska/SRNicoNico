@@ -87,6 +87,7 @@ package  {
 			connection = new NetConnection();
 			connection.addEventListener(NetStatusEvent.NET_STATUS, onConnect);
 			connection.connect(null);
+			this.ApplyChanges(config);
 		}
 		
 		//そのまんま

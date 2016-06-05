@@ -300,10 +300,10 @@ namespace SRNicoNico.ViewModels {
                     StatusBar.Status = "自動ログイン中";
 
 					//セッション情報を取得する
-					StreamReader reader = new StreamReader(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
+					var reader = new StreamReader(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
 							
-					string key = reader.ReadLine().Split(':')[1];
-					DateTimeOffset expire = DateTimeOffset.Parse(reader.ReadLine().Replace("Expire:", ""));
+					var key = reader.ReadLine().Split(':')[1];
+					var expire = DateTimeOffset.Parse(reader.ReadLine().Replace("Expire:", ""));
 
 					reader.Close();
 
@@ -334,7 +334,7 @@ namespace SRNicoNico.ViewModels {
 					}
 
                     //セッション情報を更新
-                    StreamWriter writer = new StreamWriter(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
+                    var writer = new StreamWriter(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
 
                     writer.WriteLine("Key:" + NicoNicoWrapperMain.Session.Key);
                     writer.WriteLine("Expire:" + NicoNicoWrapperMain.Session.Expire);

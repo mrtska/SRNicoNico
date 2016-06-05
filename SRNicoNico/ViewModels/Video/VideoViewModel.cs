@@ -399,9 +399,9 @@ namespace SRNicoNico.ViewModels {
             Cmsid = Name;
         }
 
-        public void Initialize() {
+        public async void Initialize() {
 
-            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+            await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
                 if(IsFullScreen) {
 
@@ -429,17 +429,13 @@ namespace SRNicoNico.ViewModels {
             Status = "動画情報取得中";
             //動画情報取得
 
-            Task.Run(() => {
+            await Task.Run(() => {
 
                 WatchApi = new NicoNicoWatchApi(videoUrl, this);
                 VideoData.ApiData = WatchApi.GetWatchApiData();
                 Handler.Initialize(VideoData);
 
             });
-
-
-            
-
         }
         
         //ツイートダイアログ表示
@@ -592,10 +588,10 @@ namespace SRNicoNico.ViewModels {
             //RTMPの時はサーバートークンも一緒にFlashに渡す
             if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
-                Handler.InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, "");
+                Handler.InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, App.ViewModelRoot.Config.Comment.ToJson());
             } else {
 
-                Handler.InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, "");
+                Handler.InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, App.ViewModelRoot.Config.Comment.ToJson());
             }
             
             IsRepeat = Properties.Settings.Default.IsRepeat;

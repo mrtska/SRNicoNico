@@ -121,6 +121,10 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                 return NicoNicoUrlType.Community;
             }
+            if(url.StartsWith("http://live.nicovideo.jp/watch/")) {
+
+                return NicoNicoUrlType.Live;
+            }
 
             return NicoNicoUrlType.Other;
         }

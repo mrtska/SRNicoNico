@@ -46,120 +46,114 @@ namespace SRNicoNico.ViewModels {
             Proxy = new ExternalInterfaceProxy(ShockwaveFlash);
             
         }
-        public void Initialize(VideoData VideoData) {
+        public async void Initialize(VideoData VideoData) {
 
-            Task.Run(() => {
+            //ロードに失敗したら
+            if(VideoData.ApiData == null) {
 
-                //ロードに失敗したら
-                if(VideoData.ApiData == null) {
+                Owner.LoadFailed = true;
+                Owner.IsActive = false;
+                Owner.Status = "動画の読み込みに失敗しました。";
+                return;
+            }
+            Owner.Name = VideoData.ApiData.Title;
 
-                    Owner.LoadFailed = true;
-                    Owner.IsActive = false;
-                    Owner.Status = "動画の読み込みに失敗しました。";
-                    return;
-                }
-                Owner.Name = VideoData.ApiData.Title;
+            //有料動画なら
+            if(VideoData.ApiData.IsPaidVideo) {
 
-                //有料動画なら
-                if(VideoData.ApiData.IsPaidVideo) {
+                App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(PaidVideoDialog), this, TransitionMode.Modal));
+                return;
+            }
 
-                    App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(PaidVideoDialog), this, TransitionMode.Modal));
-                    return;
-                }
+            await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+                if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
-                    if(VideoData.ApiData.Cmsid.Contains("nm")) {
+                    VideoData.VideoType = NicoNicoVideoType.SWF;
+                    ShockwaveFlash.LoadMovie(0, GetNMPlayerPath());
 
-                        VideoData.VideoType = NicoNicoVideoType.SWF;
-                        ShockwaveFlash.LoadMovie(0, GetNMPlayerPath());
+                } else if(VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
 
-                    } else if(VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
+                    VideoData.VideoType = NicoNicoVideoType.RTMP;
+                    ShockwaveFlash.LoadMovie(0, GetRTMPPlayerPath());
+                } else {
 
-                        VideoData.VideoType = NicoNicoVideoType.RTMP;
-                        ShockwaveFlash.LoadMovie(0, GetRTMPPlayerPath());
+                    if(VideoData.ApiData.MovieType == "flv") {
+
+                        VideoData.VideoType = NicoNicoVideoType.FLV;
                     } else {
 
-                        if(VideoData.ApiData.MovieType == "flv") {
-
-                            VideoData.VideoType = NicoNicoVideoType.FLV;
-                        } else {
-
-                            VideoData.VideoType = NicoNicoVideoType.MP4;
-                        }
-                        ShockwaveFlash.LoadMovie(0, GetPlayerPath());
+                        VideoData.VideoType = NicoNicoVideoType.MP4;
                     }
-                    Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
-                    Owner.IsActive = false;
+                    ShockwaveFlash.LoadMovie(0, GetPlayerPath());
+                }
+                Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
+                Owner.IsActive = false;
 
-                    Owner.OpenVideo();
+                Owner.OpenVideo();
 
-                }));
-                Owner.Time = new VideoTime();
-                //動画時間
-                Owner.Time.VideoTimeString = NicoNicoUtil.ConvertTime(VideoData.ApiData.Length);
+            }));
+            Owner.Time = new VideoTime();
+            //動画時間
+            Owner.Time.VideoTimeString = NicoNicoUtil.ConvertTime(VideoData.ApiData.Length);
 
-                if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
+            if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
 
-                    Task.Run(() => {
+                    Owner.StoryBoardStatus = "取得中";
 
-                        Owner.StoryBoardStatus = "取得中";
+                    var sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
+                    VideoData.StoryBoardData = sb.GetStoryBoardData();
 
-                        var sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
-                        VideoData.StoryBoardData = sb.GetStoryBoardData();
+                    if(VideoData.StoryBoardData == null) {
 
-                        if(VideoData.StoryBoardData == null) {
+                        Owner.StoryBoardStatus = "データ無し";
+                    } else {
 
-                            Owner.StoryBoardStatus = "データ無し";
-                        } else {
+                        Owner.StoryBoardStatus = "取得完了";
+                    }
+            } else {
 
-                            Owner.StoryBoardStatus = "取得完了";
-                        }
-                    });
-                } else {
+                Owner.StoryBoardStatus = "データ無し";
+            }
 
-                    Owner.StoryBoardStatus = "データ無し";
+            Owner.CommentInstance = new NicoNicoComment(VideoData.ApiData, Owner);
+            var list = Owner.CommentInstance.GetComment();
+            if(list != null) {
+
+
+                foreach(var entry in list) {
+
+                    VideoData.CommentData.Add(new CommentEntryViewModel(entry, Owner));
                 }
 
-                Owner.CommentInstance = new NicoNicoComment(VideoData.ApiData, Owner);
-                var list = Owner.CommentInstance.GetComment();
-                if(list != null) {
+                dynamic json = new DynamicJson();
+                json.array = list;
 
+                InjectComment(json.ToString());
+                Owner.Comment.CanComment = true;
+                Owner.Comment.IsCommentLoading = false;
 
-                    foreach(var entry in list) {
+                //投稿者コメントがあったら取得する
+                if(VideoData.ApiData.HasOwnerThread) {
 
-                        VideoData.CommentData.Add(new CommentEntryViewModel(entry, Owner));
-                    }
+                    var ulist = Owner.CommentInstance.GetUploaderComment();
+                    dynamic ujson = new DynamicJson();
+                    json.array = ulist;
 
-                    dynamic json = new DynamicJson();
-                    json.array = list;
-
-                    InjectComment(json.ToString());
-                    Owner.Comment.CanComment = true;
-                    Owner.Comment.IsCommentLoading = false;
-
-                    //投稿者コメントがあったら取得する
-                    if(VideoData.ApiData.HasOwnerThread) {
-
-                        var ulist = Owner.CommentInstance.GetUploaderComment();
-                        dynamic ujson = new DynamicJson();
-                        json.array = ulist;
-
-                        InjectUploaderComment(json.ToString());
-                    }
-
-                    //コメント設定を反映
-                    ApplyChanges();
+                    InjectUploaderComment(json.ToString());
                 }
 
-                if(!Properties.Settings.Default.CommentVisibility) {
+                //コメント設定を反映
+                ApplyChanges();
+            }
 
-                    InvokeScript("AsToggleComment");
-                } else {
+            if(!Properties.Settings.Default.CommentVisibility) {
 
-                    Owner.CommentVisibility = true;
-                }
-            });
+                InvokeScript("AsToggleComment");
+            } else {
+
+                Owner.CommentVisibility = true;
+            }
 
         }
 
