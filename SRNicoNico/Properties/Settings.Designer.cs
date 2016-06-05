@@ -250,5 +250,17 @@ namespace SRNicoNico.Properties {
                 this["RefreshInterval"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://www.nicovideo.jp/ranking")]
+        public global::System.Uri RankingPageUrl {
+            get {
+                return ((global::System.Uri)(this["RankingPageUrl"]));
+            }
+            set {
+                this["RankingPageUrl"] = value;
+            }
+        }
     }
 }

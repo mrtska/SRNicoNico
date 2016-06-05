@@ -59,5 +59,8 @@
     <Setting Name="RefreshInterval" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">300000</Value>
     </Setting>
+    <Setting Name="RankingPageUrl" Type="System.Uri" Scope="User">
+      <Value Profile="(Default)">http://www.nicovideo.jp/ranking</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

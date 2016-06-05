@@ -247,6 +247,7 @@
     <Compile Include="ViewModels\Misc\OSSViewModel.cs" />
     <Compile Include="ViewModels\Misc\OverViewViewModel.cs" />
     <Compile Include="ViewModels\Misc\TweetDialogViewModel.cs" />
+    <Compile Include="ViewModels\Ranking\RankingViewModel.cs" />
     <Compile Include="ViewModels\Updater\DownloadViewModel.cs" />
     <Compile Include="ViewModels\Updater\UpdateViewModel.cs" />
     <Compile Include="ViewModels\Mylist\MylistEditModeViewModel.cs" />
@@ -357,6 +358,9 @@
     </Compile>
     <Compile Include="Views\Contents\Misc\OverView.xaml.cs">
       <DependentUpon>OverView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Ranking\Ranking.xaml.cs">
+      <DependentUpon>Ranking.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Updater\DownloadDialog.xaml.cs">
       <DependentUpon>DownloadDialog.xaml</DependentUpon>
@@ -651,6 +655,10 @@
     <Page Include="Views\Contents\Misc\OverView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Ranking\Ranking.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Updater\DownloadDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -953,6 +961,15 @@
       <Lcid>0</Lcid>
       <WrapperTool>aximp</WrapperTool>
       <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="MSHTML">
+      <Guid>{3050F1C5-98B5-11CF-BB82-00AA00BDCE0B}</Guid>
+      <VersionMajor>4</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
     <COMReference Include="ShockwaveFlashObjects">
       <Guid>{D27CDB6B-AE6D-11CF-96B8-444553540000}</Guid>

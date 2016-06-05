@@ -7,6 +7,7 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:ranking="clr-namespace:SRNicoNico.Views.Contents.Ranking"
              xmlns:search="clr-namespace:SRNicoNico.Views.Contents.Search"
 			 xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
              xmlns:tab="clr-namespace:SRNicoNico.Views.Controls"
@@ -179,6 +180,9 @@
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:StartViewModel}">
                     <local:Start/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:RankingViewModel}">
+                    <ranking:Ranking />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:SearchViewModel}">
                     <search:Search />
