@@ -14,7 +14,7 @@
 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance {x:Type vm:ConfigCommentViewModel}}"
+             d:DataContext="{d:DesignInstance {x:Type vm:ConfigNGCommentViewModel}}"
              
              Background="{DynamicResource ThemeBrushKey}"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
@@ -28,7 +28,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="NG機能" FontSize="18"/>
+            <TextBlock Text="NG機能(Coming Soon)" FontSize="18"/>
 
             <StackPanel Grid.Row="1">
                 <DataGrid>

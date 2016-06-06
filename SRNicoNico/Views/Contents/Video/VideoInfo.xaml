@@ -171,6 +171,8 @@
                             <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.ApiData.YesterdayRank, StringFormat=前日総合順位 : {0}}" />
                             <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.VideoType, StringFormat=動画タイプ : {0}, TargetNullValue=読込中}" />
                             <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.Resolution, StringFormat=解像度 : {0}}" />
+                            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.FrameRate, StringFormat=フレームレート : {0}}" />
+                            <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding VideoData.FileSize, StringFormat=ファイルサイズ : {0}}" />
                         </StackPanel>
                     </Border>
 

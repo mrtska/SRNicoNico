@@ -77,6 +77,46 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
         #endregion
 
+        #region BitRate変更通知プロパティ
+        private string _BitRate;
 
+        public string BitRate {
+            get { return _BitRate; }
+            set { 
+                if(_BitRate == value)
+                    return;
+                _BitRate = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region FrameRate変更通知プロパティ
+        private string _FrameRate;
+
+        public string FrameRate {
+            get { return _FrameRate; }
+            set { 
+                if(_FrameRate == value)
+                    return;
+                _FrameRate = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region FileSize変更通知プロパティ
+        private string _FileSize;
+
+        public string FileSize {
+            get { return _FileSize; }
+            set { 
+                if(_FileSize == value)
+                    return;
+                _FileSize = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
     }
 }

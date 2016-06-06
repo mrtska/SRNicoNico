@@ -42,7 +42,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     var obj = new NGCommentEntry();
 
-                    obj.Type = entry.SelectSingleNode("type").InnerText == "id" ? NGType.Id : NGType.Word;
+                    obj.Type = entry.SelectSingleNode("type").InnerText == "id" ? NGType.UserId : NGType.Word;
                     obj.Content = entry.SelectSingleNode("source").InnerText;
                     obj.RegisterTime = entry.SelectSingleNode("register_time").InnerText;
 
@@ -143,8 +143,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
     public enum NGType {
 
-        Id,
-        Word
+        UserId,
+        Word,
+        WordContains,
+        RegEx,
+
     }
 
 

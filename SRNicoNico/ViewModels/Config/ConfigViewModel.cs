@@ -51,6 +51,7 @@ namespace SRNicoNico.ViewModels {
         public ConfigGeneralViewModel General { get; private set; }
         public ConfigVideoViewModel Video { get; private set; }
         public ConfigCommentViewModel Comment { get; private set; }
+        public ConfigNGCommentViewModel NGComment { get; private set; }
         public ConfigLiveViewModel Live { get; private set; }
 
 
@@ -59,6 +60,7 @@ namespace SRNicoNico.ViewModels {
             ConfigCollection.Add(General = new ConfigGeneralViewModel(this));
             ConfigCollection.Add(Video = new ConfigVideoViewModel());
             ConfigCollection.Add(Comment = new ConfigCommentViewModel());
+            ConfigCollection.Add(NGComment = new ConfigNGCommentViewModel());
             ConfigCollection.Add(Live = new ConfigLiveViewModel());
 
         }

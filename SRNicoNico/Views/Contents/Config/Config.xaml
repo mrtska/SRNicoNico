@@ -53,6 +53,9 @@
                 <DataTemplate DataType="{x:Type vm:ConfigLiveViewModel}">
                     <local:ConfigLive />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:ConfigNGCommentViewModel}">
+                    <local:ConfigNGComment />
+                </DataTemplate>
             </ItemsControl.Resources>
 
             <ItemsControl.ItemsPanel>

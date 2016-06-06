@@ -131,6 +131,8 @@ package  {
 			videoH = loader.contentLoaderInfo.height;
 			
 			
+
+			
 			trace("stageWidth:" + stageW + " stageHeight:" + stageH);
 			trace("videoWidth:" + videoW + " videoHeight:" + videoH);
 
@@ -157,6 +159,16 @@ package  {
 			addChild(rasterizer);
 			movie.addEventListener(Event.ENTER_FRAME, onFrame);
 			CallCSharp("Initialized");
+			var width:String = videoW.toString();
+			var height:String = videoH.toString();
+			ExternalInterface.call("WidthHeight", width + "×" + height);
+
+			var framerate:String = loader.contentLoaderInfo.frameRate.toString();
+			ExternalInterface.call("Framerate", framerate);
+			var filesize:String = movie.loaderInfo.bytesTotal.toString();
+			
+			ExternalInterface.call("FileSize", filesize);
+
 		}
 		
 		

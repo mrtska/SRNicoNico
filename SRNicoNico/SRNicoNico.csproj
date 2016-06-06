@@ -226,6 +226,7 @@
     <Compile Include="ViewModels\Community\CommunityTopViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityVideoViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityViewModel.cs" />
+    <Compile Include="ViewModels\Config\ConfigNGCommentViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigGeneralViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigCommentViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigLiveViewModel.cs" />

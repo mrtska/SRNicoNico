@@ -136,14 +136,17 @@ package  {
 				metadata = param;
 				var width:String = param["width"];
 				var height:String = param["height"];
+				var framerate:String = param["videoframerate"];
+				var filesize:String = stream.bytesTotal;
 				
 				ExternalInterface.call("WidthHeight", width + "×" + height);
+				ExternalInterface.call("Framerate", framerate + "");
+				ExternalInterface.call("FileSize", filesize + "");
 				
 				/*for (var propName:String in param){
-					if (propName == "width" || propName == "height") {
 						
 						ExternalInterface.call(propName, param[propName].toString());
-					}
+					
 					
 				}*/						
 				

@@ -29,7 +29,7 @@ namespace SRNicoNico.ViewModels {
         //現在のバージョン
         public double CurrentVersion {
 
-            get { return 0.73; }
+            get { return 0.8; }
         }
 
         
@@ -289,7 +289,8 @@ namespace SRNicoNico.ViewModels {
             NGCommentInstance = new NicoNicoNGComment();
             NGCommentInstance.GetNGClient();
 
-            }
+    
+        }
 
 		public void Initialize() {
             

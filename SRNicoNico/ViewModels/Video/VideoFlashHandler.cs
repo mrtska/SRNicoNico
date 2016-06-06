@@ -187,7 +187,7 @@ namespace SRNicoNico.ViewModels {
         }
         //ExternalIntarface.callでActionscriptから呼ばれる
         public void InvokeFromActionScript(string func, params string[] args) {
-
+            
             switch(func) {
                 case "CsFrame": //毎フレーム呼ばれる
                     CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]), args[3]);
@@ -206,6 +206,19 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case "WidthHeight":
                     Owner.VideoData.Resolution = args[0];
+                    break;
+                case "Bitrate":
+                    //Owner.VideoData.BitRate = args[0];
+                    break;
+                case "Framerate":
+                    Owner.VideoData.FrameRate = args[0];
+                    break;
+                case "FileSize":
+                    var size = double.Parse(args[0]);
+                    size /= 100000.0;
+                    size = Math.Floor(size) / 10;
+
+                    Owner.VideoData.FileSize = size.ToString() + "MB";
                     break;
                 case "Stop": //動画が最後まで行ったらリピートしたりフルスクリーンから復帰したりする
                     if(Owner.IsRepeat) {
