@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Config"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -28,15 +29,38 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="NG機能(Coming Soon)" FontSize="18"/>
+            <TextBlock Text="NG機能" FontSize="18"/>
 
-            <StackPanel Grid.Row="1">
-                <DataGrid>
-                    
-                </DataGrid>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <ListView ItemsSource="{Binding NGList,Mode=TwoWay}" >
+                    <ListView.Resources>
+                        <c:NGTypeConverter x:Key="ngconv"/>
+                        <DataTemplate DataType="{x:Type m:NGCommentEntry}">
+                            <Grid d:DataContext="{d:DesignInstance {x:Type m:NGCommentEntry}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox IsChecked="{Binding IsEnabled,Mode=TwoWay}" ToolTip="有効/無効切り替え"/>
+                                <ComboBox Grid.Column="1" IsEnabled="{Binding IsEnabled}" SelectedIndex="{Binding Type,Converter={StaticResource ngconv},Mode=TwoWay}" >
+                                    <ComboBoxItem Content="コメント完全一致" />
+                                    <ComboBoxItem Content="を含む" />
+                                    <ComboBoxItem Content="ユーザーID" />
+                                    <ComboBoxItem Content="正規表現" ToolTip="上級者向け（正しい正規表現を指定しないと動作に影響が出ます）"/>
+                                </ComboBox>
+                                <TextBox Grid.Column="2" IsEnabled="{Binding IsEnabled}" Text="{Binding Content,Mode=TwoWay}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.Resources>
+                </ListView>
                 
 
-            </StackPanel>
+            </Grid>
 
 
         </Grid>

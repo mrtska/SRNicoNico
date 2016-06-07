@@ -143,8 +143,6 @@ namespace SRNicoNico.ViewModels {
                     InjectUploaderComment(json.ToString());
                 }
 
-                //コメント設定を反映
-                ApplyChanges();
             }
 
             if(!Properties.Settings.Default.CommentVisibility) {

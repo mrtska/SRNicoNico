@@ -128,6 +128,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
     public class NGCommentEntry {
 
+        //有効かどうか
+        public bool IsEnabled { get; set; }
+
         //ユーザーIDか文字列か
         public NGType Type { get; set; }
 
