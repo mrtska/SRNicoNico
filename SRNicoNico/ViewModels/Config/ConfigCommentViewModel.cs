@@ -19,49 +19,6 @@ namespace SRNicoNico.ViewModels {
     public class ConfigCommentViewModel : ConfigViewModelBase {
 
 
-        #region Hide3DSComment変更通知プロパティ
-        public bool Hide3DSComment {
-            get { return Properties.Settings.Default.Hide3DSComment; }
-            set { 
-                if(Properties.Settings.Default.Hide3DSComment == value)
-                    return;
-                Properties.Settings.Default.Hide3DSComment = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-                ApplyConfig();
-            }
-        }
-        #endregion
-
-
-        #region HideWiiUComment変更通知プロパティ
-        public bool HideWiiUComment {
-            get { return Properties.Settings.Default.HideWiiUComment; }
-            set { 
-                if(Properties.Settings.Default.HideWiiUComment == value)
-                    return;
-                Properties.Settings.Default.HideWiiUComment = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-                ApplyConfig();
-            }
-        }
-        #endregion
-
-
-        #region NGSharedLevel変更通知プロパティ
-        public string NGSharedLevel {
-            get { return Properties.Settings.Default.NGSharedLevel; }
-            set { 
-                if(Properties.Settings.Default.NGSharedLevel == value)
-                    return;
-                Properties.Settings.Default.NGSharedLevel = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-                ApplyConfig();
-            }
-        }
-        #endregion
 
         #region CommentAlpha変更通知プロパティ
         public float CommentAlpha {
@@ -112,9 +69,6 @@ namespace SRNicoNico.ViewModels {
 
         public override void Reset() {
 
-            RaisePropertyChanged(nameof(Hide3DSComment));
-            RaisePropertyChanged(nameof(HideWiiUComment));
-            RaisePropertyChanged(nameof(NGSharedLevel));
             RaisePropertyChanged(nameof(CommentAlpha));
             RaisePropertyChanged(nameof(DefaultCommentSize));
         }
@@ -123,9 +77,9 @@ namespace SRNicoNico.ViewModels {
 
             dynamic root = new DynamicJson();
 
-            root.Hide3DSComment = Hide3DSComment;
-            root.HideWiiUComment = HideWiiUComment;
-            root.NGSharedLevel = NGSharedLevel;
+            root.Hide3DSComment = App.ViewModelRoot.Config.NGComment.Hide3DSComment;
+            root.HideWiiUComment = App.ViewModelRoot.Config.NGComment.HideWiiUComment;
+            root.NGSharedLevel = App.ViewModelRoot.Config.NGComment.NGSharedLevel;
             root.CommentAlpha = CommentAlpha / 100; //%から小数点に
             root.DefaultCommentSize = DefaultCommentSize;
 

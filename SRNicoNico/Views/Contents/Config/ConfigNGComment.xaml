@@ -36,29 +36,44 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <ListView ItemsSource="{Binding NGList,Mode=TwoWay}" >
-                    <ListView.Resources>
-                        <c:NGTypeConverter x:Key="ngconv"/>
-                        <DataTemplate DataType="{x:Type m:NGCommentEntry}">
-                            <Grid d:DataContext="{d:DesignInstance {x:Type m:NGCommentEntry}}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="200"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <CheckBox IsChecked="{Binding IsEnabled,Mode=TwoWay}" ToolTip="有効/無効切り替え"/>
-                                <ComboBox Grid.Column="1" IsEnabled="{Binding IsEnabled}" SelectedIndex="{Binding Type,Converter={StaticResource ngconv},Mode=TwoWay}" >
-                                    <ComboBoxItem Content="コメント完全一致" />
-                                    <ComboBoxItem Content="を含む" />
-                                    <ComboBoxItem Content="ユーザーID" />
-                                    <ComboBoxItem Content="正規表現" ToolTip="上級者向け（正しい正規表現を指定しないと動作に影響が出ます）"/>
-                                </ComboBox>
-                                <TextBox Grid.Column="2" IsEnabled="{Binding IsEnabled}" Text="{Binding Content,Mode=TwoWay}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.Resources>
-                </ListView>
-                
+                <StackPanel>
+                    <TextBlock Text="NG共有レベル" FontSize="20" />
+                    <ComboBox Width="200" HorizontalAlignment="Left" Margin="10" Text="{Binding NGSharedLevel,Mode=TwoWay}">
+                        <ComboBoxItem Content="無" ToolTip="コメントをフィルタリングしません。"/>
+                        <ComboBoxItem Content="弱" ToolTip="とても悪質なコメントのみフィルタリングします。"/>
+                        <ComboBoxItem Content="中" ToolTip="悪質なコメントをフィルタリングします。"/>
+                        <ComboBoxItem Content="強" ToolTip="少数のプレミアムユーザーにNG登録されたコメントもフィルタリングします。"/>
+                        <ComboBoxItem Content="最強" ToolTip="NGスコアが付いている時点でフィルタリングします。"/>
+                    </ComboBox>
+                    <TextBlock Text="コメント非表示設定" FontSize="20"  Margin="0,10,0,0"/>
+                    <StackPanel Margin="10">
+                        <CheckBox Content="3DSからのコメントを非表示にする" IsChecked="{Binding Hide3DSComment}" />
+                        <CheckBox Content="WiiUからのコメントを非表示にする" IsChecked="{Binding HideWiiUComment}" Margin="0,10,0,0"/>
+                    </StackPanel>
+                    <ListView ItemsSource="{Binding NGList,Mode=TwoWay}" >
+                        <ListView.Resources>
+                            <c:NGTypeConverter x:Key="ngconv"/>
+                            <DataTemplate DataType="{x:Type m:NGCommentEntry}">
+                                <Grid d:DataContext="{d:DesignInstance {x:Type m:NGCommentEntry}}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox IsChecked="{Binding IsEnabled,Mode=TwoWay}" ToolTip="有効/無効切り替え"/>
+                                    <ComboBox Grid.Column="1" IsEnabled="{Binding IsEnabled}" SelectedIndex="{Binding Type,Converter={StaticResource ngconv},Mode=TwoWay}" >
+                                        <ComboBoxItem Content="コメント完全一致" />
+                                        <ComboBoxItem Content="を含む" />
+                                        <ComboBoxItem Content="ユーザーID" />
+                                        <ComboBoxItem Content="正規表現" ToolTip="上級者向け（正しい正規表現を指定しないと動作に影響が出ます）"/>
+                                    </ComboBox>
+                                    <TextBox Grid.Column="2" IsEnabled="{Binding IsEnabled}" Text="{Binding Content,Mode=TwoWay}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.Resources>
+                    </ListView>
+                </StackPanel>
+
 
             </Grid>
 

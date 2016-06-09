@@ -112,7 +112,7 @@ document.getElementsByTagName('body')[0].setAttribute('oncontextmenu', 'return f
 
         public void Refresh() {
 
-            
+            WebBrowser.Refresh(true);
 
 
         }

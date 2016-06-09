@@ -20,14 +20,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //すべてのニコレポリストを取得
         public List<NicoNicoNicoRepoListEntry> GetNicoRepoList() {
 
-            List<NicoNicoNicoRepoListEntry> ret = new List<NicoNicoNicoRepoListEntry>();
+            var ret = new List<NicoNicoNicoRepoListEntry>();
 
 
-            NicoNicoNicoRepoListEntry all = new NicoNicoNicoRepoListEntry("すべて", "all");
-            NicoNicoNicoRepoListEntry myself = new NicoNicoNicoRepoListEntry("自分", "myself");
-            NicoNicoNicoRepoListEntry user = new NicoNicoNicoRepoListEntry("お気に入りユーザー", "user");
-            NicoNicoNicoRepoListEntry chcom = new NicoNicoNicoRepoListEntry("チャンネル&コミュニティ", "chcom");
-            NicoNicoNicoRepoListEntry mylist = new NicoNicoNicoRepoListEntry("マイリスト", "mylist");
+            var all = new NicoNicoNicoRepoListEntry("すべて", "all");
+            var myself = new NicoNicoNicoRepoListEntry("自分", "myself");
+            var user = new NicoNicoNicoRepoListEntry("お気に入りユーザー", "user");
+            var chcom = new NicoNicoNicoRepoListEntry("チャンネル&コミュニティ", "chcom");
+            var mylist = new NicoNicoNicoRepoListEntry("マイリスト", "mylist");
 
             ret.Add(all);
             ret.Add(myself);
@@ -42,26 +42,32 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //ユーザー定義の二コレポリストを取得
         private List<NicoNicoNicoRepoListEntry> GetUserDefinitionNicoRepoList() {
 
-            //htmlからCSRFトークンを抜き出す
-            string html = NicoNicoWrapperMain.Session.GetAsync(NicoRepoWebUrl).Result;
+            try {
 
-            //CSRFトークン
-            string token = html.Substring(html.IndexOf("Mypage_globals.hash = \"") + 23, 60);
+                //htmlからCSRFトークンを抜き出す
+                var html = NicoNicoWrapperMain.Session.GetAsync(NicoRepoWebUrl).Result;
 
-            string response = NicoNicoWrapperMain.Session.GetAsync(NicoRepoListApiUrl + token).Result;
-            Console.WriteLine(NicoRepoListApiUrl + token);
-            var json = DynamicJson.Parse(response);
+                //CSRFトークン
+                var token = html.Substring(html.IndexOf("Mypage_globals.hash = \"") + 23, 60);
+
+                var response = NicoNicoWrapperMain.Session.GetAsync(NicoRepoListApiUrl + token).Result;
+                Console.WriteLine(NicoRepoListApiUrl + token);
+                var json = DynamicJson.Parse(response);
 
 
-            List<NicoNicoNicoRepoListEntry> ret = new List<NicoNicoNicoRepoListEntry>();
+                var ret = new List<NicoNicoNicoRepoListEntry>();
+                foreach(var entry in json.nicorepolists) {
 
-            foreach(var entry in json.nicorepolists) {
+                    var list = new NicoNicoNicoRepoListEntry(entry.title, entry.id);
 
-                NicoNicoNicoRepoListEntry list = new NicoNicoNicoRepoListEntry(entry.title, entry.id);
+                    ret.Add(list);
+                }
+                return ret;
+            } catch(Exception) {
 
-                ret.Add(list);
+                return new List<NicoNicoNicoRepoListEntry>();
             }
-            return ret;
+  
 
         }
     }
