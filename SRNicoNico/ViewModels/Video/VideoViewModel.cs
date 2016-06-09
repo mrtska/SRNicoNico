@@ -395,6 +395,12 @@ namespace SRNicoNico.ViewModels {
 
         public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
+            if(videoUrl.Contains("?")) {
+
+                videoUrl = videoUrl.Split('?')[0];
+                Name = videoUrl.Substring(30);
+            }
+
             VideoUrl = videoUrl;
             Cmsid = Name;
         }

@@ -26,18 +26,15 @@
 
         <Grid Margin="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="NG機能" FontSize="18"/>
 
-            <Grid Grid.Row="1">
+            <Grid >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <StackPanel>
-                    <TextBlock Text="NG共有レベル" FontSize="20" />
+                    <TextBlock Text="NG共有レベル" FontSize="18" />
                     <ComboBox Width="200" HorizontalAlignment="Left" Margin="10" Text="{Binding NGSharedLevel,Mode=TwoWay}">
                         <ComboBoxItem Content="無" ToolTip="コメントをフィルタリングしません。"/>
                         <ComboBoxItem Content="弱" ToolTip="とても悪質なコメントのみフィルタリングします。"/>
@@ -45,12 +42,15 @@
                         <ComboBoxItem Content="強" ToolTip="少数のプレミアムユーザーにNG登録されたコメントもフィルタリングします。"/>
                         <ComboBoxItem Content="最強" ToolTip="NGスコアが付いている時点でフィルタリングします。"/>
                     </ComboBox>
-                    <TextBlock Text="コメント非表示設定" FontSize="20"  Margin="0,10,0,0"/>
+                    <TextBlock Text="コメント非表示設定" FontSize="18"  Margin="0,10,0,0"/>
                     <StackPanel Margin="10">
                         <CheckBox Content="3DSからのコメントを非表示にする" IsChecked="{Binding Hide3DSComment}" />
                         <CheckBox Content="WiiUからのコメントを非表示にする" IsChecked="{Binding HideWiiUComment}" Margin="0,10,0,0"/>
                     </StackPanel>
-                    <ListView ItemsSource="{Binding NGList,Mode=TwoWay}" >
+                    
+                    <TextBlock Text="NGフィルター(次バージョンで実装予定)" FontSize="18"  Margin="0,10,0,0"/>
+
+                    <!--<ListView ItemsSource="{Binding NGList,Mode=TwoWay}" IsEnabled="False">
                         <ListView.Resources>
                             <c:NGTypeConverter x:Key="ngconv"/>
                             <DataTemplate DataType="{x:Type m:NGCommentEntry}">
@@ -72,6 +72,7 @@
                             </DataTemplate>
                         </ListView.Resources>
                     </ListView>
+                    -->
                 </StackPanel>
 
 

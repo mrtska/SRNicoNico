@@ -58,7 +58,8 @@
                     v0.71<LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.72<LineBreak /><LineBreak /><LineBreak /><LineBreak />
                     v0.73<LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak /><LineBreak />
-                    v0.8
+                    v0.8<LineBreak /><LineBreak /><LineBreak />
+                    v0.9
 
                 </TextBlock>
                 <TextBlock Grid.Column="1">
@@ -121,8 +122,8 @@
                     生放送通知の間隔を設定できるように<LineBreak />
                     ニコレポフィルターを実装<LineBreak /><LineBreak />
                     ランキングを実装<LineBreak />
+                    一部環境で起動できない不具合を修正<LineBreak /><LineBreak />
                     NG機能を追加<LineBreak />
-                    一部環境で起動できない不具合を修正<LineBreak />
 
 
 

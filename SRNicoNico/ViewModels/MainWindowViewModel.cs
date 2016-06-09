@@ -287,7 +287,7 @@ namespace SRNicoNico.ViewModels {
 
             //公式NG機能を初期化
             NGCommentInstance = new NicoNicoNGComment();
-            NGCommentInstance.GetNGClient();
+            //NGCommentInstance.GetNGClient();
 
     
         }

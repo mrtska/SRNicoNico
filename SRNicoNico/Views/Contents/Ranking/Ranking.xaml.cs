@@ -14,7 +14,6 @@ using System.Windows.Navigation;
 using MetroRadiance.UI.Controls;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.ViewModels;
-using mshtml;
 
 namespace SRNicoNico.Views.Contents.Ranking {
     /// <summary>
