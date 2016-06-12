@@ -2,6 +2,7 @@ package comment {
 	import flash.display.Sprite;
 	import flash.external.ExternalInterface;
 	import flash.text.TextFormat;
+	import flash.utils.unescapeMultiByte;
 	
 	public class CommentRasterizer extends Sprite {
 		
@@ -45,6 +46,8 @@ package comment {
 		
 		//コメントリストをC#からもらう
 		public function loadComment(string:String):void {
+			
+			string = unescapeMultiByte(string);
 			
 			var json:Object = JSON.parse(string);
 			

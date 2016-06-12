@@ -10,6 +10,7 @@ using Livet.Messaging;
 using Livet.Messaging.IO;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
+using System.Web;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Windows.Input;
@@ -24,29 +25,44 @@ using System.IO;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Views.Contents.Video;
 using Codeplex.Data;
+using CefSharp;
 
 namespace SRNicoNico.ViewModels {
     public class VideoFlashHandler : ViewModel {
 
-
-        public AxShockwaveFlash ShockwaveFlash;
-
-        //Flashの関数を呼ぶためのもの
-        public ExternalInterfaceProxy Proxy;
+        public IWebBrowser Browser;
 
         private VideoViewModel Owner;
 
         public bool IsInitialized;
 
-        public VideoFlashHandler(VideoViewModel vm, AxShockwaveFlash flash)  {
+        public VideoFlashHandler(VideoViewModel vm)  {
 
             Owner = vm;
-
-            ShockwaveFlash = flash;
-            Proxy = new ExternalInterfaceProxy(ShockwaveFlash);
-            
         }
-        public async void Initialize(VideoData VideoData) {
+
+
+        private bool IsPreIntialized = false;
+
+        private VideoData VideoData;
+
+        public void PreInitialize(IWebBrowser flash) {
+
+
+            Browser = flash;
+            Browser.RequestHandler = new RequestHandler();
+            Browser.MenuHandler = new MenuHandler();
+            IsPreIntialized = true;
+        }
+
+        public void Initialize(VideoData videoData) {
+
+            VideoData = videoData;
+
+            while(!IsPreIntialized) {
+
+                Thread.Sleep(1);
+            }
 
             //ロードに失敗したら
             if(VideoData.ApiData == null) {
@@ -56,6 +72,7 @@ namespace SRNicoNico.ViewModels {
                 Owner.Status = "動画の読み込みに失敗しました。";
                 return;
             }
+
             Owner.Name = VideoData.ApiData.Title;
 
             //有料動画なら
@@ -65,52 +82,48 @@ namespace SRNicoNico.ViewModels {
                 return;
             }
 
-            await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-                if(VideoData.ApiData.Cmsid.Contains("nm")) {
-
-                    VideoData.VideoType = NicoNicoVideoType.SWF;
-                    ShockwaveFlash.LoadMovie(0, GetNMPlayerPath());
-
-                } else if(VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
-
-                    VideoData.VideoType = NicoNicoVideoType.RTMP;
-                    ShockwaveFlash.LoadMovie(0, GetRTMPPlayerPath());
-                } else {
-
-                    if(VideoData.ApiData.MovieType == "flv") {
-
-                        VideoData.VideoType = NicoNicoVideoType.FLV;
-                    } else {
-
-                        VideoData.VideoType = NicoNicoVideoType.MP4;
-                    }
-                    ShockwaveFlash.LoadMovie(0, GetPlayerPath());
-                }
-                Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
-                Owner.IsActive = false;
-
-                Owner.OpenVideo();
-
-            }));
             Owner.Time = new VideoTime();
             //動画時間
             Owner.Time.VideoTimeString = NicoNicoUtil.ConvertTime(VideoData.ApiData.Length);
 
+            
+            if(VideoData.ApiData.Cmsid.Contains("nm")) {
+
+                VideoData.VideoType = NicoNicoVideoType.SWF;
+
+            } else if(VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
+
+                VideoData.VideoType = NicoNicoVideoType.RTMP;
+            } else {
+
+                if(VideoData.ApiData.MovieType == "flv") {
+
+                    VideoData.VideoType = NicoNicoVideoType.FLV;
+                } else {
+
+                    VideoData.VideoType = NicoNicoVideoType.MP4;
+                }
+            }
+            Owner.IsActive = false;
+
+            Browser.Load("http://localbridge/NicoNicoPlayer.html");
+           // Browser.ShowDevTools();
+            Browser.LoadingStateChanged += Browser_LoadingStateChanged;
+
             if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
 
-                    Owner.StoryBoardStatus = "取得中";
+                Owner.StoryBoardStatus = "取得中";
 
-                    var sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
-                    VideoData.StoryBoardData = sb.GetStoryBoardData();
+                var sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
+                VideoData.StoryBoardData = sb.GetStoryBoardData();
 
-                    if(VideoData.StoryBoardData == null) {
+                if(VideoData.StoryBoardData == null) {
 
-                        Owner.StoryBoardStatus = "データ無し";
-                    } else {
+                    Owner.StoryBoardStatus = "データ無し";
+                } else {
 
-                        Owner.StoryBoardStatus = "取得完了";
-                    }
+                    Owner.StoryBoardStatus = "取得完了";
+                }
             } else {
 
                 Owner.StoryBoardStatus = "データ無し";
@@ -153,23 +166,70 @@ namespace SRNicoNico.ViewModels {
                 Owner.CommentVisibility = true;
             }
 
+
+        }
+
+        private void Browser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e) {
+
+            if(!e.IsLoading) {
+
+                Thread.Sleep(1000);
+                OpenVideo();
+            }
+        }
+
+        private void OpenVideo() {
+
+            //ここからInvoke可能
+            Owner.IsPlaying = true;
+            Owner.IsInitialized = true;
+            Owner.Mylist.EnableButtons();
+
+            //RTMPの時はサーバートークンも一緒にFlashに渡す
+            if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
+
+                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, App.ViewModelRoot.Config.Comment.ToJson());
+            } else {
+
+                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, App.ViewModelRoot.Config.Comment.ToJson());
+            }
+
+            Owner.IsRepeat = Properties.Settings.Default.IsRepeat;
         }
 
         public void DisposeHandler() {
 
-            ShockwaveFlash.Dispose();
+            Browser.Dispose();
         }
 
 
         //ASを呼ぶ
         public void InvokeScript(string func, params string[] args) {
 
+           // Console.WriteLine(func);
             //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
-            if(ShockwaveFlash != null && !ShockwaveFlash.IsDisposed) {
+             if(Browser != null && Browser.GetBrowser() != null) {
 
                 try {
 
-                    Proxy.Call(func, args);
+                    if(args.Length == 0) {
+
+                        Browser.ExecuteScriptAsync("window.AsExecuteInstruction", func);
+                    } else {
+
+                        switch(args.Length) {
+                            case 1:
+                                Browser.ExecuteScriptAsync("window.AsExecuteInstruction1", func, args[0]);
+                                break;
+                            case 2:
+                                Browser.ExecuteScriptAsync("window.AsExecuteInstruction2", func, args[0], args[1]);
+                                break;
+                            case 3:
+                                Browser.ExecuteScriptAsync("window.AsExecuteInstruction3", func, args[0], args[1], args[2]);
+                                break;
+
+                        }
+                    }
                 } catch(COMException) {
 
                     Console.WriteLine("COMException：" + func);
@@ -178,14 +238,11 @@ namespace SRNicoNico.ViewModels {
         }
         
 
-        private object ExternalInterfaceHandler(object sender, ExternalInterfaceCallEventArgs e) {
-
-            InvokeFromActionScript(e.FunctionCall.FunctionName, e.FunctionCall.Arguments);
-            return false;
-        }
         //ExternalIntarface.callでActionscriptから呼ばれる
-        public void InvokeFromActionScript(string func, params string[] args) {
-            
+        public void InvokeFromActionScript(string func, params object[] rawargs) {
+
+            var args = rawargs.Cast<string>().ToArray();
+            //Console.WriteLine("From AS:" + func);
             switch(func) {
                 case "CsFrame": //毎フレーム呼ばれる
                     CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]), args[3]);
@@ -209,7 +266,10 @@ namespace SRNicoNico.ViewModels {
                     //Owner.VideoData.BitRate = args[0];
                     break;
                 case "Framerate":
-                    Owner.VideoData.FrameRate = args[0];
+                    var rate = double.Parse(args[0]);
+                    rate *= 100;
+                    rate = Math.Floor(rate) / 100;
+                    Owner.VideoData.FrameRate = rate.ToString();
                     break;
                 case "FileSize":
                     var size = double.Parse(args[0]);
@@ -330,7 +390,8 @@ namespace SRNicoNico.ViewModels {
         //Flashにコメントリストを送る
         public void InjectComment(string json) {
 
-            InvokeScript("AsInjectComment", json);
+
+            InvokeScript("AsInjectComment", HttpUtility.UrlEncode(json));
         }
         //Flashに投稿者コメントリストを送る
         public void InjectUploaderComment(string json) {

@@ -8,6 +8,7 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:metro="http://schemes.grabacr.net/winfx/2015/personal/controls"
+             xmlns:cef="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="208" d:DesignWidth="401"
              d:DataContext="{d:DesignInstance vm:VideoViewModel}"
@@ -15,8 +16,6 @@
              DataContextChanged="UserControl_DataContextChanged"
 			 >
     <Grid>
-        <WindowsFormsHost Focusable="False">
-            <a:AxShockwaveFlash x:Name="flash"/>
-        </WindowsFormsHost>
+        <cef:ChromiumWebBrowser x:Name="Cef" IsBrowserInitializedChanged="Cef_IsBrowserInitializedChanged" />
     </Grid>
 </UserControl>

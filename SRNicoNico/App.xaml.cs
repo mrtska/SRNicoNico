@@ -12,6 +12,7 @@ using SRNicoNico.Models.NicoNicoViewer;
 
 using Livet;
 using Microsoft.Win32;
+using CefSharp;
 
 namespace SRNicoNico {
 	/// <summary>
@@ -31,10 +32,34 @@ namespace SRNicoNico {
 		protected override void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
 
+            var settings = new CefSettings();
+            settings.LogSeverity = LogSeverity.Verbose;
+            settings.AcceptLanguageList = "ja-JP";
+            settings.UserAgent = "SRNicoNico/1.0";
+
+            //Flashプラグインを指定
+            settings.CefCommandLineArgs.Add("ppapi-flash-path", "./Flash/pepflashplayer32_21_0_0_242.dll");
+
+            //サブプロセスを指定
+            settings.BrowserSubprocessPath = "./SRNicoNicoRenderingProcess.exe";
+
+            //ローカルファイルにアクセスするために使うスキーム
+            var bridge = new CefCustomScheme();
+            bridge.IsLocal = false;
+            bridge.SchemeName = "http";
+            bridge.DomainName = "localbridge";
+            bridge.SchemeHandlerFactory = new LocalBridgeSchemeHandler();
+            settings.RegisterScheme(bridge);
+
+            //日本語に
+            settings.Locale = "ja";
+            
+            Cef.Initialize(settings, true, true);
+
             DispatcherHelper.UIDispatcher = Dispatcher;
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             
-            Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", "SRNicoNico.exe", 0x00002AF9, Microsoft.Win32.RegistryValueKind.DWord);
+            Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", "SRNicoNico.exe", 0x00002AF9, RegistryValueKind.DWord);
 
 			ViewModelRoot = new MainWindowViewModel();
 			MainWindow = new MainWindow { DataContext = ViewModelRoot };
@@ -53,7 +78,6 @@ namespace SRNicoNico {
 		        MessageBoxButton.OK,
 		        MessageBoxImage.Error);
 
-			this.Shutdown(-1);
 		}
 	}
 }

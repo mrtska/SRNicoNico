@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Livet;
 using System.IO;
 using Codeplex.Data;
+using System.Web;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
@@ -46,7 +47,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //Http通信用
         private HttpClient HttpClient;
-        private HttpClientHandler HttpHandler;
+        public HttpClientHandler HttpHandler { get; private set; }
 
 		//ユーザーID
 		public string UserId { get; internal set; }
@@ -205,9 +206,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 				}
                 //ユーザーIDを取得
                 UserId = response.Headers.GetValues("x-niconico-id").Single();
-
                 //アカウント権限
-                Authority = (NiconicoAccountAuthority)int.Parse(response.Headers.GetValues("x-niconico-authflag").Single());
+                Authority = (NiconicoAccountAuthority) int.Parse(response.Headers.GetValues("x-niconico-authflag").Single());
 
 				//cookieを取得
 				var cookie = HttpHandler.CookieContainer.GetCookies(new Uri("http://nicovideo.jp/")).Cast<Cookie>()
@@ -220,6 +220,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     Expire = cookie.Expires;
 
                     App.SetCookie(new Uri("http://nicovideo.jp/"), "user_session=" + Key);
+
+                    var cefcookie = new CefSharp.Cookie();
+                    cefcookie.Domain = ".nicovideo.jp";
+                    cefcookie.Name = "user_session";
+                    cefcookie.Value = Key;
+                    cefcookie.Expires = Expire.DateTime;
+
+                    //Chromium側にセッションを使わせる
+                    var b = CefSharp.Cef.GetGlobalCookieManager().SetCookieAsync("http://.nicovideo.jp/", cefcookie).Result;
 
                     App.ViewModelRoot.LogedInInit();
 					return SigninStatus.Success;

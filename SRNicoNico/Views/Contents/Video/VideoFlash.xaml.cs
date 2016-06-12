@@ -19,7 +19,9 @@ using System.IO;
 using SRNicoNico.ViewModels;
 using System.Windows.Interop;
 using AxShockwaveFlashObjects;
-using Flash.External;
+using CefSharp;
+using SRNicoNico.Models.NicoNicoWrapper;
+using System.Threading;
 
 namespace SRNicoNico.Views.Contents.Video {
     /// <summary>
@@ -28,15 +30,47 @@ namespace SRNicoNico.Views.Contents.Video {
     public partial class VideoFlash : UserControl {
         public VideoFlash() {
             InitializeComponent();
+
+            
+            
         }
-        
+
+
+
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
-            if(DataContext is VideoViewModel) {
+            //決め打ち
+            var vm = (VideoViewModel)DataContext;
+            Cef.RegisterJsObject("external", vm.Handler);
+        }
 
-                var vm = (VideoViewModel) DataContext;
 
-                vm.Handler = new VideoFlashHandler(vm, flash);
+        private void Cef_IsBrowserInitializedChanged(object sender, DependencyPropertyChangedEventArgs e) {
+
+            if((bool)e.NewValue) {
+
+
+                var vm = (VideoViewModel)DataContext;
+
+                vm.Handler.PreInitialize(Cef.WebBrowser);
+
+
+                var history = NicoNicoWrapperMain.Session.HttpHandler.CookieContainer.GetCookies(new Uri("http://nicovideo.jp/"))["nicohistory"];
+                while(history == null) {
+
+                    history = NicoNicoWrapperMain.Session.HttpHandler.CookieContainer.GetCookies(new Uri("http://nicovideo.jp/"))["nicohistory"];
+                    Thread.Sleep(10);
+                }
+
+
+                var cefcookie = new Cookie();
+                cefcookie.Domain = ".nicovideo.jp";
+                cefcookie.Name = "nicohistory";
+                cefcookie.Value = history.Value;
+                cefcookie.Expires = history.Expires;
+
+                //Chromium側にセッションを使わせる
+                var c = CefSharp.Cef.GetGlobalCookieManager().SetCookieAsync("http://.nicovideo.jp/", cefcookie).Result;
             }
         }
     }

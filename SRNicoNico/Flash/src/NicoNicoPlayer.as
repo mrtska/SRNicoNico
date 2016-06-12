@@ -5,6 +5,7 @@ package  {
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.events.NetStatusEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Rectangle;
 	import flash.media.SoundTransform;
 	import flash.media.StageVideo;
@@ -16,6 +17,7 @@ package  {
 	import flash.ui.Keyboard;
 	import flash.external.ExternalInterface;
 	import flash.ui.Mouse;
+	import flash.utils.Timer;
 	
 	[SWF(width="640", height="360")]
 	public class NicoNicoPlayer extends NicoNicoPlayerBase {
@@ -32,6 +34,7 @@ package  {
 		//動画メタデータ
 		private var metadata:Object;
 		
+		private var renderTick:Timer;
 		
 		//コンストラクタ
 		public function NicoNicoPlayer() {
@@ -83,11 +86,16 @@ package  {
 		//指定したURLをストリーミング再生する
 		public override function OpenVideo(videoUrl:String, config:String):void {
 			
+
+			this.renderTick = new Timer(16.6 * 2);
+			this.renderTick.addEventListener(TimerEvent.TIMER, OnFrame);
+			
 			this.videoUrl = videoUrl;
 			connection = new NetConnection();
 			connection.addEventListener(NetStatusEvent.NET_STATUS, onConnect);
 			connection.connect(null);
 			this.ApplyChanges(config);
+			
 		}
 		
 		//そのまんま
@@ -139,9 +147,9 @@ package  {
 				var framerate:String = param["videoframerate"];
 				var filesize:String = stream.bytesTotal;
 				
-				ExternalInterface.call("WidthHeight", width + "×" + height);
-				ExternalInterface.call("Framerate", framerate + "");
-				ExternalInterface.call("FileSize", filesize + "");
+				CallCSharp("WidthHeight", width + "×" + height);
+				CallCSharp("Framerate", framerate + "");
+				CallCSharp("FileSize", filesize + "");
 				
 				/*for (var propName:String in param){
 						
@@ -186,20 +194,22 @@ package  {
 
 				}
 				addChild(rasterizer);
-				addEventListener(Event.ENTER_FRAME, onFrame);
+				
+				//addEventListener(Event.ENTER_FRAME, onFrame);
+				
 			}
 			stream.client = obj;
 			
 			stream.play(videoUrl);
 			CallCSharp("Initialized");
-			
+			this.renderTick.start();
 		}
 		
 		
 		private var prevTime:int = 0;
 		private var prevLoaded:uint = 0;
 		
-		public override function onFrame(e:Event):void {
+		public function OnFrame(e:TimerEvent):void {
 			
 			// 再生時間を取得
 			var value:Number = stream.time;
@@ -210,7 +220,7 @@ package  {
 			//コメントのアレ
 			var vpos:Number = Math.floor(value * 100);
 
-			ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString(), vpos.toString());
+			CallCSharp("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString(), vpos.toString());
 			prevLoaded = stream.bytesLoaded;
 			prevTime = (int) (value);
 			
@@ -220,7 +230,7 @@ package  {
 		
 		private function onAsyncError(e:AsyncErrorEvent):void {
 			
-			ExternalInterface.call("AsyncError");
+			CallCSharp("AsyncError");
 			trace("onAsyncError");
 			
 			trace(e.text);
@@ -251,7 +261,7 @@ package  {
 		
 		private function onConnect(e:NetStatusEvent):void {
 			
-			ExternalInterface.call(e.info.code);
+			CallCSharp(e.info.code);
 			switch(e.info.code) {
 			case "NetConnection.Connect.Success":
 				ConnectStream();

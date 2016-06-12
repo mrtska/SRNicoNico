@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\CefSharp.Wpf.49.0.1\build\CefSharp.Wpf.props" Condition="Exists('..\packages\CefSharp.Wpf.49.0.1\build\CefSharp.Wpf.props')" />
+  <Import Project="..\packages\CefSharp.Common.49.0.1\build\CefSharp.Common.props" Condition="Exists('..\packages\CefSharp.Common.49.0.1\build\CefSharp.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -109,6 +111,18 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CefSharp, Version=49.0.1.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CefSharp.Common.49.0.1\CefSharp\x86\CefSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="CefSharp.Core, Version=49.0.1.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CefSharp.Common.49.0.1\CefSharp\x86\CefSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CefSharp.Wpf, Version=49.0.1.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CefSharp.Wpf.49.0.1\CefSharp\x86\CefSharp.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="ExternalInterfaceProxy, Version=1.0.5865.37006, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>InfrastructureAssemblies\ExternalInterfaceProxy.dll</HintPath>
@@ -199,7 +213,9 @@
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Models\NicoNicoViewer\GetRequestQuery.cs" />
     <Compile Include="Models\NicoNicoViewer\HyperLinkReplacer.cs" />
+    <Compile Include="Models\NicoNicoViewer\SchemeHandlerFactory.cs" />
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
+    <Compile Include="Models\NicoNicoViewer\LocalBridgeSchemeHandler.cs" />
     <Compile Include="Models\NicoNicoViewer\UpdateCheck.cs" />
     <Compile Include="Models\NicoNicoViewer\VerifyEmptyText.cs" />
     <Compile Include="Models\NicoNicoViewer\VideoCommentDecoration.cs" />
@@ -266,6 +282,8 @@
     <Compile Include="ViewModels\User\UserNicoRepoViewModel.cs" />
     <Compile Include="ViewModels\User\UserVideoViewModel.cs" />
     <Compile Include="ViewModels\User\UserViewModel.cs" />
+    <Compile Include="ViewModels\Video\MenuHandler.cs" />
+    <Compile Include="ViewModels\Video\RequestHandler.cs" />
     <Compile Include="ViewModels\Video\VideoFlashHandler.cs" />
     <Compile Include="ViewModels\Video\VideoCommentViewModel.cs" />
     <Compile Include="ViewModels\Video\MylistDataViewModel.cs" />
@@ -901,6 +919,22 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="app.config" />
+    <None Include="Flash\NicoNicoLivePlayer.as3proj" />
+    <None Include="Flash\NicoNicoNMPlayer.as3proj" />
+    <None Include="Flash\NicoNicoPlayer.as3proj" />
+    <None Include="Flash\NicoNicoRTMPPlayer.as3proj" />
+    <None Include="Flash\src\comment\CommentCommand.as" />
+    <None Include="Flash\src\comment\CommentEntry.as" />
+    <None Include="Flash\src\comment\CommentPositioner.as" />
+    <None Include="Flash\src\comment\CommentRasterizer.as" />
+    <None Include="Flash\src\comment\CommentSizeCalculator.as" />
+    <None Include="Flash\src\live\NicoNicoLivePlayer.as" />
+    <None Include="Flash\src\NicoNicoNMPlayer.as" />
+    <None Include="Flash\src\NicoNicoPlayer.as" />
+    <None Include="Flash\src\NicoNicoPlayerBase.as" />
+    <None Include="Flash\src\org\libspark\utils\ForcibleLoader.as" />
+    <None Include="Flash\src\rtmp\NicoNicoRTMPPlayer.as" />
+    <None Include="Flash\src\rtmp\SecureNetConnection.as" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -931,6 +965,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Flash\bin\NicoNicoRTMPPlayer.swf" />
+    <Content Include="Flash\func.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flash\NicoNicoNMPlayer.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flash\NicoNicoRTMPPlayer.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flash\NicoNicoPlayer.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flash\style.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="InfrastructureAssemblies\Design\Livet.Design.dll" />
     <Content Include="InfrastructureAssemblies\ExternalInterfaceProxy.dll" />
     <Content Include="InfrastructureAssemblies\Livet.dll" />
@@ -989,6 +1038,19 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\cef.redist.x64.3.2623.1401\build\cef.redist.x64.targets" Condition="Exists('..\packages\cef.redist.x64.3.2623.1401\build\cef.redist.x64.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\cef.redist.x64.3.2623.1401\build\cef.redist.x64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\cef.redist.x64.3.2623.1401\build\cef.redist.x64.targets'))" />
+    <Error Condition="!Exists('..\packages\cef.redist.x86.3.2623.1401\build\cef.redist.x86.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\cef.redist.x86.3.2623.1401\build\cef.redist.x86.targets'))" />
+    <Error Condition="!Exists('..\packages\CefSharp.Common.49.0.1\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Common.49.0.1\build\CefSharp.Common.props'))" />
+    <Error Condition="!Exists('..\packages\CefSharp.Common.49.0.1\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Common.49.0.1\build\CefSharp.Common.targets'))" />
+    <Error Condition="!Exists('..\packages\CefSharp.Wpf.49.0.1\build\CefSharp.Wpf.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Wpf.49.0.1\build\CefSharp.Wpf.props'))" />
+  </Target>
+  <Import Project="..\packages\cef.redist.x86.3.2623.1401\build\cef.redist.x86.targets" Condition="Exists('..\packages\cef.redist.x86.3.2623.1401\build\cef.redist.x86.targets')" />
+  <Import Project="..\packages\CefSharp.Common.49.0.1\build\CefSharp.Common.targets" Condition="Exists('..\packages\CefSharp.Common.49.0.1\build\CefSharp.Common.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -18,4 +18,6 @@ MITライセンス
 必要なもの：FlexSDK FlashDevelop（FlexSDKのパスを通しておく） VisualStudio2015  
 FlashDevelopでFlash関連のソースをビルドしてSWFをすべて作成  
 VisualStudioでビルド  
+※Chromium関係でうまくいかないかもしれない
+
 

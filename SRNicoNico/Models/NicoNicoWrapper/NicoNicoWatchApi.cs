@@ -398,6 +398,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //動画URL
         public string VideoUrl { get; private set; }
 
+        public string LocalVideoUrl { get; set; }
+
         //コメントサーバーURL
         public string CommentServerUrl { get; private set; }
 

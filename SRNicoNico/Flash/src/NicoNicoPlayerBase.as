@@ -1,5 +1,6 @@
 package {
 	import flash.display.Sprite;
+	import flash.display.Stage;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -8,32 +9,29 @@ package {
 	import flash.external.ExternalInterface;
 	import flash.ui.Mouse;
 	import flash.utils.Timer;
-	
+	import flash.system.Security;
 	import comment.CommentRasterizer;
+	import flash.net.URLRequest;
+	import flash.errors.IOError;
+	import flash.system.FSCommand;
 	
 	
 	//抽象クラスのように使う
 	public class NicoNicoPlayerBase extends Sprite {
 		
 		
-		
 		//コメントラスタライザ
 		public var rasterizer:CommentRasterizer;
 		
-		
 		public function NicoNicoPlayerBase() {
 			
-			stage.color = 0x000000;
-			//枠に合わせてスケールする
-			stage.scaleMode = StageScaleMode.SHOW_ALL;
-			stage.frameRate = 30;
-			
-			rasterizer = new CommentRasterizer();
-			stage.showDefaultContextMenu = false;
+			Security.allowInsecureDomain("*");
+			Security.allowDomain("*");
+		
 			
 			//JSコールバック登録
-			if(ExternalInterface.available) {
-				
+			if (ExternalInterface.available) {
+
 				//コールバック登録
 				ExternalInterface.addCallback("AsOpenVideo", OpenVideo);
 				ExternalInterface.addCallback("AsPause", Pause);
@@ -46,9 +44,18 @@ package {
 				ExternalInterface.addCallback("AsInjectMyComment", InjectMyComment);
 				ExternalInterface.addCallback("AsChangeVolume", ChangeVolume);
 				ExternalInterface.addCallback("AsApplyChanges", ApplyChanges);
-				
-				ExternalInterface.marshallExceptions = true;
+
 			}
+				
+			
+			//枠に合わせてスケールする
+			stage.scaleMode = StageScaleMode.SHOW_ALL;
+			stage.frameRate = 30;
+			
+			rasterizer = new CommentRasterizer();
+			stage.showDefaultContextMenu = false;
+			
+			
 			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
 			
 			
@@ -59,6 +66,8 @@ package {
 			
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, move);
 			stage.addEventListener(MouseEvent.CLICK, click);
+
+
 		}
 		
 		private var timer:Timer;
@@ -111,7 +120,7 @@ package {
 		public function Seek(pos:Number):void {}
 		public function InjectComment(json:String):void {
 		
-				
+			
 			rasterizer.loadComment(json);
 		}
 		public function InjectOneComment(json:String):void {
@@ -146,7 +155,6 @@ package {
 		
 		public function ToggleComment():void {
 			
-			trace("とぐる");
 			if(rasterizer.visible) {
 				
 				rasterizer.visible = false;
@@ -158,14 +166,42 @@ package {
 		public function ChangeVolume(vol:Number):void { }		
 		
 		
-		public function CallCSharp(func:String):void {
+		/*public function CallCSharp(func:String):void {
 		
 			if (ExternalInterface.available) {
 				
-				ExternalInterface.call(func);
+				ExternalInterface.call("window.AsScriptHandler", func);
+			}
+		}*/
+
+			
+		public function CallCSharp(func:String, ...arg):void {
+		
+			if (ExternalInterface.available) {
+				
+				switch(arg.length) {
+					case 0:
+						ExternalInterface.call.apply(null, ["window.AsScriptHandler", func]);
+						break;
+					case 1:
+						ExternalInterface.call.apply(null, ["window.AsScriptHandler2", func, arg[0]]);
+						break;
+					case 2:
+						ExternalInterface.call.apply(null, ["window.AsScriptHandler3", func, arg[0], arg[1]]);
+						break;
+					case 3:
+						ExternalInterface.call.apply(null, ["window.AsScriptHandler4", func, arg[0], arg[1], arg[2]]);
+						break;
+					case 4:
+						ExternalInterface.call.apply(null, ["window.AsScriptHandler5", func, arg[0], arg[1], arg[2], arg[3]]);
+						break;
+					
+					
+					
+				}
+				
 			}
 		}
-		
 		
 	}
 }

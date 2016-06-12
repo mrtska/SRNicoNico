@@ -405,9 +405,15 @@ namespace SRNicoNico.ViewModels {
             Cmsid = Name;
         }
 
-        public async void Initialize() {
+        public void Initialize() {
 
-            await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+            Mylist = new VideoMylistViewModel(this);
+            Comment = new VideoCommentViewModel(this);
+            Handler = new VideoFlashHandler(this);
+            VideoData = new VideoData();
+
+
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
                 if(IsFullScreen) {
 
@@ -423,19 +429,12 @@ namespace SRNicoNico.ViewModels {
 
             var videoUrl = VideoUrl + "?watch_harmful=1";
 
-
-            Mylist = new VideoMylistViewModel(this);
-            Comment = new VideoCommentViewModel(this);
-            VideoData = new VideoData();
-
             IsActive = true;
             Comment.IsCommentLoading = true;
 
-
             Status = "動画情報取得中";
             //動画情報取得
-
-            await Task.Run(() => {
+            Task.Run(() => {
 
                 WatchApi = new NicoNicoWatchApi(videoUrl, this);
                 VideoData.ApiData = WatchApi.GetWatchApiData();
@@ -534,26 +533,31 @@ namespace SRNicoNico.ViewModels {
         public void ReturnFromFullScreen() {
 
             if(!IsFullScreen) {
-                
+
                 return;
             }
 
             IsFullScreen = false;
 
             //Flash部分をフルスクリーンウィンドウから消去
-            //Messenger.Raise(new WindowActionMessage(WindowAction.Close));
-            Window.GetWindow(FullScreenVideoFlash).Close(); //消えない時があるから強引に
+            //消えない時があるから強引に
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-            //ウィンドウを閉じる
-            App.ViewModelRoot.Visibility = Visibility.Visible;
+                Window.GetWindow(FullScreenVideoFlash).Close();
 
-            //ウィンドウにFlash部分を追加
-            var temp = FullScreenVideoFlash;
-            FullScreenVideoFlash = null;
-            VideoFlash = temp;
-            var temp2 = FullScreenContoller;
-            FullScreenContoller = null;
-            Controller = temp2;
+                //ウィンドウを閉じる
+                App.ViewModelRoot.Visibility = Visibility.Visible;
+
+                //ウィンドウにFlash部分を追加
+                var temp = FullScreenVideoFlash;
+                FullScreenVideoFlash = null;
+                VideoFlash = temp;
+                var temp2 = FullScreenContoller;
+                FullScreenContoller = null;
+                Controller = temp2;
+
+            }));
+
 
         }
 
@@ -584,24 +588,6 @@ namespace SRNicoNico.ViewModels {
             Time.CurrentTimeString = NicoNicoUtil.ConvertTime(Time.CurrentTime);
         }
         
-        public void OpenVideo() {
-
-            //ここからInvoke可能
-            IsPlaying = true;
-            IsInitialized = true;
-            Mylist.EnableButtons();
-
-            //RTMPの時はサーバートークンも一緒にFlashに渡す
-            if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
-
-                Handler.InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, App.ViewModelRoot.Config.Comment.ToJson());
-            } else {
-
-                Handler.InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, App.ViewModelRoot.Config.Comment.ToJson());
-            }
-            
-            IsRepeat = Properties.Settings.Default.IsRepeat;
-        }
         
 
         //RTMP動画でタイムアウトになった時又は予期せぬ理由でエラーになった時
