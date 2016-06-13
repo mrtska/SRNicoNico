@@ -34,7 +34,7 @@ namespace SRNicoNico {
 
             var settings = new CefSettings();
 
-            Cef.AddCrossOriginWhitelistEntry("http://localbridge/", "http", "nicovideo.jp", true);
+            Cef.AddCrossOriginWhitelistEntry("http://localbridge/", "http", "nimg.jp", true);
             //settings.LogSeverity = LogSeverity.Verbose;
             settings.AcceptLanguageList = "ja-JP";
             settings.UserAgent = "SRNicoNico/1.0";
@@ -47,18 +47,33 @@ namespace SRNicoNico {
             settings.BrowserSubprocessPath = "./SRNicoNicoRenderingProcess.exe";
             
             //ローカルファイルにアクセスするために使うスキーム
-            var nicovideobridge = new CefCustomScheme();
-            nicovideobridge.IsLocal = false;
+                        var nicovideobridge = new CefCustomScheme();
+            nicovideobridge.IsLocal = true;
             nicovideobridge.SchemeName = "http";
             nicovideobridge.DomainName = "localbridge.nicovideo.jp";
             nicovideobridge.SchemeHandlerFactory = new LocalBridgeSchemeHandler();
             settings.RegisterScheme(nicovideobridge);
+
+            var nimgbridge = new CefCustomScheme();
+            nimgbridge.IsLocal = false;
+            nimgbridge.SchemeName = "https";
+            nimgbridge.DomainName = "res.nimg.jp";
+            nimgbridge.SchemeHandlerFactory = new LocalBridgeSchemeHandler();
+            settings.RegisterScheme(nimgbridge);
+
             var bridge = new CefCustomScheme();
             bridge.IsLocal = false;
             bridge.SchemeName = "http";
             bridge.DomainName = "localbridge";
             bridge.SchemeHandlerFactory = new LocalBridgeSchemeHandler();
             settings.RegisterScheme(bridge);
+
+            var resnimgbridge = new CefCustomScheme();
+            resnimgbridge.IsLocal = false;
+            resnimgbridge.SchemeName = "http";
+            resnimgbridge.DomainName = "res.nimg.jp";
+            resnimgbridge.SchemeHandlerFactory = new LocalBridgeSchemeHandler();
+            //settings.RegisterScheme(resnimgbridge);
 
             //日本語に
             settings.Locale = "ja";

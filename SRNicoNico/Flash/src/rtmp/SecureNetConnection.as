@@ -4,6 +4,7 @@ package rtmp {
 	import flash.events.Event;
 	import flash.net.NetConnection;
 	import flash.net.URLRequest;
+	import flash.system.LoaderContext;
 
 	
 	public class SecureNetConnection extends Object {
@@ -54,8 +55,6 @@ package rtmp {
 			var info:LoaderInfo = loader.contentLoaderInfo;
 			info.addEventListener(Event.INIT, function(e:Event):void {
 				
-				
-
 				
 				process(info);
 			});

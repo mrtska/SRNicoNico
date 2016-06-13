@@ -90,7 +90,7 @@ namespace SRNicoNico.ViewModels {
             if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
                 VideoData.VideoType = NicoNicoVideoType.SWF;
-                Browser.Load("http://localbridge.nicovideo.jp/NicoNicoNMPlayer.html");
+                Browser.Load("http://localbridge/NicoNicoNMPlayer.html");
 
             } else if(VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
 
@@ -111,7 +111,7 @@ namespace SRNicoNico.ViewModels {
             }
             Owner.IsActive = false;
 
-           // Browser.ShowDevTools();
+        //    Browser.ShowDevTools();
             Browser.LoadingStateChanged += Browser_LoadingStateChanged;
 
             if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp") && videoData.ApiData.MovieType != "swf") {
@@ -246,7 +246,6 @@ namespace SRNicoNico.ViewModels {
         public void InvokeFromActionScript(string func, params object[] rawargs) {
 
             var args = rawargs.Cast<string>().ToArray();
-            //Console.WriteLine("From AS:" + func);
             switch(func) {
                 case "CsFrame": //毎フレーム呼ばれる
                     CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]), args[3]);
@@ -310,8 +309,11 @@ namespace SRNicoNico.ViewModels {
                         TogglePlay();
                     }
                     break;
+                case "PlayVideo":
+                    Console.WriteLine("From AS:" + func + " " +args[0]);
+                    break;
                 default:
-                    Console.WriteLine("Invoked From Actionscript:" + func);
+                    Console.WriteLine("From AS:" + func);
                     break;
             }
         }

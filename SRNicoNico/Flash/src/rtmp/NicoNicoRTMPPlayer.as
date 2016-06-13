@@ -45,11 +45,15 @@ package rtmp  {
 		private var metadata:*;
 		
 		private var secureNetConnection:SecureNetConnection = new SecureNetConnection("http://res.nimg.jp/swf/player/secure_nccreator.swf?t=201111091500");
+
 		
 		//コンストラクタ
 		public function NicoNicoRTMPPlayer() {
 			
 			super();
+			Security.allowDomain("*");
+			
+			
 			
 
 			//OpenVideo("rtmpe://smile-chefsf.nicovideo.jp/smile?m=mp4:26673741.16641^1455159335:09a07863b3c274dfc84879d4bb90f51e9bc10036");
@@ -99,7 +103,6 @@ package rtmp  {
 		public override function OpenVideo(videoUrl:String, config:String):void {
 			
 
-			
 			secureNetConnection.getSecureNetConnection(function(connection:NetConnection):void {
 			
 				NicoNicoRTMPPlayer.connection = connection;
@@ -216,18 +219,19 @@ package rtmp  {
 				addChild(rasterizer);
 				
 				
-				renderTick.addEventListener(TimerEvent.TIMER, onFrame);
 			}
 			stream.client = obj;
 			
-			trace("ConnectStream");
+			CallCSharp("ConnectStream");
 			
-			stream.checkPolicyFile = true;
 			stream.bufferTime = 1;
 			//イベントリスナ登録
-			
-			stream.play(NicoNicoRTMPPlayer.videoUrl.substr(NicoNicoRTMPPlayer.videoUrl.indexOf("=") + 1));
 			CallCSharp("Initialized");
+			
+			
+				renderTick.addEventListener(TimerEvent.TIMER, onFrame);
+				renderTick.start();
+			stream.play(NicoNicoRTMPPlayer.videoUrl.substr(NicoNicoRTMPPlayer.videoUrl.indexOf("=") + 1));
 			
 		}
 		
