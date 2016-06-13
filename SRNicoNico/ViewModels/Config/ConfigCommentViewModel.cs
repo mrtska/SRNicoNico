@@ -57,7 +57,7 @@ namespace SRNicoNico.ViewModels {
         //開いてる動画があれば設定を反映させる
         public void ApplyConfig() {
             
-            foreach(var tab in App.ViewModelRoot.TabItems) {
+            foreach(var tab in App.ViewModelRoot.VideoTabs) {
 
                 if(tab is VideoViewModel) {
 

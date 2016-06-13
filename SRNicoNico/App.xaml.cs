@@ -33,17 +33,26 @@ namespace SRNicoNico {
 			base.OnStartup(e);
 
             var settings = new CefSettings();
-            settings.LogSeverity = LogSeverity.Verbose;
+
+            Cef.AddCrossOriginWhitelistEntry("http://localbridge/", "http", "nicovideo.jp", true);
+            //settings.LogSeverity = LogSeverity.Verbose;
             settings.AcceptLanguageList = "ja-JP";
             settings.UserAgent = "SRNicoNico/1.0";
+            settings.CachePath = "./cache";
 
             //Flashプラグインを指定
             settings.CefCommandLineArgs.Add("ppapi-flash-path", "./Flash/pepflashplayer32_21_0_0_242.dll");
 
             //サブプロセスを指定
             settings.BrowserSubprocessPath = "./SRNicoNicoRenderingProcess.exe";
-
+            
             //ローカルファイルにアクセスするために使うスキーム
+            var nicovideobridge = new CefCustomScheme();
+            nicovideobridge.IsLocal = false;
+            nicovideobridge.SchemeName = "http";
+            nicovideobridge.DomainName = "localbridge.nicovideo.jp";
+            nicovideobridge.SchemeHandlerFactory = new LocalBridgeSchemeHandler();
+            settings.RegisterScheme(nicovideobridge);
             var bridge = new CefCustomScheme();
             bridge.IsLocal = false;
             bridge.SchemeName = "http";

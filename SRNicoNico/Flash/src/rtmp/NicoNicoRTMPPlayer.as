@@ -51,7 +51,6 @@ package rtmp  {
 			
 			super();
 			
-			Security.allowDomain("*");
 
 			//OpenVideo("rtmpe://smile-chefsf.nicovideo.jp/smile?m=mp4:26673741.16641^1455159335:09a07863b3c274dfc84879d4bb90f51e9bc10036");
 			/*//OpenVideo("Z:/smile.swf");
@@ -112,11 +111,10 @@ package rtmp  {
 				
 				connection.addEventListener(NetStatusEvent.NET_STATUS, onConnect);
 				connection.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
-				trace(videoUrl);
+
 				var tokenTime:String = fmsToken.substr(0,fmsToken.indexOf(":"));
 				var tokenHash:String = fmsToken.substr(fmsToken.indexOf(":") + 1);
 				connection.connect(NicoNicoRTMPPlayer.videoUrl.substr(0, NicoNicoRTMPPlayer.videoUrl.indexOf("?")), tokenHash, tokenTime, NicoNicoRTMPPlayer.videoUrl.substr(NicoNicoRTMPPlayer.videoUrl.indexOf("=") + 1));
-				
 				
 			});
 			//connection.connect("rtmpe://smile-chefsf.nicovideo.jp/smile", "e83c2c042be7e275dfe4c8be786bfa7cea15ee32", "1442904740", "mp4:26673741.16641");
@@ -171,11 +169,12 @@ package rtmp  {
 			stream = new NetStream(connection);
 			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			stream.addEventListener(AsyncErrorEvent.ASYNC_ERROR, onAsyncError);
+			
 			var obj:Object = new Object();
 			obj.onMetaData = function(param:Object):void {
 				
 				metadata = param;
-				ExternalInterface.call("onMetadata", param.toString());
+				CallCSharp("onMetadata", param.toString());
 				for(var propName:String in param){
 					trace(propName + "=" + param[propName]);
 				}
@@ -217,7 +216,7 @@ package rtmp  {
 				addChild(rasterizer);
 				
 				
-				addEventListener(Event.ENTER_FRAME, onFrame);
+				renderTick.addEventListener(TimerEvent.TIMER, onFrame);
 			}
 			stream.client = obj;
 			
@@ -240,7 +239,7 @@ package rtmp  {
 		private var prevTime:int = 0;
 		private var prevLoaded:uint = 0;
 		
-		public override function onFrame(e:Event):void {
+		public override function onFrame(e:TimerEvent):void {
 			
 			// 再生時間を取得
 			var value:Number = stream.time;
@@ -249,7 +248,7 @@ package rtmp  {
 			var buffer:Number = (stream.bytesLoaded) / (stream.bytesTotal);
 			var vpos:Number = Math.floor(value * 100);
 
-			ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString(), vpos.toString());
+			CallCSharp("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString(), vpos.toString());
 			prevLoaded = stream.bytesLoaded;
 			prevTime = (int) (value);
 			
@@ -291,7 +290,7 @@ package rtmp  {
 		
 		private function onConnect(e:NetStatusEvent):void {
 			
-			ExternalInterface.call(e.info.code);
+			CallCSharp(e.info.code);
 			trace("onConnect:" + e.info.level);
 		
 			switch(e.info.code) {

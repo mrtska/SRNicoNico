@@ -7,10 +7,11 @@ package  {
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.media.SoundTransform;
 	import flash.net.URLRequest;
 	import flash.external.ExternalInterface;
-	
+	import flash.system.Security;
 	import org.libspark.utils.ForcibleLoader;
 	
 	[SWF(width="640", height="360")]
@@ -30,9 +31,6 @@ package  {
 		public function NicoNicoNMPlayer() {
 			
 			super();
-			stage.frameRate = 25;
-			
-			
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
@@ -43,6 +41,7 @@ package  {
 				if (rasterizer) {
 					
 					rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
+					
 				}
 			});
 			
@@ -73,8 +72,10 @@ package  {
 			var req:URLRequest = new URLRequest(videoUrl);
 			
 			loader.contentLoaderInfo.addEventListener(Event.INIT, onInit);
+			
 			var fLoader:ForcibleLoader = new ForcibleLoader(loader);
 			fLoader.load(req);
+			this.ApplyChanges(config);
 			
 		}
 		
@@ -122,7 +123,6 @@ package  {
 			loader.width = 512;
 			loader.height = 384;
 			movie = loader.content as MovieClip;
-			movie.soundTransform = new SoundTransform(0.1);
 			
 			var stageW:int = stage.stageWidth;
 			var stageH:int = stage.stageHeight;
@@ -130,8 +130,6 @@ package  {
 			videoW = loader.contentLoaderInfo.width;
 			videoH = loader.contentLoaderInfo.height;
 			
-			
-
 			
 			trace("stageWidth:" + stageW + " stageHeight:" + stageH);
 			trace("videoWidth:" + videoW + " videoHeight:" + videoH);
@@ -157,17 +155,21 @@ package  {
 			
 			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
 			addChild(rasterizer);
-			movie.addEventListener(Event.ENTER_FRAME, onFrame);
+			
+			renderTick.addEventListener(TimerEvent.TIMER, onFrame);
+			
 			CallCSharp("Initialized");
+			this.renderTick.start();
+			
 			var width:String = videoW.toString();
 			var height:String = videoH.toString();
-			ExternalInterface.call("WidthHeight", width + "×" + height);
+			CallCSharp("WidthHeight", width + "×" + height);
 
 			var framerate:String = loader.contentLoaderInfo.frameRate.toString();
-			ExternalInterface.call("Framerate", framerate);
+			CallCSharp("Framerate", framerate);
 			var filesize:String = movie.loaderInfo.bytesTotal.toString();
 			
-			ExternalInterface.call("FileSize", filesize);
+			CallCSharp("FileSize", filesize);
 
 		}
 		
@@ -181,19 +183,23 @@ package  {
 				this.loader.scaleX = this.loader.scaleY = scale;
 				this.loader.x = 0;
 				this.loader.y = (height - this.videoH * scale) / 2;
+				this.rasterizer.scaleY = scale;
+				
 			} else {
 				
 				scale = height / this.videoH;
 				this.loader.scaleX = this.loader.scaleY = scale;
 				this.loader.x = (width - this.videoW * scale) / 2;
 				this.loader.y = 0;
+				this.rasterizer.scaleY = scale;
+				
 			}
       }
 
 		private var prevTime:int = 0;
 		private var prevLoaded:uint = 0;
 		
-		public override function onFrame(e:Event):void {
+		public override function onFrame(e:TimerEvent):void {
 			
 			// 再生時間を取得
 			var frame:int = movie.currentFrame;
@@ -207,7 +213,7 @@ package  {
 			
 			if (ExternalInterface.available) {
 
-				ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (loader.contentLoaderInfo.bytesLoaded - prevLoaded).toString(), vpos.toString());
+				CallCSharp("CsFrame", value.toString(), buffer.toString(), (loader.contentLoaderInfo.bytesLoaded - prevLoaded).toString(), vpos.toString());
 			}
 			prevLoaded = loader.contentLoaderInfo.bytesLoaded;
 			prevTime = (int) (value);

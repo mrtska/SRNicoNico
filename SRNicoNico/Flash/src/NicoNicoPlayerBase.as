@@ -23,11 +23,16 @@ package {
 		//コメントラスタライザ
 		public var rasterizer:CommentRasterizer;
 		
+		
+		protected var renderTick:Timer;
+		
+		
 		public function NicoNicoPlayerBase() {
 			
 			Security.allowInsecureDomain("*");
 			Security.allowDomain("*");
-		
+			
+			this.renderTick = new Timer(16.6 * 2);
 			
 			//JSコールバック登録
 			if (ExternalInterface.available) {
@@ -145,7 +150,7 @@ package {
 		}
 		
 		
-		public function onFrame(e:Event):void {
+		public function onFrame(e:TimerEvent):void {
 		
 		}
 		public function onNetStatus(e:NetStatusEvent):void {

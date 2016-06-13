@@ -90,10 +90,13 @@ namespace SRNicoNico.ViewModels {
             if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
                 VideoData.VideoType = NicoNicoVideoType.SWF;
+                Browser.Load("http://localbridge.nicovideo.jp/NicoNicoNMPlayer.html");
 
             } else if(VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
 
                 VideoData.VideoType = NicoNicoVideoType.RTMP;
+                Browser.Load("http://localbridge/NicoNicoRTMPPlayer.html");
+
             } else {
 
                 if(VideoData.ApiData.MovieType == "flv") {
@@ -103,14 +106,15 @@ namespace SRNicoNico.ViewModels {
 
                     VideoData.VideoType = NicoNicoVideoType.MP4;
                 }
+                Browser.Load("http://localbridge/NicoNicoPlayer.html");
+
             }
             Owner.IsActive = false;
 
-            Browser.Load("http://localbridge/NicoNicoPlayer.html");
            // Browser.ShowDevTools();
             Browser.LoadingStateChanged += Browser_LoadingStateChanged;
 
-            if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
+            if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp") && videoData.ApiData.MovieType != "swf") {
 
                 Owner.StoryBoardStatus = "取得中";
 
@@ -390,7 +394,6 @@ namespace SRNicoNico.ViewModels {
         //Flashにコメントリストを送る
         public void InjectComment(string json) {
 
-
             InvokeScript("AsInjectComment", HttpUtility.UrlEncode(json));
         }
         //Flashに投稿者コメントリストを送る
@@ -398,26 +401,5 @@ namespace SRNicoNico.ViewModels {
 
             InvokeScript("AsInjectUploaderComment", json);
         }
-        
-
-
-        private string GetPlayerPath() {
-
-            var cur = System.IO.Directory.GetCurrentDirectory();
-            return cur + "./Flash/NicoNicoPlayer.swf";
-        }
-
-        private string GetNMPlayerPath() {
-
-            var cur = System.IO.Directory.GetCurrentDirectory();
-            return cur + "./Flash/NicoNicoNMPlayer.swf";
-        }
-
-        private string GetRTMPPlayerPath() {
-
-            var cur = System.IO.Directory.GetCurrentDirectory();
-            return cur + "./Flash/NicoNicoRTMPPlayer.swf";
-        }
-
     }
 }

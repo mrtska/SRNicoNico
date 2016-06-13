@@ -36,6 +36,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         }
 
+        public FileStream Stream { get; set; }
         public string MimeType { get; set; }
         public string Path { get; set; }
         public long Size { get; set; }
@@ -46,7 +47,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
             response.StatusCode = 200;
             response.StatusText = "OK";
-            response.MimeType = MimeType;
+            
         }
 
         bool IResourceHandler.ProcessRequest(IRequest request, ICallback callback) {
@@ -58,9 +59,9 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
 
             var file = Environment.CurrentDirectory + "/Flash" + Path;
-            var info = new FileInfo(file);
+            Stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
+            Size = Stream.Length;
 
-            Size = info.Length;
             callback.Continue();
             return true;
         }
@@ -71,14 +72,15 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
             var file = Environment.CurrentDirectory + "/Flash" + Path;
 
-            var stream = new FileStream(file, FileMode.Open);
+            
             var buffer = new byte[dataOut.Length];
-            bytesRead = stream.Read(buffer, 0, buffer.Length);
-            stream.Close();
+            bytesRead = Stream.Read(buffer, 0, buffer.Length);
+
 
             dataOut.Write(buffer, 0, buffer.Length);
+        
 
-            return true;
+            return bytesRead > 0;
 
         }
     }

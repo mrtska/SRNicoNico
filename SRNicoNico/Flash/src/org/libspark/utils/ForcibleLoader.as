@@ -36,6 +36,9 @@ package org.libspark.utils
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
 	import flash.errors.EOFError;
+	import flash.system.LoaderContext;
+	import flash.system.ApplicationDomain;
+	import flash.system.SecurityDomain;
 	
 	/**
 	 * Loads a SWF file as version 9 format forcibly even if version is under 9.
@@ -207,7 +210,7 @@ package org.libspark.utils
 		
 		private function securityErrorHandler(event:SecurityErrorEvent):void
 		{
-			loader.contentLoaderInfo.dispatchEvent(event.clone());
+			loader.dispatchEvent(event.clone());
 		}
 	}
 }

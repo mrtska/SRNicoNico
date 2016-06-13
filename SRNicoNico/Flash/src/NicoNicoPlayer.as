@@ -34,8 +34,6 @@ package  {
 		//動画メタデータ
 		private var metadata:Object;
 		
-		private var renderTick:Timer;
-		
 		//コンストラクタ
 		public function NicoNicoPlayer() {
 			
@@ -87,8 +85,8 @@ package  {
 		public override function OpenVideo(videoUrl:String, config:String):void {
 			
 
-			this.renderTick = new Timer(16.6 * 2);
-			this.renderTick.addEventListener(TimerEvent.TIMER, OnFrame);
+			
+			this.renderTick.addEventListener(TimerEvent.TIMER, onFrame);
 			
 			this.videoUrl = videoUrl;
 			connection = new NetConnection();
@@ -209,7 +207,7 @@ package  {
 		private var prevTime:int = 0;
 		private var prevLoaded:uint = 0;
 		
-		public function OnFrame(e:TimerEvent):void {
+		public override function onFrame(e:TimerEvent):void {
 			
 			// 再生時間を取得
 			var value:Number = stream.time;
