@@ -194,6 +194,14 @@ package rtmp  {
 				//アスペクト比を考慮したときに両端に出る黒い部分の位置　両端からのオフセット
 				var x:* = (stageW - aspectW) / 2;
 				
+				var width:String = param["width"];
+				var height:String = param["height"];
+				var framerate:String = param["videoframerate"];
+				
+				CallCSharp("WidthHeight", width + "×" + height);
+				CallCSharp("Framerate", framerate + "");
+				CallCSharp("FileSize");
+				
 				var vec:Vector.<StageVideo> = stage.stageVideos;
 				if(vec.length >= 1) {
 					;

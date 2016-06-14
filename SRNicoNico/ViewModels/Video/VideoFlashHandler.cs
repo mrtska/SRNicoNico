@@ -275,11 +275,18 @@ namespace SRNicoNico.ViewModels {
                     Owner.VideoData.FrameRate = rate.ToString();
                     break;
                 case "FileSize":
-                    var size = double.Parse(args[0]);
-                    size /= 100000.0;
-                    size = Math.Floor(size) / 10;
+                    if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
-                    Owner.VideoData.FileSize = size.ToString() + "MB";
+                        Owner.VideoData.FileSize = "N/A";
+                    } else {
+
+                        var size = double.Parse(args[0]);
+                        size /= 100000.0;
+                        size = Math.Floor(size) / 10;
+
+                        Owner.VideoData.FileSize = size.ToString() + "MB";
+                    }
+
                     break;
                 case "Stop": //動画が最後まで行ったらリピートしたりフルスクリーンから復帰したりする
                     if(Owner.IsRepeat) {
