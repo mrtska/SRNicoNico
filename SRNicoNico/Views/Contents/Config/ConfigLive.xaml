@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Config"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -29,12 +30,12 @@
                         <TextBlock Text="その他" FontSize="20" />
                     </HeaderedContentControl.Header>
                     <StackPanel>
-                        
-                        <CheckBox IsEnabled="False" Content="フルスクリーン時、シークバーを常に表示する(実装予定)" IsChecked="{Binding AlwaysShowSeekBar}" />
-                        <CheckBox IsEnabled="False" Content="常にウィンドウモードのフルスクリーンを使う(実装予定)" IsChecked="{Binding UseWindowFullScreen}" />
+
+                        <CheckBox IsEnabled="False" Content="フルスクリーン時、シークバーを常に表示する(実装予定)" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AlwaysShowSeekBar}" />
+                        <CheckBox IsEnabled="False" Content="常にウィンドウモードのフルスクリーンを使う(実装予定)" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=UseWindowMode}" />
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="生放送通知の更新間隔 (ミリ秒)" VerticalAlignment="Center"/>
-                            <TextBox Margin="15,0,0,0" Width="50" Text="{Binding RefreshInterval,Mode=TwoWay}" ToolTip="更新間隔をミリ秒で指定">
+                            <TextBox Margin="15,0,0,0" Width="50" Text="{Binding Source={x:Static m:Settings.Instance},Path=RefreshInterval,Mode=TwoWay}" ToolTip="更新間隔をミリ秒で指定">
                                 <i:Interaction.Behaviors>
                                     <b:TextBoxNumericOnlyBehavior />
                                 </i:Interaction.Behaviors>

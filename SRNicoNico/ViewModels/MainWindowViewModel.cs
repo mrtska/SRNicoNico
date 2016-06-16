@@ -61,24 +61,8 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-        #region UserSelectedFont変更通知プロパティ
-        public FontFamily UserSelectedFont {
-            get { return Properties.Settings.Default.UserSelectedFont; }
-            set { 
-                if(Properties.Settings.Default.UserSelectedFont == value)
-                    return;
-                Properties.Settings.Default.UserSelectedFont = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        public void ApplyFont() {
-
-            RaisePropertyChanged("UserSelectedFont");
-        }
+        
+        
 
 
         #region Visibility変更通知プロパティ

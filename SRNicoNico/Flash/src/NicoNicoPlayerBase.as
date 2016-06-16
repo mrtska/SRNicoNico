@@ -72,6 +72,7 @@ package {
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, move);
 			stage.addEventListener(MouseEvent.CLICK, click);
 
+			CallCSharp("Ready");
 
 		}
 		

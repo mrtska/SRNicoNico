@@ -205,7 +205,7 @@ package org.libspark.utils
 		
 		private function ioErrorHandler(event:IOErrorEvent):void
 		{
-			loader.contentLoaderInfo.dispatchEvent(event.clone());
+			loader.dispatchEvent(event.clone());
 		}
 		
 		private function securityErrorHandler(event:SecurityErrorEvent):void

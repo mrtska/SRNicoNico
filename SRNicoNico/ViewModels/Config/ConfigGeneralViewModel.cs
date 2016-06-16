@@ -11,7 +11,7 @@ using Livet.Messaging.IO;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
-using SRNicoNico.Models;
+using SRNicoNico.Models.NicoNicoViewer;
 using System.Windows.Media;
 
 namespace SRNicoNico.ViewModels {
@@ -19,51 +19,9 @@ namespace SRNicoNico.ViewModels {
 
 
 
-
-        #region UserSelecetedFont変更通知プロパティ
-
-        public FontFamily UserSelectedFont {
-            get { return Properties.Settings.Default.UserSelectedFont; }
-            set { 
-                if(Properties.Settings.Default.UserSelectedFont == value)
-                    return;
-                Properties.Settings.Default.UserSelectedFont = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-                App.ViewModelRoot.ApplyFont();
-            }
-        }
-        #endregion
+        
 
 
-        #region EnableTwitterLink変更通知プロパティ
-
-        public bool EnableTwitterLink {
-            get { return Properties.Settings.Default.EnableTwitterLink; }
-            set {
-                if(Properties.Settings.Default.EnableTwitterLink == value)
-                    return;
-                Properties.Settings.Default.EnableTwitterLink = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region EnableUrlLink変更通知プロパティ
-
-        public bool EnableUrlLink {
-            get { return Properties.Settings.Default.EnableUrlLink; }
-            set {
-                if(Properties.Settings.Default.EnableUrlLink == value)
-                    return;
-                Properties.Settings.Default.EnableUrlLink = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
 
         private ConfigViewModel Owner;
 
@@ -71,18 +29,5 @@ namespace SRNicoNico.ViewModels {
 
             Owner = vm;
         }
-
-
-
-        public override void Reset() {
-
-            RaisePropertyChanged(nameof(EnableUrlLink));
-            RaisePropertyChanged(nameof(EnableTwitterLink));
-            RaisePropertyChanged(nameof(UserSelectedFont));
-            App.ViewModelRoot.ApplyFont();
-        }
-
-
-
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
 
@@ -13,7 +14,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         //URLをハイパーリンク化する
         public static string Replace(string desc) {
 
-            if(Properties.Settings.Default.EnableUrlLink) {
+            if(Settings.Instance.EnableUrlLink) {
 
                 //普通のURLだったら
                 Regex url = new Regex(@"(.?.?)(https?://[\w/:%#\$&\?\(\)~\.=\+\-]+)");
@@ -31,7 +32,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 }));
             }
 
-            if(Properties.Settings.Default.EnableTwitterLink) {
+            if(Settings.Instance.EnableTwitterLink) {
 
                 //TwitterのIDだった場合
                 var twitter = new Regex(@"[@|＠][A-z|0-9|_]{1,15}");

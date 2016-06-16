@@ -107,20 +107,7 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-        #region Use184変更通知プロパティ
-
-        public bool Use184 {
-            get { return Properties.Settings.Default.Use184; }
-            set { 
-                if(Properties.Settings.Default.Use184 == value)
-                    return;
-                Properties.Settings.Default.Use184 = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
+        
 
 
         #region Size変更通知プロパティ
@@ -266,7 +253,7 @@ namespace SRNicoNico.ViewModels {
                 var mail = Mail;
 
                 //公式動画は184を付けて投稿出来ない
-                if(Use184 && !Owner.VideoData.ApiData.IsOfficial) {
+                if(Settings.Instance.Use184 && !Owner.VideoData.ApiData.IsOfficial) {
                     
                     mail += " 184";
                 }

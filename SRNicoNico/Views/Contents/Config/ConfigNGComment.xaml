@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Config"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -35,7 +35,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel>
                     <TextBlock Text="NG共有レベル" FontSize="18" />
-                    <ComboBox Width="200" HorizontalAlignment="Left" Margin="10" Text="{Binding NGSharedLevel,Mode=TwoWay}">
+                    <ComboBox Width="200" IsEditable="True" IsReadOnly="True" HorizontalAlignment="Left" Margin="10" Text="{Binding Source={x:Static m:Settings.Instance},Path=NGSharedLevel,Mode=TwoWay}">
                         <ComboBoxItem Content="無" ToolTip="コメントをフィルタリングしません。"/>
                         <ComboBoxItem Content="弱" ToolTip="とても悪質なコメントのみフィルタリングします。"/>
                         <ComboBoxItem Content="中" ToolTip="悪質なコメントをフィルタリングします。"/>
@@ -44,8 +44,8 @@
                     </ComboBox>
                     <TextBlock Text="コメント非表示設定" FontSize="18"  Margin="0,10,0,0"/>
                     <StackPanel Margin="10">
-                        <CheckBox Content="3DSからのコメントを非表示にする" IsChecked="{Binding Hide3DSComment}" />
-                        <CheckBox Content="WiiUからのコメントを非表示にする" IsChecked="{Binding HideWiiUComment}" Margin="0,10,0,0"/>
+                        <CheckBox Content="3DSからのコメントを非表示にする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=Hide3DSComment}" />
+                        <CheckBox Content="WiiUからのコメントを非表示にする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=HideWiiUComment}" Margin="0,10,0,0"/>
                     </StackPanel>
                     
                     <TextBlock Text="NGフィルター(次バージョンで実装予定)" FontSize="18"  Margin="0,10,0,0"/>

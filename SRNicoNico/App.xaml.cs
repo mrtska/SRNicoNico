@@ -34,7 +34,6 @@ namespace SRNicoNico {
 
             var settings = new CefSettings();
 
-            Cef.AddCrossOriginWhitelistEntry("http://localbridge/", "http", "nimg.jp", true);
             //settings.LogSeverity = LogSeverity.Verbose;
             settings.AcceptLanguageList = "ja-JP";
             settings.UserAgent = "SRNicoNico/1.0";
@@ -45,9 +44,9 @@ namespace SRNicoNico {
 
             //サブプロセスを指定
             settings.BrowserSubprocessPath = "./SRNicoNicoRenderingProcess.exe";
-            
+
             //ローカルファイルにアクセスするために使うスキーム
-                        var nicovideobridge = new CefCustomScheme();
+            var nicovideobridge = new CefCustomScheme();
             nicovideobridge.IsLocal = true;
             nicovideobridge.SchemeName = "http";
             nicovideobridge.DomainName = "localbridge.nicovideo.jp";
@@ -68,17 +67,11 @@ namespace SRNicoNico {
             bridge.SchemeHandlerFactory = new LocalBridgeSchemeHandler();
             settings.RegisterScheme(bridge);
 
-            var resnimgbridge = new CefCustomScheme();
-            resnimgbridge.IsLocal = false;
-            resnimgbridge.SchemeName = "http";
-            resnimgbridge.DomainName = "res.nimg.jp";
-            resnimgbridge.SchemeHandlerFactory = new LocalBridgeSchemeHandler();
-            //settings.RegisterScheme(resnimgbridge);
-
             //日本語に
             settings.Locale = "ja";
             
             Cef.Initialize(settings, true, true);
+            
 
             DispatcherHelper.UIDispatcher = Dispatcher;
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);

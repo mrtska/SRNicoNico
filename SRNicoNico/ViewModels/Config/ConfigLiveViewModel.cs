@@ -13,51 +13,22 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models;
 using System.Windows;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class ConfigLiveViewModel : ConfigViewModelBase {
 
 
 
-
-        #region AlwaysShowSeekBar変更通知プロパティ
-
-        public bool AlwaysShowSeekBar {
-            get { return Properties.Settings.Default.AlwaysShowSeekBar; }
-            set {
-                if(Properties.Settings.Default.AlwaysShowSeekBar == value)
-                    return;
-                Properties.Settings.Default.AlwaysShowSeekBar = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region UseWindowFullScreen変更通知プロパティ
-        public bool UseWindowFullScreen {
-            get { return Properties.Settings.Default.UseWindowModeFullScreen; }
-            set { 
-                if(Properties.Settings.Default.UseWindowModeFullScreen == value)
-                    return;
-                Properties.Settings.Default.UseWindowModeFullScreen = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
         #region RefreshInterval変更通知プロパティ
 
         public int RefreshInterval {
-            get { return Properties.Settings.Default.RefreshInterval; }
+            get { return Settings.Instance.RefreshInterval; }
             set { 
-                if(Properties.Settings.Default.RefreshInterval == value)
+                if(Settings.Instance.RefreshInterval == value)
                     return;
-                Properties.Settings.Default.RefreshInterval = value;
+                Settings.Instance.RefreshInterval = value;
                 App.ViewModelRoot.StatusBar.RefreshTimer.Change(value, value);
-                Properties.Settings.Default.Save();
                 RaisePropertyChanged();
             }
         }
@@ -67,15 +38,6 @@ namespace SRNicoNico.ViewModels {
         public ConfigLiveViewModel() : base("生放送") {
 
         }
-
-        public override void Reset() {
-
-            RaisePropertyChanged(nameof(AlwaysShowSeekBar));
-            RaisePropertyChanged(nameof(UseWindowFullScreen));
-            RaisePropertyChanged(nameof(RefreshInterval));
-            
-        }
-
 
     }
 }

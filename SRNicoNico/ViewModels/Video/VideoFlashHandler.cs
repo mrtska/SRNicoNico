@@ -112,7 +112,6 @@ namespace SRNicoNico.ViewModels {
             Owner.IsActive = false;
 
         //    Browser.ShowDevTools();
-            Browser.LoadingStateChanged += Browser_LoadingStateChanged;
 
             if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp") && videoData.ApiData.MovieType != "swf") {
 
@@ -162,7 +161,7 @@ namespace SRNicoNico.ViewModels {
 
             }
 
-            if(!Properties.Settings.Default.CommentVisibility) {
+            if(!Settings.Instance.CommentVisibility) {
 
                 InvokeScript("AsToggleComment");
             } else {
@@ -171,15 +170,6 @@ namespace SRNicoNico.ViewModels {
             }
 
 
-        }
-
-        private void Browser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e) {
-
-            if(!e.IsLoading) {
-
-                Thread.Sleep(1000);
-                OpenVideo();
-            }
         }
 
         private void OpenVideo() {
@@ -198,7 +188,7 @@ namespace SRNicoNico.ViewModels {
                 InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, App.ViewModelRoot.Config.Comment.ToJson());
             }
 
-            Owner.IsRepeat = Properties.Settings.Default.IsRepeat;
+            Owner.IsRepeat = Settings.Instance.IsRepeat;
         }
 
         public void DisposeHandler() {
@@ -247,6 +237,10 @@ namespace SRNicoNico.ViewModels {
 
             var args = rawargs.Cast<string>().ToArray();
             switch(func) {
+                case "Ready":
+                    OpenVideo();
+                    break;
+
                 case "CsFrame": //毎フレーム呼ばれる
                     CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]), args[3]);
                     break;
@@ -260,7 +254,7 @@ namespace SRNicoNico.ViewModels {
                     Owner.HideFullScreenPopup();
                     break;
                 case "Initialized": //動画が再生される直前に呼ばれる
-                    Owner.Volume = Properties.Settings.Default.Volume;    //保存された値をFlash側に伝える
+                    Owner.Volume = Settings.Instance.Volume;    //保存された値をFlash側に伝える
                     break;
                 case "WidthHeight":
                     Owner.VideoData.Resolution = args[0];
@@ -305,13 +299,13 @@ namespace SRNicoNico.ViewModels {
 
                         if(Owner.IsPlayList) {
 
-                            Owner.PlayList.Next();
+                            Owner.PlayList.Next();  
                         }
                     }
 
                     break;
                 case "Click":   //Flash部分がクリックされた時に呼ばれる
-                    if(App.ViewModelRoot.Config.Video.ClickOnPause) {   //クリックしたら一時停止する設定になっていたら
+                    if(Settings.Instance.ClickOnPause) {   //クリックしたら一時停止する設定になっていたら
 
                         TogglePlay();
                     }

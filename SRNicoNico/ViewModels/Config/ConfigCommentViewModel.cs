@@ -11,7 +11,7 @@ using Livet.Messaging.IO;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
-using SRNicoNico.Models;
+using SRNicoNico.Models.NicoNicoViewer;
 using System.Windows;
 using Codeplex.Data;
 
@@ -22,12 +22,11 @@ namespace SRNicoNico.ViewModels {
 
         #region CommentAlpha変更通知プロパティ
         public float CommentAlpha {
-            get { return Properties.Settings.Default.CommentAlpha; }
+            get { return Settings.Instance.CommentAlpha; }
             set { 
-                if(Properties.Settings.Default.CommentAlpha == value)
+                if(Settings.Instance.CommentAlpha == value)
                     return;
-                Properties.Settings.Default.CommentAlpha = value;
-                Properties.Settings.Default.Save();
+                Settings.Instance.CommentAlpha = value;
                 RaisePropertyChanged();
                 ApplyConfig();
             }
@@ -37,12 +36,11 @@ namespace SRNicoNico.ViewModels {
 
         #region DefaultCommentSize変更通知プロパティ
         public string DefaultCommentSize {
-            get { return Properties.Settings.Default.CommentSize; }
+            get { return Settings.Instance.CommentSize; }
             set { 
-                if(Properties.Settings.Default.CommentSize == value)
+                if(Settings.Instance.CommentSize == value)
                     return;
-                Properties.Settings.Default.CommentSize = value;
-                Properties.Settings.Default.Save();
+                Settings.Instance.CommentSize = value;
                 RaisePropertyChanged();
                 ApplyConfig();
             }
@@ -67,19 +65,13 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public override void Reset() {
-
-            RaisePropertyChanged(nameof(CommentAlpha));
-            RaisePropertyChanged(nameof(DefaultCommentSize));
-        }
-
         public string ToJson() {
 
             dynamic root = new DynamicJson();
 
-            root.Hide3DSComment = App.ViewModelRoot.Config.NGComment.Hide3DSComment;
-            root.HideWiiUComment = App.ViewModelRoot.Config.NGComment.HideWiiUComment;
-            root.NGSharedLevel = App.ViewModelRoot.Config.NGComment.NGSharedLevel;
+            root.Hide3DSComment = Settings.Instance.Hide3DSComment;
+            root.HideWiiUComment = Settings.Instance.HideWiiUComment;
+            root.NGSharedLevel = Settings.Instance.NGSharedLevel;
             root.CommentAlpha = CommentAlpha / 100; //%から小数点に
             root.DefaultCommentSize = DefaultCommentSize;
 

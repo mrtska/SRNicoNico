@@ -216,6 +216,7 @@
     <Compile Include="Models\NicoNicoViewer\SchemeHandlerFactory.cs" />
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
     <Compile Include="Models\NicoNicoViewer\LocalBridgeSchemeHandler.cs" />
+    <Compile Include="Models\NicoNicoViewer\Settings.cs" />
     <Compile Include="Models\NicoNicoViewer\UpdateCheck.cs" />
     <Compile Include="Models\NicoNicoViewer\VerifyEmptyText.cs" />
     <Compile Include="Models\NicoNicoViewer\VideoCommentDecoration.cs" />
@@ -913,11 +914,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <None Include="app.config" />
     <None Include="Flash\NicoNicoLivePlayer.as3proj" />
     <None Include="Flash\NicoNicoNMPlayer.as3proj" />
@@ -937,10 +933,6 @@
     <None Include="Flash\src\rtmp\SecureNetConnection.as" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
-    <None Include="Properties\Settings.settings">
-      <Generator>PublicSettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

@@ -54,7 +54,6 @@ package rtmp  {
 			Security.allowDomain("*");
 			
 			
-			
 
 			//OpenVideo("rtmpe://smile-chefsf.nicovideo.jp/smile?m=mp4:26673741.16641^1455159335:09a07863b3c274dfc84879d4bb90f51e9bc10036");
 			/*//OpenVideo("Z:/smile.swf");

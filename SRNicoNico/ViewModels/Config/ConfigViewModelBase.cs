@@ -22,11 +22,5 @@ namespace SRNicoNico.ViewModels {
         public ConfigViewModelBase(string title) : base(title) {
 
         }
-
-
-        public abstract void Reset();
-
-
-
     }
 }

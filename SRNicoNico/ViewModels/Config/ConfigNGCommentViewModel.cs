@@ -19,65 +19,6 @@ namespace SRNicoNico.ViewModels {
     public class ConfigNGCommentViewModel : ConfigViewModelBase {
 
 
-        #region Hide3DSComment変更通知プロパティ
-        public bool Hide3DSComment {
-            get { return Properties.Settings.Default.Hide3DSComment; }
-            set {
-                if(Properties.Settings.Default.Hide3DSComment == value)
-                    return;
-                Properties.Settings.Default.Hide3DSComment = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-                ApplyConfig();
-            }
-        }
-        #endregion
-
-
-        #region HideWiiUComment変更通知プロパティ
-        public bool HideWiiUComment {
-            get { return Properties.Settings.Default.HideWiiUComment; }
-            set {
-                if(Properties.Settings.Default.HideWiiUComment == value)
-                    return;
-                Properties.Settings.Default.HideWiiUComment = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-                ApplyConfig();
-            }
-        }
-        #endregion
-
-
-        #region NGSharedLevel変更通知プロパティ
-        public string NGSharedLevel {
-            get { return Properties.Settings.Default.NGSharedLevel; }
-            set {
-                if(Properties.Settings.Default.NGSharedLevel == value)
-                    return;
-                Properties.Settings.Default.NGSharedLevel = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-                ApplyConfig();
-            }
-        }
-        #endregion
-
-
-        //開いてる動画があれば設定を反映させる
-        public void ApplyConfig() {
-
-            foreach(var tab in App.ViewModelRoot.TabItems) {
-
-                if(tab is VideoViewModel) {
-
-                    var vm = (VideoViewModel)tab;
-                    vm.Handler.ApplyChanges();
-                }
-            }
-        }
-
-
         #region NGList変更通知プロパティ
         private DispatcherCollection<NGCommentEntry> _NGList = new DispatcherCollection<NGCommentEntry>(DispatcherHelper.UIDispatcher);
 
@@ -121,13 +62,6 @@ namespace SRNicoNico.ViewModels {
             entry.Content = content;
 
             NGList.Add(entry);
-        }
-
-        public override void Reset() {
-
-            RaisePropertyChanged(nameof(Hide3DSComment));
-            RaisePropertyChanged(nameof(HideWiiUComment));
-            RaisePropertyChanged(nameof(NGSharedLevel));
         }
 
     }

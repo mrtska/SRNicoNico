@@ -204,15 +204,14 @@ namespace SRNicoNico.ViewModels {
 
         #region Volume変更通知プロパティ
         public int Volume {
-            get { return Properties.Settings.Default.Volume; }
+            get { return Settings.Instance.Volume; }
             set { 
-                Properties.Settings.Default.Volume = value;
+                Settings.Instance.Volume = value;
                 RaisePropertyChanged();
                 if(value != 0) {
 
                     IsMute = false;
                 }
-                Properties.Settings.Default.Save();
                 Handler.InvokeScript("AsChangeVolume", (value / 100.0).ToString());
             }
         }
@@ -300,20 +299,7 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-
-        #region SplitterHeight変更通知プロパティ
-
-        public GridLength SplitterHeight {
-            get { return Properties.Settings.Default.SplitterHeight; }
-            set { 
-                if(Properties.Settings.Default.SplitterHeight.Value == value.Value)
-                    return;
-                Properties.Settings.Default.SplitterHeight = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
+        
 
 
         #region VideoUrl変更通知プロパティ
@@ -466,15 +452,13 @@ namespace SRNicoNico.ViewModels {
         public void ToggleRepeat() {
 
             IsRepeat ^= true;
-            Properties.Settings.Default.IsRepeat = IsRepeat;
-            Properties.Settings.Default.Save();
+            Settings.Instance.IsRepeat = IsRepeat;
         }
 
         public void ToggleComment() {
 
             CommentVisibility ^= true;
-            Properties.Settings.Default.CommentVisibility = CommentVisibility;
-            Properties.Settings.Default.Save();
+            Settings.Instance.CommentVisibility = CommentVisibility;
             Handler.InvokeScript("AsToggleComment");
         }
 
@@ -503,7 +487,7 @@ namespace SRNicoNico.ViewModels {
             IsFullScreen = true;
 
             Type type;
-            if(App.ViewModelRoot.Config.Video.UseWindowFullScreen) {
+            if(Settings.Instance.UseWindowMode) {
 
                 type = typeof(WindowedWindow);
             } else {
@@ -788,7 +772,7 @@ namespace SRNicoNico.ViewModels {
         public void HideFullScreenPopup() {
 
             //常に表示の時は隠さない
-            if(Properties.Settings.Default.AlwaysShowSeekBar) {
+            if(Settings.Instance.AlwaysShowSeekBar) {
 
                 return;
             }
