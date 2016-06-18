@@ -54,10 +54,16 @@ namespace SRNicoNico.Views.Contents.Ranking {
             if(DataContext is RankingViewModel) {
 
                 var vm = (RankingViewModel) DataContext;
-                vm.WebBrowser = browser;
+                vm.WebBrowser = Browser;
 
             }
 
+        }
+
+        private void Browser_IsBrowserInitializedChanged(object sender, DependencyPropertyChangedEventArgs e) {
+
+
+            
         }
     }
 }

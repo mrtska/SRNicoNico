@@ -74,6 +74,7 @@ namespace SRNicoNico.ViewModels {
         public void Reset() {
 
             Settings.Instance.Reset();
+            Close();
         }
 
         public void Close() {

@@ -17,6 +17,7 @@ using SRNicoNico.Models.NicoNicoWrapper;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
+using CefSharp;
 
 namespace SRNicoNico.ViewModels {
     public class RankingViewModel : TabItemViewModel {
@@ -24,9 +25,9 @@ namespace SRNicoNico.ViewModels {
         
 
         #region WebBrowser変更通知プロパティ
-        private WebBrowser _WebBrowser;
+        private IWebBrowser _WebBrowser;
 
-        public WebBrowser WebBrowser {
+        public IWebBrowser WebBrowser {
             get { return _WebBrowser; }
             set { 
                 if(_WebBrowser == value)
@@ -63,7 +64,7 @@ namespace SRNicoNico.ViewModels {
 
                     DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                        WebBrowser.Navigate(Settings.Instance.RankingPageUrl);
+                        WebBrowser.Load(Settings.Instance.RankingPageUrl.OriginalString);
                       
                     }));
                    
@@ -87,7 +88,7 @@ namespace SRNicoNico.ViewModels {
 
         public void Refresh() {
 
-            WebBrowser.Refresh(true);
+            WebBrowser.Reload(true);
 
 
         }

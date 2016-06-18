@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -23,7 +24,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="184*" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="300"/>
+            <RowDefinition Height="{Binding Source={x:Static m:Settings.Instance},Path=SplitterHeight,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
         </Grid.RowDefinitions>
 
         <Grid>

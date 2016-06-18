@@ -33,7 +33,6 @@ namespace SRNicoNico.Views.Contents.Video {
 
             Cef.BrowserSettings.UniversalAccessFromFileUrls = CefState.Enabled;
             Cef.BrowserSettings.FileAccessFromFileUrls = CefState.Enabled;
-            
         }
 
 

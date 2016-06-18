@@ -52,6 +52,9 @@ namespace SRNicoNico.ViewModels {
             Browser = flash;
             Browser.RequestHandler = new RequestHandler();
             Browser.MenuHandler = new MenuHandler();
+            Browser.DownloadHandler = new DownloadHandler();
+            
+            
             IsPreIntialized = true;
         }
 

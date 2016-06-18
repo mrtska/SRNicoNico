@@ -34,14 +34,15 @@ namespace SRNicoNico {
 
             var settings = new CefSettings();
 
-            //settings.LogSeverity = LogSeverity.Verbose;
+            settings.LogSeverity = LogSeverity.Info;
             settings.AcceptLanguageList = "ja-JP";
             settings.UserAgent = "SRNicoNico/1.0";
             settings.CachePath = "./cache";
 
             //Flashプラグインを指定
-            settings.CefCommandLineArgs.Add("ppapi-flash-path", "./Flash/pepflashplayer32_21_0_0_242.dll");
-
+            settings.CefCommandLineArgs.Add("ppapi-flash-path", "./Flash/pepflashplayer.dll");
+            settings.CefCommandLineArgs.Add("ppapi-flash-version", "22.0.0.192");
+            //settings.CefCommandLineArgs.Add("disable-gpu", "disable-gpu");
             //サブプロセスを指定
             settings.BrowserSubprocessPath = "./SRNicoNicoRenderingProcess.exe";
 
@@ -66,11 +67,13 @@ namespace SRNicoNico {
             bridge.DomainName = "localbridge";
             bridge.SchemeHandlerFactory = new LocalBridgeSchemeHandler();
             settings.RegisterScheme(bridge);
-
+            
             //日本語に
             settings.Locale = "ja";
             
+            
             Cef.Initialize(settings, true, true);
+            
             
 
             DispatcherHelper.UIDispatcher = Dispatcher;
