@@ -21,12 +21,16 @@ package {
 		public var rasterizer:CommentRasterizer;
 		
 		
+		protected var renderTick:Timer;
+		
 		public function NicoNicoPlayerBase() {
 			
 			stage.color = 0x000000;
 			//枠に合わせてスケールする
 			stage.scaleMode = StageScaleMode.SHOW_ALL;
 			stage.frameRate = 30;
+			
+			this.renderTick = new Timer(16.6 * 2);
 			
 			rasterizer = new CommentRasterizer();
 			stage.showDefaultContextMenu = false;
@@ -47,7 +51,6 @@ package {
 				ExternalInterface.addCallback("AsChangeVolume", ChangeVolume);
 				ExternalInterface.addCallback("AsApplyChanges", ApplyChanges);
 				
-				ExternalInterface.marshallExceptions = true;
 			}
 			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
 			
@@ -59,6 +62,8 @@ package {
 			
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, move);
 			stage.addEventListener(MouseEvent.CLICK, click);
+			
+			CallCSharp("Ready");
 		}
 		
 		private var timer:Timer;
@@ -136,7 +141,7 @@ package {
 		}
 		
 		
-		public function onFrame(e:Event):void {
+		public function onFrame(e:TimerEvent):void {
 		
 		}
 		public function onNetStatus(e:NetStatusEvent):void {

@@ -53,7 +53,6 @@ namespace SRNicoNico {
 		        MessageBoxButton.OK,
 		        MessageBoxImage.Error);
 
-			this.Shutdown(-1);
 		}
 	}
 }

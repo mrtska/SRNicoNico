@@ -23,10 +23,5 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-
-        public abstract void Reset();
-
-
-
     }
 }

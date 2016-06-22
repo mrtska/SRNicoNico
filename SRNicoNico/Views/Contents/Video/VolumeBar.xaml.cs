@@ -56,7 +56,7 @@ namespace SRNicoNico.Views.Contents.Video {
                 if(DataContext is VideoViewModel) {
 
                     var vm = (VideoViewModel)DataContext;
-                    vm.Volume = ans;
+                    //vm.Volume = ans;
                 } else if(DataContext is LiveWatchViewModel) {
 
                     var vm = (LiveWatchViewModel)DataContext;

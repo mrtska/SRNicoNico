@@ -13,6 +13,7 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models;
 using System.Windows;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class ConfigVideoViewModel : ConfigViewModelBase {
@@ -22,12 +23,11 @@ namespace SRNicoNico.ViewModels {
         #region VideoPlacement変更通知プロパティ
 
         public string VideoPlacement {
-            get { return Properties.Settings.Default.VideoInfoPlacement; }
+            get { return Settings.Instance.VideoInfoPlacement; }
             set { 
-                if(Properties.Settings.Default.VideoInfoPlacement == value)
+                if(Settings.Instance.VideoInfoPlacement == value)
                     return;
-                Properties.Settings.Default.VideoInfoPlacement = value;
-                Properties.Settings.Default.Save();
+                Settings.Instance.VideoInfoPlacement = value;
                 RaisePropertyChanged();
 
                 if(value == "Right") {
@@ -49,63 +49,10 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-
-        #region AlwaysShowSeekBar変更通知プロパティ
-
-        public bool AlwaysShowSeekBar {
-            get { return Properties.Settings.Default.AlwaysShowSeekBar; }
-            set {
-                if(Properties.Settings.Default.AlwaysShowSeekBar == value)
-                    return;
-                Properties.Settings.Default.AlwaysShowSeekBar = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region ClickOnPause変更通知プロパティ
-        public bool ClickOnPause {
-            get { return Properties.Settings.Default.ClickOnPause; }
-            set { 
-                if(Properties.Settings.Default.ClickOnPause == value)
-                    return;
-                Properties.Settings.Default.ClickOnPause = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region UseWindowFullScreen変更通知プロパティ
-        public bool UseWindowFullScreen {
-            get { return Properties.Settings.Default.UseWindowModeFullScreen; }
-            set { 
-                if(Properties.Settings.Default.UseWindowModeFullScreen == value)
-                    return;
-                Properties.Settings.Default.UseWindowModeFullScreen = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-
         public ConfigVideoViewModel() : base("動画") {
 
         }
 
-        public override void Reset() {
-
-            RaisePropertyChanged(nameof(VideoPlacement));
-            RaisePropertyChanged(nameof(AlwaysShowSeekBar));
-            RaisePropertyChanged(nameof(ClickOnPause));
-            RaisePropertyChanged(nameof(UseWindowFullScreen));
-            
-        }
 
 
     }

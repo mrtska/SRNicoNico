@@ -213,15 +213,14 @@ namespace SRNicoNico.ViewModels {
 
         #region Volume変更通知プロパティ
         public int Volume {
-            get { return Properties.Settings.Default.Volume; }
+            get { return Settings.Instance.Volume; }
             set {
-                Properties.Settings.Default.Volume = value;
+                Settings.Instance.Volume = value;
                 RaisePropertyChanged();
                 if(value != 0) {
 
                     IsMute = false;
                 }
-                Properties.Settings.Default.Save();
                 Handler.InvokeScript("AsChangeVolume", (value / 100.0).ToString());
             }
         }
@@ -380,7 +379,7 @@ namespace SRNicoNico.ViewModels {
             IsFullScreen = true;
 
             Type type;
-            if(App.ViewModelRoot.Config.Video.UseWindowFullScreen) {
+            if(Settings.Instance.UseWindowMode) {
 
                 type = typeof(WindowedWindow);
             } else {
@@ -501,8 +500,7 @@ namespace SRNicoNico.ViewModels {
         public void ToggleComment() {
 
             CommentVisibility ^= true;
-            Properties.Settings.Default.CommentVisibility = CommentVisibility;
-            Properties.Settings.Default.Save();
+            Settings.Instance.CommentVisibility = CommentVisibility;
             Handler.InvokeScript("AsToggleComment");
         }
         //最初から

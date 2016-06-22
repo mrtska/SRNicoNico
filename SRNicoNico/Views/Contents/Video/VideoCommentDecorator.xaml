@@ -7,6 +7,7 @@
             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
             xmlns:nnv="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+            xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
@@ -154,7 +155,7 @@
 
             </UniformGrid>
             <StackPanel Grid.Row="2" Margin="3">
-                <CheckBox Content="184コメントで投稿する" IsChecked="{Binding Use184,Mode=TwoWay}" Margin="10,3" />
+                <CheckBox Content="184コメントで投稿する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=Use184,Mode=TwoWay}" Margin="10,3" />
 
             </StackPanel>
 

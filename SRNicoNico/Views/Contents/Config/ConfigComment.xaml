@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Config"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -40,7 +41,7 @@
                     <ComboBoxItem Content="100" />
                 </ComboBox>
                 <TextBlock Text="デフォルトコメントサイズ" FontSize="20" Margin="0,10,0,0"/>
-                <ComboBox Width="200" HorizontalAlignment="Left"  Margin="10"  Text="{Binding DefaultCommentSize,Mode=TwoWay}" >
+                <ComboBox IsEditable="True" IsReadOnly="True" Width="200" HorizontalAlignment="Left"  Margin="10"  Text="{Binding DefaultCommentSize,Mode=TwoWay}" >
                     <ComboBoxItem Content="極小" />
                     <ComboBoxItem Content="小" />
                     <ComboBoxItem Content="標準" />

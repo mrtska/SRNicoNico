@@ -17,22 +17,11 @@ using SRNicoNico.Models.NicoNicoWrapper;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class RankingViewModel : TabItemViewModel {
 
-
-        #region RankingPageUrl変更通知プロパティ
-        public Uri RankingPageUrl {
-            get { return Properties.Settings.Default.RankingPageUrl; }
-            set { 
-                if(Properties.Settings.Default.RankingPageUrl == value)
-                    return;
-                Properties.Settings.Default.RankingPageUrl = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
 
         #region WebBrowser変更通知プロパティ
         private WebBrowser _WebBrowser;
@@ -59,10 +48,10 @@ namespace SRNicoNico.ViewModels {
 
                 try {
 
-                    var a = NicoNicoWrapperMain.Session.GetAsync(RankingPageUrl.OriginalString).Result;
+                    //var a = NicoNicoWrapperMain.Session.GetAsync(Settings.Instance.RankingPageUrl.OriginalString).Result;
 
-                    var doc = new HtmlDocument();
-                    doc.LoadHtml2(a);
+                    //var doc = new HtmlDocument();
+                    //doc.LoadHtml2(a);
 
                     //doc.DocumentNode.SelectSingleNode("//div[@id='siteHeaderInner']/ul[@class='siteHeaderGlovalNavigation']").InnerHtml = "";
                     //doc.DocumentNode.SelectSingleNode("//div[@class='banner leadBanner ads']").InnerHtml = "";
@@ -74,7 +63,7 @@ namespace SRNicoNico.ViewModels {
 
                     DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                        WebBrowser.Navigate(RankingPageUrl);
+                        WebBrowser.Navigate(Settings.Instance.RankingPageUrl);
                       
                     }));
                    

@@ -10,74 +10,75 @@
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
 			 xmlns:root="clr-namespace:SRNicoNico"
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Search"
+             xmlns:mm="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
              xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              d:DataContext="{d:DesignInstance {x:Type vm:SearchViewModel}}"
              d:DesignHeight="500"
              d:DesignWidth="695"
              mc:Ignorable="d"
-             x:Name="SearchControl"
 			 >
-	
-	
-
 
 	<Grid>
-        <Grid.Resources>
-            
-        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ComboBox Width="180" Margin="5,26,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FF2D2D2D" BorderBrush="#FFAAAAAA" SelectedIndex="{Binding SelectedIndex,Mode=TwoWay}">
-			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="投稿日時が新しい順" Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="投稿日時が古い順" Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生数が多い順" Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生数が少ない順" Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="コメントが新しい順" Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="コメントが少ない順" Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="マイリスト数が多い順" Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="マイリスト数が少ない順" Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生時間が長い順" Foreground="#FFAAAAAA" />
-			<ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生時間が短い順" Foreground="#FFAAAAAA" />
+        <StackPanel>
+            <ComboBox Width="180" Margin="5,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FF2D2D2D" BorderBrush="#FFAAAAAA" SelectedIndex="{Binding Source={x:Static mm:Settings.Instance},Path=SearchIndex,Mode=TwoWay}">
+                <ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="投稿日時が新しい順" Foreground="#FFAAAAAA" />
+                <ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="投稿日時が古い順" Foreground="#FFAAAAAA" />
+                <ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生数が多い順" Foreground="#FFAAAAAA" />
+                <ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生数が少ない順" Foreground="#FFAAAAAA" />
+                <ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="コメントが新しい順" Foreground="#FFAAAAAA" />
+                <ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="コメントが少ない順" Foreground="#FFAAAAAA" />
+                <ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="マイリスト数が多い順" Foreground="#FFAAAAAA" />
+                <ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="マイリスト数が少ない順" Foreground="#FFAAAAAA" />
+                <ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生時間が長い順" Foreground="#FFAAAAAA" />
+                <ComboBoxItem Background="#FF2D2D2D" BorderBrush="#FF2D2D2D" Content="再生時間が短い順" Foreground="#FFAAAAAA" />
 
-        </ComboBox>
-        <TextBox Width="180" Height="23" Margin="5,87,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding SearchText}" TextWrapping="Wrap">
-			<i:Interaction.Behaviors>
-				<Behaviors:TextBoxBehavior Owner="{Binding}" />
-			</i:Interaction.Behaviors>
-		</TextBox>
-		<RadioButton Margin="32,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="動画" IsChecked="True" />
-		<RadioButton Margin="102,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="生放送" IsEnabled="False" />
+            </ComboBox>
+            <TextBox Width="180" Height="23" Margin="5,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding SearchText}" TextWrapping="Wrap">
+                <i:Interaction.Behaviors>
+                    <Behaviors:TextBoxBehavior Owner="{Binding}" />
+                </i:Interaction.Behaviors>
+            </TextBox>
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <RadioButton HorizontalAlignment="Center" GroupName="Type" Content="テキスト" IsChecked="True" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Checked">
+                            <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="SearchType" Value="Keyword"/>
+                        </i:EventTrigger>
+                        <ei:DataTrigger Binding="{Binding SearchType}" Value="Keyword">
+                            <ei:ChangePropertyAction PropertyName="IsChecked" Value="True"/>
+                        </ei:DataTrigger>
+                    </i:Interaction.Triggers>
+                </RadioButton>
+                <RadioButton Grid.Column="1" HorizontalAlignment="Center" GroupName="Type" Content="タグ" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Checked">
+                            <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="SearchType" Value="Tag"/>
+                        </i:EventTrigger>
+                        <ei:DataTrigger Binding="{Binding SearchType}" Value="Tag">
+                            <ei:ChangePropertyAction PropertyName="IsChecked" Value="True"/>
+                        </ei:DataTrigger>
+                    </i:Interaction.Triggers>
+                </RadioButton>
+            </Grid>
+            <Button Width="75" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="検索">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodName="DoSearch" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
 
-        <RadioButton Margin="32,55,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="Type" Content="テキスト" IsChecked="True" >
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Checked">
-                    <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="SearchType" Value="Keyword"/>
-                </i:EventTrigger>
-                <ei:DataTrigger Binding="{Binding SearchType}" Value="Keyword">
-                    <ei:ChangePropertyAction PropertyName="IsChecked" Value="True"/>
-                </ei:DataTrigger>
-            </i:Interaction.Triggers>
-        </RadioButton>
-        <RadioButton Margin="102,55,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" GroupName="Type" Content="タグ" >
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Checked">
-                    <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="SearchType" Value="Tag"/>
-                </i:EventTrigger>
-                <ei:DataTrigger Binding="{Binding SearchType}" Value="Tag">
-                    <ei:ChangePropertyAction PropertyName="IsChecked" Value="True"/>
-                </ei:DataTrigger>
-            </i:Interaction.Triggers>
-        </RadioButton>
+        </StackPanel>
 
-        <Button Width="75" Margin="110,139,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="検索">
-			<i:Interaction.Triggers>
-				<i:EventTrigger EventName="Click">
-					<l:LivetCallMethodAction MethodName="DoSearch" MethodTarget="{Binding}" />
-				</i:EventTrigger>
-			</i:Interaction.Triggers>
-		</Button>
+
 		
         <local:SearchResult Grid.Column="1" DataContext="{Binding SearchResult}"/>
 	</Grid>

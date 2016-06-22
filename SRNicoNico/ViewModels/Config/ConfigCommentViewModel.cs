@@ -14,6 +14,7 @@ using Livet.Messaging.Windows;
 using SRNicoNico.Models;
 using System.Windows;
 using Codeplex.Data;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class ConfigCommentViewModel : ConfigViewModelBase {
@@ -22,12 +23,11 @@ namespace SRNicoNico.ViewModels {
 
         #region CommentAlpha変更通知プロパティ
         public float CommentAlpha {
-            get { return Properties.Settings.Default.CommentAlpha; }
+            get { return Settings.Instance.CommentAlpha; }
             set { 
-                if(Properties.Settings.Default.CommentAlpha == value)
+                if(Settings.Instance.CommentAlpha == value)
                     return;
-                Properties.Settings.Default.CommentAlpha = value;
-                Properties.Settings.Default.Save();
+                Settings.Instance.CommentAlpha = value;
                 RaisePropertyChanged();
                 ApplyConfig();
             }
@@ -37,12 +37,11 @@ namespace SRNicoNico.ViewModels {
 
         #region DefaultCommentSize変更通知プロパティ
         public string DefaultCommentSize {
-            get { return Properties.Settings.Default.CommentSize; }
+            get { return Settings.Instance.CommentSize; }
             set { 
-                if(Properties.Settings.Default.CommentSize == value)
+                if(Settings.Instance.CommentSize == value)
                     return;
-                Properties.Settings.Default.CommentSize = value;
-                Properties.Settings.Default.Save();
+                Settings.Instance.CommentSize = value;
                 RaisePropertyChanged();
                 ApplyConfig();
             }
@@ -57,7 +56,7 @@ namespace SRNicoNico.ViewModels {
         //開いてる動画があれば設定を反映させる
         public void ApplyConfig() {
             
-            foreach(var tab in App.ViewModelRoot.TabItems) {
+            foreach(var tab in App.ViewModelRoot.VideoTabs) {
 
                 if(tab is VideoViewModel) {
 
@@ -67,11 +66,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public override void Reset() {
-
-            RaisePropertyChanged(nameof(CommentAlpha));
-            RaisePropertyChanged(nameof(DefaultCommentSize));
-        }
 
         public string ToJson() {
 

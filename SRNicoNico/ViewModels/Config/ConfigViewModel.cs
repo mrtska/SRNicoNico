@@ -65,16 +65,6 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        public void Reset() {
-
-            Properties.Settings.Default.Reset();
-            foreach(var conf in ConfigCollection) {
-
-                conf.Reset();
-            }
-
-        }
-
         public void OpenResetConfig() {
 
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Config.ConfigResetDialog), this, TransitionMode.Modal));

@@ -14,6 +14,7 @@ using Livet.Messaging.Windows;
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Windows;
 using Codeplex.Data;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class ConfigNGCommentViewModel : ConfigViewModelBase {
@@ -21,12 +22,11 @@ namespace SRNicoNico.ViewModels {
 
         #region Hide3DSComment変更通知プロパティ
         public bool Hide3DSComment {
-            get { return Properties.Settings.Default.Hide3DSComment; }
+            get { return Settings.Instance.Hide3DSComment; }
             set {
-                if(Properties.Settings.Default.Hide3DSComment == value)
+                if(Settings.Instance.Hide3DSComment == value)
                     return;
-                Properties.Settings.Default.Hide3DSComment = value;
-                Properties.Settings.Default.Save();
+                Settings.Instance.Hide3DSComment = value;
                 RaisePropertyChanged();
                 ApplyConfig();
             }
@@ -36,12 +36,11 @@ namespace SRNicoNico.ViewModels {
 
         #region HideWiiUComment変更通知プロパティ
         public bool HideWiiUComment {
-            get { return Properties.Settings.Default.HideWiiUComment; }
+            get { return Settings.Instance.HideWiiUComment; }
             set {
-                if(Properties.Settings.Default.HideWiiUComment == value)
+                if(Settings.Instance.HideWiiUComment == value)
                     return;
-                Properties.Settings.Default.HideWiiUComment = value;
-                Properties.Settings.Default.Save();
+                Settings.Instance.HideWiiUComment = value;
                 RaisePropertyChanged();
                 ApplyConfig();
             }
@@ -51,12 +50,11 @@ namespace SRNicoNico.ViewModels {
 
         #region NGSharedLevel変更通知プロパティ
         public string NGSharedLevel {
-            get { return Properties.Settings.Default.NGSharedLevel; }
+            get { return Settings.Instance.NGSharedLevel; }
             set {
-                if(Properties.Settings.Default.NGSharedLevel == value)
+                if(Settings.Instance.NGSharedLevel == value)
                     return;
-                Properties.Settings.Default.NGSharedLevel = value;
-                Properties.Settings.Default.Save();
+                Settings.Instance.NGSharedLevel = value;
                 RaisePropertyChanged();
                 ApplyConfig();
             }
@@ -67,7 +65,7 @@ namespace SRNicoNico.ViewModels {
         //開いてる動画があれば設定を反映させる
         public void ApplyConfig() {
 
-            foreach(var tab in App.ViewModelRoot.TabItems) {
+            foreach(var tab in App.ViewModelRoot.VideoTabs) {
 
                 if(tab is VideoViewModel) {
 
@@ -122,13 +120,5 @@ namespace SRNicoNico.ViewModels {
 
             NGList.Add(entry);
         }
-
-        public override void Reset() {
-
-            RaisePropertyChanged(nameof(Hide3DSComment));
-            RaisePropertyChanged(nameof(HideWiiUComment));
-            RaisePropertyChanged(nameof(NGSharedLevel));
-        }
-
     }
 }

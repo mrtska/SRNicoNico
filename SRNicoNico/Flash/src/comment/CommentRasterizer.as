@@ -2,6 +2,7 @@ package comment {
 	import flash.display.Sprite;
 	import flash.external.ExternalInterface;
 	import flash.text.TextFormat;
+	import flash.utils.unescapeMultiByte;
 	
 	public class CommentRasterizer extends Sprite {
 		
@@ -33,7 +34,14 @@ package comment {
 		//フィールド初期化
 		public function updateBounds(width:int, height:int):void {
 			
-			positioner = new CommentPositioner(width, height, drawingList);
+			if (positioner == null) {
+				
+				positioner = new CommentPositioner(width, height, drawingList);
+			} else {
+				
+				positioner.updateBounds(width, height);
+			}
+			
 		}
 		
 		public function loadMyComment(string:String):void {

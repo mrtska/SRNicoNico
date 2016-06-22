@@ -36,18 +36,30 @@ namespace SRNicoNico.ViewModels {
 
         private VideoViewModel Owner;
 
-        public bool IsInitialized;
 
-        public VideoFlashHandler(VideoViewModel vm, AxShockwaveFlash flash)  {
+        public VideoFlashHandler(VideoViewModel vm)  {
 
             Owner = vm;
+        }
+        private bool IsPreIntialized = false;
+
+        private VideoData VideoData;
+
+        public void PreInitialize(AxShockwaveFlash flash) {
+
 
             ShockwaveFlash = flash;
             Proxy = new ExternalInterfaceProxy(ShockwaveFlash);
-            
+            IsPreIntialized = true;
         }
-        public async void Initialize(VideoData VideoData) {
 
+        public async void Initialize(VideoData videoData) {
+
+            while(!IsPreIntialized) {
+
+                Thread.Sleep(1);
+            }
+            VideoData = videoData;
             //ロードに失敗したら
             if(VideoData.ApiData == null) {
 
@@ -56,6 +68,8 @@ namespace SRNicoNico.ViewModels {
                 Owner.Status = "動画の読み込みに失敗しました。";
                 return;
             }
+
+
             Owner.Name = VideoData.ApiData.Title;
 
             //有料動画なら
@@ -66,6 +80,8 @@ namespace SRNicoNico.ViewModels {
             }
 
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+                Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
 
                 if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
@@ -87,10 +103,8 @@ namespace SRNicoNico.ViewModels {
                     }
                     ShockwaveFlash.LoadMovie(0, GetPlayerPath());
                 }
-                Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
                 Owner.IsActive = false;
 
-                Owner.OpenVideo();
 
             }));
             Owner.Time = new VideoTime();
@@ -145,7 +159,7 @@ namespace SRNicoNico.ViewModels {
 
             }
 
-            if(!Properties.Settings.Default.CommentVisibility) {
+            if(!Settings.Instance.CommentVisibility) {
 
                 InvokeScript("AsToggleComment");
             } else {
@@ -153,6 +167,25 @@ namespace SRNicoNico.ViewModels {
                 Owner.CommentVisibility = true;
             }
 
+        }
+
+        private void OpenVideo() {
+
+            //ここからInvoke可能
+            Owner.IsPlaying = true;
+            Owner.IsInitialized = true;
+            Owner.Mylist.EnableButtons();
+
+            //RTMPの時はサーバートークンも一緒にFlashに渡す
+            if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
+
+                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, App.ViewModelRoot.Config.Comment.ToJson());
+            } else {
+
+                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, App.ViewModelRoot.Config.Comment.ToJson());
+            }
+
+            Owner.IsRepeat = Settings.Instance.IsRepeat;
         }
 
         public void DisposeHandler() {
@@ -187,6 +220,9 @@ namespace SRNicoNico.ViewModels {
         public void InvokeFromActionScript(string func, params string[] args) {
             
             switch(func) {
+                case "Ready":
+                    OpenVideo();
+                    break;
                 case "CsFrame": //毎フレーム呼ばれる
                     CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]), args[3]);
                     break;
@@ -200,7 +236,7 @@ namespace SRNicoNico.ViewModels {
                     Owner.HideFullScreenPopup();
                     break;
                 case "Initialized": //動画が再生される直前に呼ばれる
-                    Owner.Volume = Properties.Settings.Default.Volume;    //保存された値をFlash側に伝える
+                    Owner.Volume = Settings.Instance.Volume;    //保存された値をFlash側に伝える
                     break;
                 case "WidthHeight":
                     Owner.VideoData.Resolution = args[0];
@@ -241,7 +277,7 @@ namespace SRNicoNico.ViewModels {
 
                     break;
                 case "Click":   //Flash部分がクリックされた時に呼ばれる
-                    if(App.ViewModelRoot.Config.Video.ClickOnPause) {   //クリックしたら一時停止する設定になっていたら
+                    if(Settings.Instance.ClickOnPause) {   //クリックしたら一時停止する設定になっていたら
 
                         TogglePlay();
                     }

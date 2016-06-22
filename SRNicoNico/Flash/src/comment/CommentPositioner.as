@@ -17,6 +17,13 @@ package comment {
 			this.drawingComment = drawingComment;
 		}
 		
+		public function updateBounds(width:Number, height:Number):void {
+			
+			this.width = width;
+			this.height = height;
+		}
+		
+		
 		//現在のvposからそのコメントのX座標を取得する
 		public function getX(entry:CommentEntry, vpos:Number):Number {
 			

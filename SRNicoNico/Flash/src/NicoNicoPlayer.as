@@ -5,6 +5,7 @@ package  {
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.events.NetStatusEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Rectangle;
 	import flash.media.SoundTransform;
 	import flash.media.StageVideo;
@@ -186,7 +187,8 @@ package  {
 
 				}
 				addChild(rasterizer);
-				addEventListener(Event.ENTER_FRAME, onFrame);
+				renderTick.addEventListener(TimerEvent.TIMER, onFrame);
+				renderTick.start();
 			}
 			stream.client = obj;
 			
@@ -199,7 +201,7 @@ package  {
 		private var prevTime:int = 0;
 		private var prevLoaded:uint = 0;
 		
-		public override function onFrame(e:Event):void {
+		public override function onFrame(e:TimerEvent):void {
 			
 			// 再生時間を取得
 			var value:Number = stream.time;

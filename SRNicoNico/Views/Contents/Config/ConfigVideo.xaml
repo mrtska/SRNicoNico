@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Config"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -34,9 +35,9 @@
                         <TextBlock Text="その他" FontSize="20" />
                     </HeaderedContentControl.Header>
                     <StackPanel>
-                        <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding AlwaysShowSeekBar}" />
-                        <CheckBox Content="動画をクリックしたら一時停止/再生する" IsChecked="{Binding ClickOnPause}" />
-                        <CheckBox Content="ウィンドウモードのフルスクリーンを使う" IsChecked="{Binding UseWindowFullScreen}" />
+                        <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AlwaysShowSeekBar}" />
+                        <CheckBox Content="動画をクリックしたら一時停止/再生する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=ClickOnPause}" />
+                        <CheckBox Content="ウィンドウモードのフルスクリーンを使う" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=UseWindowMode}" />
                         
                     </StackPanel>
                 </HeaderedContentControl>

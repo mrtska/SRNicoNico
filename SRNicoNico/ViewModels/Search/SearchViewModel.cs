@@ -16,6 +16,7 @@ using System.Windows.Controls;
 
 
 using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class SearchViewModel : TabItemViewModel {
@@ -42,20 +43,7 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        #region SelectedIndex変更通知プロパティ
-
-        //バッキングストアはコンフィグ
-        public int SelectedIndex {
-            get { return Properties.Settings.Default.SearchIndex; }
-            set {
-                if (Properties.Settings.Default.SearchIndex == value)
-                    return;
-                Properties.Settings.Default.SearchIndex = value;
-                Properties.Settings.Default.Save();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
+        
 
 
         #region SearchType変更通知プロパティ
@@ -110,7 +98,7 @@ namespace SRNicoNico.ViewModels {
             SearchResult.IsActive = true;
             
             //検索
-            currentSearch = new NicoNicoSearch(this, SearchText, SearchType, sort_by[SelectedIndex]);
+            currentSearch = new NicoNicoSearch(this, SearchText, SearchType, sort_by[Settings.Instance.SearchIndex]);
 
 			Task.Run(() => {
 

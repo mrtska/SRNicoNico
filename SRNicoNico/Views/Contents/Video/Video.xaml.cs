@@ -22,7 +22,7 @@ namespace SRNicoNico.Views.Contents.Video {
 	public partial class Video : UserControl {
 		public Video() {
             InitializeComponent();
-            if(Properties.Settings.Default.VideoInfoPlacement == "Right") {
+            if(Settings.Instance.VideoInfoPlacement == "Right") {
 
                 Application.Current.Resources["VideoColumn"] = 0;
                 Application.Current.Resources["InfoColumn"] = 1;

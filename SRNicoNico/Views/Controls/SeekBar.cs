@@ -30,32 +30,23 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for CurrentTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty CurrentTimeProperty =
-			DependencyProperty.Register(nameof(CurrentTime), typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L, OnCurrentTimePropertyChanged));
+			DependencyProperty.Register(nameof(CurrentTime), typeof(long), typeof(SeekBar), new PropertyMetadata(OnCurrentTimePropertyChanged));
 
         private static void OnCurrentTimePropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
             var control = source as SeekBar;
             long time = (long)e.NewValue;
 
+            control.CurrentTime = time;
+
             if(!control.IsDrag) {
 
-                control.CurrentTimeWidth = (control.ActualWidth - 10) / control.VideoTime * control.CurrentTime;
-                control.SeekCursor = new Thickness(control.CurrentTimeWidth, 0, 0, 0);
             }
 
         }
 
 
-        public double CurrentTimeWidth {
-			get { return (double)GetValue(CurrentTimeWidthProperty); }
-			set { SetValue(CurrentTimeWidthProperty, value); }
-		}
 
-		// Using a DependencyProperty as the backing store for CurrentTimeString.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty CurrentTimeWidthProperty =
-			DependencyProperty.Register(nameof(CurrentTimeWidth), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0.0));
-
-
-		public double BufferedTime {
+        public double BufferedTime {
 			get { return (double)GetValue(BufferedTimeProperty); }
 			set { SetValue(BufferedTimeProperty, value); }
 		}
@@ -68,19 +59,8 @@ namespace SRNicoNico.Views.Controls {
             var control = source as SeekBar;
             double time = (double)e.NewValue;
 
-            control.BufferedTimeWidth = control.BufferedTime * control.ActualWidth;
 
         }
-
-
-        public double BufferedTimeWidth {
-			get { return (double)GetValue(BufferedTimeWidthProperty); }
-			set { SetValue(BufferedTimeWidthProperty, value); }
-		}
-
-		// Using a DependencyProperty as the backing store for BufferedTimeString.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty BufferedTimeWidthProperty =
-			DependencyProperty.Register(nameof(BufferedTimeWidth), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0.0));
 
 
 
@@ -188,9 +168,6 @@ namespace SRNicoNico.Views.Controls {
 
         private void SeekBar_SizeChanged(object sender, SizeChangedEventArgs e) {
 
-            CurrentTimeWidth = (ActualWidth - 10) / VideoTime * CurrentTime;
-            SeekCursor = new Thickness(CurrentTimeWidth, 0, 0, 0);
-            BufferedTimeWidth = BufferedTime * ActualWidth;
 
         }
 
@@ -205,16 +182,13 @@ namespace SRNicoNico.Views.Controls {
                 int ans = (int)(x / ActualWidth * VideoTime);
                 if(ans < 0) {
 
-                    CurrentTimeWidth = 0;
                     SeekCursor = new Thickness(0, 0, 0, 0);
                 } else if(VideoTime < ans) {
 
-                    CurrentTimeWidth = ActualWidth;
                     SeekCursor = new Thickness(ActualWidth - 10, 0, 0, 0);
                 } else {
 
                     //シーク中の動画時間
-                    CurrentTimeWidth = (ActualWidth) / VideoTime * ans;
                     SeekCursor = new Thickness(x - 5, 0, 0, 0);
                 }
             }
