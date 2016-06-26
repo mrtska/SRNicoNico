@@ -39,159 +39,166 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //動画ページを指定
         public WatchApiData GetWatchApiData() {
 
-            //動画ページのhtml取得
-            var response = NicoNicoWrapperMain.Session.GetResponseAsync(VideoPage).Result;
-
-            //チャンネル、公式動画
-            if(response.StatusCode == HttpStatusCode.MovedPermanently) {
-                
-                response = NicoNicoWrapperMain.Session.GetResponseAsync(response.Headers.Location.OriginalString).Result;
-            }
-            //削除された動画
-            if(response.StatusCode == HttpStatusCode.NotFound) {
-
-                return null;
-            }
-            //混雑中
-            if(response.StatusCode == HttpStatusCode.ServiceUnavailable) {
-
-                return null;
-            }
-
-            string html = response.Content.ReadAsStringAsync().Result;
-
-            HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml2(html);
-
-            //htmlからAPIデータだけを綺麗に抜き出す すごい
-            var container = doc.DocumentNode.QuerySelector("#watchAPIDataContainer");
-
-            if(container == null) {
-
-                return null;
-            }
-
-            var data = container.InnerHtml;
-
-            //html特殊文字をデコードする
-            data = HttpUtility.HtmlDecode(data);
-
-            //jsonとしてAPIデータを展開していく
-            var json = DynamicJson.Parse(data);
-
-            //GetFlvの結果
-             string flv = json.flashvars.flvInfo;
-
-            //2重にエンコードされてるので二回
-            flv = HttpUtility.UrlDecode(flv);
-            flv = HttpUtility.UrlDecode(flv);
+            try {
 
 
-            WatchApiData ret = new WatchApiData();
+                //動画ページのhtml取得
+                var response = NicoNicoWrapperMain.Session.GetResponseAsync(VideoPage).Result;
 
-            //&で繋がれているので剥がす
-            var getFlv = flv.Split(new char[] { '&' }).ToDictionary(source => source.Substring(0, source.IndexOf('=')),
-            source => Uri.UnescapeDataString(source.Substring(source.IndexOf('=') + 1)));
+                //チャンネル、公式動画
+                if(response.StatusCode == HttpStatusCode.MovedPermanently) {
 
-            ret.GetFlv = new NicoNicoGetFlvData(getFlv);
-
-            //動画情報
-            var videoDetail = json.videoDetail;
-
-            //---情報を詰める---
-            ret.Cmsid = videoDetail.id;
-            ret.MovieType = json.flashvars.movie_type;
-            ret.Title = HttpUtility.HtmlDecode(videoDetail.title);  //html特殊文字をデコード
-            ret.Thumbnail = videoDetail.thumbnail;
-            ret.Description = videoDetail.description;
-            ret.PostedAt = videoDetail.postedAt;
-            ret.Length = (int) videoDetail.length;
-            ret.ViewCounter = (int) videoDetail.viewCount;
-            ret.CommentCounter = (int) videoDetail.commentCount;
-            ret.MylistCounter = (int) videoDetail.mylistCount;
-            ret.YesterdayRank = videoDetail.yesterday_rank == null ? "圏外" : videoDetail.yesterday_rank + "位";
-            ret.HighestRank = videoDetail.highest_rank == null ? "圏外" : videoDetail.highest_rank + "位";
-            ret.IsOfficial = videoDetail.is_official;
-            ret.Token = json.flashvars.csrfToken;
-            ret.HasOwnerThread = json.flashvars.has_owner_thread();
-
-            if(json.uploaderInfo()) {
-
-                //投稿者情報
-                var uploaderInfo = json.uploaderInfo;
-
-                ret.UploaderId = uploaderInfo.id;
-                ret.UploaderIconUrl = uploaderInfo.icon_url;
-                ret.UploaderName = uploaderInfo.nickname;
-
-                //投稿者をお気に入り登録しているか調べる
-                Task.Run(() => {
-
-                    try {
-
-                        var a = NicoNicoWrapperMain.Session.GetAsync(string.Format(UploaderInfoApi, ret.UploaderId)).Result;
-
-                        ret.UploaderIsFavorited = DynamicJson.Parse(a).data.following;
-                        
-                    } catch(RequestFailed) {
-
-                        
-                    }
-                });
-
-                //廃止
-                //ret.UploaderIsFavorited = uploaderInfo.is_favorited;
-
-            } else if(json.channelInfo()) {
-
-                //投稿者情報
-                var channelInfo = json.channelInfo;
-
-                ret.UploaderId = channelInfo.id;
-                ret.UploaderIconUrl = channelInfo.icon_url;
-                ret.UploaderName = channelInfo.name;
-                ret.UploaderIsFavorited = channelInfo.is_favorited == 1 ? true : false;
-
-                ret.IsChannelVideo = true;
-            }
-
-
-            ret.Description = HyperLinkReplacer.Replace(ret.Description);
-
-            ret.TagList = new ObservableCollection<VideoTagViewModel>();
-
-            foreach(var tag in videoDetail.tagList) {
-
-                NicoNicoTag entry = new NicoNicoTag() {
-
-                    Id = tag.id,
-                    Tag = HttpUtility.HtmlDecode(tag.tag),
-                    Dic = tag.dic(),
-                    Lck = tag.lck == "1" ? true : false,
-                    Cat = tag.cat()
-                };
-                entry.Url = "http://dic.nicovideo.jp/a/" + entry.Tag;
-                ret.TagList.Add(new VideoTagViewModel(entry, Owner)); 
-            }
-            //------
-
-            //有料動画
-            if(ret.GetFlv.VideoUrl == null || ret.GetFlv.VideoUrl.Count() == 0) {
-
-                ret.IsPaidVideo = true;
-                return ret;
-            }
-
-            //念のためCookieを設定
-            var cookie = response.Headers.GetValues("Set-Cookie");
-            foreach(string s in cookie) {
-
-                foreach(string ss in s.Split(';')) {
-
-                    App.SetCookie(new Uri("http://nicovideo.jp/"), ss);
+                    response = NicoNicoWrapperMain.Session.GetResponseAsync(response.Headers.Location.OriginalString).Result;
                 }
+                //削除された動画
+                if(response.StatusCode == HttpStatusCode.NotFound) {
+
+                    return null;
+                }
+                //混雑中
+                if(response.StatusCode == HttpStatusCode.ServiceUnavailable) {
+
+                    return null;
+                }
+
+                string html = response.Content.ReadAsStringAsync().Result;
+
+                HtmlDocument doc = new HtmlDocument();
+                doc.LoadHtml2(html);
+
+                //htmlからAPIデータだけを綺麗に抜き出す すごい
+                var container = doc.DocumentNode.QuerySelector("#watchAPIDataContainer");
+
+                if(container == null) {
+
+                    return null;
+                }
+
+                var data = container.InnerHtml;
+
+                //html特殊文字をデコードする
+                data = HttpUtility.HtmlDecode(data);
+
+                //jsonとしてAPIデータを展開していく
+                var json = DynamicJson.Parse(data);
+
+                //GetFlvの結果
+                string flv = json.flashvars.flvInfo;
+
+                //2重にエンコードされてるので二回
+                flv = HttpUtility.UrlDecode(flv);
+                flv = HttpUtility.UrlDecode(flv);
+
+
+                WatchApiData ret = new WatchApiData();
+
+                //&で繋がれているので剥がす
+                var getFlv = flv.Split(new char[] { '&' }).ToDictionary(source => source.Substring(0, source.IndexOf('=')),
+                source => Uri.UnescapeDataString(source.Substring(source.IndexOf('=') + 1)));
+
+                ret.GetFlv = new NicoNicoGetFlvData(getFlv);
+
+                //動画情報
+                var videoDetail = json.videoDetail;
+
+                //---情報を詰める---
+                ret.Cmsid = videoDetail.id;
+                ret.MovieType = json.flashvars.movie_type;
+                ret.Title = HttpUtility.HtmlDecode(videoDetail.title);  //html特殊文字をデコード
+                ret.Thumbnail = videoDetail.thumbnail;
+                ret.Description = videoDetail.description;
+                ret.PostedAt = videoDetail.postedAt;
+                ret.Length = (int)videoDetail.length;
+                ret.ViewCounter = (int)videoDetail.viewCount;
+                ret.CommentCounter = (int)videoDetail.commentCount;
+                ret.MylistCounter = (int)videoDetail.mylistCount;
+                ret.YesterdayRank = videoDetail.yesterday_rank == null ? "圏外" : videoDetail.yesterday_rank + "位";
+                ret.HighestRank = videoDetail.highest_rank == null ? "圏外" : videoDetail.highest_rank + "位";
+                ret.IsOfficial = videoDetail.is_official;
+                ret.Token = json.flashvars.csrfToken;
+                ret.HasOwnerThread = json.flashvars.has_owner_thread();
+
+                if(json.uploaderInfo()) {
+
+                    //投稿者情報
+                    var uploaderInfo = json.uploaderInfo;
+
+                    ret.UploaderId = uploaderInfo.id;
+                    ret.UploaderIconUrl = uploaderInfo.icon_url;
+                    ret.UploaderName = uploaderInfo.nickname;
+
+                    //投稿者をお気に入り登録しているか調べる
+                    Task.Run(() => {
+
+                        try {
+
+                            var a = NicoNicoWrapperMain.Session.GetAsync(string.Format(UploaderInfoApi, ret.UploaderId)).Result;
+
+                            ret.UploaderIsFavorited = DynamicJson.Parse(a).data.following;
+
+                        } catch(RequestFailed) {
+
+
+                        }
+                    });
+
+                    //廃止
+                    //ret.UploaderIsFavorited = uploaderInfo.is_favorited;
+
+                } else if(json.channelInfo()) {
+
+                    //投稿者情報
+                    var channelInfo = json.channelInfo;
+
+                    ret.UploaderId = channelInfo.id;
+                    ret.UploaderIconUrl = channelInfo.icon_url;
+                    ret.UploaderName = channelInfo.name;
+                    ret.UploaderIsFavorited = channelInfo.is_favorited == 1 ? true : false;
+
+                    ret.IsChannelVideo = true;
+                }
+
+
+                ret.Description = HyperLinkReplacer.Replace(ret.Description);
+
+                ret.TagList = new ObservableCollection<VideoTagViewModel>();
+
+                foreach(var tag in videoDetail.tagList) {
+
+                    NicoNicoTag entry = new NicoNicoTag() {
+
+                        Id = tag.id,
+                        Tag = HttpUtility.HtmlDecode(tag.tag),
+                        Dic = tag.dic(),
+                        Lck = tag.lck == "1" ? true : false,
+                        Cat = tag.cat()
+                    };
+                    entry.Url = "http://dic.nicovideo.jp/a/" + entry.Tag;
+                    ret.TagList.Add(new VideoTagViewModel(entry, Owner));
+                }
+                //------
+
+                //有料動画
+                if(ret.GetFlv.VideoUrl == null || ret.GetFlv.VideoUrl.Count() == 0) {
+
+                    ret.IsPaidVideo = true;
+                    return ret;
+                }
+
+                //念のためCookieを設定
+                var cookie = response.Headers.GetValues("Set-Cookie");
+                foreach(string s in cookie) {
+
+                    foreach(string ss in s.Split(';')) {
+
+                        App.SetCookie(new Uri("http://nicovideo.jp/"), ss);
+                    }
+                }
+                return ret;
+            } catch(RequestTimeout) {
+
+                return null;
             }
-            return ret;
         }
 
         public Status AddFavorite(string userId, string token) {
