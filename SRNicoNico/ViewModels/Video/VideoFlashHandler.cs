@@ -236,7 +236,7 @@ namespace SRNicoNico.ViewModels {
                 case "HideController":  //マウスを数秒動画の上で静止させたら呼ばれる
                     Owner.HideFullScreenPopup();
                     break;
-                case "NetStream.Play.Start": //動画が再生される直前に呼ばれる
+                case "Initialized": //動画が再生される直前に呼ばれる
                     int vol = Settings.Instance.Volume;
                     Owner.Volume = 0;    //保存された値をFlash側に伝える
                     Owner.Volume = vol;    //保存された値をFlash側に伝える
