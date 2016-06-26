@@ -22,59 +22,5 @@ namespace SRNicoNico.Views.Contents.Video {
         public VolumeBar() {
             InitializeComponent();
         }
-
-        private bool IsDrag;
-
-        private void Volume_MouseEnter(object sender, MouseEventArgs e) {
-
-            Volume.IsPopupOpen = true;
-        }
-
-        private void Volume_MouseLeave(object sender, MouseEventArgs e) {
-
-            Volume.IsPopupOpen = false;
-        }
-
-        private void Volume_MouseMove(object sender, MouseEventArgs e) {
-
-
-            double x = e.GetPosition(this).X;
-
-            int ans = (int)(x / Volume.ActualWidth * Volume.VideoTime);
-            if(ans < 0) {
-
-                ans = 0;
-            } else if(ans > Volume.VideoTime) {
-
-                ans = (int)Volume.VideoTime;
-            }
-
-            Volume.PopupText = ans + "%";
-
-            if(IsDrag) {
-
-                if(DataContext is VideoViewModel) {
-
-                    var vm = (VideoViewModel)DataContext;
-                    //vm.Volume = ans;
-                } else if(DataContext is LiveWatchViewModel) {
-
-                    var vm = (LiveWatchViewModel)DataContext;
-                    vm.Volume = ans;
-                }
-
-            }
-
-        }
-
-        private void Volume_MouseUp(object sender, MouseButtonEventArgs e) {
-
-            IsDrag = false;
-        }
-
-        private void Volume_MouseDown(object sender, MouseButtonEventArgs e) {
-
-            IsDrag = true;
-        }
     }
 }

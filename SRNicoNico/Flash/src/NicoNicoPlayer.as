@@ -230,7 +230,7 @@ package  {
 		
 		public override function onNetStatus(e:NetStatusEvent):void {
 			
-			trace("onNetStatus");
+			ExternalInterface.call(e.info.code);
 			switch(e.info.code) {
 			case "NetStream.Play.Start":
 

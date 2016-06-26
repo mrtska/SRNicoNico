@@ -207,12 +207,12 @@ namespace SRNicoNico.ViewModels {
             get { return Settings.Instance.Volume; }
             set { 
                 Settings.Instance.Volume = value;
-                RaisePropertyChanged();
                 if(value != 0) {
 
                     IsMute = false;
                 }
                 Handler.InvokeScript("AsChangeVolume", (value / 100.0).ToString());
+                RaisePropertyChanged();
             }
         }
         #endregion

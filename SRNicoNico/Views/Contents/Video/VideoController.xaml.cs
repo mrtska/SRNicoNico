@@ -21,7 +21,7 @@ namespace SRNicoNico.Views.Contents.Video {
             InitializeComponent();
         }
 
-		[System.Runtime.InteropServices.DllImport("gdi32.dll")]
+		[DllImport("gdi32.dll")]
 		public static extern bool DeleteObject(IntPtr hObject);
 
 
@@ -56,23 +56,17 @@ namespace SRNicoNico.Views.Contents.Video {
 
                     Seek.PopupImageRect = new Rect(x - Story.Width / 2, -10, Story.Width, Story.Height);
 
-                    Bitmap test = Story.BitmapCollection[ans - ans % Story.Interval];
-                    IntPtr hBitMap = test.GetHbitmap();
+                    var test = Story.BitmapCollection[ans - ans % Story.Interval];
+                    var hBitMap = test.GetHbitmap();
                     try {
 
-                        Seek.PopupImage = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitMap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                        Seek.PopupImage = Imaging.CreateBitmapSourceFromHBitmap(hBitMap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                     } finally {
 
                         DeleteObject(hBitMap);
                     }
                 }
 			}
-		}
-
-		private void Seek_MouseLeave(object sender, MouseEventArgs e) {
-
-            Seek.IsPopupImageOpen = false;
-			Seek.IsPopupOpen = false;
 		}
 
 		private void Seek_MouseEnter(object sender, MouseEventArgs e) {
@@ -83,13 +77,10 @@ namespace SRNicoNico.Views.Contents.Video {
             }
             var vm = (VideoViewModel)DataContext;
             
-
             if(vm.VideoData.StoryBoardData != null) {
 
 				Seek.IsPopupImageOpen = true;
 			}
-
-			Seek.IsPopupOpen = true;
 		}
 
         private void Seek_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {

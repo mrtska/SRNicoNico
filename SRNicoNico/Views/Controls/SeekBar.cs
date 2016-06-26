@@ -20,7 +20,7 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for VideoTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty VideoTimeProperty =
-			DependencyProperty.Register(nameof(VideoTime), typeof(long), typeof(SeekBar), new FrameworkPropertyMetadata(0L));
+			DependencyProperty.Register(nameof(VideoTime), typeof(long), typeof(SeekBar), new PropertyMetadata());
 
 
         public long CurrentTime {
@@ -32,18 +32,29 @@ namespace SRNicoNico.Views.Controls {
 		public static readonly DependencyProperty CurrentTimeProperty =
 			DependencyProperty.Register(nameof(CurrentTime), typeof(long), typeof(SeekBar), new PropertyMetadata(OnCurrentTimePropertyChanged));
 
+
         private static void OnCurrentTimePropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
             var control = source as SeekBar;
-            long time = (long)e.NewValue;
 
-            control.CurrentTime = time;
+            if(control.ismoving || (!control.IsDrag)) {
 
-            if(!control.IsDrag) {
+                
+                control.CurrentTimeWidth = (control.ActualWidth - 10) / control.VideoTime * control.CurrentTime;
+
+                control.SeekCursor = new Thickness(control.CurrentTimeWidth, 0, 0, 0);
 
             }
 
         }
 
+        public double CurrentTimeWidth {
+            get { return (double)GetValue(CurrentTimeWidthProperty); }
+            set { SetValue(CurrentTimeWidthProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CurrentTimeWidth.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CurrentTimeWidthProperty =
+            DependencyProperty.Register("CurrentTimeWidth", typeof(double), typeof(SeekBar), new PropertyMetadata());
 
 
         public double BufferedTime {
@@ -53,18 +64,28 @@ namespace SRNicoNico.Views.Controls {
 
 		// Using a DependencyProperty as the backing store for BufferedTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty BufferedTimeProperty =
-			DependencyProperty.Register(nameof(BufferedTime), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0D, OnBufferTimePropertyChanged));
+			DependencyProperty.Register(nameof(BufferedTime), typeof(double), typeof(SeekBar), new PropertyMetadata(OnBufferedTimePropertyChanged));
 
-        private static void OnBufferTimePropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
+
+        private static void OnBufferedTimePropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
             var control = source as SeekBar;
-            double time = (double)e.NewValue;
 
-
+            control.BufferedTimeWidth = control.BufferedTime * control.ActualWidth;
+        }
+        public double BufferedTimeWidth {
+            get { return (double)GetValue(BufferedTimeWidthProperty); }
+            set { SetValue(BufferedTimeWidthProperty, value); }
         }
 
+        // Using a DependencyProperty as the backing store for BufferTimeWidth.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BufferedTimeWidthProperty =
+            DependencyProperty.Register("BufferedTimeWidth", typeof(double), typeof(SeekBar), new PropertyMetadata());
 
 
-		public Thickness SeekCursor {
+
+
+
+        public Thickness SeekCursor {
 			get { return (Thickness)GetValue(SeekCursorProperty); }
 			set { SetValue(SeekCursorProperty, value); }
 		}
@@ -149,7 +170,7 @@ namespace SRNicoNico.Views.Controls {
 
         // Using a DependencyProperty as the backing store for IsDrag.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsDragProperty =
-            DependencyProperty.Register("IsDrag", typeof(bool), typeof(SeekBar), new PropertyMetadata(false));
+            DependencyProperty.Register("IsDrag", typeof(bool), typeof(SeekBar), new PropertyMetadata());
 
 
 
@@ -160,16 +181,30 @@ namespace SRNicoNico.Views.Controls {
 
         public SeekBar() {
 
+            MouseEnter += SeekBar_MouseEnter;
+            MouseLeave += SeekBar_MouseLeave;
+
             MouseLeftButtonDown += SeekBar_MouseLeftButtonDown;
             MouseLeftButtonUp += SeekBar_MouseLeftButtonUp;
             MouseMove += SeekBar_MouseMove;
-            SizeChanged += SeekBar_SizeChanged;
         }
 
+        private void SeekBar_MouseEnter(object sender, MouseEventArgs e) {
+
+            IsPopupOpen = true;
+        }
+
+        private void SeekBar_MouseLeave(object sender, MouseEventArgs e) {
+
+            IsPopupOpen = false;
+            IsPopupImageOpen = false;
+        }
         private void SeekBar_SizeChanged(object sender, SizeChangedEventArgs e) {
 
 
         }
+
+        bool ismoving;
 
         private void SeekBar_MouseMove(object sender, MouseEventArgs e) {
 
@@ -177,20 +212,22 @@ namespace SRNicoNico.Views.Controls {
 
                 //マウスカーソルX座標
                 double x = e.GetPosition(this).X;
+                ismoving = true;
 
                 //シーク中の動画時間
                 int ans = (int)(x / ActualWidth * VideoTime);
+
                 if(ans < 0) {
 
-                    SeekCursor = new Thickness(0, 0, 0, 0);
+                    CurrentTime = 0;
                 } else if(VideoTime < ans) {
 
-                    SeekCursor = new Thickness(ActualWidth - 10, 0, 0, 0);
+                    CurrentTime = VideoTime;
                 } else {
 
-                    //シーク中の動画時間
-                    SeekCursor = new Thickness(x - 5, 0, 0, 0);
+                    CurrentTime = ans;
                 }
+                ismoving = false;
             }
         }
 

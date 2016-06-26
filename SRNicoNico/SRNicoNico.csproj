@@ -540,6 +540,7 @@
     </Compile>
     <Compile Include="Views\Controls\ManagedPopup.cs" />
     <Compile Include="Views\Controls\SeekBar.cs" />
+    <Compile Include="Views\Converter\TimeToWidthConverter.cs" />
     <Compile Include="Views\Converter\NGTypeConverter.cs" />
     <Compile Include="Views\Converter\ListCountConverter.cs" />
     <Compile Include="Views\Converter\FontFamilyToLocalizedNameConverter.cs" />

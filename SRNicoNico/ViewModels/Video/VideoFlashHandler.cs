@@ -190,6 +190,7 @@ namespace SRNicoNico.ViewModels {
 
         public void DisposeHandler() {
 
+            
             ShockwaveFlash.Dispose();
         }
 
@@ -235,8 +236,10 @@ namespace SRNicoNico.ViewModels {
                 case "HideController":  //マウスを数秒動画の上で静止させたら呼ばれる
                     Owner.HideFullScreenPopup();
                     break;
-                case "Initialized": //動画が再生される直前に呼ばれる
-                    Owner.Volume = Settings.Instance.Volume;    //保存された値をFlash側に伝える
+                case "NetStream.Play.Start": //動画が再生される直前に呼ばれる
+                    int vol = Settings.Instance.Volume;
+                    Owner.Volume = 0;    //保存された値をFlash側に伝える
+                    Owner.Volume = vol;    //保存された値をFlash側に伝える
                     break;
                 case "WidthHeight":
                     Owner.VideoData.Resolution = args[0];

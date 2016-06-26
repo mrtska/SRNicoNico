@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:SRNicoNico.Views.Controls">
+                    xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
+                    xmlns:conv="clr-namespace:SRNicoNico.Views.Converter"
+                    >
 
     <Style TargetType="{x:Type local:SeekBar}">
         <Setter Property="Template">
@@ -9,8 +11,8 @@
                     <Border Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" >
                         <Grid>
                             <Rectangle Fill="#FF404040" />
-                            <Rectangle Panel.ZIndex="1"  HorizontalAlignment="Left" Width="{TemplateBinding BufferedTime}" Fill="#FF555555" />
-                            <Rectangle Panel.ZIndex="2" HorizontalAlignment="Left" Width="{TemplateBinding CurrentTime}" Fill="#FF007AFF"/>
+                            <Rectangle Panel.ZIndex="1"  HorizontalAlignment="Left" Width="{TemplateBinding BufferedTimeWidth}" Fill="#FF555555" />
+                            <Rectangle Panel.ZIndex="2" HorizontalAlignment="Left" Width="{Binding RelativeSource={RelativeSource TemplatedParent},Path=CurrentTimeWidth,UpdateSourceTrigger=PropertyChanged}" Fill="#FF007AFF"/>
                             <Rectangle Panel.ZIndex="3" HorizontalAlignment="Left" Width="10" Margin="{TemplateBinding SeekCursor}" Fill="#FF8B8B8B" />
 
 
