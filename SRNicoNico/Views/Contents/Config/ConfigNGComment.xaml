@@ -22,9 +22,7 @@
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
 
              >
-
-    <ScrollViewer HorizontalScrollBarVisibility="Auto">
-
+    <ScrollViewer>
         <Grid Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -48,18 +46,34 @@
                         <CheckBox Content="3DSからのコメントを非表示にする" IsChecked="{Binding Hide3DSComment}" />
                         <CheckBox Content="WiiUからのコメントを非表示にする" IsChecked="{Binding HideWiiUComment}" Margin="0,10,0,0"/>
                     </StackPanel>
-                    
-                    <TextBlock Text="NGフィルター" FontSize="18"  Margin="0,10,0,0"/>
 
-                    <ListView ItemsSource="{Binding Source={x:Static mv:Settings.Instance},Path=NGList,Mode=TwoWay}">
-                        <ListView.Resources>
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="NGフィルター" FontSize="18" />
+                        <mui:ModernButton Grid.Column="1" Margin="10,0,0,0" IconHeight="20" Width="30" EllipseDiameter="25" Focusable="False" ToolTip="NGフィルタエントリ追加" HorizontalAlignment="Right" IconData="F1 M 35,19L 41,19L 41,35L 57,35L 57,41L 41,41L 41,57L 35,57L 35,41L 19,41L 19,35L 35,35L 35,19 Z" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodName="AddEmptyNGEntry" MethodTarget="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </mui:ModernButton>
+
+
+                    </Grid>
+
+                    <ItemsControl ScrollViewer.CanContentScroll="True" ItemsSource="{Binding Source={x:Static mv:Settings.Instance},Path=NGList,Mode=TwoWay}">
+                        <ItemsControl.Resources>
                             <c:NGTypeConverter x:Key="ngconv"/>
                             <DataTemplate DataType="{x:Type m:NGCommentEntry}">
-                                <Grid d:DataContext="{d:DesignInstance {x:Type m:NGCommentEntry}}">
+                                <Grid d:DataContext="{d:DesignInstance {x:Type m:NGCommentEntry}}" Margin="0,0,0,1">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition Width="200"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
                                     <CheckBox IsChecked="{Binding IsEnabled,Mode=TwoWay}" ToolTip="有効/無効切り替え"/>
                                     <ComboBox Grid.Column="1" IsEnabled="{Binding IsEnabled}" SelectedIndex="{Binding Type,Converter={StaticResource ngconv},Mode=TwoWay}" >
@@ -69,11 +83,24 @@
                                         <ComboBoxItem Content="正規表現" ToolTip="上級者向け（正しい正規表現を指定しないと動作に影響が出ます）"/>
                                     </ComboBox>
                                     <TextBox Grid.Column="2" IsEnabled="{Binding IsEnabled}" Text="{Binding Content,Mode=TwoWay}"/>
+                                    <Button Grid.Column="3" Content="×" ToolTip="削除" Focusable="True">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}},Path=DataContext}" MethodParameter="{Binding}" MethodName="DeleteNGEntry" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
                                 </Grid>
                             </DataTemplate>
-                        </ListView.Resources>
-                    </ListView>
-                    
+                        </ItemsControl.Resources>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+
+
                 </StackPanel>
 
 
@@ -83,6 +110,4 @@
         </Grid>
 
     </ScrollViewer>
-
-
 </UserControl>

@@ -10,6 +10,7 @@ using Codeplex.Data;
 using Livet;
 using Newtonsoft.Json;
 using SRNicoNico.Models.NicoNicoWrapper;
+using System.Collections.Specialized;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
     public class Settings : NotificationObject {
@@ -126,9 +127,27 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                     foreach(var entry in entries) {
 
-                        ;
+                        var ng = new NGCommentEntry();
+                        ng.Type = Enum.Parse(typeof(NGType), entry.Type);
+                        ng.Content = entry.Content;
+                        ng.IsEnabled = entry.IsEnabled;
+
+                        ng.PropertyChanged += ((sender, e) => Save());
+
+                        col.Add(ng);
                     }
 
+                    col.CollectionChanged += ((sender, e) => {
+                        
+                        if(e.Action == NotifyCollectionChangedAction.Add && e.NewItems.Count != 0 && e.NewItems[0] is NGCommentEntry) {
+
+                            var ng = e.NewItems[0] as NGCommentEntry;
+                            ng.PropertyChanged += ((sdr, ee) => Save());
+                        } else {
+
+                            Save();
+                        }
+                    });
 
                     return col;
                 default:
@@ -499,6 +518,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                     return;
                 _NGList = value;
                 RaisePropertyChanged();
+                Save();
             }
         }
         #endregion

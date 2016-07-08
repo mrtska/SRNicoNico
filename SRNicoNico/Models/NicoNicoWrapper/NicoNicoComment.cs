@@ -273,8 +273,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         private void StoreEntry(HtmlDocument doc, List<NicoNicoCommentEntry> list) {
 
-
-
             var nodes = doc.DocumentNode.SelectNodes("/packet/chat");
 
             if(nodes == null) {
@@ -305,7 +303,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 entry.Content = HttpUtility.HtmlDecode(node.InnerText);
                 entry.Score = attr.Contains("score") ? int.Parse(attr["score"].Value) : 0;
                 
-                list.Add(entry);
+                if(!NicoNicoNGComment.Filter(entry)) {
+
+                    list.Add(entry);
+                }
             }
         }
 	}

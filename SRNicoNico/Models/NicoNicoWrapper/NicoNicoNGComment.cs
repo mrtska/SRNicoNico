@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using System.Text.RegularExpressions;
 
 using System.Net.Http;
 using Livet;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
@@ -44,7 +46,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     obj.Type = entry.SelectSingleNode("type").InnerText == "id" ? NGType.UserId : NGType.Word;
                     obj.Content = entry.SelectSingleNode("source").InnerText;
-                    obj.RegisterTime = entry.SelectSingleNode("register_time").InnerText;
 
                     ret.Add(obj);
                 }
@@ -121,27 +122,104 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
 
+        //コメントをフィルタリングする アウトならtrue、セーフならfalse
+        public static bool Filter(NicoNicoCommentEntry entry) {
 
+            foreach(NGCommentEntry ng in Settings.Instance.NGList) {
+
+                if(!ng.IsEnabled) {
+
+                    continue;
+                }
+
+                switch(ng.Type) {
+                    case NGType.RegEx:
+
+                        if(Regex.Match(entry.Content, ng.Content).Success) {
+
+                            return true;
+                        }
+                        break;
+                    case NGType.UserId:
+
+                        if(entry.UserId == ng.Content) {
+
+                            return true;
+                        }
+                        break;
+                    case NGType.Word:
+
+                        if(entry.Content == ng.Content) {
+
+                            return true;
+                        }
+                        break;
+                    case NGType.WordContains:
+
+                        if(entry.Content.Contains(ng.Content)) {
+
+                            return true;
+                        }
+                        break;
+                }
+
+            }
+
+            return false;
+
+        }
 
 
     }
 
-    public class NGCommentEntry {
+    public class NGCommentEntry : NotificationObject {
 
         //有効かどうか
-        public bool IsEnabled { get; set; }
+        #region IsEnabled変更通知プロパティ
+        private bool _IsEnabled;
+
+        public bool IsEnabled {
+            get { return _IsEnabled; }
+            set { 
+                if(_IsEnabled == value)
+                    return;
+                _IsEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         //ユーザーIDか文字列か
-        public NGType Type { get; set; }
+        #region Type変更通知プロパティ
+        private NGType _Type;
+
+        public NGType Type {
+            get { return _Type; }
+            set { 
+                if(_Type == value)
+                    return;
+                _Type = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         //NG文字列またはID
-        public string Content { get; set; }
+        #region Content変更通知プロパティ
+        private string _Content;
 
-        //登録日時
-        public string RegisterTime { get; set; }
-
-
-
+        public string Content {
+            get { return _Content; }
+            set { 
+                if(_Content == value)
+                    return;
+                _Content = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
     }
 
     public enum NGType {

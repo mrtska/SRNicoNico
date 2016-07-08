@@ -78,18 +78,12 @@ namespace SRNicoNico.ViewModels {
 
         public ConfigNGCommentViewModel() : base("コメントNG機能") {
 
-            var entry = new NGCommentEntry();
-            entry.IsEnabled = true;
-            entry.Type = NGType.RegEx;
-            entry.Content = "\\d+";
-
-            Settings.Instance.NGList.Add(entry);
         }
 
         public void AddEmptyNGEntry() {
 
             var entry = new NGCommentEntry();
-            entry.IsEnabled = true;
+            entry.IsEnabled = false;
             entry.Type = NGType.Word;
             entry.Content = "";
 
@@ -104,6 +98,11 @@ namespace SRNicoNico.ViewModels {
             entry.Content = content;
 
             Settings.Instance.NGList.Add(entry);
+        }
+
+        public void DeleteNGEntry(NGCommentEntry target) {
+
+            Settings.Instance.NGList.Remove(target);
         }
     }
 }
