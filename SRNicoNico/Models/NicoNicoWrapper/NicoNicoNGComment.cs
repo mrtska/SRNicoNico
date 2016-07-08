@@ -149,7 +149,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         UserId,
         Word,
         WordContains,
-        RegEx,
+        RegEx
 
     }
 

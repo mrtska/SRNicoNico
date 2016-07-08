@@ -63,11 +63,11 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         //URLから適当なViewを開く
         public static TabItemViewModel Open(string url) {
 
-            if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
+            /*if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
 
                 System.Diagnostics.Process.Start(url);
                 return null;
-            }
+            }*/
 
             if(url.StartsWith("http://www.nicovideo.jp/watch/")) {
 

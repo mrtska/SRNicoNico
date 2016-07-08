@@ -9,6 +9,7 @@ using System.Windows.Media;
 using Codeplex.Data;
 using Livet;
 using Newtonsoft.Json;
+using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
     public class Settings : NotificationObject {
@@ -31,6 +32,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             TypePair["Uri"] = typeof(Uri);
             TypePair["FontFamily"] = typeof(FontFamily);
             TypePair["GridLength"] = typeof(GridLength);
+            TypePair["DispatcherCollection<NGCommentEntry>"] = typeof(DispatcherCollection<NGCommentEntry>);
 
             Dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\SRNicoNico\user.settings";
 
@@ -59,7 +61,23 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
             foreach(var property in properties) {
 
-                list.Add(new { Name = property.Name, Type = property.PropertyType.Name, Value = GetNeedValue(property) });
+
+                if(property.PropertyType.GenericTypeArguments.Length != 0) {
+
+                    string generic = "<";
+                    foreach(var types in property.PropertyType.GenericTypeArguments) {
+
+                        generic += types.Name + ", ";
+                    }
+                    generic = generic.Substring(0, generic.Length - 2) + ">";
+                    string st = property.PropertyType.Name;
+                    st = st.Split('`')[0] + generic;
+
+                    list.Add(new { Name = property.Name, Type = st, Value = GetNeedValue(st, property) });
+                } else {
+
+                    list.Add(new { Name = property.Name, Type = property.PropertyType.Name, Value = GetNeedValue(property.PropertyType.Name, property) });
+                }
             }
             json.settings = list;
             var s = Format(json.ToString());
@@ -72,33 +90,47 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
 
         //設定ファイルに保存する値を各クラスから指定する
-        private object GetNeedValue(PropertyInfo property) {
+        private object GetNeedValue(string name, PropertyInfo property) {
 
             var value = property.GetValue(this);
 
-            switch(property.PropertyType.Name) {
+            switch(name) {
                 case "FontFamily":
                     return ((FontFamily)value).Source;
                 case "GridLength":
                     return ((GridLength)value).ToString();
                 case "Uri":
                     return ((Uri)value).OriginalString;
+                case "DispatcherCollection<NGCommentEntry>":
+
+                    return value;
                 default:
                     return value;
             }
         }
 
         //設定ファイルの値からインスタンスを生成する
-        private object GetNeedValue(PropertyInfo property, object value) {
+        private object GetNeedValue(string name, PropertyInfo property, object value) {
 
-
-            switch(property.PropertyType.Name) {
+            switch(name) {
                 case "FontFamily":
                     return new FontFamily((string)value);
                 case "GridLength":
                     return new GridLengthConverter().ConvertFrom(value);
                 case "Uri":
                     return new Uri((string)value);
+                case "DispatcherCollection<NGCommentEntry>":
+                    var col = new DispatcherCollection<NGCommentEntry>(DispatcherHelper.UIDispatcher);
+
+                    dynamic entries = (DynamicJson)value;
+
+                    foreach(var entry in entries) {
+
+                        ;
+                    }
+
+
+                    return col;
                 default:
                     return value;
             }
@@ -127,11 +159,10 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             var raw = DynamicJson.Parse(reader.ReadToEnd());
             reader.Close();
 
-
             foreach(var entry in raw.settings) {
 
-                var property = type.GetProperty(entry.Name);
-                property.SetValue(this, Convert.ChangeType(GetNeedValue(property, entry.Value), TypePair[entry.Type]));
+                PropertyInfo property = type.GetProperty(entry.Name);
+                property.SetValue(this, Convert.ChangeType(GetNeedValue(entry.Type, property, entry.Value), TypePair[entry.Type]));
             }
 
             Loading = false;
@@ -454,6 +485,20 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 _RankingPageUrl = value;
                 RaisePropertyChanged();
                 Save();
+            }
+        }
+        #endregion
+
+        #region NGList変更通知プロパティ
+        private DispatcherCollection<NGCommentEntry> _NGList = new DispatcherCollection<NGCommentEntry>(DispatcherHelper.UIDispatcher);
+
+        public DispatcherCollection<NGCommentEntry> NGList {
+            get { return _NGList; }
+            set { 
+                if(_NGList == value)
+                    return;
+                _NGList = value;
+                RaisePropertyChanged();
             }
         }
         #endregion

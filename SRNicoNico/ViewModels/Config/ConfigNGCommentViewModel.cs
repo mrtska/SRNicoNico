@@ -76,21 +76,6 @@ namespace SRNicoNico.ViewModels {
         }
 
 
-        #region NGList変更通知プロパティ
-        private DispatcherCollection<NGCommentEntry> _NGList = new DispatcherCollection<NGCommentEntry>(DispatcherHelper.UIDispatcher);
-
-        public DispatcherCollection<NGCommentEntry> NGList {
-            get { return _NGList; }
-            set { 
-                if(_NGList == value)
-                    return;
-                _NGList = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
         public ConfigNGCommentViewModel() : base("コメントNG機能") {
 
             var entry = new NGCommentEntry();
@@ -98,7 +83,7 @@ namespace SRNicoNico.ViewModels {
             entry.Type = NGType.RegEx;
             entry.Content = "\\d+";
 
-            NGList.Add(entry);
+            Settings.Instance.NGList.Add(entry);
         }
 
         public void AddEmptyNGEntry() {
@@ -108,7 +93,7 @@ namespace SRNicoNico.ViewModels {
             entry.Type = NGType.Word;
             entry.Content = "";
 
-            NGList.Add(entry);
+            Settings.Instance.NGList.Add(entry);
         }
 
         public void AddNGEntry(NGType type, string content) {
@@ -118,7 +103,7 @@ namespace SRNicoNico.ViewModels {
             entry.Type = type;
             entry.Content = content;
 
-            NGList.Add(entry);
+            Settings.Instance.NGList.Add(entry);
         }
     }
 }

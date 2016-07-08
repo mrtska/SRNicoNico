@@ -25,15 +25,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		}
 
         //カレントディレクトリ取得
-		private static FileInfo _CurrentDirectory;
-		public static FileInfo CurrentDirectory {
+		public static string CurrentDirectory {
 			get {
-				if(_CurrentDirectory == null) {
-
-					var currentAssembly = Assembly.GetEntryAssembly();
-					_CurrentDirectory = new FileInfo(currentAssembly.Location);
-				}
-				return _CurrentDirectory;
+				return AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
 			}
 		}
 

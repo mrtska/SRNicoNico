@@ -381,19 +381,19 @@ namespace SRNicoNico.ViewModels {
 
         private string GetPlayerPath() {
 
-            var cur = System.IO.Directory.GetCurrentDirectory();
+            var cur = NicoNicoUtil.CurrentDirectory;
             return cur + "./Flash/NicoNicoPlayer.swf";
         }
 
         private string GetNMPlayerPath() {
 
-            var cur = System.IO.Directory.GetCurrentDirectory();
+            var cur = NicoNicoUtil.CurrentDirectory;
             return cur + "./Flash/NicoNicoNMPlayer.swf";
         }
 
         private string GetRTMPPlayerPath() {
 
-            var cur = System.IO.Directory.GetCurrentDirectory();
+            var cur = NicoNicoUtil.CurrentDirectory;
             return cur + "./Flash/NicoNicoRTMPPlayer.swf";
         }
 

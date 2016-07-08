@@ -22,6 +22,7 @@ using SRNicoNico.Views.Contents.SignIn;
 using System.Windows.Input;
 using System.Windows.Media;
 using SRNicoNico.Models.NicoNicoViewer;
+using System.Reflection;
 
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
@@ -270,7 +271,13 @@ namespace SRNicoNico.ViewModels {
             //公式NG機能を初期化
             NGCommentInstance = new NicoNicoNGComment();
             //NGCommentInstance.GetNGClient();
+            MessageBox.Show(AppDomain.CurrentDomain.SetupInformation.ApplicationBase);
 
+            if(Environment.GetCommandLineArgs().Length > 1) {
+
+                Task.Run(() => NicoNicoOpener.Open(Environment.GetCommandLineArgs()[1]));
+            }
+            
     
         }
 
@@ -279,12 +286,12 @@ namespace SRNicoNico.ViewModels {
 			//Modelsを初期化
 			Task.Run(() => {
 
-				if(File.Exists(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session")) {
+				if(File.Exists(NicoNicoUtil.CurrentDirectory + @"\session")) {
 
                     StatusBar.Status = "自動ログイン中";
 
 					//セッション情報を取得する
-					var reader = new StreamReader(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
+					var reader = new StreamReader(NicoNicoUtil.CurrentDirectory + @"\session");
 							
 					var key = reader.ReadLine().Split(':')[1];
 					var expire = DateTimeOffset.Parse(reader.ReadLine().Replace("Expire:", ""));
@@ -318,7 +325,7 @@ namespace SRNicoNico.ViewModels {
 					}
 
                     //セッション情報を更新
-                    var writer = new StreamWriter(NicoNicoUtil.CurrentDirectory.DirectoryName + @"\session");
+                    var writer = new StreamWriter(NicoNicoUtil.CurrentDirectory + @"\session");
 
                     writer.WriteLine("Key:" + NicoNicoWrapperMain.Session.Key);
                     writer.WriteLine("Expire:" + NicoNicoWrapperMain.Session.Expire);

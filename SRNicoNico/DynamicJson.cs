@@ -81,6 +81,9 @@ namespace Codeplex.Data {
 
         private static JsonType GetJsonType(object obj) {
             if(obj == null) return JsonType.@null;
+            if(obj.GetType().IsEnum == true) {
+                return JsonType.@string;
+            }
 
             switch(Type.GetTypeCode(obj.GetType())) {
                 case TypeCode.Boolean:
@@ -214,6 +217,11 @@ namespace Codeplex.Data {
 
         private dynamic DeserializeValue(XElement element, Type elementType) {
             var value = ToValue(element);
+
+            if(elementType.IsEnum == true) {
+                value = Enum.Parse(elementType, value);
+            }
+
             if(value is DynamicJson) {
                 value = ((DynamicJson)value).Deserialize(elementType);
             }

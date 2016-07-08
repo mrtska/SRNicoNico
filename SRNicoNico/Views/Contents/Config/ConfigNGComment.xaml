@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Config"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:mv="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
              xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
@@ -48,9 +49,9 @@
                         <CheckBox Content="WiiUからのコメントを非表示にする" IsChecked="{Binding HideWiiUComment}" Margin="0,10,0,0"/>
                     </StackPanel>
                     
-                    <TextBlock Text="NGフィルター(次バージョンで実装予定)" FontSize="18"  Margin="0,10,0,0"/>
+                    <TextBlock Text="NGフィルター" FontSize="18"  Margin="0,10,0,0"/>
 
-                    <!--<ListView ItemsSource="{Binding NGList,Mode=TwoWay}" IsEnabled="False">
+                    <ListView ItemsSource="{Binding Source={x:Static mv:Settings.Instance},Path=NGList,Mode=TwoWay}">
                         <ListView.Resources>
                             <c:NGTypeConverter x:Key="ngconv"/>
                             <DataTemplate DataType="{x:Type m:NGCommentEntry}">
@@ -72,7 +73,7 @@
                             </DataTemplate>
                         </ListView.Resources>
                     </ListView>
-                    -->
+                    
                 </StackPanel>
 
 
