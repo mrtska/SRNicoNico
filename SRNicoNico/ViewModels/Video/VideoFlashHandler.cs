@@ -285,6 +285,10 @@ namespace SRNicoNico.ViewModels {
                         TogglePlay();
                     }
                     break;
+                case "MouseWheel":
+                    Console.WriteLine("Wheel:" + args[0]);
+                    Owner.Volume += int.Parse(args[0]);
+                    break;
                 default:
                     Console.WriteLine("Invoked From Actionscript:" + func);
                     break;

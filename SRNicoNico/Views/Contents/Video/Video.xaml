@@ -17,7 +17,7 @@
 			 d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              mc:Ignorable="d"
              Focusable="False"
-             InputMethod.IsInputMethodSuspended="True"
+             InputMethod.IsInputMethodSuspended="True" 
              >
 
     <i:Interaction.Triggers>

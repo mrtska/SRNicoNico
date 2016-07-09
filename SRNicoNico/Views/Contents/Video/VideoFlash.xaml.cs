@@ -36,7 +36,13 @@ namespace SRNicoNico.Views.Contents.Video {
 
                 var vm = (VideoViewModel) DataContext;
                 vm.Handler.PreInitialize(flash);
-            }
+            }   
+        }
+
+
+        private void UserControl_MouseWheel(object sender, MouseWheelEventArgs e) {
+
+            Console.WriteLine(e.Delta);
         }
     }
 }

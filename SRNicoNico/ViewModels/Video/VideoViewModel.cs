@@ -206,7 +206,15 @@ namespace SRNicoNico.ViewModels {
         public int Volume {
             get { return Settings.Instance.Volume; }
             set { 
+                if(value > 100) {
+
+                    value = 100;
+                } else if(value < 0) {
+
+                    value = 0;
+                }
                 Settings.Instance.Volume = value;
+
                 if(value != 0) {
 
                     IsMute = false;
@@ -661,6 +669,26 @@ namespace SRNicoNico.ViewModels {
                     case Key.Enter:
                         FocusComment();
                         break;
+                    case Key.Up:
+                    case Key.VolumeUp:
+                        if(Volume <= 90) {
+
+                            Volume += 10;
+                        } else {
+
+                            Volume = 100;
+                        }
+                        break;
+                    case Key.Down:
+                    case Key.VolumeDown:
+                        if(Volume >= 10) {
+
+                            Volume -= 10;
+                        } else {
+
+                            Volume = 0;
+                        }
+                        break;
                     case Key.N:
                         if(IsPlayList) {
 
@@ -712,6 +740,28 @@ namespace SRNicoNico.ViewModels {
                             PlayList.Prev();
                         }
                         break;
+                    case Key.Up:
+                    case Key.VolumeUp:
+                        if(Volume <= 90) {
+
+                            Volume += 10;
+                        } else {
+
+                            Volume = 100;
+                        }
+                        break;
+                    case Key.Down:
+                    case Key.VolumeDown:
+                        if(Volume >= 10) {
+
+                            Volume -= 10;
+                        } else {
+
+                            Volume = 0;
+                        }
+                        break;
+
+
 
                 }
                 //Ctrl+Wで閉じる

@@ -61,6 +61,7 @@ package {
 			
 			
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, move);
+			stage.addEventListener(MouseEvent.MOUSE_WHEEL, wheel);
 			stage.addEventListener(MouseEvent.CLICK, click);
 			
 			CallCSharp("Ready");
@@ -85,6 +86,11 @@ package {
 				
 			CallCSharp("ShowController");
 
+		}
+		
+		public function wheel(e:MouseEvent):void {
+			
+			ExternalInterface.call("MouseWheel", e.delta.toString());
 		}
 		
 		private function leave(e:Event):void {

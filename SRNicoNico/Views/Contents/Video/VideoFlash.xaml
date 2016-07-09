@@ -13,6 +13,7 @@
              d:DataContext="{d:DesignInstance vm:VideoViewModel}"
              xmlns:a="clr-namespace:AxShockwaveFlashObjects;assembly=AxInterop.ShockwaveFlashObjects"
              DataContextChanged="UserControl_DataContextChanged"
+             MouseWheel="UserControl_MouseWheel"
 			 >
     <Grid>
         <WindowsFormsHost Focusable="False">
