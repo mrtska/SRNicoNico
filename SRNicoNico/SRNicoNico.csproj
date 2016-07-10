@@ -212,6 +212,7 @@
     <Compile Include="Models\NicoNicoWrapper\NicoNicoGetPlayerStatus.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoLiveComment.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoNGComment.cs" />
+    <Compile Include="Models\NicoNicoWrapper\NicoNicoRanking.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoTimeShift.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoLive.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylist.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="ViewModels\Misc\OSSViewModel.cs" />
     <Compile Include="ViewModels\Misc\OverViewViewModel.cs" />
     <Compile Include="ViewModels\Misc\TweetDialogViewModel.cs" />
+    <Compile Include="ViewModels\Ranking\RankingEntryViewModel.cs" />
     <Compile Include="ViewModels\Ranking\RankingViewModel.cs" />
     <Compile Include="ViewModels\Updater\DownloadViewModel.cs" />
     <Compile Include="ViewModels\Updater\UpdateViewModel.cs" />
@@ -275,6 +277,7 @@
     <Compile Include="ViewModels\Video\VideoMylistViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoTagViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoViewModel.cs" />
+    <Compile Include="ViewModels\WebView\WebViewViewModel.cs" />
     <Compile Include="Views\Behaviors\TextBoxNumericOnlyBehavior.cs" />
     <Compile Include="Views\Behaviors\DataGridAutoScrollBehavior.cs" />
     <Compile Include="Views\Behaviors\ListBoxAutoScrollBehavior.cs" />
@@ -360,6 +363,15 @@
     </Compile>
     <Compile Include="Views\Contents\Misc\OverView.xaml.cs">
       <DependentUpon>OverView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\NicoRepo\NicoRepo.xaml.cs">
+      <DependentUpon>NicoRepo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Ranking\RankingEntry.xaml.cs">
+      <DependentUpon>RankingEntry.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Ranking\RankingResult.xaml.cs">
+      <DependentUpon>RankingResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Ranking\Ranking.xaml.cs">
       <DependentUpon>Ranking.xaml</DependentUpon>
@@ -478,9 +490,6 @@
     <Compile Include="Views\Contents\Misc\Other.xaml.cs">
       <DependentUpon>Other.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Contents\NicoRepo\NicoRepo.xaml.cs">
-      <DependentUpon>NicoRepo.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Contents\NicoRepo\NicoRepoResult.xaml.cs">
       <DependentUpon>NicoRepoResult.xaml</DependentUpon>
     </Compile>
@@ -537,6 +546,9 @@
     </Compile>
     <Compile Include="Views\Contents\Video\VideoToolTip.xaml.cs">
       <DependentUpon>VideoToolTip.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\WebView\WebView.xaml.cs">
+      <DependentUpon>WebView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\ManagedPopup.cs" />
     <Compile Include="Views\Controls\SeekBar.cs" />
@@ -659,6 +671,18 @@
     <Page Include="Views\Contents\Misc\OverView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\NicoRepo\NicoRepo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Ranking\RankingEntry.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Ranking\RankingResult.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Ranking\Ranking.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -784,10 +808,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Contents\NicoRepo\NicoRepo.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Contents\NicoRepo\NicoRepoResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -863,6 +883,10 @@
     <Page Include="Views\Contents\Video\VideoToolTip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\WebView\WebView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

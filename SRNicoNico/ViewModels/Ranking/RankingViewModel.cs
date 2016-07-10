@@ -22,72 +22,81 @@ using SRNicoNico.Models.NicoNicoViewer;
 namespace SRNicoNico.ViewModels {
     public class RankingViewModel : TabItemViewModel {
 
+        private NicoNicoRanking RankingInstance;
 
-        #region WebBrowser変更通知プロパティ
-        private WebBrowser _WebBrowser;
 
-        public WebBrowser WebBrowser {
-            get { return _WebBrowser; }
+
+        #region Period変更通知プロパティ
+        private string _Period = "24時間";
+
+        public string Period {
+            get { return _Period; }
             set { 
-                if(_WebBrowser == value)
+                if(_Period == value)
                     return;
-                _WebBrowser = value;
+                _Period = value;
+                RaisePropertyChanged();
+                Initialize();
+            }
+        }
+        #endregion
+
+
+        #region Target変更通知プロパティ
+        private string _Target = "総合";
+
+        public string Target {
+            get { return _Target; }
+            set { 
+                if(_Target == value)
+                    return;
+                _Target = value;
+                RaisePropertyChanged();
+                Initialize();
+            }
+        }
+        #endregion
+
+
+
+        #region RankingList変更通知プロパティ
+        private DispatcherCollection<RankingEntryViewModel> _RankingList = new DispatcherCollection<RankingEntryViewModel>(DispatcherHelper.UIDispatcher);
+
+        public DispatcherCollection<RankingEntryViewModel> RankingList {
+            get { return _RankingList; }
+            set { 
+                if(_RankingList == value)
+                    return;
+                _RankingList = value;
                 RaisePropertyChanged();
             }
         }
         #endregion
 
 
+
         public RankingViewModel() : base("ランキング") {
-
-        }
-
-        public void Home() {
-
-            Task.Run(() => {
-
-                try {
-
-                    //var a = NicoNicoWrapperMain.Session.GetAsync(Settings.Instance.RankingPageUrl.OriginalString).Result;
-
-                    //var doc = new HtmlDocument();
-                    //doc.LoadHtml2(a);
-
-                    //doc.DocumentNode.SelectSingleNode("//div[@id='siteHeaderInner']/ul[@class='siteHeaderGlovalNavigation']").InnerHtml = "";
-                    //doc.DocumentNode.SelectSingleNode("//div[@class='banner leadBanner ads']").InnerHtml = "";
-                    //doc.DocumentNode.SelectSingleNode("//header[@class='header']").InnerHtml = "";
-                    //doc.DocumentNode.SelectSingleNode("//footer[@class='footer']").InnerHtml = "";
-
-                    //doc.DocumentNode.SelectSingleNode("//body").Attributes.Add("oncontextmenu", "return false;");
-                    //doc.DocumentNode.SelectSingleNode("//body").Attributes.Add("style", "bgcolor: #222222 !important;");
-
-                    DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-                        WebBrowser.Navigate(Settings.Instance.RankingPageUrl);
-                      
-                    }));
-                   
-                } catch(RequestFailed) {
-
-
-                }
-            });
-
-        }
-
-        public void LoadCompleted() {
-
 
         }
 
         public void Initialize() {
 
-            Home();
+            RankingInstance = new NicoNicoRanking(Period, Target);
+
+            RankingList.Clear();
+
+            RankingList.Add(new RankingEntryViewModel("カテゴリ合算", "all", RankingInstance));
+            RankingList.Add(new RankingEntryViewModel("エンタメ・音楽", "g_ent2", RankingInstance));
+            RankingList.Add(new RankingEntryViewModel("生活・一般・スポ", "g_life2", RankingInstance));
+            RankingList.Add(new RankingEntryViewModel("政治", "g_politics", RankingInstance));
+            RankingList.Add(new RankingEntryViewModel("科学・技術", "g_tech", RankingInstance));
+            RankingList.Add(new RankingEntryViewModel("アニメ・ゲーム・絵", "g_culture2", RankingInstance));
+            RankingList.Add(new RankingEntryViewModel("その他", "g_other", RankingInstance));
+
         }
 
         public void Refresh() {
 
-            WebBrowser.Refresh(true);
 
 
         }

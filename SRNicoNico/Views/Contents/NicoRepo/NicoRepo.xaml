@@ -52,7 +52,7 @@
         </ScrollViewer>
 
 
-        <ItemsControl Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" ItemsSource="{Binding NicoRepoListCollection}">
+        <ItemsControl Grid.RowSpan="3" Grid.Column="1" ItemsSource="{Binding NicoRepoListCollection}">
 
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:NicoRepoListViewModel}">

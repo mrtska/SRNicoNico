@@ -22,6 +22,7 @@
              xmlns:community="clr-namespace:SRNicoNico.Views.Contents.Community"
              xmlns:playlist="clr-namespace:SRNicoNico.Views.Contents.PlayList"
              xmlns:live="clr-namespace:SRNicoNico.Views.Contents.Live"
+             xmlns:web="clr-namespace:SRNicoNico.Views.Contents.WebView"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              mc:Ignorable="d" 
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
@@ -180,6 +181,9 @@
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:StartViewModel}">
                     <local:Start/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:WebViewViewModel}">
+                    <web:WebView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:RankingViewModel}">
                     <ranking:Ranking />

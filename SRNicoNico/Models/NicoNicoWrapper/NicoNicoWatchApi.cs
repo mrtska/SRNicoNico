@@ -153,7 +153,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     ret.UploaderId = channelInfo.id;
                     ret.UploaderIconUrl = channelInfo.icon_url;
                     ret.UploaderName = channelInfo.name;
-                    ret.UploaderIsFavorited = channelInfo.is_favorited == 1 ? true : false;
+                    ret.UploaderIsFavorited = channelInfo.is_favorited == 1;
 
                     ret.IsChannelVideo = true;
                 }

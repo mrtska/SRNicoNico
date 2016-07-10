@@ -523,5 +523,38 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
         #endregion
 
+
+        #region RankingPeriod変更通知プロパティ
+        private int _RankingPeriodIndex = 1;
+
+        public int RankingPeriodIndex {
+            get { return _RankingPeriodIndex; }
+            set { 
+                if(_RankingPeriodIndex == value)
+                    return;
+                _RankingPeriodIndex = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingTarget変更通知プロパティ
+        private int _RankingTargetIndex = 0;
+
+        public int RankingTargetIndex {
+            get { return _RankingTargetIndex; }
+            set { 
+                if(_RankingTargetIndex == value)
+                    return;
+                _RankingTargetIndex = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
     }
 }

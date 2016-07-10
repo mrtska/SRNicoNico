@@ -15,12 +15,12 @@ using MetroRadiance.UI.Controls;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.ViewModels;
 
-namespace SRNicoNico.Views.Contents.Ranking {
+namespace SRNicoNico.Views.Contents.WebView {
     /// <summary>
-    /// PlayList.xaml の相互作用ロジック
+    /// WebView.xaml の相互作用ロジック
     /// </summary>
-    public partial class Ranking : UserControl {
-        public Ranking() {
+    public partial class WebView : UserControl {
+        public WebView() {
             InitializeComponent();
         }
 
@@ -40,9 +40,10 @@ namespace SRNicoNico.Views.Contents.Ranking {
         private void browser_LoadCompleted(object sender, NavigationEventArgs e) {
 
 
-            if(DataContext is RankingViewModel) {
+            if(DataContext is WebViewViewModel) {
 
-                var vm = (RankingViewModel)DataContext;
+                var vm = (WebViewViewModel)DataContext;
+                vm.LoadCompleted();
 
             }
 
@@ -50,9 +51,10 @@ namespace SRNicoNico.Views.Contents.Ranking {
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
-            if(DataContext is RankingViewModel) {
+            if(DataContext is WebViewViewModel) {
 
-                var vm = (RankingViewModel) DataContext;
+                var vm = (WebViewViewModel) DataContext;
+                vm.WebBrowser = browser;
 
             }
 

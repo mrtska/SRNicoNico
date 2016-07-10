@@ -252,6 +252,7 @@ namespace SRNicoNico.ViewModels {
 
             App.ViewModelRoot.Title += "(user:" + User.UserName + ")";
 
+            TabItems.Add(new WebViewViewModel());
             TabItems.Add(new RankingViewModel());
             TabItems.Add(Search = new SearchViewModel());
             TabItems.Add(new FavoriteViewModel());
