@@ -38,7 +38,7 @@ namespace SRNicoNico.ViewModels {
 
 
         #region Page変更通知プロパティ
-        private string _Page;
+        private string _Page = "1-100";
 
         public string Page {
             get { return _Page; }
@@ -53,6 +53,22 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region IsPreparing変更通知プロパティ
+        private bool _IsPreparing = false;
+
+        public bool IsPreparing {
+            get { return _IsPreparing; }
+            set { 
+                if(_IsPreparing == value)
+                    return;
+                _IsPreparing = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
         public RankingEntryViewModel(string title, string category, NicoNicoRanking instance) : base(title) {
 
             Category = category;
@@ -62,14 +78,23 @@ namespace SRNicoNico.ViewModels {
         public async void Initialize(int page) {
 
             IsActive = true;
+            RankingItemList.Clear();
 
             var a = await RankingInstance.GetRankingAsync(Category, page);
 
-            RankingItemList.Clear();
 
             foreach(var item in a.ItemList) {
 
+                //そのページのランキングは存在しないか準備中
+                if(item.Rank == "1" && page != 1) {
+
+                    IsPreparing = true;
+                    break;
+                }
+
                 RankingItemList.Add(item);
+                IsPreparing = false;
+
             }
 
             IsActive = false;

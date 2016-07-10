@@ -228,6 +228,7 @@
     <Compile Include="ViewModels\Community\CommunityTopViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityVideoViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityViewModel.cs" />
+    <Compile Include="ViewModels\Config\ConfigRankingViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigNGCommentViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigGeneralViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigCommentViewModel.cs" />
@@ -287,6 +288,9 @@
     </Compile>
     <Compile Include="Views\Contents\Config\Config.xaml.cs">
       <DependentUpon>Config.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Config\ConfigRanking.xaml.cs">
+      <DependentUpon>ConfigRanking.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Config\ConfigNGComment.xaml.cs">
       <DependentUpon>ConfigNGComment.xaml</DependentUpon>
@@ -571,6 +575,10 @@
     <Page Include="Views\Contents\Config\Config.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Config\ConfigRanking.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Config\ConfigNGComment.xaml">
       <Generator>MSBuild:Compile</Generator>

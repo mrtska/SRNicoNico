@@ -21,6 +21,9 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="btv" />
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition />
@@ -34,7 +37,7 @@
             <TextBlock Text="{Binding Name}" FontSize="18" Margin="10,0,0,0"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <TextBlock Text="ランキング順位：" FontSize="15" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                <ComboBox Grid.Column="1" Text="{Binding Page,Mode=OneWayToSource}" Margin="0,0,10,0" Width="100" HorizontalAlignment="Right" VerticalAlignment="Center" SelectedIndex="0" ToolTip="ランキング順位">
+                <ComboBox Grid.Column="1" Text="{Binding Page,Mode=TwoWay}" Margin="0,0,10,0" Width="100" HorizontalAlignment="Right" VerticalAlignment="Center" SelectedIndex="0" ToolTip="ランキング順位">
                     <ComboBoxItem Content="1-100" />
                     <ComboBoxItem Content="101-200" />
                     <ComboBoxItem Content="201-300" />
@@ -60,6 +63,7 @@
         
         <mui:ModernProgressRing Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60" IsActive="{Binding IsActive, IsAsync=True}" Grid.RowSpan="2"/>
 
+        <TextBlock Grid.Row="1" Visibility="{Binding IsPreparing,Converter={StaticResource btv}}" Text="このランキングは存在しないか準備中です。" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center" />
         <ListBox Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="{DynamicResource ScrollMethod}" ItemsSource="{Binding RankingItemList}" >
 
             <i:Interaction.Triggers>
@@ -79,7 +83,7 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
 
-                <DataTemplate DataType="vm:NicoRepoResultEntryViewModel">
+                <DataTemplate >
                     <local:RankingEntry />
                 </DataTemplate>
             </ListBox.ItemTemplate>

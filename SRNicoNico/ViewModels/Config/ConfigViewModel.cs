@@ -58,6 +58,7 @@ namespace SRNicoNico.ViewModels {
         public ConfigViewModel() : base("設定") {
 
             ConfigCollection.Add(General = new ConfigGeneralViewModel(this));
+            ConfigCollection.Add(new ConfigRankingViewModel());
             ConfigCollection.Add(Video = new ConfigVideoViewModel());
             ConfigCollection.Add(Comment = new ConfigCommentViewModel());
             ConfigCollection.Add(NGComment = new ConfigNGCommentViewModel());

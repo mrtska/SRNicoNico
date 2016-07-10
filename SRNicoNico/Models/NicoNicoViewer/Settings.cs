@@ -138,7 +138,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                     }
 
                     col.CollectionChanged += ((sender, e) => {
-                        
+
                         if(e.Action == NotifyCollectionChangedAction.Add && e.NewItems.Count != 0 && e.NewItems[0] is NGCommentEntry) {
 
                             var ng = e.NewItems[0] as NGCommentEntry;
@@ -181,6 +181,13 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             foreach(var entry in raw.settings) {
 
                 PropertyInfo property = type.GetProperty(entry.Name);
+
+                //無効な設定はスキップ
+                if(property == null) {
+
+                    continue;
+                }
+
                 property.SetValue(this, Convert.ChangeType(GetNeedValue(entry.Type, property, entry.Value), TypePair[entry.Type]));
             }
 
@@ -513,7 +520,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         public DispatcherCollection<NGCommentEntry> NGList {
             get { return _NGList; }
-            set { 
+            set {
                 if(_NGList == value)
                     return;
                 _NGList = value;
@@ -529,7 +536,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         public int RankingPeriodIndex {
             get { return _RankingPeriodIndex; }
-            set { 
+            set {
                 if(_RankingPeriodIndex == value)
                     return;
                 _RankingPeriodIndex = value;
@@ -545,7 +552,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         public int RankingTargetIndex {
             get { return _RankingTargetIndex; }
-            set { 
+            set {
                 if(_RankingTargetIndex == value)
                     return;
                 _RankingTargetIndex = value;
@@ -554,6 +561,572 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
         #endregion
+
+
+        #region RankingCategoryTotal変更通知プロパティ
+        private bool _RankingCategoryTotal = true;
+
+        public bool RankingCategoryTotal {
+            get { return _RankingCategoryTotal; }
+            set {
+                if(_RankingCategoryTotal == value)
+                    return;
+                _RankingCategoryTotal = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingEntameMusic変更通知プロパティ
+        private bool _RankingEntameMusic = false;
+
+        public bool RankingEntameMusic {
+            get { return _RankingEntameMusic; }
+            set {
+                if(_RankingEntameMusic == value)
+                    return;
+                _RankingEntameMusic = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingEntertainment変更通知プロパティ
+        private bool _RankingEntertainment = false;
+
+        public bool RankingEntertainment {
+            get { return _RankingEntertainment; }
+            set {
+                if(_RankingEntertainment == value)
+                    return;
+                _RankingEntertainment = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingMusic変更通知プロパティ
+        private bool _RankingMusic = false;
+
+        public bool RankingMusic {
+            get { return _RankingMusic; }
+            set {
+                if(_RankingMusic == value)
+                    return;
+                _RankingMusic = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingSingaSong変更通知プロパティ
+        private bool _RankingSingaSong = false;
+
+        public bool RankingSingaSong {
+            get { return _RankingSingaSong; }
+            set {
+                if(_RankingSingaSong == value)
+                    return;
+                _RankingSingaSong = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingPlayaMusic変更通知プロパティ
+        private bool _RankingPlayaMusic = false;
+
+        public bool RankingPlayaMusic {
+            get { return _RankingPlayaMusic; }
+            set {
+                if(_RankingPlayaMusic == value)
+                    return;
+                _RankingPlayaMusic = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingDancing変更通知プロパティ
+        private bool _RankingDancing = false;
+
+        public bool RankingDancing {
+            get { return _RankingDancing; }
+            set {
+                if(_RankingDancing == value)
+                    return;
+                _RankingDancing = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingVOCALOID変更通知プロパティ
+        private bool _RankingVOCALOID = false;
+
+        public bool RankingVOCALOID {
+            get { return _RankingVOCALOID; }
+            set {
+                if(_RankingVOCALOID == value)
+                    return;
+                _RankingVOCALOID = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingIndies変更通知プロパティ
+        private bool _RankingIndies = false;
+
+        public bool RankingIndies {
+            get { return _RankingIndies; }
+            set {
+                if(_RankingIndies == value)
+                    return;
+                _RankingIndies = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingLifeSports変更通知プロパティ
+        private bool _RankingLifeSports = true;
+
+        public bool RankingLifeSports {
+            get { return _RankingLifeSports; }
+            set {
+                if(_RankingLifeSports == value)
+                    return;
+                _RankingLifeSports = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingAnimal変更通知プロパティ
+        private bool _RankingAnimal = false;
+
+        public bool RankingAnimal {
+            get { return _RankingAnimal; }
+            set {
+                if(_RankingAnimal == value)
+                    return;
+                _RankingAnimal = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingCooking変更通知プロパティ
+        private bool _RankingCooking = false;
+
+        public bool RankingCooking {
+            get { return _RankingCooking; }
+            set {
+                if(_RankingCooking == value)
+                    return;
+                _RankingCooking = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingNature変更通知プロパティ
+        private bool _RankingNature = false;
+
+        public bool RankingNature {
+            get { return _RankingNature; }
+            set {
+                if(_RankingNature == value)
+                    return;
+                _RankingNature = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingTravel変更通知プロパティ
+        private bool _RankingTravel = false;
+
+        public bool RankingTravel {
+            get { return _RankingTravel; }
+            set {
+                if(_RankingTravel == value)
+                    return;
+                _RankingTravel = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingSports変更通知プロパティ
+        private bool _RankingSports = false;
+
+        public bool RankingSports {
+            get { return _RankingSports; }
+            set {
+                if(_RankingSports == value)
+                    return;
+                _RankingSports = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingNicoNicoDougaLecture変更通知プロパティ
+        private bool _RankingNicoNicoDougaLecture = false;
+
+        public bool RankingNicoNicoDougaLecture {
+            get { return _RankingNicoNicoDougaLecture; }
+            set {
+                if(_RankingNicoNicoDougaLecture == value)
+                    return;
+                _RankingNicoNicoDougaLecture = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingDriveVideo変更通知プロパティ
+        private bool _RankingDriveVideo = false;
+
+        public bool RankingDriveVideo {
+            get { return _RankingDriveVideo; }
+            set {
+                if(_RankingDriveVideo == value)
+                    return;
+                _RankingDriveVideo = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingHistory変更通知プロパティ
+        private bool _RankingHistory = false;
+
+        public bool RankingHistory {
+            get { return _RankingHistory; }
+            set {
+                if(_RankingHistory == value)
+                    return;
+                _RankingHistory = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingPolitics変更通知プロパティ
+        private bool _RankingPolitics = true;
+
+        public bool RankingPolitics {
+            get { return _RankingPolitics; }
+            set {
+                if(_RankingPolitics == value)
+                    return;
+                _RankingPolitics = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingScienceTech変更通知プロパティ
+        private bool _RankingScienceTech = true;
+
+        public bool RankingScienceTech {
+            get { return _RankingScienceTech; }
+            set {
+                if(_RankingScienceTech == value)
+                    return;
+                _RankingScienceTech = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingScience変更通知プロパティ
+        private bool _RankingScience = false;
+
+        public bool RankingScience {
+            get { return _RankingScience; }
+            set {
+                if(_RankingScience == value)
+                    return;
+                _RankingScience = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingNicoNicoTech変更通知プロパティ
+        private bool _RankingNicoNicoTech = false;
+
+        public bool RankingNicoNicoTech {
+            get { return _RankingNicoNicoTech; }
+            set {
+                if(_RankingNicoNicoTech == value)
+                    return;
+                _RankingNicoNicoTech = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingHandicraft変更通知プロパティ
+        private bool _RankingHandicraft = false;
+
+        public bool RankingHandicraft {
+            get { return _RankingHandicraft; }
+            set {
+                if(_RankingHandicraft == value)
+                    return;
+                _RankingHandicraft = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingMaking変更通知プロパティ
+        private bool _RankingMaking = false;
+
+        public bool RankingMaking {
+            get { return _RankingMaking; }
+            set {
+                if(_RankingMaking == value)
+                    return;
+                _RankingMaking = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingAnimeGameIllust変更通知プロパティ
+        private bool _RankingAnimeGameIllust = true;
+
+        public bool RankingAnimeGameIllust {
+            get { return _RankingAnimeGameIllust; }
+            set {
+                if(_RankingAnimeGameIllust == value)
+                    return;
+                _RankingAnimeGameIllust = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingAnime変更通知プロパティ
+        private bool _RankingAnime = false;
+
+        public bool RankingAnime {
+            get { return _RankingAnime; }
+            set {
+                if(_RankingAnime == value)
+                    return;
+                _RankingAnime = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingGame変更通知プロパティ
+        private bool _RankingGame = false;
+
+        public bool RankingGame {
+            get { return _RankingGame; }
+            set {
+                if(_RankingGame == value)
+                    return;
+                _RankingGame = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingTouhou変更通知プロパティ
+        private bool _RankingTouhou = false;
+
+        public bool RankingTouhou {
+            get { return _RankingTouhou; }
+            set {
+                if(_RankingTouhou == value)
+                    return;
+                _RankingTouhou = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingIdolmaster変更通知プロパティ
+        private bool _RankingIdolmaster = false;
+
+        public bool RankingIdolmaster {
+            get { return _RankingIdolmaster; }
+            set {
+                if(_RankingIdolmaster == value)
+                    return;
+                _RankingIdolmaster = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingRadio変更通知プロパティ
+        private bool _RankingRadio = false;
+
+        public bool RankingRadio {
+            get { return _RankingRadio; }
+            set {
+                if(_RankingRadio == value)
+                    return;
+                _RankingRadio = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingDrawing変更通知プロパティ
+        private bool _RankingDrawing = false;
+
+        public bool RankingDrawing {
+            get { return _RankingDrawing; }
+            set {
+                if(_RankingDrawing == value)
+                    return;
+                _RankingDrawing = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingOtherTotal変更通知プロパティ
+        private bool _RankingOtherTotal = true;
+
+        public bool RankingOtherTotal {
+            get { return _RankingOtherTotal; }
+            set {
+                if(_RankingOtherTotal == value)
+                    return;
+                _RankingOtherTotal = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingReinoAre変更通知プロパティ
+        private bool _RankingReinoAre = false;
+
+        public bool RankingReinoAre {
+            get { return _RankingReinoAre; }
+            set {
+                if(_RankingReinoAre == value)
+                    return;
+                _RankingReinoAre = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingDiary変更通知プロパティ
+        private bool _RankingDiary = false;
+
+        public bool RankingDiary {
+            get { return _RankingDiary; }
+            set {
+                if(_RankingDiary == value)
+                    return;
+                _RankingDiary = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingOther変更通知プロパティ
+        private bool _RankingOther = false;
+
+        public bool RankingOther {
+            get { return _RankingOther; }
+            set {
+                if(_RankingOther == value)
+                    return;
+                _RankingOther = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+
+
+
+
 
 
     }

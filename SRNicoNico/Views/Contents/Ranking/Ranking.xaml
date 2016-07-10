@@ -58,11 +58,19 @@
             <mui:ModernProgressRing Grid.Row="1" HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" Foreground="#FFAAAAAA" IsActive="{Binding IsActive}" Margin="100,259,100,119.299"  />
 
             <ScrollViewer Grid.Row="1">
-                <metro:TabView Background="#FF252627" ItemsSource="{Binding RankingList}" SelectedValue="{Binding SelectedList}" />
+                <metro:TabView Background="#FF252627" ItemsSource="{Binding RankingList}" />
             </ScrollViewer>
             <StackPanel Grid.Row="2" Background="#FF252627">
                 <TextBlock Text="ランキング集計期間" />
                 <ComboBox Margin="0,2,0,0" Text="{Binding Period,Mode=OneWayToSource}" SelectedIndex="{Binding Source={x:Static m:Settings.Instance},Path=RankingPeriodIndex}">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
                     <ComboBoxItem Content="毎時"/>
                     <ComboBoxItem Content="24時間"/>
                     <ComboBoxItem Content="週間"/>
@@ -71,6 +79,14 @@
                 </ComboBox>
                 <TextBlock Margin="0,2,0,0" Text="ランキング集計対象" />
                 <ComboBox Margin="0,2,0,0" Text="{Binding Target,Mode=OneWayToSource}" SelectedIndex="{Binding Source={x:Static m:Settings.Instance},Path=RankingTargetIndex}">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
                     <ComboBoxItem Content="総合"/>
                     <ComboBoxItem Content="再生"/>
                     <ComboBoxItem Content="コメント"/>
@@ -78,14 +94,13 @@
                 </ComboBox>
             </StackPanel>
         </Grid>
-        <ItemsControl Grid.RowSpan="3" Grid.Column="1" ItemsSource="{Binding RankingList}">
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding RankingList}">
 
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:RankingEntryViewModel}">
                     <local:RankingResult />
                 </DataTemplate>
             </ItemsControl.Resources>
-
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid />
