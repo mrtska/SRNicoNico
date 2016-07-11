@@ -16,7 +16,8 @@
              d:DesignHeight="600" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:WebViewViewModel}}"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             Background="{DynamicResource ThemeBrushKey}" DataContextChanged="UserControl_DataContextChanged"
+             Background="{DynamicResource ThemeBrushKey}"
+             DataContextChanged="UserControl_DataContextChanged"
              >
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -52,9 +53,6 @@
         </Grid>
 
         <WebBrowser x:Name="browser" Grid.Row="1" Navigating="browser_Navigating" LoadCompleted="browser_LoadCompleted" metro2:WebBrowserHelper.ScriptErrorsSuppressed="True" />
-
-
-
 
     </Grid>
 </UserControl>

@@ -497,6 +497,15 @@ namespace SRNicoNico.ViewModels {
 
         public void Closing() {
 
+            if(!Settings.Instance.ConfirmExit) {
+
+                CanClose = true;
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+                    Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
+                }));
+                return;
+            }
+
             var message = new TransitionMessage(typeof(ExitDialog), this, TransitionMode.Modal);
 
             // View側がメッセージを処理し終えるまでブロックされる

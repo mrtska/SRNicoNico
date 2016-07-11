@@ -143,6 +143,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                             var ng = e.NewItems[0] as NGCommentEntry;
                             ng.PropertyChanged += ((sdr, ee) => Save());
+                            Save();
                         } else {
 
                             Save();
