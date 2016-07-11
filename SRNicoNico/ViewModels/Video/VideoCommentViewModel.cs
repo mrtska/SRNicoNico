@@ -219,12 +219,14 @@ namespace SRNicoNico.ViewModels {
 
         public void RegisterNGComment(NicoNicoCommentEntry entry) {
 
-
+            App.ViewModelRoot.Config.NGComment.AddNGEntry(NGType.Word, entry.Content);
+            Owner.Status = "NG登録しました";
         }
 
         public void RegisterNGUser(NicoNicoCommentEntry entry) {
 
-
+            App.ViewModelRoot.Config.NGComment.AddNGEntry(NGType.UserId, entry.UserId);
+            Owner.Status = "NG登録しました";
         }
 
         public void UpdateMail() {

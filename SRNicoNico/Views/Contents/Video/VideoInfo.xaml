@@ -95,8 +95,8 @@
             <DataGrid.Resources>
                 <ContextMenu x:Key="comment">
                     <MenuItem Header="このコメントの時間に飛ぶ" Click="MenuItem_Click"/>
-                    <MenuItem Header="このコメントをNG登録する(実装予定)" IsEnabled="False" Click="NGComment_Click"/>
-                    <MenuItem Header="このコメントをしたユーザーをNG登録する(実装予定)" IsEnabled="False" Click="NGUser_Click"/>
+                    <MenuItem Header="このコメントをNGフィルターに登録する" Click="NGComment_Click"/>
+                    <MenuItem Header="このコメントをしたユーザーをNGフィルターに登録する" Click="NGUser_Click"/>
 
                 </ContextMenu>
             </DataGrid.Resources>
