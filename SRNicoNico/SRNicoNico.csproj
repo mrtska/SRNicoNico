@@ -368,6 +368,9 @@
     <Compile Include="Views\Contents\Misc\OverView.xaml.cs">
       <DependentUpon>OverView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\Misc\ExitDialog.xaml.cs">
+      <DependentUpon>ExitDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\NicoRepo\NicoRepo.xaml.cs">
       <DependentUpon>NicoRepo.xaml</DependentUpon>
     </Compile>
@@ -679,6 +682,10 @@
     <Page Include="Views\Contents\Misc\OverView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Misc\ExitDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\NicoRepo\NicoRepo.xaml">
       <Generator>MSBuild:Compile</Generator>

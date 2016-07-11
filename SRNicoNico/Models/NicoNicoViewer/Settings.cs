@@ -500,20 +500,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
         #endregion
 
-        #region RankingPageUrl変更通知プロパティ
-        private Uri _RankingPageUrl = new Uri("http://www.nicovideo.jp/ranking");
-
-        public Uri RankingPageUrl {
-            get { return _RankingPageUrl; }
-            set {
-                if(_RankingPageUrl == value)
-                    return;
-                _RankingPageUrl = value;
-                RaisePropertyChanged();
-                Save();
-            }
-        }
-        #endregion
 
         #region NGList変更通知プロパティ
         private DispatcherCollection<NGCommentEntry> _NGList = new DispatcherCollection<NGCommentEntry>(DispatcherHelper.UIDispatcher);
@@ -1122,6 +1108,37 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
         #endregion
 
+
+        #region WebViewDefaultPage変更通知プロパティ
+        private string _WebViewDefaultPage = "http://www.nicovideo.jp/";
+
+        public string WebViewDefaultPage {
+            get { return _WebViewDefaultPage; }
+            set { 
+                if(_WebViewDefaultPage == value)
+                    return;
+                _WebViewDefaultPage = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region ConfirmExit変更通知プロパティ
+        private bool _ConfirmExit = true;
+
+        public bool ConfirmExit {
+            get { return _ConfirmExit; }
+            set { 
+                if(_ConfirmExit == value)
+                    return;
+                _ConfirmExit = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
 
 
 

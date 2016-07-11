@@ -45,6 +45,9 @@
         </l:InteractionMessageTrigger>
 
 
+        <l:InteractionMessageTrigger MessageKey="WindowAction" Messenger="{Binding Messenger}">
+            <l:WindowInteractionMessageAction />
+        </l:InteractionMessageTrigger>
 
         <!--  WindowのContentRenderedイベントのタイミングでViewModelのInitializeメソッドが呼ばれます  -->
         <i:EventTrigger EventName="ContentRendered">
@@ -60,6 +63,9 @@
 
     </i:Interaction.Triggers>
 
+    <i:Interaction.Behaviors>
+        <l:WindowCloseCancelBehavior CloseCanceledCallbackMethodTarget="{Binding}" CloseCanceledCallbackMethodName="Closing" CanClose="{Binding CanClose}"/>
+    </i:Interaction.Behaviors>
 
 
     <Grid>

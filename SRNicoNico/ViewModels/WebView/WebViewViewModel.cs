@@ -42,37 +42,13 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        public void Home() {
+        public async void Home() {
 
-            Task.Run(() => {
+            await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                try {
-
-                    //var a = NicoNicoWrapperMain.Session.GetAsync(Settings.Instance.RankingPageUrl.OriginalString).Result;
-
-                    //var doc = new HtmlDocument();
-                    //doc.LoadHtml2(a);
-
-                    //doc.DocumentNode.SelectSingleNode("//div[@id='siteHeaderInner']/ul[@class='siteHeaderGlovalNavigation']").InnerHtml = "";
-                    //doc.DocumentNode.SelectSingleNode("//div[@class='banner leadBanner ads']").InnerHtml = "";
-                    //doc.DocumentNode.SelectSingleNode("//header[@class='header']").InnerHtml = "";
-                    //doc.DocumentNode.SelectSingleNode("//footer[@class='footer']").InnerHtml = "";
-
-                    //doc.DocumentNode.SelectSingleNode("//body").Attributes.Add("oncontextmenu", "return false;");
-                    //doc.DocumentNode.SelectSingleNode("//body").Attributes.Add("style", "bgcolor: #222222 !important;");
-
-                    DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-                        WebBrowser.Navigate(Settings.Instance.RankingPageUrl);
+                WebBrowser.Navigate(Settings.Instance.WebViewDefaultPage);
                       
-                    }));
-                   
-                } catch(RequestFailed) {
-
-
-                }
-            });
-
+            }));
         }
 
         public void LoadCompleted() {

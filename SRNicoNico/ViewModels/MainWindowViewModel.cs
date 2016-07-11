@@ -23,6 +23,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using SRNicoNico.Models.NicoNicoViewer;
 using System.Reflection;
+using SRNicoNico.Views.Contents.Misc;
 
 namespace SRNicoNico.ViewModels {
 	public class MainWindowViewModel : ViewModel {
@@ -474,6 +475,49 @@ namespace SRNicoNico.ViewModels {
 
             AddTab(vm);
             SelectedTab = vm;
+        }
+
+
+
+        #region CanClose変更通知プロパティ
+        private bool _CanClose;
+
+        public bool CanClose {
+            get { return _CanClose; }
+            set { 
+                if(_CanClose == value)
+                    return;
+                _CanClose = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
+        public void Closing() {
+
+            var message = new TransitionMessage(typeof(ExitDialog), this, TransitionMode.Modal);
+
+            // View側がメッセージを処理し終えるまでブロックされる
+            Messenger.Raise(message);
+
+        }
+
+        public void YesClose() {
+
+            CanClose = true;
+            Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
+
+
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+                Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
+            }));
+        }
+
+        public void NoClose() {
+
+            Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
         }
 
     }
