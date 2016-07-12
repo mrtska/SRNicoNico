@@ -79,30 +79,5 @@ namespace SRNicoNico.ViewModels {
         public ConfigNGCommentViewModel() : base("コメントNG機能") {
 
         }
-
-        public void AddEmptyNGEntry() {
-
-            var entry = new NGCommentEntry();
-            entry.IsEnabled = false;
-            entry.Type = NGType.Word;
-            entry.Content = "";
-
-            Settings.Instance.NGList.Add(entry);
-        }
-
-        public void AddNGEntry(NGType type, string content) {
-
-            var entry = new NGCommentEntry();
-            entry.IsEnabled = true;
-            entry.Type = type;
-            entry.Content = content;
-
-            Settings.Instance.NGList.Add(entry);
-        }
-
-        public void DeleteNGEntry(NGCommentEntry target) {
-
-            Settings.Instance.NGList.Remove(target);
-        }
     }
 }

@@ -56,6 +56,9 @@
                 <DataTemplate DataType="{x:Type vm:ConfigNGCommentViewModel}">
                     <local:ConfigNGComment />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:ConfigNGFilterViewModel}">
+                    <local:ConfigNGFilter/>
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:ConfigRankingViewModel}">
                     <local:ConfigRanking />
                 </DataTemplate>

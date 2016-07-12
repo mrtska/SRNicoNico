@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
@@ -61,7 +61,7 @@ namespace SRNicoNico.ViewModels {
         #endregion
         
 
-        private NicoNicoSearch currentSearch;
+        private NicoNicoSearch CurrentSearch;
 
 
         #region SearchResult変更通知プロパティ
@@ -98,16 +98,26 @@ namespace SRNicoNico.ViewModels {
             SearchResult.IsActive = true;
             
             //検索
-            currentSearch = new NicoNicoSearch(this, SearchText, SearchType, sort_by[Settings.Instance.SearchIndex]);
+            CurrentSearch = new NicoNicoSearch(this, SearchText, SearchType, sort_by[Settings.Instance.SearchIndex]);
 
 			Task.Run(() => {
 
-                NicoNicoSearchResult result = currentSearch.Search();
+                var result = CurrentSearch.Search();
                 //検索結果をUIに
                 SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
 
                 SearchResult.List.Clear();
-                foreach(NicoNicoVideoInfoEntry node in result.List) {
+                foreach(var node in result.List) {
+
+                   /* foreach(var ng in Settings.Instance.NGList) {
+
+                        if(ng.Type != NGType.UserId || !Regex.Match(ng.Content, "\\d+").Success) {
+
+                            continue;
+                        }
+
+                    }*/
+
 
                     SearchResult.List.Add(new SearchResultEntryViewModel(node));
                 }
@@ -121,7 +131,7 @@ namespace SRNicoNico.ViewModels {
             SearchResult.IsActive = true;
             Task.Run(() => {
 
-                NicoNicoSearchResult result = currentSearch.Search();
+                NicoNicoSearchResult result = CurrentSearch.Search();
 
                 SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
 
