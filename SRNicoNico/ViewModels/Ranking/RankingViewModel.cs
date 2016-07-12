@@ -264,7 +264,7 @@ namespace SRNicoNico.ViewModels {
 
         public void Refresh() {
 
-
+            Initialize();
 
         }
 

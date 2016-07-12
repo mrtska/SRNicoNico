@@ -21,5 +21,10 @@ namespace SRNicoNico.Views.Contents.Config {
         public ConfigRanking() {
             InitializeComponent();
         }
+
+        public void Refresh(object sender, RoutedEventArgs e) {
+
+            App.ViewModelRoot.Ranking.Refresh();
+        }
     }
 }

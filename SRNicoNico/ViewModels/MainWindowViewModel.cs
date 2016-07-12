@@ -89,6 +89,8 @@ namespace SRNicoNico.ViewModels {
 
         public SearchViewModel Search { get; private set; }
 
+        public RankingViewModel Ranking { get; private set; }
+
         public NotifyLiveViewModel NotifyLive { get; private set; }
 
         public ConfigViewModel Config { get; private set; }
@@ -254,7 +256,7 @@ namespace SRNicoNico.ViewModels {
             App.ViewModelRoot.Title += "(user:" + User.UserName + ")";
 
             TabItems.Add(new WebViewViewModel());
-            TabItems.Add(new RankingViewModel());
+            TabItems.Add(Ranking = new RankingViewModel());
             TabItems.Add(Search = new SearchViewModel());
             TabItems.Add(new FavoriteViewModel());
             TabItems.Add(new NicoRepoViewModel());
