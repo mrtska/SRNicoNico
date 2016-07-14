@@ -741,7 +741,6 @@ namespace SRNicoNico.ViewModels {
                         }
                         break;
                     case Key.Up:
-                    case Key.VolumeUp:
                         if(Volume <= 90) {
 
                             Volume += 10;
@@ -751,7 +750,6 @@ namespace SRNicoNico.ViewModels {
                         }
                         break;
                     case Key.Down:
-                    case Key.VolumeDown:
                         if(Volume >= 10) {
 
                             Volume -= 10;
