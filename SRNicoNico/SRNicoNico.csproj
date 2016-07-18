@@ -378,6 +378,9 @@
     <Compile Include="Views\Contents\NicoRepo\NicoRepo.xaml.cs">
       <DependentUpon>NicoRepo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\PlayList\PlayListEntry.xaml.cs">
+      <DependentUpon>PlayListEntry.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Ranking\RankingEntry.xaml.cs">
       <DependentUpon>RankingEntry.xaml</DependentUpon>
     </Compile>
@@ -696,6 +699,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\NicoRepo\NicoRepo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\PlayList\PlayListEntry.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

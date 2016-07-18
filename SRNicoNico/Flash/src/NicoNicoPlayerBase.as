@@ -90,7 +90,16 @@ package {
 		
 		public function wheel(e:MouseEvent):void {
 			
-			ExternalInterface.call("MouseWheel", e.delta.toString());
+			if (e.delta > 0) {
+				
+				ExternalInterface.call("MouseWheel", "2");
+
+			} else {
+				
+				ExternalInterface.call("MouseWheel", "-2");
+
+			}
+			
 		}
 		
 		private function leave(e:Event):void {

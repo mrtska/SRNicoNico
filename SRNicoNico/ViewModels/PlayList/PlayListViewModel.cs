@@ -13,6 +13,7 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models.NicoNicoViewer;
 using System.Windows.Input;
+using SRNicoNico.Views.Contents.Video;
 
 namespace SRNicoNico.ViewModels {
     public class PlayListViewModel : TabItemViewModel {
@@ -42,7 +43,7 @@ namespace SRNicoNico.ViewModels {
             set { 
                 if(_SelectedPlayList == value)
                     return;
-                Video?.Jump(value);
+                Jump(value);
                 _SelectedPlayList = value;
                 RaisePropertyChanged();
             }
@@ -79,6 +80,26 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+
+        #region UIInstance変更通知プロパティ
+        private Video _UIInstance;
+
+        public Video UIInstance {
+            get { return _UIInstance; }
+            set { 
+                if(_UIInstance == value)
+                    return;
+                _UIInstance = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        private FullScreenWindow FullScreenWindow;
+        private WindowedWindow WindowedFullScreenWindow;
+
+        public bool IsFullScreen;
+
         public PlayListViewModel(IList<MylistListEntryViewModel> list, string title) : base(title) {
 
             foreach(var entry in list) {
@@ -102,16 +123,23 @@ namespace SRNicoNico.ViewModels {
 
         private void Initialize() {
 
+            UIInstance = new Video();
             SelectedPlayList = PlayList.First();
-            Video = new VideoViewModel(this);
-            Video.Initialize();
-
         }
 
 
         public override void KeyDown(KeyEventArgs e) {
             base.KeyDown(e);
             Video?.KeyDown(e);
+
+            switch(e.Key) {
+                case Key.N:
+                    Next();
+                    break;
+                case Key.P:
+                    Prev();
+                    break;
+            }
         }
 
         public void ToggleRepeat() {
@@ -159,6 +187,54 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        //指定したプレイリストエントリに飛ぶ
+        public void Jump(PlayListEntryViewModel entry) {
+
+            Video?.DisposeViewModel();
+            Video = new VideoViewModel(entry, IsFullScreen);
+            UIInstance.DataContext = Video;
+            Video.Initialize();
+            if(IsFullScreen) {
+
+                UpdateFullScreenViewModel();
+            }
+        }
+
+        public void ToFullScreen() {
+
+
+
+            if(Settings.Instance.UseWindowMode) {
+
+                WindowedFullScreenWindow = new WindowedWindow();
+                WindowedFullScreenWindow.DataContext = Video;
+                WindowedFullScreenWindow.Show();
+                
+            } else {
+
+                FullScreenWindow = new FullScreenWindow();
+                FullScreenWindow.DataContext = Video;
+                FullScreenWindow.Show();
+
+            }
+        }
+
+        public void UpdateFullScreenViewModel() {
+
+            if(Settings.Instance.UseWindowMode && WindowedFullScreenWindow != null) {
+
+                WindowedFullScreenWindow.DataContext = Video;
+
+            } else if(FullScreenWindow != null) {
+
+                FullScreenWindow.DataContext = Video;
+            }
+        }
+
+        public void ReturnFromFullScreen() {
+
+
+        }
 
     }
 }

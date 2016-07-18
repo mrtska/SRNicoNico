@@ -46,8 +46,8 @@
             </Grid>
         </Border>
 
-        <ContentControl Content="{Binding FullScreenVideoFlash,Mode=OneWay}" Grid.Row="1" Background="Black" />
+        <ContentControl x:Name="flash" Content="{Binding FullScreenVideoFlash,Mode=OneWay}" Grid.Row="1" Background="Black" />
 
-        <ContentControl Grid.Row="2" Content="{Binding FullScreenContoller,Mode=OneWay}" />
+        <ContentControl Grid.Row="2" Content="{Binding FullScreenController,Mode=OneWay}" />
     </Grid>
 </metro:MetroWindow>

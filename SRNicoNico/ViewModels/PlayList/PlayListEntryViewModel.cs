@@ -66,7 +66,7 @@ namespace SRNicoNico.ViewModels {
         public string VideoUrl;
 
 
-        private PlayListViewModel Owner;
+        public PlayListViewModel Owner;
 
         public PlayListEntryViewModel(string title, string thumbnail, string videoUrl) {
 

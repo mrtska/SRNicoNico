@@ -265,7 +265,7 @@ namespace SRNicoNico.ViewModels {
 
                         if(Owner.IsPlayList) {
 
-                            Owner.PlayList.Next();
+                            Owner.PlayListEntry.Owner.Next();
                         } else {
 
                             Owner.ReturnFromFullScreen();
@@ -274,7 +274,7 @@ namespace SRNicoNico.ViewModels {
 
                         if(Owner.IsPlayList) {
 
-                            Owner.PlayList.Next();
+                            Owner.PlayListEntry.Owner.Next();
                         }
                     }
 

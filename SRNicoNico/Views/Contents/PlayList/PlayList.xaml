@@ -63,18 +63,13 @@
                     </metro:TabView.ItemContainerStyle>
                     <metro:TabView.ItemTemplate>
                         <DataTemplate DataType="{x:Type vm:PlayListViewModel}">
-                            <Border>
-                                <StackPanel>
-                                    <Image Source="{Binding ThumbNailUrl}" Height="90" Margin="5"/>
-                                    <TextBlock Text="{Binding Title}" FontSize="10" Margin="3,0" TextTrimming="CharacterEllipsis"/>
-                                </StackPanel>
-                            </Border>
+                            <local:PlayListEntry />
                         </DataTemplate>
                     </metro:TabView.ItemTemplate>
                 </metro:TabView>
             </ScrollViewer>
 
         </Grid>
-        <video:Video Grid.Column="1" DataContext="{Binding Video}" />
+        <ContentControl Grid.Column="1" Content="{Binding UIInstance}"/>
     </Grid>
 </UserControl>
