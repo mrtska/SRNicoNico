@@ -35,7 +35,8 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             TypePair["GridLength"] = typeof(GridLength);
             TypePair["DispatcherCollection<NGCommentEntry>"] = typeof(DispatcherCollection<NGCommentEntry>);
 
-            Dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\SRNicoNico\user.settings";
+            Dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\SRNicoNico\";
+            Directory.CreateDirectory(Dir);
 
             Load();
         }
@@ -83,7 +84,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             json.settings = list;
             var s = Format(json.ToString());
 
-            var fi = new StreamWriter(Dir);
+            var fi = new StreamWriter(Dir + "user.settings");
             fi.AutoFlush = true;
             fi.Write(s);
             fi.Close();
@@ -163,7 +164,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             Loading = true;
 
             //%APPDATA%に保存してある
-            var info = new FileInfo(Dir);
+            var info = new FileInfo(Dir + "user.settings");
 
             //ファイルが存在しなかったらすべてデフォルト値
             if(!info.Exists) {

@@ -107,9 +107,9 @@ namespace SRNicoNico.ViewModels {
 
 
             }));
-            Owner.Time = new VideoTime();
             //動画時間
             Owner.Time.VideoTimeString = NicoNicoUtil.ConvertTime(VideoData.ApiData.Length);
+            Owner.Time.Length = VideoData.ApiData.Length;
 
             if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
 
@@ -275,8 +275,12 @@ namespace SRNicoNico.ViewModels {
                         if(Owner.IsPlayList) {
 
                             Owner.PlayListEntry.Owner.Next();
+                            return;
                         }
-                    }
+                        Owner.IsPlaying = false;
+
+
+                    } 
 
                     break;
                 case "Click":   //Flash部分がクリックされた時に呼ばれる

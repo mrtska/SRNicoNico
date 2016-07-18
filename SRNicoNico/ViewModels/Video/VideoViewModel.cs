@@ -148,6 +148,10 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _IsPlaying = value;
                 RaisePropertyChanged();
+                if(IsInitialized && Time.CurrentTime == Time.Length && value) {
+
+                    Restart();
+                }
             }
         }
         #endregion
@@ -419,7 +423,7 @@ namespace SRNicoNico.ViewModels {
             Mylist = new VideoMylistViewModel(this);
             Comment = new VideoCommentViewModel(this);
             Handler = new VideoFlashHandler(this);
-
+            Time = new VideoTime();
             VideoData = new VideoData();
 
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
