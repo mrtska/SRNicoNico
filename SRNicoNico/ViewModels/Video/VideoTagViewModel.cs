@@ -43,11 +43,8 @@ namespace SRNicoNico.ViewModels {
 
         public void TagClick() {
 
-            if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
-
-                Owner.Handler.Pause();
-                App.ViewModelRoot.SearchText(SearchType.Tag, Tag.Tag);
-            }
+            Owner.Handler.Pause();
+            App.ViewModelRoot.SearchText(SearchType.Tag, Tag.Tag);
             
         }
     }

@@ -106,7 +106,7 @@
                                             <DropShadowEffect Color="Black" RenderingBias="Quality"/>
                                         </Image.Effect>
                                     </Image>
-                                    <TextBlock TextWrapping="Wrap" Text="{Binding Tag.Tag}" Margin="5,2" ToolTip="Ctrlを押しながらクリックでタグ検索">
+                                    <TextBlock TextWrapping="Wrap" Text="{Binding Tag.Tag}" Margin="5,2" ToolTip="クリックでタグ検索">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseLeftButtonDown">
                                                 <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="TagClick" />
@@ -115,7 +115,7 @@
                                     </TextBlock>
                                     <Canvas Background="Transparent" Width="14" Height="14" ToolTip="{Binding Tag.Url}" Cursor="Hand">
                                         <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseRightButtonDown">
+                                            <i:EventTrigger EventName="MouseLeftButtonDown">
                                                 <ei:LaunchUriOrFileAction Path="{Binding Tag.Url}" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
