@@ -75,7 +75,7 @@ namespace SRNicoNico.ViewModels {
             //有料動画なら
             if(VideoData.ApiData.IsPaidVideo) {
 
-                App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(PaidVideoDialog), this, TransitionMode.Modal));
+                App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(PaidVideoDialog) , Owner, TransitionMode.Modal));
                 return;
             }
 

@@ -20,6 +20,7 @@
                    Foreground="{DynamicResource ForegroundBrushKey}"
                    ShowInTaskbar="False"
                    d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
+                   
                    >
     <i:Interaction.Triggers>
         <l:InteractionMessageTrigger MessageKey="WindowAction" Messenger="{Binding Messenger, Mode=OneWay}">
@@ -45,7 +46,7 @@
         </Border>
         
         <StackPanel Grid.Row="2" Height="80" VerticalAlignment="Top">
-            <TextBlock Grid.Row="1" Text="この動画は有料です。ブラウザで購入する必要があります。&#10;購入を完了したら再読み込みしてください。" HorizontalAlignment="Center" />
+            <TextBlock Grid.Row="1" Text="この動画は有料です。ブラウザで購入する必要があります。&#10;購入が完了したら再読み込みしてください。" HorizontalAlignment="Center" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="ブラウザで開く" Margin="10">

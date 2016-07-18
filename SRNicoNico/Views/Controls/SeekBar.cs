@@ -38,8 +38,8 @@ namespace SRNicoNico.Views.Controls {
 
             if(control.ismoving || (!control.IsDrag)) {
 
-                
-                control.CurrentTimeWidth = (control.ActualWidth - 10) / control.VideoTime * control.CurrentTime;
+                var width = (control.ActualWidth - 10) / control.VideoTime * control.CurrentTime;
+                control.CurrentTimeWidth = width < 0 ? 0 : width;
 
                 control.SeekCursor = new Thickness(control.CurrentTimeWidth, 0, 0, 0);
 
