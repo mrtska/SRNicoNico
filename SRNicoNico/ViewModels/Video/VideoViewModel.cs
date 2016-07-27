@@ -444,7 +444,6 @@ namespace SRNicoNico.ViewModels {
             var videoUrl = VideoUrl + "?watch_harmful=1";
 
             IsActive = true;
-            Comment.IsCommentLoading = true;
 
             Status = "動画情報取得中";
             //動画情報取得

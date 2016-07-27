@@ -207,6 +207,11 @@ namespace SRNicoNico.ViewModels {
             Owner = vm;
 		}
 
+        public void Refresh() {
+
+            Owner.Handler.ReloadComment();
+        }
+
         public void ToggleScroll() {
 
             AutoScroll ^= true;
@@ -216,6 +221,9 @@ namespace SRNicoNico.ViewModels {
 
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Video.CommentView), Owner, TransitionMode.NewOrActive));
         }
+        
+
+
 
         public void RegisterNGComment(NicoNicoCommentEntry entry) {
 
@@ -228,6 +236,10 @@ namespace SRNicoNico.ViewModels {
             App.ViewModelRoot.Config.NGFilter.AddNGEntry(NGType.UserId, entry.UserId);
             Owner.Status = "NG登録しました。 ユーザーID:" + entry.UserId;
         }
+
+
+
+
 
         public void UpdateMail() {
 

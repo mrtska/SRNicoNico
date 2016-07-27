@@ -50,6 +50,7 @@ package {
 				ExternalInterface.addCallback("AsInjectMyComment", InjectMyComment);
 				ExternalInterface.addCallback("AsChangeVolume", ChangeVolume);
 				ExternalInterface.addCallback("AsApplyChanges", ApplyChanges);
+				ExternalInterface.addCallback("PurgeComment", PurgeComment);
 				
 			}
 			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
@@ -133,6 +134,10 @@ package {
 		
 				
 			rasterizer.loadComment(json);
+		}
+		public function PurgeComment():void {
+			
+			rasterizer.purgeComment();
 		}
 		public function InjectOneComment(json:String):void {
 		

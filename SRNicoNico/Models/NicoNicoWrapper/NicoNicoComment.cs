@@ -15,6 +15,7 @@ using SRNicoNico.ViewModels;
 using SRNicoNico.Models.NicoNicoViewer;
 using System.Web;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoComment : NotificationObject {
@@ -50,7 +51,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		}
 
         //コメント取得
-        public List<NicoNicoCommentEntry> GetComment() {
+        public async Task<List<NicoNicoCommentEntry>> GetCommentAsync() {
 
             Video.CommentStatus = "取得中";
             var list = new List<NicoNicoCommentEntry>();
@@ -81,7 +82,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     query.AddQuery("thread", GetFlv.ThreadID);
                     query.AddQuery("language_id", 0);
 
-                    var threadKeyRaw = NicoNicoWrapperMain.Session.GetAsync(query.TargetUrl).Result;
+                    var threadKeyRaw = await NicoNicoWrapperMain.Session.GetAsync(query.TargetUrl);
                     var temp = threadKeyRaw.Split('&');
                     var threadKey = temp[0].Split('=')[1];
                     var force184 = temp[1].Split('=')[1];
@@ -109,7 +110,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 request.Content = new StringContent(root.InnerXml);
                 request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
 
-                var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
+                var a = await NicoNicoWrapperMain.Session.GetAsync(request);
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);
@@ -159,7 +160,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 return null;
             }
 		}
-        public List<NicoNicoCommentEntry> GetUploaderComment() {
+        public async Task<List<NicoNicoCommentEntry>> GetUploaderCommentAsync() {
 
             try {
                 
@@ -184,7 +185,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 request.Content = new StringContent(root.InnerXml);
                 request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
                 
-                var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
+                var a = await NicoNicoWrapperMain.Session.GetAsync(request);
                 
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);

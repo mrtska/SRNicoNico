@@ -566,6 +566,7 @@
     </Compile>
     <Compile Include="Views\Controls\ManagedPopup.cs" />
     <Compile Include="Views\Controls\SeekBar.cs" />
+    <Compile Include="Views\Converter\InvertBoolConverter.cs" />
     <Compile Include="Views\Converter\TimeToWidthConverter.cs" />
     <Compile Include="Views\Converter\NGTypeConverter.cs" />
     <Compile Include="Views\Converter\ListCountConverter.cs" />

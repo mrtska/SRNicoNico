@@ -68,6 +68,14 @@ package comment {
 			
 		}
 		
+		public function purgeComment():void {
+			
+			
+			commentList.splice(0, commentList.length);
+			drawingList.splice(0, drawingList.length);
+			removeChildren();
+		}
+		
 		
 		
 

@@ -129,9 +129,17 @@ namespace SRNicoNico.ViewModels {
 
                 Owner.StoryBoardStatus = "データ無し";
             }
-
+            
             Owner.CommentInstance = new NicoNicoComment(VideoData.ApiData, Owner);
-            var list = Owner.CommentInstance.GetComment();
+            InitializeComment();
+
+        }
+
+        private async void InitializeComment() {
+
+            Owner.Comment.IsCommentLoading = true;
+
+            var list = await Owner.CommentInstance.GetCommentAsync();
             if(list != null) {
 
 
@@ -150,7 +158,7 @@ namespace SRNicoNico.ViewModels {
                 //投稿者コメントがあったら取得する
                 if(VideoData.ApiData.HasOwnerThread) {
 
-                    var ulist = Owner.CommentInstance.GetUploaderComment();
+                    var ulist = await Owner.CommentInstance.GetUploaderCommentAsync();
                     dynamic ujson = new DynamicJson();
                     json.array = ulist;
 
@@ -166,8 +174,16 @@ namespace SRNicoNico.ViewModels {
 
                 Owner.CommentVisibility = true;
             }
-
         }
+
+        public void ReloadComment() {
+
+            InvokeScript("PurgeComment");
+            VideoData.CommentData.Clear();
+            InitializeComment();
+        }
+
+
 
         private void OpenVideo() {
 
