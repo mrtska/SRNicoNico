@@ -23,41 +23,7 @@ namespace SRNicoNico.Views.Contents.WebView {
         public WebView() {
             InitializeComponent();
         }
-
-        private void browser_Navigating(object sender, NavigatingCancelEventArgs e) {
-
-            if(e.Uri != null) {
-                var url = e.Uri.OriginalString;
-
-                if(NicoNicoOpener.GetType(url) != NicoNicoUrlType.Other) {
-
-                    NicoNicoOpener.Open(url);
-                    e.Cancel = true;
-                }
-            }
-        }
-
-        private void browser_LoadCompleted(object sender, NavigationEventArgs e) {
-
-
-            if(DataContext is WebViewViewModel) {
-
-                var vm = (WebViewViewModel)DataContext;
-                vm.LoadCompleted();
-
-            }
-
-        }
-
-        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-
-            if(DataContext is WebViewViewModel) {
-
-                var vm = (WebViewViewModel) DataContext;
-                vm.WebBrowser = browser;
-
-            }
-
-        }
+        
+        
     }
 }

@@ -23,51 +23,66 @@ namespace SRNicoNico.ViewModels {
     public class WebViewViewModel : TabItemViewModel {
 
 
-        #region WebBrowser変更通知プロパティ
-        private WebBrowser _WebBrowser;
 
-        public WebBrowser WebBrowser {
-            get { return _WebBrowser; }
+        #region WebViewTabs変更通知プロパティ
+        private DispatcherCollection<WebViewContentViewModel> _WebViewTabs = new DispatcherCollection<WebViewContentViewModel>(DispatcherHelper.UIDispatcher);
+
+        public DispatcherCollection<WebViewContentViewModel> WebViewTabs {
+            get { return _WebViewTabs; }
             set { 
-                if(_WebBrowser == value)
+                if(_WebViewTabs == value)
                     return;
-                _WebBrowser = value;
+                _WebViewTabs = value;
                 RaisePropertyChanged();
             }
         }
         #endregion
 
 
+        #region SelectedTab変更通知プロパティ
+        private WebViewContentViewModel _SelectedTab;
+
+        public WebViewContentViewModel SelectedTab {
+            get { return _SelectedTab; }
+            set { 
+                if(_SelectedTab == value)
+                    return;
+                _SelectedTab = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
         public WebViewViewModel() : base("WebView") {
 
+        }
+
+        public void Initialize() {
+
+            AddTab(Settings.Instance.WebViewDefaultPage);
+        }
+
+
+
+        public void AddTab(string url) {
+
+            WebViewTabs.Add(new WebViewContentViewModel(url));
         }
 
         public async void Home() {
 
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                WebBrowser.Navigate(Settings.Instance.WebViewDefaultPage);
-                      
+                SelectedTab?.WebBrowser.Load(Settings.Instance.WebViewDefaultPage);
+
             }));
         }
-
-        public void LoadCompleted() {
-
-
-        }
-
-        public void Initialize() {
-
-            Home();
-        }
-
         public void Refresh() {
 
-            WebBrowser.Refresh(true);
-
-
+            SelectedTab?.WebBrowser.WebBrowser.GetBrowser().Reload(true);
         }
-
 
 
 

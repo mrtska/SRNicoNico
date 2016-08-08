@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.PlayList"
+             xmlns:local="clr-namespace:SRNicoNico.Views.Contents.WebView"
+             
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
@@ -17,7 +18,6 @@
              d:DataContext="{d:DesignInstance {x:Type vm:WebViewViewModel}}"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="{DynamicResource ThemeBrushKey}"
-             DataContextChanged="UserControl_DataContextChanged"
              >
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -26,15 +26,19 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
+            <RowDefinition Height="37" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid Background="{DynamicResource ActiveBackgroundBrushKey}">
+        <Grid Background="#FF252627">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
+            <metro:TabView SelectedIndex="0" Style="{DynamicResource WebViewHorizontalViewStyle}" Height="38" ItemsSource="{Binding WebViewTabs}" SelectedValue="{Binding SelectedTab}" >
+                
+
+            </metro:TabView>
             <mui:ModernButton ToolTip="デフォルトページに戻る" HorizontalAlignment="Right" IconData="F1 M 24.0033,56.0078L 24.0033,38.0053L 22.0031,40.0056L 19.0027,35.0049L 38.0053,20.0028L 45.0063,25.5299L 45.0063,21.753L 49.0068,21.0029L 49.0068,28.6882L 57.008,35.0049L 54.0075,40.0056L 52.0073,38.0053L 52.0073,56.0078L 24.0033,56.0078 Z M 38.0053,26.9204L 27.0038,36.005L 27.0038,53.0074L 38.0045,53.0075L 38.0045,41.0061L 46.0058,41.0061L 46.0059,53.0075L 49.0068,53.0074L 49.0068,36.005L 38.0053,26.9204 Z M 30.004,41.0057L 35.0049,41.0057L 35.0049,47.0066L 30.004,47.0066L 30.004,41.0057 Z" Margin="0,0,10,0" Grid.Column="1">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
@@ -52,7 +56,26 @@
 
         </Grid>
 
-        <WebBrowser x:Name="browser" Grid.Row="1" Navigating="browser_Navigating" LoadCompleted="browser_LoadCompleted" metro2:WebBrowserHelper.ScriptErrorsSuppressed="True" />
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding WebViewTabs}">
+
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type vm:WebViewContentViewModel}">
+                    <local:WebViewContent />
+                </DataTemplate>
+            </ItemsControl.Resources>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                    <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
 
     </Grid>
 </UserControl>

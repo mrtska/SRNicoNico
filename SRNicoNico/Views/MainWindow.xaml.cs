@@ -17,6 +17,7 @@ using MetroRadiance.UI.Controls;
 using SRNicoNico.ViewModels;
 using System.Windows.Markup;
 using System.Threading;
+using CefSharp;
 
 namespace SRNicoNico.Views {
 
@@ -38,6 +39,10 @@ namespace SRNicoNico.Views {
                 vm.KeyDown(e);
 
             }
+        }
+        private void Root_Closed(object sender, EventArgs e) {
+
+            Cef.Shutdown();
         }
     }
 }

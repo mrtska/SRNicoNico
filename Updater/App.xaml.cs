@@ -9,6 +9,7 @@ using Livet;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
+
 namespace Updater {
     /// <summary>
     /// App.xaml の相互作用ロジック
