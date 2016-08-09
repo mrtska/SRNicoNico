@@ -68,7 +68,7 @@ namespace SRNicoNico.ViewModels {
 
         public void AddTab(string url) {
 
-            WebViewTabs.Add(new WebViewContentViewModel(url));
+            WebViewTabs.Add(new WebViewContentViewModel(url, this));
         }
 
         public async void Home() {

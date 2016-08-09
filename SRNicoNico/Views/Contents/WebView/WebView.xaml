@@ -26,7 +26,7 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="37" />
+            <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid Background="#FF252627">
@@ -35,7 +35,7 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <metro:TabView SelectedIndex="0" Style="{DynamicResource WebViewHorizontalViewStyle}" Height="38" ItemsSource="{Binding WebViewTabs}" SelectedValue="{Binding SelectedTab}" >
+            <metro:TabView SelectedIndex="0" Style="{DynamicResource WebViewHorizontalViewStyle}" Height="25" ItemsSource="{Binding WebViewTabs}" SelectedValue="{Binding SelectedTab}" >
                 
 
             </metro:TabView>

@@ -27,6 +27,21 @@ namespace SRNicoNico.ViewModels {
     public class WebViewContentViewModel : TabItemViewModel {
 
 
+
+        #region Status変更通知プロパティ
+
+        public new string Status {
+            get { return Owner.Status; }
+            set { 
+                if(Owner.Status == value)
+                    return;
+                Owner.Status = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         #region WebBrowser変更通知プロパティ
         private ChromiumWebBrowser _WebBrowser;
 
@@ -36,8 +51,16 @@ namespace SRNicoNico.ViewModels {
                 if(_WebBrowser == value)
                     return;
                 _WebBrowser = value;
+                value.RequestHandler = new RequestHandler(this);
+                value.TitleChanged += Value_TitleChanged;
+                value.LoadHandler = new LoadHandler(this);
                 RaisePropertyChanged();
             }
+        }
+
+        private void Value_TitleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+
+            Name = e.NewValue as string;
         }
         #endregion
 
@@ -52,15 +75,22 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _Url = value;
                 RaisePropertyChanged();
-                WebBrowser?.WebBrowser.Load(value);
+
+                DispatcherHelper.UIDispatcher.BeginInvoke((Action)(() => {
+
+                    WebBrowser?.WebBrowser?.Load(value);
+                }));
+
             }
         }
         #endregion
 
+        private WebViewViewModel Owner;
 
-        public WebViewContentViewModel(string url) {
+        public WebViewContentViewModel(string url, WebViewViewModel vm) {
 
             Url = url;
+            Owner = vm;
         }
 
         public void LoadCompleted(dynamic doc) {

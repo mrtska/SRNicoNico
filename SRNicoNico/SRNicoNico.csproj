@@ -301,6 +301,8 @@
     <Compile Include="ViewModels\Video\VideoMylistViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoTagViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoViewModel.cs" />
+    <Compile Include="ViewModels\WebView\LoadHandler.cs" />
+    <Compile Include="ViewModels\WebView\RequestHandler.cs" />
     <Compile Include="ViewModels\WebView\WebViewContentViewModel.cs" />
     <Compile Include="ViewModels\WebView\WebViewViewModel.cs" />
     <Compile Include="Views\Behaviors\TextBoxNumericOnlyBehavior.cs" />
