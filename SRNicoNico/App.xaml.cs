@@ -44,6 +44,7 @@ namespace SRNicoNico {
             settings.UserAgent = "SRNicoNico/1.0";
             settings.CachePath = "./cache";
 
+            settings.MultiThreadedMessageLoop = false;
 
             settings.Locale = "ja";
 

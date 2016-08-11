@@ -9,6 +9,7 @@ using SRNicoNico.Models.NicoNicoWrapper;
 using System.Collections.Specialized;
 
 using SRNicoNico.ViewModels;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class RequestHandler : IRequestHandler {
@@ -35,7 +36,17 @@ namespace SRNicoNico.ViewModels {
 
         bool IRequestHandler.OnBeforeBrowse(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, bool isRedirect) {
 
-          //  Console.WriteLine(request.Url);
+            //  Console.WriteLine(request.Url);
+
+            var url = request.Url;
+
+            if(NicoNicoOpener.GetType(url) != NicoNicoUrlType.Other) {
+
+
+                NicoNicoOpener.Open(url);
+                return true;
+            }
+
             Owner.Status = request.Url;
             return false;
         }

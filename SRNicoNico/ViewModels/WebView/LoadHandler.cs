@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+using SRNicoNico.Models.NicoNicoViewer;
 using CefSharp;
 
 namespace SRNicoNico.ViewModels {
@@ -29,7 +31,9 @@ namespace SRNicoNico.ViewModels {
 
             if(frameLoadStartArgs.Frame.IsMain) {
 
-                Owner.Url = frameLoadStartArgs.Url;
+                var url = frameLoadStartArgs.Url;
+
+                Owner.Url = url;
             }
 
             ;

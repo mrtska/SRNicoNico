@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.PlayList"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
@@ -50,7 +51,11 @@
             </StackPanel>
 
 
-            <TextBox Grid.Column="1" Text="{Binding Url,Mode=OneWay}"/>
+            <TextBox Grid.Column="1" Text="{Binding Url,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Behaviors>
+                    <b:TextBoxEnterKeyBehavior Binding="{Binding}" MethodName="Load"/>
+                </i:Interaction.Behaviors>
+            </TextBox>
         </Grid>
         <cef:ChromiumWebBrowser x:Name="browser" Grid.Row="1" IsBrowserInitializedChanged="Browser_IsBrowserInitializedChanged" />
 

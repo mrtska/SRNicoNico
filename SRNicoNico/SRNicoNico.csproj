@@ -111,6 +111,8 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Awesomium.Core, Version=1.7.5.1, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86" />
+    <Reference Include="Awesomium.Windows.Controls, Version=1.7.5.1, Culture=neutral, PublicKeyToken=7a34e179b8b61c39, processorArchitecture=x86" />
     <Reference Include="CefSharp, Version=51.0.0.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\CefSharp.Common.51.0.0\CefSharp\x86\CefSharp.dll</HintPath>
@@ -151,8 +153,8 @@
       <HintPath>..\packages\gong-wpf-dragdrop.0.1.4.3\lib\net40\GongSolutions.Wpf.DragDrop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Livet, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b0b1d3f711ef38cb, processorArchitecture=MSIL">
@@ -305,6 +307,7 @@
     <Compile Include="ViewModels\WebView\RequestHandler.cs" />
     <Compile Include="ViewModels\WebView\WebViewContentViewModel.cs" />
     <Compile Include="ViewModels\WebView\WebViewViewModel.cs" />
+    <Compile Include="Views\Behaviors\TextBoxEnterKeyBehavior.cs" />
     <Compile Include="Views\Behaviors\TextBoxNumericOnlyBehavior.cs" />
     <Compile Include="Views\Behaviors\DataGridAutoScrollBehavior.cs" />
     <Compile Include="Views\Behaviors\ListBoxAutoScrollBehavior.cs" />

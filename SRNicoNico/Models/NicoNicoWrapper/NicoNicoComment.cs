@@ -142,7 +142,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 if(list.Count == 0 && resultcode == "0") {
 
-                    Video.CommentStatus = "取得完了(コメント0)";
+                    Video.CommentStatus = "取得完了";
                     return list;
                 }
                 list.Sort();

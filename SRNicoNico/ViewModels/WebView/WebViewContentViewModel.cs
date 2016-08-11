@@ -99,6 +99,12 @@ namespace SRNicoNico.ViewModels {
         }
 
 
+        public void Load(string url) {
+
+            WebBrowser?.WebBrowser?.Load(url);
+            WebBrowser.Focus();
+        }
+
 
 
 
