@@ -75,13 +75,13 @@ namespace SRNicoNico.ViewModels {
 
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                SelectedTab?.WebBrowser.Load(Settings.Instance.WebViewDefaultPage);
+                SelectedTab.WebBrowser.Navigate(Settings.Instance.WebViewDefaultPage);
 
             }));
         }
         public void Refresh() {
 
-            SelectedTab?.WebBrowser.WebBrowser.GetBrowser().Reload(true);
+            SelectedTab?.WebBrowser.Refresh(System.Windows.Forms.WebBrowserRefreshOption.Completely);
         }
 
 

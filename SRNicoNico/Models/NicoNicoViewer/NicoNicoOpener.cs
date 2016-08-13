@@ -102,7 +102,13 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
 
+
+
         //ニコニコのURLが何を指しているかを返す
+        public static NicoNicoUrlType GetType(Uri url) {
+
+            return GetType(url.OriginalString);
+        }
         public static NicoNicoUrlType GetType(string url) {
 
             if(url.StartsWith("http://www.nicovideo.jp/watch/")) {

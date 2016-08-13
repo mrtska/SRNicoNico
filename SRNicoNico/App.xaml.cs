@@ -12,7 +12,7 @@ using SRNicoNico.Models.NicoNicoViewer;
 
 using Livet;
 using Microsoft.Win32;
-using CefSharp;
+
 
 namespace SRNicoNico {
 	/// <summary>
@@ -37,6 +37,7 @@ namespace SRNicoNico {
             
             Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", "SRNicoNico.exe", 0x00002AF9, Microsoft.Win32.RegistryValueKind.DWord);
 
+            /*
             var settings = new CefSettings();
 
             settings.LogSeverity = LogSeverity.Info;
@@ -51,13 +52,14 @@ namespace SRNicoNico {
             //サブプロセスを指定
             settings.BrowserSubprocessPath = "./SRNicoNicoRenderingProcess.exe";
 
-            Cef.Initialize(settings, true, true);
+           // Cef.Initialize(settings, true, true);*/
 
+            
 
             ViewModelRoot = new MainWindowViewModel();
 			MainWindow = new MainWindow { DataContext = ViewModelRoot };
 			MainWindow.Show();
-
+            
 
         }
 

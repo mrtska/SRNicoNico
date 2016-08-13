@@ -19,9 +19,9 @@ using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
 using SRNicoNico.Models.NicoNicoViewer;
 
-using CefSharp;
-using CefSharp.Wpf;
+
 using System.Windows;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class WebViewContentViewModel : TabItemViewModel {
@@ -43,19 +43,49 @@ namespace SRNicoNico.ViewModels {
 
 
         #region WebBrowser変更通知プロパティ
-        private ChromiumWebBrowser _WebBrowser;
+        private System.Windows.Forms.WebBrowser _WebBrowser;
 
-        public ChromiumWebBrowser WebBrowser {
+        public System.Windows.Forms.WebBrowser WebBrowser {
             get { return _WebBrowser; }
             set { 
                 if(_WebBrowser == value)
                     return;
                 _WebBrowser = value;
-                value.RequestHandler = new RequestHandler(this);
-                value.TitleChanged += Value_TitleChanged;
-                value.LoadHandler = new LoadHandler(this);
+                value.DocumentTitleChanged += Value_DocumentTitleChanged;
+                value.Navigating += Value_Navigating;
+                value.Navigated += Value_Navigated;
+                value.ProgressChanged += Value_ProgressChanged;
+                value.IsWebBrowserContextMenuEnabled = false;
                 RaisePropertyChanged();
             }
+        }
+            
+        private void Value_Navigated(object sender, System.Windows.Forms.WebBrowserNavigatedEventArgs e) {
+
+            
+            Url = WebBrowser.Url.OriginalString;
+        }
+
+        private void Value_ProgressChanged(object sender, System.Windows.Forms.WebBrowserProgressChangedEventArgs e) {
+
+            
+        }
+
+        private void Value_Navigating(object sender, System.Windows.Forms.WebBrowserNavigatingEventArgs e) {
+
+            if(NicoNicoOpener.GetType(e.Url) != NicoNicoUrlType.Other && !(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))) {
+
+                e.Cancel = true;
+                NicoNicoOpener.Open(e.Url);
+                return;
+            }
+
+
+        }
+
+        private void Value_DocumentTitleChanged(object sender, EventArgs e) {
+
+            Name = WebBrowser.DocumentTitle;
         }
 
         private void Value_TitleChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -75,12 +105,6 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _Url = value;
                 RaisePropertyChanged();
-
-                DispatcherHelper.UIDispatcher.BeginInvoke((Action)(() => {
-
-                    WebBrowser?.WebBrowser?.Load(value);
-                }));
-
             }
         }
         #endregion
@@ -93,16 +117,15 @@ namespace SRNicoNico.ViewModels {
             Owner = vm;
         }
 
-        public void LoadCompleted(dynamic doc) {
+        public void LoadCompleted(string doc) {
 
-            Name = doc.Title;
+            Name = doc;
         }
 
 
         public void Load(string url) {
 
-            WebBrowser?.WebBrowser?.Load(url);
-            WebBrowser.Focus();
+            WebBrowser.Navigate(url);
         }
 
 

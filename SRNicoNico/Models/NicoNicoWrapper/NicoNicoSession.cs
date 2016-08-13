@@ -222,15 +222,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     App.SetCookie(new Uri("http://nicovideo.jp/"), "user_session=" + Key);
 
 
-                    var cefcookie = new CefSharp.Cookie();
-                    cefcookie.Domain = ".nicovideo.jp";
-                    cefcookie.Name = "user_session";
-                    cefcookie.Value = Key;
-                    cefcookie.Expires = Expire.DateTime;
-
                     //Chromium側にセッションを使わせる
-                    var b = CefSharp.Cef.GetGlobalCookieManager().SetCookieAsync("http://.nicovideo.jp/", cefcookie).Result;
+                    //var b = CefSharp.Cef.GetGlobalCookieManager().SetCookieAsync("http://.nicovideo.jp/", cefcookie).Result;
 
+                    
 
                     App.ViewModelRoot.LogedInInit();
 					return SigninStatus.Success;

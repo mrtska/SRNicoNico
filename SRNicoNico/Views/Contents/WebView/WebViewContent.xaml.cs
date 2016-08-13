@@ -15,40 +15,24 @@ using MetroRadiance.UI.Controls;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.ViewModels;
 
-using CefSharp;
+
+using SRNicoNico.Models.NicoNicoWrapper;
+
+using Livet;
 
 namespace SRNicoNico.Views.Contents.WebView {
     /// <summary>
     /// WebViewContent.xaml の相互作用ロジック
     /// </summary>
     public partial class WebViewContent : UserControl {
+
+
+        private System.Windows.Forms.WebBrowser browser;
+
         public WebViewContent() {
             InitializeComponent();
-        }
 
-        private void browser_Navigating(object sender, NavigatingCancelEventArgs e) {
-
-            if(e.Uri != null) {
-                var url = e.Uri.OriginalString;
-
-                if(NicoNicoOpener.GetType(url) != NicoNicoUrlType.Other) {
-
-                    NicoNicoOpener.Open(url);
-                    e.Cancel = true;
-                }
-            }
-        }
-
-        private void browser_LoadCompleted(object sender, NavigationEventArgs e) {
-
-
-            if(DataContext is WebViewContentViewModel) {
-
-                var vm = (WebViewContentViewModel)DataContext;
-                vm.LoadCompleted(browser);
-
-            }
-
+            host.Child = browser = new System.Windows.Forms.WebBrowser();
         }
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -57,7 +41,7 @@ namespace SRNicoNico.Views.Contents.WebView {
 
                 var vm = (WebViewContentViewModel) DataContext;
                 vm.WebBrowser = browser;
-                browser.Load(vm.Url);
+                browser.Navigate(vm.Url);
             }
 
         }
@@ -68,8 +52,7 @@ namespace SRNicoNico.Views.Contents.WebView {
             if((bool)(e.NewValue)) {
 
                 var vm = (WebViewContentViewModel)DataContext;
-
-                browser.Load(vm.Url);
+                browser.Navigate(vm.Url);
             }
 
         }

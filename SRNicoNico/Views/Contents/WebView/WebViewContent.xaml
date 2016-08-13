@@ -5,9 +5,9 @@
              xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.PlayList"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:cef="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
@@ -47,7 +47,7 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </mui:ModernButton>
-                
+
             </StackPanel>
 
 
@@ -57,7 +57,7 @@
                 </i:Interaction.Behaviors>
             </TextBox>
         </Grid>
-        <cef:ChromiumWebBrowser x:Name="browser" Grid.Row="1" IsBrowserInitializedChanged="Browser_IsBrowserInitializedChanged" />
 
+        <WindowsFormsHost x:Name="host" Grid.Row="1"/>
     </Grid>
 </UserControl>

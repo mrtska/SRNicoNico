@@ -37,7 +37,6 @@
                    WindowStyle="None"
                    mc:Ignorable="d"
                    d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
-                   Closed="Root_Closed"
 				  >
 
     <i:Interaction.Triggers>
