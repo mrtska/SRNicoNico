@@ -54,21 +54,67 @@ namespace SRNicoNico.ViewModels {
                 value.DocumentTitleChanged += Value_DocumentTitleChanged;
                 value.Navigating += Value_Navigating;
                 value.Navigated += Value_Navigated;
-                value.ProgressChanged += Value_ProgressChanged;
+                value.DocumentCompleted += Value_DocumentCompleted;
+                value.CanGoForwardChanged += Value_CanGoForwardChanged;
+                value.CanGoBackChanged += Value_CanGoBackChanged;
+
                 value.IsWebBrowserContextMenuEnabled = false;
                 RaisePropertyChanged();
             }
         }
-            
-        private void Value_Navigated(object sender, System.Windows.Forms.WebBrowserNavigatedEventArgs e) {
 
-            
-            Url = WebBrowser.Url.OriginalString;
+        private void Value_CanGoBackChanged(object sender, EventArgs e) {
+
+            CanGoBack = WebBrowser.CanGoBack;
+
         }
 
-        private void Value_ProgressChanged(object sender, System.Windows.Forms.WebBrowserProgressChangedEventArgs e) {
+        private void Value_CanGoForwardChanged(object sender, EventArgs e) {
 
-            
+            CanGoForward = WebBrowser.CanGoForward;
+
+        }
+
+
+
+        #region CanGoBack変更通知プロパティ
+        private bool _CanGoBack;
+
+        public bool CanGoBack {
+            get { return _CanGoBack; }
+            set { 
+                if(_CanGoBack == value)
+                    return;
+                _CanGoBack = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region CanGoForward変更通知プロパティ
+        private bool _CanGoForward;
+
+        public bool CanGoForward {
+            get { return _CanGoForward; }
+            set { 
+                if(_CanGoForward == value)
+                    return;
+                _CanGoForward = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
+        private void Value_DocumentCompleted(object sender, System.Windows.Forms.WebBrowserDocumentCompletedEventArgs e) {
+        }
+
+
+        private void Value_Navigated(object sender, System.Windows.Forms.WebBrowserNavigatedEventArgs e) {
+
+            Url = WebBrowser.Url.OriginalString;
         }
 
         private void Value_Navigating(object sender, System.Windows.Forms.WebBrowserNavigatingEventArgs e) {
@@ -79,7 +125,6 @@ namespace SRNicoNico.ViewModels {
                 NicoNicoOpener.Open(e.Url);
                 return;
             }
-
 
         }
 
@@ -117,11 +162,26 @@ namespace SRNicoNico.ViewModels {
             Owner = vm;
         }
 
+
+        public void RemoveTab(WebViewContentViewModel vm) {
+
+            Owner.RemoveTab(vm);
+        }
+
         public void LoadCompleted(string doc) {
 
             Name = doc;
         }
 
+        public void GoBack() {
+
+            WebBrowser.GoBack();
+        }
+
+        public void GoForward() {
+
+            WebBrowser.GoForward();
+        }
 
         public void Load(string url) {
 

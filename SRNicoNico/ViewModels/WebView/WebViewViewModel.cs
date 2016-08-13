@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
 using SRNicoNico.Models.NicoNicoViewer;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class WebViewViewModel : TabItemViewModel {
@@ -64,11 +65,30 @@ namespace SRNicoNico.ViewModels {
             AddTab(Settings.Instance.WebViewDefaultPage);
         }
 
+        public void AddTab() {
 
+            AddTab(Settings.Instance.WebViewDefaultPage);
+        }
 
         public void AddTab(string url) {
 
-            WebViewTabs.Add(new WebViewContentViewModel(url, this));
+            var tab = new WebViewContentViewModel(url, this);
+            WebViewTabs.Add(tab);
+            SelectedTab = tab;
+        }
+
+
+        public void RemoveTab(WebViewContentViewModel vm) {
+
+            
+            if(WebViewTabs.Count == 1) {
+
+                Home();
+                return;
+            }
+
+            WebViewTabs.Remove(vm);
+            SelectedTab = WebViewTabs.First();
         }
 
         public async void Home() {
@@ -84,6 +104,71 @@ namespace SRNicoNico.ViewModels {
             SelectedTab?.WebBrowser.Refresh(System.Windows.Forms.WebBrowserRefreshOption.Completely);
         }
 
+
+
+        public void PrevTab() {
+
+            var index = WebViewTabs.IndexOf(SelectedTab);
+
+            if(index == 0) {
+
+                SelectedTab = WebViewTabs[WebViewTabs.Count - 1];
+            } else {
+
+                SelectedTab = WebViewTabs[index - 1];
+            }
+        }
+
+        public void NextTab() {
+
+            var index = WebViewTabs.IndexOf(SelectedTab);
+
+            if(WebViewTabs.Count - 1 == index) {
+
+                SelectedTab = WebViewTabs[0];
+            } else {
+
+                SelectedTab = WebViewTabs[index + 1];
+            }
+        }
+
+        public override void KeyDown(KeyEventArgs e) {
+
+
+            if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
+
+                switch(e.Key) {
+                    case Key.T:
+
+                        AddTab();
+                        break;
+                    case Key.W:
+
+                        RemoveTab(SelectedTab);
+                        break;
+                    case Key.R:
+
+                        Refresh();
+                        break;
+                    case Key.Tab:
+
+                        NextTab();
+                        break;
+                }
+            } else {
+
+                switch(e.Key) {
+
+                    case Key.F5:
+                        Refresh();
+                        break;
+                }
+            }
+
+
+           
+
+        }
 
 
     }
