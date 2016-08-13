@@ -19,7 +19,7 @@ using System.Collections.ObjectModel;
 namespace SRNicoNico.ViewModels {
     public class CommunityViewModel : TabItemViewModel {
 
-        private readonly NicoNicoCommunity Community;
+        private NicoNicoCommunity Community;
 
 
         #region Content変更通知プロパティ
@@ -37,7 +37,21 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-        public ObservableCollection<TabItemViewModel> TabItems { get; set; }
+
+        #region TabItems変更通知プロパティ
+        private DispatcherCollection<TabItemViewModel> _TabItems = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
+
+        public DispatcherCollection<TabItemViewModel> TabItems {
+            get { return _TabItems; }
+            set { 
+                if(_TabItems == value)
+                    return;
+                _TabItems = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
 
         #region SelectedTab変更通知プロパティ
@@ -54,12 +68,22 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        private readonly string CommunityUrl;
 
         public CommunityViewModel(string url) : base("読込中") {
 
-            TabItems = new ObservableCollection<TabItemViewModel>();
+            CommunityUrl = url;
+
+
+            Initialize();
+        }
+
+        public void Initialize() {
+
+            TabItems.Clear();
+
             TabItems.Add(new CommunityTopViewModel(this));
-            Community = new NicoNicoCommunity(url);
+            Community = new NicoNicoCommunity(CommunityUrl);
 
             IsActive = true;
             Status = "コミュニティ情報を取得中";
@@ -73,8 +97,8 @@ namespace SRNicoNico.ViewModels {
 
                 Name = Content.CommunityTitle;
             });
-
         }
+
 
         public override void KeyDown(KeyEventArgs e) {
 
@@ -100,15 +124,7 @@ namespace SRNicoNico.ViewModels {
 
         public void Refresh() {
 
-            Task.Run(() => {
-
-                Close();
-                if(Content != null) {
-
-                    new CommunityViewModel(Content.CommunityUrl);
-                }
-            });
-
+            Initialize();
         }
 
 
