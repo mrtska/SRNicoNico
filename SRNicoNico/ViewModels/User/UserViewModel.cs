@@ -53,7 +53,7 @@ namespace SRNicoNico.ViewModels {
 
 
         #region UserContentList変更通知プロパティ
-        private DispatcherCollection<TabItemViewModel> _UserContentList;
+        private DispatcherCollection<TabItemViewModel> _UserContentList = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
 
         public DispatcherCollection<TabItemViewModel> UserContentList {
             get { return _UserContentList; }
@@ -65,6 +65,22 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
+
+
+        #region SelectedIndex変更通知プロパティ
+        private int _SelectedIndex;
+
+        public int SelectedIndex {
+            get { return _SelectedIndex; }
+            set { 
+                if(_SelectedIndex == value)
+                    return;
+                _SelectedIndex = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         private readonly string UserPageUrl;
 
@@ -81,12 +97,12 @@ namespace SRNicoNico.ViewModels {
             UserEntry = UserInstance.GetUserInfo();
             Name = UserEntry.UserName;
 
-            UserContentList = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher) {
+            UserContentList.Clear();
 
-                new UserNicoRepoViewModel(this),
-                new UserMylistViewModel(this),
-                new UserVideoViewModel(this)
-            };
+            UserContentList.Add(new UserNicoRepoViewModel(this));
+            UserContentList.Add(new UserMylistViewModel(this));
+            UserContentList.Add(new UserVideoViewModel(this));
+
         }
 
         public void OpenBrowser() {
@@ -103,8 +119,8 @@ namespace SRNicoNico.ViewModels {
 
             Task.Run(() => {
 
-                Close();
-                new UserViewModel(UserPageUrl);
+                Initialize();
+                SelectedIndex = 0;
             });
 
         }

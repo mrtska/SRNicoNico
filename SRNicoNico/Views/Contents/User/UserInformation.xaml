@@ -90,7 +90,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <metro:TabView SelectedIndex="0" Style="{DynamicResource HorizontalViewStyle}" Height="38" ItemsSource="{Binding UserContentList}" SelectedValue="{Binding SelectedList}" />
+                <metro:TabView SelectedIndex="{Binding SelectedIndex,Mode=TwoWay}" Style="{DynamicResource HorizontalViewStyle}" Height="38" ItemsSource="{Binding UserContentList}" SelectedValue="{Binding SelectedList}" />
 
                 <mui:ModernButton Grid.Column="1" ToolTip="ブラウザで開く" Margin="5" Focusable="False" HorizontalAlignment="Right" EllipseDiameter="25" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5">
                     <i:Interaction.Triggers>
