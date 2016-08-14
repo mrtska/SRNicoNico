@@ -180,6 +180,7 @@ namespace SRNicoNico.ViewModels {
 
         public void RemoveTab(WebViewContentViewModel vm) {
 
+            WebBrowser.Dispose();
             Owner.RemoveTab(vm);
         }
 
