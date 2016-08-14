@@ -68,6 +68,7 @@
                                         <ComboBoxItem Content="を含む" />
                                         <ComboBoxItem Content="ユーザーID" />
                                         <ComboBoxItem Content="正規表現" ToolTip="上級者向け（正しい正規表現を指定しないと動作に影響が出ます）"/>
+                                        <ComboBoxItem Content="コメントコマンド" ToolTip="shitaやred、bigなど" />
                                     </ComboBox>
                                     <TextBox Grid.Column="2" IsEnabled="{Binding IsEnabled}" Text="{Binding Content,Mode=TwoWay}"/>
                                     <Button Grid.Column="3" Content="×" ToolTip="削除" Focusable="True">

@@ -26,6 +26,9 @@ namespace SRNicoNico.Views.Converter {
                     return 2;
                 case NGType.RegEx:
                     return 3;
+                case NGType.Command:
+                    return 4;
+                    
             }
             return 0;
         }
@@ -42,6 +45,8 @@ namespace SRNicoNico.Views.Converter {
                     return NGType.UserId;
                 case 3:
                     return NGType.RegEx;
+                case 4:
+                    return NGType.Command;
             }
             return NGType.Word;
         }

@@ -140,6 +140,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                             return true;
                         }
                         break;
+                    case NGType.Command:
+
+                        if(entry.Mail.Contains(ng.Content)) {
+
+                            return true;
+                        }
+
+                        break;
                     case NGType.UserId:
 
                         if(entry.UserId == ng.Content) {
@@ -227,6 +235,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         UserId,
         Word,
         WordContains,
+        Command,
         RegEx
 
     }
