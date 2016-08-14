@@ -83,6 +83,11 @@ namespace SRNicoNico.ViewModels {
 
                 Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
 
+                if(ShockwaveFlash.IsDisposed) {
+
+                    return;
+                }
+
                 if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
                     VideoData.VideoType = NicoNicoVideoType.SWF;
@@ -206,7 +211,6 @@ namespace SRNicoNico.ViewModels {
 
         public void DisposeHandler() {
 
-            
             ShockwaveFlash.Dispose();
         }
 
