@@ -18,5 +18,15 @@ namespace SRNicoNico.ViewModels {
 
 		//これをViewModelと呼んでいいのか謎だがとても重要なもの
         public NicoNicoHistoryData Data { get; set; }
+
+
+
+        public void OpenWebView() {
+
+            App.ViewModelRoot.WebView.AddTab("http://www.nicovideo.jp/watch/" + Data.Id, true);
+            App.ViewModelRoot.SetCurrent(App.ViewModelRoot.WebView);
+        }
+
     }
+
 }

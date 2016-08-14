@@ -62,7 +62,10 @@ namespace SRNicoNico.ViewModels {
 
         public void Initialize() {
 
-            AddTab(Settings.Instance.WebViewDefaultPage);
+            if(WebViewTabs.Count == 0) {
+
+                AddTab(Settings.Instance.WebViewDefaultPage);
+            }
         }
 
         public void AddTab() {
@@ -70,9 +73,9 @@ namespace SRNicoNico.ViewModels {
             AddTab(Settings.Instance.WebViewDefaultPage);
         }
 
-        public void AddTab(string url) {
+        public void AddTab(string url, bool forceWebView = false) {
 
-            var tab = new WebViewContentViewModel(url, this);
+            var tab = new WebViewContentViewModel(url, this, forceWebView);
             WebViewTabs.Add(tab);
             SelectedTab = tab;
         }
@@ -96,7 +99,6 @@ namespace SRNicoNico.ViewModels {
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
                 SelectedTab.WebBrowser.Navigate(Settings.Instance.WebViewDefaultPage);
-
             }));
         }
         public void Refresh() {

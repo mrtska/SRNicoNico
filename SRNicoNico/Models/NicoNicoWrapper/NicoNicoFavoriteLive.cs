@@ -5,6 +5,7 @@ using System.Text;
 using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
 using Livet;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoFavoriteLive {
@@ -88,6 +89,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //生放送開始時間
         public string StartTime { get; set; }
 
+
+        public void OpenWebView() {
+
+            App.ViewModelRoot.AddWebViewTab(LiveUrl, true);
+        }
+
+        public void OpenCommunity() {
+
+            NicoNicoOpener.Open(CommunityUrl);
+        }
+
+        public void OpenCommunityWebView() {
+
+            App.ViewModelRoot.AddWebViewTab(CommunityUrl, true);
+        }
 
     }
 

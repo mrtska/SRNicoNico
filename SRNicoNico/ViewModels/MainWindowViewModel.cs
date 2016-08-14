@@ -31,7 +31,7 @@ namespace SRNicoNico.ViewModels {
         //現在のバージョン
         public double CurrentVersion {
 
-            get { return 0.9; }
+            get { return 0.91; }
         }
 
         
@@ -90,6 +90,8 @@ namespace SRNicoNico.ViewModels {
         public SearchViewModel Search { get; private set; }
 
         public RankingViewModel Ranking { get; private set; }
+
+        public WebViewViewModel WebView { get; private set; }
 
         public NotifyLiveViewModel NotifyLive { get; private set; }
 
@@ -255,7 +257,7 @@ namespace SRNicoNico.ViewModels {
 
             App.ViewModelRoot.Title += "(user:" + User.UserName + ")";
 
-            TabItems.Add(new WebViewViewModel());
+            TabItems.Add(WebView = new WebViewViewModel());
             TabItems.Add(Ranking = new RankingViewModel());
             TabItems.Add(Search = new SearchViewModel());
             TabItems.Add(new FavoriteViewModel());
@@ -479,7 +481,11 @@ namespace SRNicoNico.ViewModels {
             SelectedTab = vm;
         }
 
+        public void AddWebViewTab(string url, bool forceWebView) {
 
+            WebView.AddTab(url, forceWebView);
+            SetCurrent(WebView);
+        }
 
         #region CanClose変更通知プロパティ
         private bool _CanClose;

@@ -54,6 +54,7 @@
                     <Style.Resources>
                         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
                         <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+
                     </Style.Resources>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>

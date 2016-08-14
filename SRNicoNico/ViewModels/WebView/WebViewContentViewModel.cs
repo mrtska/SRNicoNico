@@ -131,7 +131,7 @@ namespace SRNicoNico.ViewModels {
 
         private void Value_Navigating(object sender, System.Windows.Forms.WebBrowserNavigatingEventArgs e) {
 
-            if(NicoNicoOpener.GetType(e.Url) != NicoNicoUrlType.Other && !(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))) {
+            if(!ForceWebView && NicoNicoOpener.GetType(e.Url) != NicoNicoUrlType.Other && !(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))) {
 
                 e.Cancel = true;
                 NicoNicoOpener.Open(e.Url);
@@ -168,8 +168,11 @@ namespace SRNicoNico.ViewModels {
 
         private WebViewViewModel Owner;
 
-        public WebViewContentViewModel(string url, WebViewViewModel vm) {
+        private bool ForceWebView;
 
+        public WebViewContentViewModel(string url, WebViewViewModel vm, bool forceWebView = false) {
+
+            ForceWebView = forceWebView;
             Url = url;
             Owner = vm;
         }

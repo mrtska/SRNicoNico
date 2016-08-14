@@ -5,6 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.History"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              mc:Ignorable="d" 
              d:DesignHeight="81" d:DesignWidth="485.77"
              d:DataContext="{d:DesignInstance {x:Type vm:HistoryResultEntryViewModel}}"
@@ -12,7 +15,27 @@
              BorderBrush="#FF333333"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
+             
              >
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="WebViewで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenWebView" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="ブラウザで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:LaunchUriOrFileAction Path="{Binding Data.Id,StringFormat=http://www.nicovideo.jp/watch/{0}}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+    
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
