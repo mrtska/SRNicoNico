@@ -20,6 +20,33 @@
              ToolTipService.InitialShowDelay="1200"
              ToolTipService.ShowDuration="300000"
              >
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="WebViewで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenWebView" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="ブラウザで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:LaunchUriOrFileAction Path="{Binding Entry.VideoUrl}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="URLをクリップボードにコピー">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CopyUrl" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+
+
     <i:Interaction.Triggers>
         <l:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}">
             <l:TransitionInteractionMessageAction/>

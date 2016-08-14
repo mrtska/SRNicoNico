@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
+using System.Windows;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoRanking : NotificationObject {
@@ -203,6 +204,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //マイリスト数
         public string MylistCount { get; set; }
+
+        public void OpenWebView() {
+
+            App.ViewModelRoot.AddWebViewTab(VideoUrl, true);
+        }
+
+        public void CopyUrl() {
+
+            Clipboard.SetText(VideoUrl);
+        }
 
     }
 

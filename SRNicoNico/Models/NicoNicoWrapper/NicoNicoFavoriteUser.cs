@@ -5,6 +5,7 @@ using System.Text;
 using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
 using Livet;
+using System.Windows;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoFavoriteUser {
@@ -78,5 +79,18 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //サムネイルURL
         public string ThumbnailUrl { get; set; }
+
+
+
+
+        public void OpenWebView() {
+
+            App.ViewModelRoot.AddWebViewTab(UserPage, true);
+        }
+
+        public void CopyUrl() {
+
+            Clipboard.SetText(UserPage);
+        }
     }
 }

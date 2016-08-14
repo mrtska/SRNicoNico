@@ -1,7 +1,7 @@
 ﻿using Livet;
 
 using SRNicoNico.Models.NicoNicoWrapper;
-
+using System.Windows;
 
 namespace SRNicoNico.ViewModels {
 
@@ -14,5 +14,17 @@ namespace SRNicoNico.ViewModels {
 
             Node = node;
         }
-	}
+
+
+        public void OpenWebView() {
+
+            App.ViewModelRoot.AddWebViewTab("http://www.nicovideo.jp/watch/" + Node.Cmsid, true);
+        }
+
+        public void CopyUrl() {
+
+            Clipboard.SetText("http://www.nicovideo.jp/watch/" + Node.Cmsid);
+        }
+
+    }
 }

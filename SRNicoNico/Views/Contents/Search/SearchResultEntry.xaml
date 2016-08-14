@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              BorderThickness="1"
@@ -11,8 +12,34 @@
              d:DesignWidth="491"
              mc:Ignorable="d"
 			 BorderBrush="#FF333333"
+             Background="Transparent"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
 			 >
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="WebViewで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenWebView" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="ブラウザで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:LaunchUriOrFileAction Path="{Binding VideoUrl}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="URLをクリップボードにコピー">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CopyUrl" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="80" />

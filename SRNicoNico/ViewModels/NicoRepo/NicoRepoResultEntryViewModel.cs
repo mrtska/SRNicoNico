@@ -148,5 +148,16 @@ namespace SRNicoNico.ViewModels {
             
         }
 
+
+        public void OpenWebView() {
+
+            App.ViewModelRoot.AddWebViewTab(Entry.VideoUrl, true);
+        }
+
+        public void CopyUrl() {
+
+            Clipboard.SetText(Entry.VideoUrl);
+        }
+
     }
 }

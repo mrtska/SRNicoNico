@@ -44,7 +44,7 @@
                         <TextBlock Text="+" FontSize="18" VerticalAlignment="Center"/>
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
-                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />
+                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="AddTab" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </Button>
