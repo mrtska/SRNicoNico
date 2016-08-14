@@ -51,7 +51,7 @@
 
             </StackPanel>
 
-            <TextBox Grid.Column="1" Text="{Binding Url,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Height="25">
+            <TextBox ToolTip="URLまたは検索語句を入力:エンターでURLに飛ぶまたは検索" Grid.Column="1" Text="{Binding Url,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Height="25">
                 <i:Interaction.Behaviors>
                     <b:TextBoxEnterKeyBehavior Binding="{Binding}" MethodName="Load"/>
                 </i:Interaction.Behaviors>

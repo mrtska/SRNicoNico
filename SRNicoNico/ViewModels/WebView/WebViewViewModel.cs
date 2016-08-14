@@ -162,6 +162,9 @@ namespace SRNicoNico.ViewModels {
                     case Key.F5:
                         Refresh();
                         break;
+                    case Key.Home:
+                        Home();
+                        break;
                 }
             }
 

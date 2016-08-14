@@ -22,6 +22,7 @@ using SRNicoNico.Models.NicoNicoViewer;
 
 using System.Windows;
 using System.Windows.Input;
+using System.Text.RegularExpressions;
 
 namespace SRNicoNico.ViewModels {
     public class WebViewContentViewModel : TabItemViewModel {
@@ -57,22 +58,33 @@ namespace SRNicoNico.ViewModels {
                 value.DocumentCompleted += Value_DocumentCompleted;
                 value.CanGoForwardChanged += Value_CanGoForwardChanged;
                 value.CanGoBackChanged += Value_CanGoBackChanged;
+                value.NewWindow += Value_NewWindow;
 
+                value.ScriptErrorsSuppressed = true;
                 value.IsWebBrowserContextMenuEnabled = false;
+
                 RaisePropertyChanged();
             }
+        }
+
+        private void Value_NewWindow(object sender, CancelEventArgs e) {
+            
+            e.Cancel = true;
+            if(WebBrowser.StatusText == "") {
+
+                return;
+            }
+            Owner.AddTab(WebBrowser.StatusText);
         }
 
         private void Value_CanGoBackChanged(object sender, EventArgs e) {
 
             CanGoBack = WebBrowser.CanGoBack;
-
         }
 
         private void Value_CanGoForwardChanged(object sender, EventArgs e) {
 
             CanGoForward = WebBrowser.CanGoForward;
-
         }
 
 
@@ -185,13 +197,16 @@ namespace SRNicoNico.ViewModels {
 
         public void Load(string url) {
 
-            WebBrowser.Navigate(url);
+            var regex = new Regex(@"(.?.?)(https?://[\w/:%#\$&\?\(\)~\.=\+\-]+)");
+
+            if(regex.Match(url).Success) {
+
+                WebBrowser.Navigate(url);
+            } else {
+
+                WebBrowser.Navigate("https://www.google.co.jp/search?q=" + url);
+            }
         }
-
-
-
-
-
 
 
     }

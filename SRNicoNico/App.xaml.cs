@@ -36,31 +36,11 @@ namespace SRNicoNico {
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             
             Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", "SRNicoNico.exe", 0x00002AF9, Microsoft.Win32.RegistryValueKind.DWord);
-
-            /*
-            var settings = new CefSettings();
-
-            settings.LogSeverity = LogSeverity.Info;
-            settings.AcceptLanguageList = "ja-JP";
-            settings.UserAgent = "SRNicoNico/1.0";
-            settings.CachePath = "./cache";
-
-            settings.MultiThreadedMessageLoop = false;
-
-            settings.Locale = "ja";
-
-            //サブプロセスを指定
-            settings.BrowserSubprocessPath = "./SRNicoNicoRenderingProcess.exe";
-
-           // Cef.Initialize(settings, true, true);*/
-
             
 
             ViewModelRoot = new MainWindowViewModel();
 			MainWindow = new MainWindow { DataContext = ViewModelRoot };
 			MainWindow.Show();
-            
-
         }
 
         //集約エラーハンドラ
