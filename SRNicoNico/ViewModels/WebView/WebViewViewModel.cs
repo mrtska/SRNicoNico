@@ -90,6 +90,11 @@ namespace SRNicoNico.ViewModels {
                 return;
             }
 
+            DispatcherHelper.UIDispatcher.BeginInvoke((Action)(() => {
+
+                vm.WebBrowser.Dispose();
+            }));
+
             WebViewTabs.Remove(vm);
             SelectedTab = WebViewTabs.First();
         }
