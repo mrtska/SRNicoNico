@@ -23,6 +23,8 @@ using SRNicoNico.Models.NicoNicoViewer;
 using System.Windows;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
+using System.Windows.Navigation;
+using System.Runtime.InteropServices;
 
 namespace SRNicoNico.ViewModels {
     public class WebViewContentViewModel : TabItemViewModel {
@@ -44,15 +46,18 @@ namespace SRNicoNico.ViewModels {
 
 
         #region WebBrowser変更通知プロパティ
-        private System.Windows.Forms.WebBrowser _WebBrowser;
+        private WebBrowser _WebBrowser;
 
-        public System.Windows.Forms.WebBrowser WebBrowser {
+        public WebBrowser WebBrowser {
             get { return _WebBrowser; }
             set { 
                 if(_WebBrowser == value)
                     return;
                 _WebBrowser = value;
-                value.DocumentTitleChanged += Value_DocumentTitleChanged;
+                value.LoadCompleted += WebBrowser_LoadCompleted;
+                value.Navigating += Value_Navigating1;
+                value.Navigated += Value_Navigated1;
+                /*value.DocumentTitleChanged += Value_DocumentTitleChanged;
                 value.Navigating += Value_Navigating;
                 value.Navigated += Value_Navigated;
                 value.DocumentCompleted += Value_DocumentCompleted;
@@ -61,20 +66,66 @@ namespace SRNicoNico.ViewModels {
                 value.NewWindow += Value_NewWindow;
 
                 value.ScriptErrorsSuppressed = true;
-                value.IsWebBrowserContextMenuEnabled = false;
+                value.IsWebBrowserContextMenuEnabled = false;*/
 
                 RaisePropertyChanged();
             }
         }
+        private bool isInitialized = false;
+        private void WebBrowser_LoadCompleted(object sender, NavigationEventArgs e) {
 
-        private void Value_NewWindow(object sender, CancelEventArgs e) {
-            
-            e.Cancel = true;
-            if(WebBrowser.StatusText == "") {
 
+            if(!isInitialized) {    
+                IServiceProvider serviceProvider = (IServiceProvider)WebBrowser.Document;
+                Guid serviceGuid = new Guid("0002DF05-0000-0000-C000-000000000046");
+                Guid iid = typeof(SHDocVw.IWebBrowser2).GUID;
+                SHDocVw.DWebBrowserEvents_Event wbEvents = (SHDocVw.DWebBrowserEvents_Event)serviceProvider.QueryService(ref serviceGuid, ref iid);
+                wbEvents.NewWindow += OnNewWindow;
+                isInitialized = true;
+            }
+        }
+
+        [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [Guid("6d5140c1-7436-11ce-8034-00aa006009fa")]
+        private interface IServiceProvider {
+            [return: MarshalAs(UnmanagedType.IUnknown)]
+            object QueryService(ref Guid guidService, ref Guid riid);
+        }
+
+        private void Value_Navigated1(object sender, NavigationEventArgs e) {
+
+            dynamic doc = WebBrowser.Document;
+            Name = doc.title;
+
+            CanGoBack = WebBrowser.CanGoBack;
+            CanGoForward = WebBrowser.CanGoForward;
+        }
+
+        private void Value_Navigating1(object sender, NavigatingCancelEventArgs e) {
+
+            Url = e.Uri.OriginalString;
+
+            if(!ForceWebView && NicoNicoOpener.GetType(e.Uri) != NicoNicoUrlType.Other && !(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))) {
+
+                e.Cancel = true;
+                NicoNicoOpener.Open(e.Uri);
                 return;
             }
-            Owner.AddTab(WebBrowser.StatusText);
+        }
+
+        private void OnNewWindow(string url, int Flags, string TargetFrameName, ref object PostData, string Headers, ref bool Processed) {
+            Processed = true;
+            Owner.AddTab(url);
+        }
+        private void Value_NewWindow(object sender, CancelEventArgs e) {
+            
+           /* e.Cancel = true;
+            if(WebBrowser.StatusText == "") {
+
+                
+                return;
+            }
+            Owner.AddTab(WebBrowser.StatusText);*/
         }
 
         private void Value_CanGoBackChanged(object sender, EventArgs e) {
@@ -126,23 +177,17 @@ namespace SRNicoNico.ViewModels {
 
         private void Value_Navigated(object sender, System.Windows.Forms.WebBrowserNavigatedEventArgs e) {
 
-            Url = WebBrowser.Url.OriginalString;
+            //Url = WebBrowser.Url.OriginalString;
         }
 
         private void Value_Navigating(object sender, System.Windows.Forms.WebBrowserNavigatingEventArgs e) {
 
-            if(!ForceWebView && NicoNicoOpener.GetType(e.Url) != NicoNicoUrlType.Other && !(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))) {
-
-                e.Cancel = true;
-                NicoNicoOpener.Open(e.Url);
-                return;
-            }
 
         }
 
         private void Value_DocumentTitleChanged(object sender, EventArgs e) {
 
-            Name = WebBrowser.DocumentTitle;
+           // Name = WebBrowser.DocumentTitle;
         }
 
         private void Value_TitleChanged(object sender, DependencyPropertyChangedEventArgs e) {

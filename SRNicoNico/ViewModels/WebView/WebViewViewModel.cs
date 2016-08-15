@@ -56,6 +56,8 @@ namespace SRNicoNico.ViewModels {
 
 
 
+
+
         public WebViewViewModel() : base("WebView") {
 
         }
@@ -90,10 +92,7 @@ namespace SRNicoNico.ViewModels {
                 return;
             }
 
-            DispatcherHelper.UIDispatcher.BeginInvoke((Action)(() => {
-
-                vm.WebBrowser.Dispose();
-            }));
+            vm.WebBrowser.Dispose();
 
             WebViewTabs.Remove(vm);
             SelectedTab = WebViewTabs.First();
@@ -108,7 +107,7 @@ namespace SRNicoNico.ViewModels {
         }
         public void Refresh() {
 
-            SelectedTab?.WebBrowser.Refresh(System.Windows.Forms.WebBrowserRefreshOption.Completely);
+            SelectedTab?.WebBrowser.Refresh(true);
         }
 
 

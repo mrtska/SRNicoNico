@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using MetroRadiance.UI.Controls;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.ViewModels;
-
+using System.Threading;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 
@@ -27,13 +27,13 @@ namespace SRNicoNico.Views.Contents.WebView {
     public partial class WebViewContent : UserControl {
 
 
-        private System.Windows.Forms.WebBrowser browser;
+
 
         public WebViewContent() {
             InitializeComponent();
-
-            host.Child = browser = new System.Windows.Forms.WebBrowser();
+            
         }
+
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
