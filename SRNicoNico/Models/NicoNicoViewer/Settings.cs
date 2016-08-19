@@ -15,14 +15,16 @@ using System.Collections.Specialized;
 namespace SRNicoNico.Models.NicoNicoViewer {
     public class Settings : NotificationObject {
 
+        //インスタンス
         public static Settings Instance = new Settings();
 
+        //設定ファイルがあるディレクトリ
         private readonly string Dir;
 
-
+        //設定ファイルには型情報が文字列で保存されてるので文字からその型をルックアップできるようにするためのセット
         private readonly Dictionary<string, Type> TypePair;
 
-
+        //汎用性なんてない
         private Settings() {
 
             TypePair = new Dictionary<string, Type>();
@@ -35,6 +37,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             TypePair["GridLength"] = typeof(GridLength);
             TypePair["DispatcherCollection<NGCommentEntry>"] = typeof(DispatcherCollection<NGCommentEntry>);
 
+            //%APPDATA%/SRNicoNico/user.settings が設定ファイルの場所
             Dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\SRNicoNico\";
             Directory.CreateDirectory(Dir);
 
@@ -63,7 +66,8 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
             foreach(var property in properties) {
 
-
+                //ジェネリクスはちょっとややこしい
+                //型名に<Generic>を追加する
                 if(property.PropertyType.GenericTypeArguments.Length != 0) {
 
                     string generic = "<";
@@ -126,6 +130,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                     dynamic entries = (DynamicJson)value;
 
+                    //NGフィルターのエントリを設定ファイルからパースする
                     foreach(var entry in entries) {
 
                         var ng = new NGCommentEntry();
@@ -133,11 +138,14 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                         ng.Content = entry.Content;
                         ng.IsEnabled = entry.IsEnabled;
 
+                        //NGフィルターの内容が更新されたら即セーブする
                         ng.PropertyChanged += ((sender, e) => Save());
 
                         col.Add(ng);
                     }
 
+                    //新しくフィルターリストにエントリが追加/削除されたらセーブする
+                    //追加だったら新しいエントリに即セーブするイベントを設定
                     col.CollectionChanged += ((sender, e) => {
 
                         if(e.Action == NotifyCollectionChangedAction.Add && e.NewItems.Count != 0 && e.NewItems[0] is NGCommentEntry) {
@@ -208,10 +216,12 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
 
             //設定ファイルをデフォルト値で生成して反映させる
+            //なんてことは出来ないので
             Save();
             Load();
         }
 
+        //Jsonをいい感じにインデントする
         private string Format(string json) {
             dynamic parsedJson = JsonConvert.DeserializeObject(json);
             return JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
