@@ -135,6 +135,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 switch(ng.Type) {
                     case NGType.RegEx:
 
+                        
                         if(Regex.Match(entry.Content, ng.Content).Success) {
 
                             return true;

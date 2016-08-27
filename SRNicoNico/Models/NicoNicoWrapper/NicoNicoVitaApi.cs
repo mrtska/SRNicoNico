@@ -18,6 +18,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public static NicoNicoVitaApiVideoData GetVideoData(string cmsid) {
 
+            if(cmsid.Contains("?")) {
+
+                cmsid = cmsid.Substring(0, cmsid.IndexOf('?'));
+            }
+
+
             string result = NicoNicoWrapperMain.Session.GetAsync(VideoDataApiUrl + cmsid).Result;
 
             var json = DynamicJson.Parse(result);

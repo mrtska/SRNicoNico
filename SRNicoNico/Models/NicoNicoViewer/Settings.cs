@@ -36,6 +36,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             TypePair["FontFamily"] = typeof(FontFamily);
             TypePair["GridLength"] = typeof(GridLength);
             TypePair["DispatcherCollection<NGCommentEntry>"] = typeof(DispatcherCollection<NGCommentEntry>);
+            TypePair["DispatcherCollection<String>"] = typeof(DispatcherCollection<string>);
 
             //%APPDATA%/SRNicoNico/user.settings が設定ファイルの場所
             Dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\SRNicoNico\";
@@ -107,9 +108,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                     return ((GridLength)value).ToString();
                 case "Uri":
                     return ((Uri)value).OriginalString;
-                case "DispatcherCollection<NGCommentEntry>":
-
-                    return value;
                 default:
                     return value;
             }
@@ -125,41 +123,57 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                     return new GridLengthConverter().ConvertFrom(value);
                 case "Uri":
                     return new Uri((string)value);
-                case "DispatcherCollection<NGCommentEntry>":
-                    var col = new DispatcherCollection<NGCommentEntry>(DispatcherHelper.UIDispatcher);
+                case "DispatcherCollection<NGCommentEntry>": {
 
-                    dynamic entries = (DynamicJson)value;
+                        var col = new DispatcherCollection<NGCommentEntry>(DispatcherHelper.UIDispatcher);
 
-                    //NGフィルターのエントリを設定ファイルからパースする
-                    foreach(var entry in entries) {
+                        dynamic entries = (DynamicJson)value;
 
-                        var ng = new NGCommentEntry();
-                        ng.Type = Enum.Parse(typeof(NGType), entry.Type);
-                        ng.Content = entry.Content;
-                        ng.IsEnabled = entry.IsEnabled;
+                        //NGフィルターのエントリを設定ファイルからパースする
+                        foreach(var entry in entries) {
 
-                        //NGフィルターの内容が更新されたら即セーブする
-                        ng.PropertyChanged += ((sender, e) => Save());
+                            var ng = new NGCommentEntry();
+                            ng.Type = Enum.Parse(typeof(NGType), entry.Type);
+                            ng.Content = entry.Content;
+                            ng.IsEnabled = entry.IsEnabled;
 
-                        col.Add(ng);
-                    }
+                            //NGフィルターの内容が更新されたら即セーブする
+                            ng.PropertyChanged += ((sender, e) => Save());
 
-                    //新しくフィルターリストにエントリが追加/削除されたらセーブする
-                    //追加だったら新しいエントリに即セーブするイベントを設定
-                    col.CollectionChanged += ((sender, e) => {
-
-                        if(e.Action == NotifyCollectionChangedAction.Add && e.NewItems.Count != 0 && e.NewItems[0] is NGCommentEntry) {
-
-                            var ng = e.NewItems[0] as NGCommentEntry;
-                            ng.PropertyChanged += ((sdr, ee) => Save());
-                            Save();
-                        } else {
-
-                            Save();
+                            col.Add(ng);
                         }
-                    });
 
-                    return col;
+                        //新しくフィルターリストにエントリが追加/削除されたらセーブする
+                        //追加だったら新しいエントリに即セーブするイベントを設定
+                        col.CollectionChanged += ((sender, e) => {
+
+                            if(e.Action == NotifyCollectionChangedAction.Add && e.NewItems.Count != 0 && e.NewItems[0] is NGCommentEntry) {
+
+                                var ng = e.NewItems[0] as NGCommentEntry;
+                                ng.PropertyChanged += ((sdr, ee) => Save());
+                                Save();
+                            } else {
+
+                                Save();
+                            }
+                        });
+
+                        return col;
+                    }
+                case "DispatcherCollection<String>": {
+
+                        var col = new DispatcherCollection<string>(DispatcherHelper.UIDispatcher);
+
+                        dynamic entries = (DynamicJson)value;
+
+                        //NGフィルターのエントリを設定ファイルからパースする
+                        foreach(var entry in entries) {
+
+                            col.Add(entry);
+                        }
+                        return col;
+                    }
+                   
                 default:
                     return value;
             }
@@ -331,6 +345,24 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
         #endregion
+
+
+        #region SearchHistory変更通知プロパティ
+        private DispatcherCollection<string> _SearchHistory = new DispatcherCollection<string>(DispatcherHelper.UIDispatcher);
+
+        public DispatcherCollection<string> SearchHistory {
+            get { return _SearchHistory; }
+            set { 
+                if(_SearchHistory == value)
+                    return;
+                _SearchHistory = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
 
         #region UserSelectedFont変更通知プロパティ
         private FontFamily _UserSelectedFont = new FontFamily("Yu Gothic UI");

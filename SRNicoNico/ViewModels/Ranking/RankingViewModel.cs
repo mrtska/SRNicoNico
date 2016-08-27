@@ -79,6 +79,9 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+
+
+
         public void Initialize() {
 
             RankingInstance = new NicoNicoRanking(Period, Target);

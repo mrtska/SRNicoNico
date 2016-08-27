@@ -14,6 +14,7 @@ using System.Web.Script.Serialization;
 using Livet;
 
 using SRNicoNico.ViewModels;
+using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoSearch : NotificationObject {
@@ -21,118 +22,84 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //検索API
         private const string SearchURL = "http://ext.nicovideo.jp/api/search/";
 
-        //検索の種類
-        private SearchType Type;
-
-        //検索キーワード
-        private string Keyword;
-
-        //ソート
-        private string Sort;
-
-        //オーダー
-        private string Order;
-
         //取得しているページ
         private byte CurrentPage = 1;
 
-        private SearchViewModel SearchVM;
+        private SearchViewModel Owner;
 
 
-        public NicoNicoSearch(SearchViewModel vm, string keyword, SearchType type, string sort) {
+        public NicoNicoSearch(SearchViewModel vm) {
 
-            SearchVM = vm;
-            Type = type;
-            Keyword = keyword;
-
-            Sort = "&sort=" + sort.Split(':')[0];
-            Order = "&order=" + sort.Split(':')[1];
+            Owner = vm;
 
 
         }
         //リクエストのレスポンスを返す
-        public NicoNicoSearchResult Search() {
+        public async Task<NicoNicoSearchResult> Search(string keyword, SearchType type, string Sort, int page = 1) {
 
-            string typeString;  //表示文字列
-            string type;        //クエリ文字列
-            if(Type == SearchType.Keyword) {
+            
+            Owner.Status = "検索中:" +  keyword;
 
-                typeString = "テキスト";
-                type = "search";
+            Sort = "&sort=" + Sort.Split(':')[0] + "&order=" + Sort.Split(':')[1];
+
+            string typestr;
+            if(type == SearchType.Keyword) {
+
+                typestr = "search";
             } else {
 
-                typeString = "タグ";
-                type = "tag";
+                typestr = "tag";
             }
-            SearchVM.Status = "検索中(" + typeString + ":" + Keyword + ")";
 
-            NicoNicoSearchResult result = new NicoNicoSearchResult();
+            var result = new NicoNicoSearchResult();
 
-            //テキスト検索のとき、urlの場合はそれも検索結果に表示する
-            if(Type == SearchType.Keyword && CurrentPage == 0) {
+            try {
 
-                Match match = Regex.Match(Keyword, @"^(:?http://(:?www.nicovideo.jp/watch/|nico.ms/))?(?<cmsid>\w{0,2}\d+).*?$");
-                if(match.Success) {
+                var a = await NicoNicoWrapperMain.Session.GetAsync(SearchURL + typestr + "/" + keyword + "?mode=watch" + Sort + "&page=" + page);
 
-                    var data = NicoNicoVitaApi.GetVideoData(match.Groups["cmsid"].Value);
+                //取得したJsonの全体
+                var json = DynamicJson.Parse(a);
 
-                    if(data.Success) {
+                //検索結果総数
+                if(json.count()) {
+                    result.Total = (ulong)json.count;
+                } else {
 
+                    //連打するとエラーになる
+                    Owner.Status = "アクセスしすぎです。1分ほど時間を置いてください。";
+                    return null;
+                }
+
+                //Jsonからリストを取得、データを格納
+                if(json.list()) {
+                    foreach(var entry in json.list) {
 
                         var node = new NicoNicoVideoInfoEntry();
 
-                        node.Cmsid = data.Id;
-                        node.Title = HttpUtility.HtmlDecode(data.Title);
-                        node.ViewCounter = data.ViewCounter;
-                        node.CommentCounter = data.CommentCounter;
-                        node.MylistCounter = data.MylistCounter;
-                        node.ThumbnailUrl = data.ThumbnailUrl;
-                        node.Length = data.Length;
-                        node.FirstRetrieve = data.FirstRetrieve.Replace('-', '/');
+                        node.Cmsid = entry.id;
+                        node.Title = entry.title_short;
+                        node.ViewCounter = (int)entry.view_counter;
+                        node.CommentCounter = (int)entry.num_res;
+                        node.MylistCounter = (int)entry.mylist_counter;
+                        node.ThumbnailUrl = entry.thumbnail_url;
+                        node.Length = entry.length;
+                        node.FirstRetrieve = entry.first_retrieve;
 
                         result.List.Add(node);
-
-                        result.Total++;
                     }
-
                 }
+
+
+                Owner.Status = "";
+
+
+                return result;
+
+            } catch(RequestTimeout) {
+
+                Owner.Status = "検索がタイムアウトしました";
+                return null;
             }
-
-            //URLに検索キーワードやその他いろいろをGETリクエストする
-            string search = SearchURL + type + "/" + Keyword + "?mode=watch" + Sort + Order + "&page=" + CurrentPage++;
-
-            string jsonString = NicoNicoWrapperMain.Session.GetAsync(search).Result;
-
-            //取得したJsonの全体
-            var json = DynamicJson.Parse(jsonString);
-
-            //検索結果総数
-            if(json.count()) {
-                result.Total += (ulong)json.count;
-            }
-
-            //Jsonからリストを取得、データを格納
-            if(json.list()) {
-                foreach(var entry in json.list) {
-
-                    NicoNicoVideoInfoEntry node = new NicoNicoVideoInfoEntry();
-
-                    node.Cmsid = entry.id;
-                    node.Title = entry.title_short;
-                    node.ViewCounter = (int) entry.view_counter;
-                    node.CommentCounter = (int) entry.num_res;
-                    node.MylistCounter = (int) entry.mylist_counter;
-                    node.ThumbnailUrl = entry.thumbnail_url;
-                    node.Length = entry.length;
-                    node.FirstRetrieve = entry.first_retrieve;
-
-                    result.List.Add(node);
-                }
-            }
-            SearchVM.Status = "検索完了(" + typeString + ":" + Keyword + ")";
-
-
-            return result;
         }
     }
 
@@ -141,12 +108,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //検索結果の総数
         public ulong Total { get; set; }
-        public List<NicoNicoVideoInfoEntry> List { get; set; }
+        public List<NicoNicoVideoInfoEntry> List { get; set; } = new List<NicoNicoVideoInfoEntry>();
 
-        public NicoNicoSearchResult() {
-
-            List = new List<NicoNicoVideoInfoEntry>();
-        }
     }
 
 

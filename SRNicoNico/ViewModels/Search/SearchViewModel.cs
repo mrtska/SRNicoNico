@@ -21,8 +21,12 @@ using SRNicoNico.Models.NicoNicoViewer;
 namespace SRNicoNico.ViewModels {
     public class SearchViewModel : TabItemViewModel {
 
+
+
+        private NicoNicoSearch CurrentSearch;
+
         //ソート方法
-        private string[] sort_by = { "f:d", "f:a",
+        private string[] sortBy = { "f:d", "f:a",
                                      "v:d", "v:a",
                                      "n:d", "n:a",
                                      "m:d", "m:a",
@@ -42,7 +46,7 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
+            
         
 
 
@@ -61,7 +65,6 @@ namespace SRNicoNico.ViewModels {
         #endregion
         
 
-        private NicoNicoSearch CurrentSearch;
 
 
         #region SearchResult変更通知プロパティ
@@ -80,68 +83,67 @@ namespace SRNicoNico.ViewModels {
 
 
 
-        public SearchViewModel() : base("検索") { }
+        public SearchViewModel() : base("検索") {
+
+            SearchResult = new SearchResultViewModel();
+
+            //検索
+            CurrentSearch = new NicoNicoSearch(this);
+
+        }
 
         //検索ボタン押下
-        public void DoSearch() {
-
+        public async void Search() {
+                
 
 			if (SearchText == null || SearchText.Length == 0) {
 
 				return;
 			}
 
-            SearchResult = new SearchResultViewModel();
 
             SearchResult.OwnerViewModel = this;
 
             SearchResult.IsActive = true;
-            
-            //検索
-            CurrentSearch = new NicoNicoSearch(this, SearchText, SearchType, sort_by[Settings.Instance.SearchIndex]);
 
-			Task.Run(() => {
+            if(!Settings.Instance.SearchHistory.Contains(SearchText)) {
 
-                var result = CurrentSearch.Search();
-                //検索結果をUIに
-                SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
+                Settings.Instance.SearchHistory.Add(SearchText);
+            }
+            var result = await CurrentSearch.Search(SearchText, SearchType, sortBy[Settings.Instance.SearchIndex]);
 
-                SearchResult.List.Clear();
-                foreach(var node in result.List) {
-
-                   /* foreach(var ng in Settings.Instance.NGList) {
-
-                        if(ng.Type != NGType.UserId || !Regex.Match(ng.Content, "\\d+").Success) {
-
-                            continue;
-                        }
-
-                    }*/
-
-
-                    SearchResult.List.Add(new SearchResultEntryViewModel(node));
-                }
+            if(result == null) {
 
                 SearchResult.IsActive = false;
-            });
+                return;
+            }
+
+            //検索結果をUIに
+            SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
+
+            SearchResult.List.Clear();
+            foreach(var node in result.List) {
+
+                SearchResult.List.Add(new SearchResultEntryViewModel(node));
+            }
+
+            SearchResult.IsActive = false;
 		}
 
-		public void SearchNext() {
+		public async void SearchNext() {
 
             SearchResult.IsActive = true;
-            Task.Run(() => {
 
-                NicoNicoSearchResult result = CurrentSearch.Search();
+            NicoNicoSearchResult result = await CurrentSearch.Search(SearchText, SearchType, sortBy[Settings.Instance.SearchIndex]);
 
-                SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
+            SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
 
-                foreach(NicoNicoVideoInfoEntry node in result.List) {
+            foreach(NicoNicoVideoInfoEntry node in result.List) {
 
-                    SearchResult.List.Add(new SearchResultEntryViewModel(node));
-                }
+                SearchResult.List.Add(new SearchResultEntryViewModel(node));
+            }
 
-                SearchResult.IsActive = false;
-            });
+            SearchResult.IsActive = false;
         }
     }
 

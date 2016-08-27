@@ -55,7 +55,7 @@ namespace SRNicoNico.Views.Behaviors {
                     SearchViewModel vm = (SearchViewModel) Owner;
 
                     vm.SearchText = this.AssociatedObject.Text;
-                    vm.DoSearch();
+                    vm.Search();
                 }
 				
 			}

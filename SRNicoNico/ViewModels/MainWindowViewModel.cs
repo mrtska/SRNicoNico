@@ -368,7 +368,7 @@ namespace SRNicoNico.ViewModels {
 
             Search.SearchType = type;
             Search.SearchText = text;
-            Search.DoSearch();
+            Search.Search();
             SelectedTab = Search;
 
         }
