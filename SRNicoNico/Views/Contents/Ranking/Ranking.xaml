@@ -49,14 +49,7 @@
             <StackPanel Grid.Row="2" Background="#FF252627">
                 <TextBlock Text="ランキング集計期間" />
                 <ComboBox Margin="0,2,0,0" Text="{Binding Period,Mode=OneWayToSource}" SelectedIndex="{Binding Source={x:Static m:Settings.Instance},Path=RankingPeriodIndex}">
-                    <ComboBox.ItemContainerStyle>
-                        <Style TargetType="ComboBoxItem">
-                            <Setter Property="HorizontalAlignment" Value="Left"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                            <Setter Property="VerticalContentAlignment" Value="Center"/>
-                        </Style>
-                    </ComboBox.ItemContainerStyle>
+
                     <ComboBoxItem Content="毎時"/>
                     <ComboBoxItem Content="24時間"/>
                     <ComboBoxItem Content="週間"/>
@@ -65,14 +58,6 @@
                 </ComboBox>
                 <TextBlock Margin="0,2,0,0" Text="ランキング集計対象" />
                 <ComboBox Margin="0,2,0,0" Text="{Binding Target,Mode=OneWayToSource}" SelectedIndex="{Binding Source={x:Static m:Settings.Instance},Path=RankingTargetIndex}">
-                    <ComboBox.ItemContainerStyle>
-                        <Style TargetType="ComboBoxItem">
-                            <Setter Property="HorizontalAlignment" Value="Left"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                            <Setter Property="VerticalContentAlignment" Value="Center"/>
-                        </Style>
-                    </ComboBox.ItemContainerStyle>
                     <ComboBoxItem Content="総合"/>
                     <ComboBoxItem Content="再生"/>
                     <ComboBoxItem Content="コメント"/>

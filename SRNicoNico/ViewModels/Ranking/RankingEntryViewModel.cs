@@ -82,6 +82,12 @@ namespace SRNicoNico.ViewModels {
 
             var a = await RankingInstance.GetRankingAsync(Category, page);
 
+            if(a == null) {
+
+                IsActive = false;
+                IsPreparing = true;
+                return;
+            }
 
             foreach(var item in a.ItemList) {
 

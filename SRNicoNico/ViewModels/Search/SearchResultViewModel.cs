@@ -50,21 +50,7 @@ namespace SRNicoNico.ViewModels {
 		}
         #endregion
 
-
-
-        #region OwnerViewModel変更通知プロパティ
-        private ViewModel _OwnerViewModel;
-
-        public ViewModel OwnerViewModel {
-            get { return _OwnerViewModel; }
-            set { 
-                if(_OwnerViewModel == value)
-                    return;
-                _OwnerViewModel = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
+        
 
 
         #region IsActive変更通知プロパティ
@@ -94,9 +80,14 @@ namespace SRNicoNico.ViewModels {
 				RaisePropertyChanged();
 			}
 		}
-		#endregion
+        #endregion
 
+        public SearchViewModel Owner;
 
+        public SearchResultViewModel(SearchViewModel vm) {
+
+            Owner = vm;
+        }
 
 
 		//動画を開く

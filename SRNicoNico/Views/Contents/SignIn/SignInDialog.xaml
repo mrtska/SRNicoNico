@@ -1,6 +1,7 @@
 ﻿<metro:MetroWindow x:Class="SRNicoNico.Views.Contents.SignIn.SignInDialog"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                    xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
@@ -84,6 +85,7 @@
                 <PasswordBox Grid.Row="1" Width="242" Margin="44,0" VerticalAlignment="Center" IsEnabled="{Binding Enabled}">
                     <i:Interaction.Behaviors>
                         <l:PasswordBoxBindingSupportBehavior Password="{Binding Password}" />
+                        <b:PasswordBoxEnterKeyBehavior Binding="{Binding}" MethodName="SignIn" />
                     </i:Interaction.Behaviors>
                 </PasswordBox>
             </StackPanel>

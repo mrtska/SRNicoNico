@@ -51,7 +51,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 ret.ItemList = new List<RankingItem>();
 
-                foreach(var ranking in doc.DocumentNode.SelectNodes("//div[@class='contentBody video videoList01']/ul/li")) {
+                var nodes = doc.DocumentNode.SelectNodes("//div[@class='contentBody video videoList01']/ul/li");
+                if(nodes == null) {
+
+                    return null;
+                }
+
+                foreach(var ranking in nodes) {
 
                     var item = new RankingItem();
 

@@ -85,7 +85,7 @@ namespace SRNicoNico.ViewModels {
 
         public SearchViewModel() : base("検索") {
 
-            SearchResult = new SearchResultViewModel();
+            SearchResult = new SearchResultViewModel(this);
 
             //検索
             CurrentSearch = new NicoNicoSearch(this);
@@ -93,8 +93,12 @@ namespace SRNicoNico.ViewModels {
         }
 
         //検索ボタン押下
-        public async void Search() {
+        public async void Search(string text = "") {
                 
+            if(text.Length != 0) {
+
+                SearchText = text;
+            }
 
 			if (SearchText == null || SearchText.Length == 0) {
 
@@ -102,7 +106,6 @@ namespace SRNicoNico.ViewModels {
 			}
 
 
-            SearchResult.OwnerViewModel = this;
 
             SearchResult.IsActive = true;
 

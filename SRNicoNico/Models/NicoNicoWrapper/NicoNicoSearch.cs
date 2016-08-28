@@ -22,11 +22,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //検索API
         private const string SearchURL = "http://ext.nicovideo.jp/api/search/";
 
-        //取得しているページ
-        private byte CurrentPage = 1;
-
         private SearchViewModel Owner;
-
 
         public NicoNicoSearch(SearchViewModel vm) {
 
@@ -112,11 +108,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
     }
 
-
     public enum SearchType {
 
         Keyword,
         Tag
     }
-
 }

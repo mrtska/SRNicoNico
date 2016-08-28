@@ -62,7 +62,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <i:Interaction.Behaviors>
-                <Behaviors:ListBoxInfiniteScrollBehavior ViewModel="{Binding OwnerViewModel}" MethodName="SearchNext" />
                 <ei:FluidMoveBehavior AppliesTo="Children"/>
             </i:Interaction.Behaviors>
         </ListBox>

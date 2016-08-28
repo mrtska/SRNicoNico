@@ -51,7 +51,7 @@
                 </ComboBox>
                 <TextBox Width="180" Height="23" Margin="5,10,0,0" MaxLength="255" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding SearchText}" TextWrapping="Wrap">
                     <i:Interaction.Behaviors>
-                        <Behaviors:TextBoxBehavior Owner="{Binding}" />
+                        <Behaviors:TextBoxEnterKeyBehavior Binding="{Binding}" MethodName="Search"/>
                     </i:Interaction.Behaviors>
                 </TextBox>
                 <Grid Margin="0,10,0,0">
@@ -126,9 +126,6 @@
 
         </Grid>
         
-
-
-		
         <local:SearchResult Grid.Column="1" DataContext="{Binding SearchResult}"/>
 	</Grid>
 </UserControl>

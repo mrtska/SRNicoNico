@@ -281,6 +281,7 @@
     <Compile Include="ViewModels\Video\VideoViewModel.cs" />
     <Compile Include="ViewModels\WebView\WebViewContentViewModel.cs" />
     <Compile Include="ViewModels\WebView\WebViewViewModel.cs" />
+    <Compile Include="Views\Behaviors\PasswordBoxEnterKeyBehavior.cs" />
     <Compile Include="Views\Behaviors\TextBoxEnterKeyBehavior.cs" />
     <Compile Include="Views\Behaviors\TextBoxNumericOnlyBehavior.cs" />
     <Compile Include="Views\Behaviors\DataGridAutoScrollBehavior.cs" />
@@ -493,7 +494,6 @@
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
     <Compile Include="Views\Behaviors\ListBoxInfiniteScrollBehavior.cs" />
     <Compile Include="Views\Behaviors\TextBlockHtmlBehavior.cs" />
-    <Compile Include="Views\Behaviors\TextBoxBehavior.cs" />
     <Compile Include="Views\Contents\History\HistoryResult.xaml.cs">
       <DependentUpon>HistoryResult.xaml</DependentUpon>
     </Compile>
