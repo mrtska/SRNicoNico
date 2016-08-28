@@ -39,9 +39,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             
             Owner.Status = "検索中:" +  keyword;
-
+            
             Sort = "&sort=" + Sort.Split(':')[0] + "&order=" + Sort.Split(':')[1];
-
+            
             string typestr;
             if(type == SearchType.Keyword) {
 

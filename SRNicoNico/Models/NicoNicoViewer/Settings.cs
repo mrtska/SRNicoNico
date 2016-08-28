@@ -43,6 +43,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             Directory.CreateDirectory(Dir);
 
             Load();
+            Save();
         }
 
         private bool Loading = false;
@@ -171,6 +172,11 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                             col.Add(entry);
                         }
+                        //新しくフィルターリストにエントリが追加/削除されたらセーブする
+                        col.CollectionChanged += ((sender, e) => {
+
+                                Save();
+                        });
                         return col;
                     }
                    

@@ -43,7 +43,10 @@ namespace SRNicoNico {
 
             ViewModelRoot = new MainWindowViewModel();
 			MainWindow = new MainWindow { DataContext = ViewModelRoot };
-			MainWindow.Show();
+
+            MainWindow.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            MainWindow.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+            MainWindow.Show();
         }
 
         //集約エラーハンドラ

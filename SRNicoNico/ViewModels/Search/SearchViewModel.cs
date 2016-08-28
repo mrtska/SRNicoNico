@@ -128,23 +128,24 @@ namespace SRNicoNico.ViewModels {
             }
 
             SearchResult.IsActive = false;
-		}
-
-		public async void SearchNext() {
-
-            SearchResult.IsActive = true;
-
-            NicoNicoSearchResult result = await CurrentSearch.Search(SearchText, SearchType, sortBy[Settings.Instance.SearchIndex]);
-
-            SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
-
-            foreach(NicoNicoVideoInfoEntry node in result.List) {
-
-                SearchResult.List.Add(new SearchResultEntryViewModel(node));
-            }
-
-            SearchResult.IsActive = false;
         }
+
+        public void SearchWithHistory(string tex) {
+
+            SearchText = tex;
+            Search();
+        }
+
+        public void SearchWithHistory() {
+
+            //What's?!
+        }
+
+        public void DeleteHistory(string s) {
+
+            Settings.Instance.SearchHistory.Remove(s);
+        }
+
     }
 
 }
