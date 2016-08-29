@@ -22,6 +22,7 @@
                    Height="723"
 		           Background="{DynamicResource ThemeBrushKey}"
 		  	       Foreground="{DynamicResource ActiveForegroundBrushKey}"
+                   
 	               IsRestoringWindowPlacement="True"
 		           UseLayoutRounding="True"
 			       TextOptions.TextFormattingMode="Display"
@@ -34,7 +35,7 @@
                    KeyDown="Root_KeyDown"
                    FontFamily="{Binding  Source={x:Static m:Settings.Instance},Path=UserSelectedFont,Mode=TwoWay}"
                    Visibility="{Binding Visibility,Mode=TwoWay}"
-                   WindowStyle="None"
+                   WindowStyle="SingleBorderWindow"
                    mc:Ignorable="d"
                    d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
 				  >

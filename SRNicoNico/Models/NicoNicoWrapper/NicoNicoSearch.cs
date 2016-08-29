@@ -85,9 +85,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     }
                 }
 
-
                 Owner.Status = "";
-
 
                 return result;
 
@@ -98,7 +96,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
     }
-
 
     public class NicoNicoSearchResult : NotificationObject {
 
