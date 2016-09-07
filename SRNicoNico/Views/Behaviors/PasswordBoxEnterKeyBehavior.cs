@@ -28,7 +28,7 @@ namespace SRNicoNico.Views.Behaviors {
 
         // Using a DependencyProperty as the backing store for Binding.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty BindingProperty =
-            DependencyProperty.Register("Binding", typeof(ViewModel), typeof(TextBoxEnterKeyBehavior), new PropertyMetadata(null));
+            DependencyProperty.Register("Binding", typeof(ViewModel), typeof(PasswordBoxEnterKeyBehavior), new PropertyMetadata(null));
 
 
 
@@ -39,7 +39,7 @@ namespace SRNicoNico.Views.Behaviors {
 
         // Using a DependencyProperty as the backing store for MethodName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MethodNameProperty =
-            DependencyProperty.Register("MethodName", typeof(string), typeof(TextBoxEnterKeyBehavior), new PropertyMetadata(""));
+            DependencyProperty.Register("MethodName", typeof(string), typeof(PasswordBoxEnterKeyBehavior), new PropertyMetadata(""));
 
 
 

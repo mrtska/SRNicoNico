@@ -1,5 +1,7 @@
 ﻿using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.ViewModels;
+using SRNicoNico.Views.Contents.Interface;
+using SRNicoNico.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,7 @@ namespace SRNicoNico.Views.Contents.Video {
 	/// <summary>
 	/// Video.xaml の相互作用ロジック
 	/// </summary>
-	public partial class Video : UserControl {
+	public partial class Video : ExternalizableUserControl {
 		public Video() {
             InitializeComponent();
             if(Settings.Instance.VideoInfoPlacement == "Right") {

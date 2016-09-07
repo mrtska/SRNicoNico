@@ -248,6 +248,7 @@
     <Compile Include="ViewModels\Log\AccessLogEntryViewModel.cs" />
     <Compile Include="ViewModels\Log\AccessLogViewModel.cs" />
     <Compile Include="ViewModels\History\HistoryViewModel.cs" />
+    <Compile Include="ViewModels\ContentContainerViewModel.cs" />
     <Compile Include="ViewModels\Misc\OSSEntryViewModel.cs" />
     <Compile Include="ViewModels\Misc\OSSViewModel.cs" />
     <Compile Include="ViewModels\Misc\OverViewViewModel.cs" />
@@ -330,6 +331,7 @@
       <DependentUpon>FavoriteUser.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\Live\NotifyLiveViewModel.cs" />
+    <Compile Include="Views\Contents\Interface\IExternalizable.cs" />
     <Compile Include="Views\Contents\Live\FullScreenWindow.xaml.cs">
       <DependentUpon>FullScreenWindow.xaml</DependentUpon>
     </Compile>
@@ -569,6 +571,7 @@
     <Compile Include="Views\Contents\WebView\WebViewContent.xaml.cs">
       <DependentUpon>WebViewContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\ExternalizableUserControl.cs" />
     <Compile Include="Views\Controls\ManagedPopup.cs" />
     <Compile Include="Views\Controls\SeekBar.cs" />
     <Compile Include="Views\Converter\InvertBoolConverter.cs" />
@@ -580,6 +583,9 @@
     <Compile Include="Views\Extentions\HtmlToXamlConverter.cs" />
     <Compile Include="Views\Contents\SignIn\SignInDialog.xaml.cs">
       <DependentUpon>SignInDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ContentContainer.xaml.cs">
+      <DependentUpon>ContentContainer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StatusBar.xaml.cs">
       <DependentUpon>StatusBar.xaml</DependentUpon>
@@ -925,6 +931,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\WebView\WebViewContent.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ContentContainer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

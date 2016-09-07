@@ -61,7 +61,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
 
         //URLから適当なViewを開く
-        public static TabItemViewModel Open(string url) {
+        public static TabItemViewModel Open(string url, bool addtab = true) {
 
             /*if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
 
@@ -72,23 +72,39 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             if(url.StartsWith("http://www.nicovideo.jp/watch/")) {
 
                 var vm = new VideoViewModel(url);
-                App.ViewModelRoot.AddTabAndSetCurrent(vm);
+
+                if(addtab) {
+
+                    App.ViewModelRoot.AddTabAndSetCurrent(vm);
+                }
                 vm.Initialize();
                 return vm;
             } else if(url.StartsWith("http://www.nicovideo.jp/user/")) {
 
                 var vm = new UserViewModel(url);
-                App.ViewModelRoot.AddTabAndSetCurrent(vm);
+                
+                if(addtab) {
+
+                    App.ViewModelRoot.AddTabAndSetCurrent(vm);
+                }
                 return vm;
             } else if(url.StartsWith("http://www.nicovideo.jp/mylist/")) {
 
                 var vm = new PublicMylistViewModel(url);
-                App.ViewModelRoot.AddTabAndSetCurrent(vm);
+
+                if(addtab) {
+
+                    App.ViewModelRoot.AddTabAndSetCurrent(vm);
+                }
                 return vm;
             } else if(url.StartsWith("http://com.nicovideo.jp/community/")) {
 
                 var vm = new CommunityViewModel(url);
-                App.ViewModelRoot.AddTabAndSetCurrent(vm);
+
+                if(addtab) {
+
+                    App.ViewModelRoot.AddTabAndSetCurrent(vm);
+                }
                 return vm;
             } /*else if(url.StartsWith("http://live.nicovideo.jp/watch/")) {
 
@@ -102,7 +118,18 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
 
+        public static void OpenNew(string url) {
 
+            var vm = Open(url, false);
+            new ContentContainerViewModel(vm);
+
+        }
+        public static void OpenNew(TabItemViewModel vm) {
+
+            App.ViewModelRoot.RemoveTab(vm);
+            new ContentContainerViewModel(vm);
+
+        }
 
         //ニコニコのURLが何を指しているかを返す
         public static NicoNicoUrlType GetType(Uri url) {

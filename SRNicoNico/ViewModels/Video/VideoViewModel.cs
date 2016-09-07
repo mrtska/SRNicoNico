@@ -19,10 +19,11 @@ using Codeplex.Data;
 using Flash.External;
 using AxShockwaveFlashObjects;
 using Livet.Messaging.Windows;
+using SRNicoNico.Views.Contents.Interface;
 
 namespace SRNicoNico.ViewModels {
 
-	public class VideoViewModel : TabItemViewModel {
+	public class VideoViewModel : TabItemViewModel, IExternalizable {
 
         //APIバックエンドインスタンス
         public NicoNicoWatchApi WatchApi;
@@ -389,9 +390,16 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        Control IExternalizable.View { get; set; }
+        TabItemViewModel IExternalizable.ViewModel {
+            get {
+                return this;
+            }
+        }
 
 
-      
+
+
 
         //プレイリストだったら
         internal readonly bool IsPlayList = false;
@@ -598,6 +606,10 @@ namespace SRNicoNico.ViewModels {
             Time.CurrentTimeString = NicoNicoUtil.ConvertTime(Time.CurrentTime);
         }
         
+        public void OpenNew() {
+
+            NicoNicoOpener.OpenNew(this);
+        }
 
         //RTMP動画でタイムアウトになった時又は予期せぬ理由でエラーになった時
         public void RTMPTimeOut() {

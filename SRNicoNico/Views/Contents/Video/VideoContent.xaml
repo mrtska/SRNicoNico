@@ -41,6 +41,13 @@
                 <TextBlock HorizontalAlignment="Left" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" FontSize="20" Text="{Binding VideoData.ApiData.Title}" VerticalAlignment="Top"/>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <mui:ModernButton Focusable="False" ToolTip="新しいウィンドウで開く" HorizontalAlignment="Right" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5" Margin="0,0,10,0">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenNew" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </mui:ModernButton>
                     <mui:ModernButton Focusable="False" ToolTip="ブラウザで開く" HorizontalAlignment="Right" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5" Margin="0,0,10,0">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
