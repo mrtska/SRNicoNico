@@ -247,9 +247,9 @@ namespace SRNicoNico.ViewModels {
 
 
         #region VideoFlash変更通知プロパティ UI要素だけどこればっかりは仕方ない
-        private VideoFlash _VideoFlash;
+        private VideoHtml5 _VideoFlash;
 
-        public VideoFlash VideoFlash {
+        public VideoHtml5 VideoFlash {
             get { return _VideoFlash; }
             set { 
                 if(_VideoFlash == value)
@@ -261,9 +261,9 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
         #region FullScreenVideoFlash変更通知プロパティ
-        private VideoFlash _FullScreenVideoFlash;
+        private VideoHtml5 _FullScreenVideoFlash;
 
-        public VideoFlash FullScreenVideoFlash {
+        public VideoHtml5 FullScreenVideoFlash {
             get { return _FullScreenVideoFlash; }
             set { 
                 if(_FullScreenVideoFlash == value)
@@ -439,11 +439,11 @@ namespace SRNicoNico.ViewModels {
 
                 if(IsFullScreen) {
 
-                    FullScreenVideoFlash = new VideoFlash() { DataContext = this };
+                    FullScreenVideoFlash = new VideoHtml5() { DataContext = this };
                     FullScreenController = new VideoController() { DataContext = this };
                 } else {
 
-                    VideoFlash = new VideoFlash() { DataContext = this };
+                    VideoFlash = new VideoHtml5() { DataContext = this };
                     Controller = new VideoController() { DataContext = this };
                 }
 

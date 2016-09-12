@@ -26,13 +26,11 @@ using SRNicoNico.Views.Contents.Video;
 using Codeplex.Data;
 
 namespace SRNicoNico.ViewModels {
-    public class VideoFlashHandler : ViewModel {
+    public class VideoFlashHandler : IObjectForScriptable {
 
 
-        public AxShockwaveFlash ShockwaveFlash;
+        public WebBrowser Browser;
 
-        //Flashの関数を呼ぶためのもの
-        public ExternalInterfaceProxy Proxy;
 
         private VideoViewModel Owner;
 
@@ -45,11 +43,10 @@ namespace SRNicoNico.ViewModels {
 
         private VideoData VideoData;
 
-        public void PreInitialize(AxShockwaveFlash flash) {
+        public void PreInitialize(WebBrowser flash) {
 
 
-            ShockwaveFlash = flash;
-            Proxy = new ExternalInterfaceProxy(ShockwaveFlash);
+            Browser = flash;
             IsPreIntialized = true;
         }
 
@@ -81,22 +78,16 @@ namespace SRNicoNico.ViewModels {
 
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                Proxy.ExternalInterfaceCall += new ExternalInterfaceCallEventHandler(ExternalInterfaceHandler);
-
-                if(ShockwaveFlash.IsDisposed) {
-
-                    return;
-                }
 
                 if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
                     VideoData.VideoType = NicoNicoVideoType.SWF;
-                    ShockwaveFlash.LoadMovie(0, GetNMPlayerPath());
+                    Browser.LoadMovie(0, GetNMPlayerPath());
 
                 } else if(VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
 
                     VideoData.VideoType = NicoNicoVideoType.RTMP;
-                    ShockwaveFlash.LoadMovie(0, GetRTMPPlayerPath());
+                    Browser.LoadMovie(0, GetRTMPPlayerPath());
                 } else {
 
                     if(VideoData.ApiData.MovieType == "flv") {
@@ -106,7 +97,7 @@ namespace SRNicoNico.ViewModels {
 
                         VideoData.VideoType = NicoNicoVideoType.MP4;
                     }
-                    ShockwaveFlash.LoadMovie(0, GetPlayerPath());
+                    Browser.LoadMovie(0, GetPlayerPath());
                 }
                 Owner.IsActive = false;
 
@@ -211,7 +202,7 @@ namespace SRNicoNico.ViewModels {
 
         public void DisposeHandler() {
 
-            ShockwaveFlash.Dispose();
+            Browser.Dispose();
         }
 
 
@@ -219,7 +210,7 @@ namespace SRNicoNico.ViewModels {
         public void InvokeScript(string func, params string[] args) {
 
             //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
-            if(ShockwaveFlash != null && !ShockwaveFlash.IsDisposed) {
+            if(Browser != null && !Browser.IsDisposed) {
 
                 try {
 
@@ -425,5 +416,8 @@ namespace SRNicoNico.ViewModels {
             return cur + "./Flash/NicoNicoRTMPPlayer.swf";
         }
 
+        public void Invoked(string cmd, string args) {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -199,7 +199,9 @@
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Models\NicoNicoViewer\GetRequestQuery.cs" />
     <Compile Include="Models\NicoNicoViewer\HyperLinkReplacer.cs" />
+    <Compile Include="Models\NicoNicoViewer\IObjectForScriptable.cs" />
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
+    <Compile Include="Models\NicoNicoViewer\ObjectForScripting.cs" />
     <Compile Include="Models\NicoNicoViewer\Settings.cs" />
     <Compile Include="Models\NicoNicoViewer\UpdateCheck.cs" />
     <Compile Include="Models\NicoNicoViewer\VerifyEmptyText.cs" />
@@ -409,6 +411,9 @@
     </Compile>
     <Compile Include="Views\Contents\Video\CommentView.xaml.cs">
       <DependentUpon>CommentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoHtml5.xaml.cs">
+      <DependentUpon>VideoHtml5.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Video\WindowedWindow.xaml.cs">
       <DependentUpon>WindowedWindow.xaml</DependentUpon>
@@ -750,6 +755,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Contents\Video\VideoHtml5.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Contents\Video\WindowedWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1000,6 +1009,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Flash\bin\NicoNicoRTMPPlayer.swf" />
+    <Content Include="Html5\commentlayer.js" />
+    <Content Include="Html5\videoflash.html" />
+    <Content Include="Html5\videoplayer.js" />
     <Content Include="InfrastructureAssemblies\Design\Livet.Design.dll" />
     <Content Include="InfrastructureAssemblies\ExternalInterfaceProxy.dll" />
     <Content Include="InfrastructureAssemblies\Livet.dll" />
