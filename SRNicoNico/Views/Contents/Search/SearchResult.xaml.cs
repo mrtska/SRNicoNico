@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Livet;
+using SRNicoNico.ViewModels;
 
 namespace SRNicoNico.Views.Contents.Search {
 	/// <summary>
@@ -26,5 +27,28 @@ namespace SRNicoNico.Views.Contents.Search {
         public SearchResult() {
 			InitializeComponent();
 		}
-	}
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+
+            if(DataContext is SearchResultViewModel) {
+
+                var vm = (SearchResultViewModel)DataContext;
+
+                vm.CurrentPage--;
+                vm.Owner.SearchPage(vm.CurrentPage);
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e) {
+
+            if(DataContext is SearchResultViewModel) {
+
+                var vm = (SearchResultViewModel)DataContext;
+
+                vm.CurrentPage++;
+                vm.Owner.SearchPage(vm.CurrentPage);
+
+            }
+        }
+    }
 }

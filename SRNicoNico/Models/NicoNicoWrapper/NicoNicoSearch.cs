@@ -58,7 +58,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 //検索結果総数
                 if(json.count()) {
-                    result.Total = (ulong)json.count;
+
+                    result.Total = (int)json.count;
                 } else {
 
                     //連打するとエラーになる
@@ -81,6 +82,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         node.Length = entry.length;
                         node.FirstRetrieve = entry.first_retrieve;
 
+                        node.FirstRetrieve = node.FirstRetrieve.Replace('-', '/');
+
                         result.List.Add(node);
                     }
                 }
@@ -100,7 +103,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoSearchResult : NotificationObject {
 
         //検索結果の総数
-        public ulong Total { get; set; }
+        public int Total { get; set; }
         public List<NicoNicoVideoInfoEntry> List { get; set; } = new List<NicoNicoVideoInfoEntry>();
 
     }

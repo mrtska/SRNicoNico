@@ -32,11 +32,100 @@ namespace SRNicoNico.ViewModels {
 				RaisePropertyChanged();
 			}
 		}
-		#endregion
-		
-		
-		#region searchResult変更通知プロパティ
-		private DispatcherCollection<SearchResultEntryViewModel> _List = new DispatcherCollection<SearchResultEntryViewModel>(DispatcherHelper.UIDispatcher);
+        #endregion
+
+
+        #region MaxPages変更通知プロパティ
+        private int _MaxPages = 0;
+
+        public int MaxPages {
+            get { return _MaxPages; }
+            set { 
+                if(_MaxPages == value)
+                    return;
+                if(value > 50) {
+
+                    value = 50;
+                }
+                _MaxPages = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region CurrentPage変更通知プロパティ
+        private int _CurrentPage = 1;
+
+        public int CurrentPage {
+            get { return _CurrentPage; }
+            set { 
+                if(_CurrentPage == value)
+                    return;
+
+                if(value > MaxPages) {
+
+                    value = MaxPages;
+                }
+
+                if(value <= 1) {
+
+                    LeftButtonEnabled = false;
+                } else {
+
+                    LeftButtonEnabled = true;
+                }
+                if(value >= MaxPages) {
+
+                    RightButtonEnabled = false;
+                } else {
+
+                    RightButtonEnabled = true;
+                }
+
+
+                _CurrentPage = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region LeftButtonEnabled変更通知プロパティ
+        private bool _LeftButtonEnabled = false;
+
+        public bool LeftButtonEnabled {
+            get { return _LeftButtonEnabled; }
+            set { 
+                if(_LeftButtonEnabled == value)
+                    return;
+                _LeftButtonEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region RightButtonEnabled変更通知プロパティ
+        private bool _RightButtonEnabled = true;
+
+        public bool RightButtonEnabled {
+            get { return _RightButtonEnabled; }
+            set { 
+                if(_RightButtonEnabled == value)
+                    return;
+                _RightButtonEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
+
+
+        #region searchResult変更通知プロパティ
+        private DispatcherCollection<SearchResultEntryViewModel> _List = new DispatcherCollection<SearchResultEntryViewModel>(DispatcherHelper.UIDispatcher);
 
 		public DispatcherCollection<SearchResultEntryViewModel> List {
 			get { return _List; }
@@ -56,20 +145,56 @@ namespace SRNicoNico.ViewModels {
         #region IsActive変更通知プロパティ
         private bool _IsActive;
 
+        private bool tmpLeftButton;
+        private bool tmpRightButton;
+
         public bool IsActive {
             get { return _IsActive; }
             set { 
                 if(_IsActive == value)
                     return;
                 _IsActive = value;
+
+                if(value) {
+
+                    tmpLeftButton = LeftButtonEnabled;
+                    tmpRightButton = RightButtonEnabled;
+
+                    LeftButtonEnabled = false;
+                    RightButtonEnabled = false;
+
+                } else {
+
+
+                    LeftButtonEnabled = tmpLeftButton;
+                    RightButtonEnabled = tmpRightButton;
+                }
+
+
                 RaisePropertyChanged();
             }
         }
-		#endregion
+        #endregion
 
 
-		#region SelectedItem変更通知プロパティ
-		private SearchResultEntryViewModel _SelectedItem;
+        #region IsComplete変更通知プロパティ
+        private bool _IsComplete;
+
+        public bool IsComplete {
+            get { return _IsComplete; }
+            set { 
+                if(_IsComplete == value)
+                    return;
+                _IsComplete = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
+        #region SelectedItem変更通知プロパティ
+        private SearchResultEntryViewModel _SelectedItem;
 
 		public SearchResultEntryViewModel SelectedItem {
 			get { return _SelectedItem; }
@@ -82,9 +207,9 @@ namespace SRNicoNico.ViewModels {
 		}
         #endregion
 
-        public SearchViewModel Owner;
+        public SearchViewModel Owner { get; private set; }
 
-        public SearchResultViewModel(SearchViewModel vm) {
+        public SearchResultViewModel(SearchViewModel vm)　{
 
             Owner = vm;
         }

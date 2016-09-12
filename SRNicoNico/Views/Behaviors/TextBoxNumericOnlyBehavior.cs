@@ -16,19 +16,23 @@ using System.Windows.Input;
 namespace SRNicoNico.Views.Behaviors {
     public class TextBoxNumericOnlyBehavior : Behavior<TextBox> {
 
+
+        
+
         protected override void OnAttached() {
 
             base.OnAttached();
-            AssociatedObject.Loaded += AssociatedObject_Loaded;
             AssociatedObject.KeyDown += AssociatedObject_KeyDown;
 
         }
 
         private void AssociatedObject_KeyDown(object sender, KeyEventArgs e) {
 
-            if((Key.D0 <= e.Key && e.Key <= Key.D9) || (Key.NumPad0 <= e.Key && e.Key <= Key.NumPad9) || (Key.Delete == e.Key) || (Key.Back == e.Key) || (Key.Tab == e.Key)) {
+            if((Key.D0 <= e.Key && e.Key <= Key.D9) || (Key.NumPad0 <= e.Key && e.Key <= Key.NumPad9) || (Key.Delete == e.Key) || (Key.Back == e.Key) || (Key.Tab == e.Key) || (Key.Enter == e.Key)) {
+
                 e.Handled = false;
             } else {
+
                 e.Handled = true;
             }
         }
@@ -36,17 +40,9 @@ namespace SRNicoNico.Views.Behaviors {
         protected override void OnDetaching() {
 
             base.OnDetaching();
-            AssociatedObject.Loaded -= AssociatedObject_Loaded;
             AssociatedObject.KeyDown -= AssociatedObject_KeyDown;
 
         }
-
-
-        private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
-
-            if(AssociatedObject != null) {
-
-            }
-        }
+        
     }
 }

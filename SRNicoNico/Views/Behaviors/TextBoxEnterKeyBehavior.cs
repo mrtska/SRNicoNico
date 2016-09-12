@@ -69,7 +69,7 @@ namespace SRNicoNico.Views.Behaviors {
         private void InvokeMethod() {
 
             var type = Binding.GetType();
-            var method = type.GetMethod(MethodName);
+            var method = type.GetMethod(MethodName, new[] { typeof(string) });
             method.Invoke(Binding, new[] { AssociatedObject.Text });
         }
 

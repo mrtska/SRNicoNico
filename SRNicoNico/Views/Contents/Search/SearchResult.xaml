@@ -13,6 +13,8 @@
              xmlns:Behaviors="clr-namespace:SRNicoNico.Views.Behaviors" x:Class="SRNicoNico.Views.Contents.Search.SearchResult"
              d:DesignHeight="352"
              d:DesignWidth="494"
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             Background="{DynamicResource ThemeBrushKey}"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance {x:Type vm:SearchResultViewModel}}"
     >
@@ -36,7 +38,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
+
+        <TextBlock TextWrapping="Wrap" Text="{Binding Total}" FontSize="20"/>
 
         <mui:ModernProgressRing Grid.Row="1" Foreground="#FFAAAAAA" Panel.ZIndex="1" Width="60" Height="60"  IsActive="{Binding IsActive}"/>
 
@@ -65,8 +70,35 @@
                 <ei:FluidMoveBehavior AppliesTo="Children"/>
             </i:Interaction.Behaviors>
         </ListBox>
-        <TextBlock TextWrapping="Wrap" Text="{Binding Total}" FontSize="20"/>
 
+        <Grid Grid.Row="2" Background="#FF252627">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel.Resources>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding MaxPages}" Value="0">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock Text="{Binding MaxPages,StringFormat=1ページ~{0}ページ}" FontSize="16" Margin="10,0,10,0"/>
+
+                <Button Content="←" Padding="3" Click="Button_Click" IsEnabled="{Binding LeftButtonEnabled}"/>
+
+
+
+                <TextBox x:Name="page" x:FieldModifier="private" HorizontalAlignment="Right" MaxLength="2" Width="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Text="{Binding CurrentPage,Mode=TwoWay}">
+                    <i:Interaction.Behaviors>
+                        <Behaviors:TextBoxNumericOnlyBehavior />
+                        <Behaviors:TextBoxEnterKeyBehavior Binding="{Binding Owner}" MethodName="SearchPage"/>
+                    </i:Interaction.Behaviors>
+                </TextBox>
+                <Button Content="→" Padding="3" Margin="0,0,17,0" Click="Button_Click_1" IsEnabled="{Binding RightButtonEnabled}" />
+
+
+            </StackPanel>
+        </Grid>
     </Grid>
 
 

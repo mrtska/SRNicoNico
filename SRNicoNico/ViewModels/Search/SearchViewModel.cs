@@ -92,15 +92,35 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        //検索ボタン押下
-        public async void Search(string text = "") {
-                
-            if(text.Length != 0) {
+        public void Search() {
 
-                SearchText = text;
+            if(SearchText == null || SearchText.Length == 0) {
+
+                return;
             }
 
-			if (SearchText == null || SearchText.Length == 0) {
+            SearchResult.CurrentPage = 1;
+            Search(SearchText);
+        }
+
+        //TextBoxBehaviorで使うのでアレ
+        public void Search(string tex) {
+            
+            Search(tex, 1);
+        }
+
+        //検索ボタン押下
+        public async void Search(string text, int page = 1) {
+                
+
+
+            if(page != 1 && SearchResult.MaxPages < page) {
+
+                page = SearchResult.MaxPages;
+                SearchResult.CurrentPage = page;
+            }
+
+			if (text == null || text.Length == 0) {
 
 				return;
 			}
@@ -109,11 +129,11 @@ namespace SRNicoNico.ViewModels {
 
             SearchResult.IsActive = true;
 
-            if(!Settings.Instance.SearchHistory.Contains(SearchText)) {
+            if(!Settings.Instance.SearchHistory.Contains(text)) {
 
-                Settings.Instance.SearchHistory.Add(SearchText);
+                Settings.Instance.SearchHistory.Add(text);
             }
-            var result = await CurrentSearch.Search(SearchText, SearchType, sortBy[Settings.Instance.SearchIndex]);
+            var result = await CurrentSearch.Search(text, SearchType, sortBy[Settings.Instance.SearchIndex], page);
 
             if(result == null) {
 
@@ -123,6 +143,7 @@ namespace SRNicoNico.ViewModels {
 
             //検索結果をUIに
             SearchResult.Total = string.Format("{0:#,0}", result.Total) + "件の動画";
+            SearchResult.MaxPages = result.Total / 30;
 
             SearchResult.List.Clear();
             foreach(var node in result.List) {
@@ -132,6 +153,17 @@ namespace SRNicoNico.ViewModels {
 
             SearchResult.IsActive = false;
         }
+
+        public void SearchPage(string page) {
+
+            SearchPage(int.Parse(page));
+        }
+
+        public void SearchPage(int page) {
+
+            Search(SearchText, page);
+        }
+
 
         public void SearchWithHistory(string tex) {
 
