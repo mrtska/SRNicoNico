@@ -96,7 +96,7 @@
         </StackPanel>
 
         <Grid Grid.Column="2">
-            <StackPanel>
+            <StackPanel Margin="10,0,0,0">
 
                 <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Title}" FontSize="18" TextWrapping="Wrap" />
                 <TextBlock behaviors:HtmlTextBoxProperties.HtmlText="{Binding Description}" FontSize="16" Foreground="Gray" TextWrapping="Wrap" />
