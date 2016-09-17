@@ -12,30 +12,16 @@ namespace SRNicoNico.Models.NicoNicoViewer {
     [ComVisible(true)]
     public class ObjectForScripting {
 
+        private IObjectForScriptable Scriptable;
+
+        public ObjectForScripting(IObjectForScriptable scriptable) {
+
+            Scriptable = scriptable;
+        }
+
         public void InvokeFromJavaScript(string func, string args) {
 
-            string[] arg = args.Split(':');
-
-            switch(func) {
-                case "CsFrame":
-
-                    Video.CsFrame(float.Parse(arg[0]), float.Parse(arg[1]), long.Parse(arg[2]));
-                    break;
-                case "NetConnection.Connect.Closed":
-
-                    Video.RTMPTimeOut();
-                    break;
-                case "ShowContoller":
-                    Video.ShowFullScreenPopup();
-                    break;
-                case "HideContoller":
-                    Video.HideFullScreenPopup();
-                    break;
-                default:
-                    Console.Write("Invoked From Actionscript:" + func);
-                    Console.WriteLine(" Args:" + args);
-                    break;
-            }
+            Scriptable.Invoked(func, args);
         }
     }
 }

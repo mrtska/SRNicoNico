@@ -39,32 +39,23 @@ namespace SRNicoNico.ViewModels {
 
             Owner = vm;
         }
-        private bool IsPreIntialized = false;
 
         private VideoData VideoData;
+        
 
-        public void PreInitialize(WebBrowser flash) {
+        public async void Initialize(WebBrowser browser,  VideoData videoData) {
 
-
-            Browser = flash;
-            IsPreIntialized = true;
-        }
-
-        public async void Initialize(VideoData videoData) {
-
-            while(!IsPreIntialized) {
-
-                Thread.Sleep(1);
-            }
-            VideoData = videoData;
+            Browser = browser;
             //ロードに失敗したら
-            if(VideoData.ApiData == null) {
+            if(videoData.ApiData == null) {
 
                 Owner.LoadFailed = true;
                 Owner.IsActive = false;
                 Owner.Status = "動画の読み込みに失敗しました。";
                 return;
+
             }
+            VideoData = videoData;
 
 
             Owner.Name = VideoData.ApiData.Title;
@@ -82,12 +73,12 @@ namespace SRNicoNico.ViewModels {
                 if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
                     VideoData.VideoType = NicoNicoVideoType.SWF;
-                    Browser.LoadMovie(0, GetNMPlayerPath());
+                    Browser.Source = new Uri(GetNMPlayerPath());
 
                 } else if(VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
 
                     VideoData.VideoType = NicoNicoVideoType.RTMP;
-                    Browser.LoadMovie(0, GetRTMPPlayerPath());
+                    Browser.Source = new Uri(GetRTMPPlayerPath());
                 } else {
 
                     if(VideoData.ApiData.MovieType == "flv") {
@@ -97,7 +88,7 @@ namespace SRNicoNico.ViewModels {
 
                         VideoData.VideoType = NicoNicoVideoType.MP4;
                     }
-                    Browser.LoadMovie(0, GetPlayerPath());
+                    Browser.Source = new Uri(GetPlayerPath());
                 }
                 Owner.IsActive = false;
 
@@ -127,6 +118,14 @@ namespace SRNicoNico.ViewModels {
             }
             
             Owner.CommentInstance = new NicoNicoComment(VideoData.ApiData, Owner);
+
+
+            await Browser.Dispatcher.BeginInvoke((Action)(() => {
+
+                browser.ObjectForScripting = new ObjectForScripting(this);
+                Browser.InvokeScript("init", VideoData.ApiData.GetFlv.VideoUrl);
+
+            }));
             InitializeComment();
 
         }
@@ -165,7 +164,7 @@ namespace SRNicoNico.ViewModels {
 
             if(!Settings.Instance.CommentVisibility) {
 
-                InvokeScript("AsToggleComment");
+                //InvokeScript("AsToggleComment");
             } else {
 
                 Owner.CommentVisibility = true;
@@ -174,7 +173,7 @@ namespace SRNicoNico.ViewModels {
 
         public void ReloadComment() {
 
-            InvokeScript("PurgeComment");
+           // InvokeScript("PurgeComment");
             VideoData.CommentData.Clear();
             InitializeComment();
         }
@@ -191,10 +190,10 @@ namespace SRNicoNico.ViewModels {
             //RTMPの時はサーバートークンも一緒にFlashに渡す
             if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
-                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, App.ViewModelRoot.Config.Comment.ToJson());
+                //InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, App.ViewModelRoot.Config.Comment.ToJson());
             } else {
 
-                InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, App.ViewModelRoot.Config.Comment.ToJson());
+                //InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, App.ViewModelRoot.Config.Comment.ToJson());
             }
 
             Owner.IsRepeat = Settings.Instance.IsRepeat;
@@ -210,11 +209,11 @@ namespace SRNicoNico.ViewModels {
         public void InvokeScript(string func, params string[] args) {
 
             //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
-            if(Browser != null && !Browser.IsDisposed) {
+            if(Browser != null) {
 
                 try {
-
-                    Proxy.Call(func, args);
+                    
+                   Browser.Dispatcher.BeginInvoke((Action)(()=> Browser.InvokeScript(func, args)));
                 } catch(COMException) {
 
                     Console.WriteLine("COMException：" + func);
@@ -351,13 +350,13 @@ namespace SRNicoNico.ViewModels {
         public void Pause() {
             
             Owner.IsPlaying = false;
-            InvokeScript("AsPause");
+           // InvokeScript("AsPause");
         }
 
         public void Resume() {
 
             Owner.IsPlaying = true;
-            InvokeScript("AsResume");
+           // InvokeScript("AsResume");
         }
 
         //一時停止切り替え
@@ -375,25 +374,26 @@ namespace SRNicoNico.ViewModels {
         //コメント設定をFlashに反映させる
         public void ApplyChanges() {
 
-            InvokeScript("AsApplyChanges", App.ViewModelRoot.Config.Comment.ToJson());
+           // InvokeScript("AsApplyChanges", App.ViewModelRoot.Config.Comment.ToJson());
         }
 
 
         //Flashにシーク命令を送る
         public void Seek(float pos) {
 
-            InvokeScript("AsSeek", pos.ToString());
+           InvokeScript("seek", pos.ToString());
         }
 
         //Flashにコメントリストを送る
         public void InjectComment(string json) {
 
-            InvokeScript("AsInjectComment", json);
+          //  InvokeScript("AsInjectComment", json);
         }
+
         //Flashに投稿者コメントリストを送る
         public void InjectUploaderComment(string json) {
 
-            InvokeScript("AsInjectUploaderComment", json);
+           // InvokeScript("AsInjectUploaderComment", json);
         }
         
 
@@ -401,7 +401,7 @@ namespace SRNicoNico.ViewModels {
         private string GetPlayerPath() {
 
             var cur = NicoNicoUtil.CurrentDirectory;
-            return cur + "./Flash/NicoNicoPlayer.swf";
+            return "file://127.0.0.1/e$/Development/MVVM/WPF/SRNicoNico/SRNicoNico/Html5/videoflash.html";//cur + "./Html5/videoflash.html";
         }
 
         private string GetNMPlayerPath() {
@@ -417,7 +417,11 @@ namespace SRNicoNico.ViewModels {
         }
 
         public void Invoked(string cmd, string args) {
-            throw new NotImplementedException();
+
+
+            Console.WriteLine("Invoked " + cmd + " : " + args);
+
+
         }
     }
 }

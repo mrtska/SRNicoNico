@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
-    interface IObjectForScriptable {
+    public interface IObjectForScriptable {
 
         void Invoked(string cmd, string args);
 

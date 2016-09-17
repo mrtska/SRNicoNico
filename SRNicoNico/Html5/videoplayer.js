@@ -1,33 +1,49 @@
 ﻿
 
-var mediaSource = new MediaSource();
+function invoke_host(cmd, args) {
 
-function init() {
+    window.external.InvokeFromJavaScript(cmd, args);
+}
+
+
+window.onresize = function (e) {
+
+    
+    var video = document.getElementById("player");
+
+    video.style.height = window.innerHeight + "px";
+}
+
+
+
+function init(src) {
 
     var video = document.getElementById("player");
 
-    video.src = window.URL.createObjectURL(mediaSource);
+    video.style.height = window.innerHeight + "px";
+
+    video.src = src;
 
 
-    mediaSource.addEventListener("sourceopen", function () {
-
-        var source = mediaSource.addSourceBuffer("video/mp4");
-
-    }, false);
+    video.load();
 
 
-    video.load();  
-
-    //video.play();
+    video.play();
 
 
 
 
 }
 
+function seek(pos) {
+
+    var video = document.getElementById("player");
+
+    video.currentTime = pos;
 
 
 
+}
 
 
 

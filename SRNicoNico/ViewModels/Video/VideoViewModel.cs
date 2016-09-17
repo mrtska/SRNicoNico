@@ -415,26 +415,8 @@ namespace SRNicoNico.ViewModels {
 
             VideoUrl = videoUrl;
             Cmsid = Name;
-        }
-        public VideoViewModel(PlayListEntryViewModel entry, bool isFullScreen = false) : this(entry.VideoUrl) {
 
-            IsPlayList = true;
-            PlayListEntry = entry;
-            if(isFullScreen) {
-
-                IsFullScreen = true;
-            }
-        }
-
-        public async void Initialize() {
-
-            Mylist = new VideoMylistViewModel(this);
-            Comment = new VideoCommentViewModel(this);
-            Handler = new VideoFlashHandler(this);
-            Time = new VideoTime();
-            VideoData = new VideoData();
-
-            await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+            DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
 
                 if(IsFullScreen) {
@@ -448,6 +430,26 @@ namespace SRNicoNico.ViewModels {
                 }
 
             }));
+        }
+        public VideoViewModel(PlayListEntryViewModel entry, bool isFullScreen = false) : this(entry.VideoUrl) {
+
+            IsPlayList = true;
+            PlayListEntry = entry;
+            if(isFullScreen) {
+
+                IsFullScreen = true;
+            }
+
+        }
+
+        public async void Initialize(WebBrowser browser) {
+
+            Mylist = new VideoMylistViewModel(this);
+            Comment = new VideoCommentViewModel(this);
+            Handler = new VideoFlashHandler(this);
+            Time = new VideoTime();
+            VideoData = new VideoData();
+
 
             var videoUrl = VideoUrl + "?watch_harmful=1";
 
@@ -456,12 +458,16 @@ namespace SRNicoNico.ViewModels {
             Status = "動画情報取得中";
             //動画情報取得
 
-            await Task.Run(() => {
+            WatchApi = new NicoNicoWatchApi(videoUrl, this);
 
-                WatchApi = new NicoNicoWatchApi(videoUrl, this);
-                VideoData.ApiData = WatchApi.GetWatchApiData();
-                Handler.Initialize(VideoData);
+            await Task.Run(async () => {
+
+                VideoData.ApiData = await WatchApi.GetWatchApiDataAsync();
+                Handler.Initialize(browser, VideoData);
             });
+
+            
+
         }
         
         //ツイートダイアログ表示

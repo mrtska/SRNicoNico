@@ -35,7 +35,6 @@ namespace SRNicoNico.Views.Contents.Video {
             if(DataContext is VideoViewModel) {
 
                 var vm = (VideoViewModel) DataContext;
-                vm.Handler.PreInitialize(flash);
             }   
         }
 

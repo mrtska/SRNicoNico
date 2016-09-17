@@ -1009,9 +1009,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Flash\bin\NicoNicoRTMPPlayer.swf" />
-    <Content Include="Html5\commentlayer.js" />
-    <Content Include="Html5\videoflash.html" />
-    <Content Include="Html5\videoplayer.js" />
+    <Content Include="Html5\commentlayer.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Html5\videoflash.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Html5\videoplayer.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="InfrastructureAssemblies\Design\Livet.Design.dll" />
     <Content Include="InfrastructureAssemblies\ExternalInterfaceProxy.dll" />
     <Content Include="InfrastructureAssemblies\Livet.dll" />

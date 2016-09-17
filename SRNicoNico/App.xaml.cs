@@ -39,7 +39,7 @@ namespace SRNicoNico {
             //WebBrowserコントロールのIEバージョンを最新にする 古いとUI崩れるからね
             //レジストリを弄るのはここだけ
             Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", "SRNicoNico.exe", 0x00002AF9, Microsoft.Win32.RegistryValueKind.DWord);
-            
+            Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_GPU_RENDERING", "SRNicoNico.exe", 0x00000001, Microsoft.Win32.RegistryValueKind.DWord);
 
             ViewModelRoot = new MainWindowViewModel();
 			MainWindow = new MainWindow { DataContext = ViewModelRoot };

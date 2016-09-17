@@ -193,7 +193,6 @@ namespace SRNicoNico.ViewModels {
             Video?.DisposeViewModel();
             Video = new VideoViewModel(entry, IsFullScreen);
             UIInstance.DataContext = Video;
-            Video.Initialize();
             if(IsFullScreen) {
 
                 UpdateFullScreenViewModel();
