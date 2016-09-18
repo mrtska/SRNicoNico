@@ -18,7 +18,7 @@
     <Grid >
         <StackPanel Orientation="Horizontal">
 
-            <controls:SeekBar PopupRect="45,0,20,20" CurrentTime="{Binding Volume, Mode=TwoWay}" PopupText="{Binding Volume,StringFormat={}{0}%}" VideoTime="100" BufferedTime="100" Height="10" Width="100" />
+            <controls:SeekBar PopupRect="45,0,20,20" CurrentTime="{Binding Volume, Mode=TwoWay}" PopupText="{Binding Volume,StringFormat={}{0}%}" VideoTime="100" Height="10" Width="100" UseSimpleSeekBar="True" />
             <mui:ModernButton Margin="2,0,0,0" EllipseDiameter="30" IconWidth="30" Focusable="False" >
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding Volume}"  Value="80" Comparison="LessThan">

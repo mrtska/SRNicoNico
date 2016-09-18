@@ -4,6 +4,9 @@
                     xmlns:conv="clr-namespace:SRNicoNico.Views.Converter"
                     >
 
+
+    <BooleanToVisibilityConverter x:Key="boolto" />
+
     <Style TargetType="{x:Type local:SeekBar}">
         <Setter Property="Template">
             <Setter.Value>
@@ -11,8 +14,35 @@
                     <Border Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" >
                         <Grid>
                             <Rectangle Fill="#FF404040" />
-                            <Rectangle Panel.ZIndex="1"  HorizontalAlignment="Left" Width="{TemplateBinding BufferedTimeWidth}" Fill="#FF555555" />
-                            <Rectangle Panel.ZIndex="2" HorizontalAlignment="Left" Width="{Binding RelativeSource={RelativeSource TemplatedParent},Path=CurrentTimeWidth,UpdateSourceTrigger=PropertyChanged}" Fill="#FF007AFF"/>
+                            <ItemsControl Panel.ZIndex="1" ItemsSource="{TemplateBinding BufferedRange}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Grid />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Rectangle Panel.ZIndex="1" HorizontalAlignment="Left" Width="{Binding Width}" Margin="{Binding Position}" Fill="#FF555555" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+
+                            </ItemsControl>
+
+                            <ItemsControl Panel.ZIndex="2" ItemsSource="{TemplateBinding PlayedRange}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Grid />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Rectangle Panel.ZIndex="2" HorizontalAlignment="Left" Width="{Binding Width}" Margin="{Binding Position}" Fill="#FF007AFF" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+
+                            <Rectangle Panel.ZIndex="2" HorizontalAlignment="Left" Width="{TemplateBinding CurrentTimeWidth}" Fill="#FF007AFF" Visibility="{TemplateBinding UseSimpleSeekBar, Converter={StaticResource boolto}}"/>
                             <Rectangle Panel.ZIndex="3" HorizontalAlignment="Left" Width="10" Margin="{TemplateBinding SeekCursor}" Fill="#FF8B8B8B" />
 
 

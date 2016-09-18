@@ -290,5 +290,9 @@ namespace SRNicoNico.ViewModels {
             SelectedItem = null;
             Owner.Status = "";
         }
+
+        bool IDragSource.TryCatchOccurredException(Exception exception) {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -327,7 +327,7 @@ namespace SRNicoNico.ViewModels {
 
             Time.VideoTimeString = NicoNicoUtil.GetTimeFromVpos(Content.GetPlayerStatus, (int.Parse(Content.GetPlayerStatus.EndTime) - int.Parse(Content.GetPlayerStatus.BaseTime)) * 100);
             Time.Length = int.Parse(Content.GetPlayerStatus.EndTime) - int.Parse(Content.GetPlayerStatus.BaseTime);
-            Time.BufferedTime = Time.Length;
+            //Time.BufferedRange = Time.Length;
 
             Comment = new LiveCommentViewModel(this);
 

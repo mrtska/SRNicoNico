@@ -23,6 +23,8 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converter:ListCountConverter x:Key="listcount"/>
+            <conv:InvertBoolConverter x:Key="invert" />
+            <BooleanToVisibilityConverter x:Key="boolto" />
 
 
 

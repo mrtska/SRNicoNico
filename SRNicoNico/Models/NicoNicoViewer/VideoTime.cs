@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 
 using Livet;
+using SRNicoNico.Views.Controls;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
 	public class VideoTime : NotificationObject {
 
         //動画の現在時間
         #region CurrentTime変更通知プロパティ
-        private long _CurrentTime;
+        private double _CurrentTime;
 
-		public long CurrentTime {
+		public double CurrentTime {
 			get { return _CurrentTime; }
 			set {
 				if (_CurrentTime == value)
@@ -72,14 +73,30 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         //バッファリングが終わった時間
         #region BufferedTime変更通知プロパティ
-        private double _BufferedTime;
+        private DispatcherCollection<TimeRange> _BufferedRange = new DispatcherCollection<TimeRange>(DispatcherHelper.UIDispatcher);
 
-        public double BufferedTime {
-            get { return _BufferedTime; }
+        public DispatcherCollection<TimeRange> BufferedRange {
+            get { return _BufferedRange; }
             set { 
-                if(_BufferedTime == value)
+                if(_BufferedRange == value)
                     return;
-                _BufferedTime = value;
+
+                _BufferedRange = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region PlayedRange変更通知プロパティ
+        private DispatcherCollection<TimeRange> _PlayedRange = new DispatcherCollection<TimeRange>(DispatcherHelper.UIDispatcher);
+
+        public DispatcherCollection<TimeRange> PlayedRange {
+            get { return _PlayedRange; }
+            set { 
+                if(_PlayedRange == value)
+                    return;
+                _PlayedRange = value;
                 RaisePropertyChanged();
             }
         }

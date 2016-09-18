@@ -225,7 +225,7 @@ namespace SRNicoNico.ViewModels {
 
                     IsMute = false;
                 }
-                Handler.InvokeScript("AsChangeVolume", (value / 100.0).ToString());
+                Handler.InvokeScript("setvolume", (value / 100.0).ToString());
                 RaisePropertyChanged();
             }
         }
@@ -606,10 +606,10 @@ namespace SRNicoNico.ViewModels {
 
 
         //指定した時間でシークバーを移動する
-        public void SetSeekCursor(float time) {
+        public void SetSeekCursor(double time) {
 
-            Time.CurrentTime = (int)time;
-            Time.CurrentTimeString = NicoNicoUtil.ConvertTime(Time.CurrentTime);
+            Time.CurrentTime = time;
+            Time.CurrentTimeString = NicoNicoUtil.ConvertTime((long)Time.CurrentTime);
         }
         
         public void OpenNew() {

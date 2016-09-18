@@ -28,20 +28,10 @@ namespace SRNicoNico.Views.Contents.Video {
     /// </summary>
     public partial class VideoHtml5 : UserControl {
 
-        private const int SET_FEATURE_ON_PROCESS = 0x00000002;
-
         public VideoHtml5() {
             InitializeComponent();
 
         }
-
-
-
-        [DllImport("urlmon.dll")]
-        [PreserveSig]
-        [return: MarshalAs(UnmanagedType.Error)]
-        static extern int CoInternetSetFeatureEnabled(int FeatureEntry, [MarshalAs(UnmanagedType.U4)] int dwFlags, bool fEnable);
-
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
 

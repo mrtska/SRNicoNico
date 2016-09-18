@@ -6,6 +6,12 @@ using System.Windows.Threading;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Livet;
+using System.Collections;
+using System.Windows.Data;
 
 namespace SRNicoNico.Views.Controls {
 
@@ -23,14 +29,14 @@ namespace SRNicoNico.Views.Controls {
 			DependencyProperty.Register(nameof(VideoTime), typeof(long), typeof(SeekBar), new PropertyMetadata());
 
 
-        public long CurrentTime {
-			get { return (long)GetValue(CurrentTimeProperty); }
+        public double CurrentTime {
+			get { return (double)GetValue(CurrentTimeProperty); }
 			set { SetValue(CurrentTimeProperty, value); }
 		}
 
 		// Using a DependencyProperty as the backing store for CurrentTime.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty CurrentTimeProperty =
-			DependencyProperty.Register(nameof(CurrentTime), typeof(long), typeof(SeekBar), new PropertyMetadata(OnCurrentTimePropertyChanged));
+			DependencyProperty.Register(nameof(CurrentTime), typeof(double), typeof(SeekBar), new PropertyMetadata(OnCurrentTimePropertyChanged));
 
 
         private static void OnCurrentTimePropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
@@ -57,29 +63,36 @@ namespace SRNicoNico.Views.Controls {
             DependencyProperty.Register("CurrentTimeWidth", typeof(double), typeof(SeekBar), new PropertyMetadata());
 
 
-        public double BufferedTime {
-			get { return (double)GetValue(BufferedTimeProperty); }
-			set { SetValue(BufferedTimeProperty, value); }
-		}
 
-		// Using a DependencyProperty as the backing store for BufferedTime.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty BufferedTimeProperty =
-			DependencyProperty.Register(nameof(BufferedTime), typeof(double), typeof(SeekBar), new PropertyMetadata(OnBufferedTimePropertyChanged));
-
-
-        private static void OnBufferedTimePropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
-            var control = source as SeekBar;
-
-            control.BufferedTimeWidth = control.BufferedTime * control.ActualWidth;
-        }
-        public double BufferedTimeWidth {
-            get { return (double)GetValue(BufferedTimeWidthProperty); }
-            set { SetValue(BufferedTimeWidthProperty, value); }
+        public DispatcherCollection<TimeRange> BufferedRange {
+            get { return (DispatcherCollection<TimeRange>)GetValue(BufferedRangeProperty); }
+            set { SetValue(BufferedRangeProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for BufferTimeWidth.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty BufferedTimeWidthProperty =
-            DependencyProperty.Register("BufferedTimeWidth", typeof(double), typeof(SeekBar), new PropertyMetadata());
+        // Using a DependencyProperty as the backing store for BufferedRange.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BufferedRangeProperty =
+            DependencyProperty.Register(nameof(BufferedRange), typeof(DispatcherCollection<TimeRange>), typeof(SeekBar), new FrameworkPropertyMetadata());
+
+
+        public DispatcherCollection<TimeRange> PlayedRange {
+            get { return (DispatcherCollection<TimeRange>)GetValue(PlayedRangeProperty); }
+            set { SetValue(PlayedRangeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PlayedRange.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PlayedRangeProperty =
+            DependencyProperty.Register(nameof(PlayedRange), typeof(DispatcherCollection<TimeRange>), typeof(SeekBar), new FrameworkPropertyMetadata());
+
+
+
+        public bool UseSimpleSeekBar {
+            get { return (bool)GetValue(UseSimpleSeekBarProperty); }
+            set { SetValue(UseSimpleSeekBarProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for UseSimpleSeekBar.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UseSimpleSeekBarProperty =
+            DependencyProperty.Register("UseSimpleSeekBar", typeof(bool), typeof(SeekBar), new PropertyMetadata(false));
 
 
 
@@ -207,7 +220,6 @@ namespace SRNicoNico.Views.Controls {
 
             SeekCursor = new Thickness(CurrentTimeWidth, 0, 0, 0);
 
-            BufferedTimeWidth = BufferedTime * ActualWidth;
         }
 
         bool ismoving;

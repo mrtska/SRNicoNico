@@ -24,6 +24,8 @@ using System.IO;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Views.Contents.Video;
 using Codeplex.Data;
+using SRNicoNico.Views.Controls;
+using System.Windows;
 
 namespace SRNicoNico.ViewModels {
     public class VideoFlashHandler : IObjectForScriptable {
@@ -70,6 +72,12 @@ namespace SRNicoNico.ViewModels {
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
 
+                browser.LoadCompleted += (sender, e) => {
+
+                    browser.ObjectForScripting = new ObjectForScripting(this);
+                    browser.InvokeScript("init", VideoData.ApiData.GetFlv.VideoUrl);
+                };
+
                 if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
                     VideoData.VideoType = NicoNicoVideoType.SWF;
@@ -90,6 +98,8 @@ namespace SRNicoNico.ViewModels {
                     }
                     Browser.Source = new Uri(GetPlayerPath());
                 }
+                
+
                 Owner.IsActive = false;
 
 
@@ -120,12 +130,6 @@ namespace SRNicoNico.ViewModels {
             Owner.CommentInstance = new NicoNicoComment(VideoData.ApiData, Owner);
 
 
-            await Browser.Dispatcher.BeginInvoke((Action)(() => {
-
-                browser.ObjectForScripting = new ObjectForScripting(this);
-                Browser.InvokeScript("init", VideoData.ApiData.GetFlv.VideoUrl);
-
-            }));
             InitializeComment();
 
         }
@@ -212,129 +216,57 @@ namespace SRNicoNico.ViewModels {
             if(Browser != null) {
 
                 try {
-                    
-                   Browser.Dispatcher.BeginInvoke((Action)(()=> Browser.InvokeScript(func, args)));
+
+                    if(args.Length == 0) {
+
+                        Browser.Dispatcher.BeginInvoke((Action)(() => Browser.InvokeScript(func)));
+                    } else {
+
+                        Browser.Dispatcher.BeginInvoke((Action)(() => Browser.InvokeScript(func, args)));
+                    }
+
                 } catch(COMException) {
 
                     Console.WriteLine("COMException：" + func);
                 }
             }
         }
-        
-
-        private object ExternalInterfaceHandler(object sender, ExternalInterfaceCallEventArgs e) {
-
-            InvokeFromActionScript(e.FunctionCall.FunctionName, e.FunctionCall.Arguments);
-            return false;
-        }
-        //ExternalIntarface.callでActionscriptから呼ばれる
-        public void InvokeFromActionScript(string func, params string[] args) {
-            
-            switch(func) {
-                case "Ready":
-                    OpenVideo();
-                    break;
-                case "CsFrame": //毎フレーム呼ばれる
-                    CsFrame(float.Parse(args[0]), float.Parse(args[1]), long.Parse(args[2]), args[3]);
-                    break;
-                case "NetConnection.Connect.Closed":    //RTMP動画再生時にタイムアウトになったら
-                    Owner.RTMPTimeOut();
-                    break;
-                case "ShowController":  //マウスを動かしたら呼ばれる
-                    Owner.ShowFullScreenPopup();
-                    break;
-                case "HideController":  //マウスを数秒動画の上で静止させたら呼ばれる
-                    Owner.HideFullScreenPopup();
-                    break;
-                case "Initialized": //動画が再生される直前に呼ばれる
-                    int vol = Settings.Instance.Volume;
-                    Owner.Volume = 0;    //保存された値をFlash側に伝える
-                    Owner.Volume = vol;    //保存された値をFlash側に伝える
-                    break;
-                case "WidthHeight":
-                    Owner.VideoData.Resolution = args[0];
-                    break;
-                case "Bitrate":
-                    //Owner.VideoData.BitRate = args[0];
-                    break;
-                case "Framerate":
-                    Owner.VideoData.FrameRate = args[0];
-                    break;
-                case "FileSize":
-                    var size = double.Parse(args[0]);
-                    size /= 100000.0;
-                    size = Math.Floor(size) / 10;
-
-                    Owner.VideoData.FileSize = size.ToString() + "MB";
-                    break;
-                case "Stop": //動画が最後まで行ったらリピートしたりフルスクリーンから復帰したりする
-                    if(Owner.IsRepeat) {
-
-                        Restart();
-                    } else if(Owner.IsFullScreen) {
-
-                        if(Owner.IsPlayList) {
-
-                            Owner.PlayListEntry.Owner.Next();
-                        } else {
-
-                            Owner.ReturnFromFullScreen();
-                        }
-                    } else {
-
-                        if(Owner.IsPlayList) {
-
-                            Owner.PlayListEntry.Owner.Next();
-                            return;
-                        }
-                        Owner.IsPlaying = false;
 
 
-                    } 
+        private double GetFixedPos(double pos, long videoTime) {
 
-                    break;
-                case "Click":   //Flash部分がクリックされた時に呼ばれる
-                    if(Settings.Instance.ClickOnPause) {   //クリックしたら一時停止する設定になっていたら
+            double ret = pos / videoTime;
 
-                        TogglePlay();
-                    }
-                    break;
-                case "MouseWheel":
-                    Console.WriteLine("Wheel:" + args[0]);
-                    Owner.Volume += int.Parse(args[0]);
-                    break;
-                default:
-                    Console.WriteLine("Invoked From Actionscript:" + func);
-                    break;
-            }
+            return (Browser.ActualWidth * ret);
         }
 
-        private int prevTime;
-        private double sumBPS;
         //1フレーム毎に呼ばれる
-        public void CsFrame(float time, float buffer, long bps, string vpos) {
+        public void CsFrame(double time, TimeRange[] played, TimeRange[] buffer, int vpos) {
 
-            if(prevTime != (int)time) {
 
-                double comp = sumBPS / 1024;
 
-                //大きいから単位を変える
-                if(comp > 1000) {
+            var videoTime = VideoData.ApiData.Length;
 
-                    Owner.BPS = Math.Floor((comp / 1024) * 100) / 100 + "MiB/秒";
-                } else {
+            Owner.Time.PlayedRange.Clear();
+            foreach(var range in played) {
 
-                    Owner.BPS = Math.Floor(comp * 100) / 100 + "KiB/秒";
-                }
-                sumBPS = 0;
-            } else {
+                range.Width = GetFixedPos(range.End - range.Start, VideoData.ApiData.Length);
+                range.Position = new Thickness(GetFixedPos(range.Start, VideoData.ApiData.Length), 0, 0, 0);
 
-                sumBPS += bps;
+                Owner.Time.PlayedRange.Add(range);
             }
-            prevTime = (int)time;
 
-            Owner.Time.BufferedTime = buffer;
-            Owner.Comment.Vpos = vpos;
+            Owner.Time.BufferedRange.Clear();
+            foreach(var range in buffer) {
+
+                range.Width = GetFixedPos(range.End - range.Start, VideoData.ApiData.Length);
+                range.Position = new Thickness(GetFixedPos(range.Start, VideoData.ApiData.Length), 0, 0, 0);
+
+                Owner.Time.BufferedRange.Add(range);
+            }
+
+
+            Owner.Comment.Vpos = vpos.ToString();
 
             //Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + buffer + " vpos:" + vpos);
 
@@ -349,14 +281,12 @@ namespace SRNicoNico.ViewModels {
         }
         public void Pause() {
             
-            Owner.IsPlaying = false;
-           // InvokeScript("AsPause");
+            InvokeScript("pause");
         }
 
         public void Resume() {
 
-            Owner.IsPlaying = true;
-           // InvokeScript("AsResume");
+            InvokeScript("resume");
         }
 
         //一時停止切り替え
@@ -418,8 +348,96 @@ namespace SRNicoNico.ViewModels {
 
         public void Invoked(string cmd, string args) {
 
+//Console.WriteLine("Invoked " + cmd);
 
-            Console.WriteLine("Invoked " + cmd + " : " + args);
+            switch(cmd) {
+                case "Ready":
+                    OpenVideo();
+                    break;
+                case "currenttime": //毎フレーム呼ばれる
+
+                    //Console.WriteLine("Invoked " + cmd + " args " + args);
+
+                    dynamic json = DynamicJson.Parse(args);
+
+
+                    List<TimeRange> played = new List<TimeRange>();
+
+                    foreach(var play in json.played) {
+
+                        played.Add(new TimeRange() { Start = play.start, End = play.end });
+                    }
+
+                    List<TimeRange> buffered = new List<TimeRange>();
+
+                    foreach(var buffer in json.buffered) {
+
+                        buffered.Add(new TimeRange() { Start = buffer.start, End = buffer.end });
+                    }
+
+                    CsFrame((double)json.time, played.ToArray(), buffered.ToArray(), (int) json.vpos);
+                    break;
+                case "ShowController":  //マウスを動かしたら呼ばれる
+                    Owner.ShowFullScreenPopup();
+                    break;
+                case "HideController":  //マウスを数秒動画の上で静止させたら呼ばれる
+                    Owner.HideFullScreenPopup();
+                    break;
+                case "Initialized": //動画が再生される直前に呼ばれる
+                    int vol = Settings.Instance.Volume;
+                    Owner.Volume = 0;    //保存された値をFlash側に伝える
+                    Owner.Volume = vol;    //保存された値をFlash側に伝える
+                    break;
+                case "playstate":
+
+                    Owner.IsPlaying = bool.Parse(args);
+                    break;
+                case "duration":
+
+                    break;
+                case "widtheight":
+                    Owner.VideoData.Resolution = args;
+                    break;
+                case "Stop": //動画が最後まで行ったらリピートしたりフルスクリーンから復帰したりする
+                    if(Owner.IsRepeat) {
+
+                        Restart();
+                    } else if(Owner.IsFullScreen) {
+
+                        if(Owner.IsPlayList) {
+
+                            Owner.PlayListEntry.Owner.Next();
+                        } else {
+
+                            Owner.ReturnFromFullScreen();
+                        }
+                    } else {
+
+                        if(Owner.IsPlayList) {
+
+                            Owner.PlayListEntry.Owner.Next();
+                            return;
+                        }
+                        Owner.IsPlaying = false;
+
+
+                    }
+
+                    break;
+                case "Click":   //Flash部分がクリックされた時に呼ばれる
+                    if(Settings.Instance.ClickOnPause) {   //クリックしたら一時停止する設定になっていたら
+
+                        TogglePlay();
+                    }
+                    break;
+                case "MouseWheel":
+                    Console.WriteLine("Wheel:" + args);
+                    Owner.Volume += int.Parse(args);
+                    break;
+                default:
+                    Console.WriteLine("Invoked From Actionscript:" + cmd);
+                    break;
+            }
 
 
         }
