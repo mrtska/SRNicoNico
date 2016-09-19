@@ -13,17 +13,38 @@ function invoke_host4(cmd, args0, args1, args2, args3) {
     window.external.InvokeFromJavaScript(cmd, args0, args1, args2, args3);
 }
 
+var WIDTH = 640;
+var HEIGHT = 360;
 
 
 window.onresize = function (e) {
 
     
     video.style.height = window.innerHeight + "px";
+
+    var actx = window.innerWidth / WIDTH;
+    var acty = window.innerHeight / HEIGHT;
+
+    calc_comment_size(window.innerWidth, window.innerHeight);
+    
+
+  //  invoke_host("log", "actx :" + actx + " acty:" + acty);
+
+    //document.body.style["transform-origin"] = "";
+    //document.body.style["transform"] = "scale(" + actx + "," + acty + ")";
+    //document.body.style["zoom"] = (acty + actx) / 2;
 }
 
 
 
 function init(src) {
+
+    if (!('contains' in String.prototype)) {
+        String.prototype.contains = function (str, startIndex) {
+            "use strict";
+            return -1 !== String.prototype.indexOf.call(this, str, startIndex);
+        };
+    }
 
     video = document.getElementById("player");
 
@@ -71,8 +92,9 @@ function init(src) {
                 };
 
                 played.push(range);
-
             }
+            
+            comment_tick(obj.vpos);
 
             obj.played = played;
 
@@ -85,10 +107,12 @@ function init(src) {
 
     video.addEventListener("play", function () {
 
+        resume_comment();
         invoke_host("playstate", true);
     });
     video.addEventListener("pause", function () {
 
+        pause_comment();
         invoke_host("playstate", false);
     });
 

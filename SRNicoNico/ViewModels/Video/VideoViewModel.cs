@@ -500,7 +500,7 @@ namespace SRNicoNico.ViewModels {
 
             CommentVisibility ^= true;
             Settings.Instance.CommentVisibility = CommentVisibility;
-            Handler.InvokeScript("AsToggleComment");
+           // Handler.InvokeScript("AsToggleComment");
         }
 
         private int PrevVolume;

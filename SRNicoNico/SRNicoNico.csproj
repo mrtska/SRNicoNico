@@ -1017,6 +1017,8 @@
     <Content Include="Html5\commentlayer.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Html5\jquery-3.1.0.js" />
+    <Content Include="Html5\jquery.keyframes.js" />
     <Content Include="Html5\videoflash.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

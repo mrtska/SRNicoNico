@@ -17,6 +17,6 @@
              MouseWheel="UserControl_MouseWheel"
 			 >
     <Grid>
-        <WebBrowser x:Name="browser" Grid.Row="1" metro2:WebBrowserHelper.AllowWebBrowserDrop="False" metro2:WebBrowserHelper.ScriptErrorsSuppressed="True"/>
+        <WebBrowser x:Name="browser" Grid.Row="1" metro2:WebBrowserHelper.AllowWebBrowserDrop="False" metro2:WebBrowserHelper.ScriptErrorsSuppressed="False"/>
     </Grid>
 </UserControl>

@@ -76,6 +76,25 @@ namespace SRNicoNico.ViewModels {
 
                     browser.ObjectForScripting = new ObjectForScripting(this);
                     browser.InvokeScript("init", VideoData.ApiData.GetFlv.VideoUrl);
+
+                    //ここからInvoke可能
+                    Owner.IsPlaying = true;
+                    Owner.IsInitialized = true;
+                    Owner.Mylist.EnableButtons();
+
+                    Owner.Volume = Settings.Instance.Volume;
+
+                    //RTMPの時はサーバートークンも一緒にFlashに渡す
+                    if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
+
+                        //InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, App.ViewModelRoot.Config.Comment.ToJson());
+                    } else {
+
+                        //InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, App.ViewModelRoot.Config.Comment.ToJson());
+                    }
+
+                    Owner.IsRepeat = Settings.Instance.IsRepeat;
+
                 };
 
                 if(VideoData.ApiData.Cmsid.Contains("nm")) {
@@ -183,25 +202,7 @@ namespace SRNicoNico.ViewModels {
         }
 
 
-
-        private void OpenVideo() {
-
-            //ここからInvoke可能
-            Owner.IsPlaying = true;
-            Owner.IsInitialized = true;
-            Owner.Mylist.EnableButtons();
-
-            //RTMPの時はサーバートークンも一緒にFlashに渡す
-            if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
-
-                //InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, App.ViewModelRoot.Config.Comment.ToJson());
-            } else {
-
-                //InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, App.ViewModelRoot.Config.Comment.ToJson());
-            }
-
-            Owner.IsRepeat = Settings.Instance.IsRepeat;
-        }
+        
 
         public void DisposeHandler() {
 
@@ -317,13 +318,13 @@ namespace SRNicoNico.ViewModels {
         //Flashにコメントリストを送る
         public void InjectComment(string json) {
 
-          //  InvokeScript("AsInjectComment", json);
+           InvokeScript("comment_init", json);
         }
 
         //Flashに投稿者コメントリストを送る
         public void InjectUploaderComment(string json) {
 
-           // InvokeScript("AsInjectUploaderComment", json);
+            InvokeScript("uploader_comment_init", json);
         }
         
 
@@ -352,7 +353,6 @@ namespace SRNicoNico.ViewModels {
 
             switch(cmd) {
                 case "Ready":
-                    OpenVideo();
                     break;
                 case "currenttime": //毎フレーム呼ばれる
 
@@ -397,6 +397,9 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case "widtheight":
                     Owner.VideoData.Resolution = args;
+                    break;
+                case "log":
+                    Console.WriteLine("Log: " + args);
                     break;
                 case "Stop": //動画が最後まで行ったらリピートしたりフルスクリーンから復帰したりする
                     if(Owner.IsRepeat) {
