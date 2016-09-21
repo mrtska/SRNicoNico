@@ -14,6 +14,9 @@ var CommentViewModel = {};
 
 CommentViewModel.prototype = {
     
+    //基準となる横縦幅
+    WIDTH: 640,
+    HEIGHT: 360,
     
     
     //ニコニコビルトインカラーのマップ
@@ -111,7 +114,7 @@ CommentViewModel.prototype = {
             if (mail.contains("ue")) {
     
                 element.vend = element.vpos + 300;
-                element.duration = 300;
+                element.duration = 3000;
                 element.pos = "ue";
                 
                 //left50%にtransformするとpostionがfixedでも中央に描画される
@@ -123,7 +126,7 @@ CommentViewModel.prototype = {
     
     
                 element.vend = element.vpos + 300;
-                element.duration = 300;
+                element.duration = 3000;
                 element.pos = "shita";
                 
                 //上と同じ
@@ -136,7 +139,7 @@ CommentViewModel.prototype = {
     
                 //流れるコメントは4秒表示
                 element.vend = element.vpos + 400;
-                element.duration = 400;
+                element.duration = 4000;
                 element.pos = "naka";
     
                 //流れるコメントの初期値は一番右
@@ -187,61 +190,233 @@ CommentViewModel.prototype = {
     //ウィンドウサイズ変更はフルスクリーンによってコメントサイズの再計算が必要になった時に呼ばれる
     calc_comment_size: function(width, height) {
         
+        //現在の高さを基準の高さで割って係数をだす    
+        var mul = height / HEIGHT;
         
+        //全てのコメントに係数を掛けて反映させる
+        listener_comment.forEach(function (target) {
+    
+            if(target.size == "big") {
+    
+                $(target).css("font-size", mul * 39);
+    
+            } else if(target.size == "small") {
+    
+                $(target).css("font-size", mul * 15);
+            } else {
+    
+            $(target).css("font-size", mul * 24);
+            }
+        });
+    },
+    //描画中のコメントを全て一時停止する
+    pause_comment: function() {
+        
+        rendering_listener_comment.forEach(function (target) {
+    
+            $(target).css("animation-play-state", "paused");
+        });
+    },
+    //一時停止中のコメントを全て再開させる
+    resume_comment: function() {
+        
+        rendering_listener_comment.forEach(function (target) {
+    
+            $(target).css("animation-play-state", "running");
+        });
+    },
+    
+    //コメントのp要素から現在のy座標(top)を取得する
+    getTop: function(val) {
+        
+        return parseInt($(val).css("top"));
+    },
+    
+    //現在のvposでtarget(p要素)がどのX座標(left)に居るべきかを取得する
+    getX: function(target, vpos) {
+        
+        //流れないコメントだったらX座標は一定
+        if(target.pos != "naka") {
+            
+            return (window.innerWidth - target.clientWidth) / 2;
+        }
+        
+        //現在のvposとコメント表示開始時のvposのオフセットを取得する
+        var offset = vpos - target.vpos;
+        
+        //vpos当たりの横幅を計算してoffsetを掛けて出てきた値を現在のウィンドウの横幅から引く
+        return window.innerWidth - offset * ((window.innerWidth + target.clientWidth) / (target.vend - target.vpos));
+    },
+    
+    //現在描画中のコメントを考慮してtarget(p要素)がどのY座標で描画すれば良いか計算する
+    getY: function(target) {
+            
+            
+        var offsetY = 0;
+    
+        //下コメだったらオフセットは下から上に行く
+        if(target.pos == "shita") {
+    
+            offsetY = window.innerHeight - target.clientHeight;
+    
+            //invoke_host("log", offsetY);
+    
+        }
+    
+        var flag = false;
+        do {
+    
+    
+            flag = false;
+                
+            //描画中のコメントの位置を考慮して返す座標を決める
+            for (var i = 0; i < rendering_listener_comment.length; i++) {
+    
+                var entry = rendering_listener_comment[i];
+    
+                //同じコメントナンバーだったらやり直し
+                if(target.no == entry.no) {
+    
+                    continue;
+                }
+    
+                //同じ描画位置同士でしか計算はしない
+                if(target.pos == entry.pos) {
+    
+                    //描画中のコメントの位置よりサジェストされたY座標が小さかったら
+                    if(getTop(entry) + entry.clientHeight > offsetY) {
+    
+                        //描画中のコメントの位置よりもサジェストされたY座標＋位置を決めたいコメントの高さが大きかったら
+                        //入れる場所がないので流れるコメントは描画中のコメントのX座標も考慮して計算する
+                        //上下コメントはどう頑張っても入らないのでMath.randomでテキトーな位置に描画する
+                        if(offsetY + target.clientHeight > getTop(entry)) {
+    
+    
+                            if(target.pos == "shita") {
+    
+                                offsetY = getTop(entry) - target.clientHeight - 1;
+                                if(offsetY < 0) {
+    
+                                    offsetY = Math.random() * (window.innerHeight - target.clientHeight);
+                                    break;
+                                }
+                                flag = true;
+                                break;
+                            }
+                            
+                            if(target.pos == "ue") {
+    
+                                offsetY = getTop(entry) - target.clientHeight + 1;
+    
+                                if(offsetY + target.clientHeight > window.innerHeight) {
+    
+                                    offsetY = Math.random() * (window.innerHeight - target.clientHeight);
+                                    break;
+                                }
+                                flag = true;
+                                break;
+                            }
+    
+                            var max = Math.max(target.vpos, entry.vpos);
+                            var min = Math.min(target.vend, entry.vend);
+                            var x1 = getX(target, max);
+                            var x2 = getX(target, min);
+                            var x3 = getX(entry, max);
+                            var x4 = getX(entry, min);
+    
+    
+                            if(x1 <= x3 + entry.clientWidth && x3 <= x1 + target.clientWidth || x2 <= x4 + entry.clientWidth && x4 <= x2 + target.clientWidth) {
+                                
+                                offsetY = getTop(entry) + entry.clientHeight + 1;
+                              
+                                if(offsetY + target.clientHeight > window.innerHeight) {
+                                    
+                                    offsetY = Math.random() * window.innerHeight - target.clientHeight;
+                                    break;
+                                }
+    
+                                flag = true;
+                                break;
+                            }
+    
+                        }
+    
+                    }
+    
+                }
+            } 
+            
+        } while(flag);
+    
+        //ピクセルで出力する    
+        return offsetY + "px";
+    },
+    //VideoViewModelから1デシ秒に一回くらい呼ばれる
+    comment_tick: function(vpos) {
+        
+        //コメントリストから該当の時間になったコメントをコメントレイヤーに追加していく
+        listener_comment.forEach(function (target) {
+    
+            //該当時間かどうか
+            if (vpos >= target.vpos && vpos < target.vend) {
+    
+                //既に追加してあったらスキップ    
+                if (rendering_listener_comment.indexOf(target) >= 0) {
+    
+                } else {
+                
+                    //コメントレイヤーに追加
+                    //先に追加しないとclientWidthなどが正しく取得できない
+                    layer.appendChild(target);
+    
+                    //描画中リストに追加
+                    rendering_listener_comment.push(target);
+    
+                    //流れるコメントはアニメーションを追加
+                    if (target.pos == "naka") {
+    
+                        $(target).keyframes({
+                            "0%": {
+    
+                                //初期値をgetXで取得する しないとシークした時に全てのコメントが右から始まってしまって気持ち悪い
+                                left: getX(target, vpos) + "px" 
+                            },
+                            "100%": {
+                                
+                                //終わりはコメントの横幅を-にしたもの つまりコメントが見えなくなるまで
+                                left: -target.clientWidth + "px"
+    
+                            }, 
+    
+                        }, {
+    
+                            duration: target.duration,  //コメント表示時間 普通は4秒
+                            easing: "linear",
+                            count: 1    //ループされても困る
+                        });
+                    }
+    
+                    //Y座標を設定する
+                    $(target).css("top", getY(target));
+    
+                }
+            }
+          
+        });
+
+        //描画中リストに描画時間が過ぎたコメントがあったら排除する 重くなるからね   
+        rendering_listener_comment.forEach(function (target) {
+
+            if (vpos < target.vpos || vpos > target.vend) {
+    
+                layer.removeChild(target);
+                rendering_listener_comment.splice(rendering_listener_comment.indexOf(target), 1);
+            }
+        });
+
     }
 };
 
-
-function calc_comment_size(width, height) {
-
-
-    var mul = height / 360;
-    
-    listener_comment.forEach(function (target) {
-
-
-        if(target.size == "big") {
-
-
-
-            $(target).css("font-size", mul * 39);
-
-        } else if(target.size == "small") {
-
-
-            $(target).css("font-size", mul * 15);
-        } else {
-
-        $(target).css("font-size", mul * 24);
-        }
-    });
-}
-
-function resume_comment() {
-
-    rendering_listener_comment.forEach(function (target) {
-
-        $(target).css("animation-play-state", "running");
-    });
-}
-
-function pause_comment() {
-
-
-    rendering_listener_comment.forEach(function (target) {
-
-        $(target).css("animation-play-state", "paused");
-
-
-    });
-
-}
-
-
-
-function comment_init(json) {
-
-}
 
 function uploader_comment_init(json) {
 
@@ -334,203 +509,6 @@ function uploader_comment_init(json) {
 
     });
 }
-
-
-function getTop(val) {
-
-    return parseInt($(val).css("top"));
-}
-
-//流れる系のコメント用
-function getX(target, vpos) {
-
-    if(target.pos != "naka") {
-
-        return (window.innerWidth - target.clientWidth) / 2;
-    }
-
-    var sub = vpos - target.vpos;
-    var ret = (window.innerWidth + target.clientWidth) / (target.vend - target.vpos);
-
-    //invoke_host("log", "hage" + window.innerWidth - sub * ret);
-    return window.innerWidth - sub * ret;
-}
-
-function getY(target) {
-
-
-    var offsetY = 0;
-
-    //下コメだったら
-    if(target.pos == "shita") {
-
-        offsetY = window.innerHeight - target.clientHeight;
-
-        //invoke_host("log", offsetY);
-
-    }
-
-    var flag = false;
-    do {
-
-
-        flag = false;
-        var count = 0;
-            
-        for (var i = 0; i < rendering_listener_comment.length; i++) {
-
-            var entry = rendering_listener_comment[i];
-
-            if(target.no == entry.no) {
-
-                continue;
-            }
-
-            //同じ描画位置
-            if(target.pos == entry.pos) {
-
-                if(getTop(entry) + entry.clientHeight > offsetY) {
-
-            //invoke_host("log", "unko" + target.clientHeight);
-                    if(offsetY + target.clientHeight > getTop(entry)) {
-
-
-                        if(target.pos == "shita") {
-
-                            offsetY = getTop(entry) - target.clientHeight - 1;
-                            if(offsetY < 0) {
-
-                                offsetY = Math.random() * (window.innerHeight - target.clientHeight);
-                                break;
-                            }
-                            flag = true;
-                            break;
-                        }
-                        
-                        if(target.pos == "shita") {
-
-                            offsetY = getTop(entry) - target.clientHeight + 1;
-
-                            if(offsetY + target.clientHeight > window.innerHeight) {
-
-                                offsetY = Math.random() * (window.innerHeight - target.clientHeight);
-                                break;
-                            }
-                            flag = true;
-                            break;
-                        }
-
-                        var max = Math.max(target.vpos, entry.vpos);
-                        var min = Math.min(target.vend, entry.vend);
-                        var x1 = getX(target, max);
-                        var x2 = getX(target, min);
-                        var x3 = getX(entry, max);
-                        var x4 = getX(entry, min);
-
-
-                        if(x1 <= x3 + entry.clientWidth && x3 <= x1 + target.clientWidth || x2 <= x4 + entry.clientWidth && x4 <= x2 + target.clientWidth) {
-                            
-                            offsetY = getTop(entry) + entry.clientHeight + 1;
-                          
-                            if(offsetY + target.clientHeight > window.innerHeight) {
-                                
-                                offsetY = Math.random() * window.innerHeight - target.clientHeight;
-                                break;
-                            }
-
-                            flag = true;
-                            break;
-                        }
-
-                    }
-
-                }
-
-            }
-        } 
-        
-    } while(flag);
-
-
-
-    //invoke_host("log", "result:" + offsetY);
-    return offsetY + "px";
-}
-
-function comment_tick(vpos) {
-
-
-   // invoke_host("log", vpos);
-    listener_comment.forEach(function (target) {
-
-        if (vpos >= target.vpos && vpos < target.vend) {
-
-            
-
-            if (rendering_listener_comment.indexOf(target) >= 0) {
-
-            } else {
-
-                layer.appendChild(target);
-
-                rendering_listener_comment.push(target);
-
-                if (target.pos == "naka") {
-
-                    $(target).keyframes({
-                        "0%": {
-
-                            left: getX(target, vpos) + "px"
-                        },
-                        "100%": {
-
-                            left: -target.clientWidth + "px"
-
-                        }, 
-
-                    }, {
-
-                        duration: target.duration * 10,
-                        easing: "linear",
-                        count: 1
-                    });
-                }
-
-
-                $(target).css("top", getY(target));
-
-            }
-        }
-      
-    });
-
-    rendering_listener_comment.forEach(function (target) {
-       // invoke_host("log", target.vend);
-        if (vpos < target.vpos || vpos > target.vend) {
-
-            if (rendering_listener_comment.indexOf(target) >= 0) {
-
-                layer.removeChild(target);
-                rendering_listener_comment.splice(rendering_listener_comment.indexOf(target), 1);
-            }
-        }
-    });
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
