@@ -318,7 +318,7 @@ namespace SRNicoNico.ViewModels {
                     break;
             }
         }
-
+        
         private int prevTime;
         private double sumBPS;
         //1フレーム毎に呼ばれる
