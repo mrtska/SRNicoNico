@@ -31,14 +31,20 @@ namespace SRNicoNico.ViewModels {
         //現在のバージョン
         public double CurrentVersion {
 
-            get { return 0.92; }
+            get { return 0.93; }
         }
 
-        
-		#region Title変更通知プロパティ
-		private string _Title = "NicoNicoViewer ";
 
-		public string Title {
+        #region Title変更通知プロパティ
+
+#if DEBUG
+
+        private string _Title = "NicoNicoViewer (Debug Build) ";
+#else
+        
+        private string _Title = "NicoNicoViewer ";
+#endif
+        public string Title {
 			get { return _Title; }
 			set { 
 				if(_Title == value)
@@ -47,9 +53,9 @@ namespace SRNicoNico.ViewModels {
 				RaisePropertyChanged();
 			}
 		}
-        #endregion
+#endregion
 
-        #region WindowState変更通知プロパティ
+#region WindowState変更通知プロパティ
         private WindowState _WindowState;
 
         public WindowState WindowState {
@@ -61,11 +67,11 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+#endregion
 
         
 
-        #region Visibility変更通知プロパティ
+#region Visibility変更通知プロパティ
         private Visibility _Visibility;
 
         public Visibility Visibility {
@@ -77,7 +83,7 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+#endregion
 
 
 
@@ -113,7 +119,7 @@ namespace SRNicoNico.ViewModels {
         public DispatcherCollection<TabItemViewModel> TabItems { get; set; }
 
 
-        #region VideoTabs変更通知プロパティ
+#region VideoTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _VideoTabs;
 
         public DispatcherCollection<TabItemViewModel> VideoTabs {
@@ -125,9 +131,9 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+#endregion
 
-        #region UserTabs変更通知プロパティ
+#region UserTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _UserTabs;
 
         public DispatcherCollection<TabItemViewModel> UserTabs {
@@ -139,9 +145,9 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+#endregion
 
-        #region MylistTabs変更通知プロパティ
+#region MylistTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _MylistTabs;
 
         public DispatcherCollection<TabItemViewModel> MylistTabs {
@@ -153,9 +159,9 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+#endregion
 
-        #region CommunityTabs変更通知プロパティ
+#region CommunityTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _CommunityTabs;
 
         public DispatcherCollection<TabItemViewModel> CommunityTabs {
@@ -167,9 +173,9 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+#endregion
 
-        #region PlayListTabs変更通知プロパティ
+#region PlayListTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _PlayListTabs;
 
         public DispatcherCollection<TabItemViewModel> PlayListTabs {
@@ -181,9 +187,9 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+#endregion
 
-        #region LiveTabs変更通知プロパティ
+#region LiveTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _LiveTabs;
 
         public DispatcherCollection<TabItemViewModel> LiveTabs {
@@ -195,12 +201,12 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+#endregion
 
 
 
 
-        #region SelectedTab変更通知プロパティ
+#region SelectedTab変更通知プロパティ
         private TabItemViewModel _SelectedTab;
 
         public TabItemViewModel SelectedTab {
@@ -216,7 +222,7 @@ namespace SRNicoNico.ViewModels {
                 }
             }
         }
-        #endregion
+#endregion
 
 
         public NicoNicoNGComment NGCommentInstance;
@@ -487,7 +493,7 @@ namespace SRNicoNico.ViewModels {
             SetCurrent(WebView);
         }
 
-        #region CanClose変更通知プロパティ
+#region CanClose変更通知プロパティ
         private bool _CanClose;
 
         public bool CanClose {
@@ -499,7 +505,7 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+#endregion
 
 
 

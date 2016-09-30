@@ -46,7 +46,7 @@ package  {
 			});
 			
 			//("Z:/smile.swf");
-			//OpenVideo("Z:/smile1.swf");
+			//OpenVideo("Z:/smile.swf", "");
 			//OpenVideo("Z:/smile (1).mp4");
 			//var now:Date = new Date();
 			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
@@ -163,13 +163,13 @@ package  {
 			
 			var width:String = videoW.toString();
 			var height:String = videoH.toString();
-			CallCSharp("WidthHeight", width + "×" + height);
+			ExternalInterface.call("WidthHeight", width + "×" + height);
 
 			var framerate:String = loader.contentLoaderInfo.frameRate.toString();
-			CallCSharp("Framerate", framerate);
+			ExternalInterface.call("Framerate", framerate);
 			var filesize:String = movie.loaderInfo.bytesTotal.toString();
 			
-			CallCSharp("FileSize", filesize);
+			ExternalInterface.call("FileSize", filesize);
 
 		}
 		
@@ -213,7 +213,7 @@ package  {
 			
 			if (ExternalInterface.available) {
 
-				CallCSharp("CsFrame", value.toString(), buffer.toString(), (loader.contentLoaderInfo.bytesLoaded - prevLoaded).toString(), vpos.toString());
+				ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (loader.contentLoaderInfo.bytesLoaded - prevLoaded).toString(), vpos.toString());
 			}
 			prevLoaded = loader.contentLoaderInfo.bytesLoaded;
 			prevTime = (int) (value);
