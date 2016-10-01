@@ -75,7 +75,7 @@ namespace SRNicoNico.ViewModels {
                 browser.LoadCompleted += (sender, e) => {
 
                     browser.ObjectForScripting = new ObjectForScripting(this);
-                    browser.InvokeScript("init", VideoData.ApiData.GetFlv.VideoUrl);
+                    browser.InvokeScript("eval", @"VideoViewModel.initialize('" + VideoData.ApiData.GetFlv.VideoUrl + "')");
 
                     //ここからInvoke可能
                     Owner.IsPlaying = true;
@@ -282,12 +282,12 @@ namespace SRNicoNico.ViewModels {
         }
         public void Pause() {
             
-            InvokeScript("pause");
+            InvokeScript("VideoViewModel.pause");
         }
 
         public void Resume() {
 
-            InvokeScript("resume");
+            InvokeScript("VideoViewModel.resume");
         }
 
         //一時停止切り替え
@@ -312,19 +312,19 @@ namespace SRNicoNico.ViewModels {
         //Flashにシーク命令を送る
         public void Seek(float pos) {
 
-           InvokeScript("seek", pos.ToString());
+           InvokeScript("VideoViewModel.seek", pos.ToString());
         }
 
         //Flashにコメントリストを送る
         public void InjectComment(string json) {
 
-           InvokeScript("comment_init", json);
+           InvokeScript("CommentViewModel.initialize", json);
         }
 
         //Flashに投稿者コメントリストを送る
         public void InjectUploaderComment(string json) {
 
-            InvokeScript("uploader_comment_init", json);
+            InvokeScript("CommentViewModel.uploader_comment_init", json);
         }
         
 

@@ -225,7 +225,7 @@ namespace SRNicoNico.ViewModels {
 
                     IsMute = false;
                 }
-                Handler.InvokeScript("setvolume", (value / 100.0).ToString());
+                Handler.InvokeScript("VideoViewModel.setvolume", (value / 100.0).ToString());
                 RaisePropertyChanged();
             }
         }

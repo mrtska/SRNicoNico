@@ -15,18 +15,17 @@ function invoke_host(cmd, args) {
     }    
 })();
 
-var VideoViewModel = {};
+function VideoViewModel() { };
 
 VideoViewModel.prototype = {
     
     WIDTH: 640,
     HEIGHT: 360,
-    video: {},
   
     initialize: function(src) {
         
         //html5のvideo要素を取得
-        video = document.getElementById("player");
+        this.video = document.getElementById("player");
 
         //動画の高さをウィンドウの高さに合わせる
         video.style.height = window.innerHeight + "px";
@@ -79,7 +78,7 @@ VideoViewModel.prototype = {
                 obj.played = played;
 
                 //コメントを描画する
-                comment_tick(obj.vpos);
+                CommentViewModel.comment_tick(obj.vpos);
 
                 //objをJsonに変換してC#側に渡す
                 var json = JSON.stringify(obj);
@@ -112,17 +111,9 @@ VideoViewModel.prototype = {
             var actx = window.innerWidth / WIDTH;
             var acty = window.innerHeight / HEIGHT;
 
-            calc_comment_size(window.innerWidth, window.innerHeight);
+            CommentViewModel.calc_comment_size(window.innerWidth, window.innerHeight);
 
-
-          //  invoke_host("log", "actx :" + actx + " acty:" + acty);
-
-            //document.body.style["transform-origin"] = "";
-            //document.body.style["transform"] = "scale(" + actx + "," + acty + ")";
-            //document.body.style["zoom"] = (acty + actx) / 2;
         });
-
-        
         //ロードして再生 勝手に再生しないようにとかするならここかな
         video.load();
         video.play();

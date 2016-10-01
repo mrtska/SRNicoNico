@@ -26,7 +26,7 @@ CommentViewModel.prototype = {
     listener_comment: [],
     
     //描画中の視聴者コメントのリスト
-    rendering_listener_comment = [],
+    rendering_listener_comment: [],
     
     //投稿者コメントのリスト
     owner_comment: [],
