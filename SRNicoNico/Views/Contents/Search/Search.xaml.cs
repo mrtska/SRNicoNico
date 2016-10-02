@@ -21,5 +21,5 @@ namespace SRNicoNico.Views.Contents.Search {
 		public Search() {
 			InitializeComponent();
 		}
-	}
+    }
 }

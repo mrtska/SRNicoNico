@@ -26,7 +26,7 @@ using System.Reflection;
 using SRNicoNico.Views.Contents.Misc;
 
 namespace SRNicoNico.ViewModels {
-	public class MainWindowViewModel : ViewModel {
+    public class MainWindowViewModel : ViewModel {
 
         //現在のバージョン
         public double CurrentVersion {
@@ -39,51 +39,51 @@ namespace SRNicoNico.ViewModels {
 
 #if DEBUG
 
-        private string _Title = "NicoNicoViewer (Debug Build) ";
+        private string _Title = "NicoNicoViewer Debug Build ";
 #else
         
         private string _Title = "NicoNicoViewer ";
 #endif
         public string Title {
-			get { return _Title; }
-			set { 
-				if(_Title == value)
-					return;
-				_Title = value;
-				RaisePropertyChanged();
-			}
-		}
-#endregion
+            get { return _Title; }
+            set {
+                if(_Title == value)
+                    return;
+                _Title = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
-#region WindowState変更通知プロパティ
+        #region WindowState変更通知プロパティ
         private WindowState _WindowState;
 
         public WindowState WindowState {
             get { return _WindowState; }
-            set { 
+            set {
                 if(_WindowState == value)
                     return;
                 _WindowState = value;
                 RaisePropertyChanged();
             }
         }
-#endregion
+        #endregion
 
-        
 
-#region Visibility変更通知プロパティ
+
+        #region Visibility変更通知プロパティ
         private Visibility _Visibility;
 
         public Visibility Visibility {
             get { return _Visibility; }
-            set { 
+            set {
                 if(_Visibility == value)
                     return;
                 _Visibility = value;
                 RaisePropertyChanged();
             }
         }
-#endregion
+        #endregion
 
 
 
@@ -109,7 +109,7 @@ namespace SRNicoNico.ViewModels {
 
         public string Status {
             set {
-                    StatusBar.Status = value;
+                StatusBar.Status = value;
             }
             get {
                 return StatusBar.Status;
@@ -119,63 +119,63 @@ namespace SRNicoNico.ViewModels {
         public DispatcherCollection<TabItemViewModel> TabItems { get; set; }
 
 
-#region VideoTabs変更通知プロパティ
+        #region VideoTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _VideoTabs;
 
         public DispatcherCollection<TabItemViewModel> VideoTabs {
             get { return _VideoTabs; }
-            set { 
+            set {
                 if(_VideoTabs == value)
                     return;
                 _VideoTabs = value;
                 RaisePropertyChanged();
             }
         }
-#endregion
+        #endregion
 
-#region UserTabs変更通知プロパティ
+        #region UserTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _UserTabs;
 
         public DispatcherCollection<TabItemViewModel> UserTabs {
             get { return _UserTabs; }
-            set { 
+            set {
                 if(_UserTabs == value)
                     return;
                 _UserTabs = value;
                 RaisePropertyChanged();
             }
         }
-#endregion
+        #endregion
 
-#region MylistTabs変更通知プロパティ
+        #region MylistTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _MylistTabs;
 
         public DispatcherCollection<TabItemViewModel> MylistTabs {
             get { return _MylistTabs; }
-            set { 
+            set {
                 if(_MylistTabs == value)
                     return;
                 _MylistTabs = value;
                 RaisePropertyChanged();
             }
         }
-#endregion
+        #endregion
 
-#region CommunityTabs変更通知プロパティ
+        #region CommunityTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _CommunityTabs;
 
         public DispatcherCollection<TabItemViewModel> CommunityTabs {
             get { return _CommunityTabs; }
-            set { 
+            set {
                 if(_CommunityTabs == value)
                     return;
                 _CommunityTabs = value;
                 RaisePropertyChanged();
             }
         }
-#endregion
+        #endregion
 
-#region PlayListTabs変更通知プロパティ
+        #region PlayListTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _PlayListTabs;
 
         public DispatcherCollection<TabItemViewModel> PlayListTabs {
@@ -187,31 +187,31 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-#endregion
+        #endregion
 
-#region LiveTabs変更通知プロパティ
+        #region LiveTabs変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _LiveTabs;
 
         public DispatcherCollection<TabItemViewModel> LiveTabs {
             get { return _LiveTabs; }
-            set { 
+            set {
                 if(_LiveTabs == value)
                     return;
                 _LiveTabs = value;
                 RaisePropertyChanged();
             }
         }
-#endregion
+        #endregion
 
 
 
 
-#region SelectedTab変更通知プロパティ
+        #region SelectedTab変更通知プロパティ
         private TabItemViewModel _SelectedTab;
 
         public TabItemViewModel SelectedTab {
             get { return _SelectedTab; }
-            set { 
+            set {
                 if(_SelectedTab == value)
                     return;
                 _SelectedTab = value;
@@ -222,7 +222,7 @@ namespace SRNicoNico.ViewModels {
                 }
             }
         }
-#endregion
+        #endregion
 
 
         public NicoNicoNGComment NGCommentInstance;
@@ -252,7 +252,7 @@ namespace SRNicoNico.ViewModels {
 
             Update = new UpdateViewModel(CurrentVersion);
 
-		}
+        }
 
         //ログイン後の初期化処理
         public void LogedInInit() {
@@ -288,52 +288,52 @@ namespace SRNicoNico.ViewModels {
 
                 Task.Run(() => NicoNicoOpener.Open(Environment.GetCommandLineArgs()[1]));
             }
-            
-    
+
+
         }
 
-		public void Initialize() {
-            
-			//Modelsを初期化
-			Task.Run(() => {
+        public void Initialize() {
 
-				if(File.Exists(NicoNicoUtil.CurrentDirectory + @"\session")) {
+            //Modelsを初期化
+            Task.Run(() => {
+
+                if(File.Exists(NicoNicoUtil.CurrentDirectory + @"\session")) {
 
                     StatusBar.Status = "自動ログイン中";
 
-					//セッション情報を取得する
-					var reader = new StreamReader(NicoNicoUtil.CurrentDirectory + @"\session");
-							
-					var key = reader.ReadLine().Split(':')[1];
-					var expire = DateTimeOffset.Parse(reader.ReadLine().Replace("Expire:", ""));
+                    //セッション情報を取得する
+                    var reader = new StreamReader(NicoNicoUtil.CurrentDirectory + @"\session");
 
-					reader.Close();
+                    var key = reader.ReadLine().Split(':')[1];
+                    var expire = DateTimeOffset.Parse(reader.ReadLine().Replace("Expire:", ""));
 
-					//セッションが有効か比較する
-					if(DateTimeOffset.Compare(expire, DateTimeOffset.Now) < 0) {
+                    reader.Close();
 
-						//セッションが有効期限切れ
-						SignIn.StateText = "有効期限が切れています。\n再度ログインしてください。";
-						SignIn.AutoLogin = true;
+                    //セッションが有効か比較する
+                    if(DateTimeOffset.Compare(expire, DateTimeOffset.Now) < 0) {
+
+                        //セッションが有効期限切れ
+                        SignIn.StateText = "有効期限が切れています。\n再度ログインしてください。";
+                        SignIn.AutoLogin = true;
                         NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession());
 
                         //ログインダイアログ表示
                         Messenger.Raise(new TransitionMessage(typeof(SignInDialog), SignIn, TransitionMode.Modal));
-						return;
-					}
+                        return;
+                    }
 
-					//セッションが有効だった場合
-					NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession(key, expire));
-					if(NicoNicoWrapperMain.Session.SignInInternal() != SigninStatus.Success) {
-                   
-						//ログイン失敗
-						SignIn.StateText = "ログインに失敗しました。";
-						SignIn.AutoLogin = true;
+                    //セッションが有効だった場合
+                    NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession(key, expire));
+                    if(NicoNicoWrapperMain.Session.SignInInternal() != SigninStatus.Success) {
 
-						//ログインダイアログ表示
-						Messenger.Raise(new TransitionMessage(typeof(SignInDialog), SignIn, TransitionMode.Modal));
-						return;
-					}
+                        //ログイン失敗
+                        SignIn.StateText = "ログインに失敗しました。";
+                        SignIn.AutoLogin = true;
+
+                        //ログインダイアログ表示
+                        Messenger.Raise(new TransitionMessage(typeof(SignInDialog), SignIn, TransitionMode.Modal));
+                        return;
+                    }
 
                     //セッション情報を更新
                     var writer = new StreamWriter(NicoNicoUtil.CurrentDirectory + @"\session");
@@ -345,25 +345,25 @@ namespace SRNicoNico.ViewModels {
                     writer.Close();
                     //ログイン成功
                     StatusBar.Status = "ログイン完了";
-				//手動ログイン
-				} else {
-					//セッションを確立
-					NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession());
-					Messenger.Raise(new TransitionMessage(typeof(SignInDialog), SignIn, TransitionMode.Modal));
-					return;
-				}
-			});
-		}
+                    //手動ログイン
+                } else {
+                    //セッションを確立
+                    NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession());
+                    Messenger.Raise(new TransitionMessage(typeof(SignInDialog), SignIn, TransitionMode.Modal));
+                    return;
+                }
+            });
+        }
 
-		//終了処理
-		protected override void Dispose(bool disposing) {
+        //終了処理
+        protected override void Dispose(bool disposing) {
 
-			if(disposing) {
+            if(disposing) {
 
                 NicoNicoWrapperMain.Session.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+            }
+            base.Dispose(disposing);
+        }
 
         public void KeyDown(KeyEventArgs e) {
 
@@ -493,19 +493,19 @@ namespace SRNicoNico.ViewModels {
             SetCurrent(WebView);
         }
 
-#region CanClose変更通知プロパティ
+        #region CanClose変更通知プロパティ
         private bool _CanClose;
 
         public bool CanClose {
             get { return _CanClose; }
-            set { 
+            set {
                 if(_CanClose == value)
                     return;
                 _CanClose = value;
                 RaisePropertyChanged();
             }
         }
-#endregion
+        #endregion
 
 
 

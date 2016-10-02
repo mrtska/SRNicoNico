@@ -36,7 +36,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             TypePair["FontFamily"] = typeof(FontFamily);
             TypePair["GridLength"] = typeof(GridLength);
             TypePair["DispatcherCollection<NGCommentEntry>"] = typeof(DispatcherCollection<NGCommentEntry>);
-            TypePair["DispatcherCollection<String>"] = typeof(DispatcherCollection<string>);
+            TypePair["List<String>"] = typeof(List<string>);
 
             //%APPDATA%/SRNicoNico/user.settings が設定ファイルの場所
             Dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\SRNicoNico\";
@@ -161,9 +161,9 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                         return col;
                     }
-                case "DispatcherCollection<String>": {
+                case "List<String>": {
 
-                        var col = new DispatcherCollection<string>(DispatcherHelper.UIDispatcher);
+                        var col = new List<string>();
 
                         dynamic entries = (DynamicJson)value;
 
@@ -172,11 +172,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                             col.Add(entry);
                         }
-                        //新しくフィルターリストにエントリが追加/削除されたらセーブする
-                        col.CollectionChanged += ((sender, e) => {
-
-                                Save();
-                        });
                         return col;
                     }
                    
@@ -354,9 +349,9 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
 
         #region SearchHistory変更通知プロパティ
-        private DispatcherCollection<string> _SearchHistory = new DispatcherCollection<string>(DispatcherHelper.UIDispatcher);
+        private List<string> _SearchHistory = new List<string>();
 
-        public DispatcherCollection<string> SearchHistory {
+        public List<string> SearchHistory {
             get { return _SearchHistory; }
             set { 
                 if(_SearchHistory == value)

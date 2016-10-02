@@ -255,6 +255,7 @@
     <Compile Include="ViewModels\Misc\TweetDialogViewModel.cs" />
     <Compile Include="ViewModels\Ranking\RankingEntryViewModel.cs" />
     <Compile Include="ViewModels\Ranking\RankingViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchHistoryViewModel.cs" />
     <Compile Include="ViewModels\Updater\DownloadViewModel.cs" />
     <Compile Include="ViewModels\Updater\UpdateViewModel.cs" />
     <Compile Include="ViewModels\Mylist\MylistEditModeViewModel.cs" />

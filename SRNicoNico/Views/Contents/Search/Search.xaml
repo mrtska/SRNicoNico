@@ -90,24 +90,28 @@
 
                 <TextBlock Text="検索履歴" FontSize="18" Margin="0,10,0,0" />
             </StackPanel>
-            <ListBox Grid.Row="2" Background="#FF252627" ItemsSource="{Binding Source={x:Static mv:Settings.Instance}, Path=SearchHistory,Mode=TwoWay}" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <ListBox Grid.Row="2" Background="#FF252627" ItemsSource="{Binding SearchHistory, Mode=TwoWay}" ScrollViewer.VerticalScrollBarVisibility="Visible">
                 <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type mscorlib:String}">
-                        <Grid>
+                    <DataTemplate DataType="{x:Type vm:SearchHistoryViewModel}">
+                        <Grid Focusable="True">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding Owner}" MethodName="SearchWithHistory" MethodParameter="{Binding Content}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Margin="5,0,0,0" Foreground="{DynamicResource ActiveForegroundBrushKey}" Text="{Binding}" TextTrimming="CharacterEllipsis" />
+                            <TextBlock Margin="5,0,0,0" Foreground="{DynamicResource ActiveForegroundBrushKey}" Text="{Binding Content}" TextTrimming="CharacterEllipsis" />
 
-                            <Button HorizontalAlignment="Right" Focusable="False" Grid.Column="1" Content="×">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Click">
+                            <Button HorizontalAlignment="Right" Grid.Column="1" Command="{Binding Owner.DeleteHistoryCommand}" CommandParameter="{Binding}" Content="×" >
+                                <!--<i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                                         <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext}" MethodName="DeleteHistory" MethodParameter="{Binding}"/>
                                     </i:EventTrigger>
-                                    <i:EventTrigger EventName="MouseDoubleClick"/>
-                                </i:Interaction.Triggers>
+                                </i:Interaction.Triggers>-->
                             </Button>
                         </Grid>
                     </DataTemplate>
@@ -117,11 +121,6 @@
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     </Style>
                 </ListBox.ItemContainerStyle>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="SearchWithHistory" MethodParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=SelectedItem}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
             </ListBox>
 
         </Grid>

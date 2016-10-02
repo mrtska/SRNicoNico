@@ -17,6 +17,8 @@ using System.Windows.Controls;
 
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Models.NicoNicoViewer;
+using System.Windows.Media.Imaging;
+using System.Net.Cache;
 
 namespace SRNicoNico.ViewModels {
     public class SearchViewModel : TabItemViewModel {
@@ -47,9 +49,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
             
-        
-
-
         #region SearchType変更通知プロパティ
         private SearchType _SearchType;
 
@@ -64,9 +63,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
         
-
-
-
         #region SearchResult変更通知プロパティ
         private SearchResultViewModel _SearchResult;
 
@@ -82,6 +78,21 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
+        #region SearchHistory変更通知プロパティ
+        private DispatcherCollection<SearchHistoryViewModel> _SearchHistory = new DispatcherCollection<SearchHistoryViewModel>(DispatcherHelper.UIDispatcher);
+
+        public DispatcherCollection<SearchHistoryViewModel> SearchHistory {
+            get { return _SearchHistory; }
+            set { 
+                if(_SearchHistory == value)
+                    return;
+                _SearchHistory = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
 
         public SearchViewModel() : base("検索") {
 
@@ -89,6 +100,12 @@ namespace SRNicoNico.ViewModels {
 
             //検索
             CurrentSearch = new NicoNicoSearch(this);
+
+            foreach(var entry in Settings.Instance.SearchHistory) {
+
+                SearchHistory.Add(new SearchHistoryViewModel(this, entry));
+            }
+
 
         }
 
@@ -131,7 +148,8 @@ namespace SRNicoNico.ViewModels {
 
             if(!Settings.Instance.SearchHistory.Contains(text)) {
 
-                Settings.Instance.SearchHistory.Add(text);
+                SearchHistory.Add(new SearchHistoryViewModel(this, text));
+                ApplyHistory();
             }
             var result = await CurrentSearch.Search(text, SearchType, sortBy[Settings.Instance.SearchIndex], page);
 
@@ -164,7 +182,6 @@ namespace SRNicoNico.ViewModels {
             Search(SearchText, page);
         }
 
-
         public void SearchWithHistory(string tex) {
 
             SearchText = tex;
@@ -176,10 +193,40 @@ namespace SRNicoNico.ViewModels {
             //What's?!
         }
 
-        public void DeleteHistory(string s) {
 
-            Settings.Instance.SearchHistory.Remove(s);
+        #region DeleteHistoryCommand
+        private ListenerCommand<SearchHistoryViewModel> _DeleteHistoryCommand;
+
+        public ListenerCommand<SearchHistoryViewModel> DeleteHistoryCommand {
+            get {
+                if(_DeleteHistoryCommand == null) {
+                    _DeleteHistoryCommand = new ListenerCommand<SearchHistoryViewModel>(DeleteHistory);
+                }
+                return _DeleteHistoryCommand;
+            }
         }
+        public void DeleteHistory(SearchHistoryViewModel vm) {
+
+            SearchHistory.Remove(vm);
+            ApplyHistory();
+
+        }
+        #endregion
+
+        private void ApplyHistory() {
+
+            var ret = new List<string>();
+            foreach(var s in SearchHistory) {
+
+                ret.Add(s.Content);
+            }
+
+            Settings.Instance.SearchHistory = ret;
+        }
+
+
+
+
 
     }
 
