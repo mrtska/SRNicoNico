@@ -4,38 +4,39 @@ using System.Linq;
 using System.Text;
 
 using Livet;
+using SRNicoNico.Views.Controls;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
-	public class VideoTime : NotificationObject {
+    public class VideoTime : NotificationObject {
 
         //動画の現在時間
         #region CurrentTime変更通知プロパティ
-        private long _CurrentTime;
+        private double _CurrentTime;
 
-		public long CurrentTime {
-			get { return _CurrentTime; }
-			set {
-				if (_CurrentTime == value)
-					return;
-				_CurrentTime = value;
-				RaisePropertyChanged();
-			}
-		}
+        public double CurrentTime {
+            get { return _CurrentTime; }
+            set {
+                if(_CurrentTime == value)
+                    return;
+                _CurrentTime = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         //現在時間を文字列にしたもの
         #region CurrentTimeString変更通知プロパティ
         private string _CurrentTimeString = "0:00";
 
-		public string CurrentTimeString {
-			get { return _CurrentTimeString; }
-			set { 
-				if(_CurrentTimeString == value)
-					return;
-				_CurrentTimeString = value;
-				RaisePropertyChanged();
-			}
-		}
+        public string CurrentTimeString {
+            get { return _CurrentTimeString; }
+            set {
+                if(_CurrentTimeString == value)
+                    return;
+                _CurrentTimeString = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
 
@@ -44,7 +45,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         public long Length {
             get { return _Length; }
-            set { 
+            set {
                 if(_Length == value)
                     return;
                 _Length = value;
@@ -61,7 +62,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         public string VideoTimeString {
             get { return _VideoTimeString; }
-            set { 
+            set {
                 if(_VideoTimeString == value)
                     return;
                 _VideoTimeString = value;
@@ -72,14 +73,30 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         //バッファリングが終わった時間
         #region BufferedTime変更通知プロパティ
-        private double _BufferedTime;
+        private DispatcherCollection<TimeRange> _BufferedRange = new DispatcherCollection<TimeRange>(DispatcherHelper.UIDispatcher);
 
-        public double BufferedTime {
-            get { return _BufferedTime; }
-            set { 
-                if(_BufferedTime == value)
+        public DispatcherCollection<TimeRange> BufferedRange {
+            get { return _BufferedRange; }
+            set {
+                if(_BufferedRange == value)
                     return;
-                _BufferedTime = value;
+
+                _BufferedRange = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region PlayedRange変更通知プロパティ
+        private DispatcherCollection<TimeRange> _PlayedRange = new DispatcherCollection<TimeRange>(DispatcherHelper.UIDispatcher);
+
+        public DispatcherCollection<TimeRange> PlayedRange {
+            get { return _PlayedRange; }
+            set {
+                if(_PlayedRange == value)
+                    return;
+                _PlayedRange = value;
                 RaisePropertyChanged();
             }
         }

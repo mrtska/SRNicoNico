@@ -89,12 +89,12 @@ namespace SRNicoNico.ViewModels {
 
         public void CsFrame(string vposs) {
             
-            var vpos = long.Parse(vposs);
+            var vpos = int.Parse(vposs);
             
             Owner.LiveCommentInstance.Vpos = (int)vpos;
             Owner.Status = vposs + " " + GetTimeFromVpos((int)vpos) + " " + (int.Parse(Owner.Content.GetPlayerStatus.BaseTime) + vpos / 100);
             var unix = UnixTime.ToUnixTime(DateTime.Now);
-            Owner.Time.CurrentTimeString = GetTimeFromVpos((int)(unix - long.Parse(Owner.Content.GetPlayerStatus.BaseTime)) * 100);
+           // Owner.Time.CurrentTimeString = GetTimeFromVpos((int)(unix - int.Parse(Owner.Content.GetPlayerStatus.BaseTime)) * 100);
             Owner.Time.CurrentTime = vpos / 100;
 
             if(Owner.Content.Type == LivePageType.TimeShift) {

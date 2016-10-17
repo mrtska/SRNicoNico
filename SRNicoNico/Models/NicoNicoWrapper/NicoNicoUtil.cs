@@ -32,20 +32,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		}
 
         //m:sをsに変換
-        public static long ConvertTime(string s) {
+        public static int ConvertTime(string s) {
 
             string[] strings = s.Split(':');
             string minutes = strings[0];
             string seconds = strings[1];
 
-            return (long.Parse(minutes) * 60) + long.Parse(seconds);
+            return (int.Parse(minutes) * 60) + int.Parse(seconds);
         }
 
 		//sをm:sに変換
-		public static string ConvertTime(long time) {
+		public static string ConvertTime(int time) {
 
-			long munites = time / 60;
-			long seconds = time % 60;
+			int munites = time / 60;
+			int seconds = time % 60;
 
 			if(seconds < 10) {
 

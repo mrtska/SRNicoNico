@@ -199,7 +199,9 @@
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Models\NicoNicoViewer\GetRequestQuery.cs" />
     <Compile Include="Models\NicoNicoViewer\HyperLinkReplacer.cs" />
+    <Compile Include="Models\NicoNicoViewer\IObjectForScriptable.cs" />
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
+    <Compile Include="Models\NicoNicoViewer\ObjectForScripting.cs" />
     <Compile Include="Models\NicoNicoViewer\Settings.cs" />
     <Compile Include="Models\NicoNicoViewer\UpdateCheck.cs" />
     <Compile Include="Models\NicoNicoViewer\VerifyEmptyText.cs" />
@@ -411,6 +413,10 @@
     <Compile Include="Views\Contents\Video\CommentView.xaml.cs">
       <DependentUpon>CommentView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\Video\IVideoPlayerView.cs" />
+    <Compile Include="Views\Contents\Video\VideoHtml5.xaml.cs">
+      <DependentUpon>VideoHtml5.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Video\WindowedWindow.xaml.cs">
       <DependentUpon>WindowedWindow.xaml</DependentUpon>
     </Compile>
@@ -545,9 +551,6 @@
     <Compile Include="Views\Contents\Video\VideoController.xaml.cs">
       <DependentUpon>VideoController.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Contents\Video\VideoFlash.xaml.cs">
-      <DependentUpon>VideoFlash.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Contents\Video\VideoInfo.xaml.cs">
       <DependentUpon>VideoInfo.xaml</DependentUpon>
     </Compile>
@@ -575,6 +578,7 @@
     <Compile Include="Views\Controls\ExternalizableUserControl.cs" />
     <Compile Include="Views\Controls\ManagedPopup.cs" />
     <Compile Include="Views\Controls\SeekBar.cs" />
+    <Compile Include="Views\Controls\TimeRange.cs" />
     <Compile Include="Views\Converter\InvertBoolConverter.cs" />
     <Compile Include="Views\Converter\TimeToWidthConverter.cs" />
     <Compile Include="Views\Converter\NGTypeConverter.cs" />
@@ -751,6 +755,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Contents\Video\VideoHtml5.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Contents\Video\WindowedWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -899,10 +907,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Contents\Video\VideoFlash.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Contents\Video\VideoInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1001,6 +1005,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Flash\bin\NicoNicoRTMPPlayer.swf" />
+    <Content Include="Html\commentlayer.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Html\jquery-3.1.0.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Html\jquery.keyframes.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Html\videohtml5.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Html\videoplayer.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="InfrastructureAssemblies\Design\Livet.Design.dll" />
     <Content Include="InfrastructureAssemblies\ExternalInterfaceProxy.dll" />
     <Content Include="InfrastructureAssemblies\Livet.dll" />
@@ -1065,8 +1084,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>del *.xml *.pdb</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

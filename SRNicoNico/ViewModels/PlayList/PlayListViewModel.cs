@@ -191,9 +191,9 @@ namespace SRNicoNico.ViewModels {
         public void Jump(PlayListEntryViewModel entry) {
 
             Video?.DisposeViewModel();
-            Video = new VideoViewModel(entry, IsFullScreen);
+            //Video = new VideoViewModel(entry, IsFullScreen);
             UIInstance.DataContext = Video;
-            Video.Initialize();
+            //Video.Initialize();
             if(IsFullScreen) {
 
                 UpdateFullScreenViewModel();

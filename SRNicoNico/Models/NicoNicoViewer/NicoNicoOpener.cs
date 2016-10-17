@@ -31,7 +31,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                 var vm = new VideoViewModel(url);
                 App.ViewModelRoot.ReplaceTabAndSetCurrent(old, vm);
-                vm.Initialize();
                 return vm;
             } else if(url.StartsWith("http://www.nicovideo.jp/user/")) {
 
@@ -77,7 +76,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                     App.ViewModelRoot.AddTabAndSetCurrent(vm);
                 }
-                vm.Initialize();
                 return vm;
             } else if(url.StartsWith("http://www.nicovideo.jp/user/")) {
 

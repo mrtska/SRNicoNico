@@ -20,23 +20,27 @@ using SRNicoNico.ViewModels;
 using System.Windows.Interop;
 using AxShockwaveFlashObjects;
 using Flash.External;
+using System.Runtime.InteropServices;
 
 namespace SRNicoNico.Views.Contents.Video {
     /// <summary>
-    /// VideoFlash.xaml の相互作用ロジック
+    /// VideoHtml5.xaml の相互作用ロジック
     /// </summary>
-    public partial class VideoFlash : UserControl {
-        public VideoFlash() {
+    public partial class VideoHtml5 : UserControl, IVideoPlayerView {
+
+        public VideoHtml5() {
             InitializeComponent();
+
         }
-        
+
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
             if(DataContext is VideoViewModel) {
 
-                var vm = (VideoViewModel) DataContext;
-                vm.Handler.PreInitialize(flash);
-            }   
+                var vm = (VideoViewModel)DataContext;
+
+                vm.Initialize(browser);
+            }
         }
 
 

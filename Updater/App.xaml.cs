@@ -43,7 +43,7 @@ namespace Updater {
         //集約エラーハンドラ
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            //TODO:ロギング処理など
+
             MessageBox.Show(
                 "不明なエラーが発生しました。アプリケーションを終了します。" + e.ExceptionObject,
                 "エラー",

@@ -37,18 +37,18 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
         //動画ページを指定
-        public WatchApiData GetWatchApiData() {
+        public async Task<WatchApiData> GetWatchApiDataAsync() {
 
             try {
 
 
                 //動画ページのhtml取得
-                var response = NicoNicoWrapperMain.Session.GetResponseAsync(VideoPage).Result;
+                var response = await NicoNicoWrapperMain.Session.GetResponseAsync(VideoPage);
 
                 //チャンネル、公式動画
                 if(response.StatusCode == HttpStatusCode.MovedPermanently) {
 
-                    response = NicoNicoWrapperMain.Session.GetResponseAsync(response.Headers.Location.OriginalString).Result;
+                    response = await NicoNicoWrapperMain.Session.GetResponseAsync(response.Headers.Location.OriginalString);
                 }
                 //削除された動画
                 if(response.StatusCode == HttpStatusCode.NotFound) {
@@ -61,9 +61,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     return null;
                 }
 
-                string html = response.Content.ReadAsStringAsync().Result;
+                string html = await response.Content.ReadAsStringAsync();
 
-                HtmlDocument doc = new HtmlDocument();
+                var doc = new HtmlDocument();
                 doc.LoadHtml2(html);
 
                 //htmlからAPIデータだけを綺麗に抜き出す すごい
@@ -90,7 +90,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 flv = HttpUtility.UrlDecode(flv);
 
 
-                WatchApiData ret = new WatchApiData();
+                var ret = new WatchApiData();
 
                 //&で繋がれているので剥がす
                 var getFlv = flv.Split(new char[] { '&' }).ToDictionary(source => source.Substring(0, source.IndexOf('=')),
@@ -128,22 +128,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     ret.UploaderName = uploaderInfo.nickname;
 
                     //投稿者をお気に入り登録しているか調べる
-                    Task.Run(() => {
-
-                        try {
-
-                            var a = NicoNicoWrapperMain.Session.GetAsync(string.Format(UploaderInfoApi, ret.UploaderId)).Result;
-
-                            ret.UploaderIsFavorited = DynamicJson.Parse(a).data.following;
-
-                        } catch(RequestFailed) {
 
 
-                        }
-                    });
+                    var a = await NicoNicoWrapperMain.Session.GetAsync(string.Format(UploaderInfoApi, ret.UploaderId));
 
-                    //廃止
-                    //ret.UploaderIsFavorited = uploaderInfo.is_favorited;
+                    ret.UploaderIsFavorited = DynamicJson.Parse(a).data.following;
+
 
                 } else if(json.channelInfo()) {
 
@@ -165,7 +155,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 foreach(var tag in videoDetail.tagList) {
 
-                    NicoNicoTag entry = new NicoNicoTag() {
+                    var entry = new NicoNicoTag() {
 
                         Id = tag.id,
                         Tag = HttpUtility.HtmlDecode(tag.tag),
@@ -195,7 +185,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     }
                 }
                 return ret;
-            } catch(RequestTimeout) {
+            } catch(Exception e) when (e is RequestFailed || e is RequestTimeout) {
 
                 return null;
             }

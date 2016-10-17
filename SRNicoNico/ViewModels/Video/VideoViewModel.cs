@@ -111,20 +111,6 @@ namespace SRNicoNico.ViewModels {
 		}
 		#endregion
 
-		#region BPS変更通知プロパティ
-		private string _BPS;
-
-		public string BPS {
-			get { return _BPS; }
-			set {
-				if(_BPS == value)
-					return;
-				_BPS = value;
-				RaisePropertyChanged();
-			}
-		}
-        #endregion
-
         #region IsInitialized変更通知プロパティ
         private bool _IsInitialized;
 
@@ -182,10 +168,6 @@ namespace SRNicoNico.ViewModels {
                 if(_IsFullScreen == value)
                     return;
                 _IsFullScreen = value;
-                if(IsPlayList) {
-
-                    PlayListEntry.Owner.IsFullScreen = value;
-                }
                 RaisePropertyChanged();
 
             }
@@ -225,7 +207,7 @@ namespace SRNicoNico.ViewModels {
 
                     IsMute = false;
                 }
-                Handler.InvokeScript("AsChangeVolume", (value / 100.0).ToString());
+                Handler.SetVolume(value);
                 RaisePropertyChanged();
             }
         }
@@ -247,9 +229,9 @@ namespace SRNicoNico.ViewModels {
 
 
         #region VideoFlash変更通知プロパティ UI要素だけどこればっかりは仕方ない
-        private VideoFlash _VideoFlash;
+        private IVideoPlayerView _VideoFlash;
 
-        public VideoFlash VideoFlash {
+        public IVideoPlayerView VideoFlash {
             get { return _VideoFlash; }
             set { 
                 if(_VideoFlash == value)
@@ -261,9 +243,9 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
         #region FullScreenVideoFlash変更通知プロパティ
-        private VideoFlash _FullScreenVideoFlash;
+        private IVideoPlayerView _FullScreenVideoFlash;
 
-        public VideoFlash FullScreenVideoFlash {
+        public IVideoPlayerView FullScreenVideoFlash {
             get { return _FullScreenVideoFlash; }
             set { 
                 if(_FullScreenVideoFlash == value)
@@ -398,13 +380,6 @@ namespace SRNicoNico.ViewModels {
         }
 
 
-
-
-
-        //プレイリストだったら
-        internal readonly bool IsPlayList = false;
-        internal PlayListEntryViewModel PlayListEntry;
-
         public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
 
             if(videoUrl.Contains("?")) {
@@ -415,53 +390,48 @@ namespace SRNicoNico.ViewModels {
 
             VideoUrl = videoUrl;
             Cmsid = Name;
-        }
-        public VideoViewModel(PlayListEntryViewModel entry, bool isFullScreen = false) : this(entry.VideoUrl) {
-
-            IsPlayList = true;
-            PlayListEntry = entry;
-            if(isFullScreen) {
-
-                IsFullScreen = true;
-            }
-        }
-
-        public async void Initialize() {
 
             Mylist = new VideoMylistViewModel(this);
             Comment = new VideoCommentViewModel(this);
             Handler = new VideoFlashHandler(this);
             Time = new VideoTime();
             VideoData = new VideoData();
+            InitializeView();
+        }
+
+        private async void InitializeView() {
 
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
 
                 if(IsFullScreen) {
 
-                    FullScreenVideoFlash = new VideoFlash() { DataContext = this };
+                    FullScreenVideoFlash = new VideoHtml5() { DataContext = this };
                     FullScreenController = new VideoController() { DataContext = this };
                 } else {
 
-                    VideoFlash = new VideoFlash() { DataContext = this };
+                    VideoFlash = new VideoHtml5() { DataContext = this };
                     Controller = new VideoController() { DataContext = this };
                 }
 
             }));
+        }
+
+        public async void Initialize(WebBrowser browser) {
 
             var videoUrl = VideoUrl + "?watch_harmful=1";
+
+            WatchApi = new NicoNicoWatchApi(videoUrl, this);
+
+
 
             IsActive = true;
 
             Status = "動画情報取得中";
             //動画情報取得
+            VideoData.ApiData = await WatchApi.GetWatchApiDataAsync();
+            Handler.Initialize(browser, VideoData);
 
-            await Task.Run(() => {
-
-                WatchApi = new NicoNicoWatchApi(videoUrl, this);
-                VideoData.ApiData = WatchApi.GetWatchApiData();
-                Handler.Initialize(VideoData);
-            });
         }
         
         //ツイートダイアログ表示
@@ -494,7 +464,7 @@ namespace SRNicoNico.ViewModels {
 
             CommentVisibility ^= true;
             Settings.Instance.CommentVisibility = CommentVisibility;
-            Handler.InvokeScript("AsToggleComment");
+            Handler.ToggleComment();
         }
 
         private int PrevVolume;
@@ -542,11 +512,6 @@ namespace SRNicoNico.ViewModels {
 
             App.ViewModelRoot.Visibility = Visibility.Hidden;
 
-            if(IsPlayList) {
-
-                PlayListEntry.Owner.ToFullScreen();
-                return;
-            }
             //フルスクリーンウィンドウ表示
             Messenger.Raise(message);
 
@@ -564,7 +529,7 @@ namespace SRNicoNico.ViewModels {
 
             //Flash部分をフルスクリーンウィンドウから消去
             //Messenger.Raise(new WindowActionMessage(WindowAction.Close));
-            Window.GetWindow(FullScreenVideoFlash).Close(); //消えない時があるから強引に
+            //Window.GetWindow(FullScreenVideoFlash).Close(); //消えない時があるから強引に
 
             //ウィンドウを閉じる
             App.ViewModelRoot.Visibility = Visibility.Visible;
@@ -603,7 +568,7 @@ namespace SRNicoNico.ViewModels {
         public void SetSeekCursor(float time) {
 
             Time.CurrentTime = (int)time;
-            Time.CurrentTimeString = NicoNicoUtil.ConvertTime(Time.CurrentTime);
+            //Time.CurrentTimeString = NicoNicoUtil.ConvertTime(Time.CurrentTime);
         }
         
         public void OpenNew() {
@@ -620,25 +585,13 @@ namespace SRNicoNico.ViewModels {
 
         public void Refresh() {
 
-
-            if(IsPlayList) {
-
-                PlayListEntry.Owner.Jump(PlayListEntry);
-            } else {
-
-                DisposeViewModel();
-                NicoNicoOpener.Replace(this, VideoUrl);
-            }
-
+            DisposeViewModel();
+            NicoNicoOpener.Replace(this, VideoUrl);
         }
 
         public void Close() {
 
             DisposeViewModel();
-            if(IsPlayList) {
-
-                App.ViewModelRoot.RemoveTabAndLastSet(PlayListEntry.Owner);
-            }
             App.ViewModelRoot.RemoveTabAndLastSet(this);
         }
         
@@ -648,7 +601,7 @@ namespace SRNicoNico.ViewModels {
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
                 //UIスレッドじゃないとAccessViolationになる時がある
-                Handler.DisposeHandler();
+                Handler?.Dispose();
                 VideoFlash = null;
                 Controller = null;
                 FullScreenVideoFlash = null;
@@ -722,17 +675,6 @@ namespace SRNicoNico.ViewModels {
                             Volume = 0;
                         }
                         break;
-                    case Key.N:
-                        if(IsPlayList) {
-                            PlayListEntry.Owner.Next();
-                        }
-                        break;
-                    case Key.P:
-                        if(IsPlayList) {
-                            PlayListEntry.Owner.Prev();
-                        }
-                        break;
-
                 }
             } else {
                 switch(e.Key) {

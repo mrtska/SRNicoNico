@@ -109,7 +109,7 @@ namespace SRNicoNico.Views.Extentions {
                                 ParseCssColor(styleValue, ref nextIndex, localProperties, "background-color");
                                 break;
                             case "background":
-                                // TODO: need to parse composite background property
+                                // : need to parse composite background property
                                 ParseCssBackground(styleValue, ref nextIndex, localProperties);
                                 break;
 
@@ -536,7 +536,7 @@ namespace SRNicoNico.Views.Extentions {
                         if(listStyleImage != null) {
                             localProperties["list-style-image"] = listStyleImage;
                         } else {
-                            // TODO: Process unrecognized list style value
+                            // : Process unrecognized list style value
                             break;
                         }
                     }
@@ -553,7 +553,7 @@ namespace SRNicoNico.Views.Extentions {
         }
 
         private static string ParseCssListStyleImage(string styleValue, ref int nextIndex) {
-            // TODO: Implement URL parsing for images
+            // : Implement URL parsing for images
             return null;
         }
 
@@ -1141,7 +1141,7 @@ namespace SRNicoNico.Views.Extentions {
                 // IE keeps reading until it finds a closing quote or end of file
                 // if end of file, it treats current value as text
                 // if it finds a closing quote at any point within the text, it eats everything between the quotes
-                // TODO: Suggestion:
+                // : Suggestion:
                 // however, we could stop when we encounter end of file or an angle bracket of any kind
                 // and assume there was a quote there
                 // so the attribute value may be meaningless but it is never treated as text
@@ -1289,8 +1289,8 @@ namespace SRNicoNico.Views.Extentions {
         /// this may be the end-of-file character, it performs no checking
         /// </summary>
         private void SkipWhiteSpace() {
-            // TODO: handle character entities while processing comments, cdata, and directives
-            // TODO: SUGGESTION: we could check if lookahead and previous characters are entities also
+            // : handle character entities while processing comments, cdata, and directives
+            // : SUGGESTION: we could check if lookahead and previous characters are entities also
             while(true) {
                 if(_nextCharacter == '<' && (_lookAheadCharacter == '?' || _lookAheadCharacter == '!')) {
                     this.GetNextCharacter();
@@ -1364,7 +1364,7 @@ namespace SRNicoNico.Views.Extentions {
 
         /// <summary>
         /// identifies a character as being a combining character, permitted in a name
-        /// TODO: only a placeholder for now but later to be replaced with comparisons against
+        /// : only a placeholder for now but later to be replaced with comparisons against
         /// the list of combining characters in the XML documentation
         /// </summary>
         /// <param name="character">
@@ -1374,13 +1374,13 @@ namespace SRNicoNico.Views.Extentions {
         /// true if the character is a combining character, false otherwise
         /// </returns>
         private bool IsCombiningCharacter(char character) {
-            // TODO: put actual code with checks against all combining characters here
+            // : put actual code with checks against all combining characters here
             return false;
         }
 
         /// <summary>
         /// identifies a character as being an extender, permitted in a name
-        /// TODO: only a placeholder for now but later to be replaced with comparisons against
+        /// : only a placeholder for now but later to be replaced with comparisons against
         /// the list of extenders in the XML documentation
         /// </summary>
         /// <param name="character">
@@ -1390,7 +1390,7 @@ namespace SRNicoNico.Views.Extentions {
         /// true if the character is an extender, false otherwise
         /// </returns>
         private bool IsExtender(char character) {
-            // TODO: put actual code with checks against all extenders here
+            // : put actual code with checks against all extenders here
             return false;
         }
 
@@ -1964,24 +1964,24 @@ namespace SRNicoNico.Views.Extentions {
             _htmlElementsClosingDD = new ArrayList();
             _htmlElementsClosingDD.Add("dd");
             _htmlElementsClosingDD.Add("dt");
-            // TODO: dd may end in other cases as well - if a new "p" starts, etc.
-            // TODO: these are the basic "legal" cases but there may be more recovery
+            // : dd may end in other cases as well - if a new "p" starts, etc.
+            // : these are the basic "legal" cases but there may be more recovery
 
             _htmlElementsClosingDT = new ArrayList();
             _htmlElementsClosingDD.Add("dd");
             _htmlElementsClosingDD.Add("dt");
-            // TODO: dd may end in other cases as well - if a new "p" starts, etc.
-            // TODO: these are the basic "legal" cases but there may be more recovery
+            // : dd may end in other cases as well - if a new "p" starts, etc.
+            // : these are the basic "legal" cases but there may be more recovery
 
             _htmlElementsClosingLI = new ArrayList();
             _htmlElementsClosingLI.Add("li");
-            // TODO: more complex recovery
+            // : more complex recovery
 
             _htmlElementsClosingTbody = new ArrayList();
             _htmlElementsClosingTbody.Add("tbody");
             _htmlElementsClosingTbody.Add("thead");
             _htmlElementsClosingTbody.Add("tfoot");
-            // TODO: more complex recovery
+            // : more complex recovery
 
             _htmlElementsClosingTR = new ArrayList();
             // NOTE: tr should not really close on a new thead
@@ -1993,7 +1993,7 @@ namespace SRNicoNico.Views.Extentions {
             _htmlElementsClosingTR.Add("tfoot");
             _htmlElementsClosingTR.Add("tbody");
             _htmlElementsClosingTR.Add("tr");
-            // TODO: more complex recovery
+            // : more complex recovery
 
             _htmlElementsClosingTD = new ArrayList();
             _htmlElementsClosingTD.Add("td");
@@ -2002,7 +2002,7 @@ namespace SRNicoNico.Views.Extentions {
             _htmlElementsClosingTD.Add("tbody");
             _htmlElementsClosingTD.Add("tfoot");
             _htmlElementsClosingTD.Add("thead");
-            // TODO: more complex recovery
+            // : more complex recovery
 
             _htmlElementsClosingTH = new ArrayList();
             _htmlElementsClosingTH.Add("td");
@@ -2011,19 +2011,19 @@ namespace SRNicoNico.Views.Extentions {
             _htmlElementsClosingTH.Add("tbody");
             _htmlElementsClosingTH.Add("tfoot");
             _htmlElementsClosingTH.Add("thead");
-            // TODO: more complex recovery
+            // : more complex recovery
 
             _htmlElementsClosingThead = new ArrayList();
             _htmlElementsClosingThead.Add("tbody");
             _htmlElementsClosingThead.Add("tfoot");
-            // TODO: more complex recovery
+            // : more complex recovery
 
             _htmlElementsClosingTfoot = new ArrayList();
             _htmlElementsClosingTfoot.Add("tbody");
             // although thead comes before tfoot, we add it because if it is found the tfoot should close
             // and some recovery processing be done on the thead
             _htmlElementsClosingTfoot.Add("thead");
-            // TODO: more complex recovery
+            // : more complex recovery
         }
 
         /// <summary>
@@ -2437,7 +2437,7 @@ namespace SRNicoNico.Views.Extentions {
             if(startHtmlIndex < 0) {
                 return "ERROR: Urecognized html header";
             }
-            // TODO: We assume that indices represented by strictly 10 zeros ("0123456789".Length),
+            // : We assume that indices represented by strictly 10 zeros ("0123456789".Length),
             // which could be wrong assumption. We need to implement more flrxible parsing here
             startHtmlIndex = Int32.Parse(htmlDataString.Substring(startHtmlIndex + "StartHTML:".Length, "0123456789".Length));
             if(startHtmlIndex < 0 || startHtmlIndex > htmlDataString.Length) {
@@ -2448,7 +2448,7 @@ namespace SRNicoNico.Views.Extentions {
             if(endHtmlIndex < 0) {
                 return "ERROR: Urecognized html header";
             }
-            // TODO: We assume that indices represented by strictly 10 zeros ("0123456789".Length),
+            // : We assume that indices represented by strictly 10 zeros ("0123456789".Length),
             // which could be wrong assumption. We need to implement more flrxible parsing here
             endHtmlIndex = Int32.Parse(htmlDataString.Substring(endHtmlIndex + "EndHTML:".Length, "0123456789".Length));
             if(endHtmlIndex > htmlDataString.Length) {
@@ -2947,7 +2947,7 @@ namespace SRNicoNico.Views.Extentions {
                 if(htmlElementNamespace != HtmlParser.XhtmlNamespace) {
                     // Non-html element. skip it
                     // Isn't it too agressive? What if this is just an error in html tag name?
-                    // TODO: Consider skipping just a wparrer in recursing into the element tree,
+                    // : Consider skipping just a wparrer in recursing into the element tree,
                     // which may produce some garbage though coming from xml fragments.
                     return htmlElement;
                 }
@@ -3004,7 +3004,7 @@ namespace SRNicoNico.Views.Extentions {
                         break;
 
                     case "img":
-                        // TODO: Add image processing
+                        // : Add image processing
                         AddImage(xamlParentElement, htmlElement, inheritedProperties, stylesheet, sourceContext);
                         break;
 
@@ -3020,7 +3020,7 @@ namespace SRNicoNico.Views.Extentions {
                     case "td":
                     case "th":
                         // Table stuff without table wrapper
-                        // TODO: add special-case processing here for elements that should be within tables when the
+                        // : add special-case processing here for elements that should be within tables when the
                         // parent element is NOT a table. If the parent element is a table they can be processed normally.
                         // we need to compare against the parent element here, we can't just break on a switch
                         goto default; // Thus we will skip this element as unknown, but still recurse into it.
@@ -3482,7 +3482,7 @@ namespace SRNicoNico.Views.Extentions {
             }
 
             // Apply local properties to list to set marker attribute if specified
-            // TODO: Should we have separate list attribute processing function?
+            // : Should we have separate list attribute processing function?
             ApplyLocalProperties(xamlListElement, localProperties, /*isBlock:*/true);
 
             // Recurse into list subtree
@@ -3583,7 +3583,7 @@ namespace SRNicoNico.Views.Extentions {
 
             XmlElement xamlListItemElement = xamlListElement.OwnerDocument.CreateElement(null, Xaml_ListItem, _xamlNamespace);
 
-            // TODO: process local properties for li element
+            // : process local properties for li element
 
             // Process children of the ListItem
             for(XmlNode htmlChildNode = htmlLIElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode != null ? htmlChildNode.NextSibling : null) {
@@ -3623,7 +3623,7 @@ namespace SRNicoNico.Views.Extentions {
             Hashtable localProperties;
             Hashtable currentProperties = GetElementProperties(htmlTableElement, inheritedProperties, out localProperties, stylesheet, sourceContext);
 
-            // TODO: process localProperties for tables to override defaults, decide cell spacing defaults
+            // : process localProperties for tables to override defaults, decide cell spacing defaults
 
             // Check if the table contains only one cell - we want to take only its content
             XmlElement singleCell = GetCellFromSingleCellTable(htmlTableElement);
@@ -3666,7 +3666,7 @@ namespace SRNicoNico.Views.Extentions {
                         // Get properties of Html tbody element
                         Hashtable tbodyElementLocalProperties;
                         Hashtable tbodyElementCurrentProperties = GetElementProperties((XmlElement)htmlChildNode, currentProperties, out tbodyElementLocalProperties, stylesheet, sourceContext);
-                        // TODO: apply local properties for tbody
+                        // : apply local properties for tbody
 
                         // Process children of htmlChildNode, which is tbody, for tr elements
                         AddTableRowsToTableBody(xamlTableBodyElement, htmlChildNode.FirstChild, tbodyElementCurrentProperties, columnStarts, stylesheet, sourceContext);
@@ -3692,7 +3692,7 @@ namespace SRNicoNico.Views.Extentions {
                         }
                     } else {
                         // Element is not tbody or tr. Ignore it.
-                        // TODO: add processing for thead, tfoot elements and recovery for td elements
+                        // : add processing for thead, tfoot elements and recovery for td elements
                         htmlChildNode = htmlChildNode.NextSibling;
                     }
                 }
@@ -3782,7 +3782,7 @@ namespace SRNicoNico.Views.Extentions {
                 // Translate blindly colgroups from html.
                 for(XmlNode htmlChildNode = htmlTableElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling) {
                     if(htmlChildNode.LocalName.ToLower() == "colgroup") {
-                        // TODO: add column width information to this function as a parameter and process it
+                        // : add column width information to this function as a parameter and process it
                         AddTableColumnGroup(xamlTableElement, (XmlElement)htmlChildNode, currentProperties, stylesheet, sourceContext);
                     } else if(htmlChildNode.LocalName.ToLower() == "col") {
                         AddTableColumn(xamlTableElement, (XmlElement)htmlChildNode, currentProperties, stylesheet, sourceContext);
@@ -3810,7 +3810,7 @@ namespace SRNicoNico.Views.Extentions {
             Hashtable localProperties;
             Hashtable currentProperties = GetElementProperties(htmlColgroupElement, inheritedProperties, out localProperties, stylesheet, sourceContext);
 
-            // TODO: process local properties for colgroup
+            // : process local properties for colgroup
 
             // Process children of colgroup. Colgroup may contain only col elements.
             for(XmlNode htmlNode = htmlColgroupElement.FirstChild; htmlNode != null; htmlNode = htmlNode.NextSibling) {
@@ -3839,7 +3839,7 @@ namespace SRNicoNico.Views.Extentions {
 
             XmlElement xamlTableColumnElement = xamlTableElement.OwnerDocument.CreateElement(null, Xaml_TableColumn, _xamlNamespace);
 
-            // TODO: process local properties for TableColumn element
+            // : process local properties for TableColumn element
 
             // Col is an empty element, with no subtree
             xamlTableElement.AppendChild(xamlTableColumnElement);
@@ -3887,7 +3887,7 @@ namespace SRNicoNico.Views.Extentions {
                     // Get tr element properties
                     Hashtable trElementLocalProperties;
                     Hashtable trElementCurrentProperties = GetElementProperties((XmlElement)htmlChildNode, currentProperties, out trElementLocalProperties, stylesheet, sourceContext);
-                    // TODO: apply local properties to tr element
+                    // : apply local properties to tr element
 
                     AddTableCellsToTableRow(xamlTableRowElement, htmlChildNode.FirstChild, trElementCurrentProperties, columnStarts, activeRowSpans, stylesheet, sourceContext);
                     if(xamlTableRowElement.HasChildNodes) {
@@ -3913,7 +3913,7 @@ namespace SRNicoNico.Views.Extentions {
                     }
                 } else {
                     // Not a tr or td  element. Ignore it.
-                    // TODO: consider better recovery here
+                    // : consider better recovery here
                     htmlChildNode = htmlChildNode.NextSibling;
                 }
             }
@@ -3958,7 +3958,7 @@ namespace SRNicoNico.Views.Extentions {
                     Hashtable tdElementLocalProperties;
                     Hashtable tdElementCurrentProperties = GetElementProperties((XmlElement)htmlChildNode, currentProperties, out tdElementLocalProperties, stylesheet, sourceContext);
 
-                    // TODO: determine if localProperties can be used instead of htmlChildNode in this call, and if they can,
+                    // : determine if localProperties can be used instead of htmlChildNode in this call, and if they can,
                     // make necessary changes and use them instead.
                     ApplyPropertiesToTableCellElement((XmlElement)htmlChildNode, xamlTableCellElement);
 
@@ -4002,7 +4002,7 @@ namespace SRNicoNico.Views.Extentions {
                     htmlChildNode = htmlChildNode.NextSibling;
                 } else {
                     // Not td element. Ignore it.
-                    // TODO: Consider better recovery
+                    // : Consider better recovery
                     htmlChildNode = htmlChildNode.NextSibling;
                 }
             }
@@ -4088,7 +4088,7 @@ namespace SRNicoNico.Views.Extentions {
                         break;
                     case "td":
                         // Incorrect formatting, too deep to analyze at this level. Return null.
-                        // TODO: implement analysis at this level, possibly by creating a new tr
+                        // : implement analysis at this level, possibly by creating a new tr
                         columnWidthsAvailable = false; // interrupt the analisys
                         break;
                     default:
@@ -5048,7 +5048,7 @@ namespace SRNicoNico.Views.Extentions {
         // .................................................................
 
         private static string GetColorValue(string colorValue) {
-            // TODO: Implement color conversion
+            // : Implement color conversion
             return colorValue;
         }
 
@@ -5062,7 +5062,7 @@ namespace SRNicoNico.Views.Extentions {
         /// XmlElement representing Xaml element for which properties are to be processed
         /// </param>
         /// <remarks>
-        /// TODO: Use the processed properties for htmlChildNode instead of using the node itself
+        /// : Use the processed properties for htmlChildNode instead of using the node itself
         /// </remarks>
         private static void ApplyPropertiesToTableCellElement(XmlElement htmlChildNode, XmlElement xamlTableCellElement) {
             // Parameter validation

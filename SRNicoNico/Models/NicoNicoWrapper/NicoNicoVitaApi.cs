@@ -43,7 +43,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ret.ViewCounter = int.Parse(response.video.view_counter);
             ret.CommentCounter = int.Parse(response.thread.num_res);
             ret.MylistCounter = int.Parse(response.video.mylist_counter);
-            ret.Length = NicoNicoUtil.ConvertTime(long.Parse(response.video.length_in_seconds));
+            ret.Length = NicoNicoUtil.ConvertTime(int.Parse(response.video.length_in_seconds));
             ret.Description = response.video.description;
             ret.ThumbnailUrl = response.video.thumbnail_url;
             return ret;

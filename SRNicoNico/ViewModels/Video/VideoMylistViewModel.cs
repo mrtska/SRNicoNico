@@ -100,7 +100,7 @@ namespace SRNicoNico.ViewModels {
 
             Video = vm;
             
-            Task.Run(() => Mylists = new ObservableCollection<NicoNicoMylistGroupData>(MylistViewModel.MylistGroupInstance.GetMylistGroup()));
+            //Task.Run(() => Mylists = new ObservableCollection<NicoNicoMylistGroupData>(MylistViewModel.MylistGroupInstance.GetMylistGroup()));
         }
 
         public void EnableButtons() {
@@ -144,7 +144,7 @@ namespace SRNicoNico.ViewModels {
             Task.Run(() => {
 
                 Video.Status = SelectedMylist.Name + "に登録中";
-                MylistResult result = MylistViewModel.MylistInstance.AddMylist(SelectedMylist, Video.VideoData.ApiData.Cmsid, MylistDescription, Video.VideoData.ApiData.Token);
+                var result = MylistViewModel.MylistInstance.AddMylist(SelectedMylist, Video.VideoData.ApiData.Cmsid, MylistDescription, Video.VideoData.ApiData.Token);
 
                 if(result == MylistResult.EXIST) {
 
