@@ -23,27 +23,12 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
         #endregion
-
-        //現在時間を文字列にしたもの
-        #region CurrentTimeString変更通知プロパティ
-        private string _CurrentTimeString = "0:00";
-
-        public string CurrentTimeString {
-            get { return _CurrentTimeString; }
-            set {
-                if(_CurrentTimeString == value)
-                    return;
-                _CurrentTimeString = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
+        
 
         #region Length変更通知プロパティ
-        private long _Length;
+        private int _Length;
 
-        public long Length {
+        public int Length {
             get { return _Length; }
             set {
                 if(_Length == value)
@@ -54,25 +39,8 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
         #endregion
 
-
-
-        //動画時間
-        #region VideoTimeString変更通知プロパティ
-        private string _VideoTimeString;
-
-        public string VideoTimeString {
-            get { return _VideoTimeString; }
-            set {
-                if(_VideoTimeString == value)
-                    return;
-                _VideoTimeString = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
         //バッファリングが終わった時間
-        #region BufferedTime変更通知プロパティ
+        #region BufferedRange変更通知プロパティ
         private DispatcherCollection<TimeRange> _BufferedRange = new DispatcherCollection<TimeRange>(DispatcherHelper.UIDispatcher);
 
         public DispatcherCollection<TimeRange> BufferedRange {

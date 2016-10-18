@@ -62,7 +62,9 @@ namespace SRNicoNico.ViewModels {
             VideoData = videoData;
 
             //タブの名前を設定
-            Owner.Name = VideoData.ApiData.Title;
+            Owner.Name = videoData.ApiData.Title;
+
+            Owner.Time.Length = videoData.ApiData.Length;
 
             //有料動画なら
             if(VideoData.ApiData.IsPaidVideo) {
@@ -97,7 +99,7 @@ namespace SRNicoNico.ViewModels {
                     }
 
                     Owner.IsRepeat = Settings.Instance.IsRepeat;
-
+                    InitializeComment();
                 };
 
                 if(VideoData.ApiData.Cmsid.Contains("nm")) {
@@ -136,6 +138,48 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+        private async void InitializeComment() {
+
+            Owner.Comment.IsCommentLoading = true;
+
+            var list = await Owner.CommentInstance.GetCommentAsync();
+            if(list != null) {
+
+                foreach(var entry in list) {
+
+                    VideoData.CommentData.Add(new CommentEntryViewModel(entry, Owner));
+                }
+
+                dynamic json = new DynamicJson();
+                json.array = list;
+
+                InjectComment(json.ToString());
+                Owner.Comment.CanComment = true;
+                Owner.Comment.IsCommentLoading = false;
+
+                //投稿者コメントがあったら取得する
+                if(VideoData.ApiData.HasOwnerThread) {
+
+                    var ulist = await Owner.CommentInstance.GetUploaderCommentAsync();
+                    dynamic ujson = new DynamicJson();
+                    json.array = ulist;
+
+                    InjectUploaderComment(json.ToString());
+                }
+
+            }
+
+            if(!Settings.Instance.CommentVisibility) {
+
+                //InvokeScript("AsToggleComment");
+            } else {
+
+                Owner.CommentVisibility = true;
+            }
+        }
+
+
+
         protected internal void Restart() {
 
 
@@ -147,6 +191,19 @@ namespace SRNicoNico.ViewModels {
         }
 
         protected internal void ToggleComment() {
+
+
+        }
+
+
+
+        protected internal void InjectComment(string json) {
+
+
+            InvokeScript("CommentViewModel$initialize", json);
+        }
+
+        protected internal void InjectUploaderComment(string json) {
 
 
         }
@@ -283,6 +340,9 @@ namespace SRNicoNico.ViewModels {
 
                 case "widtheight":
                     Owner.VideoData.Resolution = args;
+                    break;
+                case "log":
+                    Console.WriteLine("Log: " + args);
                     break;
                 default: {
 

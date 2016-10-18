@@ -10,6 +10,7 @@
              xmlns:local="clr-namespace:SRNicoNico.Views.Contents.Video"
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
+             xmlns:conv="clr-namespace:SRNicoNico.Views.Converter"
             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
             xmlns:sc="clr-namespace:SRNicoNico.Views.Controls"
             x:Class="SRNicoNico.Views.Contents.Video.VideoController"
@@ -19,6 +20,9 @@
              Background="{DynamicResource ThemeBrushKey}"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
              >
+    <UserControl.Resources>
+        <conv:TimeStringConverter x:Key="timeconv"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="12"/>
@@ -54,7 +58,7 @@
                 </i:Interaction.Triggers>
             </mui:ModernButton>
 
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Height="25"  FontSize="16" Margin="10,0,0,0"><Run Text="{Binding Time.CurrentTimeString}" /><Run Text="/"/><Run Text="{Binding Time.VideoTimeString}" /></TextBlock>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Height="25"  FontSize="16" Margin="10,0,0,0"><Run Text="{Binding Time.CurrentTime, Converter={StaticResource timeconv}}" /><Run Text="/"/><Run Text="{Binding Time.Length, Converter={StaticResource timeconv}}" /></TextBlock>
 
             <mui:ModernButton ToolTip="リピート(R)" Margin="10,0,0,0" EllipseDiameter="36" IconWidth="20" IconHeight="20" Focusable="False">
                 <mui:ModernButton.Style>
@@ -112,7 +116,6 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
 
-            <TextBlock Margin="0,0,15,0" Text="{Binding BPS}" VerticalAlignment="Center" />
             <mui:ModernButton ToolTip="フルスクリーン(F)" Margin="0,0,15,0" Focusable="False" EllipseDiameter="36" IconWidth="20" IconHeight="20" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">

@@ -37,9 +37,8 @@ VideoViewModelImpl.prototype = {
         //動画のメタデータロード後
         this.video.addEventListener("loadedmetadata", function (e) {
 
-            invoke_host(e);
             //C#側に動画の長さを伝える
-            invoke_host("duration", e.target.duration);
+            //invoke_host("duration", e.target.duration);
 
             //C#側に動画の解像度を伝える
             invoke_host("widtheight", e.target.videoWidth + "×" + e.target.videoHeight);
@@ -103,16 +102,17 @@ VideoViewModelImpl.prototype = {
             invoke_host("playstate", false);
         });
 
-
+        var v = this.video;
         //ウィンドウサイズが変わったら動画の高さやコメントのサイズを計算しなおす
-        window.addEventListener("onresize", function (e) {
+        window.onresize = function (e) {
 
+            invoke_host("log", window.innerHeight);
             //動画の高さを現在のウィンドウの高さに
-            this.video.style.height = window.innerHeight + "px";
+            v.style.height = window.innerHeight + "px";
 
             CommentViewModel.calc_comment_size(window.innerWidth, window.innerHeight);
 
-        });
+        };
         //ロードして再生 勝手に再生しないようにとかするならここかな
         this.video.load();
         this.video.play();

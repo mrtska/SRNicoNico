@@ -7,7 +7,7 @@ using System.Net;
 using Livet;
 
 using Codeplex.Data;
-
+using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoStoryBoard : NotificationObject {
@@ -23,7 +23,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		}
 
 		//取得したストーリーボードのデータにBitmapオブジェクトを追加して返す
-		public NicoNicoStoryBoardData GetStoryBoardData() {
+		public async  Task<NicoNicoStoryBoardData> GetStoryBoardAsync() {
 
             try {
 
@@ -33,7 +33,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     return null;
                 }
 
-                var data = GetStoryBoardInternalData();
+                var data = await GetStoryBoardInternalDataAsync();
 
                 //ストーリーボードが無かったら
                 if(data == null) {
@@ -48,8 +48,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 int bitmapindex = 0;
                 for(int i = 1; i <= data.Count; i++) {
 
-
-                    var response = NicoNicoWrapperMain.Session.GetStreamAsync(uri + i).Result;
+                    var response = await NicoNicoWrapperMain.Session.GetStreamAsync(uri + i);
 
                     var bitmap = new Bitmap(response);
 
@@ -74,12 +73,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 		//ストーリーボードのデータを取得する
-		private NicoNicoStoryBoardData GetStoryBoardInternalData() {
+		private async Task<NicoNicoStoryBoardData> GetStoryBoardInternalDataAsync() {
 
             try {
 
 
-                var result = NicoNicoWrapperMain.Session.GetResponseAsync(StoryBoardApiBaseUrl + "&sb=1").Result;
+                var result = await NicoNicoWrapperMain.Session.GetResponseAsync(StoryBoardApiBaseUrl + "&sb=1");
 
                 //見つからなかったり見せてもらえなかったりしたら
                 if(result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.NotFound || result.Content.Headers.ContentDisposition.FileName.Contains("smile")) {
@@ -87,7 +86,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     return null;
                 }
 
-                byte[] response = result.Content.ReadAsByteArrayAsync().Result;
+                byte[] response = await result.Content.ReadAsByteArrayAsync();
 
                 var xml = new string(Encoding.ASCII.GetChars(response));
                 xml = xml.Substring(39);
@@ -131,6 +130,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
             } catch(RequestTimeout) {
 
+                return null;
             }
 
 			return null;

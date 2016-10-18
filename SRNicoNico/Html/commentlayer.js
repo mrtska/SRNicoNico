@@ -85,8 +85,9 @@ CommentViewModelImpl.prototype = {
         var obj = JSON.parse(json);
 
         //パースしたjsonのコメントリストをfor each
-        obj.array.forEach(function (val) {
+        for (var index in obj.array) {
 
+            var val = obj.array[index];
             //コメント一つ一つをp要素で描画するのでp要素を作成
             var element = document.createElement("p");
             element.innerText = val.Content;
@@ -173,7 +174,7 @@ CommentViewModelImpl.prototype = {
 
             //いろいろと設定をしたp要素をリストに入れておく
             this.listener_comment.push(element);
-        });
+        }
     },
 
     //ウィンドウサイズ変更はフルスクリーンによってコメントサイズの再計算が必要になった時に呼ばれる
@@ -295,7 +296,7 @@ CommentViewModelImpl.prototype = {
 
                             if (target.pos == "ue") {
 
-                                offsetY = this.getTop(entry) - target.clientHeight + 1;
+                                offsetY = this.getTop(entry) + target.clientHeight + 1;
 
                                 if (offsetY + target.clientHeight > window.innerHeight) {
 
@@ -344,7 +345,9 @@ CommentViewModelImpl.prototype = {
     comment_tick: function (vpos) {
 
         //コメントリストから該当の時間になったコメントをコメントレイヤーに追加していく
-        this.listener_comment.forEach(function (target) {
+        for(var index in this.listener_comment) {
+
+            var target = this.listener_comment[index];
 
             //該当時間かどうか
             if (vpos >= target.vpos && vpos < target.vend) {
@@ -390,22 +393,27 @@ CommentViewModelImpl.prototype = {
 
                 }
             }
-
-        });
+        }
 
         //描画中リストに描画時間が過ぎたコメントがあったら排除する 重くなるからね   
-        this.rendering_listener_comment.forEach(function (target) {
+        for (var index in this.rendering_listener_comment) {
+
+            var target = this.rendering_listener_comment[index];
 
             if (vpos < target.vpos || vpos > target.vend) {
 
                 this.layer.removeChild(target);
                 this.rendering_listener_comment.splice(this.rendering_listener_comment.indexOf(target), 1);
             }
-        });
-
+        }
     }
 };
 var CommentViewModel = new CommentViewModelImpl();
+
+function CommentViewModel$initialize(json) {
+
+    CommentViewModel.initialize(json);
+}
 
 
 function uploader_comment_init(json) {

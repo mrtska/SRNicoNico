@@ -432,6 +432,29 @@ namespace SRNicoNico.ViewModels {
             VideoData.ApiData = await WatchApi.GetWatchApiDataAsync();
             Handler.Initialize(browser, VideoData);
 
+            CommentInstance = new NicoNicoComment(VideoData.ApiData, this);
+
+
+
+            if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
+
+                StoryBoardStatus = "取得中";
+
+                var sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
+                VideoData.StoryBoardData = await sb.GetStoryBoardAsync();
+
+                if(VideoData.StoryBoardData == null) {
+
+                    StoryBoardStatus = "データ無し";
+                } else {
+
+                    StoryBoardStatus = "取得完了";
+                }
+            } else {
+
+                StoryBoardStatus = "データ無し";
+            }
+
         }
         
         //ツイートダイアログ表示
@@ -439,7 +462,7 @@ namespace SRNicoNico.ViewModels {
 
             TweetDialogViewModel vm = new TweetDialogViewModel();
             string url = "https://twitter.com/intent/tweet?hashtags=" + VideoData.ApiData.Cmsid
-                            + "&text=" + HttpUtility.UrlEncode(VideoData.ApiData.Title) + "(" + Time.VideoTimeString + ")&ref_src=twsrc%5Etfw&url=" + VideoUrl;
+                            + "&text=" + HttpUtility.UrlEncode(VideoData.ApiData.Title) + "(" + NicoNicoUtil.ConvertTime(Time.Length) + ")&ref_src=twsrc%5Etfw&url=" + VideoUrl;
             url = url.Replace(" ", "%20");
             System.Diagnostics.Process.Start(url);
             vm.OriginalUri = new Uri(url);
