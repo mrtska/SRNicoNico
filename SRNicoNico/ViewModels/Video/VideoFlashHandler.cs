@@ -190,9 +190,14 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        protected internal void ToggleComment() {
+        protected internal void ShowComment() {
 
+            InvokeScript("CommentViewModel$show_comment");
 
+        }
+        protected internal void HideComment() {
+
+            InvokeScript("CommentViewModel$hide_comment");
         }
 
 

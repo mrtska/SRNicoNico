@@ -106,7 +106,6 @@ VideoViewModelImpl.prototype = {
         //ウィンドウサイズが変わったら動画の高さやコメントのサイズを計算しなおす
         window.onresize = function (e) {
 
-            invoke_host("log", window.innerHeight);
             //動画の高さを現在のウィンドウの高さに
             v.style.height = window.innerHeight + "px";
 

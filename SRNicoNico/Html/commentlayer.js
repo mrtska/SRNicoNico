@@ -26,6 +26,9 @@ CommentViewModelImpl.prototype = {
     //commentLayer div要素
     layer: {},
 
+    //現在のコメント描画地点
+    current_vpos: 0,
+
     //ニコニコで定義されているコメントカラーをJSで定義する
     comment_color_init: function () {
 
@@ -89,7 +92,7 @@ CommentViewModelImpl.prototype = {
 
             var val = obj.array[index];
             //コメント一つ一つをp要素で描画するのでp要素を作成
-            var element = document.createElement("p");
+            var element = document.createElement("span");
             element.innerText = val.Content;
 
             //p要素にvposを突っ込む C#やJavaばかりやっていた私には驚き
@@ -183,9 +186,13 @@ CommentViewModelImpl.prototype = {
         //現在の高さを基準の高さで割って係数をだす    
         var mul = height / this.HEIGHT;
 
+        
         //全てのコメントに係数を掛けて反映させる
-        this.listener_comment.forEach(function (target) {
+        for(var index in this.listener_comment) {
 
+            var target = this.listener_comment[index];
+
+            
             if (target.size == "big") {
 
                 $(target).css("font-size", mul * 39);
@@ -197,7 +204,13 @@ CommentViewModelImpl.prototype = {
 
                 $(target).css("font-size", mul * 24);
             }
-        });
+
+        }
+    
+        //ホントは描画中のコメントに係数をかけたりして座標を再計算しないとなんだけど複雑すぎて分からんし
+        //こうしてもう一度描画を最初からさせても大して重くなかったのでこの方法を採用
+        this.rendering_listener_comment.length = 0;
+
     },
     //描画中のコメントを全て一時停止する
     pause_comment: function () {
@@ -234,8 +247,11 @@ CommentViewModelImpl.prototype = {
         //現在のvposとコメント表示開始時のvposのオフセットを取得する
         var offset = vpos - target.vpos;
 
+
         //vpos当たりの横幅を計算してoffsetを掛けて出てきた値を現在のウィンドウの横幅から引く
-        return window.innerWidth - offset * ((window.innerWidth + target.clientWidth) / (target.vend - target.vpos));
+        var ret = window.innerWidth - offset * ((window.innerWidth + target.clientWidth) / (target.vend - target.vpos))
+
+        return ret;
     },
 
     //現在描画中のコメントを考慮してtarget(p要素)がどのY座標で描画すれば良いか計算する
@@ -338,12 +354,24 @@ CommentViewModelImpl.prototype = {
 
         } while (flag);
 
-        //ピクセルで出力する    
+        
+        target.offsetYP = offsetY / window.innerHeight;
+        //ピクセルで出力する
         return offsetY + "px";
     },
+
+    //vposからあと何ミリ秒描画すればいいかを返す
+    getDuration: function(target, vpos) {
+
+        var offset = 1 - (vpos - target.vpos) / (target.vend - target.vpos);
+        
+        return target.duration * offset;
+    },
+
     //VideoViewModelから1デシ秒に一回くらい呼ばれる
     comment_tick: function (vpos) {
 
+        this.current_vpos = vpos;
         //コメントリストから該当の時間になったコメントをコメントレイヤーに追加していく
         for(var index in this.listener_comment) {
 
@@ -382,11 +410,21 @@ CommentViewModelImpl.prototype = {
 
                         }, {
 
-                            duration: target.duration,  //コメント表示時間 普通は4秒
+                            duration: this.getDuration(target, vpos),  //コメント表示時間 普通は4秒
                             easing: "linear",
                             count: 1    //ループされても困る
                         });
                     }
+
+
+
+                    //一時停止したタイミングでコメント描画が始まるとコメントが動いてしまうので一時停止させる
+                    if (VideoViewModel.video.paused) {
+
+                        $(target).css("animation-play-state", "paused");
+                    }
+
+
 
                     //Y座標を設定する
                     $(target).css("top", this.getY(target));
@@ -404,8 +442,19 @@ CommentViewModelImpl.prototype = {
 
                 this.layer.removeChild(target);
                 this.rendering_listener_comment.splice(this.rendering_listener_comment.indexOf(target), 1);
+                continue;
             }
+
         }
+    },
+    show_comment: function() {
+
+        $(this.layer).css("visibility", "visible");
+    },
+
+    hide_comment: function () {
+
+        $(this.layer).css("visibility", "hidden");
     }
 };
 var CommentViewModel = new CommentViewModelImpl();
@@ -414,6 +463,17 @@ function CommentViewModel$initialize(json) {
 
     CommentViewModel.initialize(json);
 }
+function CommentViewModel$hide_comment() {
+
+    CommentViewModel.hide_comment();
+}
+function CommentViewModel$show_comment() {
+
+    CommentViewModel.show_comment();
+}
+
+
+
 
 
 function uploader_comment_init(json) {

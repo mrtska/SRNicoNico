@@ -487,7 +487,13 @@ namespace SRNicoNico.ViewModels {
 
             CommentVisibility ^= true;
             Settings.Instance.CommentVisibility = CommentVisibility;
-            Handler.ToggleComment();
+            if(CommentVisibility) {
+
+                Handler.ShowComment();
+            } else {
+
+                Handler.HideComment();
+            }
         }
 
         private int PrevVolume;
@@ -552,7 +558,7 @@ namespace SRNicoNico.ViewModels {
 
             //Flash部分をフルスクリーンウィンドウから消去
             //Messenger.Raise(new WindowActionMessage(WindowAction.Close));
-            //Window.GetWindow(FullScreenVideoFlash).Close(); //消えない時があるから強引に
+            Window.GetWindow((VideoHtml5)FullScreenVideoFlash).Close(); //消えない時があるから強引に
 
             //ウィンドウを閉じる
             App.ViewModelRoot.Visibility = Visibility.Visible;
