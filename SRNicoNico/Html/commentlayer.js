@@ -416,19 +416,14 @@ CommentViewModelImpl.prototype = {
                         });
                     }
 
-
-
                     //一時停止したタイミングでコメント描画が始まるとコメントが動いてしまうので一時停止させる
-                    if (VideoViewModel.video.paused) {
+                    if (VideoViewModel.video.paused || VideoViewModel.video.seeking) {
 
                         $(target).css("animation-play-state", "paused");
                     }
 
-
-
                     //Y座標を設定する
                     $(target).css("top", this.getY(target));
-
                 }
             }
         }

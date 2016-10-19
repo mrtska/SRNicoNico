@@ -182,7 +182,7 @@ namespace SRNicoNico.ViewModels {
 
         protected internal void Restart() {
 
-
+            Seek(0);
         }
 
         protected internal void ReloadComment() {

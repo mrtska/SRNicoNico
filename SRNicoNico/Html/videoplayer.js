@@ -102,6 +102,36 @@ VideoViewModelImpl.prototype = {
             invoke_host("playstate", false);
         });
 
+        this.video.addEventListener("ended", function () {
+
+            CommentViewModel.pause_comment();
+            invoke_host("ended");
+        });
+
+        this.video.addEventListener("playing", function () {
+
+            CommentViewModel.resume_comment();
+            invoke_host("playing");
+        });
+
+        this.video.addEventListener("waiting", function () {
+
+            CommentViewModel.pause_comment();
+            invoke_host("waiting");
+        });
+
+        this.video.addEventListener("seeking", function () {
+
+            CommentViewModel.pause_comment();
+            invoke_host("seeking");
+        });
+        this.video.addEventListener("seeked", function () {
+
+            CommentViewModel.resume_comment();
+            invoke_host("seeked");
+        });
+
+
         var v = this.video;
         //ウィンドウサイズが変わったら動画の高さやコメントのサイズを計算しなおす
         window.onresize = function (e) {
