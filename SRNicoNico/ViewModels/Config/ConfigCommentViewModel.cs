@@ -62,7 +62,7 @@ namespace SRNicoNico.ViewModels {
 
                     var vm = (VideoViewModel) tab;
                     // TODO fix
-                   // vm.Handler.ApplyChanges();
+                    vm.Handler.ApplyChanges();
                 }
             }
         }

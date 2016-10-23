@@ -125,9 +125,13 @@ VideoViewModelImpl.prototype = {
             CommentViewModel.pause_comment();
             invoke_host("seeking");
         });
-        this.video.addEventListener("seeked", function () {
+        this.video.addEventListener("seeked", function (e) {
 
-            CommentViewModel.resume_comment();
+            if (!e.target.paused) {
+
+                CommentViewModel.resume_comment();
+            }
+
             invoke_host("seeked");
         });
 

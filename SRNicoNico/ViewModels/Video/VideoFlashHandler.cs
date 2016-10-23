@@ -138,6 +138,8 @@ namespace SRNicoNico.ViewModels {
 
         }
 
+
+
         private async void InitializeComment() {
 
             Owner.Comment.IsCommentLoading = true;
@@ -200,12 +202,16 @@ namespace SRNicoNico.ViewModels {
             InvokeScript("CommentViewModel$hide_comment");
         }
 
+        public void ApplyChanges() {
 
+            InvokeScript("CommentViewModel$set_opacity", Settings.Instance.CommentAlpha.ToString());
+        }
 
         protected internal void InjectComment(string json) {
 
 
             InvokeScript("CommentViewModel$initialize", json);
+            ApplyChanges();
         }
 
         protected internal void InjectUploaderComment(string json) {

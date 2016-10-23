@@ -162,7 +162,6 @@ CommentViewModelImpl.prototype = {
             if (mail.contains("big")) {
 
                 element.size = "big";
-
                 $(element).css("font-size", "39px");
             } else if (mail.contains("small")) {
 
@@ -312,7 +311,7 @@ CommentViewModelImpl.prototype = {
 
                             if (target.pos == "ue") {
 
-                                offsetY = this.getTop(entry) + target.clientHeight + 1;
+                                offsetY = this.getTop(entry) + entry.clientHeight + 1;
 
                                 if (offsetY + target.clientHeight > window.innerHeight) {
 
@@ -329,7 +328,6 @@ CommentViewModelImpl.prototype = {
                             var x2 = this.getX(target, min);
                             var x3 = this.getX(entry, max);
                             var x4 = this.getX(entry, min);
-
 
                             if (x1 <= x3 + entry.clientWidth && x3 <= x1 + target.clientWidth || x2 <= x4 + entry.clientWidth && x4 <= x2 + target.clientWidth) {
 
@@ -417,7 +415,7 @@ CommentViewModelImpl.prototype = {
                     }
 
                     //一時停止したタイミングでコメント描画が始まるとコメントが動いてしまうので一時停止させる
-                    if (VideoViewModel.video.paused || VideoViewModel.video.seeking) {
+                    if (VideoViewModel.video.paused || VideoViewModel.video.seeking || VideoViewModel.video.ended) {
 
                         $(target).css("animation-play-state", "paused");
                     }
@@ -450,6 +448,17 @@ CommentViewModelImpl.prototype = {
     hide_comment: function () {
 
         $(this.layer).css("visibility", "hidden");
+    },
+    set_opacity: function (op) {
+
+        //$(this.layer).css("opacity", op);
+
+        //全てのコメントに係数を掛けて反映させる
+        for (var index in this.listener_comment) {
+
+            var target = this.listener_comment[index];
+            $(target).css("opacity", parseInt(op) / 100.0);
+        }
     }
 };
 var CommentViewModel = new CommentViewModelImpl();
@@ -466,7 +475,11 @@ function CommentViewModel$show_comment() {
 
     CommentViewModel.show_comment();
 }
+function CommentViewModel$set_opacity(op) {
 
+    invoke_host("log", "set_opacity");
+    CommentViewModel.set_opacity(op);
+}
 
 
 

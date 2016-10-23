@@ -133,9 +133,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //動画
                 if(data.Type == 0) {
 
-                    data.UpdateTime = UnixTime.FromUnixTime((long)item.update_time).ToString();
-                    data.FirstRetrieve = UnixTime.FromUnixTime((long)item.first_retrieve).ToString();
-                    data.Length = NicoNicoUtil.ConvertTime(long.Parse(item.length_seconds));
+                    data.UpdateTime = UnixTime.FromUnixTime((int)item.update_time).ToString();
+                    data.FirstRetrieve = UnixTime.FromUnixTime((int)item.first_retrieve).ToString();
+                    data.Length = NicoNicoUtil.ConvertTime(int.Parse(item.length_seconds));
                     data.Id = item.video_id;
                     data.ViewCounter = int.Parse(item.view_counter);
                     data.CommentCounter = int.Parse(item.num_res);
@@ -144,8 +144,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 } else if(data.Type == 5) { //静画
 
-                    data.UpdateTime = UnixTime.FromUnixTime((long)item.update_time).ToString();
-                    data.FirstRetrieve = UnixTime.FromUnixTime((long)item.create_time).ToString();
+                    data.UpdateTime = UnixTime.FromUnixTime((int)item.update_time).ToString();
+                    data.FirstRetrieve = UnixTime.FromUnixTime((int)item.create_time).ToString();
                     data.Id = item.id.ToString();
                     data.ViewCounter = (int)item.view_count;
                     data.CommentCounter = (int)item.comment_count;
@@ -154,8 +154,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 } else if(data.Type == 6) { //書籍
 
-                    data.UpdateTime = UnixTime.FromUnixTime((long)entry.update_time).ToString();
-                    data.FirstRetrieve = UnixTime.FromUnixTime((long)item.released_at).ToString();
+                    data.UpdateTime = UnixTime.FromUnixTime((int)entry.update_time).ToString();
+                    data.FirstRetrieve = UnixTime.FromUnixTime((int)item.released_at).ToString();
                     data.Id = "bk" + item.id;
                     data.ViewCounter = (int)item.view_count;
                     data.CommentCounter = (int)item.comment_count;
@@ -164,8 +164,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 } else if(data.Type == 13) { //ブロマガ
 
-                    data.UpdateTime = UnixTime.FromUnixTime((long)item.commented_time).ToString();
-                    data.FirstRetrieve = UnixTime.FromUnixTime((long)item.create_time).ToString();
+                    data.UpdateTime = UnixTime.FromUnixTime((int)item.commented_time).ToString();
+                    data.FirstRetrieve = UnixTime.FromUnixTime((int)item.create_time).ToString();
                     data.Id = "ar" + item.id;
                     data.CommentCounter = (int)item.comment_count;
                     data.MylistCounter = int.Parse(item.mylist_count);

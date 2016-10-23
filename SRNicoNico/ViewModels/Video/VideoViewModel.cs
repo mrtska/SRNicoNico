@@ -528,7 +528,7 @@ namespace SRNicoNico.ViewModels {
 
 
             //リソースに登録
-            var message = new TransitionMessage(type, this, TransitionMode.NewOrActive);
+            var message = new TransitionMessage(type, this, TransitionMode.Modal);
 
             //ウィンドウからFlash部分を消去
             var temp = VideoFlash;
@@ -558,7 +558,7 @@ namespace SRNicoNico.ViewModels {
 
             //Flash部分をフルスクリーンウィンドウから消去
             //Messenger.Raise(new WindowActionMessage(WindowAction.Close));
-            Window.GetWindow((VideoHtml5)FullScreenVideoFlash).Close(); //消えない時があるから強引に
+            Window.GetWindow((UserControl)FullScreenVideoFlash).Close(); //消えない時があるから強引に
 
             //ウィンドウを閉じる
             App.ViewModelRoot.Visibility = Visibility.Visible;
