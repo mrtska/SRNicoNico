@@ -88,7 +88,7 @@ package  {
 			connection = new NetConnection();
 			connection.addEventListener(NetStatusEvent.NET_STATUS, onConnect);
 			connection.connect(null);
-			this.ApplyChanges(config);
+			//this.ApplyChanges(config);
 		}
 		
 		//そのまんま
@@ -191,7 +191,7 @@ package  {
 				renderTick.start();
 			}
 			stream.client = obj;
-			
+			stream.soundTransform = new SoundTransform(0.1);
 			stream.play(videoUrl);
 			CallCSharp("Initialized");
 			

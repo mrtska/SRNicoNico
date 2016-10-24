@@ -65,7 +65,7 @@ package {
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, wheel);
 			stage.addEventListener(MouseEvent.CLICK, click);
 			
-			CallCSharp("Ready");
+			ExternalInterface.call("ready");
 		}
 		
 		private var timer:Timer;

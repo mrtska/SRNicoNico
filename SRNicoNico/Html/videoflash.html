@@ -1,0 +1,56 @@
+﻿<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html>
+
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+
+        <style>
+            html {
+            }
+
+            body {
+                margin: 0px;
+                padding: 0px;
+                overflow: hidden;
+                background-color: black;
+                height: 100%;
+                -ms-user-select: none;
+                
+            }
+
+            .commentlayer {
+                position: fixed;
+                z-index: 100;
+                overflow: hidden;
+            }
+
+            span {
+                position: fixed;
+                padding: 0px;
+                margin: 0px;
+                font-family: Arial;
+                font-weight: bold;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                text-shadow: 1px 1px 1px #000;
+            }
+        </style>
+        <script type="text/javascript" src="./jquery-3.1.0.js"></script>
+        <script type="text/javascript" src="./swfobject.js"></script>
+        <script type="text/javascript" src="./jquery.keyframes.js"></script>
+        <script type="text/javascript" src="./commentlayer.js"></script>
+    </head>
+    <body oncontextmenu="return false;">
+
+
+        <div id="commentlayer"></div>
+        <object id="player" data="../Flash/NicoNicoPlayer.swf" width="320" align="middle" height="360" type="application/x-shockwave-flash">
+            <param name="movie" value="../Flash/NicoNicoPlayer.swf" />
+            <param name="allowscriptaccess" value="always" />
+            <param name="wmode" value="transparent" />
+        </object>
+        <script type="text/javascript" src="./videoflashplayer.js"></script>
+        
+    </body>
+</html>

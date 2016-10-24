@@ -410,7 +410,9 @@ namespace SRNicoNico.ViewModels {
 
         private string GetFlashPlayerPath() {
 
-            return "file://127.0.0.1/e$/Development/MVVM/WPF/SRNicoNico/SRNicoNico/Html5/videoflash.html";
+            var cur = NicoNicoUtil.CurrentDirectory.Replace('\\', '/').Split(':');
+
+            return @"E:\Development\MVVM\WPF\SRNicoNico\SRNicoNico\bin\Debug\Html\videoflash.html";// "file://127.0.0.1/" + cur[0] + "$" + cur[1] + "Html/videoflash.html";
         }
 
 
