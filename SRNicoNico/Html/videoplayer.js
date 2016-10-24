@@ -146,6 +146,17 @@ VideoViewModelImpl.prototype = {
             CommentViewModel.calc_comment_size(window.innerWidth, window.innerHeight);
 
         };
+
+        //クリックして一時停止をハンドリングするために
+        window.onclick = function () {
+
+            invoke_host("click");
+        }
+        window.onmousewheel = function (e) {
+
+            invoke_host("mousewheel", e.wheelDelta);
+        }
+
         //ロードして再生 勝手に再生しないようにとかするならここかな
         this.video.load();
         this.video.play();
@@ -163,7 +174,7 @@ VideoViewModelImpl.prototype = {
         this.video.play();
     },
     setvolume: function (vol) {
-
+        
         this.video.volume = vol;
     }
 

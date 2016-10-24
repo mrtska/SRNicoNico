@@ -205,6 +205,7 @@ namespace SRNicoNico.ViewModels {
         public void ApplyChanges() {
 
             InvokeScript("CommentViewModel$set_opacity", Settings.Instance.CommentAlpha.ToString());
+            InvokeScript("CommentViewModel$set_base_size", Settings.Instance.CommentSize);
         }
 
         protected internal void InjectComment(string json) {
@@ -246,6 +247,14 @@ namespace SRNicoNico.ViewModels {
         }
 
         protected internal void SetVolume(int volume) {
+
+            if(volume > 100) {
+
+                volume = 100;
+            } else if(volume < 0) {
+
+                volume = 0;
+            }
 
             InvokeScript("VideoViewModel$setvolume", (volume / 100.0).ToString());
         }
@@ -350,7 +359,28 @@ namespace SRNicoNico.ViewModels {
                     break;
 
                 case "widtheight":
+
                     Owner.VideoData.Resolution = args;
+                    break;
+                case "click":
+
+                    if(Settings.Instance.ClickOnPause) {
+
+                        TogglePlay();
+                    }
+                    break;
+                case "mousewheel":
+
+                    var vol = int.Parse(args);
+
+                    if(vol >= 0) {
+
+                        Owner.Volume += 2;
+                    } else {
+
+                        Owner.Volume -= 2;
+                    }
+
                     break;
                 case "log":
                     Console.WriteLine("Log: " + args);

@@ -29,6 +29,10 @@ CommentViewModelImpl.prototype = {
     //現在のコメント描画地点
     current_vpos: 0,
 
+    small_comment_size: 15,
+    regular_comment_size: 24,
+    big_comment_size: 39,
+
     //ニコニコで定義されているコメントカラーをJSで定義する
     comment_color_init: function () {
 
@@ -162,15 +166,15 @@ CommentViewModelImpl.prototype = {
             if (mail.contains("big")) {
 
                 element.size = "big";
-                $(element).css("font-size", "39px");
+                $(element).css("font-size", this.big_comment_size + "px");
             } else if (mail.contains("small")) {
 
                 element.size = "small";
-                $(element).css("font-size", "14px");
+                $(element).css("font-size", this.small_comment_size + "px");
             } else {
 
                 element.size = "medium";
-                $(element).css("font-size", "24px");
+                $(element).css("font-size", this.regular_comment_size + "px");
 
             }
 
@@ -194,14 +198,14 @@ CommentViewModelImpl.prototype = {
             
             if (target.size == "big") {
 
-                $(target).css("font-size", mul * 39);
+                $(target).css("font-size", mul * this.big_comment_size);
 
             } else if (target.size == "small") {
 
-                $(target).css("font-size", mul * 15);
+                $(target).css("font-size", mul * this.small_comment_size);
             } else {
 
-                $(target).css("font-size", mul * 24);
+                $(target).css("font-size", mul * this.regular_comment_size);
             }
 
         }
@@ -403,9 +407,7 @@ CommentViewModelImpl.prototype = {
 
                                 //終わりはコメントの横幅を-にしたもの つまりコメントが見えなくなるまで
                                 left: -target.clientWidth + "px"
-
                             },
-
                         }, {
 
                             duration: this.getDuration(target, vpos),  //コメント表示時間 普通は4秒
@@ -459,6 +461,27 @@ CommentViewModelImpl.prototype = {
             var target = this.listener_comment[index];
             $(target).css("opacity", parseInt(op) / 100.0);
         }
+    },
+    set_base_size: function (str) {
+
+        switch (str) {
+            case "極小":
+                this.regular_comment_size = 14;
+                break;
+            case "小":
+                this.regular_comment_size = 18;
+                break;
+            case "標準":
+                this.regular_comment_size = 24;
+                break;
+            case "大":
+                this.regular_comment_size = 30;
+                break;
+        }
+        this.big_comment_size = this.regular_comment_size + 15;
+        this.small_comment_size = this.regular_comment_size - 9;
+
+        this.calc_comment_size(window.innerWidth, window.innerHeight);
     }
 };
 var CommentViewModel = new CommentViewModelImpl();
@@ -477,10 +500,12 @@ function CommentViewModel$show_comment() {
 }
 function CommentViewModel$set_opacity(op) {
 
-    invoke_host("log", "set_opacity");
     CommentViewModel.set_opacity(op);
 }
+function CommentViewModel$set_base_size(str) {
 
+    CommentViewModel.set_base_size(str);
+}
 
 
 
