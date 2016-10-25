@@ -8,6 +8,7 @@ package {
 	import flash.external.ExternalInterface;
 	import flash.ui.Mouse;
 	import flash.utils.Timer;
+	import flash.system.FSCommand;
 	
 	import comment.CommentRasterizer;
 	
@@ -30,9 +31,9 @@ package {
 			stage.scaleMode = StageScaleMode.SHOW_ALL;
 			stage.frameRate = 30;
 			
-			this.renderTick = new Timer(16.6 * 2);
+			this.renderTick = new Timer(100);
 			
-			rasterizer = new CommentRasterizer();
+			//rasterizer = new CommentRasterizer();
 			stage.showDefaultContextMenu = false;
 			
 			//JSコールバック登録
@@ -48,24 +49,22 @@ package {
 				ExternalInterface.addCallback("AsInjectUploaderComment", InjectUploaderComment);
 				ExternalInterface.addCallback("AsToggleComment", ToggleComment);
 				ExternalInterface.addCallback("AsInjectMyComment", InjectMyComment);
-				ExternalInterface.addCallback("AsChangeVolume", ChangeVolume);
+				ExternalInterface.addCallback("AsSetVolume", ChangeVolume);
 				ExternalInterface.addCallback("AsApplyChanges", ApplyChanges);
 				ExternalInterface.addCallback("PurgeComment", PurgeComment);
 				
 			}
-			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
+			//rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
 			
 			
-			timer = new Timer(1200);
-			timer.addEventListener(TimerEvent.TIMER, tick);
-			timer.start();
+			//timer = new Timer(1200);
+			//timer.addEventListener(TimerEvent.TIMER, tick);
+			//timer.start();
 			
 			
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, move);
-			stage.addEventListener(MouseEvent.MOUSE_WHEEL, wheel);
-			stage.addEventListener(MouseEvent.CLICK, click);
-			
-			ExternalInterface.call("ready");
+			//stage.addEventListener(MouseEvent.MOUSE_MOVE, move);
+			//stage.addEventListener(MouseEvent.MOUSE_WHEEL, wheel);
+			//stage.addEventListener(MouseEvent.CLICK, click);
 		}
 		
 		private var timer:Timer;

@@ -278,23 +278,27 @@ namespace SRNicoNico.ViewModels {
 
             var videoTime = VideoData.ApiData.Length;
 
-            Owner.Time.PlayedRange.Clear();
-            foreach(var range in played) {
+            if(VideoData.VideoType == NicoNicoVideoType.MP4) {
 
-                range.Width = GetFixedPos(range.End - range.Start, VideoData.ApiData.Length);
-                range.Position = new Thickness(GetFixedPos(range.Start, VideoData.ApiData.Length), 0, 0, 0);
+                Owner.Time.PlayedRange.Clear();
+                foreach(var range in played) {
 
-                Owner.Time.PlayedRange.Add(range);
+                    range.Width = GetFixedPos(range.End - range.Start, VideoData.ApiData.Length);
+                    range.Position = new Thickness(GetFixedPos(range.Start, VideoData.ApiData.Length), 0, 0, 0);
+
+                    Owner.Time.PlayedRange.Add(range);
+                }
+
+                Owner.Time.BufferedRange.Clear();
+                foreach(var range in buffer) {
+
+                    range.Width = GetFixedPos(range.End - range.Start, VideoData.ApiData.Length);
+                    range.Position = new Thickness(GetFixedPos(range.Start, VideoData.ApiData.Length), 0, 0, 0);
+
+                    Owner.Time.BufferedRange.Add(range);
+                }
             }
 
-            Owner.Time.BufferedRange.Clear();
-            foreach(var range in buffer) {
-
-                range.Width = GetFixedPos(range.End - range.Start, VideoData.ApiData.Length);
-                range.Position = new Thickness(GetFixedPos(range.Start, VideoData.ApiData.Length), 0, 0, 0);
-
-                Owner.Time.BufferedRange.Add(range);
-            }
 
 
             Owner.Comment.Vpos = vpos.ToString();
@@ -336,21 +340,29 @@ namespace SRNicoNico.ViewModels {
 
                         dynamic json = DynamicJson.Parse(args);
 
-                        var played = new List<TimeRange>();
+                        if(VideoData.VideoType == NicoNicoVideoType.MP4) {
 
-                        foreach(var play in json.played) {
+                            var played = new List<TimeRange>();
 
-                            played.Add(new TimeRange() { Start = play.start, End = play.end });
+                            foreach(var play in json.played) {
+
+                                played.Add(new TimeRange() { Start = play.start, End = play.end });
+                            }
+
+                            var buffered = new List<TimeRange>();
+
+                            foreach(var buffer in json.buffered) {
+
+                                buffered.Add(new TimeRange() { Start = buffer.start, End = buffer.end });
+                            }
+
+                            CsFrame((double)json.time, played.ToArray(), buffered.ToArray(), (int)json.vpos);
+                        } else {
+
+                            CsFrame((double)json.time, null, null, (int)json.vpos);
                         }
 
-                        var buffered = new List<TimeRange>();
 
-                        foreach(var buffer in json.buffered) {
-
-                            buffered.Add(new TimeRange() { Start = buffer.start, End = buffer.end });
-                        }
-
-                        CsFrame((double)json.time, played.ToArray(), buffered.ToArray(), (int)json.vpos);
                         break;
                     }
                 case "playstate":
@@ -403,16 +415,16 @@ namespace SRNicoNico.ViewModels {
 
         private string GetHtml5PlayerPath() {
 
-            var cur = NicoNicoUtil.CurrentDirectory.Replace('\\', '/').Split(':');
+            var cur = NicoNicoUtil.CurrentDirectory;
 
-            return "file://127.0.0.1/" + cur[0] + "$" + cur[1] + "Html/videohtml5.html";
+            return cur + "Html/videohtml5.html";
         }
 
         private string GetFlashPlayerPath() {
 
-            var cur = NicoNicoUtil.CurrentDirectory.Replace('\\', '/').Split(':');
+            var cur = NicoNicoUtil.CurrentDirectory;
 
-            return @"E:\Development\MVVM\WPF\SRNicoNico\SRNicoNico\bin\Debug\Html\videoflash.html";// "file://127.0.0.1/" + cur[0] + "$" + cur[1] + "Html/videoflash.html";
+            return cur + "Html/videoflash.html";
         }
 
 

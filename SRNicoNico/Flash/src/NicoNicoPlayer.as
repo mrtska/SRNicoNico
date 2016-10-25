@@ -94,10 +94,12 @@ package  {
 		//そのまんま
 		public override function Pause():void {
 			
+			ExternalInterface.call("invoke_host", "playstate", false);
 			stream.pause();
 		}
 		public override function Resume():void {
 			
+			ExternalInterface.call("invoke_host", "playstate", true);
 			stream.resume();
 			
 		}
@@ -133,23 +135,13 @@ package  {
 			var obj:Object = new Object();
 			obj.onMetaData = function(param:Object):void {
 				
-				
+				ExternalInterface.call("invoke_host", "log", "onmetadata");
 				metadata = param;
 				var width:String = param["width"];
 				var height:String = param["height"];
-				var framerate:String = param["videoframerate"];
-				var filesize:String = stream.bytesTotal;
 				
-				ExternalInterface.call("WidthHeight", width + "×" + height);
-				ExternalInterface.call("Framerate", framerate + "");
-				ExternalInterface.call("FileSize", filesize + "");
+				ExternalInterface.call("invoke_host", "widtheight", width + "×" + height);
 				
-				/*for (var propName:String in param){
-						
-						ExternalInterface.call(propName, param[propName].toString());
-					
-					
-				}*/						
 				
 				var stageW:int = stage.stageWidth;
 				var stageH:int = stage.stageHeight;
@@ -186,38 +178,32 @@ package  {
 					addChild(video);
 
 				}
-				addChild(rasterizer);
+				//addChild(rasterizer);
 				renderTick.addEventListener(TimerEvent.TIMER, onFrame);
 				renderTick.start();
 			}
 			stream.client = obj;
 			stream.soundTransform = new SoundTransform(0.1);
 			stream.play(videoUrl);
-			CallCSharp("Initialized");
+			//ExternalInterface.call("readya");
 			
 		}
 		
 		
-		private var prevTime:int = 0;
-		private var prevLoaded:uint = 0;
 		
 		public override function onFrame(e:TimerEvent):void {
 			
 			// 再生時間を取得
-			var value:Number = stream.time;
+			var time:Number = stream.time;
 			
 			// バッファの計算
 			var buffer:Number = (stream.bytesLoaded) / (stream.bytesTotal);
 			
 			//コメントのアレ
-			var vpos:Number = Math.floor(value * 100);
-
-			ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString(), vpos.toString());
-			prevLoaded = stream.bytesLoaded;
-			prevTime = (int) (value);
+			var vpos:Number = Math.floor(time * 100);
 			
+			ExternalInterface.call("VideoViewModel.video_tick", time, vpos, buffer);
 			
-			rasterizer.render(vpos);
 		}
 		
 		private function onAsyncError(e:AsyncErrorEvent):void {
