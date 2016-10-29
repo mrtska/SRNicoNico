@@ -4,11 +4,6 @@ function invoke_host(cmd, args) {
     window.external.InvokeFromJavaScript(cmd, args);
 }
 
-
-function readya() {
-
-    invoke_host("log", "ready");
-}
 //containsを追加する 無いと困る
 (function () {
     if (!("contains" in String.prototype)) {
@@ -17,7 +12,6 @@ function readya() {
             return -1 !== String.prototype.indexOf.call(this, str, startIndex);
         };
     }
-
 })();
 
 
@@ -35,6 +29,9 @@ VideoViewModelImpl.prototype = {
 
         //html5のvideo要素を取得
         this.video = window.player;
+        this.video.paused = false;
+        this.video.seeking = false;
+        this.video.ended = false;
 
         //動画の高さをウィンドウの高さに合わせる
         this.video.style.height = window.innerHeight + "px";
@@ -51,19 +48,7 @@ VideoViewModelImpl.prototype = {
             v.style.height = window.innerHeight + "px";
 
             CommentViewModel.calc_comment_size(window.innerWidth, window.innerHeight);
-
         };
-
-        //クリックして一時停止をハンドリングするために
-        window.onclick = function () {
-
-            invoke_host("click");
-        }
-        window.onmousewheel = function (e) {
-
-            invoke_host("mousewheel", e.wheelDelta);
-        }
-
     },
 
     video_tick: function(time, vpos, buffer) {
@@ -74,7 +59,7 @@ VideoViewModelImpl.prototype = {
         //コメント描画タイミングのvposや現在の再生時間をobjに詰め込む
         obj.time = time;
         obj.vpos = vpos;
-
+        obj.buffer = buffer;
         //コメントを描画する
         CommentViewModel.comment_tick(obj.vpos);
 
@@ -85,15 +70,21 @@ VideoViewModelImpl.prototype = {
 
     seek: function (pos) {
 
+        this.video.seeking = true;
         this.video.AsSeek(pos);
+        this.video.seeking = false;
     },
     pause: function () {
 
+
+        this.video.paused = true;
         CommentViewModel.pause_comment();
         this.video.AsPause();
     },
     resume: function () {
 
+        this.video.paused = false;
+        this.video.ended = false;
         CommentViewModel.resume_comment();
         this.video.AsResume();
     },
@@ -101,7 +92,6 @@ VideoViewModelImpl.prototype = {
         
         this.video.AsSetVolume(vol);
     }
-
 };
 
 var VideoViewModel = new VideoViewModelImpl();

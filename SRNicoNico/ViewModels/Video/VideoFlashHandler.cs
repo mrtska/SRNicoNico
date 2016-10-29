@@ -278,25 +278,23 @@ namespace SRNicoNico.ViewModels {
 
             var videoTime = VideoData.ApiData.Length;
 
-            if(VideoData.VideoType == NicoNicoVideoType.MP4) {
 
-                Owner.Time.PlayedRange.Clear();
-                foreach(var range in played) {
+            Owner.Time.PlayedRange.Clear();
+            foreach(var range in played) {
 
-                    range.Width = GetFixedPos(range.End - range.Start, VideoData.ApiData.Length);
-                    range.Position = new Thickness(GetFixedPos(range.Start, VideoData.ApiData.Length), 0, 0, 0);
+                range.Width = GetFixedPos(range.End - range.Start, VideoData.ApiData.Length);
+                range.Position = new Thickness(GetFixedPos(range.Start, VideoData.ApiData.Length), 0, 0, 0);
 
-                    Owner.Time.PlayedRange.Add(range);
-                }
+                Owner.Time.PlayedRange.Add(range);
+            }
 
-                Owner.Time.BufferedRange.Clear();
-                foreach(var range in buffer) {
+            Owner.Time.BufferedRange.Clear();
+            foreach(var range in buffer) {
 
-                    range.Width = GetFixedPos(range.End - range.Start, VideoData.ApiData.Length);
-                    range.Position = new Thickness(GetFixedPos(range.Start, VideoData.ApiData.Length), 0, 0, 0);
+                range.Width = GetFixedPos(range.End - range.Start, VideoData.ApiData.Length);
+                range.Position = new Thickness(GetFixedPos(range.Start, VideoData.ApiData.Length), 0, 0, 0);
 
-                    Owner.Time.BufferedRange.Add(range);
-                }
+                Owner.Time.BufferedRange.Add(range);
             }
 
 
@@ -359,7 +357,13 @@ namespace SRNicoNico.ViewModels {
                             CsFrame((double)json.time, played.ToArray(), buffered.ToArray(), (int)json.vpos);
                         } else {
 
-                            CsFrame((double)json.time, null, null, (int)json.vpos);
+                            var played = new List<TimeRange>();
+                            played.Add(new TimeRange() { Start = 0, End = json.time });
+
+                            var buffered = new List<TimeRange>();
+                            buffered.Add(new TimeRange() {Start = 0, End = json.buffer * Owner.Time.Length });
+
+                            CsFrame((double)json.time, played.ToArray(), buffered.ToArray(), (int)json.vpos);
                         }
 
 

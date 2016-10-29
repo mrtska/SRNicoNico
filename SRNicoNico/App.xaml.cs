@@ -32,7 +32,8 @@ namespace SRNicoNico {
 		protected override void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
 
-		//UIスレッドのディスパッチャを登録しておく
+
+            //UIスレッドのディスパッチャを登録しておく
             DispatcherHelper.UIDispatcher = Dispatcher;
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             

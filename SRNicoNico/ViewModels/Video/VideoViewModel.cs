@@ -135,7 +135,7 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _IsPlaying = value;
                 RaisePropertyChanged();
-                if(IsInitialized && Time.CurrentTime == Time.Length && value) {
+                if(IsInitialized && Time.CurrentTime >= Time.Length && value) {
 
                     Restart();
                 }
@@ -538,7 +538,7 @@ namespace SRNicoNico.ViewModels {
             Controller = null;
             FullScreenController = temp2;
 
-
+            
             App.ViewModelRoot.Visibility = Visibility.Hidden;
 
             //フルスクリーンウィンドウ表示

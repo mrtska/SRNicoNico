@@ -17,11 +17,6 @@ package {
 	public class NicoNicoPlayerBase extends Sprite {
 		
 		
-		
-		//コメントラスタライザ
-		public var rasterizer:CommentRasterizer;
-		
-		
 		protected var renderTick:Timer;
 		
 		public function NicoNicoPlayerBase() {
@@ -44,18 +39,9 @@ package {
 				ExternalInterface.addCallback("AsPause", Pause);
 				ExternalInterface.addCallback("AsResume", Resume);
 				ExternalInterface.addCallback("AsSeek", Seek);
-				ExternalInterface.addCallback("AsInjectComment", InjectComment);
-				ExternalInterface.addCallback("AsInjectOneComment", InjectOneComment);
-				ExternalInterface.addCallback("AsInjectUploaderComment", InjectUploaderComment);
-				ExternalInterface.addCallback("AsToggleComment", ToggleComment);
-				ExternalInterface.addCallback("AsInjectMyComment", InjectMyComment);
 				ExternalInterface.addCallback("AsSetVolume", ChangeVolume);
-				ExternalInterface.addCallback("AsApplyChanges", ApplyChanges);
-				ExternalInterface.addCallback("PurgeComment", PurgeComment);
 				
 			}
-			//rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
-			
 			
 			//timer = new Timer(1200);
 			//timer.addEventListener(TimerEvent.TIMER, tick);
@@ -63,8 +49,8 @@ package {
 			
 			
 			//stage.addEventListener(MouseEvent.MOUSE_MOVE, move);
-			//stage.addEventListener(MouseEvent.MOUSE_WHEEL, wheel);
-			//stage.addEventListener(MouseEvent.CLICK, click);
+			stage.addEventListener(MouseEvent.MOUSE_WHEEL, wheel);
+			stage.addEventListener(MouseEvent.CLICK, click);
 		}
 		
 		private var timer:Timer;
@@ -90,16 +76,7 @@ package {
 		
 		public function wheel(e:MouseEvent):void {
 			
-			if (e.delta > 0) {
-				
-				ExternalInterface.call("MouseWheel", "2");
-
-			} else {
-				
-				ExternalInterface.call("MouseWheel", "-2");
-
-			}
-			
+			ExternalInterface.call("invoke_host", "mousewheel", e.delta);
 		}
 		
 		private function leave(e:Event):void {
@@ -119,9 +96,10 @@ package {
 			
 		}
 		
+		//クリックして一時停止をハンドリングするために
 		private function click(e:MouseEvent):void {
 			
-			CallCSharp("Click");
+			ExternalInterface.call("invoke_host", "click");
 		}
 		
 		//指定したURLをストリーミング再生する オーバーライドして使う
@@ -129,35 +107,6 @@ package {
 		public function Pause():void {}
 		public function Resume():void {}
 		public function Seek(pos:Number):void {}
-		public function InjectComment(json:String):void {
-		
-				
-			rasterizer.loadComment(json);
-		}
-		public function PurgeComment():void {
-			
-			rasterizer.purgeComment();
-		}
-		public function InjectOneComment(json:String):void {
-		
-				
-			rasterizer.loadOneComment(json);
-		}
-		public function InjectMyComment(json:String):void {
-		
-				
-			rasterizer.loadMyComment(json);
-		}
-		public function ApplyChanges(json:String):void {
-			
-			rasterizer.applyChanges(json);
-		}
-		
-		public function InjectUploaderComment(json:String):void {
-		
-				
-			rasterizer.loadUploaderComment(json);
-		}
 		
 		
 		public function onFrame(e:TimerEvent):void {
@@ -168,17 +117,6 @@ package {
 		}
 		
 		
-		public function ToggleComment():void {
-			
-			trace("とぐる");
-			if(rasterizer.visible) {
-				
-				rasterizer.visible = false;
-			} else {
-				
-				rasterizer.visible = true;
-			}
-		}
 		public function ChangeVolume(vol:Number):void { }		
 		
 		

@@ -38,47 +38,6 @@ package  {
 		public function NicoNicoPlayer() {
 			
 			super();
-			//OpenVideo("Z:/issue2.mp4");
-			//OpenVideo("Z:/smile.flv");
-			//OpenVideo("Z:/smile.swf");
-			//
-			//OpenVideo("Z:/smile (1).mp4");
-			//var now:Date = new Date();
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
-			/*var loader:URLLoader = new URLLoader();
-			var req:URLRequest = new URLRequest("Z:/msg.txt");
-			
-			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
-			
-			InjectComment(loader.data);
-			});
-			loader.load(req);
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void {
-				
-				if(e.keyCode == Keyboard.NUMBER_0) {
-					
-					stream.seek(0);
-				}
-				if(e.keyCode == Keyboard.NUMBER_1) {
-					
-					stream.seek(30);
-				}
-				if(e.keyCode == Keyboard.NUMBER_2) {
-					
-					stream.seek(60);
-				}
-				if(e.keyCode == Keyboard.SPACE) {
-					
-					stream.togglePause();
-				}
-				if(e.keyCode == Keyboard.N) {
-					
-					trace("step");
-					stream.step(1);
-				}
-			});*/
 		}
 		
 		//指定したURLをストリーミング再生する
@@ -88,18 +47,15 @@ package  {
 			connection = new NetConnection();
 			connection.addEventListener(NetStatusEvent.NET_STATUS, onConnect);
 			connection.connect(null);
-			//this.ApplyChanges(config);
 		}
 		
 		//そのまんま
 		public override function Pause():void {
 			
-			ExternalInterface.call("invoke_host", "playstate", false);
 			stream.pause();
 		}
 		public override function Resume():void {
 			
-			ExternalInterface.call("invoke_host", "playstate", true);
 			stream.resume();
 			
 		}
@@ -121,7 +77,7 @@ package  {
 			
 			//インスタンス作成
 			stream = new NetStream(connection);
-			//stream.soundTransform = new SoundTransform(0.1);
+
 			//イベントリスナ登録
 			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			stream.addEventListener(AsyncErrorEvent.ASYNC_ERROR, onAsyncError);
@@ -178,15 +134,11 @@ package  {
 					addChild(video);
 
 				}
-				//addChild(rasterizer);
 				renderTick.addEventListener(TimerEvent.TIMER, onFrame);
 				renderTick.start();
 			}
 			stream.client = obj;
-			stream.soundTransform = new SoundTransform(0.1);
 			stream.play(videoUrl);
-			//ExternalInterface.call("readya");
-			
 		}
 		
 		
@@ -216,17 +168,28 @@ package  {
 		
 		public override function onNetStatus(e:NetStatusEvent):void {
 			
-			ExternalInterface.call(e.info.code);
+			ExternalInterface.call("invoke_host", "log", e.info.code);
 			switch(e.info.code) {
 			case "NetStream.Play.Start":
 
 				break;
-			case "NetStream.Buffer.Full":
-				
-				trace("Buffer.Full:");
+			case "NetStream.Pause.Notify":
+				ExternalInterface.call("invoke_host", "playstate", false);
+				break;
+			case "NetStream.Unpause.Notify":
+				ExternalInterface.call("invoke_host", "playstate", true);
+				break;
+			case "NetStream.SeekStart.Notify":
+				ExternalInterface.call("CommentViewModel.pause_comment()");
+				ExternalInterface.call("eval", "VideoViewModel.video.seeking = true");
+				break;
+			case "NetStream.Seek.Complete":
+				ExternalInterface.call("CommentViewModel.resume_comment()");
+				ExternalInterface.call("eval", "VideoViewModel.video.seeking = false");
 				break;
 			case "NetStream.Play.Stop":
-				CallCSharp("Stop");
+				ExternalInterface.call("CommentViewModel.pause_comment()");
+				ExternalInterface.call("eval", "VideoViewModel.video.ended = true");
 				break;
 			default:
 				
@@ -239,7 +202,7 @@ package  {
 		
 		private function onConnect(e:NetStatusEvent):void {
 			
-			ExternalInterface.call(e.info.code);
+			ExternalInterface.call("invoke_host", "log", e.info.code);
 			switch(e.info.code) {
 			case "NetConnection.Connect.Success":
 				ConnectStream();
