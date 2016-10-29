@@ -237,7 +237,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var a = await NicoNicoWrapperMain.Session.GetAsync(request);
 
-
                 var doc = new XmlDocument();
                 doc.LoadXml(a);
 

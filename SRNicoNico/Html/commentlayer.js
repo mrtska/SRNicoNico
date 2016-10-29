@@ -82,6 +82,31 @@ CommentViewModelImpl.prototype = {
     //このメソッドはC#から呼ばれる jsonにはC#が取得したコメントがJsonになって入っている
     initialize: function (json) {
 
+        var isRollOver = true;
+
+        setInterval(function () {
+
+            if (isRollOver) {
+
+                document.body.style["cursor"] = "none";
+            }
+            invoke_host("hidecontroller");
+
+        }, 1600);
+
+        window.onmouseleave = function () {
+
+            isRollOver = false;
+        }
+
+        window.onmousemove = function (e) {
+
+            isRollOver = true;
+            document.body.style["cursor"] = "default";
+            invoke_host("showcontroller");
+            
+        };
+
         //ニコニコビルトインカラー初期化
         this.comment_color_init();
 
