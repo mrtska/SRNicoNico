@@ -1016,6 +1016,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Html\swfobject.js" />
+    <Content Include="Html\videortmp.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Html\videoswf.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Html\videoflash.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

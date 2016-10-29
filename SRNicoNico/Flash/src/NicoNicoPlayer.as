@@ -188,7 +188,9 @@ package  {
 				ExternalInterface.call("eval", "VideoViewModel.video.seeking = false");
 				break;
 			case "NetStream.Play.Stop":
+				
 				ExternalInterface.call("CommentViewModel.pause_comment()");
+				ExternalInterface.call("invoke_host", "playstate", false);
 				ExternalInterface.call("eval", "VideoViewModel.video.ended = true");
 				break;
 			default:

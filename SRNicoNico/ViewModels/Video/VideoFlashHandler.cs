@@ -123,9 +123,16 @@ namespace SRNicoNico.ViewModels {
                 if(VideoData.VideoType == NicoNicoVideoType.MP4) {
 
                     browser.Source = new Uri(GetHtml5PlayerPath());
-                } else {
+                } else if(VideoData.VideoType == NicoNicoVideoType.FLV) {
 
                     browser.Source = new Uri(GetFlashPlayerPath());
+                } else if(VideoData.VideoType == NicoNicoVideoType.SWF) {
+
+
+                    browser.Source = new Uri(GetSWFPlayerPath());
+                } else if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
+
+                    browser.Source = new Uri(GetRTMPPlayerPath());
                 }
 
 
@@ -430,7 +437,19 @@ namespace SRNicoNico.ViewModels {
 
             return cur + "Html/videoflash.html";
         }
+        private string GetSWFPlayerPath() {
 
+            var cur = NicoNicoUtil.CurrentDirectory;
+
+            return cur + "Html/videoswf.html";
+        }
+
+        private string GetRTMPPlayerPath() {
+
+            var cur = NicoNicoUtil.CurrentDirectory;
+
+            return cur + "Html/videortmp.html";
+        }
 
 
     }

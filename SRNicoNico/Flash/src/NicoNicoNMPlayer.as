@@ -36,46 +36,19 @@ package  {
 			
 			stage.addEventListener(Event.RESIZE, function(e:Event):void {
 				
-				trace(stage.stageWidth);
 				resize(stage.stageWidth, stage.stageHeight);
-				if (rasterizer) {
-					
-					rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
-					
-				}
 			});
-			
-			//("Z:/smile.swf");
-			//OpenVideo("Z:/smile.swf", "");
-			//OpenVideo("Z:/smile (1).mp4");
-			//var now:Date = new Date();
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
-			/*var loader:URLLoader = new URLLoader();
-			var req:URLRequest = new URLRequest("Z:/msg.txt");
-			
-			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
-				
-				InjectComment(loader.data);
-			});
-			loader.load(req);*/
-			
 			
 		}
 		
 		//指定したURLをストリーミング再生する
 		public override function OpenVideo(videoUrl:String, config:String):void {
 			
-			
-			
 			var req:URLRequest = new URLRequest(videoUrl);
-			
 			loader.contentLoaderInfo.addEventListener(Event.INIT, onInit);
 			
 			var fLoader:ForcibleLoader = new ForcibleLoader(loader);
 			fLoader.load(req);
-			this.ApplyChanges(config);
 			
 		}
 		
@@ -84,6 +57,7 @@ package  {
 			
 			if(movie) {
 				
+				ExternalInterface.call("invoke_host", "playstate", false);
 				movie.stop();
 			}
 		}
@@ -91,6 +65,7 @@ package  {
 			
 			if(movie) {
 				
+				ExternalInterface.call("invoke_host", "playstate", true);
 				movie.play();
 			}
 		}
@@ -133,43 +108,29 @@ package  {
 			
 			trace("stageWidth:" + stageW + " stageHeight:" + stageH);
 			trace("videoWidth:" + videoW + " videoHeight:" + videoH);
+			
+			
+			ExternalInterface.call("invoke_host", "widtheight", videoW + "×" + videoH);
 
 			//動画アスペクト比
 			var AR:Number = videoW / videoH;
-			
-			trace(AR);
-			
 			var aspectW:Number = stageH * AR;
 			
-			trace("apectWidth:" + movie.width);
 			
 			//アスペクト比を考慮したときに両端に出る黒い部分の位置　両端からのオフセット
 			var x:* = (stageW - videoW) / 2;
 			
-			trace(x);
 			
 			var _loc3_:Number = 1;
-			//movie.x = x;
 
 			resize(stageW, stageH);
 			
-			rasterizer.updateBounds(stage.stageWidth, stage.stageHeight);
-			addChild(rasterizer);
-			
 			renderTick.addEventListener(TimerEvent.TIMER, onFrame);
 			
-			CallCSharp("Initialized");
 			this.renderTick.start();
 			
 			var width:String = videoW.toString();
 			var height:String = videoH.toString();
-			ExternalInterface.call("WidthHeight", width + "×" + height);
-
-			var framerate:String = loader.contentLoaderInfo.frameRate.toString();
-			ExternalInterface.call("Framerate", framerate);
-			var filesize:String = movie.loaderInfo.bytesTotal.toString();
-			
-			ExternalInterface.call("FileSize", filesize);
 
 		}
 		
@@ -183,47 +144,34 @@ package  {
 				this.loader.scaleX = this.loader.scaleY = scale;
 				this.loader.x = 0;
 				this.loader.y = (height - this.videoH * scale) / 2;
-				this.rasterizer.scaleY = scale;
-				
 			} else {
 				
 				scale = height / this.videoH;
 				this.loader.scaleX = this.loader.scaleY = scale;
 				this.loader.x = (width - this.videoW * scale) / 2;
 				this.loader.y = 0;
-				this.rasterizer.scaleY = scale;
-				
 			}
       }
 
-		private var prevTime:int = 0;
-		private var prevLoaded:uint = 0;
-		
 		public override function onFrame(e:TimerEvent):void {
 			
 			// 再生時間を取得
 			var frame:int = movie.currentFrame;
-			var value:Number = (frame / movie.loaderInfo.frameRate);
-			var vpos:Number = Math.floor(value * 100);
+			var time:Number = (frame / movie.loaderInfo.frameRate);
+			var vpos:Number = Math.floor(time * 100);
 			
 			
 			// バッファの計算
 			var buffer:Number = (loader.contentLoaderInfo.bytesLoaded) / (loader.contentLoaderInfo.bytesTotal);
 			
+			ExternalInterface.call("VideoViewModel.video_tick", time, vpos, buffer);
 			
-			if (ExternalInterface.available) {
-
-				ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (loader.contentLoaderInfo.bytesLoaded - prevLoaded).toString(), vpos.toString());
-			}
-			prevLoaded = loader.contentLoaderInfo.bytesLoaded;
-			prevTime = (int) (value);
-			
-			rasterizer.render(vpos);
-			
-			if (frame == movie.totalFrames) {
+			if (frame >= movie.totalFrames) {
 				
-				Pause();
-				CallCSharp("Stop");
+				ExternalInterface.call("invoke_host", "playstate", false);
+				movie.stop();
+				ExternalInterface.call("CommentViewModel.pause_comment()");
+				ExternalInterface.call("eval", "VideoViewModel.video.ended = true");
 			}
 		}
 		
