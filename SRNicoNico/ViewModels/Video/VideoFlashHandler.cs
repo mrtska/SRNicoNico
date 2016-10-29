@@ -80,7 +80,15 @@ namespace SRNicoNico.ViewModels {
                 browser.LoadCompleted += (sender, e) => {
 
                     browser.ObjectForScripting = new ObjectForScripting(this);
-                    browser.InvokeScript("VideoViewModel$initialize", VideoData.ApiData.GetFlv.VideoUrl);
+
+                    //RTMPの時はサーバートークンも一緒にFlashに渡す
+                    if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
+
+                        browser.InvokeScript("VideoViewModel$initialize", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken);
+                    } else {
+
+                        browser.InvokeScript("VideoViewModel$initialize", VideoData.ApiData.GetFlv.VideoUrl);
+                    }
 
                     //ここからInvoke可能
                     Owner.IsPlaying = true;
@@ -89,14 +97,6 @@ namespace SRNicoNico.ViewModels {
 
                     Owner.Volume = Settings.Instance.Volume;
 
-                    //RTMPの時はサーバートークンも一緒にFlashに渡す
-                    if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
-
-                        //InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken, App.ViewModelRoot.Config.Comment.ToJson());
-                    } else {
-
-                        //InvokeScript("AsOpenVideo", VideoData.ApiData.GetFlv.VideoUrl, App.ViewModelRoot.Config.Comment.ToJson());
-                    }
 
                     Owner.IsRepeat = Settings.Instance.IsRepeat;
                     InitializeComment();
@@ -368,7 +368,16 @@ namespace SRNicoNico.ViewModels {
                             played.Add(new TimeRange() { Start = 0, End = json.time });
 
                             var buffered = new List<TimeRange>();
-                            buffered.Add(new TimeRange() {Start = 0, End = json.buffer * Owner.Time.Length });
+
+                            //RTMPはバッファした場所とかを教えてくれないのでアレ
+                            if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
+
+                                buffered.Add(new TimeRange() { Start = 0, End = Owner.Time.Length });
+                            } else {
+
+                                buffered.Add(new TimeRange() { Start = 0, End = json.buffer * Owner.Time.Length });
+                            }
+
 
                             CsFrame((double)json.time, played.ToArray(), buffered.ToArray(), (int)json.vpos);
                         }

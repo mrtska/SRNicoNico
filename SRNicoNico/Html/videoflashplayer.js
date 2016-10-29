@@ -70,9 +70,7 @@ VideoViewModelImpl.prototype = {
 
     seek: function (pos) {
 
-        this.video.seeking = true;
         this.video.AsSeek(pos);
-        this.video.seeking = false;
     },
     pause: function () {
 

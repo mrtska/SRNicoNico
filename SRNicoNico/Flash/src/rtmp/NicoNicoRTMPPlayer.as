@@ -52,48 +52,6 @@ package rtmp  {
 			super();
 			
 			Security.allowDomain("*");
-
-			//OpenVideo("rtmpe://smile-chefsf.nicovideo.jp/smile?m=mp4:26673741.16641^1455159335:09a07863b3c274dfc84879d4bb90f51e9bc10036");
-			/*//OpenVideo("Z:/smile.swf");
-			//OpenVideo("Z:/smile.mp4");
-			//OpenVideo("Z:/smile (1).mp4");
-			//var now:Date = new Date();
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm9?"+ now.time.toString());
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm8628149");
-			//OpenVideo("http://mrtska.net/SRNicoNico/sm9");
-			var loader:URLLoader = new URLLoader();
-			var req:URLRequest = new URLRequest("Z:/msg.txt");
-			
-			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
-			
-			InjectComment(loader.data);
-			});
-			loader.load(req);
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void {
-			
-			if(e.keyCode == Keyboard.NUMBER_0) {
-			
-			stream.seek(0);
-			}
-			if(e.keyCode == Keyboard.NUMBER_1) {
-			
-			stream.seek(30);
-			}
-			if(e.keyCode == Keyboard.NUMBER_2) {
-			
-			stream.seek(60);
-			}
-			if(e.keyCode == Keyboard.SPACE) {
-			
-			stream.togglePause();
-			}
-			if(e.keyCode == Keyboard.N) {
-			
-			trace("step");
-			stream.step(1);
-			}
-			});*/
-			
 		}
 		
 		//指定したURLをストリーミング再生する
@@ -112,7 +70,6 @@ package rtmp  {
 				
 				connection.addEventListener(NetStatusEvent.NET_STATUS, onConnect);
 				connection.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
-				trace(videoUrl);
 				var tokenTime:String = fmsToken.substr(0,fmsToken.indexOf(":"));
 				var tokenHash:String = fmsToken.substr(fmsToken.indexOf(":") + 1);
 				connection.connect(NicoNicoRTMPPlayer.videoUrl.substr(0, NicoNicoRTMPPlayer.videoUrl.indexOf("?")), tokenHash, tokenTime, NicoNicoRTMPPlayer.videoUrl.substr(NicoNicoRTMPPlayer.videoUrl.indexOf("=") + 1));
@@ -120,12 +77,6 @@ package rtmp  {
 				
 			});
 			//connection.connect("rtmpe://smile-chefsf.nicovideo.jp/smile", "e83c2c042be7e275dfe4c8be786bfa7cea15ee32", "1442904740", "mp4:26673741.16641");
-		}
-		
-		public function Reconnect():void {
-			
-			
-			
 		}
 		
 		//そのまんま
@@ -162,11 +113,6 @@ package rtmp  {
 			//ビデオコントロールにストリームを繋ぐ
 		private function ConnectStream():void {
 			
-			if(connection == null) {
-				
-				CallCSharp("ConnectionError");
-				return;
-			}
 			//インスタンス作成
 			stream = new NetStream(connection);
 			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
@@ -175,15 +121,14 @@ package rtmp  {
 			obj.onMetaData = function(param:Object):void {
 				
 				metadata = param;
-				ExternalInterface.call("onMetadata", param.toString());
-				for(var propName:String in param){
-					trace(propName + "=" + param[propName]);
-				}
+				ExternalInterface.call("invoke_host", "log", "onMetadata", param.toString());
 				var stageW:int = stage.stageWidth;
 				var stageH:int = stage.stageHeight;
 				var videoW:int = param.width;
 				var videoH:int = param.height;
 				
+				
+				ExternalInterface.call("invoke_host", "widtheight", videoW + "×" + videoH);
 				//動画アスペクト比
 				var AR:* = videoW / videoH;
 				
@@ -209,36 +154,30 @@ package rtmp  {
 					
 					video.x = x;
 					
-					
 					video.attachNetStream(stream);
 					addChild(video);
 
 				}
-				addChild(rasterizer);
 				
 				renderTick.addEventListener(TimerEvent.TIMER, onFrame);
 				renderTick.start();
 			}
 			stream.client = obj;
 			
-			trace("ConnectStream");
 			
 			stream.checkPolicyFile = true;
 			stream.bufferTime = 1;
 			//イベントリスナ登録
 			
 			stream.play(NicoNicoRTMPPlayer.videoUrl.substr(NicoNicoRTMPPlayer.videoUrl.indexOf("=") + 1));
-			CallCSharp("Initialized");
 			
 		}
 		
 		private function onSecurityError(e:SecurityErrorEvent):void {
 			
-			CallCSharp(e.toString());
+			ExternalInterface.cal("invoke_host", "log", e.toString());
 		}
 		
-		private var prevTime:int = 0;
-		private var prevLoaded:uint = 0;
 		
 		public override function onFrame(e:TimerEvent):void {
 			
@@ -248,27 +187,20 @@ package rtmp  {
 			// バッファの計算
 			var buffer:Number = (stream.bytesLoaded) / (stream.bytesTotal);
 			var vpos:Number = Math.floor(value * 100);
-
-			ExternalInterface.call("CsFrame", value.toString(), buffer.toString(), (stream.bytesLoaded - prevLoaded).toString(), vpos.toString());
-			prevLoaded = stream.bytesLoaded;
-			prevTime = (int) (value);
 			
+			ExternalInterface.call("VideoViewModel.video_tick", value, vpos, buffer);
 			
-			rasterizer.render(vpos);
 			//trace("value:" + value + " diff:" + this.diff);
 		}
 		
 		private function onAsyncError(e:AsyncErrorEvent):void {
 			
-			trace("onAsyncError");
-			CallCSharp("onAsyncError2", e.text);
-			trace(e.text);
+			ExternalInterface.call("invoke_host", "log", "onAsyncError2", e.text);
 		}
 		
 		public override function onNetStatus(e:NetStatusEvent):void {
 			
-			trace("onNetStatus");
-			CallCSharp(e.info.code);
+			ExternalInterface.call("invoke_host", "log", e.info.code);
 			switch(e.info.code) {
 			case "NetStream.Play.Start":
 				
@@ -277,12 +209,28 @@ package rtmp  {
 				
 				trace("Buffer.Full:");
 				break;
+				
+			case "NetStream.Pause.Notify":
+				ExternalInterface.call("invoke_host", "playstate", false);
+				break;
+			case "NetStream.Unpause.Notify":
+				ExternalInterface.call("invoke_host", "playstate", true);
+				break;
+			case "NetStream.SeekStart.Notify":
+				ExternalInterface.call("CommentViewModel.pause_comment()");
+				ExternalInterface.call("eval", "VideoViewModel.video.seeking = true");
+				break;
+			case "NetStream.Seek.Complete":
+				ExternalInterface.call("CommentViewModel.resume_comment()");
+				ExternalInterface.call("eval", "VideoViewModel.video.seeking = false");
+				break;
 			case "NetStream.Play.Stop":
-				CallCSharp("Stop");
+				
+				ExternalInterface.call("CommentViewModel.pause_comment()");
+				ExternalInterface.call("invoke_host", "playstate", false);
+				ExternalInterface.call("eval", "VideoViewModel.video.ended = true");
 				break;
 			default:
-				
-				trace("default:" + e.info.code);
 				break;
 			}
 			
@@ -291,9 +239,7 @@ package rtmp  {
 		
 		private function onConnect(e:NetStatusEvent):void {
 			
-			ExternalInterface.call(e.info.code);
-			trace("onConnect:" + e.info.level);
-		
+			ExternalInterface.call("invoke_host", "log", e.info.code);
 			switch(e.info.code) {
 			case "NetConnection.Connect.Success":
 				ConnectStream();

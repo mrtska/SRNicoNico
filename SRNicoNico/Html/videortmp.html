@@ -34,6 +34,8 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 text-shadow: 1px 1px 1px #000;
+                pointer-events: none;
+                cursor: default;
             }
         </style>
         <script type="text/javascript" src="./jquery-3.1.0.js"></script>
@@ -45,8 +47,8 @@
 
 
         <div id="commentlayer"></div>
-        <object id="player" data="../Flash/NicoNicoPlayer.swf" width="100%" align="middle" height="100%" type="application/x-shockwave-flash">
-            <param name="movie" value="../Flash/NicoNicoPlayer.swf" />
+        <object id="player" data="../Flash/NicoNicoRTMPPlayer.swf" width="100%" align="middle" height="100%" type="application/x-shockwave-flash">
+            <param name="movie" value="../Flash/RTMPNicoNicoPlayer.swf" />
             <param name="allowScriptAccess" value="always" />
             <param name="wmode" value="transparent" />
         </object>
