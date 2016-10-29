@@ -16,8 +16,6 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using SRNicoNico.Views.Contents.Live;
-using AxShockwaveFlashObjects;
-using Flash.External;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.IO;

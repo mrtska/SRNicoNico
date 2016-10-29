@@ -11,7 +11,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="208" d:DesignWidth="401"
              d:DataContext="{d:DesignInstance vm:VideoViewModel}"
-             xmlns:a="clr-namespace:AxShockwaveFlashObjects;assembly=AxInterop.ShockwaveFlashObjects"
              xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
              DataContextChanged="UserControl_DataContextChanged"
              MouseWheel="UserControl_MouseWheel"

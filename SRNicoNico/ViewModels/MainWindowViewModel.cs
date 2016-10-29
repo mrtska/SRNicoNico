@@ -31,7 +31,7 @@ namespace SRNicoNico.ViewModels {
         //現在のバージョン
         public double CurrentVersion {
 
-            get { return 0.93; }
+            get { return 0.94; }
         }
 
 

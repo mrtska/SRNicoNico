@@ -195,7 +195,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                         return;
                     }
-                    Handler.InvokeScript("AsInjectOneComment", comment.ToJson());
+                    //Handler.InvokeScript("AsInjectOneComment", comment.ToJson());
 
                 }
 

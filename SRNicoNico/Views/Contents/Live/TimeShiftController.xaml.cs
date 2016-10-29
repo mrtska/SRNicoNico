@@ -84,7 +84,7 @@ namespace SRNicoNico.Views.Contents.Live {
                 ans = (int) Seek.VideoTime;
             }
 
-            vm.Handler.Seek(ans * 100);
+            //vm.Handler.Seek(ans * 100);
         }
     }
 }

@@ -11,12 +11,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="208" d:DesignWidth="401"
              d:DataContext="{d:DesignInstance vm:LiveWatchViewModel}"
-             xmlns:a="clr-namespace:AxShockwaveFlashObjects;assembly=AxInterop.ShockwaveFlashObjects"
              DataContextChanged="UserControl_DataContextChanged"
 			 >
     <Grid>
         <WindowsFormsHost Focusable="False">
-            <a:AxShockwaveFlash x:Name="flash"/>
+            
         </WindowsFormsHost>
     </Grid>
 </UserControl>

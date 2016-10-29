@@ -16,8 +16,6 @@ using Livet.Messaging;
 using SRNicoNico.Views.Contents.Video;
 
 using Codeplex.Data;
-using Flash.External;
-using AxShockwaveFlashObjects;
 using Livet.Messaging.Windows;
 using SRNicoNico.Views.Contents.Interface;
 

@@ -18,8 +18,6 @@ using System.Windows.Markup;
 using System.IO;
 using SRNicoNico.ViewModels;
 using System.Windows.Interop;
-using AxShockwaveFlashObjects;
-using Flash.External;
 
 namespace SRNicoNico.Views.Contents.Live {
     /// <summary>
@@ -38,7 +36,7 @@ namespace SRNicoNico.Views.Contents.Live {
 
                 //インスタンスを設定
                 
-                vm.Handler = new LiveFlashHandler(vm, flash);
+               // vm.Handler = new LiveFlashHandler(vm, flash);
             }
         }
     }

@@ -16,8 +16,6 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using SRNicoNico.Views.Contents.Live;
-using AxShockwaveFlashObjects;
-using Flash.External;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.IO;
@@ -221,7 +219,7 @@ namespace SRNicoNico.ViewModels {
 
                     IsMute = false;
                 }
-                Handler.InvokeScript("AsChangeVolume", (value / 100.0).ToString());
+               // Handler.InvokeScript("AsChangeVolume", (value / 100.0).ToString());
             }
         }
         #endregion
@@ -339,7 +337,6 @@ namespace SRNicoNico.ViewModels {
 
                 foreach(var content in Content.GetPlayerStatus.ContentsList) {
 
-                    Handler.InvokeScript("AsCommandExcute", "/liveplay", "0", content.Content);
                 }
 
   
@@ -350,7 +347,6 @@ namespace SRNicoNico.ViewModels {
         public void OpenVideo() {
 
             var json = Content.GetPlayerStatus.ToJson();
-            Handler.InvokeScript("AsOpenVideo", Content.GetPlayerStatus.RtmpUrl, json);
         }
     
         protected override void Dispose(bool disposing) {
@@ -489,10 +485,8 @@ namespace SRNicoNico.ViewModels {
 
             if(IsPlaying) {
 
-                Handler.Pause();
             } else {
 
-                Handler.Resume();
             }
         }
         
@@ -501,12 +495,10 @@ namespace SRNicoNico.ViewModels {
 
             CommentVisibility ^= true;
             Settings.Instance.CommentVisibility = CommentVisibility;
-            Handler.InvokeScript("AsToggleComment");
         }
         //最初から
         public void Restart() {
 
-            Handler.Seek(0);
         }
         public void Close() {
             

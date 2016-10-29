@@ -105,12 +105,14 @@ VideoViewModelImpl.prototype = {
         this.video.addEventListener("ended", function () {
 
             CommentViewModel.pause_comment();
+            invoke_host("playstate", false);
             invoke_host("ended");
         });
 
         this.video.addEventListener("playing", function () {
 
             CommentViewModel.resume_comment();
+            invoke_host("playstate", true);
             invoke_host("playing");
         });
 

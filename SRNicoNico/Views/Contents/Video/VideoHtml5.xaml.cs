@@ -18,8 +18,6 @@ using System.Windows.Markup;
 using System.IO;
 using SRNicoNico.ViewModels;
 using System.Windows.Interop;
-using AxShockwaveFlashObjects;
-using Flash.External;
 using System.Runtime.InteropServices;
 
 namespace SRNicoNico.Views.Contents.Video {
