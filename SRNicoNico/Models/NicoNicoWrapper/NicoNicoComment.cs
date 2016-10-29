@@ -31,7 +31,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 		private const string GetWayBackKeyApiUrl = "http://flapi.nicovideo.jp/api/getwaybackkey";
 
         //------
-        private NicoNicoGetFlvData GetFlv;
+        private NicoNicoGetFlv GetFlv;
         private WatchApiData ApiData;
 
         private VideoViewModel Video;

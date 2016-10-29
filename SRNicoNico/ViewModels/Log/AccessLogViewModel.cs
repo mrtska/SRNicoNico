@@ -44,11 +44,9 @@ namespace SRNicoNico.ViewModels {
             vm.Status = "接続中";
             vm.Url = url;
 
-            lock(HashMap) {
 
-                HashMap[request] = vm;
-                LogEntries.Add(vm);
-            }
+            HashMap[request] = vm;
+            LogEntries.Add(vm);
 
 
         }

@@ -96,7 +96,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var getFlv = flv.Split(new char[] { '&' }).ToDictionary(source => source.Substring(0, source.IndexOf('=')),
                 source => Uri.UnescapeDataString(source.Substring(source.IndexOf('=') + 1)));
 
-                ret.GetFlv = new NicoNicoGetFlvData(getFlv);
+
+
+                ret.GetFlv = new NicoNicoGetFlv(getFlv);
 
                 //動画情報
                 var videoDetail = json.videoDetail;
@@ -116,7 +118,65 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 ret.HighestRank = videoDetail.highest_rank == null ? "圏外" : videoDetail.highest_rank + "位";
                 ret.IsOfficial = videoDetail.is_official;
                 ret.Token = json.flashvars.csrfToken;
+                ret.IsDmc = json.flashvars.isDmc == 0 ? false : true;
                 ret.HasOwnerThread = json.flashvars.has_owner_thread();
+
+                if(ret.IsDmc) {
+
+                    var dmc = DynamicJson.Parse(HttpUtility.UrlDecode(json.flashvars.dmcInfo));
+                    var dmcInfo = new NicoNicoGetDmc();
+
+                    var sessionApi = dmc.session_api;
+
+                    
+                    dmcInfo.ApiUrl = ((string[])sessionApi.api_urls).First();
+
+                    dmcInfo.Audios = new List<string>();
+                    foreach(var audio in sessionApi.audios) {
+
+                        dmcInfo.Audios.Add(audio);
+                    }
+
+                    dmcInfo.AuthType = sessionApi.auth_types.http;
+
+                    dmcInfo.ContentId = sessionApi.content_id;
+                    dmcInfo.ContentKeyTimeout = (int) sessionApi.content_key_timeout;
+                    dmcInfo.HeartbeatLifeTime = (int) sessionApi.heartbeat_lifetime;
+
+                    dmcInfo.Movies = new List<string>();
+                    foreach(var movie in sessionApi.movies) {
+
+                        dmcInfo.Movies.Add(movie);
+                    }
+
+                    dmcInfo.PlayerId = sessionApi.player_id;
+                    dmcInfo.Priority = sessionApi.priority;
+
+                    dmcInfo.Protocols = new List<string>();
+                    foreach(var protocol in sessionApi.protocols) {
+
+                        dmcInfo.Protocols.Add(protocol);
+                    }
+
+                    dmcInfo.RecipeId = sessionApi.recipe_id;
+                    dmcInfo.ServiceUserId = sessionApi.service_user_id;
+                    dmcInfo.Signature = sessionApi.signature;
+                    dmcInfo.Token = sessionApi.token;
+
+                    dmcInfo.Videos = new List<string>();
+                    foreach(var video in sessionApi.videos) {
+
+                        dmcInfo.Videos.Add(video);
+                    }
+
+                    var thread = dmc.thread;
+                    dmcInfo.MessageServerUrl = thread.server_url;
+                    dmcInfo.PostKeyAvailable = thread.postkey_available;
+                    dmcInfo.ThreadId = thread.thread_id.ToString();
+                    dmcInfo.ThreadKeyRequired = thread.thread_key_required;
+
+                    ret.DmcInfo = dmcInfo;
+                }
 
                 if(json.uploaderInfo()) {
 
@@ -266,7 +326,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public bool IsPaidVideo { get; set; }
 
         //GetFlvAPIの結果
-        public NicoNicoGetFlvData GetFlv { get; set; }
+        public NicoNicoGetFlv GetFlv { get; set; }
 
         public string Cmsid { get; set; }
 
@@ -305,6 +365,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //CSRFトークン
         public string Token { get; set; }
+
+        //所謂1.5GB動画かどうか
+        public bool IsDmc { get; set; }
+        public NicoNicoGetDmc DmcInfo { get; set; }
+
 
         //タグリスト
         #region TagList変更通知プロパティ
@@ -382,7 +447,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     }
 
 
-    public class NicoNicoGetFlvData : NotificationObject {
+    public class NicoNicoGetFlv : NotificationObject {
 
         //getflvAPIで取得できるデータ
 
@@ -419,7 +484,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
 
-        public NicoNicoGetFlvData(Dictionary<string, string> wwwData) {
+        public NicoNicoGetFlv(Dictionary<string, string> wwwData) {
 
             ThreadID = wwwData["thread_id"];
             Length = uint.Parse(wwwData["l"]);
@@ -438,7 +503,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         MP4,
         FLV,
         SWF,
-        RTMP
+        RTMP,
+        New
     }
 
     public enum Status {

@@ -204,6 +204,7 @@
     <Compile Include="Models\NicoNicoViewer\VideoCommentDecoration.cs" />
     <Compile Include="Models\NicoNicoViewer\XmlSocket.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoCommunity.cs" />
+    <Compile Include="Models\NicoNicoWrapper\NicoNicoDmcSession.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteLive.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoFavoriteUser.cs" />

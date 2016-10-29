@@ -38,6 +38,8 @@ namespace SRNicoNico.ViewModels {
 
         private VideoData VideoData;
 
+        private NicoNicoDmcSession DmcSession;
+
 
         public VideoFlashHandler(VideoViewModel vm) {
 
@@ -75,7 +77,7 @@ namespace SRNicoNico.ViewModels {
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
 
-                browser.LoadCompleted += (sender, e) => {
+                browser.LoadCompleted += async (sender, e) => {
 
                     browser.ObjectForScripting = new ObjectForScripting(this);
 
@@ -83,6 +85,16 @@ namespace SRNicoNico.ViewModels {
                     if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
                         browser.InvokeScript("VideoViewModel$initialize", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken);
+                    } else if(VideoData.VideoType == NicoNicoVideoType.New) {
+
+                        DmcSession = new NicoNicoDmcSession(videoData.ApiData.DmcInfo);
+                        var content = await DmcSession.CreateAsync();
+
+                        browser.InvokeScript("VideoViewModel$initialize", content.ContentUri);
+
+
+                        DmcSession.HeartbeatTimer = new Timer(new TimerCallback(DmcSession.Heartbeat),content.Id, 1000, 8000);
+
                     } else {
 
                         browser.InvokeScript("VideoViewModel$initialize", VideoData.ApiData.GetFlv.VideoUrl);
@@ -112,13 +124,16 @@ namespace SRNicoNico.ViewModels {
                     if(VideoData.ApiData.MovieType == "flv") {
 
                         VideoData.VideoType = NicoNicoVideoType.FLV;
+                    } else if(videoData.ApiData.IsDmc) {
+
+                        VideoData.VideoType = NicoNicoVideoType.New;
                     } else {
 
                         VideoData.VideoType = NicoNicoVideoType.MP4;
                     }
                 }
 
-                if(VideoData.VideoType == NicoNicoVideoType.MP4) {
+                if(VideoData.VideoType == NicoNicoVideoType.MP4 || VideoData.VideoType == NicoNicoVideoType.New) {
 
                     browser.Source = new Uri(GetHtml5PlayerPath());
                 } else if(VideoData.VideoType == NicoNicoVideoType.FLV) {
@@ -132,12 +147,7 @@ namespace SRNicoNico.ViewModels {
 
                     browser.Source = new Uri(GetRTMPPlayerPath());
                 }
-
-
-
                 Owner.IsActive = false;
-
-
             }));
 
 
@@ -343,7 +353,7 @@ namespace SRNicoNico.ViewModels {
 
                         dynamic json = DynamicJson.Parse(args);
 
-                        if(VideoData.VideoType == NicoNicoVideoType.MP4) {
+                        if(VideoData.VideoType == NicoNicoVideoType.MP4 || VideoData.VideoType == NicoNicoVideoType.New) {
 
                             var played = new List<TimeRange>();
 
@@ -427,6 +437,10 @@ namespace SRNicoNico.ViewModels {
         public void Dispose() {
 
             Browser?.Dispose();
+            if(VideoData.ApiData.IsDmc) {
+
+                DmcSession.HeartbeatTimer.Dispose();
+            }
 
 
         }
