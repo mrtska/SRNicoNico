@@ -414,6 +414,9 @@
     <Compile Include="Views\Contents\Video\VideoHtml5.xaml.cs">
       <DependentUpon>VideoHtml5.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\Video\VideoView.xaml.cs">
+      <DependentUpon>VideoView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Video\WindowedWindow.xaml.cs">
       <DependentUpon>WindowedWindow.xaml</DependentUpon>
     </Compile>
@@ -754,6 +757,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Video\VideoHtml5.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -422,6 +422,12 @@ namespace SRNicoNico.ViewModels {
                     }
 
                     break;
+                case "showcontroller":
+                    Owner.ShowFullScreenPopup();
+                    break;
+                case "hidecontroller":
+                    Owner.HideFullScreenPopup();
+                    break;
                 case "log":
                     Console.WriteLine("Log: " + args);
                     break;

@@ -24,7 +24,6 @@ using System.Windows.Media;
 using SRNicoNico.Models.NicoNicoViewer;
 using System.Reflection;
 using SRNicoNico.Views.Contents.Misc;
-
 namespace SRNicoNico.ViewModels {
     public class MainWindowViewModel : ViewModel {
 
@@ -80,6 +79,7 @@ namespace SRNicoNico.ViewModels {
                 if(_Visibility == value)
                     return;
                 _Visibility = value;
+
                 RaisePropertyChanged();
             }
         }

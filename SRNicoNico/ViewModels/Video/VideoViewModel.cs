@@ -515,6 +515,9 @@ namespace SRNicoNico.ViewModels {
 
             IsFullScreen = true;
 
+
+            var screen = System.Windows.Forms.Screen.FromPoint(new System.Drawing.Point((int)App.Current.MainWindow.Left, (int) App.Current.MainWindow.Top));
+
             Type type;
             if(Settings.Instance.UseWindowMode) {
 
@@ -522,11 +525,12 @@ namespace SRNicoNico.ViewModels {
             } else {
 
                 type = typeof(FullScreenWindow);
+
             }
 
 
             //リソースに登録
-            var message = new TransitionMessage(type, this, TransitionMode.Modal);
+            var message = new TransitionMessage(type, this, TransitionMode.NewOrActive);
 
             //ウィンドウからFlash部分を消去
             var temp = VideoFlash;
@@ -541,6 +545,11 @@ namespace SRNicoNico.ViewModels {
 
             //フルスクリーンウィンドウ表示
             Messenger.Raise(message);
+
+            var fullscreen = new WindowActionMessage(WindowAction.Maximize, "Full");
+
+            Messenger.Raise(fullscreen);
+
 
         }
 

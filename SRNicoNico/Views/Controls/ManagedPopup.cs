@@ -18,7 +18,7 @@ namespace SRNicoNico.Views.Controls {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ManagedPopup), new FrameworkPropertyMetadata(typeof(ManagedPopup)));
 
             // PopupのIsOpenプロパティ更新のイベントハンドラを設定する。
-            ManagedPopup.IsOpenProperty.OverrideMetadata(typeof(ManagedPopup), new FrameworkPropertyMetadata(IsOpenChanged));
+            IsOpenProperty.OverrideMetadata(typeof(ManagedPopup), new FrameworkPropertyMetadata(IsOpenChanged));
         }
 
         private static void IsOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
@@ -102,11 +102,13 @@ namespace SRNicoNico.Views.Controls {
         }
 
         private void UpdateWindow() {
-            var hwnd = ((HwndSource)PresentationSource.FromVisual(this.Child)).Handle;
+            var hwnd = ((HwndSource)PresentationSource.FromVisual(Child)).Handle;
             RECT rect;
 
+            var screen = System.Windows.Forms.Screen.FromHandle(hwnd);
+
             if(GetWindowRect(hwnd, out rect)) {
-                SetWindowPos(hwnd, Topmost ? -1 : -2, rect.Left, rect.Top, (int)this.Width, (int)this.Height, 0);
+                SetWindowPos(hwnd, Topmost ? -1 : -2, rect.Left, rect.Top, (int)Width, (int)Height, 0);
             }
         }
 
