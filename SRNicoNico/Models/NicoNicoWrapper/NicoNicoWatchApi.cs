@@ -474,7 +474,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
          
         //FMSトークン
         public string FmsToken { get; private set; } 
-         
+        
+        //ThreadKeyが必要かどうかじゃないですかね
+        public bool NeedsKey { get; private set; } 
+
         //ユーザーキー
         public string UserKey { get; private set; }
 
@@ -494,6 +497,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			UserId = wwwData["user_id"];
 			IsPremium = wwwData["is_premium"] == "1" ? true : false;
             FmsToken = wwwData.ContainsKey("fmst") ? wwwData["fmst"] : null;
+            NeedsKey = wwwData.ContainsKey("needs_key") ? wwwData["needs_key"] == "1" : false;
             UserKey = wwwData.ContainsKey("userkey") ? wwwData["userkey"] : null;
         }
     }

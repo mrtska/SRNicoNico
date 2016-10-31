@@ -75,7 +75,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             leaves.InnerText = "0-" + ((GetFlv.Length / 60) + 1) + ":100,1000";
 
             //公式動画だったらThreadkeyも取得する
-            if(ApiData.IsOfficial) {
+            if(ApiData.IsOfficial || ApiData.GetFlv.NeedsKey) {
 
                 try {
                     var query = new GetRequestQuery(GetThreadKeyApiUrl);
