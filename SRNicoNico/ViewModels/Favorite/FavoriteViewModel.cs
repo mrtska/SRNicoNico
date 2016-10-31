@@ -49,7 +49,7 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
 
-        public FavoriteViewModel() : base("お気に入り") {
+        public FavoriteViewModel() : base("フォロー") {
 
             FavoriteList = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
 

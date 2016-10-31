@@ -66,7 +66,7 @@ namespace SRNicoNico.ViewModels {
         public void Initialize() {
 
             IsActive = true;
-            Owner.Status = "お気に入りユーザーを取得中";
+            Owner.Status = "フォローユーザーを取得中";
             UserList = new DispatcherCollection<NicoNicoFavoriteUserContent>(DispatcherHelper.UIDispatcher);
             Task.Run(() => {
                 foreach(var entry in FavoriteInstance.GetFavoriteUser()) {
@@ -95,7 +95,7 @@ namespace SRNicoNico.ViewModels {
                 return;
             }
             IsActive = true;
-            Owner.Status = "お気に入りユーザーを取得中";
+            Owner.Status = "フォローユーザーを取得中";
             Task.Run(() => {
 
                 var users = FavoriteInstance.GetFavoriteUser();
