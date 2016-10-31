@@ -51,14 +51,12 @@ namespace SRNicoNico.ViewModels {
 
 
         #region SortIndex変更通知プロパティ
-        private int _SortIndex;
-
         public int SortIndex {
-            get { return _SortIndex; }
+            get { return Settings.Instance.PlayListOrder; }
             set { 
-                if(_SortIndex == value)
+                if(Settings.Instance.PlayListOrder == value)
                     return;
-                _SortIndex = value;
+                Settings.Instance.PlayListOrder = value;
                 Sort(value);
                 RaisePropertyChanged();
             }

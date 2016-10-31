@@ -1186,6 +1186,21 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         #endregion
 
 
+        #region PlayListOrder変更通知プロパティ
+        private int _PlayListOrder = 0;
+
+        public int PlayListOrder {
+            get { return _PlayListOrder; }
+            set { 
+                if(_PlayListOrder == value)
+                    return;
+                _PlayListOrder = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
 
 
 
