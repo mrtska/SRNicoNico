@@ -1196,6 +1196,23 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                     return;
                 _PlayListOrder = value;
                 RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region CommentAutoScroll変更通知プロパティ
+        private bool _CommentAutoScroll = true;
+
+        public bool CommentAutoScroll {
+            get { return _CommentAutoScroll; }
+            set { 
+                if(_CommentAutoScroll == value)
+                    return;
+                _CommentAutoScroll = value;
+                RaisePropertyChanged();
+                Save();
             }
         }
         #endregion

@@ -12,6 +12,7 @@
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
              xmlns:conv="clr-namespace:SRNicoNico.Views.Converter"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
              
              mc:Ignorable="d" 
              d:DesignHeight="600" 
@@ -48,10 +49,10 @@
                     <mui:ModernButton.Style>
                         <Style TargetType="{x:Type mui:ModernButton}">
                             <Style.Triggers>
-                                <DataTrigger  Binding="{Binding Comment.AutoScroll}" Value="True" >
+                                <DataTrigger  Binding="{Binding Source={x:Static m:Settings.Instance}, Path=CommentAutoScroll}" Value="True" >
                                     <Setter Property="IconData" Value="M12,17L7,12H10V8H14V12H17L12,17Z" />
                                 </DataTrigger>
-                                <DataTrigger  Binding="{Binding Comment.AutoScroll}" Value="False" >
+                                <DataTrigger  Binding="{Binding Source={x:Static m:Settings.Instance}, Path=CommentAutoScroll}" Value="False" >
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="mui:ModernButton">
@@ -112,7 +113,7 @@
                 </ContextMenu>
             </DataGrid.Resources>
             <i:Interaction.Behaviors>
-                <b:VideoCommentAutoScrollBehavior AutoScrollEnabled="{Binding Comment.AutoScroll}" Vpos="{Binding Comment.Vpos}" />
+                <b:VideoCommentAutoScrollBehavior AutoScrollEnabled="{Binding Source={x:Static m:Settings.Instance}, Path=CommentAutoScroll}" Vpos="{Binding Comment.Vpos}" />
             </i:Interaction.Behaviors>
             <DataGrid.Columns d:DataContext="{d:DesignInstance {x:Type vm:CommentEntryViewModel}}">
 

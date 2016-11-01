@@ -171,19 +171,7 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        #region AutoScroll変更通知プロパティ
-        private bool _AutoScroll = true;
 
-        public bool AutoScroll {
-            get { return _AutoScroll; }
-            set { 
-                if(_AutoScroll == value)
-                    return;
-                _AutoScroll = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
 
         //位置
         #region Vpos変更通知プロパティ
@@ -214,7 +202,7 @@ namespace SRNicoNico.ViewModels {
 
         public void ToggleScroll() {
 
-            AutoScroll ^= true;
+            Settings.Instance.CommentAutoScroll ^= true;
         }
 
         public void OpenCommentWindow() {
