@@ -45,60 +45,64 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             UserPage = pageUrl;
         }
 
-        public NicoNicoUserEntry GetUserInfo() {
+        public async Task<NicoNicoUserEntry> GetUserInfoAsync() {
 
-            Owner.Status = "ユーザー情報取得中";
-            var ret = new NicoNicoUserEntry();
+            try {
 
-            //ユーザーページのhtmlを取得
-            var a = NicoNicoWrapperMain.Session.GetAsync(UserPage).Result;
+                Owner.Status = "ユーザー情報取得中";
+                var ret = new NicoNicoUserEntry();
 
-            //htmlをロード
-            var doc = new HtmlDocument();
-            doc.LoadHtml2(a);
+                //ユーザーページのhtmlを取得
+                var a = await NicoNicoWrapperMain.Session.GetAsync(UserPage);
 
-            //ユーザープロファイル
-            var detail = doc.DocumentNode.SelectSingleNode("//div[@class='userDetail']");
-            var profile = detail.SelectSingleNode("child::div[@class='profile']");
-            var account = profile.SelectSingleNode("child::div[@class='account']");
+                //htmlをロード
+                var doc = new HtmlDocument();
+                doc.LoadHtml2(a);
 
-            ret.UserIconUrl = detail.SelectSingleNode("child::div[@class='avatar']/img").Attributes["src"].Value;
-            ret.UserName = profile.SelectSingleNode("child::h2").InnerText.Trim();
-            ret.Id = account.SelectSingleNode("child::p[@class='accountNumber']").InnerText.Trim();
-            ret.Gender = account.SelectSingleNode("child::p[2]").InnerText.Trim();
-            ret.BirthDay = account.SelectSingleNode("child::p[3]").InnerText.Trim();
-            ret.Region = account.SelectSingleNode("child::p[4]").InnerText.Trim();
+                //ユーザープロファイル
+                var detail = doc.DocumentNode.SelectSingleNode("//div[@class='userDetail']");
+                var profile = detail.SelectSingleNode("child::div[@class='profile']");
+                var account = profile.SelectSingleNode("child::div[@class='account']");
 
-            var temp = profile.SelectSingleNode("child::ul[@class='userDetailComment channel_open_mt0']/li/p/span");
+                ret.UserIconUrl = detail.SelectSingleNode("child::div[@class='avatar']/img").Attributes["src"].Value;
+                ret.UserName = profile.SelectSingleNode("child::h2").InnerText.Trim();
+                ret.Id = account.SelectSingleNode("child::p[@class='accountNumber']").InnerText.Trim();
 
-            ret.Description = temp == null ? "" : temp.InnerHtml;
+                var temp = profile.SelectSingleNode("child::ul[@class='userDetailComment channel_open_mt0']/li/p/span");
 
-            ret.UserPage = UserPage;
+                ret.Description = temp == null ? "" : temp.InnerHtml;
 
-            //html特殊文字をデコード
-            ret.Description = HttpUtility.HtmlDecode(ret.Description);
+                ret.UserPage = UserPage;
 
-            //URLをハイパーリンク化する エンコードされてると正しく動かない
-            ret.Description = HyperLinkReplacer.Replace(ret.Description);
+                //html特殊文字をデコード
+                ret.Description = HttpUtility.HtmlDecode(ret.Description);
 
-            //&だけエンコード エンコードしないとUIに&が表示されない
-            ret.Description = ret.Description.Replace("&", "&amp;");
+                //URLをハイパーリンク化する エンコードされてると正しく動かない
+                ret.Description = HyperLinkReplacer.Replace(ret.Description);
+
+                //&だけエンコード エンコードしないとUIに&が表示されない
+                ret.Description = ret.Description.Replace("&", "&amp;");
 
 
-            Owner.Status = "";
-            return ret;
+                Owner.Status = "";
+                return ret;
+            } catch(RequestTimeout) {
+
+                return null;
+            }
+
         }
 
         //一度nullを返してきたら二度と呼ばない
-        public List<NicoNicoNicoRepoDataEntry> GetUserNicoRepo() {
+        public async Task<List<NicoNicoNicoRepoDataEntry>> GetUserNicoRepoAsync() {
 
             var url = UserPage + "/top?innerPage=1&offset=" + Offset;
             Owner.Status = "ユーザーニコレポ取得中";
 
-            List<NicoNicoNicoRepoDataEntry> ret = new List<NicoNicoNicoRepoDataEntry>();
+            var ret = new List<NicoNicoNicoRepoDataEntry>();
             try {
 
-                var a = NicoNicoWrapperMain.Session.GetAsync(url).Result;
+                var a = await NicoNicoWrapperMain.Session.GetAsync(url);
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);
 
@@ -112,21 +116,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
 
                 //ニコレポタイムライン走査
-                foreach(HtmlNode node in timeline) {
+                foreach(var node in timeline) {
 
-                    NicoNicoNicoRepoDataEntry entry = new NicoNicoNicoRepoDataEntry();
+                    var entry = new NicoNicoNicoRepoDataEntry();
 
                     entry.IconUrl = node.SelectSingleNode("child::div[contains(@class, 'log-author ')]/a/img").Attributes["data-original"].Value;
                     entry.Title = HttpUtility.HtmlDecode(node.SelectSingleNode("child::div[@class='log-content']/div[@class='log-body']").InnerHtml.Trim());
 
-                    HtmlNode thumbnail = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-target-thumbnail']/a/img");
+                    var thumbnail = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-target-thumbnail']/a/img");
                     entry.ImageUrl = thumbnail != null ? thumbnail.Attributes["data-original"].Value : entry.IconUrl;
 
-                    HtmlNode desc = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-target-info']/a");
+                    var desc = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-target-info']/a");
                     entry.Description = desc != null ? HttpUtility.HtmlDecode(desc.InnerText.Trim()) : "";
                     entry.VideoUrl = desc != null ? desc.Attributes["href"].Value : "";
 
-                    HtmlNode time = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-footer']/div/a[contains(@class, 'log-footer-date')]/time");
+                    var time = node.SelectSingleNode("child::div[@class='log-content']/div/div[@class='log-footer']/div/a[contains(@class, 'log-footer-date')]/time");
                     entry.Time = time.InnerText.Trim();
 
                     ret.Add(entry);
@@ -141,15 +145,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 return null;
             }
         }
-        public List<NicoNicoUserMylistEntry> GetUserMylist() {
+        public async Task<List<NicoNicoUserMylistEntry>> GetUserMylistAsync() {
 
             var url = UserPage + "/mylist";
             Owner.Status = "ユーザーマイリスト取得中";
 
-            List<NicoNicoUserMylistEntry> ret = new List<NicoNicoUserMylistEntry>();
+            var ret = new List<NicoNicoUserMylistEntry>();
             try {
 
-                var a = NicoNicoWrapperMain.Session.GetAsync(url).Result;
+                var a = await NicoNicoWrapperMain.Session.GetAsync(url);
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);
 
@@ -166,7 +170,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //ニコレポタイムライン走査
                 foreach(var node in outers) {
 
-                    NicoNicoUserMylistEntry entry = new NicoNicoUserMylistEntry();
+                    var entry = new NicoNicoUserMylistEntry();
 
                     //h4タグ
                     var h4 = node.SelectSingleNode("child::div/h4");
@@ -227,16 +231,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         private int Page = 1;
 
-        public List<NicoNicoVideoInfoEntry> GetUserVideo() {
+        public async Task<List<NicoNicoVideoInfoEntry>> GetUserVideoAsync() {
 
             var url = UserPage + "/video?page=" + Page++;
             Owner.Status = "投稿動画を取得中";
 
-            List<NicoNicoVideoInfoEntry> ret = new List<NicoNicoVideoInfoEntry>();
+            var ret = new List<NicoNicoVideoInfoEntry>();
 
             try {
 
-                var a = NicoNicoWrapperMain.Session.GetAsync(url).Result;
+                var a = await NicoNicoWrapperMain.Session.GetAsync(url);
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);
 

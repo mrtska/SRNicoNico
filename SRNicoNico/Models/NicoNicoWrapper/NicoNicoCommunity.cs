@@ -29,18 +29,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);
 
-                var community_main = doc.DocumentNode.SelectSingleNode("//div[@id='community_main']");
-                var profile = community_main.SelectSingleNode("child::div/div/div[@id='cbox_profile']");
-                var news = community_main.SelectNodes("//div[parent::div[@id='community_news']]");
+                var node = doc.DocumentNode;
+
+                var community_main = node.SelectSingleNode("//main");
+                var header = node.SelectSingleNode("//header[@class='area-communityHeader']");
+                var news = node.SelectNodes("//div[parent::div[@id='community_news']]");
 
                 var ret = new NicoNicoCommunityContent();
 
                 ret.CommunityUrl = CommunityUrl;
-                ret.ThumbnailUrl = profile.SelectSingleNode("child::table/tr/td/p/img").Attributes["src"].Value;
-                ret.OwnerUrl = community_main.SelectSingleNode("child::div/div/div/div[@class='r']/p/a").Attributes["href"].Value;
-                ret.OwnerName = "<a href=\"" + ret.OwnerUrl + "\">" + community_main.SelectSingleNode("child::div/div/div/div[@class='r']/p/a/strong").InnerText + "</a>";
-                ret.CommunityTitle = community_main.SelectSingleNode("child::div/div/h1").InnerText;
-                ret.OpeningDate = community_main.SelectSingleNode("child::div/div/div/div/p/strong").InnerText;
+                ret.ThumbnailUrl = header.SelectSingleNode("div/div/div[@class='communityThumbnail']/a/img").Attributes["src"].Value;
+                ret.OwnerUrl = node.SelectSingleNode("//table[@class='communityDetail']/tr[1]/td/a").Attributes["href"].Value;
+                ret.OwnerName = "<a href=\"" + ret.OwnerUrl + "\">" + header.SelectSingleNode("//table[@class='communityDetail']/tr[1]/td/a").InnerText.Trim() + "</a>";
+                ret.CommunityTitle = header.SelectSingleNode("div/div/div[@class='communityData']/h2/a").InnerText;
+                ret.OpeningDate = header.SelectSingleNode("//table[@class='communityDetail']/tr[2]/td").InnerText;
 
                 //---お知らせ---
                 ret.CommunityNews = new List<NicoNicoCommunityNews>();
@@ -59,30 +61,29 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
                 //------
 
-                ret.CommunityLevel = profile.SelectSingleNode("child::table/tr/td/table/tr[1]/td[2]/strong").InnerText;
-                ret.CommunityStars = profile.SelectSingleNode("child::table/tr/td/table/tr[1]/td[2]/span").InnerText;
-                ret.CommunityMember = profile.SelectSingleNode("child::table/tr/td/table/tr[2]/td[2]").InnerHtml.Trim();
+                ret.CommunityLevel = node.SelectSingleNode("//dl[@class='communityScale']/dd[1]").InnerText;
+                ret.CommunityMember = node.SelectSingleNode("//dl[@class='communityScale']/dd[1]").InnerHtml.Trim();
 
                 //---登録タグ---
                 ret.CommunityTags = new List<string>();
-                var tags = profile.SelectNodes("child::table/tr/td/table/tr[4]/td[2]/a");
+                var tags = node.SelectNodes("//ul[@class='tagList']/li");
 
                 if(tags != null) {
 
                     foreach(var tag in tags) {
 
-                        ret.CommunityTags.Add(tag.SelectSingleNode("child::strong").InnerText);
+                        ret.CommunityTags.Add(tag.SelectSingleNode("a").InnerText);
                     }
                 }
                 //------
 
-                ret.CommunityProfile = HyperLinkReplacer.Replace(profile.SelectSingleNode("child::div[@id='community_description']/div/div/div").InnerHtml.Trim());
+                ret.CommunityProfile = HyperLinkReplacer.Replace(node.SelectSingleNode("//span[@id='profile_text_content']").InnerHtml.Trim());
 
                 //---特権---
                 ret.Privilege = new List<string>();
-                var privileges = profile.SelectNodes("child::table/tr/td/table/tr[6]/td[2]/div[@id='other_privilege']/p");
+                var privileges = node.SelectNodes("//div[@id='comLivePrivileged_data']/div/p");
 
-                ret.Privilege.Add(profile.SelectSingleNode("child::table/tr/td/table/tr[6]/td[2]/div[1]/p").InnerText);
+                ret.Privilege.Add(node.SelectSingleNode("//div[@id='comLivePrivileged_data']/p").InnerText);
                 if(privileges != null) {
                     foreach(var privilege in privileges) {
 
@@ -91,7 +92,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
                 //------
 
-                ret.Videos = profile.SelectSingleNode("child::table/tr/td/table/tr[8]/td[2]").InnerHtml.Trim();
 
 
                 return ret;

@@ -66,35 +66,33 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        public void Initialize() {
+        public async void Initialize() {
 
             IsActive = true;
-            Task.Run(() => {
 
-                var timeline = User.UserInstance.GetUserNicoRepo();
+            var timeline = await User.UserInstance.GetUserNicoRepoAsync();
 
-                if(timeline == null) {
+            if(timeline == null) {
 
-                    if(UserNicoRepoList.Count == 0) {
+                if(UserNicoRepoList.Count == 0) {
 
-                        //非公開、又は表示期限切れ
-                        Closed = true;
-                    }
-                    IsActive = false;
-                    IsEnd = true;
-                    return;
+                    //非公開、又は表示期限切れ
+                    Closed = true;
                 }
-                foreach(var entry in timeline) {
-
-                    UserNicoRepoList.Add(new NicoRepoResultEntryViewModel(entry));
-                }
-
                 IsActive = false;
-            });
+                IsEnd = true;
+                return;
+            }
+            foreach(var entry in timeline) {
+
+                UserNicoRepoList.Add(new NicoRepoResultEntryViewModel(entry));
+            }
+
+            IsActive = false;
         }
 
         //インフィニットスクロール発動で呼ばれる
-        public void Next() {
+        public async void Next() {
 
             if(IsEnd) {
 
@@ -102,23 +100,20 @@ namespace SRNicoNico.ViewModels {
             }
             IsActive = true;
 
-            Task.Run(() => {
+            var timeline = await User.UserInstance.GetUserNicoRepoAsync();
 
-                var timeline = User.UserInstance.GetUserNicoRepo();
+            if(timeline == null) {
 
-                if(timeline == null) {
-
-                    IsEnd = true;
-                    IsActive = false;
-                    return;
-                }
-                foreach(var entry in timeline) {
-
-                    UserNicoRepoList.Add(new NicoRepoResultEntryViewModel(entry));
-                }
-
+                IsEnd = true;
                 IsActive = false;
-            });
+                return;
+            }
+            foreach(var entry in timeline) {
+
+                UserNicoRepoList.Add(new NicoRepoResultEntryViewModel(entry));
+            }
+
+            IsActive = false;
         }
 
         public void Open() {

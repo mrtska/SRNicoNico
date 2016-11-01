@@ -339,7 +339,7 @@ namespace SRNicoNico.ViewModels {
                         Browser.Dispatcher.BeginInvoke((Action)(() => Browser.InvokeScript(func, args)));
                     }
 
-                } catch(COMException) {
+                } catch(Exception e) when (e is COMException || e is ObjectDisposedException) {
 
                     Console.WriteLine("COMException：" + func);
                 }

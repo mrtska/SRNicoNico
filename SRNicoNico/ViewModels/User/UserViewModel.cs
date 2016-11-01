@@ -91,10 +91,10 @@ namespace SRNicoNico.ViewModels {
             Task.Run(() => Initialize());
         }
 
-        public void Initialize() {
+        public async void Initialize() {
 
             UserInstance = new NicoNicoUser(this, UserPageUrl);
-            UserEntry = UserInstance.GetUserInfo();
+            UserEntry = await UserInstance.GetUserInfoAsync();
             Name = UserEntry.UserName;
 
             UserContentList.Clear();

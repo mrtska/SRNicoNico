@@ -67,37 +67,33 @@ namespace SRNicoNico.ViewModels {
             UserVideoList = new DispatcherCollection<SearchResultEntryViewModel>(DispatcherHelper.UIDispatcher);
         }
 
-        public void Initialize() {
+        public async void Initialize() {
 
             IsActive = true;
 
-            Task.Run(() => {
+            var videos = await User.UserInstance.GetUserVideoAsync();
 
-                 var videos = User.UserInstance.GetUserVideo();
+            if(videos == null) {
 
-                if(videos == null) {
+                if(UserVideoList.Count == 0) {
 
-
-                    if(UserVideoList.Count == 0) {
-
-                        //非公開、又は表示期限切れ
-                        Closed = true;
-                    }
-                    IsEnd = true;
-                    IsActive = false;
-                    return;
+                    //非公開、又は表示期限切れ
+                    Closed = true;
                 }
-
-                foreach(var video in videos) {
-
-                    UserVideoList.Add(new SearchResultEntryViewModel(video));
-                }
-
+                IsEnd = true;
                 IsActive = false;
-            });
+                return;
+            }
+
+            foreach(var video in videos) {
+
+                UserVideoList.Add(new SearchResultEntryViewModel(video));
+            }
+
+            IsActive = false;
         }
 
-        public void Next() {
+        public async void Next() {
 
             if(IsEnd) {
 
@@ -105,24 +101,21 @@ namespace SRNicoNico.ViewModels {
             }
             IsActive = true;
 
-            Task.Run(() => {
+            var videos = await User.UserInstance.GetUserVideoAsync();
 
-                var videos = User.UserInstance.GetUserVideo();
+            if(videos == null) {
 
-                if(videos == null) {
-
-                    IsEnd = true;
-                    IsActive = false;
-                    return;
-                }
-
-                foreach(var video in videos) {
-
-                    UserVideoList.Add(new SearchResultEntryViewModel(video));
-                }
-
+                IsEnd = true;
                 IsActive = false;
-            });
+                return;
+            }
+
+            foreach(var video in videos) {
+
+                UserVideoList.Add(new SearchResultEntryViewModel(video));
+            }
+
+            IsActive = false;
         }
 
         public void Open() {

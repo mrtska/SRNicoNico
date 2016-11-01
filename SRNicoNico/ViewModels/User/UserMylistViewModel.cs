@@ -69,27 +69,25 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-        public void Initialize() {
+        public async void Initialize() {
 
             IsActive = true;
-            Task.Run(() => {
 
-                var list = User.UserInstance.GetUserMylist();
+            var list = await User.UserInstance.GetUserMylistAsync();
 
-                //非公開
-                if(list == null) {
+            //非公開
+            if(list == null) {
 
-                    Closed = true;
-                    IsActive = false;
-                    return;
-                }
-
-                foreach(var entry in list) {
-
-                    UserMylistList.Add(entry);
-                }
+                Closed = true;
                 IsActive = false;
-            });
+                return;
+            }
+
+            foreach(var entry in list) {
+
+                UserMylistList.Add(entry);
+            }
+            IsActive = false;
         }
         public void Open() {
 
