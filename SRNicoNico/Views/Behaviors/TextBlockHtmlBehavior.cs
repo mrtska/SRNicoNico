@@ -12,7 +12,6 @@ using System.Windows.Navigation;
 
 using SRNicoNico.Views.Extentions;
 using SRNicoNico.Views.Contents.Video;
-using SRNicoNico.ViewModels;
 
 
 namespace SRNicoNico.Views.Behaviors {
@@ -41,8 +40,10 @@ namespace SRNicoNico.Views.Behaviors {
             InlineCollection xamLines;
 
             try {
+
                 xaml = HtmlToXamlConverter.ConvertHtmlToXaml(html, false);
                 xamLines = ((Paragraph)((Section)System.Windows.Markup.XamlReader.Parse(xaml)).Blocks.FirstBlock).Inlines;
+
             } catch {
                 // There was a problem parsing the html, return out. 
                 return;

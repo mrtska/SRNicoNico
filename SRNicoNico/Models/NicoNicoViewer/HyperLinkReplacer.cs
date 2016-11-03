@@ -16,18 +16,18 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             if(Settings.Instance.EnableUrlLink) {
 
                 //普通のURLだったら
-                Regex url = new Regex(@"(.?.?)(https?://[\w/:%#\$&\?\(\)~\.=\+\-]+)");
+                Regex url = new Regex(@"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+");
                 
                 desc = url.Replace(desc, new MatchEvaluator((match) => {
 
+                    var matchurl = match.Value;
 
-                    //aタグが書いてあったらそのまま返す
-                    if(match.Groups[1].Value.Length != 0 && (match.Groups[1].Value == "=\"" || match.Groups[1].Value == "\">")){
-
+                    if(Regex.IsMatch(desc, "<a.+" + matchurl + ".*</a>")) { 
+                        //aタグが書いてあったらそのまま返す
                         return match.Value;
                     }
 
-                    return match.Groups[1].Value + "<a href=\"" + match.Groups[2].Value + "\">" + match.Groups[2].Value + "</a>";
+                    return "<a href=\"" + match.Value + "\">" + match.Value + "</a>";
                 }));
             }
 

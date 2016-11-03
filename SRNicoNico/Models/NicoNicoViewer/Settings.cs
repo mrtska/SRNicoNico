@@ -213,7 +213,11 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                     continue;
                 }
 
-                property.SetValue(this, Convert.ChangeType(GetNeedValue(entry.Type, property, entry.Value), TypePair[entry.Type]));
+                if(TypePair.ContainsKey(entry.Type)) {
+
+                    property.SetValue(this, Convert.ChangeType(GetNeedValue(entry.Type, property, entry.Value), TypePair[entry.Type]));
+                }
+
             }
 
             Loading = false;
