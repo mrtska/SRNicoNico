@@ -303,7 +303,23 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 entry.Mail = attr.Contains("mail") ? attr["mail"].Value : "";
                 entry.Content = HttpUtility.HtmlDecode(node.InnerText);
                 entry.Score = attr.Contains("score") ? int.Parse(attr["score"].Value) : 0;
-                
+
+                if(Settings.Instance.HideWiiUComment) {
+
+                    if(entry.Mail.Contains("wiiu")) {
+
+                        continue;
+                    }
+                }
+
+                if(Settings.Instance.Hide3DSComment) {
+
+                    if(entry.Mail.Contains("3ds")) {
+
+                        continue;
+                    }
+                }
+
                 if(!NicoNicoNGComment.Filter(entry)) {
 
                     list.Add(entry);

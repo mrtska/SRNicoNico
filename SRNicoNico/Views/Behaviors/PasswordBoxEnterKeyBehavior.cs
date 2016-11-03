@@ -69,7 +69,11 @@ namespace SRNicoNico.Views.Behaviors {
 
             var type = Binding.GetType();
             var method = type.GetMethod(MethodName);
-            method.Invoke(Binding, new[] { AssociatedObject.Password });
+
+            var pass = type.GetProperty("Password");
+            pass.SetValue(Binding, AssociatedObject.Password);
+
+            method.Invoke(Binding, null);
         }
 
 
