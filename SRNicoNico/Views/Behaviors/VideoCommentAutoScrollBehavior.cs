@@ -63,6 +63,13 @@ namespace SRNicoNico.Views.Behaviors {
 
         private static void VposChanged(DependencyObject obj, DependencyPropertyChangedEventArgs p) {
 
+#if DEBUG
+            if((bool)(System.ComponentModel.DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue)) {
+                return;
+            }
+#endif
+
+
             var instance = obj as VideoCommentAutoScrollBehavior;
 
             if(p.NewValue == null || !instance.AutoScrollEnabled || instance.Collection.Count == 0) {

@@ -288,10 +288,10 @@
                                         </i:Interaction.Triggers>
                                         <ContentControl.Style>
                                             <Style TargetType="ContentControl">
-                                                <Setter Property="Content" Value="お気に入り登録"/>
+                                                <Setter Property="Content" Value="フォロー"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding VideoData.ApiData.UploaderIsFavorited}" Value="True">
-                                                        <Setter Property="Content" Value="お気に入り登録済み" />
+                                                        <Setter Property="Content" Value="フォロー済み" />
                                                         <Setter Property="Width" Value="100"/>
                                                     </DataTrigger>
                                                     <MultiDataTrigger>

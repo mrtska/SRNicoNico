@@ -415,7 +415,7 @@ namespace SRNicoNico.ViewModels {
             }));
         }
 
-        public async void Initialize(WebBrowser browser) {
+        public async void Initialize(System.Windows.Forms.WebBrowser browser) {
 
             var videoUrl = VideoUrl + "?watch_harmful=1";
 

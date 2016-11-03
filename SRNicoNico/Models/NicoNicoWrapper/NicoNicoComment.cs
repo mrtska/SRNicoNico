@@ -213,7 +213,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
         //コメントナンバーを返す
-        public  string Post(string comment, string mail, string vpos) {
+        public async Task<string> PostAsync(string comment, string mail, string vpos) {
 
             Video.Status = "コメント投稿中";
 
@@ -226,7 +226,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 query.AddQuery("device", "1");
                 query.AddQuery("thread", GetFlv.ThreadID);
 
-                var postkey = NicoNicoWrapperMain.Session.GetAsync(query.TargetUrl).Result;
+                var postkey = await NicoNicoWrapperMain.Session.GetAsync(query.TargetUrl);
                 postkey = HttpUtility.UrlDecode(postkey).Split('=')[1];
 
                 var root = new XmlDocument();
@@ -248,7 +248,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 request.Content = new StringContent(root.InnerXml);
                 request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
 
-                var a = NicoNicoWrapperMain.Session.GetAsync(request).Result;
+                var a = await NicoNicoWrapperMain.Session.GetAsync(request);
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml2(a);

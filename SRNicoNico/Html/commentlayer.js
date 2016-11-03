@@ -84,6 +84,15 @@ CommentViewModelImpl.prototype = {
 
         var isRollOver = true;
 
+        window.onkeydown = function (e) {
+
+            //F5
+            if (e.keyCode == 0x74) {
+
+                invoke_host("refresh");
+            }
+        }
+
         setInterval(function () {
 
             if (isRollOver) {

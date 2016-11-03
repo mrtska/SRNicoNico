@@ -34,7 +34,7 @@ namespace SRNicoNico.ViewModels {
 
         private VideoViewModel Owner;
 
-        private WebBrowser Browser;
+        private System.Windows.Forms.WebBrowser Browser;
 
         private VideoData VideoData;
 
@@ -46,7 +46,7 @@ namespace SRNicoNico.ViewModels {
             Owner = vm;
         }
 
-        protected internal async void Initialize(WebBrowser browser, VideoData videoData) {
+        protected internal async void Initialize(System.Windows.Forms.WebBrowser browser, VideoData videoData) {
 
             Browser = browser;
 
@@ -76,28 +76,28 @@ namespace SRNicoNico.ViewModels {
 
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-
-                browser.LoadCompleted += async (sender, e) => {
+                
+                browser.DocumentCompleted += async (sender, e) => {
 
                     browser.ObjectForScripting = new ObjectForScripting(this);
 
                     //RTMPの時はサーバートークンも一緒にFlashに渡す
                     if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
-                        browser.InvokeScript("VideoViewModel$initialize", VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken);
+                        browser.Document.InvokeScript("VideoViewModel$initialize", new object[] { VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken });
                     } else if(VideoData.VideoType == NicoNicoVideoType.New) {
 
                         DmcSession = new NicoNicoDmcSession(videoData.ApiData.DmcInfo);
                         var content = await DmcSession.CreateAsync();
 
-                        browser.InvokeScript("VideoViewModel$initialize", content.ContentUri);
+                        browser.Document.InvokeScript("VideoViewModel$initialize", new object[] { content.ContentUri });
 
 
                         DmcSession.HeartbeatTimer = new Timer(new TimerCallback(DmcSession.Heartbeat),content.Id, 1000, 8000);
 
                     } else {
 
-                        browser.InvokeScript("VideoViewModel$initialize", VideoData.ApiData.GetFlv.VideoUrl);
+                        browser.Document.InvokeScript("VideoViewModel$initialize", new object[] { VideoData.ApiData.GetFlv.VideoUrl });
                     }
 
                     //ここからInvoke可能
@@ -134,18 +134,18 @@ namespace SRNicoNico.ViewModels {
                 }
 
                 if(VideoData.VideoType == NicoNicoVideoType.MP4 || VideoData.VideoType == NicoNicoVideoType.New) {
-
-                    browser.Source = new Uri(GetHtml5PlayerPath());
+                    
+                    browser.Navigate(new Uri(GetHtml5PlayerPath()));
                 } else if(VideoData.VideoType == NicoNicoVideoType.FLV) {
 
-                    browser.Source = new Uri(GetFlashPlayerPath());
+                    browser.Navigate(new Uri(GetFlashPlayerPath()));
                 } else if(VideoData.VideoType == NicoNicoVideoType.SWF) {
 
 
-                    browser.Source = new Uri(GetSWFPlayerPath());
+                    browser.Navigate(new Uri(GetSWFPlayerPath()));
                 } else if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
-                    browser.Source = new Uri(GetRTMPPlayerPath());
+                    browser.Navigate(new Uri(GetRTMPPlayerPath()));
                 }
                 Owner.IsActive = false;
             }));
@@ -283,7 +283,7 @@ namespace SRNicoNico.ViewModels {
 
             double ret = pos / videoTime;
 
-            return (Browser.ActualWidth * ret);
+            return (Browser.Width * ret);
         }
 
 
@@ -316,10 +316,7 @@ namespace SRNicoNico.ViewModels {
 
             Owner.Comment.Vpos = vpos.ToString();
 
-            //Console.WriteLine(VideoData.ApiData.Cmsid + " time:" + time + " buffer:" + buffer + " vpos:" + vpos);
-
             Owner.Time.CurrentTime = time;
-            //Time.CurrentTimeString = NicoNicoUtil.ConvertTime((long)Time.CurrentTime);
         }
 
 
@@ -333,10 +330,10 @@ namespace SRNicoNico.ViewModels {
 
                     if(args.Length == 0) {
 
-                        Browser.Dispatcher.BeginInvoke((Action)(() => Browser.InvokeScript(func)));
+                        Browser.BeginInvoke((Action)(() => Browser.Document.InvokeScript(func)));
                     } else {
 
-                        Browser.Dispatcher.BeginInvoke((Action)(() => Browser.InvokeScript(func, args)));
+                        Browser.BeginInvoke((Action)(() => Browser.Document.InvokeScript(func, args)));
                     }
 
                 } catch(Exception e) when (e is COMException || e is ObjectDisposedException) {
@@ -427,6 +424,9 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case "hidecontroller":
                     Owner.HideFullScreenPopup();
+                    break;
+                case "refresh":
+                    Owner.Refresh();
                     break;
                 case "log":
                     Console.WriteLine("Log: " + args);

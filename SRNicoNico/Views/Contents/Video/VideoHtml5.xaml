@@ -8,6 +8,8 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:metro="http://schemes.grabacr.net/winfx/2015/personal/controls"
+             xmlns:cntls="clr-namespace:SRNicoNico.Views.Controls"
+             xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
              mc:Ignorable="d" 
              d:DesignHeight="208" d:DesignWidth="401"
              d:DataContext="{d:DesignInstance vm:VideoViewModel}"
@@ -16,6 +18,11 @@
              MouseWheel="UserControl_MouseWheel"
 			 >
     <Grid>
-        <WebBrowser x:Name="browser" Grid.Row="1" metro2:WebBrowserHelper.AllowWebBrowserDrop="False" metro2:WebBrowserHelper.ScriptErrorsSuppressed="False"/>
+        <WindowsFormsHost Grid.Row="1" Focusable="False" >
+            <WindowsFormsHost.Child>
+                <wf:WebBrowser x:Name="browser" WebBrowserShortcutsEnabled="False"/>
+            </WindowsFormsHost.Child>
+        </WindowsFormsHost>
+        <!--<WebBrowser x:Name="browser" Grid.Row="1" Focusable="False" metro2:WebBrowserHelper.AllowWebBrowserDrop="False" metro2:WebBrowserHelper.ScriptErrorsSuppressed="True" />-->
     </Grid>
 </UserControl>

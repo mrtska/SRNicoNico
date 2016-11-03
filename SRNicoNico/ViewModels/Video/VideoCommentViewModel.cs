@@ -241,7 +241,7 @@ namespace SRNicoNico.ViewModels {
             Mail = Mail.Replace("medium", "").Replace("naka", "");
         }
 
-        public void Post() {
+        public async void Post() {
             
             if(Text.Length == 0 || !IsTextBoxEnabled) {
 
@@ -249,32 +249,30 @@ namespace SRNicoNico.ViewModels {
             }
 
             IsTextBoxEnabled = false;
-            Task.Run(() => {
 
-                var mail = Mail;
+            var mail = Mail;
 
-                //公式動画は184を付けて投稿出来ない
-                if(Settings.Instance.Use184 && !Owner.VideoData.ApiData.IsOfficial) {
+            //公式動画は184を付けて投稿出来ない
+            if(Settings.Instance.Use184 && !Owner.VideoData.ApiData.IsOfficial) {
                     
-                    mail += " 184";
-                }
-                var no = Owner.CommentInstance.Post(Text, mail, Vpos);
+                mail += " 184";
+            }
+            var no = await Owner.CommentInstance.PostAsync(Text, mail, Vpos);
 
-                if(no != null) {
+            if(no != null) {
 
-                    var entry = new NicoNicoCommentEntry();
-                    entry.No = no;
-                    entry.Mail = Mail;
-                    entry.Vpos = Vpos;
+                var entry = new NicoNicoCommentEntry();
+                entry.No = no;
+                entry.Mail = Mail;
+                entry.Vpos = Vpos;
                    
-                    entry.Content = Text;
+                entry.Content = Text;
 
-                    Owner.Handler.InjectPostedComment(entry.ToJson());
-                    Text = "";
+                Owner.Handler.InjectPostedComment(entry.ToJson());
+                Text = "";
                    
-                }
-                IsTextBoxEnabled = true;
-            });
+            }
+            IsTextBoxEnabled = true;
         }
 	}
 }
