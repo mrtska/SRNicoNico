@@ -41,7 +41,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 ret.ThumbnailUrl = header.SelectSingleNode("div/div/div[@class='communityThumbnail']/a/img").Attributes["src"].Value;
                 ret.OwnerUrl = node.SelectSingleNode("//table[@class='communityDetail']/tr[1]/td/a").Attributes["href"].Value;
                 ret.OwnerName = "<a href=\"" + ret.OwnerUrl + "\">" + header.SelectSingleNode("//table[@class='communityDetail']/tr[1]/td/a").InnerText.Trim() + "</a>";
-                ret.CommunityTitle = header.SelectSingleNode("div/div/div[@class='communityData']/h2/a").InnerText;
+                ret.CommunityTitle = header.SelectSingleNode("div/div/div[@class='communityData']/h2/a").InnerText.Trim();
                 ret.OpeningDate = header.SelectSingleNode("//table[@class='communityDetail']/tr[2]/td").InnerText;
 
                 //---お知らせ---
@@ -62,7 +62,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //------
 
                 ret.CommunityLevel = node.SelectSingleNode("//dl[@class='communityScale']/dd[1]").InnerText;
-                ret.CommunityMember = node.SelectSingleNode("//dl[@class='communityScale']/dd[1]").InnerHtml.Trim();
+                ret.CommunityMember = node.SelectSingleNode("//dl[@class='communityScale']/dd[2]").InnerHtml.Trim();
 
                 //---登録タグ---
                 ret.CommunityTags = new List<string>();
@@ -71,7 +71,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 if(tags != null) {
 
                     foreach(var tag in tags) {
-
+                            
                         ret.CommunityTags.Add(tag.SelectSingleNode("a").InnerText);
                     }
                 }

@@ -10,7 +10,7 @@
 			 xmlns:video="clr-namespace:SRNicoNico.Views.Contents.Video"
              xmlns:nicorepo="clr-namespace:SRNicoNico.Views.Contents.NicoRepo"
              xmlns:history="clr-namespace:SRNicoNico.Views.Contents.History"
-             d:DesignHeight="3000"
+             d:DesignHeight="500"
              d:DesignWidth="585"
 			 d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
              mc:Ignorable="d"

@@ -86,8 +86,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel>
                         <TextBlock FontSize="14">
-                            <Run Text="{Binding Content.CommunityLevel,StringFormat=レベル : {0}・・・}"/>
-                            <Run Text="{Binding Content.CommunityStars}" Foreground="Yellow"/>
+                            <Run Text="{Binding Content.CommunityLevel,StringFormat=レベル : {0}}"/>
                         </TextBlock>
                         <TextBlock  behaviors:HtmlTextBoxProperties.HtmlText="{Binding Content.CommunityMember,StringFormat=メンバー : {0}}" FontSize="14"/>
                         <TextBlock Text="登録タグ:"/>

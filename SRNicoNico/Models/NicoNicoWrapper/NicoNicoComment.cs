@@ -109,7 +109,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var request = new HttpRequestMessage(HttpMethod.Post, GetFlv.CommentServerUrl);
                 request.Content = new StringContent(root.InnerXml);
                 request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
-
+                
                 var a = await NicoNicoWrapperMain.Session.GetAsync(request);
 
                 var doc = new HtmlDocument();
