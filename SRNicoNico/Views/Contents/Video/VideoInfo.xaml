@@ -279,7 +279,7 @@
                                 </Hyperlink>
                             </TextBlock>
 
-                                <Button x:Name="favorite" Grid.Row="1" Focusable="False" HorizontalAlignment="Left" Margin="5,0,0,10" IsEnabled="{Binding IsInitialized}" >
+                                <Button x:Name="favorite" Grid.Row="1" Focusable="False" HorizontalAlignment="Left"  Margin="5,0,0,10" IsEnabled="{Binding IsInitialized}" >
                                     <ContentControl>
                                         <i:Interaction.Triggers>
                                             <ei:DataTrigger Binding="{Binding VideoData.ApiData.IsChannelVideo}" Value="True">
@@ -292,7 +292,8 @@
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding VideoData.ApiData.UploaderIsFavorited}" Value="True">
                                                         <Setter Property="Content" Value="フォロー済み" />
-                                                        <Setter Property="Width" Value="100"/>
+                                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                        <Setter Property="Width" Value="60"/>
                                                     </DataTrigger>
                                                     <MultiDataTrigger>
                                                         <MultiDataTrigger.Conditions>

@@ -170,6 +170,7 @@ namespace SRNicoNico.ViewModels {
                 dynamic json = new DynamicJson();
                 json.array = list;
 
+                InvokeScript("CommentViewModel$initialize");
                 InjectComment(json.ToString());
                 Owner.Comment.CanComment = true;
                 Owner.Comment.IsCommentLoading = false;
@@ -179,9 +180,14 @@ namespace SRNicoNico.ViewModels {
 
                     var ulist = await Owner.CommentInstance.GetUploaderCommentAsync();
                     dynamic ujson = new DynamicJson();
-                    json.array = ulist;
+                    ujson.array = ulist;
 
-                    InjectUploaderComment(json.ToString());
+                    foreach(var entry in ulist) {
+
+                        VideoData.CommentData.Add(new CommentEntryViewModel(entry, Owner));
+                    }
+
+                    InjectUploaderComment(ujson.ToString());
                 }
 
             }
@@ -254,13 +260,15 @@ namespace SRNicoNico.ViewModels {
         protected internal void InjectComment(string json) {
 
 
-            InvokeScript("CommentViewModel$initialize", json);
+            InvokeScript("CommentViewModel$add_comment", json);
             ApplyChanges();
         }
 
         protected internal void InjectUploaderComment(string json) {
 
 
+            InvokeScript("CommentViewModel$add_comment", json);
+            ApplyChanges();
         }
 
         protected internal void InjectPostedComment(string json) {
