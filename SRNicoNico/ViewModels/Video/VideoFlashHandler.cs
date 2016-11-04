@@ -202,9 +202,37 @@ namespace SRNicoNico.ViewModels {
             Seek(0);
         }
 
-        protected internal void ReloadComment() {
+        public async void ReloadCommentAsync() {
 
+            Owner.CommentStatus = "リロード中";
 
+            var list = await Owner.CommentInstance.ReloadCommentAsync();
+            if(list != null) {
+
+                foreach(var entry in list) {
+
+                    int i = 0;
+                    foreach(var comment in VideoData.CommentData) {
+
+                        //リロードしたコメントをどこに挿入するか
+                        if(int.Parse(comment.Entry.Vpos) > int.Parse(entry.Vpos)) {
+
+                            VideoData.CommentData.Insert(i, new CommentEntryViewModel(entry, Owner));
+                            break;
+                        }
+                        i++;
+                    }
+                }
+
+                dynamic json = new DynamicJson();
+                json.array = list;
+
+                InjectComment(json.ToString());
+                Owner.Comment.CanComment = true;
+                Owner.Comment.IsCommentLoading = false;
+            }
+            //成功しようが失敗しようが完了なのさ
+            Owner.CommentStatus = "リロード完了";
         }
 
         protected internal void ShowComment() {

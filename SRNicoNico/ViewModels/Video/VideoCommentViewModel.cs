@@ -197,7 +197,7 @@ namespace SRNicoNico.ViewModels {
 
         public void Refresh() {
 
-            Owner.Handler.ReloadComment();
+            Owner.Handler.ReloadCommentAsync();
         }
 
         public void ToggleScroll() {

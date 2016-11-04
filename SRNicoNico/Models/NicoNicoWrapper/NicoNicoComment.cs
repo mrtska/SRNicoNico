@@ -126,7 +126,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     recv.AddQuery("thread", GetFlv.ThreadID);
                     recv.AddQuery("res_from", "-1000");
 
-                    a = NicoNicoWrapperMain.Session.GetAsync(recv.TargetUrl).Result;
+                    a = await NicoNicoWrapperMain.Session.GetAsync(recv.TargetUrl);
                     doc.LoadHtml2(a);
                 }
 
@@ -160,6 +160,50 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 return null;
             }
 		}
+
+        public async Task<List<NicoNicoCommentEntry>> ReloadCommentAsync() {
+
+            try {
+
+                //---ユーザーコメント取得---
+                var root = new XmlDocument();
+                var packet = root.CreateElement("packet");
+
+                var thread = root.CreateElement("thread");
+                thread.SetAttribute("thread", GetFlv.ThreadID);
+                thread.SetAttribute("version", "20090904");
+                thread.SetAttribute("res_from", LastRes.ToString());
+                thread.SetAttribute("user_id", GetFlv.UserId);
+                thread.SetAttribute("userkey", GetFlv.UserKey);
+                thread.SetAttribute("scores", "1");
+                thread.SetAttribute("nicoru", "1");
+                thread.SetAttribute("with_global", "1");
+
+                packet.AppendChild(thread);
+                root.AppendChild(packet);
+
+                var request = new HttpRequestMessage(HttpMethod.Post, GetFlv.CommentServerUrl);
+                request.Content = new StringContent(root.OuterXml);
+                request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
+
+                var a = await NicoNicoWrapperMain.Session.GetAsync(request);
+
+                var ret = new List<NicoNicoCommentEntry>();
+
+                var doc = new HtmlDocument();
+                doc.LoadHtml2(a);
+
+                LastRes = int.Parse(doc.DocumentNode.SelectSingleNode("packet/thread").Attributes["last_res"].Value);
+
+                StoreEntry(doc, ret);
+
+                return ret;
+            } catch(RequestTimeout) {
+
+                return null;
+            }
+        }
+
         public async Task<List<NicoNicoCommentEntry>> GetUploaderCommentAsync() {
 
             try {
