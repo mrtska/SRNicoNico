@@ -317,6 +317,12 @@ namespace SRNicoNico.ViewModels {
             Owner.Comment.Vpos = vpos.ToString();
 
             Owner.Time.CurrentTime = time;
+
+            if(Owner.IsRepeat && time >= VideoData.ApiData.Length) {
+
+                Restart();
+            }
+
         }
 
 
@@ -443,6 +449,12 @@ namespace SRNicoNico.ViewModels {
         public void Dispose() {
 
             Browser?.Dispose();
+
+            if(VideoData == null || VideoData.ApiData == null) {
+
+                return;
+            }
+
             if(VideoData.ApiData.IsDmc) {
 
                 DmcSession.HeartbeatTimer.Dispose();
