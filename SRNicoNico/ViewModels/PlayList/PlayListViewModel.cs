@@ -97,7 +97,7 @@ namespace SRNicoNico.ViewModels {
             Initialize();
         }
         public PlayListViewModel(IList<PlayListEntryViewModel> list, string title) : base(title) {
-
+            
             foreach(var entry in list) {
 
                 PlayList.Add(entry.RegisterOwner(this));

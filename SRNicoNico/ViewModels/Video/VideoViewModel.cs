@@ -678,7 +678,16 @@ namespace SRNicoNico.ViewModels {
         public void Close() {
 
             DisposeViewModel();
-            App.ViewModelRoot.RemoveTabAndLastSet(this);
+
+            if(IsPlayList) {
+
+                App.ViewModelRoot.RemoveTabAndLastSet(PlayList);
+            } else {
+
+                App.ViewModelRoot.RemoveTabAndLastSet(this);
+            }
+
+
         }
         
         public async void DisposeViewModel() {

@@ -249,6 +249,7 @@ CommentViewModelImpl.prototype = {
         //ホントは描画中のコメントに係数をかけたりして座標を再計算しないとなんだけど複雑すぎて分からんし
         //こうしてもう一度描画を最初からさせても大して重くなかったのでこの方法を採用
         this.rendering_listener_comment.length = 0;
+        $(this.layer).empty();
 
     },
     //描画中のコメントを全て一時停止する
@@ -410,13 +411,15 @@ CommentViewModelImpl.prototype = {
     comment_tick: function (vpos) {
 
         this.current_vpos = vpos;
+
+
         //コメントリストから該当の時間になったコメントをコメントレイヤーに追加していく
         for(var index in this.listener_comment) {
 
             var target = this.listener_comment[index];
-
+            
             //該当時間かどうか
-            if (vpos >= target.vpos && vpos < target.vend) {
+            if (vpos >= target.vpos && vpos < target.vpos + 10) {
 
                 //既に追加してあったらスキップ    
                 if (this.rendering_listener_comment.indexOf(target) >= 0) {
@@ -433,7 +436,6 @@ CommentViewModelImpl.prototype = {
                     if (this.rendering_listener_comment.length >= 40) {
 
                         this.layer.removeChild(this.rendering_listener_comment.shift());
-                        this.rendering_listener_comment.length = 39;
                     }
 
                     //流れるコメントはアニメーションを追加
@@ -469,6 +471,8 @@ CommentViewModelImpl.prototype = {
                 }
             }
         }
+
+     
 
         //描画中リストに描画時間が過ぎたコメントがあったら排除する 重くなるからね   
         for (var index in this.rendering_listener_comment) {
