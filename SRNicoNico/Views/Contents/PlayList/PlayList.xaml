@@ -70,6 +70,13 @@
             </ScrollViewer>
 
         </Grid>
-        <ContentControl Grid.Column="1" Content="{Binding UIInstance}"/>
+        <ContentControl Grid.Column="1" Content="{Binding Video}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type vm:VideoViewModel}">
+                    <video:Video />
+                </DataTemplate>
+            </ContentControl.Resources>
+            
+        </ContentControl>
     </Grid>
 </UserControl>

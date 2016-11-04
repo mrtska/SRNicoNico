@@ -80,23 +80,7 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-        #region UIInstance変更通知プロパティ
-        private Video _UIInstance;
-
-        public Video UIInstance {
-            get { return _UIInstance; }
-            set { 
-                if(_UIInstance == value)
-                    return;
-                _UIInstance = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        private FullScreenWindow FullScreenWindow;
-        private WindowedWindow WindowedFullScreenWindow;
+        
 
         public bool IsFullScreen;
 
@@ -123,8 +107,8 @@ namespace SRNicoNico.ViewModels {
 
         private void Initialize() {
 
-            UIInstance = new Video();
             SelectedPlayList = PlayList.First();
+            Video = new VideoViewModel(SelectedPlayList.VideoUrl, this);
         }
 
 
@@ -190,51 +174,9 @@ namespace SRNicoNico.ViewModels {
         //指定したプレイリストエントリに飛ぶ
         public void Jump(PlayListEntryViewModel entry) {
 
-            Video?.DisposeViewModel();
-            //Video = new VideoViewModel(entry, IsFullScreen);
-            UIInstance.DataContext = Video;
-            //Video.Initialize();
-            if(IsFullScreen) {
-
-                UpdateFullScreenViewModel();
-            }
+            Video?.JumpTo(entry.VideoUrl);
         }
-
-        public void ToFullScreen() {
-
-
-
-            if(Settings.Instance.UseWindowMode) {
-
-                WindowedFullScreenWindow = new WindowedWindow();
-                WindowedFullScreenWindow.DataContext = Video;
-                WindowedFullScreenWindow.Show();
-                
-            } else {
-
-                FullScreenWindow = new FullScreenWindow();
-                FullScreenWindow.DataContext = Video;
-                FullScreenWindow.Show();
-
-            }
-        }
-
-        public void UpdateFullScreenViewModel() {
-
-            if(Settings.Instance.UseWindowMode && WindowedFullScreenWindow != null) {
-
-                WindowedFullScreenWindow.DataContext = Video;
-
-            } else if(FullScreenWindow != null) {
-
-                FullScreenWindow.DataContext = Video;
-            }
-        }
-
-        public void ReturnFromFullScreen() {
-
-
-        }
-
+        
+        
     }
 }

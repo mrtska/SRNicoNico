@@ -430,6 +430,12 @@ CommentViewModelImpl.prototype = {
                     //描画中リストに追加
                     this.rendering_listener_comment.push(target);
 
+                    if (this.rendering_listener_comment.length >= 40) {
+
+                        this.layer.removeChild(this.rendering_listener_comment.shift());
+                        this.rendering_listener_comment.length = 39;
+                    }
+
                     //流れるコメントはアニメーションを追加
                     if (target.pos == "naka") {
 
@@ -519,9 +525,6 @@ CommentViewModelImpl.prototype = {
 
         this.calc_comment_size(window.innerWidth, window.innerHeight);
     },
-
-
-
     add_uploader_comment: function (json) {
 
         //C#で取得したコメントをパース
@@ -617,7 +620,103 @@ CommentViewModelImpl.prototype = {
             //いろいろと設定をしたp要素をリストに入れておく
             this.listener_comment.push(element);
         }
+    },
+    add_posted_comment: function (json) {
+        
+        //C#で取得したコメントをパース
+        var val = JSON.parse(json);
+
+        //パースしたjsonのコメントリストをfor each
+
+        //コメント一つ一つをp要素で描画するのでp要素を作成
+        var element = document.createElement("span");
+
+        $(element).css("border", "solid 1px #FFFF00");
+        element.innerText = val.Content;
+
+        //p要素にvposを突っ込む C#やJavaばかりやっていた私には驚き
+        //val.VposはstringなのでparseIntしないとあとあと 100 + 400 = 100400 になったりする
+        element.vpos = parseInt(val.Vpos);
+        element.no = val.No;    //コメントナンバー 描画位置計算時に使う
+
+        //コメントの装飾 なんでmailなんだ
+        var mail = String(val.Mail);
+
+        //上コメント 流れるコメント以外は基本３秒表示
+        if (mail.contains("ue")) {
+
+            element.vend = element.vpos + 300;
+            element.duration = 3000;
+            element.pos = "ue";
+
+            //left50%にtransformするとpostionがfixedでも中央に描画される
+            $(element).css("left", "50%");
+            $(element).css("transform", "translate(-50%, 0%)");
+
+
+        } else if (mail.contains("shita")) {    //下コメント
+
+
+            element.vend = element.vpos + 300;
+            element.duration = 3000;
+            element.pos = "shita";
+
+            //上と同じ
+            $(element).css("bottom", "0");
+            $(element).css("left", "50%");
+            $(element).css("transform", "translate(-50%, 0%)");
+
+
+        } else {    //流れるコメント
+
+            //流れるコメントは4秒表示
+            element.vend = element.vpos + 400;
+            element.duration = 4000;
+            element.pos = "naka";
+
+            //流れるコメントの初期値は一番右
+            $(element).css("left", "100%");
+        }
+
+        //デフォルトカラーは白
+        $(element).css("color", "#FFF");
+
+        //コメントのmailにニコニコのビルトインカラーが含まれていたらその色を適用する
+        for (var key in this.niconico_color_map) {
+
+            if (mail.contains(key)) {
+
+                $(element).css("color", this.niconico_color_map[key]);
+            }
+        }
+
+        //ニコニコはコメントカラーを16進トリプレット表記でも指定できる
+        if (mail.contains("#")) {
+
+
+        }
+
+        //ここでコメントサイズの初期値をcssで指定する
+        //ウィンドウのheightが変わるとfont-sizeもそれに応じて乗算される
+        if (mail.contains("big")) {
+
+            element.size = "big";
+            $(element).css("font-size", this.big_comment_size + "px");
+        } else if (mail.contains("small")) {
+
+            element.size = "small";
+            $(element).css("font-size", this.small_comment_size + "px");
+        } else {
+
+            element.size = "medium";
+            $(element).css("font-size", this.regular_comment_size + "px");
+
+        }
+
+        //いろいろと設定をしたp要素をリストに入れておく
+        this.listener_comment.push(element);
     }
+    
 };
 var CommentViewModel = new CommentViewModelImpl();
 
@@ -629,6 +728,10 @@ function CommentViewModel$initialize() {
 function CommentViewModel$add_comment(json) {
 
     CommentViewModel.add_comment(json);
+}
+function CommentViewModel$add_posted_comment(json) {
+
+    CommentViewModel.add_posted_comment(json);
 }
 function CommentViewModel$hide_comment() {
 

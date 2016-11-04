@@ -20,7 +20,7 @@
     <Grid>
         <WindowsFormsHost Grid.Row="1" Focusable="False" >
             <WindowsFormsHost.Child>
-                <wf:WebBrowser x:Name="browser" WebBrowserShortcutsEnabled="False"/>
+                <wf:WebBrowser x:Name="browser" WebBrowserShortcutsEnabled="False" ScriptErrorsSuppressed="True" AllowWebBrowserDrop="False"/>
             </WindowsFormsHost.Child>
         </WindowsFormsHost>
         <!--<WebBrowser x:Name="browser" Grid.Row="1" Focusable="False" metro2:WebBrowserHelper.AllowWebBrowserDrop="False" metro2:WebBrowserHelper.ScriptErrorsSuppressed="True" />-->

@@ -132,6 +132,7 @@ VideoViewModelImpl.prototype = {
             if (!e.target.paused) {
 
                 CommentViewModel.resume_comment();
+                invoke_host("playstate", true);
             }
 
             invoke_host("seeked");

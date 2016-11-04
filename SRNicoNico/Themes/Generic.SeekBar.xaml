@@ -11,10 +11,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SeekBar}">
-                    <Border Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" >
-                        <Grid>
+                    <Border Background="Transparent"  BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" >
+                        <Grid Focusable="False">
                             <Rectangle Fill="#FF404040" />
-                            <ItemsControl Panel.ZIndex="1" ItemsSource="{TemplateBinding BufferedRange}">
+                            <ItemsControl Panel.ZIndex="1" Background="Transparent" ItemsSource="{TemplateBinding BufferedRange}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <Grid />
@@ -22,13 +22,13 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Rectangle Panel.ZIndex="1" HorizontalAlignment="Left" Width="{Binding Width}" Margin="{Binding Position}" Fill="#FF555555" />
+                                        <Rectangle Panel.ZIndex="1" Focusable="False" HorizontalAlignment="Left" Width="{Binding Width}" Margin="{Binding Position}" Fill="#FF555555" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
 
                             </ItemsControl>
 
-                            <ItemsControl Panel.ZIndex="2" ItemsSource="{TemplateBinding PlayedRange}">
+                            <ItemsControl Panel.ZIndex="2" Background="Transparent" ItemsSource="{TemplateBinding PlayedRange}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <Grid />
@@ -36,7 +36,7 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Rectangle Panel.ZIndex="2" HorizontalAlignment="Left" Width="{Binding Width}" Margin="{Binding Position}" Fill="#FF007AFF" />
+                                        <Rectangle Panel.ZIndex="2" Focusable="False" HorizontalAlignment="Left" Width="{Binding Width}" Margin="{Binding Position}" Fill="#FF007AFF" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

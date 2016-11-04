@@ -378,7 +378,17 @@ namespace SRNicoNico.ViewModels {
         }
 
 
-        public VideoViewModel(string videoUrl) : base(videoUrl.Substring(30)) {
+        protected internal PlayListViewModel PlayList;
+
+        protected internal bool IsPlayList {
+            get {
+                return PlayList != null;
+            }
+        }
+
+        public VideoViewModel(string videoUrl, PlayListViewModel playList = null) : base(videoUrl.Substring(30)) {
+
+            PlayList = playList;
 
             if(videoUrl.Contains("?")) {
 
@@ -454,6 +464,47 @@ namespace SRNicoNico.ViewModels {
             }
 
         }
+
+        public async void JumpTo(string videoUrl) {
+
+
+            VideoUrl =  videoUrl;
+
+            WatchApi = new NicoNicoWatchApi(videoUrl + "?watch_harmful=1", this);
+
+
+
+            IsActive = true;
+
+            Status = "動画情報取得中";
+            //動画情報取得
+            VideoData.ApiData = await WatchApi.GetWatchApiDataAsync();
+            Handler.Update();
+
+            CommentInstance = new NicoNicoComment(VideoData.ApiData, this);
+
+
+
+            if(VideoData.ApiData.GetFlv.IsPremium && !VideoData.ApiData.GetFlv.VideoUrl.StartsWith("rtmp")) {
+
+                StoryBoardStatus = "取得中";
+
+                var sb = new NicoNicoStoryBoard(VideoData.ApiData.GetFlv.VideoUrl);
+                VideoData.StoryBoardData = await sb.GetStoryBoardAsync();
+
+                if(VideoData.StoryBoardData == null) {
+
+                    StoryBoardStatus = "データ無し";
+                } else {
+
+                    StoryBoardStatus = "取得完了";
+                }
+            } else {
+
+                StoryBoardStatus = "データ無し";
+            }
+        }
+
         
         //ツイートダイアログ表示
         public void OpenTweetDialog() {
@@ -621,8 +672,7 @@ namespace SRNicoNico.ViewModels {
 
         public void Refresh() {
 
-            DisposeViewModel();
-            NicoNicoOpener.Replace(this, VideoUrl);
+            JumpTo(VideoUrl);
         }
 
         public void Close() {

@@ -197,9 +197,9 @@ namespace SRNicoNico.Views.Controls {
             MouseEnter += SeekBar_MouseEnter;
             MouseLeave += SeekBar_MouseLeave;
 
-            MouseLeftButtonDown += SeekBar_MouseLeftButtonDown;
-            MouseLeftButtonUp += SeekBar_MouseLeftButtonUp;
-            MouseMove += SeekBar_MouseMove;
+            PreviewMouseLeftButtonDown += SeekBar_MouseLeftButtonDown;
+            PreviewMouseLeftButtonUp += SeekBar_MouseLeftButtonUp;
+            PreviewMouseMove += SeekBar_MouseMove;
 
             SizeChanged += SeekBar_SizeChanged;
         }
@@ -258,6 +258,7 @@ namespace SRNicoNico.Views.Controls {
 
         private void SeekBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
 
+            Console.WriteLine("!!");
             IsDrag = true;
             UIElement el = sender as UIElement;
             el.CaptureMouse();

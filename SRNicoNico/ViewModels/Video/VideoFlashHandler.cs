@@ -46,7 +46,7 @@ namespace SRNicoNico.ViewModels {
             Owner = vm;
         }
 
-        protected internal async void Initialize(System.Windows.Forms.WebBrowser browser, VideoData videoData) {
+        protected internal void Initialize(System.Windows.Forms.WebBrowser browser, VideoData videoData) {
 
             Browser = browser;
 
@@ -61,10 +61,15 @@ namespace SRNicoNico.ViewModels {
             }
             VideoData = videoData;
 
-            //タブの名前を設定
-            Owner.Name = videoData.ApiData.Title;
+            Update();
+        }
 
-            Owner.Time.Length = videoData.ApiData.Length;
+        protected internal async void Update() {
+
+            //タブの名前を設定
+            Owner.Name = VideoData.ApiData.Title;
+
+            Owner.Time.Length = VideoData.ApiData.Length;
 
             //有料動画なら
             if(VideoData.ApiData.IsPaidVideo) {
@@ -74,43 +79,12 @@ namespace SRNicoNico.ViewModels {
             }
 
 
+            Browser.DocumentCompleted -= LoadCompleted;
+            Browser.DocumentCompleted += LoadCompleted;
+
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
 
-                
-                browser.DocumentCompleted += async (sender, e) => {
 
-                    browser.ObjectForScripting = new ObjectForScripting(this);
-
-                    //RTMPの時はサーバートークンも一緒にFlashに渡す
-                    if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
-
-                        browser.Document.InvokeScript("VideoViewModel$initialize", new object[] { VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken });
-                    } else if(VideoData.VideoType == NicoNicoVideoType.New) {
-
-                        DmcSession = new NicoNicoDmcSession(videoData.ApiData.DmcInfo);
-                        var content = await DmcSession.CreateAsync();
-
-                        browser.Document.InvokeScript("VideoViewModel$initialize", new object[] { content.ContentUri });
-
-
-                        DmcSession.HeartbeatTimer = new Timer(new TimerCallback(DmcSession.Heartbeat),content.Id, 1000, 8000);
-
-                    } else {
-
-                        browser.Document.InvokeScript("VideoViewModel$initialize", new object[] { VideoData.ApiData.GetFlv.VideoUrl });
-                    }
-
-                    //ここからInvoke可能
-                    Owner.IsPlaying = true;
-                    Owner.IsInitialized = true;
-                    Owner.Mylist.EnableButtons();
-
-                    Owner.Volume = Settings.Instance.Volume;
-
-
-                    Owner.IsRepeat = Settings.Instance.IsRepeat;
-                    InitializeComment();
-                };
 
                 if(VideoData.ApiData.Cmsid.Contains("nm")) {
 
@@ -124,7 +98,7 @@ namespace SRNicoNico.ViewModels {
                     if(VideoData.ApiData.MovieType == "flv") {
 
                         VideoData.VideoType = NicoNicoVideoType.FLV;
-                    } else if(videoData.ApiData.IsDmc) {
+                    } else if(VideoData.ApiData.IsDmc) {
 
                         VideoData.VideoType = NicoNicoVideoType.New;
                     } else {
@@ -134,32 +108,67 @@ namespace SRNicoNico.ViewModels {
                 }
 
                 if(VideoData.VideoType == NicoNicoVideoType.MP4 || VideoData.VideoType == NicoNicoVideoType.New) {
-                    
-                    browser.Navigate(new Uri(GetHtml5PlayerPath()));
+
+                    Browser.Navigate(new Uri(GetHtml5PlayerPath()));
                 } else if(VideoData.VideoType == NicoNicoVideoType.FLV) {
 
-                    browser.Navigate(new Uri(GetFlashPlayerPath()));
+                    Browser.Navigate(new Uri(GetFlashPlayerPath()));
                 } else if(VideoData.VideoType == NicoNicoVideoType.SWF) {
 
 
-                    browser.Navigate(new Uri(GetSWFPlayerPath()));
+                    Browser.Navigate(new Uri(GetSWFPlayerPath()));
                 } else if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
 
-                    browser.Navigate(new Uri(GetRTMPPlayerPath()));
+                    Browser.Navigate(new Uri(GetRTMPPlayerPath()));
                 }
                 Owner.IsActive = false;
             }));
-
-
         }
 
+        private async void LoadCompleted(object sender, System.Windows.Forms.WebBrowserDocumentCompletedEventArgs e) {
+
+
+                Browser.ObjectForScripting = new ObjectForScripting(this);
+
+                //RTMPの時はサーバートークンも一緒にFlashに渡す
+                if(VideoData.VideoType == NicoNicoVideoType.RTMP) {
+
+                    Browser.Document.InvokeScript("VideoViewModel$initialize", new object[] { VideoData.ApiData.GetFlv.VideoUrl + "^" + VideoData.ApiData.GetFlv.FmsToken });
+                } else if(VideoData.VideoType == NicoNicoVideoType.New) {
+
+                    DmcSession = new NicoNicoDmcSession(VideoData.ApiData.DmcInfo);
+                    var content = await DmcSession.CreateAsync();
+
+                    Browser.Document.InvokeScript("VideoViewModel$initialize", new object[] { content.ContentUri });
+
+
+                    DmcSession.HeartbeatTimer = new Timer(new TimerCallback(DmcSession.Heartbeat), content.Id, 1000, 8000);
+
+                } else {
+
+                    Browser.Document.InvokeScript("VideoViewModel$initialize", new object[] { VideoData.ApiData.GetFlv.VideoUrl });
+                }
+
+                //ここからInvoke可能
+                Owner.IsPlaying = true;
+                Owner.IsInitialized = true;
+                Owner.Mylist.EnableButtons();
+
+                Owner.Volume = Settings.Instance.Volume;
+
+
+                Owner.IsRepeat = Settings.Instance.IsRepeat;
+                InitializeComment();
+        }
 
 
         private async void InitializeComment() {
 
             Owner.Comment.IsCommentLoading = true;
 
+
             var list = await Owner.CommentInstance.GetCommentAsync();
+            VideoData.CommentData.Clear();
             if(list != null) {
 
                 foreach(var entry in list) {
@@ -273,7 +282,8 @@ namespace SRNicoNico.ViewModels {
 
         protected internal void InjectPostedComment(string json) {
 
-
+            InvokeScript("CommentViewModel$add_posted_comment", json);
+            ApplyChanges();
         }
 
         protected internal void Pause() {
@@ -436,7 +446,10 @@ namespace SRNicoNico.ViewModels {
 
                     Owner.IsPlaying = bool.Parse(args);
                     break;
+                case "playing":
 
+                    Owner.IsPlaying = true;
+                    break;
                 case "widtheight":
 
                     Owner.VideoData.Resolution = args;
@@ -469,6 +482,26 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case "refresh":
                     Owner.Refresh();
+                    break;
+                case "ended":
+                    
+                    if(Owner.IsPlayList) {
+
+
+                        if(!Owner.IsRepeat) {
+
+                            Owner.PlayList.Next();
+                        }
+
+                    } else {
+
+
+                        if(Owner.IsFullScreen) {
+
+                            Owner.ReturnFromFullScreen();
+                        }
+                    }
+
                     break;
                 case "log":
                     Console.WriteLine("Log: " + args);
