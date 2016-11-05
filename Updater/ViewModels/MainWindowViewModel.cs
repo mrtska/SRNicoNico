@@ -49,11 +49,18 @@ namespace Updater.ViewModels {
 
 
 
+        //カレントディレクトリ取得
+        public static string CurrentDirectory {
+            get {
+                return AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+            }
+        }
+
         public void Update() {
 
             Status = "前バージョンを削除中";
             Progress = 60;
-            var files = Directory.GetFiles(Environment.CurrentDirectory);
+            var files = Directory.GetFiles(CurrentDirectory);
 
             foreach(var path in files) {
 
@@ -65,8 +72,13 @@ namespace Updater.ViewModels {
                     File.Delete(path);
                 }
             }
-            Directory.Delete("Flash", true);
-            Directory.Delete("Html", true);
+
+            //
+            foreach(var directory in Directory.GetDirectories(CurrentDirectory)) {
+
+                Directory.Delete(directory, true);
+            }
+
 
             Status = "新バージョンを解凍中";
             Progress = 80;
