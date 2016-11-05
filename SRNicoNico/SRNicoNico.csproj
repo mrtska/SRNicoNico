@@ -195,6 +195,7 @@
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Models\NicoNicoViewer\GetRequestQuery.cs" />
     <Compile Include="Models\NicoNicoViewer\HyperLinkReplacer.cs" />
+    <Compile Include="Models\NicoNicoViewer\InternetSecurityManagerHelper.cs" />
     <Compile Include="Models\NicoNicoViewer\IObjectForScriptable.cs" />
     <Compile Include="Models\NicoNicoViewer\NicoNicoOpener.cs" />
     <Compile Include="Models\NicoNicoViewer\ObjectForScripting.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Models\NicoNicoViewer\UpdateCheck.cs" />
     <Compile Include="Models\NicoNicoViewer\VerifyEmptyText.cs" />
     <Compile Include="Models\NicoNicoViewer\VideoCommentDecoration.cs" />
+    <Compile Include="Models\NicoNicoViewer\WebBrowserAPI.cs" />
     <Compile Include="Models\NicoNicoViewer\XmlSocket.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoDmcSession.cs" />
@@ -1010,31 +1012,31 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Flash\bin\NicoNicoRTMPPlayer.swf" />
-    <Content Include="Html\commentlayer.js">
+    <Content Include="Flash\commentlayer.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Html\jquery-3.1.0.js">
+    <Content Include="Flash\jquery-3.1.0.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Html\jquery.keyframes.js">
+    <Content Include="Flash\jquery.keyframes.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Html\videortmp.html">
+    <Content Include="Flash\videortmp.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Html\videoswf.html">
+    <Content Include="Flash\videoswf.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Html\videoflash.html">
+    <Content Include="Flash\videoflash.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Html\videohtml5.html">
+    <Content Include="Flash\videohtml5.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Html\videoflashplayer.js">
+    <Content Include="Flash\videoflashplayer.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Html\videoplayer.js">
+    <Content Include="Flash\videoplayer.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="InfrastructureAssemblies\Design\Livet.Design.dll" />
@@ -1062,6 +1064,17 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Updater\Updater.csproj">
+      <Project>{9b19cf4e-9d12-438b-af62-dabba8762e1c}</Project>
+      <Name>Updater</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Html\" />
+    <Folder Include="ViewModels\TimeShift\" />
+    <Folder Include="Views\Styles\" />
+  </ItemGroup>
+  <ItemGroup>
     <COMReference Include="SHDocVw">
       <Guid>{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}</Guid>
       <VersionMajor>1</VersionMajor>
@@ -1071,16 +1084,6 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Updater\Updater.csproj">
-      <Project>{9b19cf4e-9d12-438b-af62-dabba8762e1c}</Project>
-      <Name>Updater</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\TimeShift\" />
-    <Folder Include="Views\Styles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

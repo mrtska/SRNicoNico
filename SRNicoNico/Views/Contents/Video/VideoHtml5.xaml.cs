@@ -19,6 +19,7 @@ using System.IO;
 using SRNicoNico.ViewModels;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.Views.Contents.Video {
     /// <summary>
@@ -30,17 +31,41 @@ namespace SRNicoNico.Views.Contents.Video {
             InitializeComponent();
 
         }
+        private InternetSecurityManagerHelper SecurityHelper;
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
 
             if(DataContext is VideoViewModel) {
-
                 var vm = (VideoViewModel)DataContext;
-
+                SecurityHelper = new InternetSecurityManagerHelper();
+                var ax = browser.ActiveXInstance;
+                SecurityHelper.Attach(ax);
+                SecurityHelper.ProcessUrlAction += internetSecurityManagerHelper_ProcessUrlAction;
+                SecurityHelper.MapUrlToZone += SecurityHelper_MapUrlToZone;
                 vm.Initialize(browser);
             }
         }
 
+        private int SecurityHelper_MapUrlToZone(string pwszUrl, out int pdwZone, int dwFlags) {
+
+            pdwZone = (int) WebBrowserAPI.URLZONE.URLZONE_TRUSTED;
+            return HRESULT.S_OK;
+
+        }
+
+        private int internetSecurityManagerHelper_ProcessUrlAction(String pwszUrl, int dwAction, out byte pPolicy, int cbPolicy, byte pContext, int cbContext, int dwFlags, int dwReserved) {
+            pPolicy = 0;
+            if(WebBrowserAPI.URLACTION_SCRIPT_MIN <= dwAction && dwAction <= WebBrowserAPI.URLACTION_SCRIPT_MAX) {
+
+                pPolicy = WebBrowserAPI.URLPOLICY_ALLOW;
+                return HRESULT.S_OK;
+            } else if((WebBrowserAPI.URLACTION_ACTIVEX_MIN <= dwAction && dwAction <= WebBrowserAPI.URLACTION_ACTIVEX_MAX)) {
+
+                pPolicy = WebBrowserAPI.URLPOLICY_ALLOW;
+                return HRESULT.S_OK;
+            }
+            return WebBrowserAPI.INET_E_DEFAULT_ACTION;
+        }
 
         private void UserControl_MouseWheel(object sender, MouseWheelEventArgs e) {
 

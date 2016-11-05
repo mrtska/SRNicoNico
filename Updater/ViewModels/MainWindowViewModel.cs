@@ -66,6 +66,7 @@ namespace Updater.ViewModels {
                 }
             }
             Directory.Delete("Flash", true);
+            Directory.Delete("Html", true);
 
             Status = "新バージョンを解凍中";
             Progress = 80;

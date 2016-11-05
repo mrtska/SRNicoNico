@@ -536,27 +536,27 @@ namespace SRNicoNico.ViewModels {
 
             var cur = NicoNicoUtil.CurrentDirectory;
 
-            return cur + "Html/videohtml5.html";
+            return cur + "Flash/videohtml5.html";
         }
 
         private string GetFlashPlayerPath() {
 
             var cur = NicoNicoUtil.CurrentDirectory;
 
-            return cur + "Html/videoflash.html";
+            return cur + "Flash/videoflash.html";
         }
         private string GetSWFPlayerPath() {
 
             var cur = NicoNicoUtil.CurrentDirectory;
 
-            return cur + "Html/videoswf.html";
+            return cur + "Flash/videoswf.html";
         }
 
         private string GetRTMPPlayerPath() {
 
             var cur = NicoNicoUtil.CurrentDirectory;
 
-            return cur + "Html/videortmp.html";
+            return cur + "Flash/videortmp.html";
         }
 
 
