@@ -13,6 +13,7 @@ using Livet.Messaging.Windows;
 
 using SRNicoNico.Models;
 using System.Collections.ObjectModel;
+using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class ConfigViewModel : TabItemViewModel {
@@ -71,6 +72,11 @@ namespace SRNicoNico.ViewModels {
         public void OpenResetConfig() {
 
             App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.Contents.Config.ConfigResetDialog), this, TransitionMode.Modal));
+        }
+
+        public void Reset() {
+
+            Settings.Instance.Reset();
         }
 
         public void Close() {

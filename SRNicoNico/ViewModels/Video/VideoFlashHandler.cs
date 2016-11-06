@@ -78,13 +78,10 @@ namespace SRNicoNico.ViewModels {
                 return;
             }
 
-
             Browser.DocumentCompleted -= LoadCompleted;
             Browser.DocumentCompleted += LoadCompleted;
 
             await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-
 
                 if(VideoData.ApiData.Cmsid.Contains("nm")) {
 

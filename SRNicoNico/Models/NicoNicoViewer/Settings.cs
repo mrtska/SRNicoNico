@@ -11,6 +11,7 @@ using Livet;
 using Newtonsoft.Json;
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
     public class Settings : NotificationObject {
@@ -228,16 +229,17 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         public void Reset() {
 
             //ファイルを完全に消す
-            var fi = new FileInfo(Dir);
+            var fi = new FileInfo(Dir + "user.settings");
             if(fi.Exists) {
 
                 fi.Delete();
             }
 
             //設定ファイルをデフォルト値で生成して反映させる
-            //なんてことは出来ないので
-            Save();
-            Load();
+            //なんてことは出来ないのでぷろせすを再起動
+            Process.Start("SRNicoNico.exe");
+            Environment.Exit(0);
+            
         }
 
         //Jsonをいい感じにインデントする

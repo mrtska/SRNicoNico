@@ -43,7 +43,7 @@
             </Grid>
         </Border>
         <StackPanel Grid.Row="2" Height="80" VerticalAlignment="Top">
-            <TextBlock Text="設定を初期化しますか？" HorizontalAlignment="Center" />
+            <TextBlock Text="設定を初期化しますか？(初期化後 自動的に再起動します)" HorizontalAlignment="Center" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="初期化" Margin="10">
                     <i:Interaction.Triggers>
