@@ -82,9 +82,8 @@ CommentViewModelImpl.prototype = {
     //このメソッドはC#から呼ばれる jsonにはC#が取得したコメントがJsonになって入っている
     initialize: function () {
 
-        var isRollOver = true;
 
-        window.onkeydown = function (e) {
+        document.onkeydown = function (e) {
 
             //F5
             if (e.keyCode == 0x74) {
@@ -93,35 +92,53 @@ CommentViewModelImpl.prototype = {
             }
         }
 
-        setInterval(function () {
-
-            if (isRollOver) {
-
-                document.body.style["cursor"] = "none";
-            }
-            invoke_host("hidecontroller");
-
-        }, 1600);
-
-        window.onmouseleave = function () {
-
-            isRollOver = false;
-        }
-
-        window.onmousemove = function (e) {
-
-            isRollOver = true;
-            document.body.style["cursor"] = "default";
-            invoke_host("showcontroller");
-            
-        };
 
         //ニコニコビルトインカラー初期化
         this.comment_color_init();
 
+        var isRollOver = true;
         //コメントレイヤーのdivを取得
         this.layer = document.getElementById("commentlayer");
 
+        var func = function () {
+
+            if (isRollOver) {
+
+                document.body.style["cursor"] = "none";
+                invoke_host("hidecontroller");
+            }
+        };
+
+        var id = -1;
+
+        $(document).mouseleave(function () {
+
+            isRollOver = false;
+            clearInterval(id);
+        });
+
+
+        var x = 0;
+        var y = 0;
+
+        $(document).mousemove(function (e) {
+
+            if (x == e.pageX && y == e.pageY) {
+
+                return;
+            }
+
+            x = e.pageX;
+            y = e.pageY;
+            document.body.style["cursor"] = "default";
+
+            clearInterval(id);
+            id = setInterval(func, 1600);
+
+            isRollOver = true;
+            invoke_host("showcontroller");
+
+        });
     },
     add_comment: function(json) {
         //C#で取得したコメントをパース

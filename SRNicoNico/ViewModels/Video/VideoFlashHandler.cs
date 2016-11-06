@@ -476,6 +476,7 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case "showcontroller":
                     Owner.ShowFullScreenPopup();
+                    Console.WriteLine("!!!");
                     break;
                 case "hidecontroller":
                     Owner.HideFullScreenPopup();

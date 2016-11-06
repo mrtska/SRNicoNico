@@ -252,15 +252,14 @@ namespace SRNicoNico.Views.Controls {
         private void SeekBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
 
             IsDrag = false;
-            UIElement el = sender as UIElement;
+            var el = sender as UIElement;
             el.ReleaseMouseCapture();
         }
 
         private void SeekBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
 
-            Console.WriteLine("!!");
             IsDrag = true;
-            UIElement el = sender as UIElement;
+            var el = sender as UIElement;
             el.CaptureMouse();
 
         }
