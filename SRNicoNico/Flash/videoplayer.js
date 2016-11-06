@@ -138,7 +138,11 @@ VideoViewModelImpl.prototype = {
             invoke_host("seeked");
         });
 
+        this.video.addEventListener("progress", function (e) {
 
+            //CommentViewModel.pause_comment();
+            invoke_host("log", e.target.paused);
+        });
         var v = this.video;
         //ウィンドウサイズが変わったら動画の高さやコメントのサイズを計算しなおす
         window.onresize = function (e) {

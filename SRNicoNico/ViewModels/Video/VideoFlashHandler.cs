@@ -513,6 +513,8 @@ namespace SRNicoNico.ViewModels {
                         break;
                     }
             }
+            //if(cmd != "currenttime" && cmd != "log")
+            //Console.WriteLine("Invoked:" + cmd);
         }
 
         public void Dispose() {

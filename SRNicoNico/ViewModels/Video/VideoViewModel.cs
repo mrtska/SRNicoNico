@@ -431,13 +431,17 @@ namespace SRNicoNico.ViewModels {
 
             WatchApi = new NicoNicoWatchApi(videoUrl, this);
 
-
-
             IsActive = true;
 
             Status = "動画情報取得中";
             //動画情報取得
             VideoData.ApiData = await WatchApi.GetWatchApiDataAsync();
+            if(VideoData.ApiData == null) {
+
+                LoadFailed = true;
+                return;
+            }
+
             Handler.Initialize(browser, VideoData);
 
             CommentInstance = new NicoNicoComment(VideoData.ApiData, this);
@@ -472,13 +476,18 @@ namespace SRNicoNico.ViewModels {
 
             WatchApi = new NicoNicoWatchApi(videoUrl + "?watch_harmful=1", this);
 
-
-
             IsActive = true;
 
             Status = "動画情報取得中";
             //動画情報取得
             VideoData.ApiData = await WatchApi.GetWatchApiDataAsync();
+
+            if(VideoData.ApiData == null) {
+
+                LoadFailed = true;
+                return;
+            }
+
             Handler.Update();
 
             CommentInstance = new NicoNicoComment(VideoData.ApiData, this);
@@ -567,7 +576,6 @@ namespace SRNicoNico.ViewModels {
             IsFullScreen = true;
 
 
-            var screen = System.Windows.Forms.Screen.FromPoint(new System.Drawing.Point((int)App.Current.MainWindow.Left, (int) App.Current.MainWindow.Top));
 
             Type type;
             if(Settings.Instance.UseWindowMode) {
