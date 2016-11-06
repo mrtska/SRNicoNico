@@ -85,26 +85,23 @@ namespace SRNicoNico.ViewModels {
 		private bool Success = false;
 
 		//サインイン
-		public void SignIn() {
+		public async void SignIn() {
 
 			StateText = "ログイン中・・・";
 			Enabled = false;
 
-			Task.Run(new Action(() => {
+			var status = await NicoNicoWrapperMain.Session.SignInAsync(MailAddress, Password);
 
-				SigninStatus status = NicoNicoWrapperMain.Session.SignIn(MailAddress, Password);
+			//サインイン失敗
+			if(status != SigninStatus.Success) {
 
-				//サインイン失敗
-				if(status != SigninStatus.Success) {
+				StateText = "ログインに失敗しました。";
+				Enabled = true;
+				return;
+			}
 
-					StateText = "ログインに失敗しました。";
-					Enabled = true;
-					return;
-				}
-
-				Success = true;
-				Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
-			}));
+			Success = true;
+			Messenger.Raise(new WindowActionMessage(WindowAction.Close, "WindowAction"));
 		}
 
 		public void Close() {

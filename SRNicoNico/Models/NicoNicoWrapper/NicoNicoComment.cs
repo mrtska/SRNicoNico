@@ -218,9 +218,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var packet = root.CreateElement("packet");
                 var thread = root.CreateElement("thread");
                 thread.SetAttribute("thread", GetFlv.ThreadID);
-                thread.SetAttribute("version", "20090904");
+                thread.SetAttribute("version", "20061206");
                 thread.SetAttribute("res_from", "-1000");
                 thread.SetAttribute("fork", "1");
+                thread.SetAttribute("click_revision", "-1");
+                thread.SetAttribute("scores", "1");
 
                 packet.AppendChild(thread);
                 root.AppendChild(packet);

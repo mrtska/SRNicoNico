@@ -174,66 +174,66 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
 
         //サインイン
-        public SigninStatus SignIn(string address, string passwd) {
+        public async Task<SigninStatus> SignInAsync(string address, string passwd) {
 
 			var request = new Dictionary<string, string>();
 			request.Add("mail_tel", address);		//アドレス
 			request.Add("password", passwd);		//パスワード
 
 			//サインインリクエスト
-			return HttpClient.PostAsync(SignInURL, new FormUrlEncodedContent(request)).ContinueWith(prevTask => {
+			return await await HttpClient.PostAsync(SignInURL, new FormUrlEncodedContent(request)).ContinueWith(async (task) => {
 
-				return SignInInternal();
-			}).Result;
+                return await SignInInternalAsync();
+            });
 		}
 
 		//セッションを確立した後に呼ぶ
-		public SigninStatus SignInInternal() {
+		public async Task<SigninStatus> SignInInternalAsync() {
 
-			//ニコニコTOPにレスポンスヘッダを要求する
-			var message = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
+            try {
 
-			var response = HttpClient.SendAsync(message).Result;
+                //ニコニコTOPにレスポンスヘッダを要求する
+                var message = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
 
-			//成功したら
-			if(response.StatusCode == HttpStatusCode.OK) {
+                var response = await HttpClient.SendAsync(message);
 
-				//レスポンスヘッダにユーザーIDが無かったらログイン失敗
-				if(!response.Headers.Contains("x-niconico-id")) {
+                //成功したら
+                if(response.StatusCode == HttpStatusCode.OK) {
 
-					return SigninStatus.Failed;
-				}
-                //ユーザーIDを取得
-                UserId = response.Headers.GetValues("x-niconico-id").Single();
+                    //レスポンスヘッダにユーザーIDが無かったらログイン失敗
+                    if(!response.Headers.Contains("x-niconico-id")) {
 
-                //アカウント権限
-                Authority = (NiconicoAccountAuthority)int.Parse(response.Headers.GetValues("x-niconico-authflag").Single());
+                        return SigninStatus.Failed;
+                    }
+                    //ユーザーIDを取得
+                    UserId = response.Headers.GetValues("x-niconico-id").Single();
 
-				//cookieを取得
-				var cookie = HttpHandler.CookieContainer.GetCookies(new Uri("http://nicovideo.jp/")).Cast<Cookie>()
-									.Where( c => c.Name == "user_session" && c.Path == "/" ).OrderByDescending( c => c.Expires.Ticks ).First();
+                    //アカウント権限
+                    Authority = (NiconicoAccountAuthority)int.Parse(response.Headers.GetValues("x-niconico-authflag").Single());
 
-				if(cookie != null && cookie.Expires != null) {
+                    //cookieを取得
+                    var cookie = HttpHandler.CookieContainer.GetCookies(new Uri("http://nicovideo.jp/")).Cast<Cookie>()
+                                        .Where(c => c.Name == "user_session" && c.Path == "/").OrderByDescending(c => c.Expires.Ticks).First();
 
-                    //cookieをもとにキーと有効期限を取得
-                    Key = cookie.Value;
-                    Expire = cookie.Expires;
+                    if(cookie != null && cookie.Expires != null) {
 
-                    App.SetCookie(new Uri("http://nicovideo.jp/"), "user_session=" + Key);
+                        //cookieをもとにキーと有効期限を取得
+                        Key = cookie.Value;
+                        Expire = cookie.Expires;
 
+                        App.SetCookie(new Uri("http://nicovideo.jp/"), "user_session=" + Key);
 
-                    //Chromium側にセッションを使わせる
-                    //var b = CefSharp.Cef.GetGlobalCookieManager().SetCookieAsync("http://.nicovideo.jp/", cefcookie).Result;
+                        App.ViewModelRoot.LogedInInit();
+                        return SigninStatus.Success;
+                    }
+                }
 
-                    
+                //サインイン失敗
+                return SigninStatus.Failed;
+            } catch(RequestTimeout) {
 
-                    App.ViewModelRoot.LogedInInit();
-					return SigninStatus.Success;
-				}
-			}
-
-			//サインイン失敗
-			return SigninStatus.Failed;
+                return SigninStatus.Failed;
+            }
 		}
 
 

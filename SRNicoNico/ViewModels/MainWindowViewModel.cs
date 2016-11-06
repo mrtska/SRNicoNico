@@ -295,7 +295,7 @@ namespace SRNicoNico.ViewModels {
         public void Initialize() {
 
             //Modelsを初期化
-            Task.Run(() => {
+            Task.Run(async () => {
 
                 if(File.Exists(NicoNicoUtil.CurrentDirectory + @"\session")) {
 
@@ -324,7 +324,7 @@ namespace SRNicoNico.ViewModels {
 
                     //セッションが有効だった場合
                     NicoNicoWrapperMain.Instance = new NicoNicoWrapperMain(new NicoNicoSession(key, expire));
-                    if(NicoNicoWrapperMain.Session.SignInInternal() != SigninStatus.Success) {
+                    if(await NicoNicoWrapperMain.Session.SignInInternalAsync() != SigninStatus.Success) {
 
                         //ログイン失敗
                         SignIn.StateText = "ログインに失敗しました。";

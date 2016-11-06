@@ -188,12 +188,16 @@ namespace SRNicoNico.ViewModels {
                     dynamic ujson = new DynamicJson();
                     ujson.array = ulist;
 
-                    foreach(var entry in ulist) {
+                    if(ulist != null) {
 
-                        VideoData.CommentData.Add(new CommentEntryViewModel(entry, Owner));
+                        foreach(var entry in ulist) {
+
+                            VideoData.CommentData.Add(new CommentEntryViewModel(entry, Owner));
+                        }
+
+                        InjectUploaderComment(ujson.ToString());
                     }
 
-                    InjectUploaderComment(ujson.ToString());
                 }
 
             }
