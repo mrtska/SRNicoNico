@@ -10,7 +10,6 @@ using System.IO;
 
 using Newtonsoft.Json;
 
-
 namespace SRNicoNico.Models.NicoNicoWrapper {
 	public class NicoNicoUtil {
 
@@ -24,12 +23,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			return JsonConvert.SerializeXmlNode(doc);
 		}
 
+
         //カレントディレクトリ取得
-		public static string CurrentDirectory {
-			get {
-				return AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-			}
-		}
+        public static string CurrentDirectory {
+            get {
+
+                return AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+            }   
+        }
 
         //m:sをsに変換
         public static int ConvertTime(string s) {

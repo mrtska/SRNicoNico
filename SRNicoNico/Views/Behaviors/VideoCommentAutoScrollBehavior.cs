@@ -69,10 +69,9 @@ namespace SRNicoNico.Views.Behaviors {
             }
 #endif
 
-
             var instance = obj as VideoCommentAutoScrollBehavior;
 
-            if(p.NewValue == null || !instance.AutoScrollEnabled || instance.Collection.Count == 0) {
+            if(p.NewValue == null || !instance.AutoScrollEnabled || instance.Collection == null || instance.Collection.Count == 0) {
 
                 return;
             }

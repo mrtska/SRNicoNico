@@ -16,6 +16,7 @@ using SRNicoNico.Models.NicoNicoViewer;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
+using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
     public class DownloadViewModel : TabItemViewModel {
@@ -71,7 +72,7 @@ namespace SRNicoNico.ViewModels {
 
                 Directory.CreateDirectory("./backup/Flash");
 
-                var flash = Directory.GetFiles(Environment.CurrentDirectory + "/Flash");
+                var flash = Directory.GetFiles(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "/Flash");
                 foreach(var path in flash) {
 
                     var file = new FileInfo(path).Name;
@@ -85,7 +86,7 @@ namespace SRNicoNico.ViewModels {
                 Thread.Sleep(200);
 
                 //直接起動されたら困っちゃうのでコマンドライン引数にいれちゃう
-                Process.Start(Environment.CurrentDirectory + "/backup/Updater.exe", "iris " + Process.GetCurrentProcess().Id);
+                Process.Start(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "/backup/Updater.exe", "iris " + Process.GetCurrentProcess().Id);
                 //Environment.Exit(0);
             });
         }

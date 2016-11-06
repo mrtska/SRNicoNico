@@ -44,13 +44,7 @@ namespace Updater {
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
 
-            MessageBox.Show(
-                "不明なエラーが発生しました。アプリケーションを終了します。" + e.ExceptionObject,
-                "エラー",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
-        
-            Environment.Exit(1);
+            
         }
     }
 }

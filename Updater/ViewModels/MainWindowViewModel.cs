@@ -48,10 +48,14 @@ namespace Updater.ViewModels {
         #endregion
 
 
-
         //カレントディレクトリ取得
         public static string CurrentDirectory {
             get {
+                if(AppDomain.CurrentDomain.SetupInformation.ApplicationBase.EndsWith(@"backup\")) {
+
+                    return AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "..";
+                }
+
                 return AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             }
         }
@@ -61,7 +65,6 @@ namespace Updater.ViewModels {
             Status = "前バージョンを削除中";
             Progress = 60;
             var files = Directory.GetFiles(CurrentDirectory);
-
             foreach(var path in files) {
 
                 var file = new FileInfo(path).Name;
@@ -72,13 +75,7 @@ namespace Updater.ViewModels {
                     File.Delete(path);
                 }
             }
-
-            //
-            foreach(var directory in Directory.GetDirectories(CurrentDirectory)) {
-
-                Directory.Delete(directory, true);
-            }
-
+            Directory.Delete("Flash", true);
 
             Status = "新バージョンを解凍中";
             Progress = 80;
