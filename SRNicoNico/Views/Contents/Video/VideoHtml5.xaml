@@ -15,7 +15,6 @@
              d:DataContext="{d:DesignInstance vm:VideoViewModel}"
              xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
              DataContextChanged="UserControl_DataContextChanged"
-             MouseWheel="UserControl_MouseWheel"
 			 >
     <Grid>
         <WindowsFormsHost Grid.Row="1" Focusable="False" >

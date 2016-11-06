@@ -48,8 +48,16 @@ namespace SRNicoNico.Views.Contents.Video {
                         NicoNicoOpener.Open(e.Uri.OriginalString);
                     } else {
 
-                        NicoNicoOpener.Replace(vm, e.Uri.OriginalString);
-                        vm.DisposeViewModel();
+                        if(vm.IsPlayList) {
+
+                            vm.Handler.Pause();
+                            NicoNicoOpener.Open(e.Uri.OriginalString);
+                        } else {
+
+                            NicoNicoOpener.Replace(vm, e.Uri.OriginalString);
+                            vm.DisposeViewModel();
+                        }
+
                     }
                 }
             }

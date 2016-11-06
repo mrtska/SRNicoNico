@@ -66,10 +66,5 @@ namespace SRNicoNico.Views.Contents.Video {
             }
             return WebBrowserAPI.INET_E_DEFAULT_ACTION;
         }
-
-        private void UserControl_MouseWheel(object sender, MouseWheelEventArgs e) {
-
-            Console.WriteLine(e.Delta);
-        }
     }
 }
