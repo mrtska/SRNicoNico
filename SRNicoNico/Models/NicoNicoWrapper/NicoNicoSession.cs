@@ -67,7 +67,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 			HttpHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
 			HttpClient = new HttpClient(HttpHandler, false);
 			HttpClient.DefaultRequestHeaders.Add("user-agent", UserAgent);
-            HttpClient.Timeout = TimeSpan.FromSeconds(30);
+            HttpClient.Timeout = TimeSpan.FromSeconds(15);
 
         }
 

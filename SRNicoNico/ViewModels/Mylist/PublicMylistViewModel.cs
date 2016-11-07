@@ -85,6 +85,7 @@ namespace SRNicoNico.ViewModels {
 
             MylistId = url.Substring(31);
             PublicMylist = new NicoNicoPublicMylist(url);
+            Sort(SortIndex);
         }
         public void Sort(int index) {
 

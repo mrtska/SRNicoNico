@@ -102,7 +102,7 @@ namespace SRNicoNico.ViewModels {
 
                 Mylist.Add(new MylistListEntryViewModel(this, data));
             }
-            Sort(0);
+            Sort(SortIndex);
 
         }
 
