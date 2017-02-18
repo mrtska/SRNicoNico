@@ -1,0 +1,66 @@
+﻿<metro:MetroWindow x:Class="SRNicoNico.Views.NicoRepoHelpView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                   xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+                   xmlns:v="clr-namespace:SRNicoNico.Views"
+                   xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+                   xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
+                   xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                   xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
+                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+                   xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+                   mc:Ignorable="d" 
+                   WindowStartupLocation="CenterOwner"
+		           Background="{DynamicResource ThemeBrushKey}"
+		           Foreground="{DynamicResource ActiveForegroundBrushKey}"
+                   SizeToContent="Height"
+                   ResizeMode="CanResize"
+                   WindowStyle="None"
+                   Width="500"
+                   d:DataContext="{d:DesignInstance {x:Type vm:NewMylistViewModel}}"
+                   >
+    <i:Interaction.Triggers>
+        <l:InteractionMessageTrigger MessageKey="NewMylist" Messenger="{Binding Messenger, Mode=OneWay}">
+            <l:WindowInteractionMessageAction />
+        </l:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border metro:MetroWindow.IsCaptionBar="True">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="HelpView" TextTrimming="CharacterEllipsis" FontSize="18" Margin="2,1,0,1" VerticalAlignment="Center" />
+                <metro:CaptionButton Grid.Column="1" WindowAction="Close" />
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="2">
+            <StackPanel VerticalAlignment="Top">
+                <TextBlock Margin="10,0,0,0" TextWrapping="Wrap">
+                    ニコレポです。投稿動画のみなどのフィルターが使えます。<LineBreak/>
+                    ニコレポリストを作っている場合も表示されます。<LineBreak />
+                </TextBlock>
+                <TextBlock Margin="15,0,0,0" TextWrapping="Wrap">
+                    キーボードショートカット：
+                </TextBlock>
+                <TextBlock Margin="20,0,0,0" TextWrapping="Wrap">
+                    Ctrl+F5：ニコレポリストを更新<LineBreak/>
+                    F5：更新<LineBreak/>
+                    Space：さらに読み込む
+                </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</metro:MetroWindow>

@@ -1,0 +1,207 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using Livet;
+using Livet.Messaging;
+using Livet.Messaging.Windows;
+using SRNicoNico.Models.NicoNicoWrapper;
+using Codeplex.Data;
+using System.Timers;
+using System.Windows;
+
+namespace SRNicoNico.ViewModels {
+
+    
+    public class SignInViewModel : ViewModel {
+
+        private const string UserSessionName = "user.session";
+
+
+        #region SignInViewTitle変更通知プロパティ
+        private string _SignInViewTitle = "サインイン";
+
+        public string SignInViewTitle {
+            get { return _SignInViewTitle; }
+            set { 
+                if(_SignInViewTitle == value)
+                    return;
+                _SignInViewTitle = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+
+        public SignInViewModel() {
+
+        }
+
+
+        public async Task<List<NicoNicoSessionUser>> AutoSignIn() {
+
+            //ユーザーのセッションファイルがあったらオートログインを試みる
+            if(File.Exists(NicoNicoUtil.OptionDirectory + UserSessionName)) {
+
+                try {
+
+                    //ファイルからセッションデータをロードする
+                    using(var file = File.OpenRead(NicoNicoUtil.OptionDirectory + UserSessionName)) {
+                        using(var reader = new StreamReader(file)) {
+
+
+                            dynamic json = DynamicJson.Parse(Encoding.UTF8.GetString(Convert.FromBase64String(reader.ReadToEnd())));
+
+                            var list = new List<NicoNicoSessionUser>();
+
+                            foreach(var user in json.list) {
+
+                                var session = new NicoNicoSession(user.session.Key);
+
+                                //カレントユーザーだけサインインする
+                                if(user.session.UserId != json.CurrentUser) {
+
+                                    list.Add(new NicoNicoSessionUser(session));
+                                    continue;
+                                }
+
+                                App.SetCookie(new Uri("http://nicovideo.jp/"), "user_session=" + session.Key);
+
+                                var status = await session.VerifySignInAsync();
+                                if(status == SigninStatus.Success) {
+
+                                    list.Add(new NicoNicoSessionUser(session));
+                                } else if(status == SigninStatus.Failed) {
+
+                                    SignInViewTitle = "自動サインイン失敗";
+                                    list.Add(await SignInAsync());
+                                }
+                                    
+                            }
+
+                            return list;//  new NicoNicoUser(new NicoNicoSession());
+                        }
+                    }
+
+                    //例外吐いて読み込めなかったらファイルを消して作り直す
+                } catch(Exception) {
+
+                    //同じ名前のディレクトリなんか作るやつおらんやろ～
+                    //いたら非常に困ります
+                    if(Directory.Exists(NicoNicoUtil.OptionDirectory + UserSessionName)) {
+
+                        Directory.Delete(NicoNicoUtil.OptionDirectory + UserSessionName, true);
+                    }
+
+                    if(File.Exists(NicoNicoUtil.OptionDirectory + UserSessionName)) {
+
+                        File.Delete(NicoNicoUtil.OptionDirectory + UserSessionName);
+                    }
+
+                    //ダイアログを使ってサインイン
+                    return new List<NicoNicoSessionUser>() { await SignInAsync() };
+                }
+            } else {
+
+
+
+                return new List<NicoNicoSessionUser>() { await SignInAsync() };
+            }
+        }
+
+
+
+
+
+        public async Task<NicoNicoSessionUser> SignInAsync() {
+
+            //前のCookieを削除
+            var expiration = DateTime.UtcNow - TimeSpan.FromDays(1);
+            string str = string.Format("{0}=; expires={1}; path=/; domain=.nicovideo.jp", "user_session", expiration.ToString("R"));
+            App.SetCookie(new Uri("http://nicovideo.jp/"), str);
+            
+            var userSession = "";
+
+            //ブラウザのCookieをポーリングしてログインしてるか確認
+            var pollingTimer = new Timer(1000);
+
+            pollingTimer.Elapsed += (o, e) => {
+
+                //Cookieをブラウザから取得
+                var cookie = App.GetCookie(new Uri("http://nicovideo.jp/"));
+
+                foreach(var entry in cookie.Split(';')) {
+
+                    var keyvalue = entry.Split('=');
+                    var key = keyvalue[0];
+
+                    //セッションが見つかったらポップアップを閉じて終了
+                    if(key.Contains("user_session")) {
+
+                        userSession = keyvalue[1];
+                        Messenger.Raise(new WindowActionMessage(WindowAction.Close, "SignIn"));
+                        break;
+                    }
+                }
+            };
+
+            pollingTimer.Enabled = true;
+
+            while(true) {
+
+                //Modalで開くと下のDisposeはウィンドウを閉じるまで呼ばれない
+                App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.SignInView), this, TransitionMode.Modal));
+
+                var session = new NicoNicoSession(userSession);
+
+                //Sucessにならないのはおかしいんだけどね
+                var status = await session.VerifySignInAsync();
+
+                //メンテナンス中なら落とす 迷惑になると思うし
+                if(status == SigninStatus.ServiceUnavailable) {
+
+                    MessageBox.Show("メンテナンス中か、サーバーが落ちています。");
+                    Environment.Exit(0);
+                }
+
+                if(status == SigninStatus.Success) {
+
+                    //タイマーを終了
+                    pollingTimer.Dispose();
+                    return new NicoNicoSessionUser(session);
+                }
+            }
+        }
+        
+        //Jsonにしてセッションを保存する
+        public void SaveSession(List<NicoNicoSessionUser> users, NicoNicoSessionUser current) {
+
+            dynamic json = new DynamicJson();
+
+            var list = new List<dynamic>();
+            foreach(var user in users) {
+
+                list.Add(new { session = user.Session });
+            }
+
+            json.list = (object[]) list.ToArray();
+
+            json.CurrentUser = current.Session.UserId;
+
+            var str = json.ToString();
+
+            var writer = new StreamWriter(NicoNicoUtil.OptionDirectory + UserSessionName);
+
+            writer.AutoFlush = true;
+            writer.WriteLine(Convert.ToBase64String(Encoding.UTF8.GetBytes(str)));
+
+            writer.Close();
+
+        }
+
+
+    }
+}

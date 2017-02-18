@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Other"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance {x:Type vm:OtherViewModel}}"
+             >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Background="{DynamicResource BackgroundLevel1BrushKey}">
+            <ScrollViewer>
+                <metro:TabView ItemsSource="{Binding OtherList}" SelectedIndex="0" />
+            </ScrollViewer>
+        </Grid>
+
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding OtherList}">
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type vm:OverViewViewModel}">
+                    <v:OverView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:OSSViewModel}">
+                    <v:OSS />
+                </DataTemplate>
+            </ItemsControl.Resources>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                    <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+
+
+    </Grid>
+</UserControl>

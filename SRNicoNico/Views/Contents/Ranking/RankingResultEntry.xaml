@@ -1,0 +1,147 @@
+﻿<UserControl x:Class="SRNicoNico.Views.RankingResultEntry"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Action"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="80"
+             d:DesignWidth="600"
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             d:DataContext="{d:DesignInstance {x:Type vm:RankingResultEntryViewModel}}"
+             >
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="MouseDoubleClick">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="WebViewで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <a:OpenWebViewAction Url="{Binding Item.ContentUrl}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="ブラウザで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:LaunchUriOrFileAction Path="{Binding Item.ContentUrl}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="URLをクリップボードにコピー">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <a:CopyToClipBoardAction Text="{Binding Item.ContentUrl}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="{Binding Item.Rank}" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center" Width="auto">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="1">
+                                <Setter Property="Foreground" Value="Gold" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="2">
+                                <Setter Property="Foreground" Value="Silver" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="3">
+                                <Setter Property="Foreground" Value="#C47222" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <TextBlock Text="{Binding Item.RankingPoint}" HorizontalAlignment="Center">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="1">
+                                <Setter Property="Foreground" Value="Gold" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="2">
+                                <Setter Property="Foreground" Value="Silver" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="3">
+                                <Setter Property="Foreground" Value="#C47222" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <Image Source="{Binding Item.ThumbNail}"  Width="70" Height="40"/>
+            <TextBlock Text="{Binding Item.Length}" HorizontalAlignment="Right" />
+        </StackPanel>
+
+        <Grid Grid.Column="2">
+            <StackPanel Margin="10,0,0,0">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Item.Title}" FontSize="18" TextWrapping="Wrap" />
+                    <ContentControl Grid.Column="1" Margin="4,0,0,0">
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Item.IsWatched}" Value="True">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ContentControl">
+                                                    <TextBlock Text="視聴済み" Margin="0,2,10,0" Foreground="Gray" FontSize="12"  />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                </Grid>
+                <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Item.Description}" FontSize="14" Foreground="Gray" TextWrapping="Wrap" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Item.ViewCount,StringFormat=再生数:{0}}" FontSize="13" TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding Item.CommentCount,StringFormat=コメント数:{0}}" Margin="10,0,0,0" FontSize="13" TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding Item.MylistCount,StringFormat=マイリスト数:{0}}" Margin="10,0,0,0" FontSize="13" TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="1" TextWrapping="Wrap" Text="{Binding Item.PostAt}" FontSize="13" HorizontalAlignment="Right" Foreground="Red" />
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

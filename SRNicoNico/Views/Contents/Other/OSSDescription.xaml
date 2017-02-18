@@ -1,0 +1,668 @@
+﻿<UserControl x:Class="SRNicoNico.Views.OSSDescription"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="600">
+
+
+    <UserControl.Resources>
+        <Style TargetType="Hyperlink">
+            <EventSetter Event="RequestNavigate" Handler="Hyperlink_RequestNavigate" />
+        </Style>
+    </UserControl.Resources>
+
+    <UserControl.Style>
+        <Style TargetType="UserControl">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Name}" Value="MetroRadiance">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="MetroRadiance 2.3.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            このライブラリはメインのユーザーインターフェースを構成するために必要な基幹ライブラリです。<LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="https://github.com/Grabacr07/MetroRadiance" >
+                                                https://github.com/Grabacr07/MetroRadiance
+                                            </Hyperlink><LineBreak />
+                                            <Hyperlink NavigateUri="https://twitter.com/Grabacr07" ToolTip="https://twitter.com/Grabacr07" >
+                                                @Grabacr07
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : MIT License<LineBreak />
+                                            The MIT License (MIT)<LineBreak /><LineBreak />
+
+                                            Copyright (c) 2015 Grabacr07<LineBreak /><LineBreak />
+
+                                            Permission is hereby granted, free of charge, to any person obtaining a copy<LineBreak />
+                                            of this software and associated documentation files (the "Software"), to deal<LineBreak />
+                                            in the Software without restriction, including without limitation the rights<LineBreak />
+                                            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<LineBreak />
+                                            copies of the Software, and to permit persons to whom the Software is<LineBreak />
+                                            furnished to do so, subject to the following conditions:<LineBreak /><LineBreak />
+
+                                            The above copyright notice and this permission notice shall be included in<LineBreak />
+                                            all copies or substantial portions of the Software.<LineBreak /><LineBreak />
+
+                                            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<LineBreak />
+                                            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<LineBreak />
+                                            FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE<LineBreak />
+                                            AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<LineBreak />
+                                            LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<LineBreak />
+                                            OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN<LineBreak />
+                                            THE SOFTWARE.<LineBreak />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="MetroTrilithon">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="MetroTrilithon 0.2.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="https://github.com/Grabacr07/MetroTrilithon" >
+                                                https://github.com/Grabacr07/MetroTrilithon
+                                            </Hyperlink><LineBreak />
+                                            <Hyperlink NavigateUri="https://twitter.com/Grabacr07" ToolTip="https://twitter.com/Grabacr07" >
+                                                @Grabacr07
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : MIT License<LineBreak />
+                                            The MIT License (MIT)<LineBreak /><LineBreak />
+
+                                            Copyright (c) 2015 Grabacr07<LineBreak /><LineBreak />
+
+                                            Permission is hereby granted, free of charge, to any person obtaining a copy<LineBreak />
+                                            of this software and associated documentation files (the "Software"), to deal<LineBreak />
+                                            in the Software without restriction, including without limitation the rights<LineBreak />
+                                            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<LineBreak />
+                                            copies of the Software, and to permit persons to whom the Software is<LineBreak />
+                                            furnished to do so, subject to the following conditions:<LineBreak /><LineBreak />
+
+                                            The above copyright notice and this permission notice shall be included in<LineBreak />
+                                            all copies or substantial portions of the Software.<LineBreak /><LineBreak />
+
+                                            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<LineBreak />
+                                            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<LineBreak />
+                                            FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE<LineBreak />
+                                            AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<LineBreak />
+                                            LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<LineBreak />
+                                            OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN<LineBreak />
+                                            THE SOFTWARE.<LineBreak />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="StatefulModel">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="StatefulModel 0.6.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="https://github.com/ugaya40/StatefulModel" >
+                                                https://github.com/ugaya40/StatefulModel
+                                            </Hyperlink><LineBreak />
+                                            <Hyperlink NavigateUri="https://twitter.com/ugaya40" ToolTip="https://twitter.com/ugaya40" >
+                                                @ugaya40
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : MIT License<LineBreak />
+                                            The MIT License (MIT)<LineBreak /><LineBreak />
+
+                                            Copyright (c) 2015 Masanori Onoue<LineBreak /><LineBreak />
+
+                                            Permission is hereby granted, free of charge, to any person obtaining a copy<LineBreak />
+                                            of this software and associated documentation files (the "Software"), to deal<LineBreak />
+                                            in the Software without restriction, including without limitation the rights<LineBreak />
+                                            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<LineBreak />
+                                            copies of the Software, and to permit persons to whom the Software is<LineBreak />
+                                            furnished to do so, subject to the following conditions:<LineBreak /><LineBreak />
+
+                                            The above copyright notice and this permission notice shall be included in<LineBreak />
+                                            all copies or substantial portions of the Software.<LineBreak /><LineBreak />
+
+                                            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<LineBreak />
+                                            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<LineBreak />
+                                            FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE<LineBreak />
+                                            AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<LineBreak />
+                                            LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<LineBreak />
+                                            OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN<LineBreak />
+                                            THE SOFTWARE.<LineBreak />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="ModernUI">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="ModernUI 1.0.9" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="https://github.com/firstfloorsoftware/mui"  >
+                                                https://github.com/firstfloorsoftware/mui
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : Microsoft Public License<LineBreak />
+                                            Microsoft Public License (Ms-PL)<LineBreak /><LineBreak />
+
+                                            This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.<LineBreak /><LineBreak />
+
+                                            Definitions<LineBreak />
+                                            The terms "reproduce," "reproduction," "derivative works," and "distribution" have the same meaning here as under U.S. copyright law.<LineBreak /><LineBreak />
+
+                                            A "contribution" is the original software, or any additions or changes to the software.<LineBreak /><LineBreak />
+
+                                            A "contributor" is any person that distributes its contribution under this license.<LineBreak /><LineBreak />
+
+                                            "Licensed patents" are a contributor's patent claims that read directly on its contribution.<LineBreak /><LineBreak />
+
+                                            Grant of Rights<LineBreak />
+                                            (A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.<LineBreak /><LineBreak />
+
+                                            (B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.<LineBreak /><LineBreak />
+
+                                            Conditions and Limitations<LineBreak />
+                                            (A) No Trademark License- This license does not grant you rights to use any contributors' name, logo, or trademarks.<LineBreak /><LineBreak />
+
+                                            (B) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, your patent license from such contributor to the software ends automatically.<LineBreak /><LineBreak />
+
+                                            (C) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution notices that are present in the software.<LineBreak /><LineBreak />
+
+                                            (D) If you distribute any portion of the software in source code form, you may do so only under this license by including a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object code form, you may only do so under a license that complies with this license.<LineBreak /><LineBreak />
+
+                                            (E) The software is licensed "as-is." You bear the risk of using it. The contributors give no express warranties, guarantees or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement.
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="Livet">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="Livet 1.3.1" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="http://ugaya40.hateblo.jp/entry/livet"  >
+                                                http://ugaya40.hateblo.jp/entry/livet
+                                            </Hyperlink><LineBreak />
+                                            <Hyperlink NavigateUri="https://twitter.com/ugaya40" ToolTip="https://twitter.com/ugaya40"  >
+                                                @ugaya40
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : zlib/libpng License<LineBreak />
+                                            The zlib/libpng License<LineBreak />
+                                            
+                                            Livet Copyright (c) 2010-2011 Livet Project <LineBreak /><LineBreak />
+
+                                            This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.<LineBreak /><LineBreak />
+
+                                            Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:<LineBreak /><LineBreak />
+
+                                            1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.<LineBreak /><LineBreak />
+
+                                            2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+
+                                            3. This notice may not be removed or altered from any source distribution.<LineBreak />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="Newtonsoft.Json">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="Newtonsoft.Json 9.0.1" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="http://www.newtonsoft.com/json"  >
+                                                http://www.newtonsoft.com/json
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : MIT License<LineBreak />
+                                            The MIT License (MIT)<LineBreak /><LineBreak />
+
+                                            Copyright (c) 2007 James Newton-King<LineBreak /><LineBreak />
+
+                                            Permission is hereby granted, free of charge, to any person obtaining a copy of<LineBreak />
+                                            this software and associated documentation files (the "Software"), to deal in<LineBreak />
+                                            the Software without restriction, including without limitation the rights to<LineBreak />
+                                            use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of<LineBreak />
+                                            the Software, and to permit persons to whom the Software is furnished to do so,<LineBreak />
+                                            subject to the following conditions:<LineBreak /><LineBreak />
+
+                                            The above copyright notice and this permission notice shall be included in all<LineBreak />
+                                            copies or substantial portions of the Software.<LineBreak /><LineBreak />
+
+                                            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<LineBreak />
+                                            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS<LineBreak />
+                                            FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR<LineBreak />
+                                            COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER<LineBreak />
+                                            IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN<LineBreak />
+                                            CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.<LineBreak />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="DynamicJson">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="DynamicJson 1.2.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="http://dynamicjson.codeplex.com/"  >
+                                                http://dynamicjson.codeplex.com/
+                                            </Hyperlink><LineBreak />
+                                            <Hyperlink NavigateUri="https://twitter.com/neuecc"  >
+                                                @neuecc
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : Microsoft Public License<LineBreak />
+                                            Microsoft Public License (Ms-PL)<LineBreak /><LineBreak />
+
+                                            This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.<LineBreak /><LineBreak />
+
+                                            Definitions<LineBreak />
+                                            The terms "reproduce," "reproduction," "derivative works," and "distribution" have the same meaning here as under U.S. copyright law.<LineBreak /><LineBreak />
+
+                                            A "contribution" is the original software, or any additions or changes to the software.<LineBreak /><LineBreak />
+
+                                            A "contributor" is any person that distributes its contribution under this license.<LineBreak /><LineBreak />
+
+                                            "Licensed patents" are a contributor's patent claims that read directly on its contribution.<LineBreak /><LineBreak />
+
+                                            Grant of Rights<LineBreak />
+                                            (A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.<LineBreak /><LineBreak />
+
+                                            (B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.<LineBreak /><LineBreak />
+
+                                            Conditions and Limitations<LineBreak />
+                                            (A) No Trademark License- This license does not grant you rights to use any contributors' name, logo, or trademarks.<LineBreak /><LineBreak />
+
+                                            (B) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, your patent license from such contributor to the software ends automatically.<LineBreak /><LineBreak />
+
+                                            (C) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution notices that are present in the software.<LineBreak /><LineBreak />
+
+                                            (D) If you distribute any portion of the software in source code form, you may do so only under this license by including a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object code form, you may only do so under a license that complies with this license.<LineBreak /><LineBreak />
+
+                                            (E) The software is licensed "as-is." You bear the risk of using it. The contributors give no express warranties, guarantees or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement.
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="Fizzler">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="Fizzler 1.0.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="https://fizzler.googlecode.com" >
+                                               https://fizzler.googlecode.com
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : LGPL<LineBreak />
+                                                                GNU LESSER GENERAL PUBLIC LICENSE<LineBreak />
+                                                                    Version 3, 29 June 2007<LineBreak />
+
+                                                Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/><LineBreak />
+                                                Everyone is permitted to copy and distribute verbatim copies<LineBreak />
+                                                of this license document, but changing it is not allowed.<LineBreak /><LineBreak />
+
+
+                                                This version of the GNU Lesser General Public License incorporates<LineBreak />
+                                            the terms and conditions of version 3 of the GNU General Public<LineBreak />
+                                            License, supplemented by the additional permissions listed below.<LineBreak /><LineBreak />
+
+                                                0. Additional Definitions.<LineBreak /><LineBreak />
+
+                                                As used herein, "this License" refers to version 3 of the GNU Lesser<LineBreak />
+                                            General Public License, and the "GNU GPL" refers to version 3 of the GNU<LineBreak />
+                                            General Public License.<LineBreak /><LineBreak />
+
+                                                "The Library" refers to a covered work governed by this License,<LineBreak />
+                                            other than an Application or a Combined Work as defined below.<LineBreak /><LineBreak />
+
+                                                An "Application" is any work that makes use of an interface provided<LineBreak />
+                                            by the Library, but which is not otherwise based on the Library.<LineBreak />
+                                            Defining a subclass of a class defined by the Library is deemed a mode<LineBreak />
+                                            of using an interface provided by the Library.<LineBreak /><LineBreak />
+
+                                                A "Combined Work" is a work produced by combining or linking an<LineBreak />
+                                            Application with the Library.  The particular version of the Library<LineBreak />
+                                            with which the Combined Work was made is also called the "Linked<LineBreak />
+                                            Version".<LineBreak /><LineBreak />
+
+                                                The "Minimal Corresponding Source" for a Combined Work means the<LineBreak />
+                                            Corresponding Source for the Combined Work, excluding any source code<LineBreak />
+                                            for portions of the Combined Work that, considered in isolation, are<LineBreak />
+                                            based on the Application, and not on the Linked Version.<LineBreak /><LineBreak />
+
+                                                The "Corresponding Application Code" for a Combined Work means the<LineBreak />
+                                            object code and/or source code for the Application, including any data<LineBreak />
+                                            and utility programs needed for reproducing the Combined Work from the<LineBreak />
+                                            Application, but excluding the System Libraries of the Combined Work.<LineBreak /><LineBreak />
+
+                                                1. Exception to Section 3 of the GNU GPL.<LineBreak /><LineBreak />
+
+                                                You may convey a covered work under sections 3 and 4 of this License<LineBreak />
+                                            without being bound by section 3 of the GNU GPL.<LineBreak /><LineBreak />
+
+                                                2. Conveying Modified Versions.<LineBreak /><LineBreak />
+
+                                                If you modify a copy of the Library, and, in your modifications, a<LineBreak />
+                                            facility refers to a function or data to be supplied by an Application<LineBreak />
+                                            that uses the facility (other than as an argument passed when the<LineBreak />
+                                            facility is invoked), then you may convey a copy of the modified<LineBreak />
+                                            version:<LineBreak /><LineBreak />
+
+                                                a) under this License, provided that you make a good faith effort to<LineBreak />
+                                                ensure that, in the event an Application does not supply the<LineBreak />
+                                                function or data, the facility still operates, and performs<LineBreak />
+                                                whatever part of its purpose remains meaningful, or<LineBreak /><LineBreak />
+
+                                                b) under the GNU GPL, with none of the additional permissions of<LineBreak />
+                                                this License applicable to that copy.<LineBreak /><LineBreak />
+
+                                                3. Object Code Incorporating Material from Library Header Files.<LineBreak /><LineBreak />
+
+                                                The object code form of an Application may incorporate material from<LineBreak />
+                                            a header file that is part of the Library.  You may convey such object<LineBreak />
+                                            code under terms of your choice, provided that, if the incorporated<LineBreak />
+                                            material is not limited to numerical parameters, data structure<LineBreak />
+                                            layouts and accessors, or small macros, inline functions and templates<LineBreak />
+                                            (ten or fewer lines in length), you do both of the following:<LineBreak /><LineBreak />
+
+                                                a) Give prominent notice with each copy of the object code that the<LineBreak />
+                                                Library is used in it and that the Library and its use are<LineBreak />
+                                                covered by this License.<LineBreak /><LineBreak />
+
+                                                b) Accompany the object code with a copy of the GNU GPL and this license<LineBreak />
+                                                document.<LineBreak /><LineBreak />
+
+                                                4. Combined Works.<LineBreak /><LineBreak />
+
+                                                You may convey a Combined Work under terms of your choice that,<LineBreak />
+                                            taken together, effectively do not restrict modification of the<LineBreak />
+                                            portions of the Library contained in the Combined Work and reverse<LineBreak />
+                                            engineering for debugging such modifications, if you also do each of<LineBreak />
+                                            the following:<LineBreak /><LineBreak />
+
+                                                a) Give prominent notice with each copy of the Combined Work that<LineBreak />
+                                                the Library is used in it and that the Library and its use are<LineBreak />
+                                                covered by this License.<LineBreak /><LineBreak />
+
+                                                b) Accompany the Combined Work with a copy of the GNU GPL and this license<LineBreak />
+                                                document.<LineBreak /><LineBreak />
+
+                                                c) For a Combined Work that displays copyright notices during<LineBreak />
+                                                execution, include the copyright notice for the Library among<LineBreak />
+                                                these notices, as well as a reference directing the user to the<LineBreak />
+                                                copies of the GNU GPL and this license document.<LineBreak /><LineBreak />
+
+                                                d) Do one of the following:<LineBreak /><LineBreak />
+
+                                                    0) Convey the Minimal Corresponding Source under the terms of this<LineBreak />
+                                                    License, and the Corresponding Application Code in a form<LineBreak />
+                                                    suitable for, and under terms that permit, the user to<LineBreak />
+                                                    recombine or relink the Application with a modified version of<LineBreak />
+                                                    the Linked Version to produce a modified Combined Work, in the<LineBreak />
+                                                    manner specified by section 6 of the GNU GPL for conveying<LineBreak />
+                                                    Corresponding Source.<LineBreak /><LineBreak />
+
+                                                    1) Use a suitable shared library mechanism for linking with the<LineBreak />
+                                                    Library.  A suitable mechanism is one that (a) uses at run time<LineBreak />
+                                                    a copy of the Library already present on the user's computer<LineBreak />
+                                                    system, and (b) will operate properly with a modified version<LineBreak />
+                                                    of the Library that is interface-compatible with the Linked<LineBreak />
+                                                    Version.<LineBreak /><LineBreak />
+
+                                                e) Provide Installation Information, but only if you would otherwise<LineBreak />
+                                                be required to provide such information under section 6 of the<LineBreak />
+                                                GNU GPL, and only to the extent that such information is<LineBreak />
+                                                necessary to install and execute a modified version of the<LineBreak />
+                                                Combined Work produced by recombining or relinking the<LineBreak />
+                                                Application with a modified version of the Linked Version. (If<LineBreak />
+                                                you use option 4d0, the Installation Information must accompany<LineBreak />
+                                                the Minimal Corresponding Source and Corresponding Application<LineBreak />
+                                                Code. If you use option 4d1, you must provide the Installation<LineBreak />
+                                                Information in the manner specified by section 6 of the GNU GPL<LineBreak />
+                                                for conveying Corresponding Source.)<LineBreak /><LineBreak />
+
+                                                5. Combined Libraries.<LineBreak /><LineBreak />
+
+                                                You may place library facilities that are a work based on the<LineBreak />
+                                            Library side by side in a single library together with other library<LineBreak />
+                                            facilities that are not Applications and are not covered by this<LineBreak />
+                                            License, and convey such a combined library under terms of your<LineBreak />
+                                            choice, if you do both of the following:<LineBreak /><LineBreak />
+
+                                                a) Accompany the combined library with a copy of the same work based<LineBreak />
+                                                on the Library, uncombined with any other library facilities,<LineBreak />
+                                                conveyed under the terms of this License.<LineBreak /><LineBreak />
+
+                                                b) Give prominent notice with the combined library that part of it<LineBreak />
+                                                is a work based on the Library, and explaining where to find the<LineBreak />
+                                                accompanying uncombined form of the same work.<LineBreak /><LineBreak />
+
+                                                6. Revised Versions of the GNU Lesser General Public License.<LineBreak /><LineBreak />
+
+                                                The Free Software Foundation may publish revised and/or new versions<LineBreak />
+                                            of the GNU Lesser General Public License from time to time. Such new<LineBreak />
+                                            versions will be similar in spirit to the present version, but may<LineBreak />
+                                            differ in detail to address new problems or concerns.<LineBreak /><LineBreak />
+
+                                                Each version is given a distinguishing version number. If the<LineBreak />
+                                            Library as you received it specifies that a certain numbered version<LineBreak />
+                                            of the GNU Lesser General Public License "or any later version"<LineBreak />
+                                            applies to it, you have the option of following the terms and<LineBreak />
+                                            conditions either of that published version or of any later version<LineBreak />
+                                            published by the Free Software Foundation. If the Library as you<LineBreak />
+                                            received it does not specify a version number of the GNU Lesser<LineBreak />
+                                            General Public License, you may choose any version of the GNU Lesser<LineBreak />
+                                            General Public License ever published by the Free Software Foundation.<LineBreak /><LineBreak />
+
+                                                If the Library as you received it specifies that a proxy can decide<LineBreak />
+                                            whether future versions of the GNU Lesser General Public License shall<LineBreak />
+                                            apply, that proxy's public statement of acceptance of any version is<LineBreak />
+                                            permanent authorization for you to choose that version for the<LineBreak />
+                                            Library.<LineBreak />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="HtmlAgilityPack">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="HtmlAgilityPack 1.4.9.5" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            htmlをパースするために使用しているライブラリです。<LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="http://htmlagilitypack.codeplex.com/"  >
+                                                http://htmlagilitypack.codeplex.com/
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : Microsoft Public License<LineBreak />
+                                            Microsoft Public License (Ms-PL)<LineBreak /><LineBreak />
+
+                                            This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.<LineBreak /><LineBreak />
+
+                                            Definitions<LineBreak />
+                                            The terms "reproduce," "reproduction," "derivative works," and "distribution" have the same meaning here as under U.S. copyright law.<LineBreak /><LineBreak />
+
+                                            A "contribution" is the original software, or any additions or changes to the software.<LineBreak /><LineBreak />
+
+                                            A "contributor" is any person that distributes its contribution under this license.<LineBreak /><LineBreak />
+
+                                            "Licensed patents" are a contributor's patent claims that read directly on its contribution.<LineBreak /><LineBreak />
+
+                                            Grant of Rights<LineBreak />
+                                            (A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.<LineBreak /><LineBreak />
+
+                                            (B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.<LineBreak /><LineBreak />
+
+                                            Conditions and Limitations<LineBreak />
+                                            (A) No Trademark License- This license does not grant you rights to use any contributors' name, logo, or trademarks.<LineBreak /><LineBreak />
+
+                                            (B) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, your patent license from such contributor to the software ends automatically.<LineBreak /><LineBreak />
+
+                                            (C) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution notices that are present in the software.<LineBreak /><LineBreak />
+
+                                            (D) If you distribute any portion of the software in source code form, you may do so only under this license by including a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object code form, you may only do so under a license that complies with this license.<LineBreak /><LineBreak />
+
+                                            (E) The software is licensed "as-is." You bear the risk of using it. The contributors give no express warranties, guarantees or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement.
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="gong-wpf-dragdrop">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="gong-wpf-dragdrop 0.1.4.3" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="https://github.com/punker76/gong-wpf-dragdrop" >
+                                                https://github.com/punker76/gong-wpf-dragdrop
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : 三条項BSD License<LineBreak />
+                                            BSD 3-Clause License<LineBreak /><LineBreak />
+
+                                            Copyright (c) 2015, Jan Karger (Steven Kirk)<LineBreak />
+                                            All rights reserved.<LineBreak /><LineBreak />
+
+                                            Redistribution and use in source and binary forms, with or without<LineBreak />
+                                            modification, are permitted provided that the following conditions are met:<LineBreak /><LineBreak />
+
+                                            * Redistributions of source code must retain the above copyright notice, this<LineBreak />
+                                              list of conditions and the following disclaimer.<LineBreak /><LineBreak />
+
+                                            * Redistributions in binary form must reproduce the above copyright notice,<LineBreak />
+                                              this list of conditions and the following disclaimer in the documentation<LineBreak />
+                                              and/or other materials provided with the distribution.<LineBreak /><LineBreak />
+
+                                            * Neither the name of gong-wpf-dragdrop nor the names of its<LineBreak />
+                                              contributors may be used to endorse or promote products derived from<LineBreak />
+                                              this software without specific prior written permission.<LineBreak /><LineBreak />
+
+                                            THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"<LineBreak />
+                                            AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE<LineBreak />
+                                            IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE<LineBreak />
+                                            DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE<LineBreak />
+                                            FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL<LineBreak />
+                                            DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR<LineBreak />
+                                            SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER<LineBreak />
+                                            CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,<LineBreak />
+                                            OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE<LineBreak />
+                                            OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.<LineBreak />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="ForcibleLoader">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="ForcibleLoader" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="http://www.libspark.org/wiki/yossy/ForcibleLoader" >
+                                                http://www.libspark.org/wiki/yossy/ForcibleLoader
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : MIT License<LineBreak />
+                                            The MIT License (MIT)<LineBreak /><LineBreak />
+
+                                            Copyright (c) 2007-2009 BeInteractive! (www.be-interactive.org) and Spark project  (www.libspark.org)<LineBreak /><LineBreak />
+
+                                            Permission is hereby granted, free of charge, to any person obtaining a copy<LineBreak />
+                                            of this software and associated documentation files (the "Software"), to deal<LineBreak />
+                                            in the Software without restriction, including without limitation the rights<LineBreak />
+                                            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<LineBreak />
+                                            copies of the Software, and to permit persons to whom the Software is<LineBreak />
+                                            furnished to do so, subject to the following conditions:<LineBreak /><LineBreak />
+
+                                            The above copyright notice and this permission notice shall be included in<LineBreak />
+                                            all copies or substantial portions of the Software.<LineBreak /><LineBreak />
+
+                                            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<LineBreak />
+                                            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<LineBreak />
+                                            FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE<LineBreak />
+                                            AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<LineBreak />
+                                            LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<LineBreak />
+                                            OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN<LineBreak />
+                                            THE SOFTWARE.<LineBreak />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
+</UserControl>

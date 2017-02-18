@@ -1,0 +1,130 @@
+﻿<UserControl x:Class="SRNicoNico.Views.SearchResult"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="600"
+             d:DesignWidth="600"
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             Background="{DynamicResource ThemeBrushKey}"
+             d:DataContext="{d:DesignInstance {x:Type vm:SearchResultViewModel}}"
+             
+             >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+
+        <Grid Background="{DynamicResource BackgroundLevel1BrushKey}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="169*"/>
+                <ColumnDefinition Width="31*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock TextWrapping="Wrap" Text="{Binding Total, StringFormat={}{0:N0}件の動画}" FontSize="18" >
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Total}" Value="0">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Total}" Value="-1">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Button Grid.Column="1" Content="連続再生" Margin="5,2" IsEnabled="{Binding IsActive,Converter={StaticResource Invert}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="MakePlayList"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+        </Grid>
+
+
+        <metro:ProgressRing Grid.Row="1" HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsActive}"  />
+
+        <ContentControl Grid.Row="1">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Total}" Value="0">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ContentControl}">
+                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Text="キーワードに一致する結果が見つかりませんでした"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+
+            <ListBox VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding List}" AlternationCount="2" ItemContainerStyle="{StaticResource FlatListBoxItem}" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="vm:SearchResultEntryViewModel">
+                        <v:SearchResultEntry />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ContentControl>
+
+
+        <Grid Grid.Row="2" Background="{DynamicResource BackgroundLevel1BrushKey}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel.Resources>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding MaxPages}" Value="0">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock Text="{Binding MaxPages,StringFormat=1ページ~{0}ページ}" FontSize="16" Margin="10,0,10,0"/>
+
+                <Button Content="←" Padding="3" IsEnabled="{Binding LeftButtonEnabled}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="LeftButtonClick" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+
+
+                <TextBox x:Name="page" x:FieldModifier="private" HorizontalAlignment="Right" MaxLength="2" Width="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Text="{Binding CurrentPage,Mode=TwoWay}">
+                    <i:Interaction.Behaviors>
+                        <b:TextBoxNumericOnlyBehavior />
+                        <b:TextBoxPageSpinnerEnterKeyBehavior Binding="{Binding Owner}" MethodName="SearchPage"/>
+                    </i:Interaction.Behaviors>
+                </TextBox>
+                <Button Content="→" Padding="3" Margin="0,0,17,0" IsEnabled="{Binding RightButtonEnabled}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="RightButtonClick" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+
+
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

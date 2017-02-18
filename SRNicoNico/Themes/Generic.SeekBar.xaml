@@ -1,0 +1,80 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
+    xmlns:c="clr-namespace:SRNicoNico.Views.Converter"
+    >
+
+
+    <BooleanToVisibilityConverter x:Key="booltov" />
+    <c:SecondsToMSSConverter x:Key="stomss" />
+    <Style TargetType="{x:Type local:SeekBar}">
+        <Setter Property="Height" Value="12" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:SeekBar}">
+                    <Grid>
+                        <Rectangle Fill="{DynamicResource ActiveBackgroundBrushKey}" />
+
+                        <ItemsControl Panel.ZIndex="1" ItemsSource="{TemplateBinding BufferedRange}">
+
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Canvas>
+                                        <Rectangle  Canvas.Left="{Binding Start}" Height="12" Width="{Binding Width}" HorizontalAlignment="Left" Fill="#FF555555" />
+                                    </Canvas>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <ItemsControl Panel.ZIndex="2" ItemsSource="{TemplateBinding PlayedRange}">
+
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type local:TimeRange}">
+                                    <Canvas>
+                                        <Rectangle Canvas.Left="{Binding Start}"  Height="12" Width="{Binding Width}" HorizontalAlignment="Left" Fill="{DynamicResource AccentBrushKey}" />
+                                    </Canvas>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+
+                        </ItemsControl>
+                        <Canvas Panel.ZIndex="2">
+                            <Thumb Canvas.Left="0" Canvas.Top="0" Name="Thumb_PART" HorizontalAlignment="Left" Width="10" Height="12">
+                                <Thumb.Template>
+                                    <ControlTemplate TargetType="{x:Type Thumb}">
+                                        <Rectangle HorizontalAlignment="Left" Width="10" Fill="#FF8B8B8B" />
+                                    </ControlTemplate>
+                                </Thumb.Template>
+                            </Thumb>
+                        </Canvas>
+                        
+                        <Popup AllowsTransparency="False" IsOpen="{TemplateBinding IsPopupOpen}" PlacementRectangle="{TemplateBinding PopupTextRect}" PopupAnimation="Slide">
+                            <Border BorderThickness="1" Background="#FF1B1B1C" BorderBrush="#FF3F3F46" Padding="4" >
+                                <TextBlock Text="{TemplateBinding PopupTime,Converter={StaticResource stomss}}"/>
+                            </Border>
+                        </Popup>
+
+                        <Popup AllowsTransparency="True" IsOpen="{TemplateBinding IsStoryBoardOpen}" PlacementRectangle="{TemplateBinding StoryBoardBitmapRect}" PopupAnimation="Slide" Placement="Top" >
+                            <Border BorderThickness="1" BorderBrush="#FF3F3F46">
+
+                                <Image Source="{TemplateBinding StoryBoardImage}" />
+                            </Border>
+
+                        </Popup>
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

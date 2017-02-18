@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="SRNicoNico.Views.SettingsComment"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:conv="clr-namespace:SRNicoNico.Views.Converter"
+             mc:Ignorable="d" 
+             d:DesignHeight="600"
+             d:DesignWidth="600"
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             Background="{DynamicResource ThemeBrushKey}"
+             d:DataContext="{d:DesignInstance {x:Type vm:SettingsGeneralViewModel}}"
+             
+             >
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+
+        <Grid Margin="10" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <TextBlock FontSize="20" Text="コメント設定"/>
+
+                <StackPanel Margin="5,0,0,0">
+                    <TextBlock FontSize="18" Text="デフォルトコメント透明度" />
+                    <ComboBox Width="200" HorizontalAlignment="Left" IsEditable="True" Margin="10" ToolTip="デフォルトのコメントの透明度を設定できます。(単位:%)" Text="{Binding CommentAlpha,Mode=TwoWay}" >
+                        <ComboBoxItem Content="20" />
+                        <ComboBoxItem Content="40" />
+                        <ComboBoxItem Content="60" />
+                        <ComboBoxItem Content="80" />
+                        <ComboBoxItem Content="100" />
+                    </ComboBox>
+                    <TextBlock Text="デフォルトコメントサイズ" FontSize="20" Margin="0,10,0,0"/>
+                    <ComboBox IsEditable="True" IsReadOnly="True" Width="200" HorizontalAlignment="Left"  Margin="10"  Text="{Binding DefaultCommentSize,Mode=TwoWay}" >
+                        <ComboBoxItem Content="極小" />
+                        <ComboBoxItem Content="小" />
+                        <ComboBoxItem Content="標準" />
+                        <ComboBoxItem Content="大" />
+                    </ComboBox>
+
+
+                </StackPanel>
+                <TextBlock FontSize="20" Text="コメントNG設定" Margin="0,10,0,0"/>
+                <StackPanel Margin="5,0,0,0">
+                    <TextBlock Text="NG共有レベル" FontSize="18" />
+                    <ComboBox Width="200" HorizontalAlignment="Left" Margin="10" Text="{Binding NGSharedLevel,Mode=TwoWay}">
+                        <ComboBoxItem Content="無" ToolTip="コメントをフィルタリングしません。"/>
+                        <ComboBoxItem Content="弱" ToolTip="とても悪質なコメントのみフィルタリングします。"/>
+                        <ComboBoxItem Content="中" ToolTip="悪質なコメントをフィルタリングします。"/>
+                        <ComboBoxItem Content="強" ToolTip="少数のプレミアムユーザーにNG登録されたコメントもフィルタリングします。"/>
+                        <ComboBoxItem Content="最強" ToolTip="NGスコアが付いている時点でフィルタリングします。"/>
+                    </ComboBox>
+                    <TextBlock Text="コメント非表示設定" FontSize="18"  Margin="0,10,0,0"/>
+                    <StackPanel Margin="10">
+                        <CheckBox Content="3DSからのコメントを非表示にする" IsChecked="{Binding Hide3DSComment}" />
+                        <CheckBox Content="WiiUからのコメントを非表示にする" IsChecked="{Binding HideWiiUComment}" Margin="0,10,0,0"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

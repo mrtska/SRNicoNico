@@ -1,0 +1,55 @@
+﻿<metro:MetroWindow x:Class="SRNicoNico.Views.WindowFullScreenView"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+               xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+               xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+               xmlns:v="clr-namespace:SRNicoNico.Views"
+               xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+               xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
+               xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+               xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
+               xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+               xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+               xmlns:c="clr-namespace:SRNicoNico.Views.Controls"
+               mc:Ignorable="d" 
+               WindowStartupLocation="CenterOwner"
+               IsRestoringWindowPlacement="True"
+		       Foreground="{DynamicResource ActiveForegroundBrushKey}"
+               d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
+               PreviewKeyDown="Window_PreviewKeyDown"
+               PreviewKeyUp="Window_PreviewKeyUp"
+               Closed="Window_Closed"
+               Title="{Binding ApiData.Video.Title}"
+               >
+    <i:Interaction.Triggers>
+        <l:InteractionMessageTrigger MessageKey="Video" Messenger="{Binding Messenger, Mode=OneWay}">
+            <l:WindowInteractionMessageAction />
+        </l:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Border metro:MetroWindow.IsCaptionBar="True" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1"  Text="{Binding ApiData.Video.Title}" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource ForegroundBrushKey}" FontSize="18" Margin="3,0,0,0" VerticalAlignment="Center" />
+                <metro:SystemButtons Grid.Column="2" VerticalAlignment="Top" />
+            </Grid>
+        </Border>
+
+        <ContentControl Grid.Row="1" Content="{Binding FullScreenWebBrowser,Mode=OneWay}" Background="Black" />
+
+        <ContentControl Grid.Row="2" Content="{Binding FullScreenController,Mode=OneWay}" />
+    </Grid>
+</metro:MetroWindow>

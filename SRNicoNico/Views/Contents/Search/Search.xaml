@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Search"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="600"
+             d:DesignWidth="600"
+             Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             Background="{DynamicResource ThemeBrushKey}"
+             d:DataContext="{d:DesignInstance {x:Type vm:RankingViewModel}}"
+             
+             >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="89*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Background="{DynamicResource BackgroundLevel1BrushKey}" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="38" />
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock HorizontalAlignment="Left" Margin="5,0,0,0" TextWrapping="Wrap" Text="検索" VerticalAlignment="Center" FontSize="20" Height="30"/>
+
+            <StackPanel Grid.Row="1">
+                <ComboBox Width="140" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FF2D2D2D" SelectedIndex="{Binding Source={x:Static m:Settings.Instance},Path=SearchIndex,Mode=TwoWay}">
+
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Search" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    
+                    
+                    <ComboBoxItem Content="投稿日時が新しい順" />
+                    <ComboBoxItem  Content="投稿日時が古い順" />
+                    <ComboBoxItem Content="再生数が多い順" />
+                    <ComboBoxItem Content="再生数が少ない順" />
+                    <ComboBoxItem Content="コメントが新しい順" />
+                    <ComboBoxItem Content="コメントが少ない順" />
+                    <ComboBoxItem Content="マイリスト数が多い順" />
+                    <ComboBoxItem Content="マイリスト数が少ない順" />
+                    <ComboBoxItem Content="再生時間が長い順" />
+                    <ComboBoxItem Content="再生時間が短い順" />
+
+                </ComboBox>
+                <TextBox Width="140" Height="23" Margin="5,10,0,0" MaxLength="255"  HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding SearchText}" TextWrapping="Wrap">
+                    <i:Interaction.Behaviors>
+                        <b:TextBoxEnterKeyBehavior UseMethodParameter="True" Binding="{Binding}" MethodName="Search"/>
+                    </i:Interaction.Behaviors>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="GotFocus">
+                            <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="TextBoxFocused" Value="True"/>
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="LostFocus">
+                            <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="TextBoxFocused" Value="False"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <RadioButton HorizontalAlignment="Center" GroupName="Type" Content="テキスト" IsChecked="True" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="SearchType" Value="Keyword"/>
+                            </i:EventTrigger>
+                            <ei:DataTrigger Binding="{Binding SearchType}" Value="Keyword">
+                                <ei:ChangePropertyAction PropertyName="IsChecked" Value="True"/>
+                            </ei:DataTrigger>
+                        </i:Interaction.Triggers>
+                    </RadioButton>
+                    <RadioButton Grid.Column="1" HorizontalAlignment="Center" GroupName="Type" Content="タグ" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="SearchType" Value="Tag"/>
+                            </i:EventTrigger>
+                            <ei:DataTrigger Binding="{Binding SearchType}" Value="Tag">
+                                <ei:ChangePropertyAction PropertyName="IsChecked" Value="True"/>
+                            </ei:DataTrigger>
+                        </i:Interaction.Triggers>
+                    </RadioButton>
+                </Grid>
+                <Button Width="75" Margin="0,10,20,0" HorizontalAlignment="Right" VerticalAlignment="Top" Content="検索">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodName="Search" MethodTarget="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+
+                <TextBlock Text="検索履歴" FontSize="18" Margin="0,10,0,0" />
+            </StackPanel>
+            <ListBox Grid.Row="2" ItemsSource="{Binding SearchHistory, Mode=TwoWay}" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource FlatListBoxItem}">
+                        <Setter Property="Padding" Value="0" />
+                        <Style.Triggers>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                <Setter Property="Background" Value="{DynamicResource BackgroundLevel1BrushKey}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:SearchHistoryViewModel}">
+                        <Grid Focusable="True">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding Owner}" MethodName="SearchWithHistory" MethodParameter="{Binding Content}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Margin="5,0,0,0" Foreground="{DynamicResource ActiveForegroundBrushKey}" Text="{Binding Content}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                            <Button HorizontalAlignment="Right" Grid.Column="1" Margin="1" Command="{Binding Owner.DeleteHistoryCommand}" CommandParameter="{Binding}" Content="×" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+
+        <v:SearchResult Grid.Column="1" DataContext="{Binding SearchResult}"/>
+    </Grid>
+
+</UserControl>
