@@ -15,9 +15,7 @@
 
     <UserControl.Resources>
         <Style TargetType="Hyperlink">
-
             <EventSetter Event="RequestNavigate" Handler="Hyperlink_RequestNavigate" />
-            
         </Style>
     </UserControl.Resources>
 
@@ -42,7 +40,7 @@
 
             
                                             ライセンス : MIT License<LineBreak />
-                                            ﻿The MIT License (MIT)<LineBreak /><LineBreak />
+                                            The MIT License (MIT)<LineBreak /><LineBreak />
 
                                             Copyright (c) 2015 Grabacr07<LineBreak /><LineBreak />
 
@@ -78,7 +76,7 @@
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
                                             <Run Text="MetroTrilithon 0.1.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
-                                            このライブラリは動画再生部分にURLをドラッグアンドドロップすることが出来てしまう不具合を抑制するためのライブラリです。<LineBreak /><LineBreak />
+                                            このライブラリは動画再生部分にURLをドラッグアンドドロップすることが出来てしまう不具合などを抑制するためのライブラリです。<LineBreak /><LineBreak />
                                             <Hyperlink NavigateUri="https://github.com/Grabacr07/MetroTrilithon" >
                                                 https://github.com/Grabacr07/MetroTrilithon
                                             </Hyperlink><LineBreak />
@@ -88,7 +86,7 @@
 
             
                                             ライセンス : MIT License<LineBreak />
-                                            ﻿The MIT License (MIT)<LineBreak /><LineBreak />
+                                            The MIT License (MIT)<LineBreak /><LineBreak />
 
                                             Copyright (c) 2015 Grabacr07<LineBreak /><LineBreak />
 
@@ -134,7 +132,7 @@
 
             
                                             ライセンス : MIT License<LineBreak />
-                                            ﻿The MIT License (MIT)<LineBreak /><LineBreak />
+                                            The MIT License (MIT)<LineBreak /><LineBreak />
 
                                             Copyright (c) 2015 Masanori Onoue<LineBreak /><LineBreak />
 
@@ -178,7 +176,7 @@
 
             
                                             ライセンス : Microsoft Public License<LineBreak />
-                                            ﻿Microsoft Public License (Ms-PL)<LineBreak /><LineBreak />
+                                            Microsoft Public License (Ms-PL)<LineBreak /><LineBreak />
 
                                             This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.<LineBreak /><LineBreak />
 
@@ -232,7 +230,7 @@
 
             
                                             ライセンス : zlib/libpng License<LineBreak />
-                                            ﻿The zlib/libpng License<LineBreak />
+                                            The zlib/libpng License<LineBreak />
                                             
                                             Livet Copyright (c) 2010-2011 Livet Project <LineBreak /><LineBreak />
 
@@ -312,7 +310,7 @@
 
             
                                             ライセンス : Microsoft Public License<LineBreak />
-                                            ﻿Microsoft Public License (Ms-PL)<LineBreak /><LineBreak />
+                                            Microsoft Public License (Ms-PL)<LineBreak /><LineBreak />
 
                                             This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.<LineBreak /><LineBreak />
 
@@ -549,7 +547,7 @@
 
             
                                             ライセンス : Microsoft Public License<LineBreak />
-                                            ﻿Microsoft Public License (Ms-PL)<LineBreak /><LineBreak />
+                                            Microsoft Public License (Ms-PL)<LineBreak /><LineBreak />
 
                                             This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.<LineBreak /><LineBreak />
 
@@ -650,7 +648,7 @@
 
             
                                             ライセンス : MIT License<LineBreak />
-                                            ﻿The MIT License (MIT)<LineBreak /><LineBreak />
+                                            The MIT License (MIT)<LineBreak /><LineBreak />
 
                                             Copyright (c) 2007-2009 BeInteractive! (www.be-interactive.org) and Spark project  (www.libspark.org)<LineBreak /><LineBreak />
 

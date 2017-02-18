@@ -2,14 +2,14 @@ using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 
-//codezine.jp —l‚æ‚è
+//codezine.jp æ§˜ã‚ˆã‚Š
 namespace SRNicoNico.Models.NicoNicoViewer {
     public delegate int MapUrlToZoneEventHandler(String pwszUrl, out int pdwZone, int dwFlags);
 
     public delegate int ProcessUrlActionEventHandler(String pwszUrl, int dwAction, out byte pPolicy, int cbPolicy, byte pContext, int cbContext, int dwFlags, int dwReserved);
 
     /// <summary>
-    /// Form1 ‚ÌŠT—v‚Ìà–¾‚Å‚·B
+    /// Form1 ã®æ¦‚è¦ã®èª¬æ˜ã§ã™ã€‚
     /// </summary>
     public class InternetSecurityManagerHelper : WebBrowserAPI.IServiceProvider, WebBrowserAPI.IInternetSecurityManager {
         public event MapUrlToZoneEventHandler MapUrlToZone;
@@ -19,29 +19,29 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
 
         public void Attach(object activeXInstance) {
-            // Microsoft Web Browser ƒRƒ“ƒgƒ[ƒ‹‚Ì ActiveX ƒRƒ“ƒgƒ[ƒ‹–{‘Ì‚ğæ“¾
+            // Microsoft Web Browser ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã® ActiveX ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«æœ¬ä½“ã‚’å–å¾—
             //object ocx = axWebBrowser.GetOcx();
 
-            // Microsoft Web Browser ƒRƒ“ƒgƒ[ƒ‹‚©‚ç IServiceProvider ‚ğæ“¾
+            // Microsoft Web Browser ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‹ã‚‰ IServiceProvider ã‚’å–å¾—
             WebBrowserAPI.IServiceProvider ocxServiceProvider = activeXInstance as WebBrowserAPI.IServiceProvider;
 
-            // IServiceProvider.QueryService() ‚ğg‚Á‚Ä IProfferService ‚ğæ“¾
+            // IServiceProvider.QueryService() ã‚’ä½¿ã£ã¦ IProfferService ã‚’å–å¾—
             IntPtr profferServicePtr;
             ocxServiceProvider.QueryService(ref WebBrowserAPI.SID_SProfferService, ref WebBrowserAPI.IID_IProfferService, out profferServicePtr);
             WebBrowserAPI.IProfferService profferService = Marshal.GetObjectForIUnknown(profferServicePtr) as WebBrowserAPI.IProfferService;
 
-            // IProfferService.ProfferService() ‚ğg‚Á‚Ä©•ª‚ğ IInternetSecurityManager ‚Æ‚µ‚Ä’ñ‹Ÿ
+            // IProfferService.ProfferService() ã‚’ä½¿ã£ã¦è‡ªåˆ†ã‚’ IInternetSecurityManager ã¨ã—ã¦æä¾›
             int cookie = 0;
             profferService.ProfferService(ref WebBrowserAPI.IID_IInternetSecurityManager, this, ref cookie);
 
         }
 
-        #region IServiceProvider ƒƒ“ƒo
+        #region IServiceProvider ãƒ¡ãƒ³ãƒ
 
         int WebBrowserAPI.IServiceProvider.QueryService(ref Guid guidService, ref Guid riid, out IntPtr ppvObject) {
             ppvObject = IntPtr.Zero;
             if(guidService == WebBrowserAPI.IID_IInternetSecurityManager) {
-                // ©•ª‚©‚ç IID_IInternetSecurityManager ‚ğ QueryInterface ‚µ‚Ä•Ô‚·
+                // è‡ªåˆ†ã‹ã‚‰ IID_IInternetSecurityManager ã‚’ QueryInterface ã—ã¦è¿”ã™
                 IntPtr punk = Marshal.GetIUnknownForObject(this);
                 return Marshal.QueryInterface(punk, ref riid, out ppvObject);
             }
@@ -50,7 +50,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         #endregion
 
-        #region IInternetSecurityManager ƒƒ“ƒo
+        #region IInternetSecurityManager ãƒ¡ãƒ³ãƒ
 
         int WebBrowserAPI.IInternetSecurityManager.SetSecuritySite(WebBrowserAPI.IInternetSecurityMgrSite pSite) {
             return WebBrowserAPI.INET_E_DEFAULT_ACTION;

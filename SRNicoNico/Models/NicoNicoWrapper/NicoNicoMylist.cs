@@ -100,7 +100,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 } else if(data.Type == 13) { //ブロマガ
 
-                    data.UpdateTime = UnixTime.FromUnixTime((int)item.commented_time).ToString();
+                    data.UpdateTime = UnixTime.FromUnixTime((int)item.article_update_time).ToString();
                     data.FirstRetrieve = UnixTime.FromUnixTime((int)item.create_time).ToString();
                     data.Id = "ar" + item.id;
                     data.CommentCounter = (int)item.comment_count;

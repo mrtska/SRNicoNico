@@ -25,7 +25,6 @@ namespace SRNicoNico.Views.Contents.User {
             InitializeComponent();
         }
 
-
         public void OpenHyperLink(object sender, RequestNavigateEventArgs e) {
 
             var text = e.Uri.OriginalString;

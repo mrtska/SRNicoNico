@@ -359,7 +359,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public string ThumbNail3Url { get; set; }
         public string ThumbNail3ToolTip { get; set; }
         //------
-
     }
 
 }

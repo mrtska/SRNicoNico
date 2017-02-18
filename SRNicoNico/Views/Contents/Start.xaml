@@ -28,7 +28,6 @@
         </TextBlock>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="10,62,0,0" Height="140">
 			このアプリケーションはニコニコ動画をブラウザを起動しなくても見られるようにするアプリケーションです。<LineBreak />
-			権利者からの申し立てなどには速やかに対処します。<LineBreak />
 			このアプリケーションを利用して生じた障害や不利益の責任は一切負いません。自己責任でお使いください。<LineBreak /><LineBreak />
             表示が乱れる、動画が正常に再生されない場合はオンボードのGPUを使用すると解消する場合があります。<LineBreak /><LineBreak /><LineBreak />
         </TextBlock>
