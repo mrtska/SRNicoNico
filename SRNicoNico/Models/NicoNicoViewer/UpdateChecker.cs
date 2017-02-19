@@ -42,7 +42,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                 var json = DynamicJson.Parse(a);
 
-                return  App.ViewModelRoot.CurrentVersion > json.version;
+                return  App.ViewModelRoot.CurrentVersion < json.version;
             } catch(Exception) {
 
                 return false;
