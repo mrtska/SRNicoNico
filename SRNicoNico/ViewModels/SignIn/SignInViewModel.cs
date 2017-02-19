@@ -118,10 +118,12 @@ namespace SRNicoNico.ViewModels {
 
         public async Task<NicoNicoSessionUser> SignInAsync() {
 
-            //前のCookieを削除
-            var expiration = DateTime.UtcNow - TimeSpan.FromDays(1);
-            string str = string.Format("{0}=; expires={1}; path=/; domain=.nicovideo.jp", "user_session", expiration.ToString("R"));
-            App.SetCookie(new Uri("http://nicovideo.jp/"), str);
+            {
+                //前のCookieを削除
+                var expiration = DateTime.UtcNow - TimeSpan.FromDays(1);
+                string str = string.Format("{0}=; expires={1}; path=/; domain=.nicovideo.jp", "user_session", expiration.ToString("R"));
+                App.SetCookie(new Uri("http://nicovideo.jp/"), str);
+            }
             
             var userSession = "";
 
@@ -165,6 +167,15 @@ namespace SRNicoNico.ViewModels {
 
                     MessageBox.Show("メンテナンス中か、サーバーが落ちています。");
                     Environment.Exit(0);
+                }
+
+                //失敗した時に前のセッションを消す
+                if(status == SigninStatus.Failed) {
+
+                    //前のCookieを削除
+                    var expiration = DateTime.UtcNow - TimeSpan.FromDays(1);
+                    string str = string.Format("{0}=; expires={1}; path=/; domain=.nicovideo.jp", "user_session", expiration.ToString("R"));
+                    App.SetCookie(new Uri("http://nicovideo.jp/"), str);
                 }
 
                 if(status == SigninStatus.Success) {

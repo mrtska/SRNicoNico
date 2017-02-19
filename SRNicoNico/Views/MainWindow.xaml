@@ -14,7 +14,7 @@
                    IsRestoringWindowPlacement="True"
 		           Foreground="{DynamicResource ActiveForegroundBrushKey}"
 		           Background="{DynamicResource ThemeBrushKey}"
-                   WindowStyle="None"
+                   WindowStyle="SingleBorderWindow"
                    RenderOptions.BitmapScalingMode="HighQuality"
                    
                    FontFamily="{Binding  Source={x:Static m:Settings.Instance},Path=UserSelectedFont,Mode=TwoWay}"
