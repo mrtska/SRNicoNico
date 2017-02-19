@@ -1,9 +1,9 @@
 # SRNicoNico
 ニコニコ動画を見るだけのアプリケーション
-WPFにActiveX ShockwaveFlashを載せてそこで自作のFlashを動かしてストリーミング再生します。
+WPFでニコニコ動画の動画をhtml5でストリーミング再生します。
 
 #使用言語
-C# XAML ActionScript3
+C# XAML TypeScript JavaScript Html CSS3 ActionScript3
 
 #開発環境
 Visual Studio 2015 Community  
