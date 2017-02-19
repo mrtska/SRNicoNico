@@ -199,7 +199,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
             //設定ファイルをデフォルト値で生成して反映させる
             //なんてことは出来ないのでぷろせすを再起動
-            Process.Start("SRNicoNico.exe");
+            Process.Start(Environment.GetCommandLineArgs()[0]);
             Environment.Exit(0);
             
         }
