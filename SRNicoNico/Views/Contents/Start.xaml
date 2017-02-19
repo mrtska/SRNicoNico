@@ -24,7 +24,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock FontSize="36">
-            NicoNico Viewer <Run FontSize="20" Text="{Binding CurrentVersion,Mode=OneTime,StringFormat=ver {0:N1}}" />
+            NicoNico Viewer <Run FontSize="20" Text="{Binding CurrentVersion,Mode=OneTime,StringFormat=ver {0:N2}}" />
         </TextBlock>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="12" VerticalAlignment="Top" Margin="10,62,0,0" Height="140">
 			このアプリケーションはニコニコ動画をブラウザを起動しなくても見られるようにするアプリケーションです。<LineBreak />

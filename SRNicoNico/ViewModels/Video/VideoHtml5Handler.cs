@@ -191,12 +191,6 @@ namespace SRNicoNico.ViewModels {
         //JSから呼ばれる
         public void Invoked(string cmd, string args) {
 
-            if(cmd != "currenttime" && cmd != "showcontroller") {
-
-            }
-
-            //Console.WriteLine("Inv:" + cmd);
-            
             switch(cmd) {
                 case "widtheight":
                     Owner.Resolution = args;
@@ -208,7 +202,10 @@ namespace SRNicoNico.ViewModels {
                     Owner.IsBuffering = false;
                     break;
                 case "playstate":
-                    Owner.IsPlaying = bool.Parse(args);
+                    if(!string.IsNullOrEmpty(args)) {
+
+                        Owner.IsPlaying = bool.Parse(args);
+                    }
                     break;
                 case "click":
 
@@ -218,41 +215,44 @@ namespace SRNicoNico.ViewModels {
                     }
                     break;
                 case "mousewheel":
+                    if(!string.IsNullOrEmpty(args)) {
 
-                    var vol = int.Parse(args);
+                        var vol = int.Parse(args);
 
-                    if(vol >= 0) {
+                        if(vol >= 0) {
 
-                        Owner.Volume += 2;
-                    } else {
+                            Owner.Volume += 2;
+                        } else {
 
-                        Owner.Volume -= 2;
+                            Owner.Volume -= 2;
+                        }
                     }
                     break;
                 case "currenttime": {
 
+                        if(!string.IsNullOrEmpty(args)) {
 
-                        dynamic json = DynamicJson.Parse(args);
+                            dynamic json = DynamicJson.Parse(args);
 
-                        Owner.PlayedRange.Clear();
-                        Owner.BufferedRange.Clear();
+                            Owner.PlayedRange.Clear();
+                            Owner.BufferedRange.Clear();
 
-                        foreach(var play in json.played) {
+                            foreach(var play in json.played) {
 
-                            Owner.PlayedRange.Add(new TimeRange() { StartTime = play.start, EndTime = play.end });
+                                Owner.PlayedRange.Add(new TimeRange() { StartTime = play.start, EndTime = play.end });
+                            }
+
+                            foreach(var buffer in json.buffered) {
+
+                                Owner.BufferedRange.Add(new TimeRange() { StartTime = buffer.start, EndTime = buffer.end });
+                            }
+
+                            Owner.CurrentTime = json.time;
+                            if(Owner.Comment.CommentVisibility) {
+
+                                Owner.Comment.CommentTick((int)json.vpos);
+                            }
                         }
-
-                        foreach(var buffer in json.buffered) {
-
-                            Owner.BufferedRange.Add(new TimeRange() { StartTime = buffer.start, EndTime = buffer.end });
-                        }
-                            
-                        Owner.CurrentTime = json.time;
-                        if(Owner.Comment.CommentVisibility) {
-
-                            Owner.Comment.CommentTick((int)json.vpos);
-                        }
-
                         break;
                     }
                 case "ended": {
@@ -297,8 +297,6 @@ namespace SRNicoNico.ViewModels {
                     Console.WriteLine("Invoked: " + cmd);
                     break;
             }
-
-
         }
 
         private string GetHtml5PlayerPath() {
