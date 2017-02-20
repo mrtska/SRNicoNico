@@ -61,7 +61,7 @@
 
             </Grid>
             <metro:TabView Grid.Row="1" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" b:DragDropExtension.ScrollOnDragDrop="True"
-                           ScrollViewer.CanContentScroll="False" AlternationCount="2" ItemsSource="{Binding PlayList}" SelectedValue="{Binding SelectedPlayList}"
+                           ScrollViewer.CanContentScroll="False" AlternationCount="2" ItemsSource="{Binding PlayList}" SelectedItem="{Binding SelectedPlayList}"
                            Focusable="False" Background="{DynamicResource BackgroundLevel1BrushKey}" Style="{StaticResource TabViewWithScrollViewerStyle}"
                            dd:DragDrop.DropHandler="{Binding}">
                     <metro:TabView.ItemContainerStyle>

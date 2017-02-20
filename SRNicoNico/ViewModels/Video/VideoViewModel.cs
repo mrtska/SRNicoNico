@@ -55,7 +55,20 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public string VideoUrl { get; set; }
+
+        #region VideoUrl変更通知プロパティ
+        private string _VideoUrl;
+
+        public string VideoUrl {
+            get { return _VideoUrl; }
+            set { 
+                if(_VideoUrl == value)
+                    return;
+                _VideoUrl = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         protected internal NicoNicoWatchApi WatchiApiInstance;
 
