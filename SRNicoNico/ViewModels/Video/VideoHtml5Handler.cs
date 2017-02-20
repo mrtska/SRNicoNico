@@ -230,7 +230,7 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case "currenttime": {
 
-                        if(!string.IsNullOrEmpty(args)) {
+                        //if(!string.IsNullOrEmpty(args)) {
 
                             dynamic json = DynamicJson.Parse(args);
 
@@ -252,7 +252,7 @@ namespace SRNicoNico.ViewModels {
 
                                 Owner.Comment.CommentTick((int)json.vpos);
                             }
-                        }
+                        //}
                         break;
                     }
                 case "ended": {

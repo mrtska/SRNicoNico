@@ -448,7 +448,6 @@ namespace SRNicoNico.ViewModels {
             
             if(ApiData == null) {
 
-                IsActive = false;
                 return;
             }
 
