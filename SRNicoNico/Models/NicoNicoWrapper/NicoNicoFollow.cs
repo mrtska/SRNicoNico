@@ -35,6 +35,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var count = doc.DocumentNode.SelectSingleNode("//div[@id='favUser']/h3/span");
 
+                if(count == null) {
+
+                    return 0;
+                }
                 return int.Parse(Regex.Match(count.InnerHtml, @"\((\d+)").Groups[1].Value);
             } catch(RequestFailed) {
 
@@ -106,6 +110,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var count = doc.DocumentNode.SelectSingleNode("//div[@id='favMylist']/h3/span");
 
+                if(count == null) {
+
+                    return 0;
+                }
                 return int.Parse(Regex.Match(count.InnerHtml, @"\((\d+)").Groups[1].Value);
             } catch(RequestFailed) {
 
@@ -190,6 +198,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var count = doc.DocumentNode.SelectSingleNode("//div[@id='favChannel']/h3/span");
 
+                if(count == null) {
+
+                    return 0;
+                }
+
                 return int.Parse(Regex.Match(count.InnerHtml, @"\((\d+)").Groups[1].Value);
             } catch(RequestFailed) {
 
@@ -261,6 +274,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var count = doc.DocumentNode.SelectSingleNode("//div[@id='favCommunity']/h3/span");
 
+                if(count == null) {
+
+                    return 0;
+                }
                 return int.Parse(Regex.Match(count.InnerHtml, @"\((\d+)").Groups[1].Value);
             } catch(RequestFailed) {
 

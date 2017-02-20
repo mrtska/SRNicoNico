@@ -148,6 +148,13 @@ namespace SRNicoNico.ViewModels {
             Owner.Status = "フォローマイリスト数を取得中";
             FollowedMylistCount = await FollowInstance.GetFollowedMylistCountAsync();
 
+            if(FollowedMylistCount == 0) {
+
+                IsActive = false;
+                Owner.Status = "フォローしているマイリストはありません。";
+                return;
+            }
+
             if(FollowedMylistCount != -1) {
 
                 MaxPages = (FollowedMylistCount / 20) + 1;

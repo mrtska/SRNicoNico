@@ -148,6 +148,14 @@ namespace SRNicoNico.ViewModels {
             Owner.Status = "フォローコミュニティ数を取得中";
             FollowedCommunityCount = await FollowInstance.GetFollowedCommunityCountAsync();
 
+            if(FollowedCommunityCount == 0) {
+
+                Owner.Status = "フォローしているコミュニティはありません。";
+                IsActive = false;
+                return;
+            }
+
+
             if(FollowedCommunityCount != -1) {
 
                 MaxPages = (FollowedCommunityCount / 10) + 1;

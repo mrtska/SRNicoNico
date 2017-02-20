@@ -148,6 +148,13 @@ namespace SRNicoNico.ViewModels {
             Owner.Status = "フォローチャンネル数を取得中";
             FollowedChannelCount = await FollowInstance.GetFollowedChannelCountAsync();
 
+            if(FollowedChannelCount == 0) {
+
+                IsActive = false;
+                Owner.Status = "フォローしているチャンネルはありません。";
+                return;
+            }
+
             if(FollowedChannelCount != -1) {
 
                 MaxPages = (FollowedChannelCount / 10) + 1;
