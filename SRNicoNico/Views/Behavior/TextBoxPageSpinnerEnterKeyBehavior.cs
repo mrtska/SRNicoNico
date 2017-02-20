@@ -72,7 +72,7 @@ namespace SRNicoNico.Views.Behavior {
             } else {
 
                 AssociatedObject.Text = "1";
-                pass.SetValue(Binding, 1);
+                pass?.SetValue(Binding, 1);
             }
 
 

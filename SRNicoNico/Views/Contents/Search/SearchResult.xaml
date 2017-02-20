@@ -112,7 +112,7 @@
                 <TextBox x:Name="page" x:FieldModifier="private" HorizontalAlignment="Right" MaxLength="2" Width="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Text="{Binding CurrentPage,Mode=TwoWay}">
                     <i:Interaction.Behaviors>
                         <b:TextBoxNumericOnlyBehavior />
-                        <b:TextBoxPageSpinnerEnterKeyBehavior Binding="{Binding Owner}" MethodName="SearchPage"/>
+                        <b:TextBoxPageSpinnerEnterKeyBehavior Binding="{Binding}" MethodName="SpinPage"/>
                     </i:Interaction.Behaviors>
                 </TextBox>
                 <Button Content="→" Padding="3" Margin="0,0,17,0" IsEnabled="{Binding RightButtonEnabled}">
