@@ -35,10 +35,10 @@ namespace SRNicoNico {
 
             Console.WriteLine(Monitor.IsMultipleLaunching());
 
-#if RELEASE
+#if !DEBUG
             //多重起動をしようとしていたら最初に起動したプロセスにコマンドラインなどを送って終了
             if(Monitor.IsMultipleLaunching()) {
-
+            
                 Monitor.SendCommandLine();
                 Environment.Exit(0);
                 return;
