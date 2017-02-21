@@ -109,7 +109,7 @@ namespace SRNicoNico.ViewModels {
         public void InvokeScript(string func, params string[] args) {
 
             //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
-            if(Browser != null) {
+            if(Browser != null && Browser.IsLoaded) {
                 try {
 
                     if(args.Length == 0) {

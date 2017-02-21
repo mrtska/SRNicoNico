@@ -120,6 +120,16 @@ namespace SRNicoNico.ViewModels {
         }
 
         public override void KeyDown(KeyEventArgs e) {
+
+            if(Video == null) {
+
+                return;
+            }
+            if(Video.IsActive) {
+
+                return;
+            }
+
             base.KeyDown(e);
             Video?.KeyDown(e);
 
