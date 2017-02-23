@@ -70,6 +70,9 @@ var VideoViewModelImpl = (function () {
         if (autoplay) {
             this.Video.play();
         }
+        else {
+            invoke_host("playstate", false);
+        }
     };
     VideoViewModelImpl.prototype.videoloop = function () {
         this.currentPlayPos = this.Video.currentTime;

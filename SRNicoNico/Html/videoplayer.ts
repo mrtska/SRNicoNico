@@ -122,8 +122,11 @@ class VideoViewModelImpl {
         this.Video.load();
 
         if (autoplay) {
-            
+
             this.Video.play();
+        } else {
+
+            invoke_host("playstate", false);
         }
     }
     
