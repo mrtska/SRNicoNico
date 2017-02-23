@@ -447,7 +447,10 @@ namespace SRNicoNico.ViewModels {
 
         public VideoViewModel(string url) : base(url) {
 
-            VideoUrl = url;
+            var query = new GetRequestQuery(url);
+            query.AddQuery("watch_harmful", 1);
+
+            VideoUrl = query.TargetUrl;
             WatchiApiInstance = new NicoNicoWatchApi(this);
             StoryBoardInstance = new NicoNicoStoryBoard(this);
 
