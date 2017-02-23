@@ -107,7 +107,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         ret.Video = new NicoNicoVideo() {
 
                             Id = videoDetail.id,
-                            Source = getFlv["url"],
+                            SmileInfo = new NicoNicoVideo.NicoNicoSmileInfo() {
+                                Url = getFlv["url"]
+                            },
                             Title = videoDetail.title,
                             OriginalTitle = videoDetail.title_original,
                             Description = videoDetail.description,
@@ -223,7 +225,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     ret.Video = new NicoNicoVideo() {
 
                         Id = video.id,
-                        Source = video.source,
+                        SmileInfo = new NicoNicoVideo.NicoNicoSmileInfo() {
+
+                            Url = video.smileInfo.url,
+                            IsSlowLine = video.smileInfo.isSlowLine,
+                            CurrentQualityId = video.smileInfo.currentQualityId
+                        },
                         Title = HttpUtility.HtmlDecode(video.title),
                         OriginalTitle = video.originalTitle,
                         Description = HyperLinkReplacer.Replace(video.description),
@@ -403,9 +410,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         WatchId = context.watchId,
                         IsNoMovie = context.isNoMovie,
                         IsNoRelatedVideo = context.isNoRelatedVideo,
-                        IsSlowLine = context.isSlowLine,
-                        IsEconomy = (int?) context.isEconomy,
-                        IsEconomyExists = (int) context.isEconomyExists,
                         IsDownloadCompleteWait = context.isDownloadCompleteWait,
                         IsNoNicotic = context.isNoNicotic,
                         IsNeedPayment = context.isNeedPayment,
@@ -637,8 +641,23 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //VideoId
         public string Id { get; set; }
 
-        //動画URL
-        public string Source { get; set; }
+
+        public class NicoNicoSmileInfo {
+
+            //動画URL
+            public string Url { get; set; }
+
+            public bool IsSlowLine { get; set; }
+
+            public string CurrentQualityId { get; set; }
+
+
+
+        }
+
+        public NicoNicoSmileInfo SmileInfo { get; set; }
+
+
 
         //動画タイトル
         public string Title { get; set; }
@@ -841,12 +860,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public bool? IsNoMovie { get; set; }
 
         public string IsNoRelatedVideo { get; set; }
-
-        public bool? IsSlowLine { get; set; }
-
-        public int? IsEconomy { get; set; }
-
-        public int IsEconomyExists { get; set; }
 
         public bool? IsDownloadCompleteWait { get; set; }
 

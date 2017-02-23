@@ -130,7 +130,7 @@ namespace SRNicoNico.ViewModels {
             //ブラウザのCookieをポーリングしてログインしてるか確認
             var pollingTimer = new Timer(1000);
 
-            pollingTimer.Elapsed += (o, e) => {
+            pollingTimer.Elapsed += async (o, e) => {
 
                 //Cookieをブラウザから取得
                 var cookie = App.GetCookie(new Uri("http://nicovideo.jp/"));
@@ -144,7 +144,33 @@ namespace SRNicoNico.ViewModels {
                     if(key.Contains("user_session")) {
 
                         userSession = keyvalue[1];
-                        Messenger.Raise(new WindowActionMessage(WindowAction.Close, "SignIn"));
+
+
+                        var session = new NicoNicoSession(userSession);
+
+                        //Sucessにならないのはおかしいんだけどね
+                        var status = await session.VerifySignInAsync();
+
+                        //メンテナンス中なら落とす 迷惑になると思うし
+                        if(status == SigninStatus.ServiceUnavailable) {
+
+                            MessageBox.Show("メンテナンス中か、サーバーが落ちています。");
+                            Environment.Exit(0);
+                        }
+
+                        //失敗した時に前のセッションを消す
+                        if(status == SigninStatus.Failed) {
+
+                            //前のCookieを削除
+                            var expiration = DateTime.UtcNow - TimeSpan.FromDays(1);
+                            string str = string.Format("{0}=; expires={1}; path=/; domain=.nicovideo.jp", "user_session", expiration.ToString("R"));
+                            App.SetCookie(new Uri("http://nicovideo.jp/"), str);
+                        }
+
+                        if(status == SigninStatus.Success) {
+
+                            Messenger.Raise(new WindowActionMessage(WindowAction.Close, "SignIn"));
+                        }
                         break;
                     }
                 }

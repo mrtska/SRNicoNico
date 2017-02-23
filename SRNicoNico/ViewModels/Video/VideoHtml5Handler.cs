@@ -61,7 +61,7 @@ namespace SRNicoNico.ViewModels {
                     Browser.InvokeScript("VideoViewModel$initialize", new object[] { session.ContentUri, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, Settings.Instance.AutoPlay });
                 } else {
 
-                    if(string.IsNullOrEmpty(Owner.ApiData.Video.Source)) {
+                    if(string.IsNullOrEmpty(Owner.ApiData.Video.SmileInfo.Url)) {
 
                         App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.PaidVideoView), new PaidVideoViewModel(Owner), TransitionMode.NewOrActive));
                         return;
@@ -70,10 +70,10 @@ namespace SRNicoNico.ViewModels {
 
                     if(VideoType == NicoNicoVideoType.RTMP) {
 
-                        Browser.InvokeScript("VideoViewModel$initialize", new object[] { Owner.ApiData.Video.Source + "^" + Owner.ApiData.FmsToken, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, Settings.Instance.AutoPlay });
+                        Browser.InvokeScript("VideoViewModel$initialize", new object[] { Owner.ApiData.Video.SmileInfo.Url + "^" + Owner.ApiData.FmsToken, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, Settings.Instance.AutoPlay });
                     } else {
 
-                        Browser.InvokeScript("VideoViewModel$initialize", new object[] { Owner.ApiData.Video.Source, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, Settings.Instance.AutoPlay });
+                        Browser.InvokeScript("VideoViewModel$initialize", new object[] { Owner.ApiData.Video.SmileInfo.Url, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, Settings.Instance.AutoPlay });
                     }
 
                 }
@@ -135,7 +135,7 @@ namespace SRNicoNico.ViewModels {
                 VideoType = NicoNicoVideoType.SWF;
 
                 Browser.Source = new Uri(GetSWFPlayerPath());
-            } else if(Owner.ApiData.Video.Source.Contains("rtmp")) {
+            } else if(Owner.ApiData.Video.SmileInfo.Url.Contains("rtmp")) {
 
                 VideoType = NicoNicoVideoType.RTMP;
 

@@ -506,12 +506,10 @@ namespace SRNicoNico.ViewModels {
                 Handler.Initialize(this);
             }
             
-
-
             Comment.Initialize();
 
             //画像処理をUIスレッドでやられると重いので
-            await Task.Run(async () => StoryBoardList = await StoryBoardInstance.GetVideoStoryBoardAsync(ApiData.Video.Source));
+            await Task.Run(async () => StoryBoardList = await StoryBoardInstance.GetVideoStoryBoardAsync(ApiData.Video.SmileInfo.Url));
 
         }
 
