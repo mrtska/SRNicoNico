@@ -50,8 +50,14 @@
             <StackPanel VerticalAlignment="Top">
                 <TextBlock Margin="10,0,0,0" TextWrapping="Wrap">
                     動画ページです。<LineBreak/>
-                    ショートカットがかなりありますのでご活用ください。<LineBreak />
-                    下記以外にも細かいショートカットがいくつかあります。<LineBreak />
+                    ショートカットがかなりありますのでご活用ください。<LineBreak /><LineBreak />
+                    ツイートボタンを押すとポップアップでツイート画面が出ます。<LineBreak />
+                    ツイートするとポップアップは自動的に閉じられます。<LineBreak />
+                    ツイートしない場合はEscで閉じられます。<LineBreak /><LineBreak />
+                    フルスクリーンボタンを右クリックするとウィンドウフルスクリーンか通常か選べます。<LineBreak /><LineBreak />
+                    184コメントはデフォルトがOFFなので気にする方はコメントデコレータを開いて設定してください。<LineBreak />
+                    
+                    
                 </TextBlock>
                 <TextBlock Margin="15,0,0,0" TextWrapping="Wrap">
                 キーボードショートカット：
@@ -69,7 +75,8 @@
                         ←→：＋ー10秒シーク<LineBreak/>
                         Enter：コメントパレット表示<LineBreak/>
                         Esc：コメントパレット非表示、フルスクリーン解除<LineBreak/>
-                        フルスクリーン時, D(押下中)：動画情報を表示
+                        Ctrl+W：動画を閉じる<LineBreak />
+                        フルスクリーン時、D長押し：動画説明文を押している間表示する
                 </TextBlock>
             </StackPanel>
         </ScrollViewer>
