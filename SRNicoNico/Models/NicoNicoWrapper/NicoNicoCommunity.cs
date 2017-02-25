@@ -37,6 +37,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var header = doc.DocumentNode.SelectSingleNode("//header[@class='area-communityHeader']");
 
+                if(header == null) {
+
+                    return null;
+                }
+
+
                 ret.CommunityUrl = CommunityUrl;
                 ret.ThumbnailUrl = header.SelectSingleNode("div/div/div/a/img").Attributes["src"].Value;
 

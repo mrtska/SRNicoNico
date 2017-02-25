@@ -63,6 +63,8 @@ namespace SRNicoNico.ViewModels {
 
             if(info == null) {
 
+                IsActive = false;
+                Status = "コミュニティの読み込みに失敗しました。";
                 return;
             }
 
