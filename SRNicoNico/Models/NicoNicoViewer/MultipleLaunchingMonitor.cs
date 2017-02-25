@@ -10,6 +10,7 @@ using System.Runtime.Remoting.Channels.Ipc;
 using Livet;
 using System.Windows;
 using System.Text.RegularExpressions;
+using System.Runtime.Remoting.Lifetime;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
     public class MultipleLaunchingMonitor : IDisposable {
@@ -33,6 +34,9 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         //最初に起動したインスタンスがIPCで複数起動したインスタンスからいろいろを取得する
         public void StartMonitoring() {
+
+            LifetimeServices.LeaseTime = TimeSpan.Zero;
+            LifetimeServices.RenewOnCallTime = TimeSpan.Zero;
 
             Server = new IpcServerChannel("NicoNicoViewer");
 
