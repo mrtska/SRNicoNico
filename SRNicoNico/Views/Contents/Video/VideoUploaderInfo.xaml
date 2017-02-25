@@ -48,6 +48,15 @@
                     <Image Margin="10,15,0,0" Source="{Binding ApiData.Video.ThumbNailUrl}" Width="100" Height="80" VerticalAlignment="Top" />
 
                     <Grid Grid.Row="1">
+                        <Grid.Resources>
+                            <Style TargetType="{x:Type Grid}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ApiData.IsOwnerDeleted}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Resources>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>

@@ -444,6 +444,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         OwnerNGFilters = new List<NicoNicoVideoNGFilter>()
                     };
 
+                    //垢消しうp主
+                    if(ret.Channel == null && ret.Owner == null) {
+
+                        ret.IsOwnerDeleted = true;
+                    }
+
                     if(!Settings.Instance.UseResumePlay) {
 
                         ret.Context.InitialPlaybackPosition = 0;
@@ -626,6 +632,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //チャンネル動画か否か
         public bool IsChannelVideo { get; set; }
+
+        //投稿者失踪
+        public bool IsOwnerDeleted { get; set; }
 
         //プレイヤーコンテキスト
         public NicoNicoVideoContext Context { get; set; }
