@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoCommunity {
@@ -52,17 +53,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 ret.OwnerUrl = data.SelectSingleNode("table/tr[1]/td/a").Attributes["href"].Value;
                 ret.OwnerName = "<a href=\"" + ret.OwnerUrl + "\">" + data.SelectSingleNode("table/tr[1]/td/a").InnerText.Trim() + "</a>";
-                ret.CommmunityName = data.SelectSingleNode("h2/a").InnerText.Trim();
+                ret.CommmunityName = HttpUtility.HtmlDecode(data.SelectSingleNode("h2/a").InnerText.Trim());
                 ret.OpeningDate = data.SelectSingleNode("table/tr[2]/td").InnerText.Trim();
 
                 var tags = data.SelectNodes("table/tr[3]/td/ul/li/a");
 
                 ret.CommunityTags = new List<string>();
 
-                foreach(var tag in tags) {
+                if(tags != null) {
 
-                    ret.CommunityTags.Add(tag.InnerText.Trim());
+                    foreach(var tag in tags) {
+
+                        ret.CommunityTags.Add(tag.InnerText.Trim());
+                    }
                 }
+
 
                 var scale = header.SelectSingleNode("div/div/div/dl[@class='communityScale']");
 
