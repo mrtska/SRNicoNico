@@ -148,14 +148,29 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     var detail = video.SelectSingleNode("div[@class='videoContent']/div[@class='videoDetail']");
                     var status = video.SelectSingleNode("div[@class='videoStatus']");
 
-                    entry.Title = detail.SelectSingleNode("span[@class='videoTitle']/a").InnerText.Trim();
-                    entry.ContentUrl = detail.SelectSingleNode("span[@class='videoTitle']/a").Attributes["href"].Value;
-                    entry.Cmsid = Regex.Match(entry.ContentUrl, @"\d+$").Value;
+                    entry.Title = detail.SelectSingleNode("span[@class='videoTitle']").InnerText.Trim();
                     entry.ViewCounter = int.Parse(detail.SelectSingleNode("ul/li[1]/span[2]").InnerText.Trim(), System.Globalization.NumberStyles.AllowThousands);
                     entry.CommentCounter = int.Parse(detail.SelectSingleNode("ul/li[2]/span[2]/strong").InnerText.Trim(), System.Globalization.NumberStyles.AllowThousands);
-                    entry.MylistCounter = int.Parse(detail.SelectSingleNode("ul/li[3]/a/span").InnerText.Trim(), System.Globalization.NumberStyles.AllowThousands);
+
+                    var mylist = detail.SelectSingleNode("ul/li[3]/a/span");
+
+                    if(mylist != null) {
+
+                        entry.MylistCounter = int.Parse(mylist.InnerText.Trim(), System.Globalization.NumberStyles.AllowThousands);
+                    }
+
+
                     entry.ThumbnailUrl = video.SelectSingleNode("div[@class='videoContent']/div[@class='videoThumbnail']/a/img").Attributes["src"].Value;
-                    entry.Length = video.SelectSingleNode("div[@class='videoContent']/div[@class='videoThumbnail']/span").InnerText.Trim();
+                    entry.ContentUrl = video.SelectSingleNode("div[@class='videoContent']/div[@class='videoThumbnail']/a").Attributes["href"].Value;
+                    entry.Cmsid = Regex.Match(entry.ContentUrl, @"\d+$").Value;
+
+                    var length = video.SelectSingleNode("div[@class='videoContent']/div[@class='videoThumbnail']/span");
+
+                    if(length != null) {
+
+                        entry.Length = length.InnerText.Trim();
+                    }
+
                     entry.FirstRetrieve = status.SelectSingleNode("span[@class='videoRegisterdDate']").InnerText;
                     entry.VideoStatus = status.SelectSingleNode("span[@class='videoPermission']").InnerHtml.Trim();
 
@@ -213,15 +228,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var ret = new List<NicoNicoCommunityMember>();
 
-                foreach(var follower in doc.DocumentNode.SelectNodes("//li[@class='memberItem']")) {
+                var followers = doc.DocumentNode.SelectNodes("//li[@class='memberItem']");
 
-                    var entry = new NicoNicoCommunityMember();
+                if(followers != null) {
 
-                    entry.Name = follower.SelectSingleNode("span/a").InnerText.Trim();
-                    entry.ThumbNailUrl = follower.SelectSingleNode("div[@class='memberThumbnail']/a/img").Attributes["src"].Value;
-                    entry.UserUrl = follower.SelectSingleNode("span/a").Attributes["href"].Value;
+                    foreach(var follower in followers) {
 
-                    ret.Add(entry);
+                        var entry = new NicoNicoCommunityMember();
+
+                        entry.Name = follower.SelectSingleNode("span/a").InnerText.Trim();
+                        entry.ThumbNailUrl = follower.SelectSingleNode("div[@class='memberThumbnail']/a/img").Attributes["src"].Value;
+                        entry.UserUrl = follower.SelectSingleNode("span/a").Attributes["href"].Value;
+
+                        ret.Add(entry);
+                    }
                 }
 
                 Owner.Status = "";
