@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SRNicoNico.Models.NicoNicoViewer;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,8 +20,10 @@ namespace SRNicoNico.Views {
     /// Start.xaml の相互作用ロジック
     /// </summary>
     public partial class Start : UserControl {
+
         public Start() {
             InitializeComponent();
+
         }
 
         private void browser_Navigating(object sender, NavigatingCancelEventArgs e) {

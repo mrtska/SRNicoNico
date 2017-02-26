@@ -23,6 +23,7 @@ namespace SRNicoNico.ViewModels {
 
         #region WebBrowser変更通知プロパティ
         private WebBrowser _WebBrowser;
+        private WebBrowserHostUIHandler UIHandler;
 
         public WebBrowser WebBrowser {
             get { return _WebBrowser; }
@@ -33,7 +34,8 @@ namespace SRNicoNico.ViewModels {
                 value.Navigating += WebViewNavigating;
                 value.Navigated += WebViewNavigated;
                 value.LoadCompleted += WebViewLoadCompleted;
-                
+
+                UIHandler = new WebBrowserHostUIHandler(value);
                 CompositeDisposable.Add(value);
                 RaisePropertyChanged();
             }
@@ -139,6 +141,11 @@ namespace SRNicoNico.ViewModels {
 
         public void Load(string url) {
 
+            if(url.StartsWith("javascript:")) {
+
+                WebBrowser.InvokeScript("eval", url.Split(new char[] { ':' }, 2)[1]);
+                return;
+            }
             var regex = new Regex(@"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+");
 
             if(regex.Match(url).Success) {
@@ -173,6 +180,14 @@ namespace SRNicoNico.ViewModels {
 
         //画面遷移する直前
         private void WebViewNavigating(object sender, NavigatingCancelEventArgs e) {
+
+
+            if(e.Uri.OriginalString.StartsWith("javascript:")) {
+
+                WebBrowser.InvokeScript("eval", e.Uri.OriginalString.Split(new char[] { ':' }, 2)[1]);
+                e.Cancel = true;
+                return;
+            }
 
             //Viewerで開けるURLはViewerで開く
             if(NicoNicoOpener.GetType(e.Uri.OriginalString) != NicoNicoUrlType.Other && OpenWithViewer) {

@@ -21,9 +21,9 @@ namespace SRNicoNico {
         //メインウィンドウのViewModel
         public static MainWindowViewModel ViewModelRoot { get; private set; }
 
-
+#if !DEBUG
         private MultipleLaunchingMonitor Monitor;
-
+#endif
 
         private void Application_Startup(object sender, StartupEventArgs e) {
 
@@ -31,11 +31,10 @@ namespace SRNicoNico {
             DispatcherHelper.UIDispatcher = Dispatcher;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
+#if !DEBUG
             Monitor = new MultipleLaunchingMonitor();
 
-            Console.WriteLine(Monitor.IsMultipleLaunching());
 
-#if !DEBUG
             //多重起動をしようとしていたら最初に起動したプロセスにコマンドラインなどを送って終了
             if(Monitor.IsMultipleLaunching()) {
             
