@@ -43,8 +43,8 @@
                         <HeaderedContentControl.Header>
                             <TextBlock Text="その他" FontSize="18" />
                         </HeaderedContentControl.Header>
-                        <StackPanel>
-                            <CheckBox Content="動画を自動的に再生する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AutoPlay}" />
+                        <StackPanel HorizontalAlignment="Left">
+                            <CheckBox Content="動画を自動的に再生する" ToolTip="連続再生には適用されません。" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AutoPlay}" />
                             <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AlwaysShowSeekBar}" />
                             <CheckBox Content="動画をクリックしたら一時停止/再生する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=ClickOnPause}" />
                             <CheckBox Content="レジューム再生を使用する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=UseResumePlay}" />

@@ -46,6 +46,14 @@ namespace SRNicoNico.ViewModels {
             Browser.ObjectForScripting = new ObjectForScripting(this);
             //
             Browser.LoadCompleted += async (obj, e) => {
+
+                var autoPlay = Settings.Instance.AutoPlay;
+
+                //プレイリストなら強制的にtrue
+                if(Owner.IsPlayList()) {
+
+                    autoPlay = true;
+                }
                 
                 if(Owner.ApiData.Video.DmcInfo != null) {
 
@@ -58,7 +66,7 @@ namespace SRNicoNico.ViewModels {
                     };
                     DmcHeartBeatTimer.Enabled = true;
 
-                    Browser.InvokeScript("VideoViewModel$initialize", new object[] { session.ContentUri, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, Settings.Instance.AutoPlay });
+                    Browser.InvokeScript("VideoViewModel$initialize", new object[] { session.ContentUri, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, autoPlay });
                 } else {
 
                     if(string.IsNullOrEmpty(Owner.ApiData.Video.SmileInfo.Url)) {
@@ -67,13 +75,12 @@ namespace SRNicoNico.ViewModels {
                         return;
                     }
 
-
                     if(VideoType == NicoNicoVideoType.RTMP) {
 
-                        Browser.InvokeScript("VideoViewModel$initialize", new object[] { Owner.ApiData.Video.SmileInfo.Url + "^" + Owner.ApiData.FmsToken, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, Settings.Instance.AutoPlay });
+                        Browser.InvokeScript("VideoViewModel$initialize", new object[] { Owner.ApiData.Video.SmileInfo.Url + "^" + Owner.ApiData.FmsToken, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, autoPlay });
                     } else {
 
-                        Browser.InvokeScript("VideoViewModel$initialize", new object[] { Owner.ApiData.Video.SmileInfo.Url, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, Settings.Instance.AutoPlay });
+                        Browser.InvokeScript("VideoViewModel$initialize", new object[] { Owner.ApiData.Video.SmileInfo.Url, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, autoPlay });
                     }
 
                 }
