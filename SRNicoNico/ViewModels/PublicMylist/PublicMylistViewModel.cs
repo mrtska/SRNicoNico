@@ -92,6 +92,13 @@ namespace SRNicoNico.ViewModels {
 
             var mylist = await PublicMylistInstance.GetMylistAsync();
 
+            if(mylist == null) {
+
+                Status = "存在しないか、非公開のマイリストです。";
+                IsActive = false;
+                return;
+            }
+
             MylistInfo = mylist;
 
             Name += "\n" + mylist.Name;

@@ -30,8 +30,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(MylistUrl);
 
+                var index = a.IndexOf("Jarty.globals(");
+
+                if(index == -1) {
+
+                    return null;
+                }
+
                 //該当JavaScriptの部分から取得
-                var globals = a.Substring(a.IndexOf("Jarty.globals("));
+                var globals = a.Substring(index);
 
                 //改行で分割
                 var splitted = globals.Split('\n');
