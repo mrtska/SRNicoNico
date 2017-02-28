@@ -238,8 +238,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         ThumbNailUrl = video.thumbnailURL,
                         PostedDateTime = DateTime.Parse(video.postedDateTime),
                         OriginalPostedDateTime = video.originalPostedDateTime() && video.originalPostedDateTime != null ? DateTime.Parse(video.originalPostedDateTime) : DateTime.MinValue,
-                        Width = (int)video.width,
-                        Height = (int)video.height,
+                        Width = (int?)video.width,
+                        Height = (int?)video.height,
                         Duration = (int)video.duration,
                         ViewCount = (int)video.viewCount,
                         MylistCount = (int)video.mylistCount,
@@ -684,10 +684,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public DateTime OriginalPostedDateTime { get; set; }
 
         //動画の横幅
-        public int Width { get; set; }
+        public int? Width { get; set; }
 
         //動画の縦幅
-        public int Height { get; set; }
+        public int? Height { get; set; }
 
         //動画の長さ
         public int Duration { get; set; }

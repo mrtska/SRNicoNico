@@ -206,7 +206,7 @@ namespace SRNicoNico.ViewModels {
 
             IsActive = false;
             CanComment = true;
-            Owner.Handler?.InvokeScript("CommentViewModel$initialize");
+            Owner?.Handler?.InvokeScript("CommentViewModel$initialize");
             ApplyFontSize();
             if(CommentVisibility) {
 
@@ -274,7 +274,7 @@ namespace SRNicoNico.ViewModels {
                             item.NicoScript.Execute(null);
                             continue;
                         }
-                        Owner.Handler?.InvokeScript("CommentViewModel$dispatch", item.ToJson());
+                        Owner?.Handler?.InvokeScript("CommentViewModel$dispatch", item.ToJson());
                     }
                 }
             }
@@ -311,7 +311,7 @@ namespace SRNicoNico.ViewModels {
 
             IsActive = false;
             CanComment = true;
-            Owner.Handler?.InvokeScript("CommentViewModel$initialize");
+            Owner?.Handler?.InvokeScript("CommentViewModel$initialize");
             if (CommentVisibility) {
 
                 Owner?.Handler?.InvokeScript("CommentViewModel$show_comment");
@@ -325,7 +325,7 @@ namespace SRNicoNico.ViewModels {
 
         public void ApplyFontSize() {
 
-            Owner.Handler?.InvokeScript("CommentViewModel$setbasesize", Settings.Instance.CommentSize);
+            Owner?.Handler?.InvokeScript("CommentViewModel$setbasesize", Settings.Instance.CommentSize);
         }
 
         public void ToggleAutoScroll() {
