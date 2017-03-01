@@ -144,7 +144,7 @@
                     <Grid Grid.Column="1" Margin="3,0,0,0" >
 
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="2" TextWrapping="Wrap" ToolTip="{Binding ApiData.Owner.UserUrl}">
-                        <Hyperlink RequestNavigate="OpenHyperLink" NavigateUri="{Binding ApiData.Owner.UserUrl}">
+                        <Hyperlink NavigateUri="{Binding ApiData.Owner.UserUrl}">
                             <Run FontSize="16" Text="{Binding ApiData.Owner.Nickname}" />
                         </Hyperlink>
                         </TextBlock>
