@@ -9,6 +9,8 @@ class VideoViewModelImpl {
 
     public Video: HTMLVideoElement;
 
+    private loaded: boolean = false;
+
     public initialize(src:string, initialPos:number, autoplay:boolean) {
 
         //レイヤーを取得
@@ -23,9 +25,9 @@ class VideoViewModelImpl {
         //動画のメタデータロード後
         this.Video.addEventListener("loadedmetadata", (e) => {
 
+            this.loaded = true;
             //C#側に動画の長さを伝える
             //invoke_host("duration", e.target.duration);
-
             this.Video.currentTime = initialPos;
             //C#側に動画の解像度を伝える
             invoke_host("widtheight", this.Video.videoWidth + "×" + this.Video.videoHeight);
@@ -118,9 +120,6 @@ class VideoViewModelImpl {
             invoke_host("mousewheel", e.wheelDelta);
         }
         
-        //ロードして再生 勝手に再生しないようにとかするならここかな
-        this.Video.load();
-
         if (autoplay) {
 
             this.Video.play();
@@ -203,7 +202,7 @@ class VideoViewModelImpl {
     //動画シーク
     public seek(pos:number):void {
 
-        if(this.Video) {
+        if(this.Video && this.loaded) {
 
             this.Video.currentTime = pos;
         }

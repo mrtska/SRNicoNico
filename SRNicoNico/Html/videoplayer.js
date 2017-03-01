@@ -2,6 +2,7 @@ var VideoViewModelImpl = (function () {
     function VideoViewModelImpl() {
         this.WIDTH = 640;
         this.HEIGHT = 360;
+        this.loaded = false;
         this.currentPlayPos = 0;
         this.checkInterval = 50.0;
         this.lastPlayPos = 0;
@@ -13,6 +14,7 @@ var VideoViewModelImpl = (function () {
         this.Video.style.height = window.innerHeight + "px";
         this.Video.src = src;
         this.Video.addEventListener("loadedmetadata", function (e) {
+            _this.loaded = true;
             _this.Video.currentTime = initialPos;
             invoke_host("widtheight", _this.Video.videoWidth + "×" + _this.Video.videoHeight);
             setInterval(function () { return _this.videoloop(); }, 50);
@@ -66,7 +68,6 @@ var VideoViewModelImpl = (function () {
         window.onmousewheel = function (e) {
             invoke_host("mousewheel", e.wheelDelta);
         };
-        this.Video.load();
         if (autoplay) {
             this.Video.play();
         }
@@ -118,7 +119,7 @@ var VideoViewModelImpl = (function () {
         }
     };
     VideoViewModelImpl.prototype.seek = function (pos) {
-        if (this.Video) {
+        if (this.Video && this.loaded) {
             this.Video.currentTime = pos;
         }
     };

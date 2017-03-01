@@ -237,29 +237,41 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case "currenttime": {
 
-                        //if(!string.IsNullOrEmpty(args)) {
+                        dynamic json = DynamicJson.Parse(args);
 
-                            dynamic json = DynamicJson.Parse(args);
+                        if(json.played()) {
 
                             Owner.PlayedRange.Clear();
-                            Owner.BufferedRange.Clear();
 
                             foreach(var play in json.played) {
 
                                 Owner.PlayedRange.Add(new TimeRange() { StartTime = play.start, EndTime = play.end });
                             }
+                        }
+
+                        if(json.buffered()) {
+
+                            Owner.BufferedRange.Clear();
 
                             foreach(var buffer in json.buffered) {
 
                                 Owner.BufferedRange.Add(new TimeRange() { StartTime = buffer.start, EndTime = buffer.end });
                             }
+                        }
+
+                        if(json.time()) {
 
                             Owner.CurrentTime = json.time;
+                        }
+
+                        if(json.vpos()) {
+
                             if(Owner.Comment.CommentVisibility) {
 
                                 Owner.Comment.CommentTick((int)json.vpos);
                             }
-                        //}
+                        }
+
                         break;
                     }
                 case "ended": {
