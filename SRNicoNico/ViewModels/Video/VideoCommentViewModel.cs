@@ -142,6 +142,8 @@ namespace SRNicoNico.ViewModels {
 
         internal VideoViewModel Owner;
 
+        private bool Initialized = false;
+
         public VideoCommentViewModel(VideoViewModel vm) {
 
             Owner = vm;
@@ -215,9 +217,16 @@ namespace SRNicoNico.ViewModels {
 
                 Owner?.Handler?.InvokeScript("CommentViewModel$hide_comment");
             }
+
+            Initialized = true;
         }
 
         public void CommentTick(int vpos) {
+            
+            if(!Initialized) {
+
+                return;
+            }
 
             //同じだったら無視
             if(CurrentVpos == vpos) {
