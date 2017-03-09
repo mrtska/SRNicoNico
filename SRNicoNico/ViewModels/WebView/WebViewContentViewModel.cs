@@ -23,7 +23,6 @@ namespace SRNicoNico.ViewModels {
 
         #region WebBrowser変更通知プロパティ
         private WebBrowser _WebBrowser;
-        private WebBrowserHostUIHandler UIHandler;
 
         public WebBrowser WebBrowser {
             get { return _WebBrowser; }
@@ -35,7 +34,6 @@ namespace SRNicoNico.ViewModels {
                 value.Navigated += WebViewNavigated;
                 value.LoadCompleted += WebViewLoadCompleted;
 
-                UIHandler = new WebBrowserHostUIHandler(value);
                 CompositeDisposable.Add(value);
                 RaisePropertyChanged();
             }
