@@ -333,185 +333,116 @@
                         </Setter.Value>
                     </Setter>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Name}" Value="Fizzler">
+                <DataTrigger Binding="{Binding Name}" Value="Material Design Icons">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="UserControl">
                                 <ScrollViewer>
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Fizzler 1.0.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
-                                            <Hyperlink NavigateUri="https://fizzler.googlecode.com" >
-                                               https://fizzler.googlecode.com
+                                            <Run Text="Material Design Icons" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="http://materialdesignicons.com" >
+                                               http://materialdesignicons.com
                                             </Hyperlink><LineBreak /><LineBreak />                                        
 
             
-                                            ライセンス : LGPL<LineBreak />
-                                                                GNU LESSER GENERAL PUBLIC LICENSE<LineBreak />
-                                                                    Version 3, 29 June 2007<LineBreak />
+                                            ライセンス :SIL OPEN FONT LICENSE Version 1.1<LineBreak />
+                                            Copyright (c) 2014, Austin Andrews (http://materialdesignicons.com/),<LineBreak />
+with Reserved Font Name Material Design Icons.<LineBreak />
+Copyright (c) 2014, Google (http://www.google.com/design/)<LineBreak />
+uses the license at https://github.com/google/material-design-icons/blob/master/LICENSE<LineBreak />
 
-                                                Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/><LineBreak />
-                                                Everyone is permitted to copy and distribute verbatim copies<LineBreak />
-                                                of this license document, but changing it is not allowed.<LineBreak /><LineBreak />
+This Font Software is licensed under the SIL Open Font License, Version 1.1.<LineBreak />
+This license is copied below, and is also available with a FAQ at:<LineBreak />
+http://scripts.sil.org/OFL<LineBreak /><LineBreak />
 
 
-                                                This version of the GNU Lesser General Public License incorporates<LineBreak />
-                                            the terms and conditions of version 3 of the GNU General Public<LineBreak />
-                                            License, supplemented by the additional permissions listed below.<LineBreak /><LineBreak />
+-----------------------------------------------------------<LineBreak />
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007<LineBreak />
+-----------------------------------------------------------<LineBreak /><LineBreak />
 
-                                                0. Additional Definitions.<LineBreak /><LineBreak />
+PREAMBLE<LineBreak />
+The goals of the Open Font License (OFL) are to stimulate worldwide<LineBreak />
+development of collaborative font projects, to support the font creation<LineBreak />
+efforts of academic and linguistic communities, and to provide a free and<LineBreak />
+open framework in which fonts may be shared and improved in partnership<LineBreak />
+with others.<LineBreak /><LineBreak />
 
-                                                As used herein, "this License" refers to version 3 of the GNU Lesser<LineBreak />
-                                            General Public License, and the "GNU GPL" refers to version 3 of the GNU<LineBreak />
-                                            General Public License.<LineBreak /><LineBreak />
+The OFL allows the licensed fonts to be used, studied, modified and<LineBreak />
+redistributed freely as long as they are not sold by themselves. The<LineBreak />
+fonts, including any derivative works, can be bundled, embedded, <LineBreak />
+redistributed and/or sold with any software provided that any reserved<LineBreak />
+names are not used by derivative works. The fonts and derivatives,<LineBreak />
+however, cannot be released under any other type of license. The<LineBreak />
+requirement for fonts to remain under this license does not apply<LineBreak />
+to any document created using the fonts or their derivatives.<LineBreak /><LineBreak />
 
-                                                "The Library" refers to a covered work governed by this License,<LineBreak />
-                                            other than an Application or a Combined Work as defined below.<LineBreak /><LineBreak />
+DEFINITIONS<LineBreak />
+"Font Software" refers to the set of files released by the Copyright<LineBreak />
+Holder(s) under this license and clearly marked as such. This may<LineBreak />
+include source files, build scripts and documentation.<LineBreak /><LineBreak />
 
-                                                An "Application" is any work that makes use of an interface provided<LineBreak />
-                                            by the Library, but which is not otherwise based on the Library.<LineBreak />
-                                            Defining a subclass of a class defined by the Library is deemed a mode<LineBreak />
-                                            of using an interface provided by the Library.<LineBreak /><LineBreak />
+"Reserved Font Name" refers to any names specified as such after the<LineBreak />
+copyright statement(s).<LineBreak /><LineBreak />
 
-                                                A "Combined Work" is a work produced by combining or linking an<LineBreak />
-                                            Application with the Library.  The particular version of the Library<LineBreak />
-                                            with which the Combined Work was made is also called the "Linked<LineBreak />
-                                            Version".<LineBreak /><LineBreak />
+"Original Version" refers to the collection of Font Software components as<LineBreak />
+distributed by the Copyright Holder(s).<LineBreak /><LineBreak />
 
-                                                The "Minimal Corresponding Source" for a Combined Work means the<LineBreak />
-                                            Corresponding Source for the Combined Work, excluding any source code<LineBreak />
-                                            for portions of the Combined Work that, considered in isolation, are<LineBreak />
-                                            based on the Application, and not on the Linked Version.<LineBreak /><LineBreak />
+"Modified Version" refers to any derivative made by adding to, deleting,<LineBreak />
+or substituting -- in part or in whole -- any of the components of the<LineBreak />
+Original Version, by changing formats or by porting the Font Software to a<LineBreak />
+new environment.<LineBreak /><LineBreak />
 
-                                                The "Corresponding Application Code" for a Combined Work means the<LineBreak />
-                                            object code and/or source code for the Application, including any data<LineBreak />
-                                            and utility programs needed for reproducing the Combined Work from the<LineBreak />
-                                            Application, but excluding the System Libraries of the Combined Work.<LineBreak /><LineBreak />
+"Author" refers to any designer, engineer, programmer, technical<LineBreak />
+writer or other person who contributed to the Font Software.<LineBreak /><LineBreak />
 
-                                                1. Exception to Section 3 of the GNU GPL.<LineBreak /><LineBreak />
+PERMISSION &amp; CONDITIONS<LineBreak />
+Permission is hereby granted, free of charge, to any person obtaining<LineBreak />
+a copy of the Font Software, to use, study, copy, merge, embed, modify,<LineBreak />
+redistribute, and sell modified and unmodified copies of the Font<LineBreak />
+Software, subject to the following conditions:<LineBreak /><LineBreak />
 
-                                                You may convey a covered work under sections 3 and 4 of this License<LineBreak />
-                                            without being bound by section 3 of the GNU GPL.<LineBreak /><LineBreak />
+1) Neither the Font Software nor any of its individual components,<LineBreak />
+in Original or Modified Versions, may be sold by itself.<LineBreak />
 
-                                                2. Conveying Modified Versions.<LineBreak /><LineBreak />
+2) Original or Modified Versions of the Font Software may be bundled,<LineBreak />
+redistributed and/or sold with any software, provided that each copy<LineBreak />
+contains the above copyright notice and this license. These can be<LineBreak />
+included either as stand-alone text files, human-readable headers or<LineBreak />
+in the appropriate machine-readable metadata fields within text or<LineBreak />
+binary files as long as those fields can be easily viewed by the user.<LineBreak /><LineBreak />
 
-                                                If you modify a copy of the Library, and, in your modifications, a<LineBreak />
-                                            facility refers to a function or data to be supplied by an Application<LineBreak />
-                                            that uses the facility (other than as an argument passed when the<LineBreak />
-                                            facility is invoked), then you may convey a copy of the modified<LineBreak />
-                                            version:<LineBreak /><LineBreak />
+3) No Modified Version of the Font Software may use the Reserved Font<LineBreak />
+Name(s) unless explicit written permission is granted by the corresponding<LineBreak />
+Copyright Holder. This restriction only applies to the primary font name as<LineBreak />
+presented to the users.<LineBreak /><LineBreak />
 
-                                                a) under this License, provided that you make a good faith effort to<LineBreak />
-                                                ensure that, in the event an Application does not supply the<LineBreak />
-                                                function or data, the facility still operates, and performs<LineBreak />
-                                                whatever part of its purpose remains meaningful, or<LineBreak /><LineBreak />
+4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font<LineBreak />
+Software shall not be used to promote, endorse or advertise any<LineBreak />
+Modified Version, except to acknowledge the contribution(s) of the<LineBreak />
+Copyright Holder(s) and the Author(s) or with their explicit written<LineBreak />
+permission.<LineBreak /><LineBreak />
 
-                                                b) under the GNU GPL, with none of the additional permissions of<LineBreak />
-                                                this License applicable to that copy.<LineBreak /><LineBreak />
+5) The Font Software, modified or unmodified, in part or in whole,<LineBreak />
+must be distributed entirely under this license, and must not be<LineBreak />
+distributed under any other license. The requirement for fonts to<LineBreak />
+remain under this license does not apply to any document created<LineBreak />
+using the Font Software.<LineBreak /><LineBreak />
 
-                                                3. Object Code Incorporating Material from Library Header Files.<LineBreak /><LineBreak />
+TERMINATION<LineBreak />
+This license becomes null and void if any of the above conditions are<LineBreak />
+not met.<LineBreak /><LineBreak />
 
-                                                The object code form of an Application may incorporate material from<LineBreak />
-                                            a header file that is part of the Library.  You may convey such object<LineBreak />
-                                            code under terms of your choice, provided that, if the incorporated<LineBreak />
-                                            material is not limited to numerical parameters, data structure<LineBreak />
-                                            layouts and accessors, or small macros, inline functions and templates<LineBreak />
-                                            (ten or fewer lines in length), you do both of the following:<LineBreak /><LineBreak />
-
-                                                a) Give prominent notice with each copy of the object code that the<LineBreak />
-                                                Library is used in it and that the Library and its use are<LineBreak />
-                                                covered by this License.<LineBreak /><LineBreak />
-
-                                                b) Accompany the object code with a copy of the GNU GPL and this license<LineBreak />
-                                                document.<LineBreak /><LineBreak />
-
-                                                4. Combined Works.<LineBreak /><LineBreak />
-
-                                                You may convey a Combined Work under terms of your choice that,<LineBreak />
-                                            taken together, effectively do not restrict modification of the<LineBreak />
-                                            portions of the Library contained in the Combined Work and reverse<LineBreak />
-                                            engineering for debugging such modifications, if you also do each of<LineBreak />
-                                            the following:<LineBreak /><LineBreak />
-
-                                                a) Give prominent notice with each copy of the Combined Work that<LineBreak />
-                                                the Library is used in it and that the Library and its use are<LineBreak />
-                                                covered by this License.<LineBreak /><LineBreak />
-
-                                                b) Accompany the Combined Work with a copy of the GNU GPL and this license<LineBreak />
-                                                document.<LineBreak /><LineBreak />
-
-                                                c) For a Combined Work that displays copyright notices during<LineBreak />
-                                                execution, include the copyright notice for the Library among<LineBreak />
-                                                these notices, as well as a reference directing the user to the<LineBreak />
-                                                copies of the GNU GPL and this license document.<LineBreak /><LineBreak />
-
-                                                d) Do one of the following:<LineBreak /><LineBreak />
-
-                                                    0) Convey the Minimal Corresponding Source under the terms of this<LineBreak />
-                                                    License, and the Corresponding Application Code in a form<LineBreak />
-                                                    suitable for, and under terms that permit, the user to<LineBreak />
-                                                    recombine or relink the Application with a modified version of<LineBreak />
-                                                    the Linked Version to produce a modified Combined Work, in the<LineBreak />
-                                                    manner specified by section 6 of the GNU GPL for conveying<LineBreak />
-                                                    Corresponding Source.<LineBreak /><LineBreak />
-
-                                                    1) Use a suitable shared library mechanism for linking with the<LineBreak />
-                                                    Library.  A suitable mechanism is one that (a) uses at run time<LineBreak />
-                                                    a copy of the Library already present on the user's computer<LineBreak />
-                                                    system, and (b) will operate properly with a modified version<LineBreak />
-                                                    of the Library that is interface-compatible with the Linked<LineBreak />
-                                                    Version.<LineBreak /><LineBreak />
-
-                                                e) Provide Installation Information, but only if you would otherwise<LineBreak />
-                                                be required to provide such information under section 6 of the<LineBreak />
-                                                GNU GPL, and only to the extent that such information is<LineBreak />
-                                                necessary to install and execute a modified version of the<LineBreak />
-                                                Combined Work produced by recombining or relinking the<LineBreak />
-                                                Application with a modified version of the Linked Version. (If<LineBreak />
-                                                you use option 4d0, the Installation Information must accompany<LineBreak />
-                                                the Minimal Corresponding Source and Corresponding Application<LineBreak />
-                                                Code. If you use option 4d1, you must provide the Installation<LineBreak />
-                                                Information in the manner specified by section 6 of the GNU GPL<LineBreak />
-                                                for conveying Corresponding Source.)<LineBreak /><LineBreak />
-
-                                                5. Combined Libraries.<LineBreak /><LineBreak />
-
-                                                You may place library facilities that are a work based on the<LineBreak />
-                                            Library side by side in a single library together with other library<LineBreak />
-                                            facilities that are not Applications and are not covered by this<LineBreak />
-                                            License, and convey such a combined library under terms of your<LineBreak />
-                                            choice, if you do both of the following:<LineBreak /><LineBreak />
-
-                                                a) Accompany the combined library with a copy of the same work based<LineBreak />
-                                                on the Library, uncombined with any other library facilities,<LineBreak />
-                                                conveyed under the terms of this License.<LineBreak /><LineBreak />
-
-                                                b) Give prominent notice with the combined library that part of it<LineBreak />
-                                                is a work based on the Library, and explaining where to find the<LineBreak />
-                                                accompanying uncombined form of the same work.<LineBreak /><LineBreak />
-
-                                                6. Revised Versions of the GNU Lesser General Public License.<LineBreak /><LineBreak />
-
-                                                The Free Software Foundation may publish revised and/or new versions<LineBreak />
-                                            of the GNU Lesser General Public License from time to time. Such new<LineBreak />
-                                            versions will be similar in spirit to the present version, but may<LineBreak />
-                                            differ in detail to address new problems or concerns.<LineBreak /><LineBreak />
-
-                                                Each version is given a distinguishing version number. If the<LineBreak />
-                                            Library as you received it specifies that a certain numbered version<LineBreak />
-                                            of the GNU Lesser General Public License "or any later version"<LineBreak />
-                                            applies to it, you have the option of following the terms and<LineBreak />
-                                            conditions either of that published version or of any later version<LineBreak />
-                                            published by the Free Software Foundation. If the Library as you<LineBreak />
-                                            received it does not specify a version number of the GNU Lesser<LineBreak />
-                                            General Public License, you may choose any version of the GNU Lesser<LineBreak />
-                                            General Public License ever published by the Free Software Foundation.<LineBreak /><LineBreak />
-
-                                                If the Library as you received it specifies that a proxy can decide<LineBreak />
-                                            whether future versions of the GNU Lesser General Public License shall<LineBreak />
-                                            apply, that proxy's public statement of acceptance of any version is<LineBreak />
-                                            permanent authorization for you to choose that version for the<LineBreak />
-                                            Library.<LineBreak />
+DISCLAIMER<LineBreak />
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,<LineBreak />
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF<LineBreak />
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT<LineBreak />
+OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE<LineBreak />
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,<LineBreak />
+INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL<LineBreak />
+DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING<LineBreak />
+FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM<LineBreak />
+OTHER DEALINGS IN THE FONT SOFTWARE.<LineBreak /><LineBreak />
                                         </TextBlock>
                                     </StackPanel>
                                 </ScrollViewer>

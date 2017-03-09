@@ -41,7 +41,7 @@ namespace SRNicoNico.ViewModels {
             OSSList.Add(new OSSEntryViewModel("Livet"));
             OSSList.Add(new OSSEntryViewModel("Newtonsoft.Json"));
             OSSList.Add(new OSSEntryViewModel("DynamicJson"));
-            OSSList.Add(new OSSEntryViewModel("Fizzler"));
+            OSSList.Add(new OSSEntryViewModel("Material Design Icons"));
             OSSList.Add(new OSSEntryViewModel("HtmlAgilityPack"));
             OSSList.Add(new OSSEntryViewModel("gong-wpf-dragdrop"));
             OSSList.Add(new OSSEntryViewModel("ForcibleLoader"));
