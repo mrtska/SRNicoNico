@@ -60,13 +60,18 @@ namespace SRNicoNico.ViewModels {
                     var dmc = new NicoNicoDmcSession(Owner.ApiData.Video.DmcInfo);
                     var session = await dmc.CreateAsync();
 
-                    DmcHeartBeatTimer.Elapsed += (state, ev) => {
 
-                        dmc.HeartbeatAsync(session.Id);
-                    };
-                    DmcHeartBeatTimer.Enabled = true;
+                    if(DmcHeartBeatTimer != null) {
 
-                    Browser.InvokeScript("VideoViewModel$initialize", new object[] { session.ContentUri, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, autoPlay });
+                        DmcHeartBeatTimer.Elapsed += (state, ev) => {
+
+                            dmc.HeartbeatAsync(session.Id);
+                        };
+
+                        DmcHeartBeatTimer.Enabled = true;
+                    }
+
+                    Browser?.InvokeScript("VideoViewModel$initialize", new object[] { session.ContentUri, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, autoPlay });
                 } else {
 
                     if(string.IsNullOrEmpty(Owner.ApiData.Video.SmileInfo.Url)) {
@@ -344,6 +349,7 @@ namespace SRNicoNico.ViewModels {
         public void Dispose() {
 
             ((IDisposable)DmcHeartBeatTimer).Dispose();
+            DmcHeartBeatTimer = null;
             Browser.Dispose();
             Browser = null;
         }
