@@ -39,7 +39,7 @@
             <MenuItem Header="ブラウザで開く">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <ei:LaunchUriOrFileAction Path="{Binding Item.VideoId}" />
+                        <ei:LaunchUriOrFileAction Path="{Binding Item.VideoId,StringFormat='http://www.nicovideo.jp/watch/{0}'}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
