@@ -6,7 +6,7 @@ WPFでニコニコ動画の動画をhtml5でストリーミング再生します
 C# XAML TypeScript JavaScript Html CSS3 ActionScript3
 
 #開発環境
-Visual Studio 2015 Community  
+Visual Studio 2017 Community  
 Flash Develop
 
 
