@@ -55,7 +55,7 @@ namespace SRNicoNico.ViewModels {
                     autoPlay = true;
                 }
                 
-                if(Owner.ApiData.Video.DmcInfo != null) {
+                if(Owner.ApiData.Video.DmcInfo != null && !Owner.ApiData.Video.Title.Contains("ドットバイドット")) {
 
                     var dmc = new NicoNicoDmcSession(Owner.ApiData.Video.DmcInfo);
                     var session = await dmc.CreateAsync();
