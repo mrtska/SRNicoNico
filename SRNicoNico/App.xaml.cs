@@ -47,7 +47,7 @@ namespace SRNicoNico {
         }
 #endif
 
-            //WebBrowserコントロールのIEバージョンを最新にする 古いとUI崩れるからね
+            //WebBrowserコントロールのIEバージョンを最新にする 古いとUI崩れるからね インストーラーでもこの処理はされてるけど一応
             //レジストリを弄るのはここだけ
             Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", "SRNicoNico.exe", 0x00002AFA, RegistryValueKind.DWord);
             Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_GPU_RENDERING", "SRNicoNico.exe", 0x00000001, RegistryValueKind.DWord);
@@ -62,9 +62,9 @@ namespace SRNicoNico {
 
         //集約エラーハンドラ
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
-            //ハンドルされない例外の処理 このメソッドが終わると例外を吐いた
+            //ハンドルされない例外の処理 このメソッドが終わると
             MessageBox.Show(
-                "不明なエラーが発生しました。可能であれば、この文章をコピーして作者に報告していただれば幸いです。Ctrl+Cでコピーできます。\n ExceptionObject:" + e.ExceptionObject,
+                "不明なエラーが発生しました。可能であれば、この文章をコピーして作者に報告していただれば幸いです。Ctrl+Cでコピーできます。\n動画再生時に起きた場合は動画IDを添えてください。\n ExceptionObject:" + e.ExceptionObject,
                 "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
             
         }
