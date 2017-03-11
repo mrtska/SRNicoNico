@@ -30,25 +30,24 @@ namespace SRNicoNico.Views {
 
             var url = e.Uri.OriginalString;
 
-            if(DataContext is VideoViewModel) {
+            if (DataContext is VideoViewModel vm) {
 
-                var vm = (VideoViewModel)DataContext;
-
-                if(url.StartsWith("#")) {
+                if (url.StartsWith("#")) {
 
                     var time = url.Substring(1);
 
-                    vm.Handler.Seek(NicoNicoUtil.ConvertTime((time)));
+                    vm?.Handler?.Seek(NicoNicoUtil.ConvertTime((time)));
                 } else {
 
 
-                    if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftShift) || NicoNicoOpener.GetType(e.Uri.OriginalString) != NicoNicoUrlType.Video) {
+                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftShift) || NicoNicoOpener.GetType(e.Uri.OriginalString) != NicoNicoUrlType.Video || vm.IsPlayList()) {
 
+                        vm?.Handler?.Pause();
                         NicoNicoOpener.Open(e.Uri.OriginalString);
                     } else {
 
                         //URLを書き換えて再読込
-                        vm.VideoUrl =  e.Uri.OriginalString;
+                        vm.VideoUrl = e.Uri.OriginalString;
                         vm.Initialize();
                     }
                 }
