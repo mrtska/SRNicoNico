@@ -891,7 +891,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public bool IsThreadOwner { get; set; }
 
-        public bool? IsOwnerThreadEditable { get; set; }
+        public string IsOwnerThreadEditable { get; set; }
 
         public string UseChecklistCache { get; set; }
 
