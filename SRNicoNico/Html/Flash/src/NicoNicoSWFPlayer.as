@@ -83,8 +83,15 @@ package
 			
 			if(movie) {
 				
+				ExternalInterface.call("eval", "VideoViewModel.video.ended = false");
 				ExternalInterface.call("invoke_host", "playstate", true);
 				ExternalInterface.call("CommentViewModel.resumeComment()");
+				
+				if (!hasEventListener(Event.ENTER_FRAME)) {
+					
+					addEventListener(Event.ENTER_FRAME, onFrame2);
+				}
+				
 				movie.play();
 			}
 		}
@@ -149,9 +156,9 @@ package
 			
 			resize(stageW, stageH);
 			
-			renderTick.addEventListener(TimerEvent.TIMER, onFrame);
+			addEventListener(Event.ENTER_FRAME, onFrame2);
 			
-			this.renderTick.start();
+			//this.renderTick.start();
 						ExternalInterface.call("invoke_host", "log" + this.autoPlay);
 
 			if(this.autoPlay) {
@@ -183,7 +190,7 @@ package
 			}
       }
 
-		public override function onFrame(e:TimerEvent):void {
+		public function onFrame2(e:Event):void {
 			
 			// 再生時間を取得
 			var frame:int = movie.currentFrame;
@@ -202,6 +209,15 @@ package
 				movie.stop();
 				ExternalInterface.call("CommentViewModel.pauseComment()");
 				ExternalInterface.call("eval", "VideoViewModel.video.ended = true");
+				
+				ExternalInterface.call("invoke_host", "ended");
+				
+				if (hasEventListener(Event.ENTER_FRAME)) {
+					
+					removeEventListener(Event.ENTER_FRAME, onFrame2);
+				}
+				
+				
 			}
 		}
 	

@@ -276,14 +276,15 @@ namespace SRNicoNico.ViewModels {
                                 Owner.Comment.CommentTick((int)json.vpos);
                             }
                         }
-
+                        
                         break;
                     }
                 case "ended": {
 
                         if(Owner.IsRepeat) {
-
+                            
                             Owner.Restart();
+                            Play();
                         } else {
 
                             if(Owner.IsFullScreen && !Owner.IsPlayList()) {
@@ -322,7 +323,7 @@ namespace SRNicoNico.ViewModels {
                     break;
             }
         }
-
+        
         private string GetHtml5PlayerPath() {
 
             var cur = NicoNicoUtil.CurrentDirectory;
