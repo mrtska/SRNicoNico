@@ -1,4 +1,6 @@
-﻿using SRNicoNico.Models.NicoNicoViewer;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using SRNicoNico.Models.NicoNicoViewer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,7 +90,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
         }
-
+        public static bool IsValidJson(string strInput) {
+            strInput = strInput.Trim();
+            if ((strInput.StartsWith("{") && strInput.EndsWith("}")) || (strInput.StartsWith("[") && strInput.EndsWith("]"))) {
+                try {
+                    var obj = JToken.Parse(strInput);
+                    return true;
+                } catch (JsonReaderException) {
+                    return false;
+                } catch (Exception) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
     }
 
     [Flags]

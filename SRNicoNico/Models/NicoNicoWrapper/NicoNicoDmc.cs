@@ -124,7 +124,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
 
-        public async void HeartbeatAsync(string id) {
+        public async Task HeartbeatAsync(string id) {
 
             try {
 
@@ -138,7 +138,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(request);
+               
+                if(!NicoNicoUtil.IsValidJson(a)) {
 
+                    return;
+                }
                 var doc = DynamicJson.Parse(a);
 
                 if(doc.data()) {

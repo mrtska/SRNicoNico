@@ -153,7 +153,7 @@ namespace SRNicoNico.ViewModels {
 
         
 
-        public async void Initialize() {
+        public async Task Initialize() {
 
             IsActive = true;
 
