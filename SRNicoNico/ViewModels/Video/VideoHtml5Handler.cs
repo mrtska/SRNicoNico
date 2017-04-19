@@ -90,16 +90,13 @@ namespace SRNicoNico.ViewModels {
 
                 }
 
-                if(Owner.ApiData.Viewer.IsPremium) {
 
-                    Owner.ChangePlayRateAvalilable = PlayBackRateAvalilableReason.Available;
-                } else {
-
-                    Owner.ChangePlayRateAvalilable = PlayBackRateAvalilableReason.PremiumOnly;
-                }
                 if(VideoType != NicoNicoVideoType.MP4 && VideoType != NicoNicoVideoType.New) {
 
                     Owner.ChangePlayRateAvalilable = PlayBackRateAvalilableReason.NotSupportVideo;
+                } else {
+
+                    Owner.ChangePlayRateAvalilable = PlayBackRateAvalilableReason.Available;
                 }
 
                 Owner.Volume = Owner.Volume;
