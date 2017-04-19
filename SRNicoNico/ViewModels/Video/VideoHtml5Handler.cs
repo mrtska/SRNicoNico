@@ -184,6 +184,11 @@ namespace SRNicoNico.ViewModels {
 
         protected internal void Seek(double pos) {
 
+            if(Owner.ApiData == null) {
+
+                return;
+            }
+
             if(pos < 0) {
 
                 pos = 0;
