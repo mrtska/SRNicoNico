@@ -63,9 +63,9 @@ namespace SRNicoNico.ViewModels {
 
                     if(DmcHeartBeatTimer != null) {
 
-                        DmcHeartBeatTimer.Elapsed += (state, ev) => {
+                        DmcHeartBeatTimer.Elapsed += async (state, ev) => {
 
-                            dmc.HeartbeatAsync(session.Id);
+                            await dmc.HeartbeatAsync(session.Id);
                         };
 
                         DmcHeartBeatTimer.Enabled = true;

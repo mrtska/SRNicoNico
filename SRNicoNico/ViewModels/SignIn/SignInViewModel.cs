@@ -238,7 +238,10 @@ namespace SRNicoNico.ViewModels {
             writer.Close();
 
         }
+        public void ExitButtonDown() {
 
+            Application.Current.Shutdown();
+        }
 
     }
 }

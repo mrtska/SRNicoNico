@@ -28,8 +28,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
                 var split = Entry.Content.Split(' ');
 
-                Owner.Owner.VideoUrl = "http://www.nicovideo.jp/watch/" + split[1];
-                Owner.Owner.Initialize();
+                if(Regex.IsMatch(split[1], "\\d")) {
+
+                    Owner.Owner.VideoUrl = "http://www.nicovideo.jp/watch/" + split[1];
+                    Owner.Owner.Initialize();
+                }
+
             }
         }
     }
