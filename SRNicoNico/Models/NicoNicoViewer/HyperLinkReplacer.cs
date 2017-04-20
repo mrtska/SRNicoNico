@@ -11,7 +11,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         private static readonly Regex UrlPattern = new Regex(@"http(s)?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?");
 
-        private static readonly Regex TwitterPattern = new Regex(@"[@|＠][A-z|0-9|_]{1,15}(?!.*\.)");
+        private static readonly Regex TwitterPattern = new Regex(@"[@|＠][A-z|0-9|_]{1,15}");
         private static readonly Regex Twitter2Pattern = new Regex(@"TwitterID:([A-z|0-9|_]{1,15})");
 
         private static readonly Regex MailAddressPattern = new Regex(@"[\x00-\x7f]+@[\x00-\x7f]+");

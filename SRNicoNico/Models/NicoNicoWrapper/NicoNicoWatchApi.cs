@@ -455,7 +455,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         ret.Context.InitialPlaybackPosition = 0;
                     }
 
-                    foreach(var filter in context.ownerNGFilters) {
+                    foreach(var filter in context.ownerNGList) {
 
                         ret.Context.OwnerNGFilters.Add(new NicoNicoVideoNGFilter() { Source = filter.source, Destination = filter.destination });
                     }
