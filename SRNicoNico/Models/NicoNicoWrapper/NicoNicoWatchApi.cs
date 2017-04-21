@@ -373,7 +373,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         };
                         ret.Channel.ChannelUrl = "http://ch.nicovideo.jp/" + ret.Channel.GlobalId;
 
-                        foreach(var filter in channel.ngFilters) {
+                        foreach(var filter in channel.ngList) {
 
                             ret.Channel.NGFilters.Add(new NicoNicoVideoNGFilter() { Source = filter.source, Destination = filter.destination });
                         }

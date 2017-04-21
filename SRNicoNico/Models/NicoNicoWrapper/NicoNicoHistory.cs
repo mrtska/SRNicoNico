@@ -114,7 +114,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         return ret;
                     }
                 } catch(Exception) {
-
+                            
                     Owner.Status = "ローカルの視聴履歴の取得に失敗しました。ファイルが壊れている可能性があります";
                     return null;
                 }
@@ -159,6 +159,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //数が増えると重くなりそうなんだよな・・・
         //まあそんなの私が気にすることないか
         public void MergeHistories(List<NicoNicoHistoryEntry> from, List<NicoNicoHistoryEntry> to) {
+
+            if(from == null || to == null) {
+
+                return;
+            }
+
 
             foreach(var fromentry in from) {
 
