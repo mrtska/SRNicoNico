@@ -210,7 +210,7 @@
                 </mui:ModernButton.ContextMenu>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodName="EnterFullScreen" MethodTarget="{Binding}" />
+                        <l:LivetCallMethodAction MethodName="BeforeEnterFullScreen" MethodTarget="{Binding}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
 

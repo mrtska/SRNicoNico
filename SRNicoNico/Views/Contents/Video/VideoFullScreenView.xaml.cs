@@ -29,10 +29,9 @@ namespace SRNicoNico.Views {
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e) {
 
-            if(DataContext is VideoViewModel) {
+            if (DataContext is VideoViewModel vm) {
 
-                var vm = (VideoViewModel)DataContext;
-                if(vm.Comment.Post.IsCommentPopupOpen) {
+                if (vm.Comment.Post.IsCommentPopupOpen) {
 
                     App.ViewModelRoot.KeyDown(e);
                 } else {
@@ -73,8 +72,8 @@ namespace SRNicoNico.Views {
 
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e) {
 
-            if (DataContext is VideoViewModel) {
-                var vm = (VideoViewModel)DataContext;
+            if (DataContext is VideoViewModel vm) {
+
                 vm.KeyUp(e);
             }
         }

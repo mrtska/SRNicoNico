@@ -554,6 +554,17 @@ namespace SRNicoNico.ViewModels {
             IsMute ^= true;
         }
 
+        public void BeforeEnterFullScreen() {
+
+            if (Settings.Instance.UseWindowMode) {
+
+                EnterWindowFullScreen();
+            } else {
+
+                EnterFullScreen();
+            }
+        }
+
         public void EnterFullScreen() {
 
             if(IsFullScreen) {
@@ -804,7 +815,7 @@ namespace SRNicoNico.ViewModels {
                     ToggleMute();
                     break;
                 case Key.F:
-                    if(e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control)) {
+                    if(Settings.Instance.UseWindowMode ^ e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control)) {
 
                         EnterWindowFullScreen();
                     } else {

@@ -29,10 +29,9 @@ namespace SRNicoNico.Views {
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e) {
 
-            if(DataContext is VideoViewModel) {
+            if (DataContext is VideoViewModel vm) {
 
-                var vm = (VideoViewModel)DataContext;
-                if(vm.Comment.Post.IsCommentPopupOpen) {
+                if (vm.Comment.Post.IsCommentPopupOpen) {
 
                     App.ViewModelRoot.KeyDown(e);
                 } else {
@@ -42,15 +41,15 @@ namespace SRNicoNico.Views {
                         Close();
                         return;
                     }
-                    App.ViewModelRoot.KeyDown(e);
+                    vm.KeyDown(e);
                 }
             }
         }
 
         private void Window_Closed(object sender, EventArgs e) {
 
-            if(DataContext is VideoViewModel) {
-                var vm = (VideoViewModel)DataContext;
+            if (DataContext is VideoViewModel vm) {
+
                 var temp = vm.FullScreenWebBrowser;
                 vm.FullScreenWebBrowser = null;
                 vm.WebBrowser = temp;
@@ -61,7 +60,7 @@ namespace SRNicoNico.Views {
 
                 vm.IsFullScreen = false;
 
-                if(vm.IsPlayList()) {
+                if (vm.IsPlayList()) {
 
                     GetWindow(temp).Visibility = Visibility.Visible;
                 } else {
