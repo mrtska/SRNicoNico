@@ -127,11 +127,11 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition MaxWidth="120" Width="*"/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Margin="5,0,0,0" Foreground="{DynamicResource ActiveForegroundBrushKey}" Text="{Binding Content}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                            <TextBlock Margin="5,0,0,0" Foreground="{DynamicResource ActiveForegroundBrushKey}" Text="{Binding Content}" ToolTip="{Binding Content}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
                             <Button HorizontalAlignment="Right" Grid.Column="1" Margin="1" Command="{Binding Owner.DeleteHistoryCommand}" CommandParameter="{Binding}" Content="×" />
                         </Grid>
                     </DataTemplate>
