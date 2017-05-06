@@ -159,8 +159,15 @@ namespace SRNicoNico.ViewModels {
 
             CommentListList.Clear();
 
+            var lists = await CommentInstance.GetAllCommentAsync();
+
+            if(lists == null) {
+
+                return;
+            }
+
             //コメントを取得できるやつは取得する
-            foreach(var list in await CommentInstance.GetAllCommentAsync()) {
+            foreach(var list in lists) {
 
                 var listlist = new VideoCommentListViewModel(list);
                 
