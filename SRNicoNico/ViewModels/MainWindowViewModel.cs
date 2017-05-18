@@ -22,7 +22,7 @@ namespace SRNicoNico.ViewModels {
         //現在のバージョン
         public double CurrentVersion {
 
-            get { return 1.08; }
+            get { return 1.09; }
         }
 
         #region Title変更通知プロパティ
