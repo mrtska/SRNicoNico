@@ -75,7 +75,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     //説明文がないユーザーはなしにする
                     var p = outer.SelectSingleNode("div/p");
-                    user.Description = p.Attributes["class"] == null ? p.InnerText.Trim(): "";
+                    user.Description = p == null ? "" : p.InnerText.Trim();
 
                     ret.Add(user);
                 }
