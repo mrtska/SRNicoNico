@@ -264,7 +264,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                             OwnerNGWords = video.dmcInfo.thread.owner_ng_words,
                             MaintenancesNg = video.dmcInfo.thread.maintenances_ng,
                             PostkeyAvailable = video.dmcInfo.thread.postkey_available,
-                            NgRevision = (int)video.dmcInfo.thread.ng_revision,
+                            NgRevision = (int?)video.dmcInfo.thread.ng_revision,
 
                             ApiUrls = video.dmcInfo.session_api.api_urls,
                             RecipeId = video.dmcInfo.session_api.recipe_id,
@@ -770,7 +770,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public object OwnerNGWords { get; set; }
         public bool MaintenancesNg { get; set; }
         public bool PostkeyAvailable { get; set; }
-        public int NgRevision { get; set; }
+        public int? NgRevision { get; set; }
 
         //session API
         public List<string> ApiUrls { get; set; }

@@ -64,6 +64,7 @@ namespace SRNicoNico.ViewModels {
             NicoRepoList.Add(new NicoRepoResultViewModel("チャンネル＆コミュニティ", "chcom", NicoRepoInstance));
             NicoRepoList.Add(new NicoRepoResultViewModel("マイリスト", "mylist", NicoRepoInstance));
 
+            Status = "";
             IsActive = false;
         }
 
