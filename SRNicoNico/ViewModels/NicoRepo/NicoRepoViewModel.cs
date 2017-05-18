@@ -64,18 +64,6 @@ namespace SRNicoNico.ViewModels {
             NicoRepoList.Add(new NicoRepoResultViewModel("チャンネル＆コミュニティ", "chcom", NicoRepoInstance));
             NicoRepoList.Add(new NicoRepoResultViewModel("マイリスト", "mylist", NicoRepoInstance));
 
-            //ユーザー定義ニコレポを取得する
-            var list = await NicoRepoInstance.GetUserNicoRepoListAsync();
-
-            if(list != null) {
-
-                foreach(var entry in list) {
-
-                    NicoRepoList.Add(new NicoRepoResultViewModel(entry.Value, entry.Key, NicoRepoInstance));
-                }
-
-                Status = "";
-            }
             IsActive = false;
         }
 

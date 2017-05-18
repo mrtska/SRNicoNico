@@ -20,42 +20,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             Owner = owner;
         }
 
-        public async Task<Dictionary<string, string>> GetUserNicoRepoListAsync() {
-
-            try {
-
-                //ニコレポのhtmlからユーザー定義ニコレポの一覧を取得する
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync("http://www.nicovideo.jp/my/top/all");
-
-                var doc = new HtmlDocument();
-                doc.LoadHtml(a);
-
-                var ret = new Dictionary<string, string>();
-
-                //htmlからリストを抜き出す
-                foreach(var entry in doc.DocumentNode.SelectNodes("//div[@class='navInner']/ul[@class='child']/li/a")) {
-
-                    var href = entry.Attributes["href"].Value;
-                    var text = HttpUtility.HtmlDecode(entry.InnerText.Substring(1));
-
-                    //ユーザー定義ニコレポのみ抜き出す
-                    if(href.EndsWith("all") || href.EndsWith("myself") || href.EndsWith("user") || href.EndsWith("chcom") || href.EndsWith("mylist")) {
-
-                        continue;
-                    }
-
-                    ret.Add(Regex.Match(href, @"\d+").Value, text);
-                }
-
-                return ret;
-            } catch(RequestFailed) {
-
-                Owner.Status = "ユーザー定義ニコレポの取得に失敗しました";
-                return null;
-            }
-
-        }
-        
         public async Task<NicoNicoNicoRepoResult> GetNicoRepoAsync(string type, string nextPage) {
 
             try {
@@ -105,7 +69,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                         if(detail != null) {
 
-                            item.Time = detail.SelectSingleNode("div/div/a/time")?.InnerText.Trim() ?? "";
+                            item.Time = detail.SelectSingleNode("div/div/span/time")?.InnerText.Trim() ?? "";
 
                             item.ContentThumbNail = detail.SelectSingleNode("div[@class='log-target-thumbnail']/a/img")?.Attributes["data-original"].Value ?? "";
 
