@@ -104,7 +104,7 @@ namespace SRNicoNico.ViewModels {
                 NicoRepoList.RemoveAt(NicoRepoList.Count - 1);
             }
 
-            var ret = await NicoRepoInstance.GetNicoRepoAsync(Api, NextPageTime);
+            var ret = await NicoRepoInstance.GetNicoRepoAsync(Api, UnFilteredNicoRepoList.Count != 0 ? ((NicoRepoResultEntryViewModel) UnFilteredNicoRepoList.Last()).Item.Id : null);
             
             if(ret != null) {
 
@@ -112,7 +112,6 @@ namespace SRNicoNico.ViewModels {
 
                     UnFilteredNicoRepoList.Add(new NicoRepoResultEntryViewModel(entry));
                 }
-                NextPageTime = ret.NextPage;
                 IsEnd = ret.IsEnd;
 
                 FilterNicoRepo();
@@ -129,45 +128,12 @@ namespace SRNicoNico.ViewModels {
 
         public void FilterNicoRepo() {
 
-            switch(Filter) {
-                case "すべて":
-                    NicoRepoList.Clear();
-                    foreach(var raw in UnFilteredNicoRepoList) {
+            foreach (var raw in UnFilteredNicoRepoList) {
 
-                        NicoRepoList.Add(raw);
-                    }
-                    break;
-                case "動画投稿のみ":
-
-                    NicoRepoList.Clear();
-                    var video = UnFilteredNicoRepoList.Where((e) => ((NicoRepoResultEntryViewModel)e).Item.Title.Contains("動画を投稿しました。"));
-
-                    foreach(var raw in video) {
-
-                        NicoRepoList.Add(raw);
-                    }
-                    break;
-                case "生放送開始のみ":
-
-                    NicoRepoList.Clear();
-                    var live = UnFilteredNicoRepoList.Where(e => ((NicoRepoResultEntryViewModel)e).Item.Title.Contains("生放送を開始しました。"));
-                    foreach(var raw in live) {
-
-                        NicoRepoList.Add(raw);
-                    }
-                    break;
-                case "マイリスト登録のみ":
-
-                    NicoRepoList.Clear();
-                    var mylist = UnFilteredNicoRepoList.Where(e => ((NicoRepoResultEntryViewModel)e).Item.Title.Contains("マイリスト登録しました。"));
-
-                    foreach(var raw in mylist) {
-
-                        NicoRepoList.Add(raw);
-                    }
-                    break;
+                NicoRepoList.Add(raw);
             }
-            if(!IsEnd) {
+
+            if (!IsEnd) {
 
                 NicoRepoList.Add(new NicoRepoNextButtonEntryViewModel(this));
             }

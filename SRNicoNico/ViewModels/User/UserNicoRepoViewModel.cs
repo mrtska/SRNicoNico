@@ -45,7 +45,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        private string NextPageOffset = "0";
 
         private UserViewModel User;
         public UserNicoRepoViewModel(UserViewModel user) : base("ニコレポ") {
@@ -55,7 +54,6 @@ namespace SRNicoNico.ViewModels {
 
         public void Initialize() {
 
-            NextPageOffset = "0";
             Closed = false;
             UserNicoRepoList.Clear();
             GetMore();
@@ -76,7 +74,7 @@ namespace SRNicoNico.ViewModels {
                 UserNicoRepoList.RemoveAt(UserNicoRepoList.Count - 1);
             }
 
-            var timeline = await User.UserInstance.GetUserNicoRepoAsync(NextPageOffset);
+            var timeline = await User.UserInstance.GetUserNicoRepoAsync("");
 
             if(timeline == null || timeline.Items.Count == 0) {
 
@@ -89,8 +87,6 @@ namespace SRNicoNico.ViewModels {
 
                 UserNicoRepoList.Add(new NicoRepoResultEntryViewModel(entry));
             }
-
-            NextPageOffset = timeline.NextPage;
 
             IsActive = false;
             if(!timeline.IsEnd) {

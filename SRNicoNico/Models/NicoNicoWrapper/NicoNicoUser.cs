@@ -170,8 +170,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             var ret = new NicoNicoNicoRepoResult();
             ret.Items = new List<NicoNicoNicoRepoResultEntry>();
-
-            try {
+            return ret;
+            /*try {
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
                 var doc = new HtmlDocument();
@@ -256,7 +256,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 Owner.Status = "ユーザーニコレポの取得に失敗しました";
                 return null;
-            }
+            }*/
         }
         public async Task<List<NicoNicoUserMylistEntry>> GetUserMylistAsync() {
 

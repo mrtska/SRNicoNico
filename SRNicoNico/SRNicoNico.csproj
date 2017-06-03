@@ -227,6 +227,12 @@
     <Compile Include="Views\Contents\Mylist\RemoveMylistView.xaml.cs">
       <DependentUpon>RemoveMylistView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\NicoRepo\NicoRepoResultSeigaEntry.xaml.cs">
+      <DependentUpon>NicoRepoResultSeigaEntry.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\NicoRepo\NicoRepoResultLiveEntry.xaml.cs">
+      <DependentUpon>NicoRepoResultLiveEntry.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\PlayList\PlayList.xaml.cs">
       <DependentUpon>PlayList.xaml</DependentUpon>
     </Compile>
@@ -459,6 +465,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\Mylist\MylistResultEntry.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\NicoRepo\NicoRepoResultSeigaEntry.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\NicoRepo\NicoRepoResultLiveEntry.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

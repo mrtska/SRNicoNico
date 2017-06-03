@@ -53,16 +53,17 @@ namespace SRNicoNico.ViewModels {
             NicoRepoInstance = new NicoNicoNicoRepo(this);
         }
 
-        public async void Initialize() {
+        public void Initialize() {
 
             IsActive = true;
             Status = "ニコレポリストを取得中";
             NicoRepoList.Clear();
             NicoRepoList.Add(new NicoRepoResultViewModel("すべて", "all", NicoRepoInstance));
-            NicoRepoList.Add(new NicoRepoResultViewModel("自分", "myself", NicoRepoInstance));
-            NicoRepoList.Add(new NicoRepoResultViewModel("フォロー中のユーザー", "user", NicoRepoInstance));
-            NicoRepoList.Add(new NicoRepoResultViewModel("チャンネル＆コミュニティ", "chcom", NicoRepoInstance));
-            NicoRepoList.Add(new NicoRepoResultViewModel("マイリスト", "mylist", NicoRepoInstance));
+            NicoRepoList.Add(new NicoRepoResultViewModel("自分", "self", NicoRepoInstance));
+            NicoRepoList.Add(new NicoRepoResultViewModel("フォロー中のユーザー", "followingUser", NicoRepoInstance));
+            NicoRepoList.Add(new NicoRepoResultViewModel("チャンネル", "followingChannel", NicoRepoInstance));
+            NicoRepoList.Add(new NicoRepoResultViewModel("コミュニティ", "followingCommunity", NicoRepoInstance));
+            NicoRepoList.Add(new NicoRepoResultViewModel("マイリスト", "followingMylist", NicoRepoInstance));
 
             Status = "";
             IsActive = false;

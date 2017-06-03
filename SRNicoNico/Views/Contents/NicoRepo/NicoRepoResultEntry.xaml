@@ -8,7 +8,7 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
@@ -59,68 +59,15 @@
         </ContextMenu>
     </UserControl.ContextMenu>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="67*"/>
-        </Grid.ColumnDefinitions>
-        <Image Source="{Binding Item.NicoRepoThumbNail}" Height="40" Margin="5"/>
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Item.Title}" TextWrapping="Wrap" FontSize="14" />
-                <ContentControl Grid.Column="1">
-                    <ContentControl.Style>
-                        <Style TargetType="ContentControl">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Item.IsWatched}" Value="True">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="ContentControl">
-                                                <TextBlock Text="視聴済み" Margin="0,0,10,0" Foreground="Gray" FontSize="12"  />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ContentControl.Style>
-                </ContentControl>
-                <TextBlock Grid.Column="2" Text="{Binding Item.Time}" FontSize="12"  />
-            </Grid>
-
-            <ContentControl Grid.Row="1">
-                <ContentControl.Style>
-                    <Style TargetType="ContentControl">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Item.HasContent}" Value="True">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="ContentControl">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="50"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <Image Source="{Binding Item.ContentThumbNail}" Height="40" Stretch="Uniform" Margin="2"/>
-                                                <TextBlock Grid.Column="1" Margin="5,0,0,0" Text="{Binding Item.ContentTitle}" TextWrapping="Wrap" VerticalAlignment="Center" />
-                                            </Grid>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ContentControl.Style>
-            </ContentControl>
-        </Grid>
+        <ContentControl Content="{Binding Item}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoLiveEntry}">
+                    <v:NicoRepoResultLiveEntry />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoSeigaEntry}">
+                    <v:NicoRepoResultSeigaEntry />
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
     </Grid>
 </UserControl>

@@ -9,6 +9,7 @@ using SRNicoNico.Models.NicoNicoViewer;
 using HtmlAgilityPack;
 using System.Web;
 using System.Text.RegularExpressions;
+using Codeplex.Data;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoNicoRepo {
@@ -24,87 +25,129 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             try {
 
-                //ニコレポのhtmlを取得
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync("http://www.nicovideo.jp/my/top/" + type + "?innerPage=1&mode=next_page" + ((nextPage == null) ? "" : "&last_timeline=" + nextPage));
+                var query = new GetRequestQuery("http://www.nicovideo.jp/api/nicorepo/timeline/my/" + type);
+                query.AddQuery("client_app", "pc_myrepo");
+                query.AddQuery("_", UnixTime.ToUnixTime(DateTime.Now));
+                if(nextPage != null) {
 
-
-                var doc = new HtmlDocument();
-                doc.LoadHtml(a);
-
-                var timeline = doc.DocumentNode.SelectNodes("//div[@class='timeline']/div");
-                
-                //無いとき 
-                if(timeline == null) {
-
-                    return null;
+                    query.AddQuery("cursor", nextPage);
                 }
+
+                //ニコレポのhtmlを取得
+                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(query.TargetUrl);
+
+                dynamic json = DynamicJson.Parse(a);
 
                 var ret = new NicoNicoNicoRepoResult();
                 ret.Items = new List<NicoNicoNicoRepoResultEntry>();
 
                 //ニコレポタイムラインを走査
-                foreach(var entry in timeline) {
+                foreach(var entry in json.data) {
 
-                    var item = new NicoNicoNicoRepoResultEntry();
-                    var author = entry.SelectSingleNode("div[contains(@class, 'log-author ')]");
+                    NicoNicoNicoRepoResultEntry item = null;
 
-                    if(author != null) {
+                    Console.WriteLine(entry.topic);
 
-                        item.NicoRepoThumbNail = author.SelectSingleNode("a/img").Attributes["data-original"].Value;
-                        item.AuthorUrl = author.SelectSingleNode("a").Attributes["href"].Value;
-                    }
+                    switch(entry.topic) {
+                        case "live.channel.program.onairs":
+                        case "live.channel.program.reserve": {
 
-                    var content = entry.SelectSingleNode("div[@class='log-content']");
+                                var sender = entry.senderChannel;
+                                var program = entry.program;
 
-                    if(content != null) {
+                                item = new NicoNicoNicoRepoLiveEntry() {
+                                    SenderId = (int)sender.id,
+                                    SenderName = sender.name,
+                                    SenderUrl = sender.url,
+                                    SenderThumbnail = sender.thumbnailUrl,
+                                    ProgramId = program.id,
+                                    ProgramBeginAt = DateTime.Parse(program.beginAt),
+                                    IsPayProgram = program.isPayProgram,
+                                    ProgramThumbnail = program.thumbnailUrl,
+                                    ProgramTitle = program.title
+                                };
 
+                                if (((string)entry.topic).EndsWith("onairs")) {
 
-                        var body = content.SelectSingleNode("div[@class='log-body']");
-                        if(body != null) {
+                                    item.ComputedTitle = string.Format("チャンネル {0} で生放送が開始されました。", item.SenderName);
+                                } else {
 
-                            item.Title = body.InnerHtml;
-                        }
-
-                        var detail = content.SelectSingleNode("div[contains(@class, 'log-details')]");
-
-                        if(detail != null) {
-
-                            item.Time = detail.SelectSingleNode("div/div/span/time")?.InnerText.Trim() ?? "";
-
-                            item.ContentThumbNail = detail.SelectSingleNode("div[@class='log-target-thumbnail']/a/img")?.Attributes["data-original"].Value ?? "";
-
-                            var target = detail.SelectSingleNode("div[@class='log-target-info']/a");
-                            if(target != null) {
-
-                                item.HasContent = true;
-                                item.ContentTitle = HttpUtility.HtmlDecode(target.InnerText.Trim());
-                                item.ContentUrl = target.Attributes["href"].Value;
-
-                                NicoNicoUtil.ApplyLocalHistory(item);
+                                    item.ComputedTitle = string.Format("チャンネル {0} で {1:yy年M月d日 h時 m分} に生放送が予約されました。", item.SenderName, DateTime.Parse(program.beginAt));
+                                }
+                                break;
                             }
+                        case "live.user.program.onairs":
+                        case "live.user.program.reserve": {
 
-                        }
+                                var sender = entry.senderNiconicoUser;
+                                var program = entry.program;
+                                var com = entry.community;
+
+                                item = new NicoNicoNicoRepoLiveEntry() {
+                                    SenderId = (int)sender.id,
+                                    SenderName = sender.nickname,
+                                    SenderUrl = "http://www.nicovideo.jp/user/" + sender.id,
+                                    SenderThumbnail = sender.icons.tags.defaultValue.urls.s50x50,
+                                    ProgramId = program.id,
+                                    ProgramBeginAt = DateTime.Parse(program.beginAt),
+                                    IsPayProgram = program.isPayProgram,
+                                    ProgramThumbnail = program.thumbnailUrl,
+                                    ProgramTitle = program.title,
+                                    CommunityId = com.id,
+                                    CommunityName = com.name,
+                                    CommunityThumbnail = com.thumbnailUrl.small
+                                };
+
+                                if (((string)entry.topic).EndsWith("onairs")) {
+
+                                    item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんがコミュニティ {1} で生放送が開始されました。", item.SenderName, item.CommunityName);
+                                } else {
+
+                                    item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんがコミュニティ {1} で {2:yy年M月d日 h時 m分} に生放送が予約しました。", item.SenderName, item.CommunityName, DateTime.Parse(program.beginAt));
+                                }
+                                break;
+                            }
+                        case "nicoseiga.user.illust.clip":
+                        case "nicoseiga.user.illust.upload": {
+
+                                var sender = entry.senderNiconicoUser;
+                                var seiga = entry.illustImage;
+
+                                item = new NicoNicoNicoRepoSeigaEntry() {
+                                    SenderId = (int)sender.id,
+                                    SenderName = sender.nickname,
+                                    SenderUrl = "http://www.nicovideo.jp/user/" + sender.id,
+                                    SenderThumbnail = sender.icons.tags.defaultValue.urls.s50x50,
+                                    SeigaId = seiga.id,
+                                    SeigaTitle = seiga.title,
+                                    SeigaThumbnail = seiga.thumbnailUrl,
+                                    SeigaUrl = seiga.urls.pcUrl
+                                };
+
+                                if (((string)entry.topic).EndsWith("clip")) {
+
+                                    item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが イラストをクリップしました。", item.SenderName);
+                                } else {
+
+                                    item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが <strong>イラストを投稿しました。</strong>", item.SenderName);
+                                }
+                                break;
+                            }
+                        default:
+                            item = new NicoNicoNicoRepoResultEntry();
+                            break;
 
                     }
 
-                    if(item.ContentUrl == null) {
-
-                        item.ContentUrl = item.AuthorUrl;
-                    }
+                    item.Id = entry.id;
+                    item.Topic = entry.topic;
+                    item.CreatedAt = DateTime.Parse(entry.createdAt);
+                    item.Visible = entry.isVisible;
+                    item.Muted = entry.isMuted;
 
                     ret.Items.Add(item);
                 }
 
-                var next = doc.DocumentNode.SelectSingleNode("//a[@class='next-page-link']");
-
-                if(next != null) {
-
-                    ret.NextPage = Regex.Match(next.Attributes["href"].Value, @"\d+$").Value;
-                } else {
-
-                    ret.IsEnd = true;
-                    ret.NextPage = null;
-                }
                 return ret;
             } catch(RequestFailed e) {
 
@@ -115,17 +158,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     Owner.Status = "ニコレポの取得がタイムアウトになりました";
                 }
-
                 return null;
             }
-
-
         }
-
-
-
-
-
     }
 
     public class NicoNicoNicoRepoResult {
@@ -136,39 +171,91 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //リストの終端まで来たかどうか
         public bool IsEnd { get; set; }
 
-        //次のページのトークン IsEndがtrueならnull
-        public string NextPage { get; set; }
-
-
     }
 
     public class NicoNicoNicoRepoResultEntry : IWatchable {
 
-        //ニコレポのタイトル
-        public string Title { get; set; }
-        
+        //ニコレポの固有ID なんでこんなもん振ったんだろうね
+        public string Id { get; set; }
 
-        //ニコレポのサムネ
-        public string NicoRepoThumbNail { get; set; }
+        //トピック そのニコレポがどんな内容か
+        public string Topic { get; set; }
 
-        //ニコレポが発生した時間
-        public string Time { get; set; }
+        //そのニコレポがディスパッチされた時間
+        public DateTime CreatedAt { get; set; }
 
-        //そのニコレポを
-        public string AuthorUrl { get; set; }
+        //Visible
+        public bool Visible { get; set; }
 
-        //内容があるかどうか
-        public bool HasContent { get; set; }
+        //ミュート対象かどうか
+        public bool Muted { get; set; }
+
+        public bool Deletable { get; set; }
 
         //内容のURL
         public string ContentUrl { get; set; }
 
-        //内容
-        public string ContentTitle { get; set; }
-
-        //内容のサムネ
-        public string ContentThumbNail { get; set; }
-
         public bool IsWatched { get; set; }
+
+        public string SenderName { get; set; }
+
+        public int SenderId { get; set; }
+
+        public string SenderUrl { get; set; }
+
+        public string SenderThumbnail { get; set; }
+
+        //いろいろ弄ったタイトル
+        public string ComputedTitle { get; set; }
+
+        public string CommunityName { get; set; }
+
+        public string CommunityId { get; set; }
+
+        public string CommunityThumbnail { get; set; }
+    }
+
+    public class NicoNicoNicoRepoVideoEntry : NicoNicoNicoRepoResultEntry {
+
+        public string VideoId { get; set; }
+
+        //なんの解像度か全く分からんぞい
+        public int VideoWidth { get; set; }
+        public int VideoHeight { get; set; }
+
+        public string Status { get; set; }
+
+        public string VideoThumbnail { get; set; }
+
+        public string VideoTitle { get; set; }
+
+        public string VideoWatchPageId { get; set; }
+    }
+
+    public class NicoNicoNicoRepoSeigaEntry : NicoNicoNicoRepoResultEntry {
+
+        public string SeigaUrl { get; set; }
+
+        public string SeigaId { get; set; }
+
+        public string SeigaTitle { get; set; }
+
+        public string SeigaThumbnail { get; set; }
+    }
+
+    public class NicoNicoNicoRepoLiveEntry : NicoNicoNicoRepoResultEntry {
+
+        //生放送ID
+        public string ProgramId { get; set; }
+
+        //生放送開始
+        public DateTime ProgramBeginAt { get; set; }
+
+        //有料放送かどうか
+        public bool IsPayProgram { get; set; }
+
+        public string ProgramThumbnail { get; set; }
+
+        public string ProgramTitle { get; set; }
     }
 }
