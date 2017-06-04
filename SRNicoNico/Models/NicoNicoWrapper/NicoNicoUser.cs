@@ -26,11 +26,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //ユーザーフォローAPI
         private const string UserFollowApi = "http://www.nicovideo.jp/api/watchitem/add";
 
-        
+        private NicoNicoNicoRepo NicoRepoInstance;
+
         private readonly UserViewModel Owner;
 
         public NicoNicoUser(UserViewModel vm) {
-            
+
+            NicoRepoInstance = new NicoNicoNicoRepo(vm);
             Owner = vm;
         }
 
@@ -140,7 +142,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     ret.ChannelUrl = channel.SelectSingleNode("p/a").Attributes["href"].Value;
                 }
 
-
                 //html特殊文字をデコード
                 ret.Description = HttpUtility.HtmlDecode(ret.Description);
 
@@ -149,7 +150,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 //&だけエンコード エンコードしないとUIに&が表示されない
                 ret.Description = ret.Description.Replace("&", "&amp;");
-
 
                 Owner.Status = "";
                 return ret;
@@ -161,101 +161,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         }
 
-
         //一度nullを返してきたら二度と呼ばない
-        public async Task<List<NicoNicoNicoRepoResultEntry>> GetUserNicoRepoAsync(string offset) {
-
-            var url = Owner.UserPageUrl + "/top?innerPage=1&offset=" + offset;
-            Owner.Status = "ユーザーニコレポ取得中";
+        public async Task<Tuple<List<NicoNicoNicoRepoResultEntry>, bool>> GetUserNicoRepoAsync(string userId, string nextPage) {
 
             var ret = new List<NicoNicoNicoRepoResultEntry>();
-            return ret;
-            /*try {
 
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
-                var doc = new HtmlDocument();
-                doc.LoadHtml(a);
-
-                var timeline = doc.DocumentNode.SelectNodes("//div[@class='timeline']/div");
-
-                //タイムラインを取得できなかったら終了
-                if(timeline == null) {
-
-                    Owner.Status = "";
-                    return null;
-                }
-
-                //ニコレポタイムライン走査
-                foreach(var entry in timeline) {
-
-                    var item = new NicoNicoNicoRepoResultEntry();
-
-                    var author = entry.SelectSingleNode("div[contains(@class, 'log-author ')]");
-
-                    if(author != null) {
-
-                        item.NicoRepoThumbNail = author.SelectSingleNode("a/img").Attributes["data-original"].Value;
-                        item.AuthorUrl = author.SelectSingleNode("a").Attributes["href"].Value;
-                    }
-
-                    var content = entry.SelectSingleNode("div[@class='log-content']");
-
-                    if(content != null) {
-
-
-                        var body = content.SelectSingleNode("div[@class='log-body']");
-                        if(body != null) {
-
-                            item.Title = body.InnerHtml;
-                        }
-
-                        var detail = content.SelectSingleNode("div[contains(@class, 'log-details')]");
-
-                        if(detail != null) {
-
-                            item.Time = detail.SelectSingleNode("div/div/a/time")?.InnerText.Trim() ?? "";
-
-                            item.ContentThumbNail = detail.SelectSingleNode("div[@class='log-target-thumbnail']/a/img")?.Attributes["data-original"].Value ?? "";
-
-                            var target = detail.SelectSingleNode("div[@class='log-target-info']/a");
-                            if(target != null) {
-
-                                item.HasContent = true;
-                                item.ContentTitle = HttpUtility.HtmlDecode(target.InnerText.Trim());
-                                item.ContentUrl = target.Attributes["href"].Value;
-
-                                NicoNicoUtil.ApplyLocalHistory(item);
-                            }
-
-                        }
-
-                    }
-
-                    if(item.ContentUrl == null) {
-
-                        item.ContentUrl = item.AuthorUrl;
-                    }
-
-                    ret.Items.Add(item);
-
-                    var next = doc.DocumentNode.SelectSingleNode("//a[@class='next-page-link']");
-
-                    if(next != null) {
-
-                        ret.NextPage = Regex.Match(next.Attributes["href"].Value, @"\d+$").Value;
-                    } else {
-
-                        ret.IsEnd = true;
-                        ret.NextPage = null;
-                    }
-                }
-                Owner.Status = "";
-                return ret;
-            } catch(RequestFailed) {
-
-                Owner.Status = "ユーザーニコレポの取得に失敗しました";
-                return null;
-            }*/
+            return await NicoRepoInstance.GetNicoRepoAsync(userId, nextPage);
         }
         public async Task<List<NicoNicoUserMylistEntry>> GetUserMylistAsync() {
 

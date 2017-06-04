@@ -17,6 +17,8 @@ using System.Windows.Input;
 namespace SRNicoNico.ViewModels {
     public class UserNicoRepoViewModel : TabItemViewModel {
 
+        private List<ViewModel> UnFilteredNicoRepoList = new List<ViewModel>();
+
         #region UserNicoRepoList変更通知プロパティ
         private DispatcherCollection<ViewModel> _UserNicoRepoList = new DispatcherCollection<ViewModel>(DispatcherHelper.UIDispatcher);
 
@@ -27,6 +29,21 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _UserNicoRepoList = value;
                 RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Filter変更通知プロパティ
+        private string _Filter;
+
+        public string Filter {
+            get { return _Filter; }
+            set {
+                if (_Filter == value)
+                    return;
+                _Filter = value;
+
+                FilterNicoRepo();
             }
         }
         #endregion
@@ -45,7 +62,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         private UserViewModel User;
         public UserNicoRepoViewModel(UserViewModel user) : base("ニコレポ") {
 
@@ -55,13 +71,14 @@ namespace SRNicoNico.ViewModels {
         public void Initialize() {
 
             Closed = false;
+            UnFilteredNicoRepoList.Clear();
             UserNicoRepoList.Clear();
             GetMore();
         }
 
         public async void GetMore() {
 
-            if(IsActive) {
+            if ((UserNicoRepoList.Count != 0 && !(UserNicoRepoList.LastOrDefault() is NicoRepoNextButtonEntryViewModel))) {
 
                 return;
             }
@@ -73,26 +90,89 @@ namespace SRNicoNico.ViewModels {
 
                 UserNicoRepoList.RemoveAt(UserNicoRepoList.Count - 1);
             }
+            
+            var ret = await User.UserInstance.GetUserNicoRepoAsync(User.UserInfo.UserId, UnFilteredNicoRepoList.Count != 0 ? ((NicoRepoResultEntryViewModel) UnFilteredNicoRepoList.Last()).Item.Id : null);
 
-            var timeline = await User.UserInstance.GetUserNicoRepoAsync("");
-            /*
-            if(timeline == null || timeline.Items.Count == 0) {
+            if (ret != null) {
 
-                //非公開、又は表示期限切れ
-                Closed = true;
+                foreach (var entry in ret.Item1) {
+
+                    var vm = new NicoRepoResultEntryViewModel(entry);
+                    UnFilteredNicoRepoList.Add(vm);
+
+                    if (FilterEntry(vm)) {
+
+                        UserNicoRepoList.Add(vm);
+                    }
+                }
+
+                if (ret.Item2) {
+
+                    UserNicoRepoList.Add(new NicoRepoNextButtonEntryViewModel(this));
+                }
+
+                if (UnFilteredNicoRepoList.Count == 0) {
+
+                    Closed = true;
+                }
+
                 IsActive = false;
+            }
+        }
+
+        public void FilterNicoRepo() {
+
+            if (UnFilteredNicoRepoList.Count == 0) {
+
                 return;
             }
-            foreach(var entry in timeline.Items) {
 
-                UserNicoRepoList.Add(new NicoRepoResultEntryViewModel(entry));
+            bool isnotEnd = UserNicoRepoList.Count != 0 && UserNicoRepoList.Last() is NicoRepoNextButtonEntryViewModel;
+            UserNicoRepoList?.Clear();
+
+            foreach (var raw in UnFilteredNicoRepoList) {
+
+                if (raw is NicoRepoResultEntryViewModel item) {
+
+                    if (FilterEntry(item)) {
+
+                        UserNicoRepoList.Add(raw);
+                    }
+                }
             }
-
-            IsActive = false;
-            if(!timeline.IsEnd) {
+            if (isnotEnd) {
 
                 UserNicoRepoList.Add(new NicoRepoNextButtonEntryViewModel(this));
-            }*/
+            }
+        }
+        private bool FilterEntry(NicoRepoResultEntryViewModel item) {
+
+            if(item.Item.Muted) {
+
+                return false;
+            }
+
+            switch (Filter) {
+                case "すべて":
+                    return true;
+                case "動画投稿のみ":
+                    if (item.Item.Topic.EndsWith("video.upload")) {
+                        return true;
+                    }
+                    return false;
+                case "生放送開始のみ":
+                    if (item.Item.Topic.EndsWith("program.onairs")) {
+                        return true;
+                    }
+                    return false;
+                case "マイリスト登録のみ":
+                    if (item.Item.Topic.Contains("mylist.add")) {
+                        return true;
+                    }
+                    return false;
+                default:
+                    return true;
+            }
         }
 
         public void Refresh() {

@@ -32,9 +32,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         }
 
-        private NicoRepoViewModel Owner;
+        private TabItemViewModel Owner;
 
-        public NicoNicoNicoRepo(NicoRepoViewModel owner) {
+        public NicoNicoNicoRepo(TabItemViewModel owner) {
 
             Owner = owner;
         }
@@ -43,12 +43,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             try {
 
-                var query = new GetRequestQuery("http://www.nicovideo.jp/api/nicorepo/timeline/my/" + type);
+                GetRequestQuery query;
+                if (Regex.IsMatch(type, @"\d+")) {
+
+                    query = new GetRequestQuery("http://www.nicovideo.jp/api/nicorepo/timeline/user/" + type);
+                    query.AddQuery("client_app", "pc_profilerepo");
+                } else {
+
+                    query = new GetRequestQuery("http://www.nicovideo.jp/api/nicorepo/timeline/my/" + type);
+                    query.AddQuery("client_app", "pc_myrepo");
+                }
+
                 if (nextPage != null) {
 
                     query.AddQuery("cursor", nextPage);
                 }
-                query.AddQuery("client_app", "pc_myrepo");
                 query.AddQuery("_", UnixTime.ToUnixTime(DateTime.Now) + "000");
 
                 //ニコレポのhtmlを取得

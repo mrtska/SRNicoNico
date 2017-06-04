@@ -22,8 +22,6 @@ namespace SRNicoNico.ViewModels {
 
         protected internal readonly NicoNicoUser UserInstance;
 
-
-
         #region UserPageUrl変更通知プロパティ
         private string _UserPageUrl;
 
@@ -38,7 +36,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region SelectedList変更通知プロパティ
         private TabItemViewModel _SelectedList;
 
@@ -52,7 +49,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region UserContentList変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _UserContentList = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
@@ -82,7 +78,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region LoadFailed変更通知プロパティ
         private  bool _LoadFailed = false;
 
@@ -99,9 +94,7 @@ namespace SRNicoNico.ViewModels {
 
         public UserViewModel(string url) : base("ユーザー") {
 
-
             UserPageUrl = UserUrlPattern.Match(url).Value;
-
 
             UserInstance = new NicoNicoUser(this);
         }
@@ -125,7 +118,6 @@ namespace SRNicoNico.ViewModels {
             }
             Name += "\n" + UserInfo.UserName;
 
-
             IsActive = false;
         }
 
@@ -137,7 +129,6 @@ namespace SRNicoNico.ViewModels {
 
                     UserInfo.IsFollow ^= true;
                 }
-               
             }
         }
 
@@ -161,7 +152,6 @@ namespace SRNicoNico.ViewModels {
                     Close();
                     return;
                 }
-
                 if(e.Key == Key.F5) {
 
                     Refresh();
@@ -169,7 +159,6 @@ namespace SRNicoNico.ViewModels {
                 }
             }
             SelectedList?.KeyDown(e);
-
         }
 
         public override bool CanShowHelp() {

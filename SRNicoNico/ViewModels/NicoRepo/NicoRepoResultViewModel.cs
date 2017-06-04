@@ -128,12 +128,12 @@ namespace SRNicoNico.ViewModels {
 
         public void FilterNicoRepo() {
 
-            if(IsEmpty || NicoRepoList.Count == 0) {
+            if(IsEmpty || UnFilteredNicoRepoList.Count == 0) {
 
                 return;
             }
 
-            bool isnotEnd = NicoRepoList.Last() is NicoRepoNextButtonEntryViewModel;
+            bool isnotEnd = NicoRepoList.Count != 0 && NicoRepoList.Last() is NicoRepoNextButtonEntryViewModel;
             NicoRepoList?.Clear();
 
             foreach (var raw in UnFilteredNicoRepoList) {
@@ -154,7 +154,12 @@ namespace SRNicoNico.ViewModels {
 
         private bool FilterEntry(NicoRepoResultEntryViewModel item) {
 
-            switch(Filter) {
+            if (item.Item.Muted) {
+
+                return false;
+            }
+
+            switch (Filter) {
                 case "すべて":
                     return true;
                 case "動画投稿のみ":
