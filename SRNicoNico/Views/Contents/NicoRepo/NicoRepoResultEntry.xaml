@@ -67,6 +67,18 @@
                 <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoSeigaEntry}">
                     <v:NicoRepoResultSeigaEntry />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoMangaEntry}">
+                    <v:NicoRepoResultMangaEntry />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoGenericEntry}">
+                    <v:NicoRepoResultGenericEntry />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoVideoEntry}">
+                    <v:NicoRepoResultVideoEntry />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoNoContentEntry}">
+                    <v:NicoRepoResultNoContentEntry />
+                </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
     </Grid>

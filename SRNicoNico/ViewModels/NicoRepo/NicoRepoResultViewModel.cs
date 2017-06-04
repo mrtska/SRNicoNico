@@ -64,6 +64,8 @@ namespace SRNicoNico.ViewModels {
                 if(_Filter == value)
                     return;
                 _Filter = value;
+                
+                NicoRepoList?.Clear();
                 FilterNicoRepo();
             }
         }
@@ -110,11 +112,16 @@ namespace SRNicoNico.ViewModels {
 
                 foreach(var entry in ret.Items) {
 
-                    UnFilteredNicoRepoList.Add(new NicoRepoResultEntryViewModel(entry));
+                    var vm = new NicoRepoResultEntryViewModel(entry);
+                    UnFilteredNicoRepoList.Add(vm);
+                    NicoRepoList.Add(vm);
                 }
                 IsEnd = ret.IsEnd;
 
-                FilterNicoRepo();
+                if (!IsEnd) {
+
+                    NicoRepoList.Add(new NicoRepoNextButtonEntryViewModel(this));
+                }
             }
 
             if(UnFilteredNicoRepoList.Count == 0) {
@@ -128,15 +135,12 @@ namespace SRNicoNico.ViewModels {
 
         public void FilterNicoRepo() {
 
+
             foreach (var raw in UnFilteredNicoRepoList) {
 
                 NicoRepoList.Add(raw);
             }
 
-            if (!IsEnd) {
-
-                NicoRepoList.Add(new NicoRepoNextButtonEntryViewModel(this));
-            }
         }
 
         public void Refresh() {
