@@ -163,13 +163,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
         //一度nullを返してきたら二度と呼ばない
-        public async Task<NicoNicoNicoRepoResult> GetUserNicoRepoAsync(string offset) {
+        public async Task<List<NicoNicoNicoRepoResultEntry>> GetUserNicoRepoAsync(string offset) {
 
             var url = Owner.UserPageUrl + "/top?innerPage=1&offset=" + offset;
             Owner.Status = "ユーザーニコレポ取得中";
 
-            var ret = new NicoNicoNicoRepoResult();
-            ret.Items = new List<NicoNicoNicoRepoResultEntry>();
+            var ret = new List<NicoNicoNicoRepoResultEntry>();
             return ret;
             /*try {
 

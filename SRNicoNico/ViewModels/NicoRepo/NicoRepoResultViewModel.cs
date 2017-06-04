@@ -21,9 +21,6 @@ namespace SRNicoNico.ViewModels {
 
         private readonly string Api;
 
-        private string NextPageTime;
-
-
         #region IsEmpty変更通知プロパティ
         private bool _IsEmpty;
 
@@ -37,7 +34,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         private List<ViewModel> UnFilteredNicoRepoList = new List<ViewModel>();
 
@@ -65,14 +61,10 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _Filter = value;
                 
-                NicoRepoList?.Clear();
                 FilterNicoRepo();
             }
         }
         #endregion
-
-
-        private bool IsEnd;
 
         public NicoRepoResultViewModel(string title, string api, NicoNicoNicoRepo nicorepo) : base(title) {
 
@@ -85,7 +77,6 @@ namespace SRNicoNico.ViewModels {
 
             IsActive = true;
             IsEmpty = false;
-            NextPageTime = null;
             UnFilteredNicoRepoList.Clear();
             NicoRepoList.Clear();
             GetMore();
@@ -110,15 +101,18 @@ namespace SRNicoNico.ViewModels {
             
             if(ret != null) {
 
-                foreach(var entry in ret.Items) {
+                foreach(var entry in ret.Item1) {
 
                     var vm = new NicoRepoResultEntryViewModel(entry);
                     UnFilteredNicoRepoList.Add(vm);
-                    NicoRepoList.Add(vm);
-                }
-                IsEnd = ret.IsEnd;
 
-                if (!IsEnd) {
+                    if (FilterEntry(vm)) {
+
+                        NicoRepoList.Add(vm);
+                    }
+                }
+
+                if(ret.Item2) {
 
                     NicoRepoList.Add(new NicoRepoNextButtonEntryViewModel(this));
                 }
@@ -129,18 +123,63 @@ namespace SRNicoNico.ViewModels {
                 IsEmpty = true;
             }
 
-
             IsActive = false;
         }
 
         public void FilterNicoRepo() {
 
+            if(IsEmpty || NicoRepoList.Count == 0) {
+
+                return;
+            }
+
+            bool isnotEnd = NicoRepoList.Last() is NicoRepoNextButtonEntryViewModel;
+            NicoRepoList?.Clear();
 
             foreach (var raw in UnFilteredNicoRepoList) {
 
-                NicoRepoList.Add(raw);
-            }
+                if(raw is NicoRepoResultEntryViewModel item) {
 
+                    if (FilterEntry(item)) {
+
+                        NicoRepoList.Add(raw);
+                    }
+                }
+            }
+            if(isnotEnd) {
+
+                NicoRepoList.Add(new NicoRepoNextButtonEntryViewModel(this));
+            }
+        }
+
+        private bool FilterEntry(NicoRepoResultEntryViewModel item) {
+
+            switch(Filter) {
+                case "すべて":
+                    return true;
+                case "動画投稿のみ":
+                    if(item.Item.Topic.EndsWith("video.upload")) {
+
+                        return true;
+                    }
+                    return false;
+                case "生放送開始のみ":
+                    if (item.Item.Topic.EndsWith("program.onairs")) {
+
+                        return true;
+                    }
+                    return false;
+                case "マイリスト登録のみ":
+                    if (item.Item.Topic.Contains("mylist.add")) {
+
+                        return true;
+                    }
+                    return false;
+                default:
+                    return true;
+
+
+            }
         }
 
         public void Refresh() {

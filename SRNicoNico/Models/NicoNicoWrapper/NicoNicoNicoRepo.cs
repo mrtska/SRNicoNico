@@ -39,7 +39,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             Owner = owner;
         }
 
-        public async Task<NicoNicoNicoRepoResult> GetNicoRepoAsync(string type, string nextPage) {
+        public async Task<Tuple<List<NicoNicoNicoRepoResultEntry>, bool>> GetNicoRepoAsync(string type, string nextPage) {
 
             try {
 
@@ -56,8 +56,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 dynamic json = DynamicJson.Parse(a);
 
-                var ret = new NicoNicoNicoRepoResult();
-                ret.Items = new List<NicoNicoNicoRepoResultEntry>();
+                var ret = new List<NicoNicoNicoRepoResultEntry>();
 
 
                 void storeSenderUser(NicoNicoNicoRepoResultEntry item, dynamic sender) {
@@ -119,7 +118,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     NicoNicoNicoRepoResultEntry item = null;
 
-                    Console.WriteLine(entry.topic);
+                    //Console.WriteLine(entry.topic);
                     switch(entry.topic) {
                         case "live.channel.program.onairs":
                         case "live.channel.program.reserve": {
@@ -678,10 +677,17 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     item.Visible = entry.isVisible;
                     item.Muted = entry.isMuted;
 
-                    ret.Items.Add(item);
+                    ret.Add(item);
                 }
 
-                return ret;
+                var errorc = 0;
+                foreach(var error in json.errors) {
+
+                    errorc++;
+                }
+
+
+                return Tuple.Create(ret, (ret.Count + errorc) == 25);
             } catch(RequestFailed e) {
 
                 if(e.FailedType == FailedType.Failed) {
@@ -695,17 +701,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
     }
-
-    public class NicoNicoNicoRepoResult {
-
-        //エントリリスト
-        public List<NicoNicoNicoRepoResultEntry> Items { get; set; }
-
-        //リストの終端まで来たかどうか
-        public bool IsEnd { get; set; }
-
-    }
-
     public class NicoNicoNicoRepoResultEntry : IWatchable {
 
         //ニコレポの固有ID なんでこんなもん振ったんだろうね

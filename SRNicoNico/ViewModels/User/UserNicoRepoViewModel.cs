@@ -75,7 +75,7 @@ namespace SRNicoNico.ViewModels {
             }
 
             var timeline = await User.UserInstance.GetUserNicoRepoAsync("");
-
+            /*
             if(timeline == null || timeline.Items.Count == 0) {
 
                 //非公開、又は表示期限切れ
@@ -92,7 +92,7 @@ namespace SRNicoNico.ViewModels {
             if(!timeline.IsEnd) {
 
                 UserNicoRepoList.Add(new NicoRepoNextButtonEntryViewModel(this));
-            }
+            }*/
         }
 
         public void Refresh() {

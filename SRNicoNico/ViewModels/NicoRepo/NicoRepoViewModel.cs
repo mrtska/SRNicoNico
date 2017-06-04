@@ -60,7 +60,7 @@ namespace SRNicoNico.ViewModels {
             NicoRepoList.Clear();
             NicoRepoList.Add(new NicoRepoResultViewModel("すべて", "all", NicoRepoInstance));
             NicoRepoList.Add(new NicoRepoResultViewModel("自分", "self", NicoRepoInstance));
-            NicoRepoList.Add(new NicoRepoResultViewModel("フォロー中のユーザー", "followingUser", NicoRepoInstance));
+            NicoRepoList.Add(new NicoRepoResultViewModel("ユーザー", "followingUser", NicoRepoInstance));
             NicoRepoList.Add(new NicoRepoResultViewModel("チャンネル", "followingChannel", NicoRepoInstance));
             NicoRepoList.Add(new NicoRepoResultViewModel("コミュニティ", "followingCommunity", NicoRepoInstance));
             NicoRepoList.Add(new NicoRepoResultViewModel("マイリスト", "followingMylist", NicoRepoInstance));
