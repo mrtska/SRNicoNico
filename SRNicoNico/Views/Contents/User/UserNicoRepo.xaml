@@ -42,8 +42,8 @@
             </ContentControl.Style>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="17*"/>
-                    <RowDefinition Height="233*"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid Background="{DynamicResource BackgroundLevel1BrushKey}">
                     <Grid.ColumnDefinitions>

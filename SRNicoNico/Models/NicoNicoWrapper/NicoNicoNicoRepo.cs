@@ -623,17 +623,25 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                                 break;
                             }
+                        case "nicovideo.channel.video.kiriban.play":
                         case "nicovideo.user.video.kiriban.play": {
 
-                                var sender = entry.senderNiconicoUser;
                                 var video = entry.video;
 
                                 item = new NicoNicoNicoRepoVideoEntry();
-                                storeSenderUser(item, sender);
                                 storeVideo(item as NicoNicoNicoRepoVideoEntry, video);
 
-                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんの動画が {1} 再生を達成しました。", item.SenderName, entry.actionLog.kiriban);
+                                if (((string)entry.topic).Contains("channel")) {
 
+                                    var sender = entry.senderChannel;
+                                    storeSenderChannel(item, sender);
+                                    item.ComputedTitle = string.Format("チャンネル <a href=\"" + item.SenderUrl + "\">{0}</a> の動画が {1} 再生を達成しました。", item.SenderName, string.Format("{0:N0}", entry.actionLog.kiriban));
+                                } else {
+
+                                    var sender = entry.senderNiconicoUser;
+                                    storeSenderUser(item, sender);
+                                    item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんの動画が {1} 再生を達成しました。", item.SenderName, string.Format("{0:N0}", entry.actionLog.kiriban));
+                                }
                                 break;
                             }
                         case "nicovideo.user.video.live.introduce": {
@@ -685,6 +693,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     item.CreatedAt = DateTime.Parse(entry.createdAt);
                     item.Visible = entry.isVisible;
                     item.Muted = entry.isMuted;
+
+                    if(item is NicoNicoNicoRepoVideoEntry) {
+
+                        NicoNicoUtil.ApplyLocalHistory(item);
+                    }
 
                     ret.Add(item);
                 }
