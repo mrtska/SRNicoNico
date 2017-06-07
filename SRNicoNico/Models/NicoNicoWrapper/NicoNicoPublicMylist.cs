@@ -105,7 +105,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var list = new List<NicoNicoMylistEntry>();
 
-                StoreItems(json, list);
+                if(json != null) {
+
+                    StoreItems(json, list);
+                }
+
 
                 ret.Data = list;
 
