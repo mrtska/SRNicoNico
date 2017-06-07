@@ -80,9 +80,58 @@ namespace SRNicoNico.ViewModels {
         public override void KeyDown(KeyEventArgs e) {
             base.KeyDown(e);
 
+            if(e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control)) {
+
+                if(e.Key == Key.Tab) {
+
+                    if(e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Shift)) {
+
+                        Prev();
+                    } else {
+
+                        Next();
+                    }
+                    return;
+                }
+            }
+
             SelectedList?.KeyDown(e);
         }
 
+        //次の動画へ
+        private void Next() {
+
+            if (VideoList.Count == 1) {
+
+                return;
+            }
+            var index = VideoList.IndexOf(SelectedList);
+
+            if (index + 1 >= VideoList.Count) {
+
+                SelectedList = VideoList.First();
+            } else {
+
+                SelectedList = VideoList[index + 1];
+            }
+        }
+        //前の動画へ
+        private void Prev() {
+
+            if (VideoList.Count == 1) {
+
+                return;
+            }
+
+            var index = VideoList.IndexOf(SelectedList);
+            if (index <= 0) {
+
+                SelectedList = VideoList.Last();
+            } else {
+
+                SelectedList = VideoList[index - 1];
+            }
+        }
         public override bool CanShowHelp() {
             return true;
         }
