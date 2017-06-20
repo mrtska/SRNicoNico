@@ -266,7 +266,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                             PostkeyAvailable = video.dmcInfo.thread.postkey_available,
                             NgRevision = (int?)video.dmcInfo.thread.ng_revision,
 
-                            ApiUrls = video.dmcInfo.session_api.api_urls,
                             RecipeId = video.dmcInfo.session_api.recipe_id,
                             PlayerId = video.dmcInfo.session_api.player_id,
                             Videos = video.dmcInfo.session_api.videos,
@@ -301,6 +300,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         IsOfficial = video.isOfficial,
                         IsMonetized = video.isMonetized
                     };
+                    ret.Video.DmcInfo.ApiUrls = new List<DynamicJson>();
+                    foreach(var session in video.dmcInfo.session_api.urls) {
+
+                        ret.Video.DmcInfo.ApiUrls.Add(session);
+                    }
 
                     var thread = json.thread;
                     ret.Thread = new NicoNicoThread() {
@@ -773,7 +777,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public int? NgRevision { get; set; }
 
         //session API
-        public List<string> ApiUrls { get; set; }
+        public List<DynamicJson> ApiUrls { get; set; }
 
         public string RecipeId { get; set; }
         public string PlayerId { get; set; }
@@ -812,6 +816,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public int ContentKeyTimeout { get; set; }
         //
         public double Priority { get; set; }
+    }
+
+    public class NicoNicoDmcSessionApi {
+
+        public string Url { get; set; }
+
+        public bool IsWellknownPort { get; set; }
+
+        public bool IsSsl { get; set; }
     }
 
 

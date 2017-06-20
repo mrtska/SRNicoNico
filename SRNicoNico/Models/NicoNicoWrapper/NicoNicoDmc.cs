@@ -100,7 +100,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             try {
                 var str = json.ToString();
-                var query = new GetRequestQuery(Dmc.ApiUrls.First());
+
+                dynamic session = Dmc.ApiUrls.First();
+
+                var query = new GetRequestQuery(session.url);
                 query.AddQuery("_format", "json");
 
                 var request = new HttpRequestMessage(HttpMethod.Post, new Uri(query.TargetUrl)) {
@@ -128,7 +131,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             try {
 
-                var query = new GetRequestQuery(Dmc.ApiUrls.First() + "/" + id);
+                dynamic session = Dmc.ApiUrls.First();
+                var query = new GetRequestQuery(session.url + "/" + id);
                 query.AddQuery("_format", "json");
                 query.AddQuery("_method", "PUT");
 
