@@ -77,7 +77,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //html
                 var a = await res.Content.ReadAsStringAsync();
 
-                //Responsehはもう必要ない
+                //Responseはもう必要ない
                 res.Dispose();
 
                 var doc = new HtmlDocument();
@@ -300,10 +300,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         IsOfficial = video.isOfficial,
                         IsMonetized = video.isMonetized
                     };
-                    ret.Video.DmcInfo.ApiUrls = new List<DynamicJson>();
-                    foreach(var session in video.dmcInfo.session_api.urls) {
 
-                        ret.Video.DmcInfo.ApiUrls.Add(session);
+                    if(video.dmcInfo != null) {
+
+                        ret.Video.DmcInfo.ApiUrls = new List<DynamicJson>();
+                        foreach (var session in video.dmcInfo.session_api.urls) {
+
+                            ret.Video.DmcInfo.ApiUrls.Add(session);
+                        }
                     }
 
                     var thread = json.thread;
