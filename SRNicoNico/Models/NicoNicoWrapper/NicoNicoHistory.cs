@@ -146,9 +146,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     writer.BaseStream.Position = 0;
                     writer.WriteLine(Convert.ToBase64String(Encoding.UTF8.GetBytes(root.ToString())));
-
-                    writer.AutoFlush = true;
-                    writer.Close();
+                    writer.Flush();
                 }
             } catch(Exception) {
 
