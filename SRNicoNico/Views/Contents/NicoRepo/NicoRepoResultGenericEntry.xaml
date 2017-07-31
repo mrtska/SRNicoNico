@@ -39,7 +39,7 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding ComputedTitle}" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14" />
-                <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="{Binding CreatedAt,StringFormat='yy年M月d日 h時 m分'}" TextWrapping="Wrap" FontSize="12"  />
+                <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="{Binding CreatedAt,StringFormat='yy年M月d日 H時 m分'}" TextWrapping="Wrap" FontSize="12"  />
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
