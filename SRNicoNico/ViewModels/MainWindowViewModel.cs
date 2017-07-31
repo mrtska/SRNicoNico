@@ -22,7 +22,7 @@ namespace SRNicoNico.ViewModels {
         //現在のバージョン
         public double CurrentVersion {
 
-            get { return 1.12; }
+            get { return 1.13; }
         }
 
         #region Title変更通知プロパティ
@@ -54,7 +54,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region CanShowHelpView変更通知プロパティ
         private bool _CanShowHelpView;
 
@@ -68,7 +67,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region CanClose変更通知プロパティ
         private bool _CanClose;
