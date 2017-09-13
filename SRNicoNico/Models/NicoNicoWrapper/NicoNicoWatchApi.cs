@@ -247,7 +247,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         Translator = video.translator,
                         MovieType = video.movieType,
                         Badges = video.badges,
-                        IntroducedNicoliveDJInfo = video.introducedNicoliveDJInfo,
                         DmcInfo = video.dmcInfo != null ? new NicoNicoDmc() {
                             Time = (long)video.dmcInfo.time,
                             TimeMs = (long)video.dmcInfo.time_ms,
@@ -714,8 +713,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public string MovieType { get; set; }
 
         public object Badges { get; set; }
-
-        public object IntroducedNicoliveDJInfo { get; set; }
 
         public NicoNicoDmc DmcInfo { get; set; }
 
