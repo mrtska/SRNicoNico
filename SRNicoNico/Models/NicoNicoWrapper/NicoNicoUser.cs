@@ -120,7 +120,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 ret.Description = desc != null ? desc.InnerHtml : "";
 
-                var stats = profile.SelectSingleNode("ul[@class='stats channel_open_mb8']");
+                var stats = profile.SelectSingleNode("div[@class='stats channel_open_mb8']/ul");
 
                 ret.FollowedCount = int.Parse(stats.SelectSingleNode("li/span").InnerText, System.Globalization.NumberStyles.AllowThousands);
                 ret.StampExp = int.Parse(stats.SelectSingleNode("li/a/span").InnerText, System.Globalization.NumberStyles.AllowThousands);
