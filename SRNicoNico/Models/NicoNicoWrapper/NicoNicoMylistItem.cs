@@ -262,9 +262,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 Owner.Status = "マイリストコピー中";
 
                 var form = new Dictionary<string, string>();
-                form["group_id"] = source.First().Owner.Group.Id;
                 form["target_group_id"] = target.Id;
                 form["token"] = token;
+                if (!source.First().Owner.IsDefList) {
+
+                    form["group_id"] = source.First().Owner.Group.Id;
+                }
 
                 //Dictionaryをテキストに変換
                 var text = await new FormUrlEncodedContent(form).ReadAsStringAsync();
@@ -309,9 +312,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 Owner.Status = "マイリスト移動中";
 
                 var form = new Dictionary<string, string>();
-                form["group_id"] = source.First().Owner.Group.Id;
                 form["target_group_id"] = target.Id;
                 form["token"] = token;
+
+                if(!source.First().Owner.IsDefList) {
+
+                    form["group_id"] = source.First().Owner.Group.Id;
+                }
 
                 //Dictionaryをテキストに変換
                 var text = await new FormUrlEncodedContent(form).ReadAsStringAsync();
@@ -330,6 +337,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(request);
+
 
                 dynamic json = DynamicJson.Parse(a);
                 if(json.status == "ok") {
