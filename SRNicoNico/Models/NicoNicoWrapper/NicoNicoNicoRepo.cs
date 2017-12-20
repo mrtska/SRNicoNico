@@ -172,6 +172,31 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 }
                                 break;
                             }
+                        case "nicoad.user.advertise.video": {
+
+                                var sender = entry.senderNiconicoUser;
+                                var video = entry.video;
+
+                                item = new NicoNicoNicoRepoVideoEntry();
+                                storeSenderUser(item, sender);
+                                storeVideo(item as NicoNicoNicoRepoVideoEntry, video);
+
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが ニコニ広告しました。", item.SenderName);
+                                break;
+                            }
+                        case "nicoad.user.advertised.video.announce": {
+
+                                var sender = entry.senderNiconicoUser;
+                                var video = entry.video;
+
+                                item = new NicoNicoNicoRepoVideoEntry();
+                                storeSenderUser(item, sender);
+                                storeVideo(item as NicoNicoNicoRepoVideoEntry, video);
+
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんの動画が {1} さんにニコニ広告されました。", item.SenderName, entry.nicoad.advertiserName);
+
+                                break;
+                            }
                         case "nicoseiga.user.illust.clip":
                         case "nicoseiga.user.illust.upload": {
 
