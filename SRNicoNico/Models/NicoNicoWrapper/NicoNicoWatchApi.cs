@@ -178,7 +178,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                                 Id = channel.id,
                                 Name = channel.name,
-                                IconUrl = channel.icon_url,
                                 FavoriteToken = channel.favorite_token,
                                 FavoriteTokenTime = (long)channel.favorite_token_time,
                                 IsFavorited = channel.is_favorited == 1D
@@ -370,7 +369,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                             Id = channel.id,
                             Name = channel.name,
-                            IconUrl = channel.iconURL,
                             FavoriteToken = channel.favoriteToken,
                             FavoriteTokenTime = (long)channel.favoriteTokenTime,
                             IsFavorited = channel.isFavorited,
@@ -1001,9 +999,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //チャンネルURL
         public string ChannelUrl { get; set; }
-
-        //チャンネルアイコンURL
-        public string IconUrl { get; set; }
 
         public string FavoriteToken { get; set; }
 
