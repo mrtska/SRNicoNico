@@ -1,61 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-using System.Windows.Input;
+﻿using Livet.Messaging;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Models.NicoNicoWrapper;
+using System.Threading;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class LiveNotifyViewModel : TabItemViewModel {
 
-        private readonly NicoNicoLiveNotify NotifyInstance;
-
-
-        #region NowLiveList変更通知プロパティ
-        private DispatcherCollection<LiveNotifyEntryViewModel> _NowLiveList = new DispatcherCollection<LiveNotifyEntryViewModel>(DispatcherHelper.UIDispatcher);
-
-        public DispatcherCollection<LiveNotifyEntryViewModel> NowLiveList {
-            get { return _NowLiveList; }
-            set {
-                if(_NowLiveList == value)
-                    return;
-                _NowLiveList = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region SelectedLive変更通知プロパティ
-        private LiveNotifyEntryViewModel _SelectedLive;
-
-        public LiveNotifyEntryViewModel SelectedLive {
-            get { return _SelectedLive; }
-            set {
-                if(_SelectedLive == value)
-                    return;
-                _SelectedLive = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
+        public NicoNicoLiveNotify Model { get; set; }
 
         private Timer RefreshTimer;
 
 
         public LiveNotifyViewModel() : base("生放送通知") {
 
-            NotifyInstance = new NicoNicoLiveNotify(this);
+            Model = new NicoNicoLiveNotify();
             Initialize();
 
             RefreshTimer = new Timer(new TimerCallback(o => {
@@ -76,25 +35,16 @@ namespace SRNicoNico.ViewModels {
 
             IsActive = true;
             Status = "更新中";
-            NowLiveList.Clear();
+            Status = await Model.GetLiveInformationAsync();
 
-            var list = await NotifyInstance.GetLiveInformationAsync();
+            if(Model.NowLiveList.Count != 0) {
 
-            if(list != null) {
-
-                foreach(var entry in list) {
-
-                    NowLiveList.Add(new LiveNotifyEntryViewModel(entry));
-                }
-
-                Badge = list.Count;
+                Badge = Model.NowLiveList.Count;
             } else {
 
                 Badge = null;
             }
-
             IsActive = false;
-            Status = "";
         }
 
         public void Refresh() {

@@ -1,29 +1,38 @@
 ﻿using HtmlAgilityPack;
+using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
-using SRNicoNico.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using System.Windows;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
-    public class NicoNicoLiveNotify {
+    public class NicoNicoLiveNotify : NotificationObject {
 
         private const string LiveUrl = "http://www.nicovideo.jp/my/live";
 
-        private readonly LiveNotifyViewModel Owner;
+        #region NowLiveList変更通知プロパティ
+        private ObservableSynchronizedCollection<NicoNicoLiveNotifyEntry> _NowLiveList;
 
-        public NicoNicoLiveNotify(LiveNotifyViewModel vm) {
+        public ObservableSynchronizedCollection<NicoNicoLiveNotifyEntry> NowLiveList {
+            get { return _NowLiveList; }
+            set {
+                if (_NowLiveList == value)
+                    return;
+                _NowLiveList = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
-            Owner = vm;
+        public NicoNicoLiveNotify() {
+
+            NowLiveList = new ObservableSynchronizedCollection<NicoNicoLiveNotifyEntry>();
         }
 
-        public async Task<List<NicoNicoLiveNotifyEntry>> GetLiveInformationAsync() {
+        public async Task<string> GetLiveInformationAsync() {
 
             try {
+
+                NowLiveList.Clear();
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(LiveUrl);
 
@@ -45,8 +54,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     return null;
                 }
 
-                var list = new List<NicoNicoLiveNotifyEntry>();
-
                 foreach(var outer in outers) {
 
                     var entry = new NicoNicoLiveNotifyEntry();
@@ -64,14 +71,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     entry.LiveUrl = section.SelectSingleNode("h5/a").Attributes["href"].Value;
                     entry.StartTime = section.SelectSingleNode("p[@class='time']/small").InnerText;
 
-                    list.Add(entry);
+                    NowLiveList.Add(entry);
                 }
-
-                return list;
+                return "";
             } catch(RequestFailed) {
 
-                Owner.Status = "生放送の取得に失敗しました";
-                return null;
+                return "生放送の取得に失敗しました";
             }
         }
     }

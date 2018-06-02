@@ -739,7 +739,6 @@
     <Compile Include="ViewModels\Follow\FollowUserViewModel.cs" />
     <Compile Include="ViewModels\Follow\FollowViewModel.cs" />
     <Compile Include="ViewModels\History\HistoryViewModel.cs" />
-    <Compile Include="ViewModels\LiveNotify\LiveNotifyEntryViewModel.cs" />
     <Compile Include="ViewModels\LiveNotify\LiveNotifyViewModel.cs" />
     <Compile Include="ViewModels\MainContentViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
