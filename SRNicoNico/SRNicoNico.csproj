@@ -607,7 +607,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Contents\Start.xaml">
+    <Page Include="Views\Contents\Misc\Start.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -937,7 +937,7 @@
     <Compile Include="Views\Contents\SignIn\SignInView.xaml.cs">
       <DependentUpon>SignInView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Contents\Start.xaml.cs">
+    <Compile Include="Views\Contents\Misc\Start.xaml.cs">
       <DependentUpon>Start.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\StatusBar\StatusBar.xaml.cs">

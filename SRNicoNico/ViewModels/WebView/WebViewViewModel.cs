@@ -17,11 +17,10 @@ using System.Windows.Input;
 namespace SRNicoNico.ViewModels {
     public class WebViewViewModel : TabItemViewModel {
 
-
         #region WebViewTabs変更通知プロパティ
-        private DispatcherCollection<WebViewContentViewModel> _WebViewTabs = new DispatcherCollection<WebViewContentViewModel>(DispatcherHelper.UIDispatcher);
+        private ObservableSynchronizedCollection<WebViewContentViewModel> _WebViewTabs;
 
-        public DispatcherCollection<WebViewContentViewModel> WebViewTabs {
+        public ObservableSynchronizedCollection<WebViewContentViewModel> WebViewTabs {
             get { return _WebViewTabs; }
             set {
                 if(_WebViewTabs == value)
@@ -31,7 +30,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region SelectedTab変更通知プロパティ
         private WebViewContentViewModel _SelectedTab;
@@ -48,8 +46,9 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
         public WebViewViewModel() : base("WebView") {
-        }
 
+            WebViewTabs = new ObservableSynchronizedCollection<WebViewContentViewModel>();
+        }
 
         public void Initialize() {
 
@@ -58,7 +57,6 @@ namespace SRNicoNico.ViewModels {
                 AddTab();
             }
         }
-
 
         public void AddTab() {
 
@@ -75,14 +73,11 @@ namespace SRNicoNico.ViewModels {
 
         public void RemoveTab(WebViewContentViewModel vm) {
 
-
             if(WebViewTabs.Count == 1) {
 
                 Home();
                 return;
             }
-
-
             vm.Dispose();
 
             WebViewTabs.Remove(vm);

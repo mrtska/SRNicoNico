@@ -111,11 +111,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             if(File.Exists(LocalHistoryLocation)) {
 
                 try {
-
                     using(var stream = new StreamReader(LocalHistoryLocation)) {
 
                         var a = Encoding.UTF8.GetString(Convert.FromBase64String(await stream.ReadToEndAsync()));
-
                         dynamic json = DynamicJson.Parse(a);
                             
                         foreach(var entry in json.history) {

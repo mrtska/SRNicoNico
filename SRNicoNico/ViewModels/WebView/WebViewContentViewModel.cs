@@ -1,25 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Text.RegularExpressions;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-using System.Windows.Navigation;
-using SRNicoNico.Models.NicoNicoViewer;
+﻿using SRNicoNico.Models.NicoNicoViewer;
+using System;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace SRNicoNico.ViewModels {
     public class WebViewContentViewModel : TabItemViewModel {
-
 
         #region WebBrowser変更通知プロパティ
         private WebBrowser _WebBrowser;
@@ -72,7 +59,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region CanGoForward変更通知プロパティ
         private bool _CanGoForward;
 
@@ -86,8 +72,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
-
 
         #region OpenWithViewer変更通知プロパティ
         private bool _OpenWithViewer;
@@ -103,10 +87,7 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
-
         private WebViewViewModel Owner { get; set; }
-
 
         public WebViewContentViewModel(WebViewViewModel vm, string url, bool forceUseWebView = false) {
             
@@ -114,7 +95,6 @@ namespace SRNicoNico.ViewModels {
             Url = url;
             Owner = vm;
         }
-
 
         public WebViewContentViewModel() : base("WebView") {
         }
@@ -165,15 +145,6 @@ namespace SRNicoNico.ViewModels {
         private void WebViewLoadCompleted(object sender, NavigationEventArgs e) {
 
         }
-
-
-        private void OnNewWindow(string url, int Flags, string TargetFrameName, ref object PostData, string Headers, ref bool Processed) {
-            Processed = true;
-            Owner.AddTab(url, true);
-        }
-
-
-
         private string PrevUrl = "";
 
         //画面遷移する直前
@@ -233,6 +204,11 @@ namespace SRNicoNico.ViewModels {
                 var wbEvents = (SHDocVw.DWebBrowserEvents_Event)serviceProvider.QueryService(ref serviceGuid, ref iid);
                 wbEvents.NewWindow += OnNewWindow;
             }
+        }
+
+        private void OnNewWindow(string url, int Flags, string TargetFrameName, ref object PostData, string Headers, ref bool Processed) {
+            Processed = true;
+            Owner.AddTab(url, true);
         }
     }
 }
