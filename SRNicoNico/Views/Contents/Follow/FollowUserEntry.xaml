@@ -1,26 +1,19 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.FollowUserEntry"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:a="clr-namespace:SRNicoNico.Views.Action"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-             xmlns:v="clr-namespace:SRNicoNico.Views"
-             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
-             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-             xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
-             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Action"
              mc:Ignorable="d" 
              d:DesignHeight="80"
              d:DesignWidth="600"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
-             d:DataContext="{d:DesignInstance {x:Type vm:FollowUserEntryViewModel}}"
-             >
+             d:DataContext="{d:DesignInstance {x:Type m:NicoNicoFollowUserEntry}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
             <l:LivetCallMethodAction MethodName="Open" MethodTarget="{Binding}" />
@@ -31,21 +24,21 @@
             <MenuItem Header="WebViewで開く">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <a:OpenWebViewAction Url="{Binding Item.UserPageUrl}" />
+                        <a:OpenWebViewAction Url="{Binding UserPageUrl}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
             <MenuItem Header="ブラウザで開く">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <ei:LaunchUriOrFileAction Path="{Binding Item.UserPageUrl}" />
+                        <ei:LaunchUriOrFileAction Path="{Binding UserPageUrl}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
             <MenuItem Header="URLをクリップボードにコピー">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <a:CopyToClipBoardAction Text="{Binding Item.UserPageUrl}" />
+                        <a:CopyToClipBoardAction Text="{Binding UserPageUrl}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
@@ -57,11 +50,10 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-
-        <Image Width="50" Height="50" Margin="5,4" HorizontalAlignment="Left" VerticalAlignment="Top" Source="{Binding Item.ThumbNailUrl}" />
+        <Image Width="50" Height="50" Margin="5,4" HorizontalAlignment="Left" VerticalAlignment="Top" Source="{Binding ThumbNailUrl}" />
         <StackPanel Grid.Column="1">
-            <TextBlock FontSize="18" Margin="0,2,0,0" VerticalAlignment="Top" Text="{Binding Item.Name}" TextWrapping="Wrap" />
-            <TextBlock FontSize="12" Margin="0,3,0,0" VerticalAlignment="Top" Text="{Binding Item.Description}" TextWrapping="Wrap" Foreground="#777777" TextTrimming="CharacterEllipsis" />
+            <TextBlock FontSize="18" Margin="0,2,0,0" VerticalAlignment="Top" Text="{Binding Name}" TextWrapping="Wrap" />
+            <TextBlock FontSize="12" Margin="0,3,0,0" VerticalAlignment="Top" Text="{Binding Description}" TextWrapping="Wrap" Foreground="#777777" TextTrimming="CharacterEllipsis" />
         </StackPanel>
     </Grid>
 </UserControl>

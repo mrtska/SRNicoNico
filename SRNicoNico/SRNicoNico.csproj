@@ -155,6 +155,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\NicoNicoViewer\UpdateChecker.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Follow\NicoNicoFollowCommunity.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Follow\NicoNicoFollowMylist.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Follow\NicoNicoFollowChannel.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Follow\NicoNicoFollowUser.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoNGFilter.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylist.cs" />
@@ -716,7 +720,6 @@
     <Compile Include="Models\NicoNicoViewer\Settings.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoComment.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoHistory.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoNicoFollow.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylistItem.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoNicoRepo.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoDmc.cs" />
@@ -729,12 +732,8 @@
     <Compile Include="Models\NicoNicoWrapper\NicoNicoSessionUser.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoRanking.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoUtil.cs" />
-    <Compile Include="ViewModels\Follow\FollowCommunityEntryViewModel.cs" />
-    <Compile Include="ViewModels\Follow\FollowChannelEntryViewModel.cs" />
     <Compile Include="ViewModels\Follow\FollowCommunityViewModel.cs" />
-    <Compile Include="ViewModels\Follow\FollowMylistEntryViewModel.cs" />
     <Compile Include="ViewModels\Follow\FollowChannelViewModel.cs" />
-    <Compile Include="ViewModels\Follow\FollowUserEntryViewModel.cs" />
     <Compile Include="ViewModels\Follow\FollowMylistViewModel.cs" />
     <Compile Include="ViewModels\Follow\FollowUserViewModel.cs" />
     <Compile Include="ViewModels\Follow\FollowViewModel.cs" />

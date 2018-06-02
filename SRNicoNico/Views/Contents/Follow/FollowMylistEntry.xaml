@@ -9,7 +9,7 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
@@ -19,8 +19,7 @@
              d:DesignWidth="600"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
-             d:DataContext="{d:DesignInstance {x:Type vm:FollowMylistEntryViewModel}}"
-             >
+             d:DataContext="{d:DesignInstance {x:Type m:NicoNicoFollowMylistEntry}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
@@ -31,42 +30,42 @@
             <MenuItem Header="マイリストをWebViewで開く">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <a:OpenWebViewAction Url="{Binding Item.MylistPageUrl}" />
+                        <a:OpenWebViewAction Url="{Binding MylistPageUrl}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
             <MenuItem Header="マイリストをブラウザで開く">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <ei:LaunchUriOrFileAction Path="{Binding Item.MylistPageUrl}" />
+                        <ei:LaunchUriOrFileAction Path="{Binding MylistPageUrl}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
             <MenuItem Header="マイリストのURLをクリップボードにコピー">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <a:CopyToClipBoardAction Text="{Binding Item.MylistPageUrl}"/>
+                        <a:CopyToClipBoardAction Text="{Binding MylistPageUrl}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
-            <MenuItem Header="表示されている動画をWebViewで開く" IsEnabled="{Binding Item.HasVideoLink}">
+            <MenuItem Header="表示されている動画をWebViewで開く" IsEnabled="{Binding HasVideoLink}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <a:OpenWebViewAction Url="{Binding Item.VideoUrl}" />
+                        <a:OpenWebViewAction Url="{Binding VideoUrl}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
-            <MenuItem Header="表示されている動画をブラウザで開く" IsEnabled="{Binding Item.HasVideoLink}">
+            <MenuItem Header="表示されている動画をブラウザで開く" IsEnabled="{Binding HasVideoLink}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <ei:LaunchUriOrFileAction Path="{Binding Item.Videourl}" />
+                        <ei:LaunchUriOrFileAction Path="{Binding Videourl}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
-            <MenuItem Header="表示されている動画のURLをクリップボードにコピー" IsEnabled="{Binding Item.HasVideoLink}">
+            <MenuItem Header="表示されている動画のURLをクリップボードにコピー" IsEnabled="{Binding HasVideoLink}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <a:CopyToClipBoardAction Text="{Binding Item.VideoUrl}" />
+                        <a:CopyToClipBoardAction Text="{Binding VideoUrl}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
@@ -78,12 +77,12 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel>
-            <TextBlock Text="{Binding Item.Title}" FontSize="18"/>
-            <TextBlock FontSize="12" Margin="0,3,0,0" VerticalAlignment="Top" Text="{Binding Item.Description}" TextWrapping="Wrap" Foreground="{DynamicResource DescriptionBrushKey}" TextTrimming="CharacterEllipsis">
+            <TextBlock Text="{Binding Title}" FontSize="18"/>
+            <TextBlock FontSize="12" Margin="0,3,0,0" VerticalAlignment="Top" Text="{Binding Description}" TextWrapping="Wrap" Foreground="{DynamicResource DescriptionBrushKey}" TextTrimming="CharacterEllipsis">
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Item.Description.Length}" Value="0">
+                            <DataTrigger Binding="{Binding Description.Length}" Value="0">
                                 <Setter Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -96,7 +95,7 @@
             <ContentControl.Style>
                 <Style TargetType="ContentControl">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Item.HasVideoLink}" Value="True">
+                        <DataTrigger Binding="{Binding HasVideoLink}" Value="True">
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ContentControl">
@@ -105,16 +104,16 @@
                                                 <ColumnDefinition Width="50"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <Image Height="40" Source="{Binding Item.ThumbNailUrl}" Margin="5,0,0,0" />
+                                            <Image Height="40" Source="{Binding ThumbNailUrl}" Margin="5,0,0,0" />
 
                                             <StackPanel Grid.Column="1" Margin="5">
-                                                <TextBlock ToolTip="{Binding Item.VideoUrl}">
-                                                    <Hyperlink NavigateUri="{Binding Item.VideoUrl}">
-                                                        <Run Text="{Binding Item.VideoTitle}" />
+                                                <TextBlock ToolTip="{Binding VideoUrl}">
+                                                    <Hyperlink NavigateUri="{Binding VideoUrl}">
+                                                        <Run Text="{Binding VideoTitle}" />
                                                     </Hyperlink>
                                                 </TextBlock>
 
-                                                <TextBlock Text="{Binding Item.PostedAt,StringFormat={}{0} 投稿}" />
+                                                <TextBlock Text="{Binding PostedAt,StringFormat={}{0} 投稿}" />
                                             </StackPanel>
                                         </Grid>
                                     </ControlTemplate>
@@ -125,6 +124,5 @@
                 </Style>
             </ContentControl.Style>
         </ContentControl>
-        
     </Grid>
 </UserControl>
