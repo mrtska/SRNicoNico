@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
+﻿using Livet;
 using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
 using SRNicoNico.Models.NicoNicoViewer;
+using System;
+using System.Linq;
 using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
@@ -197,6 +188,5 @@ namespace SRNicoNico.ViewModels {
 
             Messenger.Raise(new TransitionMessage(typeof(Views.WebViewHelpView), this, TransitionMode.NewOrActive));
         }
-
     }
 }
