@@ -18,50 +18,11 @@ using System.Windows.Input;
 namespace SRNicoNico.ViewModels {
     public class HistoryViewModel : TabItemViewModel {
 
-
-        private NicoNicoHistory HistoryInstance;
-
-
-
-
-        #region AccountHistoryList変更通知プロパティ
-        private DispatcherCollection<HistoryEntryViewModel> _AccountHistoryList = new DispatcherCollection<HistoryEntryViewModel>(DispatcherHelper.UIDispatcher);
-
-        public DispatcherCollection<HistoryEntryViewModel> AccountHistoryList {
-            get { return _AccountHistoryList; }
-            set { 
-                if(_AccountHistoryList == value)
-                    return;
-                _AccountHistoryList = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region LocalHistoryList変更通知プロパティ
-        private DispatcherCollection<HistoryEntryViewModel> _LocalHistoryList = new DispatcherCollection<HistoryEntryViewModel>(DispatcherHelper.UIDispatcher);
-
-        public DispatcherCollection<HistoryEntryViewModel> LocalHistoryList {
-            get { return _LocalHistoryList; }
-            set { 
-                if(_LocalHistoryList == value)
-                    return;
-                _LocalHistoryList = value;
-                value.PropertyChanged += (obj, e) => {
-
-                    HistoryInstance.SaveLocalHistory(value.Select(o => o.Item).ToList());
-                };
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
+        public NicoNicoHistory Model { get; set; }
 
         public HistoryViewModel() : base("視聴履歴") {
 
-            HistoryInstance = new NicoNicoHistory(this);
+            Model = new NicoNicoHistory();
             Initialize();
         }
 
@@ -70,35 +31,11 @@ namespace SRNicoNico.ViewModels {
             IsActive = true;
             Status = "視聴履歴取得中";
 
-            AccountHistoryList.Clear();
-            var account = await HistoryInstance.GetAccountHistoryAsync();
+            Status = await Model.GetAccountHistoryAsync();
 
-            if(account != null) {
+            Status = await Model.GetLocalHistoryAsync();
 
-                foreach(var entry in account) {
-
-                    AccountHistoryList.Add(new HistoryEntryViewModel(entry));
-                }
-            }
-
-            var local = await HistoryInstance.GetLocalHistoryAsync();
-
-            HistoryInstance.MergeHistories(account, local);
-
-            local.Sort();
-            local.Reverse();
-
-            var collection = new DispatcherCollection<HistoryEntryViewModel>(DispatcherHelper.UIDispatcher);
-
-            if(local != null) {
-
-                foreach(var entry in local) {
-
-                    collection.Add(new HistoryEntryViewModel(entry));
-                }
-                LocalHistoryList = collection;
-            }
-            HistoryInstance.SaveLocalHistory(local);
+            await Model.MergeHistoriesAsync();
 
             IsActive = false;
         }

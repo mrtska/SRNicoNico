@@ -7,10 +7,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
-    public class NicoNicoOpener : Exception {
+    public class NicoNicoOpener {
 
-
-        
         private readonly Regex UrlRegex = new Regex(@"http(s)?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?");
 
         //引数の文字列が正しいURLだったらOpenする
@@ -26,11 +24,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
             return null;
         }
-
-
-
-
-
         //シンタックスシュガー的な何か シンタックスじゃないけど
         public static TabItemViewModel Open(Uri uri) {
 
@@ -39,7 +32,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         //URLから適当なViewを開く
         public static TabItemViewModel Open(string url) {
-
 
             if(url.StartsWith("http://www.nicovideo.jp/watch/")) {
 
@@ -70,7 +62,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 return null;
             }
         }
-
 
         //ニコニコのURLが何を指しているかを返す
         public static NicoNicoUrlType GetType(Uri url) {
@@ -112,7 +103,5 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         User,
         Community,
         Other
-
     }
-
 }

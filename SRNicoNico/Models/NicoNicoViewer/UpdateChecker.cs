@@ -18,7 +18,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         private static string CheckUrl = "http://download.mrtska.net/DownloadCounter/Download?file=NicoNicoViewer/releaseupdate";
 #endif
 
-
         public static async Task<string> GetUpdaterBinaryUrl() {
 
             try {
@@ -41,13 +40,11 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(CheckUrl);
 
                 var json = DynamicJson.Parse(a);
-
                 return  App.ViewModelRoot.CurrentVersion < json.version;
             } catch(Exception) {
 
                 return false;
             }
         }
-
     }
 }

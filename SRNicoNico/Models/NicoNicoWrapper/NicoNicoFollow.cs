@@ -45,9 +45,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 Owner.Status = "フォローしているユーザーの数の取得に失敗しました";
                 return -1;
             }
-
         }
-
 
         public async Task<List<NicoNicoFollowUser>> GetFollowedUserAsync(int page) {
 
@@ -57,7 +55,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var url = "http://www.nicovideo.jp/my/fav/user?page=" + page;
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
-                
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml(a);
@@ -92,7 +89,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
                 return null;
             }
-
         }
 
         //自分がフォローしているマイリストの数を取得する
@@ -120,9 +116,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 Owner.Status = "フォローしているmマイリストの数の取得に失敗しました";
                 return -1;
             }
-
         }
-
 
         public async Task<List<NicoNicoFollowMylist>> GetFollowedMylistAsync(int page) {
 
@@ -164,7 +158,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         mylist.VideoUrl =  inner.SelectSingleNode("div/p/a").Attributes["href"].Value;
                         mylist.PostedAt = inner.SelectSingleNode("div/p/span").InnerText.Trim();
                     }
-
                     ret.Add(mylist);
                 }
 

@@ -160,7 +160,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     }
                 }
 
-
                 return;
             } catch(RequestFailed) {
 
@@ -169,7 +168,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         }
     }
-
 
     public class DmcSession {
 

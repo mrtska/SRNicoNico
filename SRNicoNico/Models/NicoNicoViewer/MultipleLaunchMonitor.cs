@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 using System.Runtime.Remoting.Lifetime;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
-    public class MultipleLaunchingMonitor : IDisposable {
+    public class MultipleLaunchMonitor : IDisposable {
 
         private IpcServerChannel Server;
 

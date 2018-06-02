@@ -8,7 +8,7 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
@@ -55,16 +55,16 @@
                 <Style TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ElementName=combo, Path=Text}" Value="アカウント">
-                            <Setter Property="ItemsSource" Value="{Binding AccountHistoryList}" />
+                            <Setter Property="ItemsSource" Value="{Binding Model.AccountHistories}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding ElementName=combo, Path=Text}" Value="ローカル">
-                            <Setter Property="ItemsSource" Value="{Binding LocalHistoryList}" />
+                            <Setter Property="ItemsSource" Value="{Binding Model.LocalHistries}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </ListBox.Style>
             <ListBox.Resources>
-                <DataTemplate DataType="{x:Type vm:HistoryEntryViewModel}">
+                <DataTemplate DataType="{x:Type m:NicoNicoHistoryEntry}">
                     <v:HistoryEntry />
                 </DataTemplate>
             </ListBox.Resources>

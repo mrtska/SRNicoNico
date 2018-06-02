@@ -43,9 +43,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //ローカル視聴履歴に指定したIWatchableが存在したらフラグを立てる
         public static void ApplyLocalHistory(IWatchable target) {
 
-            foreach(var entry in App.ViewModelRoot.History.LocalHistoryList) {
+            foreach(var entry in App.ViewModelRoot.History.Model.LocalHistries) {
 
-                if(target.ContentUrl.Contains(entry.Item.VideoId)) {
+                if(target.ContentUrl.Contains(entry.VideoId)) {
 
                     target.IsWatched = true;
                     return;
