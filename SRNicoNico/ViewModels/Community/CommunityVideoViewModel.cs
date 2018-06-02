@@ -31,9 +31,9 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
         #region CommunityVideoList変更通知プロパティ
-        private DispatcherCollection<SearchResultEntryViewModel> _CommunityVideoList = new DispatcherCollection<SearchResultEntryViewModel>(DispatcherHelper.UIDispatcher);
+        private DispatcherCollection<NicoNicoSearchResultEntry> _CommunityVideoList = new DispatcherCollection<NicoNicoSearchResultEntry>(DispatcherHelper.UIDispatcher);
 
-        public DispatcherCollection<SearchResultEntryViewModel> CommunityVideoList {
+        public DispatcherCollection<NicoNicoSearchResultEntry> CommunityVideoList {
             get { return _CommunityVideoList; }
             set { 
                 if(_CommunityVideoList == value)
@@ -64,7 +64,7 @@ namespace SRNicoNico.ViewModels {
 
                 foreach(var video in videos) {
 
-                    CommunityVideoList.Add(new SearchResultEntryViewModel(video));
+                    //CommunityVideoList.Add(new NicoNicoSearchResultEntry(video));
                 }
             }
 

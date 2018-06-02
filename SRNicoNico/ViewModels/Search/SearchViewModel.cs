@@ -16,13 +16,12 @@ using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
-    public class SearchViewModel : TabItemViewModel {
+    public class SearchViewModel : PageSpinnerViewModel {
 
-        private NicoNicoSearch CurrentSearch;
-
+        public NicoNicoSearch Model { get; set; }
 
         //ソート方法
-        private string[] sortBy = { "f:d", "f:a",
+        private readonly string[] sortBy = { "f:d", "f:a",
                                      "v:d", "v:a",
                                      "n:d", "n:a",
                                      "m:d", "m:a",
@@ -57,24 +56,10 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        #region SearchResult変更通知プロパティ
-        private SearchResultViewModel _SearchResult;
-
-        public SearchResultViewModel SearchResult {
-            get { return _SearchResult; }
-            set {
-                if(_SearchResult == value)
-                    return;
-                _SearchResult = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
         #region SearchHistory変更通知プロパティ
-        private DispatcherCollection<SearchHistoryViewModel> _SearchHistory = new DispatcherCollection<SearchHistoryViewModel>(DispatcherHelper.UIDispatcher);
+        private ObservableSynchronizedCollection<string> _SearchHistory = new ObservableSynchronizedCollection<string>();
 
-        public DispatcherCollection<SearchHistoryViewModel> SearchHistory {
+        public ObservableSynchronizedCollection<string> SearchHistory {
             get { return _SearchHistory; }
             set {
                 if(_SearchHistory == value)
@@ -90,14 +75,12 @@ namespace SRNicoNico.ViewModels {
 
         public SearchViewModel() : base("検索") {
 
-            SearchResult = new SearchResultViewModel(this);
-
             //検索
-            CurrentSearch = new NicoNicoSearch(this);
+            Model = new NicoNicoSearch();
 
             foreach(var entry in Settings.Instance.SearchHistory) {
 
-                SearchHistory.Add(new SearchHistoryViewModel(this, entry));
+                SearchHistory.Add(entry);
             }
         }
 
@@ -108,7 +91,9 @@ namespace SRNicoNico.ViewModels {
                 return;
             }
 
-            SearchResult.CurrentPage = 1;
+            Status = "検索中:" + SearchText;
+
+            CurrentPage = 1;
             Search(SearchText);
         }
 
@@ -121,11 +106,11 @@ namespace SRNicoNico.ViewModels {
         //検索ボタン押下
         public async void Search(string text, int page = 1) {
 
-            //ページ数がおかしい場合は一番ギリギリセーフな値にバリデートする
-            if(page != 1 && SearchResult.MaxPages < page) {
+            //ページ数がおかしい場合は一番ギリギリセーフな値になるようバリデートする
+            if(page != 1 && MaxPages < page) {
 
-                page = SearchResult.MaxPages;
-                SearchResult.CurrentPage = page;
+                page = MaxPages;
+                CurrentPage = page;
             }
 
             //どうしてそれで検索出来ると思ったんだ
@@ -133,46 +118,32 @@ namespace SRNicoNico.ViewModels {
 
                 return;
             }
-
-            SearchResult.List.Clear();
-
-            SearchResult.IsActive = true;
+            IsActive = true;
 
             //履歴に存在しなかったら履歴に追加する
             if(!Settings.Instance.SearchHistory.Contains(text)) {
 
                 //一番上に追加する
-                SearchHistory.Insert(0, new SearchHistoryViewModel(this, text));
+                SearchHistory.Insert(0, text);
             } else {
 
                 //存在したら一番上に持ってくる
-                SearchHistory.Move(SearchHistory.IndexOf(SearchHistory.Where(e => e.Content == text).First()), 0);
+                SearchHistory.Move(SearchHistory.IndexOf(SearchHistory.Where(e => e == text).First()), 0);
             }
             ApplyHistory();
 
-            var result = await CurrentSearch.Search(text, SearchType, sortBy[Settings.Instance.SearchIndex], page);
-
-            if(result == null) {
-
-                SearchResult.IsActive = false;
-                return;
-            }
+            Status  = await Model.Search(text, SearchType, sortBy[Settings.Instance.SearchIndex], page);
 
             //検索結果をUIに
-            SearchResult.Total = result.Total;
-            SearchResult.MaxPages = result.Total / 30;
+            Total = Model.Total;
+            MaxPages = Total / 30;
 
-            if(SearchResult.Total == 0) {
+            if(Total == 0) {
 
                 Status = "0件です";
             }
 
-            foreach(var node in result.List) {
-
-                SearchResult.List.Add(new SearchResultEntryViewModel(node));
-            }
-
-            SearchResult.IsActive = false;
+            IsActive = false;
         }
 
         public void SearchPage(string page) {
@@ -196,17 +167,17 @@ namespace SRNicoNico.ViewModels {
         }
 
         #region DeleteHistoryCommand
-        private ListenerCommand<SearchHistoryViewModel> _DeleteHistoryCommand;
+        private ListenerCommand<string> _DeleteHistoryCommand;
 
-        public ListenerCommand<SearchHistoryViewModel> DeleteHistoryCommand {
+        public ListenerCommand<string> DeleteHistoryCommand {
             get {
                 if(_DeleteHistoryCommand == null) {
-                    _DeleteHistoryCommand = new ListenerCommand<SearchHistoryViewModel>(DeleteHistory);
+                    _DeleteHistoryCommand = new ListenerCommand<string>(DeleteHistory);
                 }
                 return _DeleteHistoryCommand;
             }
         }
-        public void DeleteHistory(SearchHistoryViewModel vm) {
+        public void DeleteHistory(string vm) {
 
             SearchHistory.Remove(vm);
             ApplyHistory();
@@ -218,30 +189,47 @@ namespace SRNicoNico.ViewModels {
             var ret = new List<string>();
             foreach(var s in SearchHistory) {
 
-                ret.Add(s.Content);
+                ret.Add(s);
             }
 
             Settings.Instance.SearchHistory = ret;
+        }
+
+
+        public void MakePlayList() {
+
+            var filteredList = Model.SearchResult;
+
+            if(filteredList.Count() == 0) {
+
+                Status = "連続再生できる動画がありません";
+                return;
+            }
+
+            var vm = new PlayListViewModel(SearchText, filteredList);
+            App.ViewModelRoot.MainContent.AddUserTab(vm);
         }
 
         public override void KeyDown(KeyEventArgs e) {
 
             //TextBoxにフォーカスが合ったら無視する
             if(TextBoxFocused) {
-
                 return;
             }
-
             if(e.Key == Key.Right) {
 
-                SearchResult.RightButtonClick();
+                RightButtonClick();
             }
             if(e.Key == Key.Left) {
 
-                SearchResult.LeftButtonClick();
+                LeftButtonClick();
             }
         }
 
+        public override void SpinPage() {
+
+            SearchPage(CurrentPage);
+        }
         public override bool CanShowHelp() {
             return true;
         }

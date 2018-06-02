@@ -11,24 +11,50 @@ using Codeplex.Data;
 using System.Web;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
-    public class NicoNicoSearch {
+    public class NicoNicoSearch : NotificationObject {
 
         //検索API
         private const string SearchURL = "http://ext.nicovideo.jp/api/search/";
 
-        private SearchViewModel Owner;
+        //検索結果
+        #region SearchResult変更通知プロパティ
+        private ObservableSynchronizedCollection<NicoNicoSearchResultEntry> _SearchResult;
+
+        public ObservableSynchronizedCollection<NicoNicoSearchResultEntry> SearchResult {
+            get { return _SearchResult; }
+            set { 
+                if (_SearchResult == value)
+                    return;
+                _SearchResult = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
 
-        public NicoNicoSearch(SearchViewModel vm) {
+        #region Total変更通知プロパティ
+        private int _Total;
 
-            Owner = vm;
+        public int Total {
+            get { return _Total; }
+            set { 
+                if (_Total == value)
+                    return;
+                _Total = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        public NicoNicoSearch() {
+
+            SearchResult = new ObservableSynchronizedCollection<NicoNicoSearchResultEntry>();
         }
 
         //リクエストのレスポンスを返す
-        public async Task<NicoNicoSearchResult> Search(string keyword, SearchType type, string Sort, int page = 1) {
+        public async Task<string> Search(string keyword, SearchType type, string Sort, int page = 1) {
 
-
-            Owner.Status = "検索中:" + keyword;
+            SearchResult.Clear();
 
             Sort = "&sort=" + Sort.Split(':')[0] + "&order=" + Sort.Split(':')[1];
 
@@ -40,9 +66,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 typestr = "tag";
             }
-
-            var result = new NicoNicoSearchResult();
-
             try {
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(SearchURL + typestr + "/" + HttpUtility.UrlEncode(keyword) + "?mode=watch" + Sort + "&page=" + page);
@@ -51,16 +74,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var json = DynamicJson.Parse(a);
 
                 //検索結果総数
-                if(json.count()) {
+                if (json.count()) {
 
-                    result.Total = (int)json.count;
+                    Total = (int)json.count;
                 } else {
-
                     //連打するとエラーになる
-                    Owner.Status = "アクセスしすぎです。1分ほど時間を置いてください。";
-                    return null;
+                    return "アクセスしすぎです。1分ほど時間を置いてください。";
                 }
-
                 //Jsonからリストを取得、データを格納
                 if(json.list()) {
                     foreach(var entry in json.list) {
@@ -81,28 +101,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                         NicoNicoUtil.ApplyLocalHistory(node);
 
-                        result.List.Add(node);
+                        SearchResult.Add(node);
                     }
                 }
-
-                Owner.Status = "";
-
-                return result;
+                return "";
 
             } catch(RequestFailed) {
 
-                Owner.Status = "検索がタイムアウトしました";
-                return null;
+                return "検索がタイムアウトしました";
             }
         }
-    }
-
-    public class NicoNicoSearchResult : NotificationObject {
-
-        //検索結果の総数
-        public int Total { get; set; }
-        public List<NicoNicoSearchResultEntry> List { get; set; } = new List<NicoNicoSearchResultEntry>();
-
     }
 
     public enum SearchType {
@@ -139,5 +147,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public bool IsWatched { get; set; }
 
         public string ContentUrl { get; set; }
+
+        public void Open() {
+
+            NicoNicoOpener.Open("http://www.nicovideo.jp/watch/" + Cmsid);
+        }
     }
 }

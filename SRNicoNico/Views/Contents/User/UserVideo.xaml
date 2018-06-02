@@ -8,7 +8,7 @@
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
@@ -48,7 +48,7 @@
                 </Grid.RowDefinitions>
                 <ListBox AlternationCount="2" SelectedItem="{Binding SelectedItem}" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding UserVideoList}" ItemContainerStyle="{StaticResource FlatListBoxItem}" >
                     <ListBox.ItemTemplate>
-                        <DataTemplate DataType="{x:Type vm:SearchResultEntryViewModel}">
+                        <DataTemplate DataType="{x:Type m:NicoNicoSearchResultEntry}">
                             <v:SearchResultEntry />
                         </DataTemplate>
                     </ListBox.ItemTemplate>

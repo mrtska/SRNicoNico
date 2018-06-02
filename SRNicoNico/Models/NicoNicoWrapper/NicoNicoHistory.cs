@@ -42,9 +42,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         #endregion
 
         #region LocalHistries変更通知プロパティ
-        private ObservableSynchronizedCollection<NicoNicoHistoryEntry> _LocalHistries;
+        private DispatcherCollection<NicoNicoHistoryEntry> _LocalHistries;
 
-        public ObservableSynchronizedCollection<NicoNicoHistoryEntry> LocalHistries {
+        public DispatcherCollection<NicoNicoHistoryEntry> LocalHistries {
             get { return _LocalHistries; }
             set { 
                 if (_LocalHistries == value)
@@ -58,12 +58,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public NicoNicoHistory() {
 
             AccountHistories = new ObservableSynchronizedCollection<NicoNicoHistoryEntry>();
-            LocalHistries = new ObservableSynchronizedCollection<NicoNicoHistoryEntry>();
         }
 
         public async Task<string> GetAccountHistoryAsync() {
 
             try {
+
+                AccountHistories.Clear();
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(HistoryUrl);
 
@@ -110,8 +111,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             if(File.Exists(LocalHistoryLocation)) {
 
+
                 try {
+
                     using(var stream = new StreamReader(LocalHistoryLocation)) {
+
+                        var coll = new DispatcherCollection<NicoNicoHistoryEntry>(DispatcherHelper.UIDispatcher);
 
                         var a = Encoding.UTF8.GetString(Convert.FromBase64String(await stream.ReadToEndAsync()));
                         dynamic json = DynamicJson.Parse(a);
@@ -127,8 +132,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                             item.WatchDate = (long) entry.watchdate;
                             item.WatchCount = entry.watchcount;
 
-                            LocalHistries.Add(item);
+                            coll.Add(item);
                         }
+                        LocalHistries = coll;
                         return "";
                     }
                 } catch(Exception) {
@@ -143,7 +149,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
 
-        private void SaveLocalHistory(List<NicoNicoHistoryEntry> list) {
+        public void SaveLocalHistory() {
 
             try {
 
@@ -151,20 +157,23 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var array = new List<object>();
 
+                var list = LocalHistries.ToList();
+                list.Sort();
+                list.Reverse();
+
                 foreach(var entry in list) {
 
                     array.Add(new { video_id = entry.VideoId, thumbnail_url = entry.ThumbNailUrl, title = entry.Title, length = entry.Length, watchdate = entry.WatchDate, watchcount = entry.WatchCount });
                 }
                 root.history = array;
 
-                using(var writer = new StreamWriter(new FileStream(LocalHistoryLocation, FileMode.OpenOrCreate))) {
+                using(var writer = new StreamWriter(new FileStream(LocalHistoryLocation, FileMode.Create))) {
 
-                    writer.BaseStream.Position = 0;
                     writer.WriteLine(Convert.ToBase64String(Encoding.UTF8.GetBytes(root.ToString())));
                     writer.Flush();
                 }
             } catch(Exception) {
-                
+
             }
         }
 
@@ -173,6 +182,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             await Task.Run(() => {
 
+                //ローカル視聴履歴にアカウント視聴履歴を足す
                 var from = AccountHistories;
                 var to = LocalHistries;
 
@@ -204,8 +214,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         to.Add(fromentry);
                     }
                 }
-
-                to.Reverse();
+                
+                SaveLocalHistory();
             });
         }
     }

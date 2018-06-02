@@ -764,9 +764,6 @@
     <Compile Include="ViewModels\Other\OtherViewModel.cs" />
     <Compile Include="ViewModels\Ranking\RankingEntryViewModel.cs" />
     <Compile Include="ViewModels\Ranking\RankingViewModel.cs" />
-    <Compile Include="ViewModels\Search\SearchHistoryViewModel.cs" />
-    <Compile Include="ViewModels\Search\SearchResultEntryViewModel.cs" />
-    <Compile Include="ViewModels\Search\SearchResultViewModel.cs" />
     <Compile Include="ViewModels\Search\SearchViewModel.cs" />
     <Compile Include="ViewModels\SignIn\SignInViewModel.cs" />
     <Compile Include="ViewModels\PageSpinnerViewModel.cs" />

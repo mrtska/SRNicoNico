@@ -17,9 +17,9 @@ namespace SRNicoNico.ViewModels {
     public class UserVideoViewModel : PageSpinnerViewModel {
 
         #region UserVideoList変更通知プロパティ
-        private DispatcherCollection<SearchResultEntryViewModel> _UserVideoList = new DispatcherCollection<SearchResultEntryViewModel>(DispatcherHelper.UIDispatcher);
+        private DispatcherCollection<NicoNicoSearchResultEntry> _UserVideoList = new DispatcherCollection<NicoNicoSearchResultEntry>(DispatcherHelper.UIDispatcher);
 
-        public DispatcherCollection<SearchResultEntryViewModel> UserVideoList {
+        public DispatcherCollection<NicoNicoSearchResultEntry> UserVideoList {
             get { return _UserVideoList; }
             set {
                 if(_UserVideoList == value)
@@ -80,7 +80,7 @@ namespace SRNicoNico.ViewModels {
 
             foreach(var video in videos) {
 
-                UserVideoList.Add(new SearchResultEntryViewModel(video));
+                //UserVideoList.Add(new SearchResultEntryViewModel(video));
             }
 
 

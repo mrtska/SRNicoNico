@@ -46,7 +46,7 @@
                 </Grid.RowDefinitions>
                 <ListBox AlternationCount="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding CommunityVideoList}" ItemContainerStyle="{StaticResource FlatListBoxItem}">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type vm:SearchResultEntryViewModel}">
+                        <DataTemplate DataType="{x:Type mm:NicoNicoSearchResultEntry}">
                             <v:CommunityVideoEntry />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
