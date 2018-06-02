@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HtmlAgilityPack;
 using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
-using HtmlAgilityPack;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
-    public class NicoNicoRanking {
-
-
-
+    public class NicoNicoRanking : NotificationObject {
 
         private static string TransPeriod(RankingPeriod period) {
 
@@ -27,7 +22,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 case RankingPeriod.Total:
                     return "total";
                 default:
-                    throw new InvalidOperationException("そんなバカな");
+                    throw new ArgumentException("そんなバカな");
             }
         }
 
@@ -45,7 +40,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 case "合計":
                     return RankingPeriod.Total;
                 default:
-                    throw new InvalidOperationException("そんなバカな");
+                    throw new ArgumentException("そんなバカな");
             }
         }
 
@@ -80,52 +75,81 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
 
+        private RankingPeriod Period;
 
-        private readonly RankingPeriod Period;
-
-        private readonly RankingTarget Target;
+        private RankingTarget Target;
 
         private const string ApiBaseUrl = "http://www.nicovideo.jp/ranking/{0}/{1}/";
-        private readonly string ApiUrl;
+        private string ApiUrl = string.Empty;
+
+        #region RankingList変更通知プロパティ
+        private ObservableSynchronizedCollection<NicoNicoRankingEntry> _RankingList;
+
+        public ObservableSynchronizedCollection<NicoNicoRankingEntry> RankingList {
+            get { return _RankingList; }
+            set { 
+                if (_RankingList == value)
+                    return;
+                _RankingList = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region IsPreparing変更通知プロパティ
+        private bool _IsPreparing = false;
+
+        public bool IsPreparing {
+            get { return _IsPreparing; }
+            set {
+                if (_IsPreparing == value)
+                    return;
+                _IsPreparing = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         public NicoNicoRanking(string period, string target) : this(TransPeriod(period), TransTarget(target)) {
         }
 
-
         public NicoNicoRanking(RankingPeriod period, RankingTarget target) {
+
+            RankingList = new ObservableSynchronizedCollection<NicoNicoRankingEntry>();
+            SetRankingSpan(period, target);
+        }
+
+        private void SetRankingSpan(RankingPeriod period, RankingTarget target) {
 
             Period = period;
             Target = target;
 
             ApiUrl = string.Format(ApiBaseUrl, TransTarget(Target), TransPeriod(Period)) + "{0}?page={1}";
         }
-
-        public async Task<NicoNicoRankingEntry> GetRankingAsync(string category, int page) {
+ 
+        public async Task<string> GetRankingAsync(string category, int page) {
 
             try {
 
-                var ret = new NicoNicoRankingEntry();
+                RankingList.Clear();
 
-                ret.Period = Period;
-                ret.Target = Target;
-
+                IsPreparing = false;
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(string.Format(ApiUrl, category, page));
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml(a);
 
-                ret.ItemList = new List<RankingItem>();
-
                 var nodes = doc.DocumentNode.SelectNodes("//div[@class='contentBody video videoList01']/ul/li");
                 if(nodes == null) {
 
+                    IsPreparing = true;
                     return null;
                 }
                 
                 //ランキングページから各種データをXPathで取得
                 foreach(var ranking in nodes) {
 
-                    var item = new RankingItem();
+                    var item = new NicoNicoRankingEntry();
 
                     item.Rank = ranking.SelectSingleNode("div[@class='rankingNumWrap']/p[@class='rankingNum']").InnerText;
                     item.RankingPoint = ranking.SelectSingleNode("div[@class='rankingNumWrap']/p[@class='rankingPt']").InnerText;
@@ -152,29 +176,23 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     NicoNicoUtil.ApplyLocalHistory(item);
 
-                    ret.ItemList.Add(item);
-                }
+                    //そのページのランキングは存在しないか準備中
+                    if (item.Rank == "1" && page != 1) {
 
-                return ret;
+                        IsPreparing = true;
+                        break;
+                    }
+
+                    RankingList.Add(item);
+                }
+                return "";
             } catch(RequestFailed) {
 
-                return null;
+                return "ランキングの取得に失敗しました";
             }
         }
     }
-    public class NicoNicoRankingEntry {
-
-        //ランキング集計期間
-        public RankingPeriod Period { get; set; }
-
-        //ランキング集計対象
-        public RankingTarget Target { get; set; }
-
-        public List<RankingItem> ItemList { get; set; }
-
-    }
-
-    public class RankingItem : IWatchable {
+    public class NicoNicoRankingEntry : IWatchable {
 
         //動画URL
         public bool IsWatched { get; set; }
@@ -211,6 +229,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //マイリスト数
         public string MylistCount { get; set; }
 
+        public void Open() {
+
+            NicoNicoOpener.Open(ContentUrl);
+        }
     }
 
     public enum RankingPeriod {
@@ -228,5 +250,4 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         Comment,
         Mylist
     }
-
 }

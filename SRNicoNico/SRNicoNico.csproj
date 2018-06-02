@@ -762,8 +762,7 @@
     <Compile Include="ViewModels\Other\OSSEntryViewModel.cs" />
     <Compile Include="ViewModels\Other\OverViewViewModel.cs" />
     <Compile Include="ViewModels\Other\OtherViewModel.cs" />
-    <Compile Include="ViewModels\Ranking\RankingResultEntryViewModel.cs" />
-    <Compile Include="ViewModels\Ranking\RankingResultViewModel.cs" />
+    <Compile Include="ViewModels\Ranking\RankingEntryViewModel.cs" />
     <Compile Include="ViewModels\Ranking\RankingViewModel.cs" />
     <Compile Include="ViewModels\Search\SearchHistoryViewModel.cs" />
     <Compile Include="ViewModels\Search\SearchResultEntryViewModel.cs" />

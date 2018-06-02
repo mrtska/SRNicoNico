@@ -1,37 +1,26 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.RankingResult"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-             xmlns:v="clr-namespace:SRNicoNico.Views"
-             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-             xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
-             xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
-             BorderBrush="#FF333333"
-             d:DataContext="{d:DesignInstance {x:Type vm:RankingResultViewModel}}"
-             
-             >
+             d:DataContext="{d:DesignInstance {x:Type vm:RankingEntryViewModel}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Refresh" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-
     <Grid>
-        <Grid.Resources>
-            <BooleanToVisibilityConverter x:Key="btv" />
-        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition />
@@ -71,12 +60,11 @@
 
         <metro:ProgressRing Grid.Row="1" HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsActive}"  />
 
-        <TextBlock Grid.Row="1" Visibility="{Binding IsPreparing,Converter={StaticResource btv}}" Text="このランキングは存在しないか準備中です。" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center" />
-
+        <TextBlock Grid.Row="1" Visibility="{Binding Model.IsPreparing,Converter={StaticResource BooleanToVisibilityConverter}}" Text="このランキングは存在しないか準備中です。" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center" />
         
-        <ListBox Grid.Row="1" AlternationCount="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding RankingItemList}" ItemContainerStyle="{StaticResource FlatListBoxItem}" >
+        <ListBox Grid.Row="1" AlternationCount="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding Model.RankingList}" ItemContainerStyle="{StaticResource FlatListBoxItem}" >
             <ListBox.ItemTemplate>
-                <DataTemplate >
+                <DataTemplate>
                     <v:RankingResultEntry />
                 </DataTemplate>
             </ListBox.ItemTemplate>

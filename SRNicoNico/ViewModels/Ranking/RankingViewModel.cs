@@ -1,41 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
+﻿using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Models.NicoNicoWrapper;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class RankingViewModel : TabItemViewModel {
-
-
-        private NicoNicoRanking RankingInstance;
-
-
-        #region RankingList変更通知プロパティ
-        private DispatcherCollection<RankingResultViewModel> _RankingList = new DispatcherCollection<RankingResultViewModel>(DispatcherHelper.UIDispatcher);
-
-        public DispatcherCollection<RankingResultViewModel> RankingList {
-            get { return _RankingList; }
-            set {
-                if(_RankingList == value)
-                    return;
-                _RankingList = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
 
         #region Period変更通知プロパティ
         private string _Period = "24時間";
@@ -81,196 +50,208 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        #region RankingList変更通知プロパティ
+        private ObservableSynchronizedCollection<RankingEntryViewModel> _RankingList;
+
+        public ObservableSynchronizedCollection<RankingEntryViewModel> RankingList {
+            get { return _RankingList; }
+            set { 
+                if (_RankingList == value)
+                    return;
+                _RankingList = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         public RankingViewModel() : base("ランキング") {
-        }
 
+            RankingList = new ObservableSynchronizedCollection<RankingEntryViewModel>();
+        }
 
         public void Initialize() {
 
-            RankingInstance = new NicoNicoRanking(Period, Target);
-
             RankingList.Clear();
 
-            if(Settings.Instance.RankingCategoryTotal) {
+            if (Settings.Instance.RankingCategoryTotal) {
 
-                RankingList.Add(new RankingResultViewModel(this, "カテゴリ合算", "all", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "カテゴリ合算", "all"));
             }
 
-            if(Settings.Instance.RankingEntameMusic) {
+            if (Settings.Instance.RankingEntameMusic) {
 
-                RankingList.Add(new RankingResultViewModel(this, "エンタメ・音楽", "g_ent2", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "エンタメ・音楽", "g_ent2"));
             }
 
-            if(Settings.Instance.RankingEntertainment) {
+            if (Settings.Instance.RankingEntertainment) {
 
-                RankingList.Add(new RankingResultViewModel(this, "エンターテイメント", "ent", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "エンターテイメント", "ent"));
             }
 
-            if(Settings.Instance.RankingMusic) {
+            if (Settings.Instance.RankingMusic) {
 
-                RankingList.Add(new RankingResultViewModel(this, "音楽", "music", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "音楽", "music"));
             }
 
-            if(Settings.Instance.RankingSingaSong) {
+            if (Settings.Instance.RankingSingaSong) {
 
-                RankingList.Add(new RankingResultViewModel(this, "歌ってみた", "sing", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "歌ってみた", "sing"));
             }
 
-            if(Settings.Instance.RankingPlayaMusic) {
+            if (Settings.Instance.RankingPlayaMusic) {
 
-                RankingList.Add(new RankingResultViewModel(this, "演奏してみた", "play", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "演奏してみた", "play"));
             }
 
-            if(Settings.Instance.RankingDancing) {
+            if (Settings.Instance.RankingDancing) {
 
-                RankingList.Add(new RankingResultViewModel(this, "踊ってみた", "dance", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "踊ってみた", "dance"));
             }
 
-            if(Settings.Instance.RankingVOCALOID) {
+            if (Settings.Instance.RankingVOCALOID) {
 
-                RankingList.Add(new RankingResultViewModel(this, "VOCALOID", "vocaloid", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "VOCALOID", "vocaloid"));
             }
 
-            if(Settings.Instance.RankingIndies) {
+            if (Settings.Instance.RankingIndies) {
 
-                RankingList.Add(new RankingResultViewModel(this, "ニコニコインディーズ", "nicoindies", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "ニコニコインディーズ", "nicoindies"));
             }
 
-            if(Settings.Instance.RankingLifeSports) {
+            if (Settings.Instance.RankingLifeSports) {
 
-                RankingList.Add(new RankingResultViewModel(this, "生活・一般・スポ", "g_life2", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "生活・一般・スポ", "g_life2"));
             }
 
-            if(Settings.Instance.RankingAnimal) {
+            if (Settings.Instance.RankingAnimal) {
 
-                RankingList.Add(new RankingResultViewModel(this, "動物", "animal", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "動物", "animal"));
             }
 
-            if(Settings.Instance.RankingCooking) {
+            if (Settings.Instance.RankingCooking) {
 
-                RankingList.Add(new RankingResultViewModel(this, "料理", "cooking", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "料理", "cooking"));
             }
 
-            if(Settings.Instance.RankingNature) {
+            if (Settings.Instance.RankingNature) {
 
-                RankingList.Add(new RankingResultViewModel(this, "自然", "nature", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "自然", "nature"));
             }
 
-            if(Settings.Instance.RankingTravel) {
+            if (Settings.Instance.RankingTravel) {
 
-                RankingList.Add(new RankingResultViewModel(this, "旅行", "travel", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "旅行", "travel"));
             }
 
-            if(Settings.Instance.RankingSports) {
+            if (Settings.Instance.RankingSports) {
 
-                RankingList.Add(new RankingResultViewModel(this, "スポーツ", "sport", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "スポーツ", "sport"));
             }
 
-            if(Settings.Instance.RankingNicoNicoDougaLecture) {
+            if (Settings.Instance.RankingNicoNicoDougaLecture) {
 
-                RankingList.Add(new RankingResultViewModel(this, "ニコニコ動画講座", "lecture", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "ニコニコ動画講座", "lecture"));
             }
 
-            if(Settings.Instance.RankingDriveVideo) {
+            if (Settings.Instance.RankingDriveVideo) {
 
-                RankingList.Add(new RankingResultViewModel(this, "車載動画", "drive", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "車載動画", "drive"));
             }
 
-            if(Settings.Instance.RankingHistory) {
+            if (Settings.Instance.RankingHistory) {
 
-                RankingList.Add(new RankingResultViewModel(this, "歴史", "history", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "歴史", "history"));
             }
 
-            if(Settings.Instance.RankingPolitics) {
+            if (Settings.Instance.RankingPolitics) {
 
-                RankingList.Add(new RankingResultViewModel(this, "政治", "g_politics", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "政治", "g_politics"));
             }
 
-            if(Settings.Instance.RankingScienceTech) {
+            if (Settings.Instance.RankingScienceTech) {
 
-                RankingList.Add(new RankingResultViewModel(this, "科学・技術", "g_tech", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "科学・技術", "g_tech"));
             }
 
-            if(Settings.Instance.RankingScience) {
+            if (Settings.Instance.RankingScience) {
 
-                RankingList.Add(new RankingResultViewModel(this, "科学", "science", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "科学", "science"));
             }
 
-            if(Settings.Instance.RankingNicoNicoTech) {
+            if (Settings.Instance.RankingNicoNicoTech) {
 
-                RankingList.Add(new RankingResultViewModel(this, "ニコニコ技術部", "tech", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "ニコニコ技術部", "tech"));
             }
 
-            if(Settings.Instance.RankingHandicraft) {
+            if (Settings.Instance.RankingHandicraft) {
 
-                RankingList.Add(new RankingResultViewModel(this, "ニコニコ手芸部", "handcraft", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "ニコニコ手芸部", "handcraft"));
             }
 
-            if(Settings.Instance.RankingMaking) {
+            if (Settings.Instance.RankingMaking) {
 
-                RankingList.Add(new RankingResultViewModel(this, "作ってみた", "make", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "作ってみた", "make"));
             }
 
-            if(Settings.Instance.RankingAnimeGameIllust) {
+            if (Settings.Instance.RankingAnimeGameIllust) {
 
-                RankingList.Add(new RankingResultViewModel(this, "アニメ・ゲーム・絵", "g_culture2", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "アニメ・ゲーム・絵", "g_culture2"));
             }
 
-            if(Settings.Instance.RankingAnime) {
+            if (Settings.Instance.RankingAnime) {
 
-                RankingList.Add(new RankingResultViewModel(this, "アニメ", "anime", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "アニメ", "anime"));
 
             }
 
-            if(Settings.Instance.RankingGame) {
+            if (Settings.Instance.RankingGame) {
 
-                RankingList.Add(new RankingResultViewModel(this, "ゲーム", "game", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "ゲーム", "game"));
             }
 
-            if(Settings.Instance.RankingJikkyo) {
+            if (Settings.Instance.RankingJikkyo) {
 
-                RankingList.Add(new RankingResultViewModel(this, "実況プレイ動画", "jikkyo", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "実況プレイ動画", "jikkyo"));
             }
 
-            if(Settings.Instance.RankingTouhou) {
+            if (Settings.Instance.RankingTouhou) {
 
-                RankingList.Add(new RankingResultViewModel(this, "東方", "toho", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "東方", "toho"));
             }
 
-            if(Settings.Instance.RankingIdolmaster) {
+            if (Settings.Instance.RankingIdolmaster) {
 
-                RankingList.Add(new RankingResultViewModel(this, "アイドルマスター", "imas", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "アイドルマスター", "imas"));
             }
 
-            if(Settings.Instance.RankingRadio) {
+            if (Settings.Instance.RankingRadio) {
 
-                RankingList.Add(new RankingResultViewModel(this, "ラジオ", "radio", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "ラジオ", "radio"));
             }
 
-            if(Settings.Instance.RankingDrawing) {
+            if (Settings.Instance.RankingDrawing) {
 
-                RankingList.Add(new RankingResultViewModel(this, "描いてみた", "draw", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "描いてみた", "draw"));
             }
 
-            if(Settings.Instance.RankingOtherTotal) {
+            if (Settings.Instance.RankingOtherTotal) {
 
-                RankingList.Add(new RankingResultViewModel(this, "その他合算", "g_other", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "その他合算", "g_other"));
             }
 
-            if(Settings.Instance.RankingReinoAre) {
+            if (Settings.Instance.RankingReinoAre) {
 
-                RankingList.Add(new RankingResultViewModel(this, "例のアレ", "are", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "例のアレ", "are"));
             }
 
-            if(Settings.Instance.RankingDiary) {
+            if (Settings.Instance.RankingDiary) {
 
-                RankingList.Add(new RankingResultViewModel(this, "日記", "diary", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "日記", "diary"));
             }
 
-            if(Settings.Instance.RankingOther) {
+            if (Settings.Instance.RankingOther) {
 
-                RankingList.Add(new RankingResultViewModel(this, "その他", "other", RankingInstance));
+                RankingList.Add(new RankingEntryViewModel(this, "その他", "other"));
             }
 
             SelectedIndex = 0;
