@@ -1,16 +1,11 @@
-﻿using System;
+﻿using Codeplex.Data;
+using Livet;
+using SRNicoNico.Models.NicoNicoViewer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using SRNicoNico.ViewModels;
-using SRNicoNico.Models.NicoNicoViewer;
-using HtmlAgilityPack;
-using System.Web;
 using System.Text.RegularExpressions;
-using Codeplex.Data;
-using Livet;
+using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoNicoRepo : NotificationObject {

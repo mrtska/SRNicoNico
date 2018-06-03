@@ -19,8 +19,6 @@ namespace SRNicoNico.ViewModels {
 
         public NicoNicoNicoRepo Model { get; set; }
 
-
-
         #region Filter変更通知プロパティ
         private string _Filter;
 
@@ -31,7 +29,6 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _Filter = value;
                 Model.SetFilter(value);
-
                 //OnewayToSourceなのでRaisePropertyChangedは不要
             }
         }

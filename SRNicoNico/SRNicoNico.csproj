@@ -170,6 +170,8 @@
     <Compile Include="Models\NicoNicoWrapper\NicoScript\NicoScriptReverse.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoScript\NicoScriptReplace.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoScript\NicoScriptDefault.cs" />
+    <Compile Include="Models\NicoNicoWrapper\User\NicoNicoUserVideo.cs" />
+    <Compile Include="Models\NicoNicoWrapper\User\NicoNicoUserMylist.cs" />
     <Compile Include="ViewModels\Community\CommunityFollowViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityProfileViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityVideoViewModel.cs" />
@@ -723,7 +725,7 @@
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylistItem.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoNicoRepo.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoDmc.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoNicoUser.cs" />
+    <Compile Include="Models\NicoNicoWrapper\User\NicoNicoUser.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoStoryBoard.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoLiveNotify.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoWatchApi.cs" />
@@ -764,7 +766,6 @@
     <Compile Include="ViewModels\SignIn\SignInViewModel.cs" />
     <Compile Include="ViewModels\PageSpinnerViewModel.cs" />
     <Compile Include="ViewModels\TabItemViewModel.cs" />
-    <Compile Include="ViewModels\User\UserMylistEntryViewModel.cs" />
     <Compile Include="ViewModels\User\UserVideoViewModel.cs" />
     <Compile Include="ViewModels\User\UserMylistViewModel.cs" />
     <Compile Include="ViewModels\User\UserNicoRepoViewModel.cs" />

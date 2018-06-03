@@ -1,56 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-using SRNicoNico.Models.NicoNicoWrapper;
+﻿using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
     public class UserVideoViewModel : PageSpinnerViewModel {
 
-        #region UserVideoList変更通知プロパティ
-        private DispatcherCollection<NicoNicoSearchResultEntry> _UserVideoList = new DispatcherCollection<NicoNicoSearchResultEntry>(DispatcherHelper.UIDispatcher);
+        private UserViewModel Owner;
 
-        public DispatcherCollection<NicoNicoSearchResultEntry> UserVideoList {
-            get { return _UserVideoList; }
-            set {
-                if(_UserVideoList == value)
-                    return;
-                _UserVideoList = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region Closed変更通知プロパティ
-        private bool _Closed;
-
-        public bool Closed {
-            get { return _Closed; }
-            set {
-                if(_Closed == value)
-                    return;
-                _Closed = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        //OwnerViewModel
-        private UserViewModel User;
+        public NicoNicoUserVideo Model { get; set; }
 
         public UserVideoViewModel(UserViewModel vm) : base("投稿動画") {
 
-            User = vm;
+            Owner = vm;
+            Model = new NicoNicoUserVideo(vm.UserPageUrl);
+        }
+
+        public async void Initialize() {
+
+            MaxPages = await Model.GetUserVideoCountAsync() / 30 + 1;
+            CurrentPage = 1;
+            GetPage();
         }
 
         public override void SpinPage() {
@@ -61,37 +28,9 @@ namespace SRNicoNico.ViewModels {
         public async void GetPage() {
 
             IsActive = true;
-
-            UserVideoList.Clear();
-
-            var videos = await User.UserInstance.GetUserVideoAsync(CurrentPage);
-
-            if(videos == null) {
-
-                if(UserVideoList.Count == 0) {
-
-                    //非公開、又は表示期限切れ
-                    Closed = true;
-                }
-                IsActive = false;
-                return;
-            }
-
-
-            foreach(var video in videos) {
-
-                //UserVideoList.Add(new SearchResultEntryViewModel(video));
-            }
-
-
+            Owner.Status = "投稿動画を取得中";
+            Owner.Status = await Model.GetUserVideoAsync(CurrentPage);
             IsActive = false;
-        }
-
-        public async void Initialize() {
-
-            MaxPages = await User.UserInstance.GetUserVideoCountAsync() / 30 + 1;
-            CurrentPage = 1;
-            GetPage();
         }
     }
 }

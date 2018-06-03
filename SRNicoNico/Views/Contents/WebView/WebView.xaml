@@ -121,7 +121,7 @@
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type mui:ModernButton}">
-                        <Setter Property="Margin" Value="3,0" />
+                        <Setter Property="Margin" Value="5,0" />
                     </Style>
                 </StackPanel.Resources>
 
