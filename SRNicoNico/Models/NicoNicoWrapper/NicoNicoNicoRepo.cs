@@ -10,9 +10,10 @@ using HtmlAgilityPack;
 using System.Web;
 using System.Text.RegularExpressions;
 using Codeplex.Data;
+using Livet;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
-    public class NicoNicoNicoRepo {
+    public class NicoNicoNicoRepo : NotificationObject {
 
         private static readonly Dictionary<string, string> RankingSpan = new Dictionary<string, string>();
         private static readonly Dictionary<string, string> RankingType = new Dictionary<string, string>();
@@ -29,34 +30,107 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             RankingType["view"] = "再生";
             RankingType["res"] = "コメント";
             RankingType["mylist"] = "マイリスト";
-
         }
 
-        private TabItemViewModel Owner;
+        #region IsEmpty変更通知プロパティ
+        private bool _IsEmpty;
 
-        public NicoNicoNicoRepo(TabItemViewModel owner) {
+        public bool IsEmpty {
+            get { return _IsEmpty; }
+            set {
+                if (_IsEmpty == value)
+                    return;
+                _IsEmpty = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
-            Owner = owner;
+
+        #region IsEnd変更通知プロパティ
+        private bool _IsEnd;
+
+        public bool IsEnd {
+            get { return _IsEnd; }
+            set { 
+                if (_IsEnd == value)
+                    return;
+                _IsEnd = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        private readonly List<NicoNicoNicoRepoResultEntry> UnFilteredNicoRepoList = new List<NicoNicoNicoRepoResultEntry>();
+
+        #region NicoRepoList変更通知プロパティ
+        private ObservableSynchronizedCollection<INicoRepo> _NicoRepoList;
+
+        public ObservableSynchronizedCollection<INicoRepo> NicoRepoList {
+            get { return _NicoRepoList; }
+            set { 
+                if (_NicoRepoList == value)
+                    return;
+                _NicoRepoList = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        private readonly string Type;
+
+        private string Filter = "すべて";
+
+        private string Next = "";
+
+        public NicoNicoNicoRepo(string type) {
+
+            Type = type;
+            NicoRepoList = new ObservableSynchronizedCollection<INicoRepo>();
         }
 
-        public async Task<Tuple<List<NicoNicoNicoRepoResultEntry>, bool>> GetNicoRepoAsync(string type, string nextPage) {
+        public void SetFilter(string filter) {
 
+            Filter = filter;
+            Filtering();
+        }
+
+        public void Reset() {
+
+            Next = "";
+            UnFilteredNicoRepoList.Clear();
+            NicoRepoList.Clear();
+            IsEnd = false;
+            IsEmpty = false;
+        }
+
+        public async Task<string> GetNicoRepoAsync() {
+
+            if (IsEnd) {
+
+                return "";
+            }
             try {
 
-                GetRequestQuery query;
-                if (Regex.IsMatch(type, @"\d+")) {
+                if(NicoRepoList.LastOrDefault() is NicoNicoNextButtonEntry button) {
 
-                    query = new GetRequestQuery("http://www.nicovideo.jp/api/nicorepo/timeline/user/" + type);
+                    NicoRepoList.Remove(button);
+                }
+
+                GetRequestQuery query;
+                if (Regex.IsMatch(Type, @"\d+")) {
+
+                    query = new GetRequestQuery("http://www.nicovideo.jp/api/nicorepo/timeline/user/" + Type);
                     query.AddQuery("client_app", "pc_profilerepo");
                 } else {
 
-                    query = new GetRequestQuery("http://www.nicovideo.jp/api/nicorepo/timeline/my/" + type);
+                    query = new GetRequestQuery("http://www.nicovideo.jp/api/nicorepo/timeline/my/" + Type);
                     query.AddQuery("client_app", "pc_myrepo");
                 }
+                
+                if (!string.IsNullOrEmpty(Next)) {
 
-                if (nextPage != null) {
-
-                    query.AddQuery("cursor", nextPage);
+                    query.AddQuery("cursor", Next);
                 }
                 query.AddQuery("_", UnixTime.ToUnixTime(DateTime.Now) + "000");
 
@@ -64,9 +138,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(query.TargetUrl);
 
                 dynamic json = DynamicJson.Parse(a);
-
-                var ret = new List<NicoNicoNicoRepoResultEntry>();
-
 
                 void storeSenderUser(NicoNicoNicoRepoResultEntry item, dynamic sender) {
 
@@ -119,7 +190,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     item.ProgramThumbnail = program.thumbnailUrl;
                     item.ProgramTitle = program.title;
                     item.ContentUrl = "http://live.nicovideo.jp/watch/" + item.ProgramId;
+                }
 
+                if(!json.data()) {
+
+                    return "ニコニコ側でエラーが発生しました";
                 }
 
                 //ニコレポタイムラインを走査
@@ -148,6 +223,19 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                                     item.ComputedTitle = string.Format("チャンネル <a href=\"" + item.SenderUrl + "\">{0}</a> で {1:yy年M月d日 h時 m分} に生放送が予約されました。", item.SenderName, DateTime.Parse(program.beginAt));
                                 }
+                                break;
+                            }
+                        case "live.user.program.cas.onairs": {
+
+                                var sender = entry.senderNiconicoUser;
+                                var program = entry.program;
+
+                                item = new NicoNicoNicoRepoLiveEntry();
+
+                                storeSenderUser(item, sender);
+                                storeLive(item as NicoNicoNicoRepoLiveEntry, program);
+
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが生放送が開始しました。", item.SenderName);
                                 break;
                             }
                         case "live.user.program.onairs":
@@ -194,6 +282,54 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 storeVideo(item as NicoNicoNicoRepoVideoEntry, video);
 
                                 item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんの動画が {1} さんにニコニ広告されました。", item.SenderName, entry.nicoad.advertiserName);
+
+                                break;
+                            }
+                        case "nicoad.user.advertise.program": {
+
+                                var sender = entry.senderNiconicoUser;
+
+                                item = new NicoNicoNicoRepoNoContentEntry();
+                                storeSenderUser(item, sender);
+
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんがニコニ広告しました。", item.SenderName);
+                                break;
+                            }
+                        case "nicoad.user.advertised.program.announce": {
+
+                                var sender = entry.senderNiconicoUser;
+                                var program = entry.program;
+
+                                item = new NicoNicoNicoRepoLiveEntry();
+                                storeSenderUser(item, sender);
+                                storeLive(item as NicoNicoNicoRepoLiveEntry, program);
+
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんの生放送が {1} さんにニコニ広告されました。", item.SenderName, entry.nicoad.advertiserName);
+
+                                break;
+                            }
+                        case "nicoad.user.advertise.program.cas": {
+
+                                var sender = entry.senderNiconicoUser;
+                                var program = entry.program;
+
+                                item = new NicoNicoNicoRepoLiveEntry();
+                                storeSenderUser(item, sender);
+                                storeLive(item as NicoNicoNicoRepoLiveEntry, program);
+
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんがニコニ広告しました。", item.SenderName);
+                                break;
+                            }
+                        case "nicoad.user.advertised.program.cas.announce": {
+
+                                var sender = entry.senderNiconicoUser;
+                                var program = entry.program;
+
+                                item = new NicoNicoNicoRepoLiveEntry();
+                                storeSenderUser(item, sender);
+                                storeLive(item as NicoNicoNicoRepoLiveEntry, program);
+
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんのnicocas番組が {1} さんにニコニ広告されました。", item.SenderName, entry.nicoad.advertiserName);
 
                                 break;
                             }
@@ -276,7 +412,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 var content = entry.channelNotice;
 
                                 item = new NicoNicoNicoRepoGenericEntry() {
-                                    ContentId = content.id.ToString(),
+                                    ContentId = sender.id.ToString(),
                                     ContentTitle = content.title,
                                     ContentThumbnail = sender.thumbnailUrl,
                                     ContentUrl = sender.url
@@ -648,7 +784,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                                 break;
                             }
-                        case "nicovideo.channel.video.kiriban.play":
                         case "nicovideo.user.video.kiriban.play": {
 
                                 var video = entry.video;
@@ -656,17 +791,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 item = new NicoNicoNicoRepoVideoEntry();
                                 storeVideo(item as NicoNicoNicoRepoVideoEntry, video);
 
-                                if (((string)entry.topic).Contains("channel")) {
-
-                                    var sender = entry.senderChannel;
-                                    storeSenderChannel(item, sender);
-                                    item.ComputedTitle = string.Format("チャンネル <a href=\"" + item.SenderUrl + "\">{0}</a> の動画が {1} 再生を達成しました。", item.SenderName, string.Format("{0:N0}", entry.actionLog.kiriban));
-                                } else {
-
-                                    var sender = entry.senderNiconicoUser;
-                                    storeSenderUser(item, sender);
-                                    item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんの動画が {1} 再生を達成しました。", item.SenderName, string.Format("{0:N0}", entry.actionLog.kiriban));
-                                }
+                                var sender = entry.senderNiconicoUser;
+                                storeSenderUser(item, sender);
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんの動画が {1} 再生を達成しました。", item.SenderName, string.Format("{0:N0}", entry.actionLog.kiriban));
                                 break;
                             }
                         case "nicovideo.user.video.live.introduce": {
@@ -719,12 +846,30 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     item.Visible = entry.isVisible;
                     item.Muted = entry.isMuted;
 
-                    if(item is NicoNicoNicoRepoVideoEntry) {
+                    if(item is NicoNicoNicoRepoVideoEntry ve) {
 
-                        NicoNicoUtil.ApplyLocalHistory(item);
+                        NicoNicoUtil.ApplyLocalHistory(ve);
                     }
 
-                    ret.Add(item);
+                    UnFilteredNicoRepoList.Add(item);
+                    if (FilterEntry(item)) {
+
+                        NicoRepoList.Add(item);
+                    }
+                }
+
+                if(UnFilteredNicoRepoList.Count == 0) {
+
+                    IsEmpty = true;
+                    return "";
+                }
+
+                Next = UnFilteredNicoRepoList.Last().Id;
+
+                var datac = 0;
+                foreach(var data in json.data) {
+
+                    datac++;
                 }
 
                 var errorc = 0;
@@ -733,24 +878,89 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     errorc++;
                 }
 
+                if((datac + errorc) == 25) {
 
-                return Tuple.Create(ret, (ret.Count + errorc) == 25);
+                    NicoRepoList.Add(new NicoNicoNextButtonEntry());
+                } else {
+
+                    IsEnd = true;
+                }
+
+                return "";
             } catch(RequestFailed e) {
 
                 if(e.FailedType == FailedType.Failed) {
 
-                    Owner.Status = "ニコレポの取得に失敗しました";
+                    return "ニコレポの取得に失敗しました";
                 } else {
 
-                    Owner.Status = "ニコレポの取得がタイムアウトになりました";
+                    return "ニコレポの取得がタイムアウトになりました";
                 }
-                return null;
+            }
+        }
+
+        private void Filtering() {
+
+            bool hasButton = false;
+            if (NicoRepoList.LastOrDefault() is NicoNicoNextButtonEntry button) {
+
+                hasButton = true;
+            }
+            NicoRepoList.Clear();
+            foreach (var entry in UnFilteredNicoRepoList) {
+
+                if (FilterEntry(entry)) {
+
+                    NicoRepoList.Add(entry);
+                }
+            }
+            if(hasButton) {
+
+                NicoRepoList.Add(new NicoNicoNextButtonEntry());
+            }
+        }
+
+        private bool FilterEntry(NicoNicoNicoRepoResultEntry item) {
+
+            if (item.Muted) {
+
+                return false;
+            }
+
+            switch (Filter) {
+                case "すべて":
+                    return true;
+                case "動画投稿のみ":
+                    if (item.Topic.EndsWith("video.upload")) {
+
+                        return true;
+                    }
+                    return false;
+                case "生放送開始のみ":
+                    if (item.Topic.EndsWith("program.onairs")) {
+
+                        return true;
+                    }
+                    return false;
+                case "マイリスト登録のみ":
+                    if (item.Topic.Contains("mylist.add")) {
+
+                        return true;
+                    }
+                    return false;
+                default:
+                    return true;
             }
         }
     }
-    public class NicoNicoNicoRepoResultEntry : IWatchable {
 
-        //ニコレポの固有ID なんでこんなもん振ったんだろうね
+    public interface INicoRepo { }
+
+    public class NicoNicoNextButtonEntry : INicoRepo { }
+
+    public class NicoNicoNicoRepoResultEntry : INicoRepo {
+
+        //ニコレポの固有ID
         public string Id { get; set; }
 
         //トピック そのニコレポがどんな内容か
@@ -795,9 +1005,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
 
+        public void Open() {
+
+            NicoNicoOpener.Open(ContentUrl);
+        }
+
     }
 
-    public class NicoNicoNicoRepoVideoEntry : NicoNicoNicoRepoResultEntry {
+    public class NicoNicoNicoRepoVideoEntry : NicoNicoNicoRepoResultEntry, IWatchable {
 
         public string VideoId { get; set; }
 

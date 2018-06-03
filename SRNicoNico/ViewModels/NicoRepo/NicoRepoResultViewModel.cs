@@ -17,39 +17,9 @@ using System.Windows.Input;
 namespace SRNicoNico.ViewModels {
     public class NicoRepoResultViewModel : TabItemViewModel {
 
-        private readonly NicoNicoNicoRepo NicoRepoInstance;
+        public NicoNicoNicoRepo Model { get; set; }
 
-        private readonly string Api;
 
-        #region IsEmpty変更通知プロパティ
-        private bool _IsEmpty;
-
-        public bool IsEmpty {
-            get { return _IsEmpty; }
-            set { 
-                if(_IsEmpty == value)
-                    return;
-                _IsEmpty = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        private List<ViewModel> UnFilteredNicoRepoList = new List<ViewModel>();
-
-        #region NicoRepoList変更通知プロパティ
-        private DispatcherCollection<ViewModel> _NicoRepoList = new DispatcherCollection<ViewModel>(DispatcherHelper.UIDispatcher);
-
-        public DispatcherCollection<ViewModel> NicoRepoList {
-            get { return _NicoRepoList; }
-            set { 
-                if(_NicoRepoList == value)
-                    return;
-                _NicoRepoList = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
 
         #region Filter変更通知プロパティ
         private string _Filter;
@@ -60,135 +30,44 @@ namespace SRNicoNico.ViewModels {
                 if(_Filter == value)
                     return;
                 _Filter = value;
-                
-                FilterNicoRepo();
+                Model.SetFilter(value);
+
+                //OnewayToSourceなのでRaisePropertyChangedは不要
             }
         }
         #endregion
 
-        public NicoRepoResultViewModel(string title, string api, NicoNicoNicoRepo nicorepo) : base(title) {
+        private readonly NicoRepoViewModel Owner;
 
-            NicoRepoInstance = nicorepo;
-            Api = api;
+        public NicoRepoResultViewModel(NicoRepoViewModel owner, string title, string api) : base(title) {
+
+            Owner = owner;
+            Model = new NicoNicoNicoRepo(api);
         }
 
 
         public void Initialize() {
 
-            IsActive = true;
-            IsEmpty = false;
-            UnFilteredNicoRepoList.Clear();
-            NicoRepoList.Clear();
             GetMore();
         }
 
         public async void GetMore() {
 
-            if(IsEmpty || (NicoRepoList.Count != 0 && !(NicoRepoList.LastOrDefault() is NicoRepoNextButtonEntryViewModel))) {
+            if(IsActive) {
 
                 return;
             }
 
             IsActive = true;
-            
-            //一番最後にあるボタンを消す
-            if(NicoRepoList.Count > 0) {
 
-                NicoRepoList.RemoveAt(NicoRepoList.Count - 1);
-            }
-
-            var ret = await NicoRepoInstance.GetNicoRepoAsync(Api, UnFilteredNicoRepoList.Count != 0 ? ((NicoRepoResultEntryViewModel) UnFilteredNicoRepoList.Last()).Item.Id : null);
-            
-            if(ret != null) {
-
-                foreach(var entry in ret.Item1) {
-
-                    var vm = new NicoRepoResultEntryViewModel(entry);
-                    UnFilteredNicoRepoList.Add(vm);
-
-                    if (FilterEntry(vm)) {
-
-                        NicoRepoList.Add(vm);
-                    }
-                }
-
-                if(ret.Item2) {
-
-                    NicoRepoList.Add(new NicoRepoNextButtonEntryViewModel(this));
-                }
-            }
-
-            if(UnFilteredNicoRepoList.Count == 0) {
-
-                IsEmpty = true;
-            }
-
+            Owner.Status = "ニコレポ取得中：" + Name;
+            Owner.Status = await Model.GetNicoRepoAsync();
             IsActive = false;
-        }
-
-        public void FilterNicoRepo() {
-
-            if(IsEmpty || UnFilteredNicoRepoList.Count == 0) {
-
-                return;
-            }
-
-            bool isnotEnd = NicoRepoList.Count != 0 && NicoRepoList.Last() is NicoRepoNextButtonEntryViewModel;
-            NicoRepoList?.Clear();
-
-            foreach (var raw in UnFilteredNicoRepoList) {
-
-                if(raw is NicoRepoResultEntryViewModel item) {
-
-                    if (FilterEntry(item)) {
-
-                        NicoRepoList.Add(raw);
-                    }
-                }
-            }
-            if(isnotEnd) {
-
-                NicoRepoList.Add(new NicoRepoNextButtonEntryViewModel(this));
-            }
-        }
-
-        private bool FilterEntry(NicoRepoResultEntryViewModel item) {
-
-            if (item.Item.Muted) {
-
-                return false;
-            }
-
-            switch (Filter) {
-                case "すべて":
-                    return true;
-                case "動画投稿のみ":
-                    if(item.Item.Topic.EndsWith("video.upload")) {
-
-                        return true;
-                    }
-                    return false;
-                case "生放送開始のみ":
-                    if (item.Item.Topic.EndsWith("program.onairs")) {
-
-                        return true;
-                    }
-                    return false;
-                case "マイリスト登録のみ":
-                    if (item.Item.Topic.Contains("mylist.add")) {
-
-                        return true;
-                    }
-                    return false;
-                default:
-                    return true;
-
-
-            }
         }
 
         public void Refresh() {
 
+            Model.Reset();
             Initialize();
         }
 

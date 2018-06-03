@@ -752,8 +752,6 @@
     <Compile Include="ViewModels\Mylist\MylistViewModel.cs" />
     <Compile Include="ViewModels\Mylist\MylistResultViewModel.cs" />
     <Compile Include="ViewModels\Mylist\MylistResultEntryViewModel.cs" />
-    <Compile Include="ViewModels\NicoRepo\NicoRepoNextButtonEntryViewModel.cs" />
-    <Compile Include="ViewModels\NicoRepo\NicoRepoResultEntryViewModel.cs" />
     <Compile Include="ViewModels\NicoRepo\NicoRepoResultViewModel.cs" />
     <Compile Include="ViewModels\NicoRepo\NicoRepoViewModel.cs" />
     <Compile Include="ViewModels\Other\OSSViewModel.cs" />

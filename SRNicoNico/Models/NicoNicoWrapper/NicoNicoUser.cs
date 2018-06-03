@@ -32,7 +32,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public NicoNicoUser(UserViewModel vm) {
 
-            NicoRepoInstance = new NicoNicoNicoRepo(vm);
+            //NicoRepoInstance = new NicoNicoNicoRepo();
             Owner = vm;
         }
 
@@ -166,7 +166,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             var ret = new List<NicoNicoNicoRepoResultEntry>();
 
-            return await NicoRepoInstance.GetNicoRepoAsync(userId, nextPage);
+            return null;//await NicoRepoInstance.GetNicoRepoAsync();
         }
         public async Task<List<NicoNicoUserMylistEntry>> GetUserMylistAsync() {
 

@@ -1,27 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
+﻿using Livet;
 using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-using SRNicoNico.Models.NicoNicoWrapper;
 using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class NicoRepoViewModel : TabItemViewModel {
 
-
         #region NicoRepoList変更通知プロパティ
-        private DispatcherCollection<TabItemViewModel> _NicoRepoList = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
+        private ObservableSynchronizedCollection<TabItemViewModel> _NicoRepoList;
 
-        public DispatcherCollection<TabItemViewModel> NicoRepoList {
+        public ObservableSynchronizedCollection<TabItemViewModel> NicoRepoList {
             get { return _NicoRepoList; }
             set {
                 if(_NicoRepoList == value)
@@ -46,26 +33,23 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        private NicoNicoNicoRepo NicoRepoInstance;
 
         public NicoRepoViewModel() : base("ニコレポ") {
 
-            NicoRepoInstance = new NicoNicoNicoRepo(this);
+            NicoRepoList = new ObservableSynchronizedCollection<TabItemViewModel>();
         }
 
         public void Initialize() {
 
             IsActive = true;
-            Status = "ニコレポリストを取得中";
             NicoRepoList.Clear();
-            NicoRepoList.Add(new NicoRepoResultViewModel("すべて", "all", NicoRepoInstance));
-            NicoRepoList.Add(new NicoRepoResultViewModel("自分", "self", NicoRepoInstance));
-            NicoRepoList.Add(new NicoRepoResultViewModel("ユーザー", "followingUser", NicoRepoInstance));
-            NicoRepoList.Add(new NicoRepoResultViewModel("チャンネル", "followingChannel", NicoRepoInstance));
-            NicoRepoList.Add(new NicoRepoResultViewModel("コミュニティ", "followingCommunity", NicoRepoInstance));
-            NicoRepoList.Add(new NicoRepoResultViewModel("マイリスト", "followingMylist", NicoRepoInstance));
+            NicoRepoList.Add(new NicoRepoResultViewModel(this, "すべて", "all"));
+            NicoRepoList.Add(new NicoRepoResultViewModel(this, "自分", "self"));
+            NicoRepoList.Add(new NicoRepoResultViewModel(this, "ユーザー", "followingUser"));
+            NicoRepoList.Add(new NicoRepoResultViewModel(this, "チャンネル", "followingChannel"));
+            NicoRepoList.Add(new NicoRepoResultViewModel(this, "コミュニティ", "followingCommunity"));
+            NicoRepoList.Add(new NicoRepoResultViewModel(this, "マイリスト", "followingMylist"));
 
-            Status = "";
             IsActive = false;
         }
 
@@ -85,7 +69,6 @@ namespace SRNicoNico.ViewModels {
                 }
             }
             SelectedList?.KeyDown(e);
-
         }
 
         public override bool CanShowHelp() {

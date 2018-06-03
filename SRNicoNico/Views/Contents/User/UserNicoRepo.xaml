@@ -70,10 +70,10 @@
 
                 <ListBox Grid.Row="1" AlternationCount="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding UserNicoRepoList}" ItemContainerStyle="{StaticResource FlatListBoxItem}">
                     <ListBox.Resources>
-                        <DataTemplate DataType="{x:Type vm:NicoRepoResultEntryViewModel}">
+                        <DataTemplate DataType="{x:Type vm:FollowViewModel}">
                             <v:NicoRepoResultEntry />
                         </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:NicoRepoNextButtonEntryViewModel}">
+                        <DataTemplate DataType="{x:Type vm:FollowViewModel}">
                             <Button Content="さらに読み込む" Padding="0" Margin="-5,-2">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">

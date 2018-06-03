@@ -78,10 +78,6 @@ namespace SRNicoNico.ViewModels {
 
         public async void GetMore() {
 
-            if ((UserNicoRepoList.Count != 0 && !(UserNicoRepoList.LastOrDefault() is NicoRepoNextButtonEntryViewModel))) {
-
-                return;
-            }
 
             IsActive = true;
 
@@ -90,14 +86,14 @@ namespace SRNicoNico.ViewModels {
 
                 UserNicoRepoList.RemoveAt(UserNicoRepoList.Count - 1);
             }
-            
-            var ret = await User.UserInstance.GetUserNicoRepoAsync(User.UserInfo.UserId, UnFilteredNicoRepoList.Count != 0 ? ((NicoRepoResultEntryViewModel) UnFilteredNicoRepoList.Last()).Item.Id : null);
+            /*
+            var ret = await User.UserInstance.GetUserNicoRepoAsync(User.UserInfo.UserId, UnFilteredNicoRepoList.Count != 0 ? ((NicoNicoNicoRepoResultEntry) UnFilteredNicoRepoList.Last()).Item.Id : null);
 
             if (ret != null) {
 
                 foreach (var entry in ret.Item1) {
 
-                    var vm = new NicoRepoResultEntryViewModel(entry);
+                    var vm = new NicoNicoNicoRepoResultEntry(entry);
                     UnFilteredNicoRepoList.Add(vm);
 
                     if (FilterEntry(vm)) {
@@ -117,7 +113,7 @@ namespace SRNicoNico.ViewModels {
                 }
 
                 IsActive = false;
-            }
+            }*/
         }
 
         public void FilterNicoRepo() {
@@ -127,12 +123,12 @@ namespace SRNicoNico.ViewModels {
                 return;
             }
 
-            bool isnotEnd = UserNicoRepoList.Count != 0 && UserNicoRepoList.Last() is NicoRepoNextButtonEntryViewModel;
+            /*bool isnotEnd = UserNicoRepoList.Count != 0 && UserNicoRepoList.Last() is NicoRepoNextButtonEntryViewModel;
             UserNicoRepoList?.Clear();
 
             foreach (var raw in UnFilteredNicoRepoList) {
-
-                if (raw is NicoRepoResultEntryViewModel item) {
+                /*
+                if (raw is NicoNicoNicoRepoResultEntry item) {
 
                     if (FilterEntry(item)) {
 
@@ -142,12 +138,12 @@ namespace SRNicoNico.ViewModels {
             }
             if (isnotEnd) {
 
-                UserNicoRepoList.Add(new NicoRepoNextButtonEntryViewModel(this));
-            }
+                //UserNicoRepoList.Add(new NicoRepoNextButtonEntryViewModel(this));*/
         }
-        private bool FilterEntry(NicoRepoResultEntryViewModel item) {
 
-            if(item.Item.Muted) {
+        private bool FilterEntry(NicoNicoNicoRepoResultEntry item) {
+
+            if(item.Muted) {
 
                 return false;
             }
@@ -156,17 +152,17 @@ namespace SRNicoNico.ViewModels {
                 case "すべて":
                     return true;
                 case "動画投稿のみ":
-                    if (item.Item.Topic.EndsWith("video.upload")) {
+                    if (item.Topic.EndsWith("video.upload")) {
                         return true;
                     }
                     return false;
                 case "生放送開始のみ":
-                    if (item.Item.Topic.EndsWith("program.onairs")) {
+                    if (item.Topic.EndsWith("program.onairs")) {
                         return true;
                     }
                     return false;
                 case "マイリスト登録のみ":
-                    if (item.Item.Topic.Contains("mylist.add")) {
+                    if (item.Topic.Contains("mylist.add")) {
                         return true;
                     }
                     return false;
