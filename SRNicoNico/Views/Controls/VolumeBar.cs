@@ -1,27 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SRNicoNico.Views.Controls {
- 
+
     public class VolumeBar : Control {
         static VolumeBar() {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(VolumeBar), new FrameworkPropertyMetadata(typeof(VolumeBar)));
         }
-
-
 
         public double ThumbPos {
             get { return (double)GetValue(ThumbPosProperty); }
@@ -31,8 +18,6 @@ namespace SRNicoNico.Views.Controls {
         // Using a DependencyProperty as the backing store for ThumbPos.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ThumbPosProperty =
             DependencyProperty.Register("ThumbPos", typeof(double), typeof(VolumeBar), new PropertyMetadata(0.0D));
-
-
 
         public double Volume {
             get { return (double)GetValue(VolumeProperty); }
@@ -49,14 +34,10 @@ namespace SRNicoNico.Views.Controls {
 
             }));
 
-
-
         public bool IsMute {
             get { return (bool)GetValue(IsMuteProperty); }
             set { SetValue(IsMuteProperty, value); }
         }
-
-
 
         public bool IsPopupOpen {
             get { return (bool)GetValue(IsPopupOpenProperty); }
@@ -67,14 +48,9 @@ namespace SRNicoNico.Views.Controls {
         public static readonly DependencyProperty IsPopupOpenProperty =
             DependencyProperty.Register("IsPopupOpen", typeof(bool), typeof(VolumeBar), new PropertyMetadata(false));
 
-
-
-
         // Using a DependencyProperty as the backing store for IsMute.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsMuteProperty =
             DependencyProperty.Register("IsMute", typeof(bool), typeof(VolumeBar), new PropertyMetadata(false));
-
-
 
         public VolumeBar() {
 
@@ -84,7 +60,6 @@ namespace SRNicoNico.Views.Controls {
 
             MouseEnter += VolumeBar_MouseEnter;
             MouseLeave += VolumeBar_MouseLeave;
-            
         }
 
         private void VolumeBar_MouseEnter(object sender, MouseEventArgs e) {

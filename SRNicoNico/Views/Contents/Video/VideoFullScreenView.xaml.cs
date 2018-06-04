@@ -1,27 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.ViewModels;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MetroRadiance.UI.Controls;
-using SRNicoNico.ViewModels;
-using System.Windows.Controls.Primitives;
-using SRNicoNico.Models.NicoNicoViewer;
-using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.Views {
-    /// <summary>
-    /// VideoFullScreenView.xaml の相互作用ロジック
-    /// </summary>
     public partial class VideoFullScreenView : Window {
         public VideoFullScreenView() {
             InitializeComponent();
@@ -54,8 +41,7 @@ namespace SRNicoNico.Views {
 
         private void Window_Closed(object sender, EventArgs e) {
 
-            if(DataContext is VideoViewModel) {
-                var vm = (VideoViewModel)DataContext;
+            if (DataContext is VideoViewModel vm) {
                 var temp = vm.FullScreenWebBrowser;
                 vm.FullScreenWebBrowser = null;
                 vm.WebBrowser = temp;
@@ -82,15 +68,13 @@ namespace SRNicoNico.Views {
 
             var url = e.Uri.OriginalString;
 
-            if (DataContext is VideoViewModel) {
-                var vm = (VideoViewModel)DataContext;
+            if (DataContext is VideoViewModel vm) {
                 if (url.StartsWith("#")) {
 
                     var time = url.Substring(1);
 
                     vm.Handler.Seek(NicoNicoUtil.ConvertTime((time)));
                 } else {
-
 
                     if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftShift) || NicoNicoOpener.GetType(e.Uri.OriginalString) != NicoNicoUrlType.Video) {
 
@@ -103,9 +87,6 @@ namespace SRNicoNico.Views {
                     }
                 }
             }
-
-
-
         }
 
         public void InitializeToolTip(object sender, RoutedEventArgs e) {
@@ -118,16 +99,15 @@ namespace SRNicoNico.Views {
                 return;
             }
 
-            var inline = link.Inlines.First() as Run;
-            if(inline != null) {
+            if (link.Inlines.First() is Run inline) {
 
                 var uri = link.NavigateUri;
                 //#○○:×× リンクだとnullになるので
-                if(uri == null) {
+                if (uri == null) {
 
                     var time = inline.Text;
 
-                    if(time.StartsWith("#")) {
+                    if (time.StartsWith("#")) {
 
                         link.NavigateUri = new Uri(time, UriKind.Relative);
                     }
@@ -137,7 +117,7 @@ namespace SRNicoNico.Views {
                 var text = uri.OriginalString;
                 var type = NicoNicoOpener.GetType(text);
 
-                if(type == NicoNicoUrlType.Video) {
+                if (type == NicoNicoUrlType.Video) {
 
 
                     link.ToolTip = text;

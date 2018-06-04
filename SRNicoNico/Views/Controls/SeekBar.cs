@@ -1,35 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Livet;
+using SRNicoNico.Models.NicoNicoWrapper;
+using System;
+using System.Collections.Specialized;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Drawing;
-
-using Livet;
-using System.Collections.Specialized;
-using SRNicoNico.Models.NicoNicoWrapper;
 using System.Windows.Interop;
-using System.Runtime.InteropServices;
+using System.Windows.Media.Imaging;
 
 namespace SRNicoNico.Views.Controls {
- 
+
     public class SeekBar : Control {
 
         static SeekBar() {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SeekBar), new FrameworkPropertyMetadata(typeof(SeekBar)));
         }
-
-
 
         public bool IsPopupOpen {
             get { return (bool)GetValue(IsPopupOpenProperty); }
@@ -40,9 +27,6 @@ namespace SRNicoNico.Views.Controls {
         public static readonly DependencyProperty IsPopupOpenProperty =
             DependencyProperty.Register(nameof(IsPopupOpen), typeof(bool), typeof(SeekBar), new FrameworkPropertyMetadata(false));
 
-
-
-
         public int PopupTime {
             get { return (int)GetValue(PopupTimeProperty); }
             set { SetValue(PopupTimeProperty, value); }
@@ -51,10 +35,6 @@ namespace SRNicoNico.Views.Controls {
         // Using a DependencyProperty as the backing store for PopupTime.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PopupTimeProperty =
             DependencyProperty.Register("PopupTime", typeof(int), typeof(SeekBar), new PropertyMetadata(0));
-
-
-
-
 
         public double CurrentTime {
             get { return (double)GetValue(CurrentTimeProperty); }
@@ -65,7 +45,6 @@ namespace SRNicoNico.Views.Controls {
         public static readonly DependencyProperty CurrentTimeProperty =
             DependencyProperty.Register("CurrentTime", typeof(double), typeof(SeekBar), new PropertyMetadata(0.0D, (obj, e) => {
 
-
                 var bar = obj as SeekBar;
 
                 if(bar.Thumb == null) {
@@ -75,17 +54,12 @@ namespace SRNicoNico.Views.Controls {
 
                 if(bar.IsDragging) {
 
-
                     Canvas.SetLeft(bar.Thumb, bar.ActualWidth / (bar.VideoTime / bar.RequestSeekPos) - (10 * (bar.RequestSeekPos / bar.VideoTime)));
                 } else {
 
-
                     Canvas.SetLeft(bar.Thumb, bar.ActualWidth / (bar.VideoTime / bar.CurrentTime) - (10 * (bar.CurrentTime / bar.VideoTime)));
                 }
-                
             }));
-
-
 
         public double VideoTime {
             get { return (double)GetValue(VideoTimeProperty); }
@@ -96,9 +70,6 @@ namespace SRNicoNico.Views.Controls {
         public static readonly DependencyProperty VideoTimeProperty =
             DependencyProperty.Register("VideoTime", typeof(double), typeof(SeekBar), new PropertyMetadata(0.0D));
 
-
-
-
         public Rect PopupTextRect {
             get { return (Rect)GetValue(PopupTextRectProperty); }
             set { SetValue(PopupTextRectProperty, value); }
@@ -107,9 +78,6 @@ namespace SRNicoNico.Views.Controls {
         // Using a DependencyProperty as the backing store for PopupTextRect.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PopupTextRectProperty =
             DependencyProperty.Register("PopupTextRect", typeof(Rect), typeof(SeekBar), new FrameworkPropertyMetadata(Rect.Empty, FrameworkPropertyMetadataOptions.NotDataBindable));
-
-
-
 
         public DispatcherCollection<TimeRange> PlayedRange {
             get { return (DispatcherCollection<TimeRange>)GetValue(PlayedRangeProperty); }
@@ -127,10 +95,7 @@ namespace SRNicoNico.Views.Controls {
 
                     bar.AdjustTimeRange(ev);
                 };
-
             }));
-
-
 
         public DispatcherCollection<TimeRange> BufferedRange {
             get { return (DispatcherCollection<TimeRange>)GetValue(BufferedRangeProperty); }
@@ -150,31 +115,22 @@ namespace SRNicoNico.Views.Controls {
                 };
             }));
 
-
         private void AdjustTimeRange(NotifyCollectionChangedEventArgs e) {
 
             if(e.Action == NotifyCollectionChangedAction.Add) {
 
                 foreach(var item in e.NewItems) {
 
-                    if(item is TimeRange) {
-
-                        var time = (TimeRange)item;
-
+                    if (item is TimeRange time) {
                         var temp = VideoTime / (time.EndTime - time.StartTime);
 
                         time.Start = ActualWidth / (VideoTime / time.StartTime);
                         time.Width = ActualWidth / temp;
                     }
                 }
-
                 Canvas.SetLeft(Thumb, ActualWidth / (VideoTime / CurrentTime) - (10 * (CurrentTime / VideoTime)));
             }
         }
-
-
-
-
 
         public bool IsStoryBoardOpen {
             get { return (bool)GetValue(IsStoryBoardOpenProperty); }
@@ -205,9 +161,6 @@ namespace SRNicoNico.Views.Controls {
         public static readonly DependencyProperty StoryBoardDataProperty =
             DependencyProperty.Register("StoryBoardData", typeof(NicoNicoStoryBoardData), typeof(SeekBar), new PropertyMetadata(null));
 
-
-
-
         public BitmapSource StoryBoardImage {
             get { return (BitmapSource)GetValue(StoryBoardImageProperty); }
             set { SetValue(StoryBoardImageProperty, value); }
@@ -216,10 +169,6 @@ namespace SRNicoNico.Views.Controls {
         // Using a DependencyProperty as the backing store for StoryBoardImage.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty StoryBoardImageProperty =
             DependencyProperty.Register("StoryBoardImage", typeof(BitmapSource), typeof(SeekBar), new PropertyMetadata(null));
-
-
-
-
 
         public event SeekRequestedHandler SeekRequested;
 
@@ -231,7 +180,6 @@ namespace SRNicoNico.Views.Controls {
 
             MouseEnter += SeekBar_MouseEnter;
             MouseLeave += SeekBar_MouseLeave;
-            
         }
 
         private void SeekBar_MouseEnter(object sender, MouseEventArgs e) {
@@ -300,9 +248,6 @@ namespace SRNicoNico.Views.Controls {
                 }
 
             } else {
-
-                
-
 
             }
         }

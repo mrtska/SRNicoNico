@@ -1,20 +1,14 @@
 ﻿<metro:MetroWindow x:Class="SRNicoNico.Views.PaidVideoView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                   xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
                    xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-                   xmlns:v="clr-namespace:SRNicoNico.Views"
+                   xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
                    xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
                    xmlns:a="clr-namespace:SRNicoNico.Views.Action"
-                   xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
-                   xmlns:mm="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
-                   xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-                   xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
-                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-                   xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
                    mc:Ignorable="d" 
                    WindowStartupLocation="CenterOwner"
 		           Background="{DynamicResource ThemeBrushKey}"
@@ -23,8 +17,7 @@
                    ResizeMode="NoResize"
                    WindowStyle="None"
                    Width="400"
-                   d:DataContext="{d:DesignInstance {x:Type vm:VideoMylistViewModel}}"
-                   >
+                   d:DataContext="{d:DesignInstance {x:Type vm:VideoMylistViewModel}}">
     <i:Interaction.Triggers>
         <l:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}">
             <l:WindowInteractionMessageAction />
@@ -41,7 +34,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" metro:MetroWindow.IsCaptionBar="True">
-
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -53,13 +45,10 @@
         </Border>
 
         <StackPanel Grid.Row="2" VerticalAlignment="Top">
-
-
             <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center">
                 この動画は有料です。WebViewかブラウザで購入するした後、<LineBreak />
                 更新ボタンを押してください。
             </TextBlock>
-
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <Button Content="WebViewで開く" Margin="10">
                     <i:Interaction.Triggers>

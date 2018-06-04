@@ -565,10 +565,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Contents\Search\SearchResult.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Contents\Search\Search.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -902,9 +898,6 @@
     </Compile>
     <Compile Include="Views\Contents\Search\SearchResultEntry.xaml.cs">
       <DependentUpon>SearchResultEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\Search\SearchResult.xaml.cs">
-      <DependentUpon>SearchResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Search\Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>

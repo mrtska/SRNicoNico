@@ -20,14 +20,7 @@
                    SizeToContent="Height"
                    ResizeMode="CanResize"
                    WindowStyle="None"
-                   Width="500"
-                   d:DataContext="{d:DesignInstance {x:Type vm:NewMylistViewModel}}"
-                   >
-    <i:Interaction.Triggers>
-        <l:InteractionMessageTrigger MessageKey="NewMylist" Messenger="{Binding Messenger, Mode=OneWay}">
-            <l:WindowInteractionMessageAction />
-        </l:InteractionMessageTrigger>
-    </i:Interaction.Triggers>
+                   Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -35,7 +28,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Border metro:MetroWindow.IsCaptionBar="True">
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -57,8 +49,6 @@
                     フルスクリーンボタンを右クリックするとウィンドウフルスクリーンか通常か選べます。<LineBreak /><LineBreak />
                     184コメントはデフォルトがOFFなので気にする方はコメントデコレータを開いて設定してください。<LineBreak /><LineBreak />
                     再生速度を等倍に戻したい場合は、スライダーを右クリックしてください。<LineBreak />
-                    
-                    
                 </TextBlock>
                 <TextBlock Margin="15,0,0,0" TextWrapping="Wrap">
                 キーボードショートカット：

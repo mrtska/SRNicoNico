@@ -13,8 +13,7 @@
              d:DesignWidth="600"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
-             d:DataContext="{d:DesignInstance {x:Type m:NicoNicoHistory}}"
-             >
+             d:DataContext="{d:DesignInstance {x:Type m:NicoNicoHistory}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />

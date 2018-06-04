@@ -1,15 +1,14 @@
 ﻿<metro:MetroWindow x:Class="SRNicoNico.Views.MainWindow"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                   xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
                    xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-                   xmlns:v="clr-namespace:SRNicoNico.Views"
-                   xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-                   xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
-                   xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-			 	   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                   xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
+                   xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+                   xmlns:v="clr-namespace:SRNicoNico.Views"
                    mc:Ignorable="d"
                    IsRestoringWindowPlacement="True"
 		           Foreground="{DynamicResource ActiveForegroundBrushKey}"
@@ -23,9 +22,7 @@
                    Title="{Binding Title}" Height="700" Width="600" 
                    PreviewKeyDown="MetroWindow_PreviewKeyDown"
                    PreviewMouseDown="MetroWindow_PreviewMouseDown"
-                   PreviewKeyUp="MetroWindow_PreviewKeyUp"
-                   >
-
+                   PreviewKeyUp="MetroWindow_PreviewKeyUp">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="ContentRendered">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize"/>

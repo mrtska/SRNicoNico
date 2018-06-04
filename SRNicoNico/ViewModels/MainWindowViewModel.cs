@@ -217,6 +217,11 @@ namespace SRNicoNico.ViewModels {
 #if DEBUG
             Console.WriteLine("KeyDown: " + e.Key + ", " + e.ImeProcessedKey);
 #endif
+
+            if (e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control | ModifierKeys.Shift) && e.Key == Key.W) {
+
+            }
+
             MainContent.SelectedTab?.KeyDown(e);
         }
         public void KeyUp(KeyEventArgs e) {

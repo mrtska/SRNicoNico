@@ -1,28 +1,22 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.VideoCommentBar"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-             xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
-             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:c="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="25.856" d:DesignWidth="566.936"
              d:DataContext="{d:DesignInstance {x:Type vm:VideoCommentViewModel}}"
              BorderThickness="1"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             BorderBrush="{StaticResource AccentBrushKey}"
-             Background="{DynamicResource ThemeBrushKey}"
-             >
+             BorderBrush="{DynamicResource AccentBrushKey}"
+             Background="{DynamicResource ThemeBrushKey}">
     <Grid>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1.5*" MaxWidth="150"/>
             <ColumnDefinition Width="3*"/>

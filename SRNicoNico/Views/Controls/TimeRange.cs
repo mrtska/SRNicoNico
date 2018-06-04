@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Livet;
+﻿using Livet;
 
 namespace SRNicoNico.Views.Controls {
     public class TimeRange : NotificationObject {
-
 
         #region Start変更通知プロパティ
         private double _Start;
@@ -27,8 +21,6 @@ namespace SRNicoNico.Views.Controls {
 
         public double EndTime;
 
-        
-
         #region Width変更通知プロパティ
         private double _Width;
 
@@ -42,7 +34,6 @@ namespace SRNicoNico.Views.Controls {
             }
         }
         #endregion
-
 
     }
 }

@@ -1,28 +1,22 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.MylistResultEditModeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-             xmlns:v="clr-namespace:SRNicoNico.Views"
-             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
-             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-             xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
-             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="{DynamicResource ThemeBrushKey}"
-             d:DataContext="{d:DesignInstance {x:Type vm:MylistResultViewModel}}"
-             
-             >
+             d:DataContext="{d:DesignInstance {x:Type vm:MylistResultViewModel}}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -54,7 +48,6 @@
                 </ContentControl.Style>
                 <TextBox Margin="2" TextWrapping="Wrap" Text="{Binding Group.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="16" MaxLines="1" VerticalAlignment="Center" MaxLength="128" />
             </ContentControl>
-
 
             <ComboBox Grid.Column="1" SelectedIndex="{Binding SortIndex}" Width="140" Margin="10,0" Height="22">
 
@@ -136,7 +129,7 @@
             </ListBox>
         </ContentControl>
 
-        <Grid Grid.Row="2" Background="#FF222222">
+        <Grid Grid.Row="2" Background="{DynamicResource BackgroundLevel1BrushKey}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>

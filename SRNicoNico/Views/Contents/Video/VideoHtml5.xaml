@@ -1,24 +1,18 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.VideoHtml5"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-             xmlns:v="clr-namespace:SRNicoNico.Views"
-             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
-             xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
-             xmlns:c="clr-namespace:SRNicoNico.Views.Controls"
-             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-             xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:c="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="235.219" d:DesignWidth="484.319"
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}">
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -66,15 +60,11 @@
             </StackPanel>
         </Grid>
 
-
-        
         <ContentControl x:Name="content" x:FieldModifier="private" Grid.Row="1" Content="{Binding WebBrowser,Mode=OneWay}" />
 
         <c:ManagedPopup Grid.Row="1" Focusable="False" IsOpen="{Binding IsBuffering}" StaysOpen="False" AllowsTransparency="True"  Placement="Center" PlacementTarget="{Binding ElementName=content}">
             <metro:ProgressRing HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsBuffering}" />
         </c:ManagedPopup>
         <ContentControl Grid.Row="2" Content="{Binding Controller,Mode=OneWay}" Width="auto" />
-
     </Grid>
-
 </UserControl>

@@ -20,14 +20,7 @@
                    SizeToContent="Height"
                    ResizeMode="CanResize"
                    WindowStyle="None"
-                   Width="500"
-                   d:DataContext="{d:DesignInstance {x:Type vm:NewMylistViewModel}}"
-                   >
-    <i:Interaction.Triggers>
-        <l:InteractionMessageTrigger MessageKey="NewMylist" Messenger="{Binding Messenger, Mode=OneWay}">
-            <l:WindowInteractionMessageAction />
-        </l:InteractionMessageTrigger>
-    </i:Interaction.Triggers>
+                   Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -35,7 +28,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Border metro:MetroWindow.IsCaptionBar="True">
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

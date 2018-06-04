@@ -23,8 +23,7 @@ namespace SRNicoNico.Views.Controls {
         }
 
         private static void IsOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            var ctrl = d as ManagedPopup;
-            if(ctrl == null)
+            if (!(d is ManagedPopup ctrl))
                 return;
             // ポップアップの親要素にいるScrollViewer要素があれば取得する。
             var scrollViewer = ctrl.GetDependencyObjectFromVisualTree(ctrl, typeof(ScrollViewer)) as ScrollViewer;
@@ -113,9 +112,8 @@ namespace SRNicoNico.Views.Controls {
 
         private void UpdateWindow() {
             var hwnd = ((HwndSource)PresentationSource.FromVisual(Child)).Handle;
-            RECT rect;
 
-            if(GetWindowRect(hwnd, out rect)) {
+            if (GetWindowRect(hwnd, out var rect)) {
                 SetWindowPos(hwnd, Topmost ? -1 : -2, rect.Left, rect.Top, (int)Width, (int)Height, SWP_NOACTIVATE);
             }
         }

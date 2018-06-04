@@ -1,29 +1,18 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.VideoUploaderInfo"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-             xmlns:v="clr-namespace:SRNicoNico.Views"
-             xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
-             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
-             xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
-             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-             xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              Width="280"
-             Height="175"
-             >
-
+             Height="175">
     <Grid Background="{DynamicResource BackgroundLevel1BrushKey}">
-
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
@@ -34,7 +23,6 @@
                 <RowDefinition Height="125"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -82,7 +70,6 @@
                             </mui:ModernButton.Style>
                         </mui:ModernButton>
                     </Grid>
-
                 </Grid>
 
                 <Viewbox Grid.Column="1" Stretch="Uniform">
@@ -152,8 +139,6 @@
                 </Grid>
             </ContentControl>
         </Grid>
-
-
         <UniformGrid Grid.Column="2" Margin="0,2,0,0" Width="45" Columns="1">
             <mui:ModernButton Focusable="False" IsEnabled="{Binding IsActive,Converter={StaticResource Invert}}" EllipseDiameter="36" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="20" IconHeight="20" ToolTip="とりあえずマイリストに登録" IconData="M43.877.033a7.662 7.662 0 0 1 2.025.271 7.88 7.88 0 0 1 4.977 4.126c.089.18 3.116 7.632 3.116 7.632 12.722 0 25.444-.08 38.166 0 .103.002.847.051 1.115.092a7.91 7.91 0 0 1 1.715.463 8.03 8.03 0 0 1 4.581 4.694 7.935 7.935 0 0 1 .485 2.647 4462.23 4462.23 0 0 1 0 56.207 7.94 7.94 0 0 1-.485 2.647 8.027 8.027 0 0 1-4.856 4.797 7.945 7.945 0 0 1-2.555.452 6639.41 6639.41 0 0 1-84.207 0 7.94 7.94 0 0 1-2.647-.485A8.027 8.027 0 0 1 .51 78.72a7.92 7.92 0 0 1-.452-2.555c-.009-1.377-.001-2.754-.001-4.132 0-21.366-.129-42.733.001-64.099a8.186 8.186 0 0 1 .525-2.781 8.054 8.054 0 0 1 1.439-2.415 7.86 7.86 0 0 1 3.414-2.3A7.839 7.839 0 0 1 7.802.034C19.827-.042 31.852.033 43.877.033zm-31.82 8a4 4 0 0 0-4 4v60.006a4 4 0 0 0 3.999 4l75.978.022a4 4 0 0 0 4.001-3.999l.02-48a4 4 0 0 0-3.983-4.001c-9.837-.002-34.486-.008-34.635-.019a8.015 8.015 0 0 1-3.679-1.194 8.018 8.018 0 0 1-2.951-3.273 811.01 811.01 0 0 1-2.081-5.096 4 4 0 0 0-3.685-2.445l-28.984-.001zm47.045 44.14l-7.657 7.491a3.837 3.837 0 0 1-4.17.778c-1.421-.602-2.322-1.993-2.273-3.507l.739-22.637c.063-1.947 1.662-3.511 3.652-3.574l23.14-.722c1.548-.048 2.969.833 3.584 2.224a3.634 3.634 0 0 1-.794 4.079l-5.031 4.921C74.813 47.536 84.791 62.712 85 74c0 0-11.48-16.421-25.898-21.827z" >
                 <i:Interaction.Triggers>
@@ -179,9 +164,6 @@
         </UniformGrid>
         <local:ManagedPopup IsOpen="{Binding TweetPopupOpen}" StaysOpen="True" Placement="Bottom" >
             <ContentControl Content="{Binding TweetBrowser}" Width="400" Height="300" />
-
         </local:ManagedPopup>
-
     </Grid>
-
 </UserControl>

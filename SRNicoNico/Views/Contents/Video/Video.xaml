@@ -1,31 +1,21 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.Video"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-             xmlns:v="clr-namespace:SRNicoNico.Views"
-             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
-             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}" Loaded="UserControl_Loaded"
-             
-             >
-
+             d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
+             Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <v:VideoHtml5 x:Key="html5" />
         <v:VideoComment x:Key="comment"/>
         <v:VideoDescription x:Key="desc" />
         <v:VideoUploaderInfo x:Key="info"/>
     </UserControl.Resources>
-    
-    
     <ContentControl>
         <ContentControl.Style>
             <Style TargetType="ContentControl">
@@ -39,31 +29,23 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="280"/>
                                         </Grid.ColumnDefinitions>
-
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*"/>
                                                 <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="{Binding SplitterHeight,Mode=TwoWay}"/>
                                             </Grid.RowDefinitions>
-
-                                            
                                             <ContentControl Content="{StaticResource html5}" />
-
                                             <GridSplitter Grid.Row="1" Height="5" Focusable="True" ResizeDirection="Rows" Width="auto" />
-
                                             <ScrollViewer Grid.Row="2">
                                                 <ContentControl Content="{StaticResource desc}" />
                                             </ScrollViewer>
-
                                         </Grid>
-
                                         <Grid Grid.Column="1">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*"/>
                                                 <RowDefinition Height="auto"/>
                                             </Grid.RowDefinitions>
-
                                             <ContentControl DataContext="{Binding Comment}" Content="{StaticResource comment}" />
                                             <ContentControl Grid.Row="1" Content="{StaticResource info}" />
                                         </Grid>
@@ -99,17 +81,14 @@
                                                 <RowDefinition Height="{Binding SplitterHeight,Mode=TwoWay}"/>
                                             </Grid.RowDefinitions>
 
-
                                             <ContentControl Content="{StaticResource html5}" />
 
                                             <GridSplitter Grid.Row="1" Height="5" Focusable="True" ResizeDirection="Rows" Width="auto" />
-
 
                                             <ScrollViewer Grid.Row="2">
                                                 <ContentControl Content="{StaticResource desc}" />
                                             </ScrollViewer>
                                         </Grid>
-
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -120,7 +99,6 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="ContentControl">
                                     <Grid>
-
                                         <Grid Grid.Column="1">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*"/>
