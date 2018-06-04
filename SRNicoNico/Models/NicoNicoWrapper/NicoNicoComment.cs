@@ -307,7 +307,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                             Number = (int)chat.no,
                                             Vpos = (int)chat.vpos,
                                             PostedAt = (long)chat.date,
-                                            Content = chat.content,
+                                            Content = chat.content() ? chat.content: "",
                                             Mail = chat.mail() ? chat.mail : ""
                                         };
                                         item.Mail = new string(item.Mail.Select(n => (ConvMap.ContainsKey(n) ? ConvMap[n] : n)).ToArray());
