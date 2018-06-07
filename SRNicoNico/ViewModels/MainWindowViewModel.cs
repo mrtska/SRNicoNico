@@ -179,8 +179,11 @@ namespace SRNicoNico.ViewModels {
             MainContent.AddSystemTab(new OtherViewModel());
             MainContent.AddSystemTab(Setting = new SettingsViewModel());
 
+#if DEBUG
+            MainContent.AddSystemTab(new DeployViewModel());
+#endif
 
-            if(await UpdateChecker.IsUpdateAvailable()) {
+            if (await UpdateChecker.IsUpdateAvailable()) {
 
                 Messenger.Raise(new TransitionMessage(typeof(Views.UpdateFoundView), new UpdaterViewModel(), TransitionMode.Modal));
             }

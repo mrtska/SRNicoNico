@@ -283,9 +283,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         case "nicoad.user.advertise.program": {
 
                                 var sender = entry.senderNiconicoUser;
+                                var program = entry.program;
 
-                                item = new NicoNicoNicoRepoNoContentEntry();
+                                item = new NicoNicoNicoRepoLiveEntry();
                                 storeSenderUser(item, sender);
+                                storeLive(item as NicoNicoNicoRepoLiveEntry, program);
 
                                 item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんがニコニ広告しました。", item.SenderName);
                                 break;

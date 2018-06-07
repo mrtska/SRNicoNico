@@ -66,16 +66,14 @@
                 <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
                     <v:History />
                 </DataTemplate>
-
-
-
-
                 <DataTemplate DataType="{x:Type vm:OtherViewModel}">
                     <v:Other />
                 </DataTemplate>
-
                 <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
                     <v:Settings />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:DeployViewModel}">
+                    <v:Deploy />
                 </DataTemplate>
             </ItemsControl.Resources>
 

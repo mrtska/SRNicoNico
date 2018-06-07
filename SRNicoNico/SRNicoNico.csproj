@@ -154,6 +154,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\NicoNicoViewer\DeployModel.cs" />
     <Compile Include="Models\NicoNicoViewer\UpdateChecker.cs" />
     <Compile Include="Models\NicoNicoWrapper\Follow\NicoNicoFollowCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\Follow\NicoNicoFollowMylist.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="ViewModels\Community\CommunityVideoViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityNoticeViewModel.cs" />
+    <Compile Include="ViewModels\Deploy\DeployViewModel.cs" />
     <Compile Include="ViewModels\Misc\UpdaterViewModel.cs" />
     <Compile Include="ViewModels\Mylist\MylistOperationViewModel.cs" />
     <Compile Include="ViewModels\PlayList\PlayListEntryViewModel.cs" />
@@ -203,6 +205,9 @@
     </Compile>
     <Compile Include="Views\Contents\Community\CommunityVideoEntry.xaml.cs">
       <DependentUpon>CommunityVideoEntry.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Deploy\Deploy.xaml.cs">
+      <DependentUpon>Deploy.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Help\MylistHelpView.xaml.cs">
       <DependentUpon>MylistHelpView.xaml</DependentUpon>
@@ -340,6 +345,10 @@
     <Page Include="Views\Contents\Community\CommunityVideoEntry.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Deploy\Deploy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Contents\Follow\Follow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -1062,7 +1071,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Html\Flash\bin\" />
-    <Folder Include="Views\Contents\Deploy\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
