@@ -12,7 +12,7 @@ namespace SRNicoNico.Views {
 
         private void browser_Navigating(object sender, NavigatingCancelEventArgs e) {
 
-            if(e.Uri.OriginalString != "https://mrtska.net/niconicowrapper/releasenote.html") {
+            if(e.Uri.OriginalString != "https://mrtska.net/niconicoviewer/releasenote") {
 
                 Process.Start(e.Uri.OriginalString);
                 e.Cancel = true;

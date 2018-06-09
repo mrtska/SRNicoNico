@@ -13,9 +13,9 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         //アップデート確認するURL
 #if DEBUG
-        private static string CheckUrl = "https://mrtska.net/niconicowrapper/debugupdate";
+        private const string CheckUrl = "https://mrtska.net/niconicowrapper/debugupdate";
 #else
-        private static string CheckUrl = "http://download.mrtska.net/DownloadCounter/Download?file=NicoNicoViewer/releaseupdate";
+        private const string CheckUrl = "https://mrtska.net/niconicoviewer/latest";
 #endif
 
         public static async Task<string> GetUpdaterBinaryUrl() {

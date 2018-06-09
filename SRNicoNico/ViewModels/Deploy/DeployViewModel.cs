@@ -19,8 +19,9 @@ namespace SRNicoNico.ViewModels {
 
     public class DeployViewModel : TabItemViewModel {
 
+#if DEBUG
         public DeployModel Model { get; set; }
-
+#endif
         public DeployViewModel() : base("デプロイ") {
 #if DEBUG
             Model = new DeployModel();
@@ -31,7 +32,7 @@ namespace SRNicoNico.ViewModels {
 
 
         }
-
+#if DEBUG
         public void FileSelect() {
 
             var dialog = new OpenFileDialog();
@@ -40,11 +41,10 @@ namespace SRNicoNico.ViewModels {
             Model.FilePath = dialog.FileName;
         }
 
-        public async void Upload() {
-
+    public async void Upload() {
             Status = "アップロード中";
             Status = await Model.UploadAsync();
-
         }
+#endif
     }
 }

@@ -34,7 +34,7 @@
         </mui:ModernButton>
 
         <Grid Grid.Row="1" Background="#FF222222">
-            <WebBrowser x:Name="browser" x:FieldModifier="internal" Source="https://mrtska.net/niconicowrapper/releasenote.html" Navigating="browser_Navigating" />
+            <WebBrowser x:Name="browser" x:FieldModifier="internal" Source="https://mrtska.net/niconicoviewer/releasenote" Navigating="browser_Navigating" />
         </Grid>
 
     </Grid>
