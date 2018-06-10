@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-
+﻿using Livet;
+using System;
+using System.Diagnostics;
+using System.IO;
 using Updater.Models;
-using System.Windows;
 
 namespace Updater.ViewModels {
     public class MainWindowViewModel : ViewModel {
@@ -31,7 +21,6 @@ namespace Updater.ViewModels {
         }
         #endregion
 
-
         #region PrevButtonAvailable変更通知プロパティ
         private bool _PrevButtonAvailable = false;
 
@@ -45,7 +34,6 @@ namespace Updater.ViewModels {
             }
         }
         #endregion
-
 
         #region NextButtonAvailable変更通知プロパティ
         private bool _NextButtonAvailable = true;
@@ -61,23 +49,23 @@ namespace Updater.ViewModels {
         }
         #endregion
 
+        #region Status変更通知プロパティ
+        private string _Status = string.Empty;
 
-        #region ProgressViewModel変更通知プロパティ
-        private ProgressViewModel _ProgressViewModel;
-
-        public ProgressViewModel ProgressViewModel {
-            get { return _ProgressViewModel; }
+        public string Status {
+            get { return _Status; }
             set {
-                if(_ProgressViewModel == value)
+                if (_Status == value)
                     return;
-                _ProgressViewModel = value;
+                _Status = value;
                 RaisePropertyChanged();
             }
         }
         #endregion
 
-         
         internal string InstallLocation = "";
+
+        private readonly InstallProcess InstallProcess;
 
         public MainWindowViewModel() {
 
@@ -87,14 +75,26 @@ namespace Updater.ViewModels {
 
                 Environment.Exit(0);
             }
+            if(args.Length == 4) {
+
+                int pid = int.Parse(args[3]);
+                Process.GetProcessById(pid).WaitForExit();
+            }
 
             InstallLocation = args[2] + @"\";
-
-            ProgressViewModel = new ProgressViewModel(this);
+            InstallProcess = new InstallProcess(this);
         }
 
+        public void EndOfLife() {
 
-        public void Initialize() {
+            Environment.Exit(0);
+        }
+
+        public async void Initialize() {
+
+            await InstallProcess.InstallAsync();
+            Next();
+            Status = "アップデート完了\n手動で起動してください";
         }
 
         public void Prev() {
@@ -105,8 +105,10 @@ namespace Updater.ViewModels {
         public void Next() {
 
             Index++;
+            if(Index == 2) {
+
+                EndOfLife();
+            }
         }
-
-
     }
 }

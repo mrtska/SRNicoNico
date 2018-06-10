@@ -12,11 +12,7 @@ namespace Updater.Models {
     public class UpdateChecker {
 
         //アップデート確認するURL
-#if DEBUG
-        private static string CheckUrl = "https://mrtska.net/niconicowrapper/debugupdate";
-#else
-        private static string CheckUrl = "http://download.mrtska.net/DownloadCounter/Download?file=NicoNicoViewer/releaseupdate";
-#endif
+        private const string CheckUrl = "https://mrtska.net/niconicoviewer/latest";
 
         public static async Task<string> GetLatestBinaryUrl(WebClient wc) {
 
@@ -26,8 +22,8 @@ namespace Updater.Models {
 
                 var json = DynamicJson.Parse(a);
 
-                return json.url;
-            } catch(Exception) {
+                return "https://mrtska.net/niconicoviewer/download/" + json.version;
+            } catch (Exception) {
 
                 return null;
             }

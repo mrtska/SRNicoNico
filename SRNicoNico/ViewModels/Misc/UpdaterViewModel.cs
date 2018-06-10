@@ -22,9 +22,9 @@ namespace SRNicoNico.ViewModels {
 
         public string AssemblyDirectory {
             get {
-                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-                UriBuilder uri = new UriBuilder(codeBase);
-                string path = Uri.UnescapeDataString(uri.Path);
+                var codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                var uri = new UriBuilder(codeBase);
+                var path = Uri.UnescapeDataString(uri.Path);
                 return Path.GetDirectoryName(path);
             }
         }
@@ -41,12 +41,12 @@ namespace SRNicoNico.ViewModels {
 
                 using(var wc = new WebClient()) {
 
-                    await wc.DownloadFileTaskAsync(await UpdateChecker.GetUpdaterBinaryUrl(), updater);
+                    await wc.DownloadFileTaskAsync("https://mrtska.net/download/niconicoviewer/NicoNicoViewerUpdater.exe", updater);
                 }
 
                 var process = new Process();
                 process.StartInfo.FileName = updater;
-                process.StartInfo.Arguments = "iris \"" + AssemblyDirectory + "\"";
+                process.StartInfo.Arguments = "iris \"" + AssemblyDirectory + "\" " + Process.GetCurrentProcess().Id;
                 process.Start();
                 Environment.Exit(0);
 
