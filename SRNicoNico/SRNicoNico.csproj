@@ -1025,6 +1025,7 @@
     <None Include="Html\Flash\src\org\libspark\utils\ForcibleLoader.as" />
     <None Include="Html\Flash\src\SecureNetConnection.as" />
     <None Include="Microsoft.TypeScript.props" />
+    <None Include="Models\NicoNicoViewer\DeployModel.cs.sample" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
