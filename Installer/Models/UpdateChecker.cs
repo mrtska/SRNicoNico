@@ -1,24 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Livet;
+﻿using Codeplex.Data;
+using System;
 using System.Net;
-
-using Codeplex.Data;
+using System.Threading.Tasks;
 
 namespace Installer.Models {
     public class UpdateChecker {
 
-
-
         //アップデート確認するURL
-#if DEBUG
-        private static string CheckUrl = "https://mrtska.net/niconicowrapper/debugupdate";
-#else
-        private static string CheckUrl = "http://download.mrtska.net/DownloadCounter/Download?file=NicoNicoViewer/releaseupdate";
-#endif
+        private const string CheckUrl = "https://mrtska.net/niconicoviewer/latest";
 
         public static async Task<string> GetLatestBinaryUrl(WebClient wc) {
 
@@ -28,25 +17,11 @@ namespace Installer.Models {
 
                 var json = DynamicJson.Parse(a);
 
-                return json.url;
+                return "https://mrtska.net/niconicoviewer/download/" + json.version;
             } catch(Exception) {
 
                 return null;
             }
-
         }
-
-
-
-        public static bool UpdateAvailable() {
-
-
-
-            return true;
-        }
-
-
-
-
     }
 }

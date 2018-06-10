@@ -1,14 +1,11 @@
 ﻿<UserControl x:Class="Installer.Views.InstallLocationSelectorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-             xmlns:v="clr-namespace:Installer.Views"
-             xmlns:vm="clr-namespace:Installer.ViewModels"
-             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Installer.ViewModels"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}" d:DesignWidth="493.029" d:DesignHeight="239.358">
     <StackPanel VerticalAlignment="Center">
@@ -29,5 +26,4 @@
             </Button>
         </Grid>
     </StackPanel>
-
 </UserControl>

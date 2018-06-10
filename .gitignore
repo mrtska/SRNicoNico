@@ -194,3 +194,4 @@ ModelManifest.xml
 /.vs/config
 /SRNicoNico/Icons
 /SRNicoNico/Flash/bin-debug
+/SRNicoNico/Models/NicoNicoViewer/DeployModel.cs
