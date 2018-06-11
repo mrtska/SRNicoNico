@@ -1,6 +1,8 @@
-﻿using Livet.Messaging;
+﻿using Livet;
+using Livet.Messaging;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Models.NicoNicoWrapper;
+using System;
 using System.Threading;
 using System.Windows.Input;
 
@@ -19,7 +21,10 @@ namespace SRNicoNico.ViewModels {
 
             RefreshTimer = new Timer(new TimerCallback(o => {
 
-                Initialize();
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+
+                    Initialize();
+                }));
 
             }), null, Settings.Instance.RefreshInterval, Settings.Instance.RefreshInterval);
         }
