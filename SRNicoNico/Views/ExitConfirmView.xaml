@@ -7,6 +7,7 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                   xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
                    mc:Ignorable="d" 
                    WindowStartupLocation="CenterOwner"
 		           Background="{DynamicResource ThemeBrushKey}"
@@ -14,7 +15,13 @@
                    SizeToContent="Height"
                    ResizeMode="NoResize"
                    WindowStyle="None"
-                   Width="400">
+                   Width="400"
+                   d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}">
+    <i:Interaction.Triggers>
+        <l:InteractionMessageTrigger MessageKey="Exit" Messenger="{Binding Messenger, Mode=OneWay}">
+            <l:WindowInteractionMessageAction />
+        </l:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
