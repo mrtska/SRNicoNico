@@ -5,8 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600">
-
-
     <UserControl.Resources>
         <Style TargetType="Hyperlink">
             <EventSetter Event="RequestNavigate" Handler="Hyperlink_RequestNavigate" />
@@ -23,16 +21,13 @@
                                 <ScrollViewer>
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="MetroRadiance 2.3.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
-                                            このライブラリはメインのユーザーインターフェースを構成するために必要な基幹ライブラリです。<LineBreak /><LineBreak />
+                                            <Run Text="MetroRadiance 2.4.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
                                             <Hyperlink NavigateUri="https://github.com/Grabacr07/MetroRadiance" >
                                                 https://github.com/Grabacr07/MetroRadiance
                                             </Hyperlink><LineBreak />
                                             <Hyperlink NavigateUri="https://twitter.com/Grabacr07" ToolTip="https://twitter.com/Grabacr07" >
                                                 @Grabacr07
                                             </Hyperlink><LineBreak /><LineBreak />                                        
-
-            
                                             ライセンス : MIT License<LineBreak />
                                             The MIT License (MIT)<LineBreak /><LineBreak />
 
@@ -247,7 +242,7 @@
                                 <ScrollViewer>
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Newtonsoft.Json 9.0.1" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Run Text="Newtonsoft.Json 11.0.2" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
                                             <Hyperlink NavigateUri="http://www.newtonsoft.com/json"  >
                                                 http://www.newtonsoft.com/json
                                             </Hyperlink><LineBreak /><LineBreak />                                        
@@ -457,7 +452,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.<LineBreak /><LineBreak />
                                 <ScrollViewer>
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="HtmlAgilityPack 1.4.9.5" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Run Text="HtmlAgilityPack 1.8.4" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
                                             htmlをパースするために使用しているライブラリです。<LineBreak /><LineBreak />
                                             <Hyperlink NavigateUri="http://htmlagilitypack.codeplex.com/"  >
                                                 http://htmlagilitypack.codeplex.com/
