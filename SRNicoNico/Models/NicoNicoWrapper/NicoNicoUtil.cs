@@ -43,6 +43,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //ローカル視聴履歴に指定したIWatchableが存在したらフラグを立てる
         public static void ApplyLocalHistory(IWatchable target) {
 
+            if(target == null || target.ContentUrl == null) {
+
+                return;
+            }
+
             foreach(var entry in App.ViewModelRoot.History.Model.LocalHistries) {
 
                 if(target.ContentUrl.Contains(entry.VideoId)) {
@@ -51,7 +56,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     return;
                 }
             }
-
         }
 
         //m:ssな形式をintに変換する
