@@ -15,7 +15,6 @@
 		           Background="{DynamicResource ThemeBrushKey}"
                    WindowStyle="SingleBorderWindow"
                    RenderOptions.BitmapScalingMode="HighQuality"
-                   
                    FontFamily="{Binding  Source={x:Static m:Settings.Instance},Path=UserSelectedFont,Mode=TwoWay}"
                    d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
                 
@@ -48,14 +47,14 @@
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
 
-
         <Border metro:MetroWindow.IsCaptionBar="True">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="1"  Text="{Binding Title}" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource ForegroundBrushKey}" FontSize="18" Margin="3,0,0,0" VerticalAlignment="Center" />
                 <metro:CaptionButton Grid.Column="2" IsEnabled="{Binding CanShowHelpView}" ToolTip="表示しているタブのヘルプ画面が有れば表示します" ToolTipService.ShowOnDisabled="False">
@@ -84,12 +83,37 @@
                         </ControlTemplate>
                     </metro:CaptionButton.Template>
                 </metro:CaptionButton>
-                <metro:SystemButtons Grid.Column="3" VerticalAlignment="Top" />
+                <metro:CaptionButton Grid.Column="3" IsChecked="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type metro:MetroWindow}}, Path=Topmost, Mode=OneWayToSource}" ToolTip="常に手前に表示" Mode="Toggle" ToolTipService.ShowOnDisabled="False">
+                    <metro:CaptionButton.Template>
+                        <ControlTemplate TargetType="metro:CaptionButton">
+                            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                <Grid Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                    <ContentPresenter x:Name="contentPresenter" />
+                                    <Path x:Name="icon" Fill="{TemplateBinding Foreground}" Width="10" Height="20" Stretch="Uniform" Visibility="Visible" Data="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" RenderTransformOrigin="0.5,0.5" >
+                                        <Path.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform/>
+                                                <SkewTransform/>
+                                                <RotateTransform Angle="8.797"/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentBrushKey}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </metro:CaptionButton.Template>
+                </metro:CaptionButton>
+                <metro:SystemButtons Grid.Column="4" VerticalAlignment="Top" />
             </Grid>
         </Border>
 
         <v:MainContent Grid.Row="1" DataContext="{Binding MainContent}" />
-
 
         <DockPanel x:Name="statusBar" x:FieldModifier="private" Grid.Row="2" Height="23" Background="{DynamicResource AccentBrushKey}" >
             <Border DockPanel.Dock="Right" Width="{Binding ActualWidth, ElementName=resizeGrip}" />
@@ -98,6 +122,5 @@
 
         <metro:ResizeGrip Grid.Row="1" Grid.RowSpan="2" x:Name="resizeGrip" x:FieldModifier="private" HorizontalAlignment="Right" VerticalAlignment="Bottom"
 						  WindowChrome.ResizeGripDirection="BottomRight" />
-
     </Grid>
 </metro:MetroWindow>
