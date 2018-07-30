@@ -54,8 +54,14 @@ namespace SRNicoNico.ViewModels {
 
                     autoPlay = true;
                 }
-                
-                if(Owner.ApiData.Video.DmcInfo != null && !Owner.ApiData.Video.Title.Contains("ドットバイドット")) {
+
+                if (string.IsNullOrEmpty(Owner.ApiData.Video.SmileInfo.Url) || Owner.ApiData.Context.IsNeedPayment) {
+
+                    App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.PaidVideoView), new PaidVideoViewModel(Owner), TransitionMode.NewOrActive));
+                    return;
+                }
+
+                if (Owner.ApiData.Video.DmcInfo != null && !Owner.ApiData.Video.Title.Contains("ドットバイドット")) {
 
                     var dmc = new NicoNicoDmcSession(Owner.ApiData.Video.DmcInfo);
                     var session = await dmc.CreateAsync();
@@ -73,12 +79,6 @@ namespace SRNicoNico.ViewModels {
 
                     Browser?.InvokeScript("VideoViewModel$initialize", new object[] { session.ContentUri, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, autoPlay });
                 } else {
-
-                    if(string.IsNullOrEmpty(Owner.ApiData.Video.SmileInfo.Url)) {
-
-                        App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.PaidVideoView), new PaidVideoViewModel(Owner), TransitionMode.NewOrActive));
-                        return;
-                    }
 
                     if(VideoType == NicoNicoVideoType.RTMP) {
 

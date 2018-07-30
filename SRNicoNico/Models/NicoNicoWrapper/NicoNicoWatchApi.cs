@@ -264,20 +264,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                             PostkeyAvailable = video.dmcInfo.thread.postkey_available,
                             NgRevision = (int?)video.dmcInfo.thread.ng_revision,
 
-                            RecipeId = video.dmcInfo.session_api.recipe_id,
-                            PlayerId = video.dmcInfo.session_api.player_id,
-                            Videos = video.dmcInfo.session_api.videos,
-                            Audios = video.dmcInfo.session_api.audios,
-                            Movies = video.dmcInfo.session_api.movies,
-                            Protocols = video.dmcInfo.session_api.protocols,
-                            AuthType = video.dmcInfo.session_api.auth_types.http,
-                            ServiceUserId = video.dmcInfo.session_api.service_user_id,
-                            Token = video.dmcInfo.session_api.token,
-                            Signature = video.dmcInfo.session_api.signature,
-                            ContentId = video.dmcInfo.session_api.content_id,
-                            HeartbeatLifeTime = (int)video.dmcInfo.session_api.heartbeat_lifetime,
-                            ContentKeyTimeout = (int)video.dmcInfo.session_api.content_key_timeout,
-                            Priority = video.dmcInfo.session_api.priority
+                            RecipeId = video.dmcInfo.session_api?.recipe_id,
+                            PlayerId = video.dmcInfo.session_api?.player_id,
+                            Videos = video.dmcInfo.session_api?.videos,
+                            Audios = video.dmcInfo.session_api?.audios,
+                            Movies = video.dmcInfo.session_api?.movies,
+                            Protocols = video.dmcInfo.session_api?.protocols,
+                            AuthType = video.dmcInfo.session_api?.auth_types.http,
+                            ServiceUserId = video.dmcInfo.session_api?.service_user_id,
+                            Token = video.dmcInfo.session_api?.token,
+                            Signature = video.dmcInfo.session_api?.signature,
+                            ContentId = video.dmcInfo.session_api?.content_id,
+                            HeartbeatLifeTime = (int?)video.dmcInfo.session_api?.heartbeat_lifetime ?? 0,
+                            ContentKeyTimeout = (int?)video.dmcInfo.session_api?.content_key_timeout ?? 0,
+                            Priority = video.dmcInfo.session_api?.priority ?? 0.0
                         } : null,
                         BackCommentType = video.backCommentType,
                         IsCommentExpired = video.isCommentExpired,
@@ -299,7 +299,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         IsMonetized = video.isMonetized
                     };
 
-                    if(video.dmcInfo != null) {
+                    if(video.dmcInfo != null && video.dmcInfo.session_api != null) {
 
                         ret.Video.DmcInfo.ApiUrls = new List<DynamicJson>();
                         foreach (var session in video.dmcInfo.session_api.urls) {
