@@ -144,8 +144,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             } else {    //ファイルが無い 初回起動か何かかな
 
+                await GetAccountHistoryAsync();
+
                 //ファイルがないときはアカウントの視聴履歴をコピーして使う
-                return await GetAccountHistoryAsync();
+                LocalHistries = new DispatcherCollection<NicoNicoHistoryEntry>(DispatcherHelper.UIDispatcher);
+                foreach(var entry in AccountHistories) {
+
+                    LocalHistries.Add(entry);
+                }
+                return "";
             }
         }
 
@@ -177,7 +184,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
 
-        //数が増えると重くなりそうなんだよな・・・
+        //数が増えると重くなりそうなんだよな・・・ O(n)
         public async Task MergeHistoriesAsync() {
 
             await Task.Run(() => {
