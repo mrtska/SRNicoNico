@@ -18,7 +18,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private const string SignInURL = "https://secure.nicovideo.jp/secure/login?site=niconico";
 
         //アカウント権限
-        private const string UserAgent = "SRNicoNico/1.0";
+        private const string UserAgent = "SRNicoNico/1.0 (@m__gl user/23425727)";
 
         //ニコニコトップ
         private const string NicoNicoTop = "http://www.nicovideo.jp/";
