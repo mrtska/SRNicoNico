@@ -737,7 +737,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public bool IsPublic { get; set; }
 
-        public bool? IsPublishedNicoscript { get; set; }
+        public string IsPublishedNicoscript { get; set; }
 
         public string IsNoNGS { get; set; }
 
