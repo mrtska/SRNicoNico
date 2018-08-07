@@ -78,10 +78,6 @@
     <ApplicationIcon>Icons\production.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FirstFloor.ModernUI, Version=1.0.9.0, Culture=neutral, PublicKeyToken=bc9b0c37bf06c6a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\ModernUI.WPF.1.0.9\lib\net45\FirstFloor.ModernUI.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\gong-wpf-dragdrop.1.1.0\lib\net46\GongSolutions.Wpf.DragDrop.dll</HintPath>
       <Private>True</Private>
@@ -221,6 +217,9 @@
     <Compile Include="Views\Contents\Help\SearchHelpView.xaml.cs">
       <DependentUpon>SearchHelpView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\Misc\PageSpinner.xaml.cs">
+      <DependentUpon>PageSpinner.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\Misc\UpdateFoundView.xaml.cs">
       <DependentUpon>UpdateFoundView.xaml</DependentUpon>
     </Compile>
@@ -281,6 +280,7 @@
     <Compile Include="Views\Contents\Video\WindowFullScreenView.xaml.cs">
       <DependentUpon>WindowFullScreenView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\RoundButton.cs" />
     <Compile Include="Views\Converter\NGTypeConverter.cs" />
     <Compile Include="Views\ExitConfirmView.xaml.cs">
       <DependentUpon>ExitConfirmView.xaml</DependentUpon>
@@ -290,7 +290,23 @@
     <Compile Include="Views\Service\Theme\Blue.cs" />
     <Compile Include="Views\Service\Theme\Purple.cs" />
     <Compile Include="Views\Service\Theme\Orange.cs" />
+    <Page Include="Themes\Generic.RoundButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Theme.DataGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Theme.ComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Theme.Slider.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Theme.TextBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -431,6 +447,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Contents\MainContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Misc\PageSpinner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1017,6 +1037,7 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="app.config" />
+    <None Include="Documentation\Theme.md" />
     <None Include="Html\Flash\NicoNicoRTMPPlayer.as3proj" />
     <None Include="Html\Flash\NicoNicoSWFPlayer.as3proj" />
     <None Include="Html\Flash\src\NicoNicoPlayerBase.as" />

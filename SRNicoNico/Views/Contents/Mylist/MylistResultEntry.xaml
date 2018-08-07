@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.MylistResultEntry"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -73,9 +73,9 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ContentControl}">
-                                        <mui:ModernButton HorizontalAlignment="Right" IconWidth="10" IconHeight="10" EllipseDiameter="16" Margin="10,-20,10,0" ToolTip="マイリストコメント編集" IconData="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z">
-                                            <mui:ModernButton.Style>
-                                                <Style TargetType="{x:Type mui:ModernButton}">
+                                        <controls:RoundButton HorizontalAlignment="Right" IconWidth="10" IconHeight="10" EllipseDiameter="16" Margin="10,-20,10,0" ToolTip="マイリストコメント編集" IconData="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z">
+                                            <controls:RoundButton.Style>
+                                                <Style TargetType="{x:Type controls:RoundButton}">
                                                     <Setter Property="Visibility" Value="Hidden" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Path=IsMouseOver}" Value="True">
@@ -83,13 +83,13 @@
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </mui:ModernButton.Style>
+                                            </controls:RoundButton.Style>
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Click">
                                                     <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="IsDescriptionEditMode" Value="True"/>
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
-                                        </mui:ModernButton>
+                                        </controls:RoundButton>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -104,13 +104,13 @@
                                                 <ColumnDefinition Width="auto"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBox Text="{Binding Item.Description}" AcceptsReturn="True" Margin="10,2" TextWrapping="Wrap" Foreground="#FF888888" Background="#FF333333" />
-                                            <mui:ModernButton Grid.Column="1" IconWidth="10" IconHeight="10" EllipseDiameter="16" ToolTip="完了" IconData="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z">
+                                            <controls:RoundButton Grid.Column="1" IconWidth="10" IconHeight="10" EllipseDiameter="16" ToolTip="完了" IconData="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z">
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="Click">
                                                         <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="UpdateDescription" />
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
-                                            </mui:ModernButton>
+                                            </controls:RoundButton>
                                         </Grid>
                                     </ControlTemplate>
                                 </Setter.Value>
@@ -125,9 +125,9 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding Item.Description}" Margin="10,2" TextWrapping="Wrap" Foreground="#FF888888" Background="#FF333333" />
-                <mui:ModernButton Grid.Column="1" IconWidth="10" IconHeight="10" EllipseDiameter="16" ToolTip="マイリストコメント編集" IconData="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z">
-                    <mui:ModernButton.Style>
-                        <Style TargetType="{x:Type mui:ModernButton}">
+                <controls:RoundButton Grid.Column="1" IconWidth="10" IconHeight="10" EllipseDiameter="16" ToolTip="マイリストコメント編集" IconData="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z">
+                    <controls:RoundButton.Style>
+                        <Style TargetType="{x:Type controls:RoundButton}">
                             <Setter Property="Visibility" Value="Hidden" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Path=IsMouseOver}" Value="True">
@@ -135,13 +135,13 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </mui:ModernButton.Style>
+                    </controls:RoundButton.Style>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="IsDescriptionEditMode" Value="True"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                </mui:ModernButton>
+                </controls:RoundButton>
             </Grid>
         </ContentControl>
 

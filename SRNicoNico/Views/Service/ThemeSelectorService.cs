@@ -14,22 +14,18 @@ namespace SRNicoNico.Views.Service {
         Blue,
         Orange,
         Purple
-
     }
-
-
-
 
     public class ThemeSelectorService {
 
         //テーマ本体とenumのマップ
         private static readonly Dictionary<ThemeColors, IThemeColor> ColorMap = new Dictionary<ThemeColors, IThemeColor>();
 
-        private static readonly string[] AccentTarget = { "AccentBrushKey", "WindowBorderActive", "Accent", "SliderThumbBorderDragging" };
+        private static readonly string[] AccentTarget = { "AccentBrushKey"/*, "WindowBorderActive", "Accent", "SliderThumbBorderDragging"*/ };
         private static readonly string[] AccentActiveTarget = { "AccentActiveBrushKey" };
         private static readonly string[] AccentAlphaHighlightTarget = { "AccentAlphaHighlightBrushKey" };
         private static readonly string[] AccentForegroundTarget = { "AccentForegroundBrushKey" };
-        private static readonly string[] AccentHighlightTarget = { "AccentHighlightBrushKey", "DataGridCellBackgroundHover", "DataGridCellBackgroundSelected", "ModernButtonTextHover", "ModernButtonIconBackgroundPressed", "SliderThumbBackgroundDragging" };
+        private static readonly string[] AccentHighlightTarget = { "AccentHighlightBrushKey"/*, "DataGridCellBackgroundHover", "DataGridCellBackgroundSelected", "ModernButtonTextHover", "ModernButtonIconBackgroundPressed", "SliderThumbBackgroundDragging"*/ };
 
         static ThemeSelectorService() {
 

@@ -11,7 +11,7 @@
                    xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
                    xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
                    xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
-                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+                   xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
                    xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
                    mc:Ignorable="d" 
                    WindowStartupLocation="CenterOwner"

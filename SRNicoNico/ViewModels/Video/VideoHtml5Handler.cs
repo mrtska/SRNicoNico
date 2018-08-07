@@ -91,7 +91,7 @@ namespace SRNicoNico.ViewModels {
                 }
 
 
-                if(VideoType != NicoNicoVideoType.MP4 && VideoType != NicoNicoVideoType.New) {
+                if(VideoType == NicoNicoVideoType.SWF || VideoType == NicoNicoVideoType.RTMP) {
 
                     Owner.ChangePlayRateAvalilable = PlayBackRateAvalilableReason.NotSupportVideo;
                 } else {

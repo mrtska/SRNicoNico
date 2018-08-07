@@ -10,6 +10,7 @@
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:UserVideoViewModel}}">
@@ -42,48 +43,14 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
-                <ListBox AlternationCount="2" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding Model.UserVideo}" ItemContainerStyle="{StaticResource FlatListBoxItem}" >
+                <ListBox   ItemsSource="{Binding Model.UserVideo}"  >
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type m:NicoNicoSearchResultEntry}">
                             <v:SearchResultEntry />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <Grid Grid.Row="2" Background="{DynamicResource BackgroundLevel1BrushKey}">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <StackPanel.Resources>
-                            <Style TargetType="StackPanel">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding MaxPages}" Value="0">
-                                        <Setter Property="Visibility" Value="Hidden" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Resources>
-                        <TextBlock Text="{Binding MaxPages,StringFormat=1ページ~{0}ページ}" FontSize="16" Margin="10,0,10,0"/>
-
-                        <Button Content="←" Padding="3" IsEnabled="{Binding LeftButtonEnabled}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="LeftButtonClick" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Button>
-                        <TextBox x:Name="page" x:FieldModifier="private" IsEnabled="{Binding IsActive,Converter={StaticResource Invert}}" HorizontalAlignment="Right" MaxLength="2" Width="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Text="{Binding CurrentPage,Mode=TwoWay}">
-                            <i:Interaction.Behaviors>
-                                <b:TextBoxNumericOnlyBehavior />
-                                <b:TextBoxPageSpinnerEnterKeyBehavior Binding="{Binding}" MethodName="SpinPage"/>
-                            </i:Interaction.Behaviors>
-                        </TextBox>
-                        <Button Content="→" Padding="3" Margin="0,0,17,0" IsEnabled="{Binding RightButtonEnabled}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="RightButtonClick" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Button>
-                    </StackPanel>
-                </Grid>
+                <misc:PageSpinner Grid.Row="2" />
                 <metro:ProgressRing Panel.ZIndex="2" HorizontalAlignment="Center" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsActive}" />
             </Grid>
         </ContentControl>

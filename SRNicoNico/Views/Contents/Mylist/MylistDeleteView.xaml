@@ -43,7 +43,7 @@
             <Grid Background="{DynamicResource BackgroundLevel1BrushKey}" >
                 <TextBlock Text="対象のマイリスト" FontSize="14" Margin="5"/>
             </Grid>
-                <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" MaxHeight="300" AlternationCount="2" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding SelectedMylist}" ItemContainerStyle="{StaticResource FlatListBoxItem}" >
+                <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" MaxHeight="300"   ItemsSource="{Binding SelectedMylist}"  >
                     <ListBox.Resources>
                         <DataTemplate DataType="{x:Type vm:MylistResultEntryViewModel}">
                                 <v:MylistResultEntry IsHitTestVisible="False" />

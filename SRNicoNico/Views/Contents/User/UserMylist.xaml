@@ -35,7 +35,7 @@
                 </Style>
             </ContentControl.Resources>
             <Grid>
-                <ListBox AlternationCount="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding Model.MylistList}" ItemContainerStyle="{StaticResource FlatListBoxItem}">
+                <ListBox  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding Model.MylistList}" >
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type m:NicoNicoUserMylistEntry}">
                             <v:UserMylistEntry />

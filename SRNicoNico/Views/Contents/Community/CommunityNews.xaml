@@ -41,7 +41,7 @@
                     </Style>
                 </ContentControl.Style>
                 <Grid>
-                    <ItemsControl AlternationCount="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding CommunityNewsList}" >
+                    <ItemsControl  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding CommunityNewsList}" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type mm:NicoNicoCommunityNews}">
                                 <Grid x:Name="back">

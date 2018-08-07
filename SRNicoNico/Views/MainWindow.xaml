@@ -11,7 +11,7 @@
                    xmlns:v="clr-namespace:SRNicoNico.Views"
                    mc:Ignorable="d"
                    IsRestoringWindowPlacement="True"
-		           Foreground="{DynamicResource ActiveForegroundBrushKey}"
+		           Foreground="{DynamicResource ForegroundTextBrushKey}"
 		           Background="{DynamicResource ThemeBrushKey}"
                    WindowStyle="SingleBorderWindow"
                    RenderOptions.BitmapScalingMode="HighQuality"
@@ -109,7 +109,7 @@
                         </ControlTemplate>
                     </metro:CaptionButton.Template>
                 </metro:CaptionButton>
-                <metro:SystemButtons Grid.Column="4" VerticalAlignment="Top" />
+                <metro:SystemButtons Grid.Column="4" />
             </Grid>
         </Border>
 

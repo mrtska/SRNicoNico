@@ -13,6 +13,7 @@
              xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
@@ -51,7 +52,7 @@
                     <ComboBoxItem Content="再生時間が長い順" />
                     <ComboBoxItem Content="再生時間が短い順" />
                 </ComboBox>
-                <TextBox Width="140" Height="23" Margin="5,10,0,0" MaxLength="255"  HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding SearchText}" TextWrapping="Wrap">
+                <metro:PromptTextBox Prompt="検索ワードを入力" Width="140" Height="23" Margin="5,10,0,0" MaxLength="255"  HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding SearchText}" TextWrapping="Wrap">
                     <i:Interaction.Behaviors>
                         <b:TextBoxEnterKeyBehavior UseMethodParameter="True" Binding="{Binding}" MethodName="Search"/>
                     </i:Interaction.Behaviors>
@@ -63,13 +64,13 @@
                             <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="TextBoxFocused" Value="False"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                </TextBox>
+                </metro:PromptTextBox>
                 <Grid Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <RadioButton HorizontalAlignment="Center" GroupName="Type" Content="テキスト" IsChecked="True" >
+                    <RadioButton HorizontalAlignment="Center" GroupName="Type" Content="テキスト" IsChecked="True">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Checked">
                                 <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="SearchType" Value="Keyword"/>
@@ -79,13 +80,13 @@
                             </ei:DataTrigger>
                         </i:Interaction.Triggers>
                     </RadioButton>
-                    <RadioButton Grid.Column="1" HorizontalAlignment="Center" GroupName="Type" Content="タグ" >
+                    <RadioButton Grid.Column="1" HorizontalAlignment="Center" GroupName="Type" Content="タグ">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Checked">
-                                <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="SearchType" Value="Tag"/>
+                                <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="SearchType" Value="Tag" />
                             </i:EventTrigger>
                             <ei:DataTrigger Binding="{Binding SearchType}" Value="Tag">
-                                <ei:ChangePropertyAction PropertyName="IsChecked" Value="True"/>
+                                <ei:ChangePropertyAction PropertyName="IsChecked" Value="True" />
                             </ei:DataTrigger>
                         </i:Interaction.Triggers>
                     </RadioButton>
@@ -100,7 +101,7 @@
 
                 <TextBlock Text="検索履歴" FontSize="18" Margin="0,10,0,0" />
             </StackPanel>
-            <ListBox Grid.Row="2" ItemsSource="{Binding SearchHistory, Mode=TwoWay}" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <ListBox Grid.Row="2" ItemsSource="{Binding SearchHistory, Mode=TwoWay}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource FlatListBoxItem}">
                         <Setter Property="Padding" Value="0" />
@@ -120,8 +121,8 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition MaxWidth="120" Width="*"/>
-                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition MaxWidth="120" Width="*" />
+                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Margin="5,0,0,0" Foreground="{DynamicResource ActiveForegroundBrushKey}" Text="{Binding}" ToolTip="{Binding}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
                             <Button HorizontalAlignment="Right" Grid.Column="1" Margin="1" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},Path=DataContext.DeleteHistoryCommand}" CommandParameter="{Binding}" Content="×" />
@@ -184,7 +185,7 @@
                     </Style>
                 </ContentControl.Style>
 
-                <ListBox VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding Model.SearchResult}" AlternationCount="2" ItemContainerStyle="{StaticResource FlatListBoxItem}" >
+                <ListBox ItemsSource="{Binding Model.SearchResult}">
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type m:NicoNicoSearchResultEntry}">
                             <v:SearchResultEntry />
@@ -192,41 +193,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </ContentControl>
-            <Grid Grid.Row="2" Background="{DynamicResource BackgroundLevel1BrushKey}">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <StackPanel.Resources>
-                        <Style TargetType="StackPanel">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding MaxPages}" Value="0">
-                                    <Setter Property="Visibility" Value="Hidden" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </StackPanel.Resources>
-                    <TextBlock Text="{Binding MaxPages,StringFormat=1ページ~{0}ページ}" FontSize="16" Margin="10,0,10,0"/>
-
-                    <Button Content="←" Padding="3" IsEnabled="{Binding LeftButtonEnabled}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="LeftButtonClick" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Button>
-                    <TextBox x:Name="page" x:FieldModifier="private" HorizontalAlignment="Right" MaxLength="2" Width="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Text="{Binding CurrentPage,Mode=TwoWay}">
-                        <i:Interaction.Behaviors>
-                            <b:TextBoxNumericOnlyBehavior />
-                            <b:TextBoxPageSpinnerEnterKeyBehavior Binding="{Binding}" MethodName="SpinPage"/>
-                        </i:Interaction.Behaviors>
-                    </TextBox>
-                    <Button Content="→" Padding="3" Margin="0,0,17,0" IsEnabled="{Binding RightButtonEnabled}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="RightButtonClick" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Button>
-                </StackPanel>
-            </Grid>
+            <misc:PageSpinner Grid.Row="2" />
         </Grid>
     </Grid>
 </UserControl>
