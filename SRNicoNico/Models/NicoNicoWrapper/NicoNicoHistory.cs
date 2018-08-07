@@ -82,6 +82,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                         item.VideoId = entry.SelectSingleNode("div/h5/a").Attributes["href"].Value.Substring(6);
                         item.ThumbNailUrl = entry.SelectSingleNode("div/a/img").Attributes["data-original"].Value;
+
+                        //削除・非公開の動画はURLにドメインが含まれていない
+                        if (item.ThumbNailUrl.Contains("deleted")) {
+
+                            item.ThumbNailUrl = "http://www.nicovideo.jp/" + item.ThumbNailUrl;
+                        }
+
                         item.Title = entry.SelectSingleNode("div/h5/a").InnerText.Trim();
 
                         //削除された動画だとぬるぽになる
