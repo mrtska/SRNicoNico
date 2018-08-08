@@ -14,13 +14,13 @@ namespace SRNicoNico.Views {
                 var str = (string) radio.Content;
                 switch(str) {
                     case "Blue":
-                        App.ViewModelRoot.ThemeSelector.ChangeTheme(Service.ThemeColors.Blue);
+                        App.ViewModelRoot.ThemeSelector.ChangeAccent(Service.EnumAccents.Blue);
                         break;
                     case "Orange":
-                        App.ViewModelRoot.ThemeSelector.ChangeTheme(Service.ThemeColors.Orange);
+                        App.ViewModelRoot.ThemeSelector.ChangeAccent(Service.EnumAccents.Orange);
                         break;
                     case "Purple":
-                        App.ViewModelRoot.ThemeSelector.ChangeTheme(Service.ThemeColors.Purple);
+                        App.ViewModelRoot.ThemeSelector.ChangeAccent(Service.EnumAccents.Purple);
                         break;
                 }
                 Models.NicoNicoViewer.Settings.Instance.ThemeColor = str;

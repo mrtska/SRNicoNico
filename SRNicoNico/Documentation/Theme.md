@@ -11,11 +11,12 @@
 |-|:-:|:-:|-|-|
 |ThemeBrushKey|Dark|*|![#FF2D2D30](https://via.placeholder.com/15/2D2D30/00000000?text=+) #FF2D2D30|Theme Background Color (Main Background Color) |
 |BackgroundBrushKey|Dark|*|![#FF1B1B1C](https://via.placeholder.com/15/1B1B1C/00000000?text=+) #FF1B1B1C|Control Background Color|
-|ForegroundBrushKey|Dark|*|![#FFC8C8C8](https://via.placeholder.com/15/C8C8C8/00000000?text=+) #FFC8C8C8|Control Foreground Color|
+|ForegroundBrushKey|Dark|*|![AliceBlue](https://via.placeholder.com/15/F0F8FF/00000000?text=+) AliceBlue|Control Foreground Color|
 |BorderBrushKey|Dark|*|![#FF3F3F46](https://via.placeholder.com/15/3F3F46/00000000?text=+) #FF3F3F46|Border Background Color|
 |SemiactiveBackgroundBrushKey|Dark|*|![#FF333337](https://via.placeholder.com/15/333337/00000000?text=+) #FF333337|Minor Control Background Color|
 |SemiactiveBorderBrushKey|Dark|*|![#FF3F3F46](https://via.placeholder.com/15/3F3F46/00000000?text=+) #FF3F3F46|Minor Control Border Background Color|
 |SemiActiveForegroundBrushKey|Dark|*|![#FFA1A0A0](https://via.placeholder.com/15/A1A0A0/00000000?text=+) #FFA1A0A0|Minor Control Foreground Color|
+|ActiveBackgroundBrushKey|Dark|*|![#FF3F3F46](https://via.placeholder.com/15/3F3F46/00000000?text=+) #FF3F3F46|Minor Control Foreground Color|
 |ActiveBorderBrushKey|Dark|*|![#FF3F3F46](https://via.placeholder.com/15/3F3F46/00000000?text=+) #FF3F3F46|Active Control Border Color (MouseOver etc...)|
 |ActiveForegroundBrushKey|Dark|*|![White](https://via.placeholder.com/15/FFFFFF/00000000?text=+) White|Active Control Foreground Color (Pressed Control etc...)|
 |InactiveBackgroundBrushKey|Dark|*|![#FF2D2D30](https://via.placeholder.com/15/2D2D30/00000000?text=+) #FF2D2D30|InActive Control Background Color|
@@ -39,10 +40,3 @@
 |LinkForegroundBrushKey|Dark|*|![#FF7AC1FF](https://via.placeholder.com/15/7AC1FF/00000000?text=+) #FF7AC1FF|HyperLink Foreground Color|
 |ActiveLinkForegroundBrushKey|Dark|*|![#FF007ACC](https://via.placeholder.com/15/007ACC/00000000?text=+) #FF007ACC|Active HyperLink Foreground Color|
 |ValidationErrorBrushKey|Dark|*|![#FFC80000](https://via.placeholder.com/15/C80000/00000000?text=+) #FFC80000|Validation Error Foreground Color|
-
-
-|Key|Theme|Accent|Value|Comment|
-|-|:-:|:-:|-|-|
-|ForegroundTextBrushKey|Dark|*|![#AliceBlue](https://via.placeholder.com/15/F0F8FF/00000000?text=+) AliceBlue|Foreground Text|
-|ForegroundDisabledBrushKey|Dark|*|![#FF515151](https://via.placeholder.com/15/515151/00000000?text=+) #FF515151|Disabled Foreground Color|
-|ForegroundNormalBrushKey|Dark|*|![#FF919191](https://via.placeholder.com/15/919191/00000000?text=+) #FF919191|Validation Error Background Color|

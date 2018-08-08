@@ -285,11 +285,24 @@
     <Compile Include="Views\ExitConfirmView.xaml.cs">
       <DependentUpon>ExitConfirmView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Service\IThemeColor.cs" />
+    <Compile Include="Views\Service\ITheme.cs" />
     <Compile Include="Views\Service\ThemeSelectorService.cs" />
-    <Compile Include="Views\Service\Theme\Blue.cs" />
-    <Compile Include="Views\Service\Theme\Purple.cs" />
-    <Compile Include="Views\Service\Theme\Orange.cs" />
+    <Compile Include="Views\Service\Accent\Blue.cs" />
+    <Compile Include="Views\Service\Accent\Orange.cs" />
+    <Compile Include="Views\Service\Accent\Purple.cs" />
+    <Compile Include="Views\Service\Theme\Dark.cs" />
+    <Page Include="Themes\Accent\Purple.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Accent\Blue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Accent\Orange.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.RoundButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -303,6 +316,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Theme.Slider.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Theme.ScrollViewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -341,6 +358,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Theme\Dark.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Contents\Community\Community.xaml">
       <Generator>MSBuild:Compile</Generator>

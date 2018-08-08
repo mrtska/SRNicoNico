@@ -134,7 +134,8 @@ namespace SRNicoNico.ViewModels {
         public MainWindowViewModel() {
 
             ThemeSelector = new ThemeSelectorService();
-            ThemeSelector.ChangeTheme((ThemeColors) Enum.Parse(typeof(ThemeColors), Settings.Instance.ThemeColor));
+            ThemeSelector.ChangeAccent((EnumAccents) Enum.Parse(typeof(EnumAccents), Settings.Instance.ThemeColor));
+            ThemeSelector.ChangeTheme(EnumThemes.Dark);
 
             //ステータスバーを初期化してタイマーをスタートさせる
             StatusBar = new StatusBarViewModel();

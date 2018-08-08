@@ -1,69 +1,51 @@
 ﻿using SRNicoNico.Views.Service.Theme;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Media;
+using System.Windows;
 
 namespace SRNicoNico.Views.Service {
 
-    public enum ThemeColors {
+    public enum EnumAccents {
 
         Blue,
         Orange,
         Purple
     }
+    public enum EnumThemes {
+
+        Dark,
+        Light
+    }
 
     public class ThemeSelectorService {
 
         //テーマ本体とenumのマップ
-        private static readonly Dictionary<ThemeColors, IThemeColor> ColorMap = new Dictionary<ThemeColors, IThemeColor>();
-
-        private static readonly string[] AccentTarget = { "AccentBrushKey"/*, "WindowBorderActive", "Accent", "SliderThumbBorderDragging"*/ };
-        private static readonly string[] AccentActiveTarget = { "AccentActiveBrushKey" };
-        private static readonly string[] AccentAlphaHighlightTarget = { "AccentAlphaHighlightBrushKey" };
-        private static readonly string[] AccentForegroundTarget = { "AccentForegroundBrushKey" };
-        private static readonly string[] AccentHighlightTarget = { "AccentHighlightBrushKey"/*, "DataGridCellBackgroundHover", "DataGridCellBackgroundSelected", "ModernButtonTextHover", "ModernButtonIconBackgroundPressed", "SliderThumbBackgroundDragging"*/ };
+        private static readonly Dictionary<EnumAccents, IAccent> AccentMap = new Dictionary<EnumAccents, IAccent>();
+        private static readonly Dictionary<EnumThemes, ITheme> ThemeMap = new Dictionary<EnumThemes, ITheme>();
 
         static ThemeSelectorService() {
 
-            ColorMap[ThemeColors.Orange] = new Orange();
-            ColorMap[ThemeColors.Blue] = new Blue();
-            ColorMap[ThemeColors.Purple] = new Purple();
+            AccentMap[EnumAccents.Orange] = new Orange();
+            AccentMap[EnumAccents.Blue] = new Blue();
+            AccentMap[EnumAccents.Purple] = new Purple();
+
+            ThemeMap[EnumThemes.Dark] = new Dark();
         }
 
-        public void ChangeTheme(ThemeColors color) {
+        public void ChangeAccent(EnumAccents accent) {
 
-            var theme = ColorMap[color];
+            var theme = AccentMap[accent];
+
+            //アクセントを反映
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary() { Source =  new Uri(theme.ResourcePath, UriKind.RelativeOrAbsolute)});
+        }
+
+        public void ChangeTheme(EnumThemes theme) {
+
+            var uri = ThemeMap[theme];
 
             //テーマを反映
-            foreach(var name in AccentTarget) {
-
-                App.Current.Resources[name] = theme.AccentBrush;
-            }
-
-            foreach (var name in AccentActiveTarget) {
-
-                App.Current.Resources[name] = theme.AccentActiveBrush;
-            }
-            foreach (var name in AccentAlphaHighlightTarget) {
-
-                App.Current.Resources[name] = theme.AccentAlphaHighlightBrush;
-            }
-
-            foreach(var name in AccentForegroundTarget) {
-
-                App.Current.Resources[name] = theme.AccentForegroundBrush;
-            }
-            foreach (var name in AccentHighlightTarget) {
-
-                App.Current.Resources[name] = theme.AccentHighlightBrush;
-            }
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri(uri.ResourcePath, UriKind.RelativeOrAbsolute) });
         }
-
-
-
     }
 }
