@@ -51,7 +51,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 App.ViewModelRoot.MainContent.AddUserTab(vm);
                 return vm;
             }
-            if(url.StartsWith("http://com.nicovideo.jp/community/")) {
+            if(url.StartsWith("https://com.nicovideo.jp/community/")) {
 
                 var vm = new CommunityViewModel(url);
                 App.ViewModelRoot.MainContent.AddUserTab(vm);
