@@ -8,6 +8,8 @@ using System.IO;
 using System.Windows;
 using System.Diagnostics;
 using System.Windows.Documents;
+using System.Windows.Media;
+using System.Text.RegularExpressions;
 
 namespace SRNicoNico.Views.Converter {
     // This code was taken from MSDN as an example of converting HTML to XAML.
@@ -4884,8 +4886,22 @@ namespace SRNicoNico.Views.Converter {
                         */
                     }
                     attributeValue = GetAttribute(htmlElement, "color");
-                    if(attributeValue != null) {
-                        localProperties["color"] = attributeValue;
+
+                    if (attributeValue != null) {
+
+                        if (Models.NicoNicoViewer.Settings.Instance.Theme == "Dark" && Regex.IsMatch(attributeValue, "#[a-fA-F0-9]+$")) {
+
+                            var color = (Color) ColorConverter.ConvertFromString(attributeValue);
+                            
+                            // 暗い色は白背景じゃないと見えないのでそれなりに派手な色のみ適用する
+                            if (color.R > 0x55 || color.G > 0x55 || color.B > 0x55) {
+
+                                localProperties["color"] = attributeValue;
+                            }
+                        } else {
+
+                            localProperties["color"] = attributeValue;
+                        }
                     }
                     break;
                 case "samp":

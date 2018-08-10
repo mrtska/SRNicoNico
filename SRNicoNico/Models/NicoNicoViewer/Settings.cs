@@ -364,7 +364,23 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
         #endregion
-        
+
+
+        #region Theme変更通知プロパティ
+        private string _Theme = "Dark";
+
+        public string Theme {
+            get { return _Theme; }
+            set { 
+                if (_Theme == value)
+                    return;
+                _Theme = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
 
         #region ThemeColor変更通知プロパティ
         private string _ThemeColor = "Orange";
