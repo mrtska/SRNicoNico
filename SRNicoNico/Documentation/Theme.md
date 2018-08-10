@@ -37,6 +37,7 @@
 
 |Key|Theme|Accent|Value|Comment|
 |-|:-:|:-:|-|-|
-|LinkForegroundBrushKey|Dark|*|![#FF7AC1FF](https://via.placeholder.com/15/7AC1FF/00000000?text=+) #FF7AC1FF|HyperLink Foreground Color|
-|ActiveLinkForegroundBrushKey|Dark|*|![#FF007ACC](https://via.placeholder.com/15/007ACC/00000000?text=+) #FF007ACC|Active HyperLink Foreground Color|
+|LinkForegroundBrushKey|Dark|*|![#FF007ACC](https://via.placeholder.com/15/007ACC/00000000?text=+) #FF007ACC|HyperLink Foreground Color|
+|HoverLinkForegroundBrushKey|Dark|*|![#FFCA5100](https://via.placeholder.com/15/CA5100/00000000?text=+) #FFCA5100|Hover HyperLink Foreground Color|
+|ActiveLinkForegroundBrushKey|Dark|*|![#FF5A1464](https://via.placeholder.com/15/5A1464/00000000?text=+) #FF5A1464|Active HyperLink Foreground Color|
 |ValidationErrorBrushKey|Dark|*|![#FFC80000](https://via.placeholder.com/15/C80000/00000000?text=+) #FFC80000|Validation Error Foreground Color|

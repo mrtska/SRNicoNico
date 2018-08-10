@@ -44,11 +44,7 @@
                 Text="コメント" />
 
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                <controls:RoundButton
-                    Margin="0,0,10,0"
-                    HorizontalAlignment="Right"
-                    Focusable="False"
-                    ToolTip="オートスクロール">
+                <controls:RoundButton Margin="0,0,10,0" HorizontalAlignment="Right" Focusable="False" ToolTip="オートスクロール">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <l:LivetCallMethodAction MethodName="ToggleAutoScroll" MethodTarget="{Binding}" />
@@ -64,43 +60,23 @@
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type controls:RoundButton}">
-                                                <Grid
-                                                    Width="{TemplateBinding EllipseDiameter}"
-                                                    Height="{TemplateBinding EllipseDiameter}"
-                                                    Margin="1"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center">
-                                                    <Ellipse
-                                                        x:Name="ellipse"
-                                                        VerticalAlignment="Stretch"
-                                                        Stroke="{DynamicResource ModernButtonBorder}"
-                                                        StrokeThickness="{TemplateBinding EllipseStrokeThickness}" />
-                                                    <Path
-                                                        Width="{TemplateBinding IconWidth}"
-                                                        Height="{TemplateBinding IconHeight}"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center"
-                                                        Data="M12,17L7,12H10V8H14V12H17L12,17 Z"
-                                                        Fill="{TemplateBinding Foreground}"
-                                                        Stretch="Uniform" />
-                                                    <Path
-                                                        Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
-                                                        Fill="#FFDD2324"
-                                                        Stretch="Uniform" />
+                                                <Grid Width="{TemplateBinding EllipseDiameter}" Height="{TemplateBinding EllipseDiameter}" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <Ellipse x:Name="ellipse" VerticalAlignment="Stretch" Stroke="{DynamicResource SemiActiveForegroundBrushKey}" StrokeThickness="{TemplateBinding EllipseStrokeThickness}" />
+                                                    <Path Width="{TemplateBinding IconWidth}" Height="{TemplateBinding IconHeight}" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M12,17L7,12H10V8H14V12H17L12,17 Z"
+                                                        Fill="{TemplateBinding Foreground}" Stretch="Uniform" />
+                                                    <Path Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" Fill="{DynamicResource ValidationErrorBrushKey}" Stretch="Uniform" />
                                                 </Grid>
 
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsFocused" Value="True">
-                                                        <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource Accent}" />
+                                                        <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource AccentBrushKey}" />
                                                     </Trigger>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Foreground" Value="{DynamicResource ModernButtonTextHover}" />
-                                                        <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource ModernButtonBorderHover}" />
+                                                        <Setter Property="Foreground" Value="{DynamicResource AccentHighlightBrushKey}" />
+                                                        <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource ActiveForegroundBrushKey}" />
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
-                                                        <Setter Property="Foreground" Value="{DynamicResource ModernButtonTextPressed}" />
-                                                        <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource ModernButtonBorderPressed}" />
-                                                        <Setter TargetName="ellipse" Property="Fill" Value="{DynamicResource ModernButtonIconBackgroundPressed}" />
+                                                        <Setter TargetName="ellipse" Property="Fill" Value="{DynamicResource AccentHighlightBrushKey}" />
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
 
@@ -112,13 +88,9 @@
                         </Style>
                     </controls:RoundButton.Style>
                 </controls:RoundButton>
-                <controls:RoundButton
-                    Margin="0,0,10,0"
-                    HorizontalAlignment="Right"
-                    Focusable="False"
+                <controls:RoundButton Margin="0,0,10,0" HorizontalAlignment="Right" Focusable="False"
                     IconData="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z"
-                    IsEnabled="{Binding IsActive, Converter={StaticResource Invert}}"
-                    ToolTip="コメントを更新">
+                    IsEnabled="{Binding IsActive, Converter={StaticResource Invert}}" ToolTip="コメントを更新">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <l:LivetCallMethodAction MethodName="Refresh" MethodTarget="{Binding}" />
@@ -127,17 +99,8 @@
                 </controls:RoundButton>
             </StackPanel>
         </Grid>
-        <DataGrid
-            Grid.Row="1"
-            AlternationCount="2"
-            AutoGenerateColumns="False"
-            HeadersVisibility="None"
-            ItemsSource="{Binding SelectedList.CommentList}"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            ScrollViewer.VerticalScrollBarVisibility="Visible"
-            SelectionMode="Single">
+        <DataGrid Grid.Row="1" AutoGenerateColumns="False" HeadersVisibility="None" ItemsSource="{Binding SelectedList.CommentList}">
             <DataGrid.Resources>
-
                 <ContextMenu x:Key="comment">
                     <MenuItem Header="このコメントの時間に飛ぶ">
                         <i:Interaction.Triggers>
@@ -160,38 +123,17 @@
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </MenuItem>
-
                 </ContextMenu>
             </DataGrid.Resources>
-            <DataGrid.ItemContainerStyle>
-                <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
-                    <Style.Triggers>
-                        <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}" />
-                        </Trigger>
-                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="{DynamicResource BackgroundLevel1BrushKey}" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource AccentBrushKey}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.ItemContainerStyle>
             <i:Interaction.Behaviors>
                 <b:CommentAutoScrollBehavior AutoScrollEnabled="{Binding AutoScrollEnabled}" Vpos="{Binding CurrentVpos}" />
             </i:Interaction.Behaviors>
             <DataGrid.Columns d:DataContext="{d:DesignInstance {x:Type vm:VideoCommentEntryViewModel}}">
 
-                <DataGridTextColumn
-                    Width="40"
-                    Binding="{Binding Item.Vpos, Converter={StaticResource vpostd}, StringFormat=m:ss}"
-                    CanUserSort="False"
-                    IsReadOnly="True">
+                <DataGridTextColumn Width="40" Binding="{Binding Item.Vpos, Converter={StaticResource vpostd}, StringFormat=m:ss}" CanUserSort="False" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="ContextMenu" Value="{StaticResource comment}" />
-
                             <Setter Property="ToolTipService.ShowDuration" Value="0x7FFFFFFF" />
                             <Setter Property="ToolTip">
                                 <Setter.Value>
@@ -200,14 +142,8 @@
                             </Setter>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-
                 </DataGridTextColumn>
-
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding Item.Content}"
-                    CanUserSort="False"
-                    IsReadOnly="True">
+                <DataGridTextColumn Width="*" Binding="{Binding Item.Content}" CanUserSort="False" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="ContextMenu">
@@ -235,15 +171,6 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <metro:ProgressRing
-            Grid.Row="1"
-            Width="50"
-            Height="50"
-            HorizontalAlignment="Center"
-            Panel.ZIndex="2"
-            EllipseDiameter="6"
-            Foreground="Gray"
-            IsActive="{Binding IsActive}"
-            MaxSideLength="40" />
+        <metro:ProgressRing Grid.Row="1" Width="50" Height="50" HorizontalAlignment="Center" Panel.ZIndex="2" EllipseDiameter="6" IsActive="{Binding IsActive}"  MaxSideLength="40" />
     </Grid>
 </UserControl>

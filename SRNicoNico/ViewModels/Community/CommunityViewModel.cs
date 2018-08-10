@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
+﻿using Livet;
 using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
 using SRNicoNico.Models.NicoNicoWrapper;
 using System.Windows.Input;
 
@@ -18,7 +7,6 @@ namespace SRNicoNico.ViewModels {
     public class CommunityViewModel : TabItemViewModel {
 
         internal readonly NicoNicoCommunity CommunityInstance;
-
 
         #region CommunityInfo変更通知プロパティ
         private NicoNicoCommunityEntry _CommunityInfo;
@@ -48,13 +36,10 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
         public CommunityViewModel(string communityUrl) : base("コミュニティ") {
 
             CommunityInstance = new NicoNicoCommunity(this, communityUrl);
         }
-
-
         public async void Initialize() {
 
             IsActive = true;
@@ -88,8 +73,6 @@ namespace SRNicoNico.ViewModels {
 
         }
 
-
-
         public void Refresh() {
 
             Initialize();
@@ -116,7 +99,6 @@ namespace SRNicoNico.ViewModels {
                     return;
                 }
             }
-
         }
         public override bool CanShowHelp() {
             return true;
@@ -126,6 +108,5 @@ namespace SRNicoNico.ViewModels {
 
             Messenger.Raise(new TransitionMessage(typeof(Views.StartHelpView), this, TransitionMode.NewOrActive));
         }
-
     }
 }

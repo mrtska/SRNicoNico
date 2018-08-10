@@ -3,6 +3,7 @@
 
     <SolidColorBrush x:Key="AccentBrushKey" Color="#FF68217A" />
     <SolidColorBrush x:Key="AccentHighlightBrushKey" Color="#FF8C46A0" />
+    <SolidColorBrush x:Key="AccentAlphaHighlightBrushKey" Color="#A068217A" />
     <SolidColorBrush x:Key="AccentActiveBrushKey" Color="#FF5A1464" />
     <SolidColorBrush x:Key="AccentForegroundBrushKey" Color="White" />
 

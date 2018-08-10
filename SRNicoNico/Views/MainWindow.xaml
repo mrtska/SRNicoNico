@@ -120,6 +120,5 @@
             <v:StatusBar DataContext="{Binding StatusBar}"/>
         </DockPanel>
 
-        <metro:ResizeGrip Grid.Row="1" Grid.RowSpan="2" x:Name="resizeGrip" x:FieldModifier="private" HorizontalAlignment="Right" VerticalAlignment="Bottom" WindowChrome.ResizeGripDirection="BottomRight" />
     </Grid>
 </metro:MetroWindow>

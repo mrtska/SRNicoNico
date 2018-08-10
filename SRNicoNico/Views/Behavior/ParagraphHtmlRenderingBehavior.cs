@@ -13,21 +13,21 @@ using SRNicoNico.Views.Converter;
 
 namespace SRNicoNico.Views.Behavior {
 
-    public static class TextBlockHtmlRenderingBehavior {
+    public static class ParagraphHtmlRenderingBehavior {
 
-        public static string GetHtmlText(TextBlock wb) {
-            return wb.GetValue(HtmlTextProperty) as string;
+        public static string GetRawHtmlText(Paragraph wb) {
+            return wb.GetValue(RawHtmlTextProperty) as string;
         }
-        public static void SetHtmlText(TextBlock wb, string html) {
-            wb.SetValue(HtmlTextProperty, html);
+        public static void SetRawHtmlText(Paragraph wb, string html) {
+            wb.SetValue(RawHtmlTextProperty, html);
         }
-        public static readonly DependencyProperty HtmlTextProperty =
-            DependencyProperty.RegisterAttached("HtmlText", typeof(string), typeof(TextBlockHtmlRenderingBehavior), new UIPropertyMetadata("", OnHtmlTextChanged));
+        public static readonly DependencyProperty RawHtmlTextProperty =
+            DependencyProperty.RegisterAttached("RawHtmlText", typeof(string), typeof(ParagraphHtmlRenderingBehavior), new UIPropertyMetadata("", OnHtmlTextChanged));
 
 
         private static void OnHtmlTextChanged(DependencyObject depObj, DependencyPropertyChangedEventArgs e) {
             // Go ahead and return out if we set the property on something other than a textblock, or set a value that is not a string.
-            if (!(depObj is TextBlock txtBox))
+            if (!(depObj is Paragraph txtBox))
                 return;
             if (!(e.NewValue is string))
                 return;

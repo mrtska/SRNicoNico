@@ -169,6 +169,9 @@
     <Compile Include="Models\NicoNicoWrapper\NicoScript\NicoScriptDefault.cs" />
     <Compile Include="Models\NicoNicoWrapper\User\NicoNicoUserVideo.cs" />
     <Compile Include="Models\NicoNicoWrapper\User\NicoNicoUserMylist.cs" />
+    <Compile Include="Themes\Theme.Hyperlink.xaml.cs">
+      <DependentUpon>Theme.Hyperlink.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\Community\CommunityFollowViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityProfileViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityVideoViewModel.cs" />
@@ -187,6 +190,8 @@
     <Compile Include="ViewModels\Video\PaidVideoViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoMylistViewModel.cs" />
     <Compile Include="Views\Behavior\DragDropExtension.cs" />
+    <Compile Include="Views\Behavior\ParagraphHtmlRenderingBehavior.cs" />
+    <Compile Include="Views\Behavior\ScrollViewerScrollingAmountBahavior.cs" />
     <Compile Include="Views\Contents\Community\Community.xaml.cs">
       <DependentUpon>Community.xaml</DependentUpon>
     </Compile>
@@ -280,6 +285,8 @@
     <Compile Include="Views\Contents\Video\WindowFullScreenView.xaml.cs">
       <DependentUpon>WindowFullScreenView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\DisabledScrollViewerFlowDocumentScrollViewer.cs" />
+    <Compile Include="Views\Controls\HtmlRenderer.cs" />
     <Compile Include="Views\Controls\RoundButton.cs" />
     <Compile Include="Views\Converter\NGTypeConverter.cs" />
     <Compile Include="Views\ExitConfirmView.xaml.cs">
@@ -303,7 +310,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Generic.DisabledScrollViewerFlowDocumentScrollViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.RoundButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.HtmlRenderer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Theme.FlowDocument.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Theme.Hyperlink.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -320,6 +343,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Theme.ScrollViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Theme.TabView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

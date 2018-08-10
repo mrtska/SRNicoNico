@@ -20,7 +20,7 @@
                             <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBrushKey}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{DynamicResource ForegroundDisabledBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource InactiveForegroundBrushKey}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -81,11 +81,11 @@
                 <Setter TargetName="DropDownBorder" Property="Height" Value="95"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource InputTextDisabled}"/>
+                <Setter Property="Foreground" Value="{DynamicResource InactiveForegroundBrushKey}"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource InputBackgroundHover}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource InputBorderHover}" />
+                <Setter Property="Background" Value="{DynamicResource ActiveBackgroundBrushKey}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ActiveBorderBrushKey}" />
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
                 <Setter Property="BorderBrush" Value="{DynamicResource AccentBrushKey}" />
@@ -157,7 +157,7 @@
                             <Setter TargetName="DropDownBorder" Property="Height" Value="95"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{DynamicResource ForegroundDisabledBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource InactiveForegroundBrushKey}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="{DynamicResource ActiveBackgroundBrushKey}" />

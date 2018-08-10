@@ -15,6 +15,8 @@
     <SolidColorBrush x:Key="InactiveBorderBrushKey" Color="#FF3C3C41" />
     <SolidColorBrush x:Key="InactiveForegroundBrushKey" Color="#FF787878" />
 
+    <SolidColorBrush x:Key="AlternationBackgroundBrushKey" Color="#FF252627" />
+
     <SolidColorBrush x:Key="HighlightBackgroundBrushKey" Color="#FF686868" />
     <SolidColorBrush x:Key="HighlightBorderBrushKey" Color="#FF686868" />
     <SolidColorBrush x:Key="HighlightForegroundBrushKey" Color="White" />
@@ -25,7 +27,8 @@
     <SolidColorBrush x:Key="Highlight3BorderBrushKey" Color="#FFC8C8C8" />
     <SolidColorBrush x:Key="Highlight3ForegroundBrushKey" Color="Black" />
 
-    <SolidColorBrush x:Key="LinkForegroundBrushKey" Color="#FF7AC1FF" />
-    <SolidColorBrush x:Key="ActiveLinkForegroundBrushKey" Color="#FF007ACC" />
+    <SolidColorBrush x:Key="LinkForegroundBrushKey" Color="#FF007ACC" />
+    <SolidColorBrush x:Key="HoverLinkForegroundBrushKey" Color="#FFCA5100" />
+    <SolidColorBrush x:Key="ActiveLinkForegroundBrushKey" Color="#FF5A1464" />
     <SolidColorBrush x:Key="ValidationErrorBrushKey" Color="#FFC80000" />
 </ResourceDictionary>

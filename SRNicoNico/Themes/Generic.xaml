@@ -2,9 +2,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
 
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.DisabledScrollViewerFlowDocumentScrollViewer.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.HtmlRenderer.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.RoundButton.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.VolumeBar.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.SeekBar.xaml" />
 
     </ResourceDictionary.MergedDictionaries>
+
 </ResourceDictionary>

@@ -59,7 +59,7 @@
                            Focusable="False" Background="{DynamicResource BackgroundLevel1BrushKey}" Style="{StaticResource TabViewWithScrollViewerStyle}"
                            dd:DragDrop.DropHandler="{Binding}">
                     <metro:TabView.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource DefaultTabViewItemContainerStyle}">
+                    <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="Height" Value="auto"/>
                         <Setter Property="dd:DragDrop.DragSourceIgnore" Value="True" />
                         <EventSetter Event="PreviewMouseDown" Handler="MouseDown" />

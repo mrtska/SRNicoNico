@@ -17,8 +17,8 @@
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="Background" Value="{DynamicResource ForegroundNormalBrushKey}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ForegroundNormalBrushKey}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrushKey}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushKey}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
@@ -27,16 +27,16 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource SliderThumbBackgroundHover}" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource SliderThumbBorderHover}" />
+                            <Setter Property="Background" Value="{DynamicResource ActiveBackgroundBrushKey}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource ActiveBorderBrushKey}" />
                         </Trigger>
                         <Trigger Property="IsDragging" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource SliderThumbBackgroundDragging}" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource SliderThumbBorderDragging}" />
+                            <Setter Property="Background" Value="{DynamicResource ActiveBackgroundBrushKey}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource ActiveBorderBrushKey}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Background" Value="{DynamicResource SliderThumbBackgroundDisabled}" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource SliderThumbBorderDisabled}" />
+                            <Setter Property="Background" Value="{DynamicResource InactiveBackgroundBrushKey}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource InactiveBorderBrushKey}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -68,14 +68,14 @@
                                 <RowDefinition Height="Auto" MinHeight="{TemplateBinding Slider.MinHeight}" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TickBar x:Name="TopTick" Grid.Row="0" Height="4" Fill="{DynamicResource ForegroundNormalBrushKey}" Placement="Top" Visibility="Collapsed" />
-                            <TickBar x:Name="BottomTick" Grid.Row="2" Height="4" Fill="{DynamicResource ForegroundNormalBrushKey}" Placement="Bottom" Visibility="Collapsed" />
+                            <TickBar x:Name="TopTick" Grid.Row="0" Height="4" Fill="{DynamicResource ForegroundBrushKey}" Placement="Top" Visibility="Collapsed" />
+                            <TickBar x:Name="BottomTick" Grid.Row="2" Height="4" Fill="{DynamicResource ForegroundBrushKey}" Placement="Bottom" Visibility="Collapsed" />
                             <Border x:Name="TrackBackground" Grid.Row="1" Height="4.0" Margin="5,0" VerticalAlignment="center"
                                     Background="{DynamicResource BackgroundBrushKey}"
                                     BorderBrush="{DynamicResource BackgroundBrushKey}"
                                     BorderThickness="1">
                                 <Canvas Margin="-6,-1">
-                                    <Rectangle x:Name="PART_SelectionRange" Height="4.0" Fill="{DynamicResource SliderSelectionBackground}" Stroke="{DynamicResource SliderSelectionBorder}" StrokeThickness="1.0" Visibility="Hidden" />
+                                    <Rectangle x:Name="PART_SelectionRange" Height="4.0" Fill="{DynamicResource SemiactiveBackgroundBrushKey}" Stroke="{DynamicResource SemiactiveBorderBrushKey}" StrokeThickness="1.0" Visibility="Hidden" />
                                 </Canvas>
                             </Border>
                             <Track Name="PART_Track" Grid.Row="1">
@@ -108,8 +108,8 @@
                             <Setter TargetName="PART_SelectionRange" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="TopTick" Property="Fill" Value="{DynamicResource SliderTickDisabled}" />
-                            <Setter TargetName="BottomTick" Property="Fill" Value="{DynamicResource SliderTickDisabled}" />
+                            <Setter TargetName="TopTick" Property="Fill" Value="{DynamicResource InactiveBackgroundBrushKey}" />
+                            <Setter TargetName="BottomTick" Property="Fill" Value="{DynamicResource InactiveBackgroundBrushKey}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -127,15 +127,12 @@
                                         <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding Slider.MinWidth}" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TickBar x:Name="TopTick" Grid.Column="0" Width="4" Fill="{DynamicResource ForegroundNormalBrushKey}" Placement="Left" Visibility="Collapsed" />
-                                    <TickBar x:Name="BottomTick" Grid.Column="2" Width="4" Fill="{DynamicResource ForegroundNormalBrushKey}" Placement="Right" Visibility="Collapsed" />
+                                    <TickBar x:Name="TopTick" Grid.Column="0" Width="4" Fill="{DynamicResource ForegroundBrushKey}" Placement="Left" Visibility="Collapsed" />
+                                    <TickBar x:Name="BottomTick" Grid.Column="2" Width="4" Fill="{DynamicResource ForegroundBrushKey}" Placement="Right" Visibility="Collapsed" />
                                     <Border Name="TrackBackground" Grid.Column="1" Width="4.0" Margin="0,5" HorizontalAlignment="center"
-                                            Background="{DynamicResource ForegroundNormalBrushKey}"
-                                            BorderBrush="{DynamicResource ForegroundNormalBrushKey}"
-                                            BorderThickness="1">
-
+                                            Background="{DynamicResource ForegroundBrushKey}" BorderBrush="{DynamicResource ForegroundBrushKey}" BorderThickness="1">
                                         <Canvas Margin="-1,-6">
-                                            <Rectangle x:Name="PART_SelectionRange" Width="4.0" Fill="{DynamicResource SliderSelectionBackground}" Stroke="{DynamicResource SliderSelectionBorder}" StrokeThickness="1.0" Visibility="Hidden" />
+                                            <Rectangle x:Name="PART_SelectionRange" Width="4.0" Fill="{DynamicResource SemiactiveBackgroundBrushKey}" Stroke="{DynamicResource SemiactiveBorderBrushKey}" StrokeThickness="1.0" Visibility="Hidden" />
                                         </Canvas>
                                     </Border>
 
@@ -169,8 +166,8 @@
                                     <Setter TargetName="PART_SelectionRange" Property="Visibility" Value="Visible" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
-                                    <Setter TargetName="TopTick" Property="Fill" Value="{DynamicResource SliderTickDisabled}" />
-                                    <Setter TargetName="BottomTick" Property="Fill" Value="{DynamicResource SliderTickDisabled}" />
+                                    <Setter TargetName="TopTick" Property="Fill" Value="{DynamicResource InactiveBackgroundBrushKey}" />
+                                    <Setter TargetName="BottomTick" Property="Fill" Value="{DynamicResource InactiveBackgroundBrushKey}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

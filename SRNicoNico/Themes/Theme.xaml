@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <SolidColorBrush x:Key="AccentBrushKey" />
+    <SolidColorBrush x:Key="AccentAlphaHighlightBrushKey" />
     <SolidColorBrush x:Key="AccentHighlightBrushKey" />
     <SolidColorBrush x:Key="AccentActiveBrushKey" />
     <SolidColorBrush x:Key="AccentForegroundBrushKey" />
@@ -13,11 +14,14 @@
     <SolidColorBrush x:Key="SemiactiveBackgroundBrushKey" />
     <SolidColorBrush x:Key="SemiactiveBorderBrushKey" />
     <SolidColorBrush x:Key="SemiActiveForegroundBrushKey" />
+    <SolidColorBrush x:Key="ActiveBackgroundBrushKey" />
     <SolidColorBrush x:Key="ActiveBorderBrushKey" />
     <SolidColorBrush x:Key="ActiveForegroundBrushKey" />
     <SolidColorBrush x:Key="InactiveBackgroundBrushKey" />
     <SolidColorBrush x:Key="InactiveBorderBrushKey" />
     <SolidColorBrush x:Key="InactiveForegroundBrushKey" />
+    
+    <SolidColorBrush x:Key="AlternationBackgroundBrushKey" />
 
     <SolidColorBrush x:Key="HighlightBackgroundBrushKey" />
     <SolidColorBrush x:Key="HighlightBorderBrushKey" />
@@ -31,6 +35,7 @@
 
     <SolidColorBrush x:Key="LinkForegroundBrushKey" />
     <SolidColorBrush x:Key="ActiveLinkForegroundBrushKey" />
+    <SolidColorBrush x:Key="HoverLinkForegroundBrushKey" />
     <SolidColorBrush x:Key="ValidationErrorBrushKey" />
 
 
@@ -41,10 +46,13 @@
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ComboBox.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ContextMenu.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.DataGrid.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.FlowDocument.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.Hyperlink.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ListBox.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.MenuItem.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ScrollViewer.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.Slider.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.TabView.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.TextBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

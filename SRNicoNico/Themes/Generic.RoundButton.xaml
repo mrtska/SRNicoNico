@@ -4,7 +4,7 @@
     xmlns:local="clr-namespace:SRNicoNico.Views.Controls">
     <Style TargetType="{x:Type local:RoundButton}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundTextBrushKey}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrushKey}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="1" />
@@ -13,22 +13,22 @@
                 <ControlTemplate TargetType="{x:Type local:RoundButton}">
                     <Grid Background="Transparent" Margin="{TemplateBinding Padding}">
                         <Grid Width="{TemplateBinding EllipseDiameter}" Height="{TemplateBinding EllipseDiameter}">
-                            <Ellipse x:Name="ellipse" Stroke="{DynamicResource ForegroundNormalBrushKey}" StrokeThickness="{TemplateBinding EllipseStrokeThickness}" VerticalAlignment="Stretch" />
+                            <Ellipse x:Name="ellipse" Stroke="{DynamicResource SemiActiveForegroundBrushKey}" StrokeThickness="{TemplateBinding EllipseStrokeThickness}" VerticalAlignment="Stretch" />
                             <Path x:Name="icon" Data="{TemplateBinding IconData}"  Width="{TemplateBinding IconWidth}" Height="{TemplateBinding IconHeight}" Fill="{TemplateBinding Foreground}" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Foreground" Value="{DynamicResource AccentHighlightBrushKey}" />
-                            <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource ForegroundTextBrushKey}" />
+                            <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource ActiveForegroundBrushKey}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="ellipse" Property="Fill" Value="{DynamicResource AccentHighlightBrushKey}" />
-                            <Setter TargetName="icon" Property="Fill" Value="{DynamicResource ForegroundTextBrushKey}" />
+                            <Setter TargetName="icon" Property="Fill" Value="{DynamicResource ActiveForegroundBrushKey}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{DynamicResource ForegroundDisabledBrushKey}" />
-                            <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource ForegroundDisabledBrushKey}" />
+                            <Setter Property="Foreground" Value="{DynamicResource InactiveForegroundBrushKey}" />
+                            <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource InactiveForegroundBrushKey}" />
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource AccentBrushKey}" />

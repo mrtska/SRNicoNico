@@ -4,7 +4,7 @@
     
     <Style x:Key="FlatListBoxItem" TargetType="ListBoxItem">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundTextBrushKey}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrushKey}" />
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -20,19 +20,19 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentAlphaHighlightBrushKey}"/>
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentAlphaHighlightBrushKey}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBrushKey}"/>
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBrushKey}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{DynamicResource ForegroundDisabledBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource InactiveForegroundBrushKey}" />
                         </Trigger>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                             <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}" />
                         </Trigger>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="{DynamicResource BackgroundLevel1BrushKey}" />
+                            <Setter Property="Background" Value="{DynamicResource AlternationBackgroundBrushKey}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -85,16 +85,16 @@
                             <Setter TargetName="Bd" Property="BorderThickness" Value="1"/>
                             <Setter TargetName="Bd" Property="CornerRadius" Value="5"/>
                             <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentBrushKey}"/>
-                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentAlphaHighlightBrushKey}"/>
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentHighlightBrushKey}"/>
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="{DynamicResource ForegroundDisabledBrushKey}"/>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource InactiveForegroundBrushKey}"/>
                         </Trigger>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                             <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}" />
                         </Trigger>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="{DynamicResource BackgroundLevel1BrushKey}" />
+                            <Setter Property="Background" Value="{DynamicResource AlternationBackgroundBrushKey}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
