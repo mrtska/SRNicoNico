@@ -1,5 +1,6 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.CommunityNews"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -17,58 +18,36 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <ScrollViewer>
-        <Grid>
-            <Grid.Resources>
-                <Style TargetType="Hyperlink">
-                    <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
-                    <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
-                </Style>
-            </Grid.Resources>
-            <ContentControl>
-                <ContentControl.Style>
-                    <Style TargetType="{x:Type ContentControl}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsEmpty}" Value="True">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ContentControl}">
-                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Text="お知らせがありません"/>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ContentControl.Style>
-                <Grid>
-                    <ItemsControl  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding CommunityNewsList}" >
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type mm:NicoNicoCommunityNews}">
-                                <Grid x:Name="back">
-                                    <StackPanel Margin="5">
-                                        <TextBlock Text="{Binding Title}"  FontSize="18" TextDecorations="Underline" TextWrapping="Wrap"/>
-                                        <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Description}" TextWrapping="Wrap" />
-                                        <TextBlock Text="{Binding Date}" HorizontalAlignment="Right" TextWrapping="Wrap"/>
-                                    </StackPanel>
-                                </Grid>
-                                <DataTemplate.Triggers>
-                                    <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                                        <Setter TargetName="back" Property="Background" Value="{DynamicResource ThemeBrushKey}" />
-                                    </Trigger>
-                                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                                        <Setter TargetName="back" Property="Background" Value="{DynamicResource BackgroundLevel1BrushKey}" />
-                                    </Trigger>
-                                </DataTemplate.Triggers>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Margin="0,0,0,5"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
-                </Grid>
-            </ContentControl>
-        </Grid>
+        <ContentControl Content="{Binding IsActive}">
+            <ContentControl.ContentTemplateSelector>
+                <controls:BooleanDataTemplateSelector>
+                    <controls:BooleanDataTemplateSelector.TrueTemplate>
+                        <DataTemplate>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Text="お知らせがありません"/>
+                        </DataTemplate>
+                    </controls:BooleanDataTemplateSelector.TrueTemplate>
+                    <controls:BooleanDataTemplateSelector.FalseTemplate>
+                        <DataTemplate>
+                            <ItemsControl  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CommunityNewsList}" >
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type mm:NicoNicoCommunityNews}">
+                                        <StackPanel Margin="5">
+                                            <TextBlock Text="{Binding Title}"  FontSize="18" TextDecorations="Underline" TextWrapping="Wrap" />
+                                            <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Description}" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding Date}" HorizontalAlignment="Right" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Margin="0,0,0,5" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </controls:BooleanDataTemplateSelector.FalseTemplate>
+                </controls:BooleanDataTemplateSelector>
+            </ContentControl.ContentTemplateSelector>
+        </ContentControl>
     </ScrollViewer> 
 </UserControl>

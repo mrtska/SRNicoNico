@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
+﻿using Livet;
 using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
     public class CommunityFollowViewModel : PageSpinnerViewModel {
 
 
-        #region CommunityNewsList変更通知プロパティ
+        #region CommunityMemberList変更通知プロパティ
         private DispatcherCollection<NicoNicoCommunityMember> _CommunityMemberList = new DispatcherCollection<NicoNicoCommunityMember>(DispatcherHelper.UIDispatcher);
 
         public DispatcherCollection<NicoNicoCommunityMember> CommunityMemberList {
@@ -30,7 +18,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         //OwnerViewModel
         private CommunityViewModel Community;

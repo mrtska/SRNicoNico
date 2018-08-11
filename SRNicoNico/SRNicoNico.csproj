@@ -189,6 +189,7 @@
     <Compile Include="ViewModels\Settings\SettingsCommentViewModel.cs" />
     <Compile Include="ViewModels\Video\PaidVideoViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoMylistViewModel.cs" />
+    <Compile Include="Views\Action\NicoNicoOpenAction.cs" />
     <Compile Include="Views\Behavior\DragDropExtension.cs" />
     <Compile Include="Views\Behavior\ParagraphHtmlRenderingBehavior.cs" />
     <Compile Include="Views\Behavior\ScrollViewerScrollingAmountBahavior.cs" />
@@ -285,6 +286,7 @@
     <Compile Include="Views\Contents\Video\WindowFullScreenView.xaml.cs">
       <DependentUpon>WindowFullScreenView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\BooleanDataTemplateSelector.cs" />
     <Compile Include="Views\Controls\DisabledScrollViewerFlowDocumentScrollViewer.cs" />
     <Compile Include="Views\Controls\HtmlRenderer.cs" />
     <Compile Include="Views\Controls\RoundButton.cs" />
@@ -335,6 +337,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Theme.ComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Theme.ProgressRing.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

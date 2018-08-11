@@ -9,49 +9,46 @@
              xmlns:mm="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:v="clr-namespace:SRNicoNico.Views"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
              xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance {x:Type vm:CommunityNoticeViewModel}}">
+             d:DataContext="{d:DesignInstance {x:Type vm:CommunityVideoViewModel}}">
     <i:Interaction.Triggers>
         <i:EventTrigger>
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        <ContentControl>
-            <ContentControl.Style>
-                <Style TargetType="{x:Type ContentControl}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsEmpty}" Value="True">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ContentControl}">
-                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Text="コミュニティ動画がありません"/>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <ListBox  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding CommunityVideoList}" >
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type mm:NicoNicoSearchResultEntry}">
-                            <v:CommunityVideoEntry />
+        <ContentControl Content="{Binding IsEmpty}">
+            <ContentControl.ContentTemplateSelector>
+                <controls:BooleanDataTemplateSelector>
+                    <controls:BooleanDataTemplateSelector.TrueTemplate>
+                        <DataTemplate>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Text="コミュニティ動画がありません"/>
                         </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ListBox>
-
-                <metro:ProgressRing HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsActive}"  />
-                <misc:PageSpinner Grid.Row="1" />
-            </Grid>
+                    </controls:BooleanDataTemplateSelector.TrueTemplate>
+                    <controls:BooleanDataTemplateSelector.FalseTemplate>
+                        <DataTemplate>
+                            <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <ListBox ItemsSource="{Binding CommunityVideoList}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type mm:NicoNicoSearchResultEntry}">
+                                            <v:CommunityVideoEntry />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ListBox>
+                                <metro:ProgressRing IsActive="{Binding IsActive}" />
+                                <misc:PageSpinner Grid.Row="1" />
+                            </Grid>
+                        </DataTemplate>
+                    </controls:BooleanDataTemplateSelector.FalseTemplate>
+                </controls:BooleanDataTemplateSelector>
+            </ContentControl.ContentTemplateSelector>
         </ContentControl>
     </Grid>
 </UserControl>

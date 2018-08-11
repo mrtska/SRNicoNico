@@ -11,6 +11,7 @@
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:a="clr-namespace:SRNicoNico.Views.Action"
              xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:CommunityViewModel}}">
@@ -20,135 +21,116 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="152"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <Image Width="130" Height="130" Source="{Binding CommunityInfo.ThumbnailUrl}" />
-
-        <Grid Grid.Column="1">
-            <Grid.Resources>
-                <Style TargetType="Hyperlink">
-                    <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
-                    <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
-                </Style>
-            </Grid.Resources>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <StackPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image Width="130" Height="130" Source="{Binding CommunityInfo.ThumbnailUrl}" />
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
                         <TextBlock FontSize="20" Text="{Binding CommunityInfo.CommmunityName}" />
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <controls:RoundButton Grid.Column="1" ToolTip="ブラウザで開く" Margin="0,0,10,0" Focusable="False" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <a:OpenWebViewAction Url="{Binding CommunityInfo.CommunityUrl}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </controls:RoundButton>
-                        <controls:RoundButton Margin="0,0,10,0"  ToolTip="更新" IconData="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z"  >
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Refresh" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </controls:RoundButton>
-                        <controls:RoundButton Margin="0,0,5,0"  ToolTip="閉じる" IconData="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z" >
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Close" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </controls:RoundButton>
-                    </StackPanel>
-                </Grid>
-
-            </StackPanel>
-            <Grid Grid.Row="1" Background="{DynamicResource BackgroundLevel1BrushKey}">
-                <ScrollViewer>
-                    <WrapPanel Orientation="Vertical" >
-                        <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding CommunityInfo.OwnerName,StringFormat=オーナー：{0}}"/>
-                        <TextBlock Text="{Binding CommunityInfo.OpeningDate,StringFormat=開設日：{0}}"/>
-                        <TextBlock Text="{Binding CommunityInfo.CommunityLevel,StringFormat=コミュニティレベル：{0:N0}}"/>
-                        <TextBlock Text="{Binding CommunityInfo.CommunityMember,StringFormat=コミュニティメンバー数：{0:N0}}"/>
-                        <TextBlock Text="{Binding CommunityInfo.CommunityMaxMember,StringFormat=コミュニティメンバー最大人数：{0:N0}}"/>
-                        <WrapPanel Orientation="Horizontal">
-                            <TextBlock>
-                                <TextBlock.Style>
-                                    <Style TargetType="{x:Type TextBlock}">
-                                        <Style.Setters>
-                                            <Setter Property="Text"  Value="お気に入りタグ："/>
-                                        </Style.Setters>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsActive}" Value="True">
-                                                <Setter Property="Text" Value="" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                            <ItemsControl ItemsSource="{Binding CommunityInfo.CommunityTags}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="MouseDoubleClick">
-
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                            <TextBlock Text="{Binding}" Margin="5,0"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal" Margin="2,0" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <controls:RoundButton ToolTip="ブラウザで開く" Margin="0,0,10,0" Focusable="False" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <a:OpenWebViewAction Url="{Binding CommunityInfo.CommunityUrl}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </controls:RoundButton>
+                            <controls:RoundButton Margin="0,0,10,0"  ToolTip="更新" IconData="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z"  >
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Refresh" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </controls:RoundButton>
+                            <controls:RoundButton Margin="0,0,5,0"  ToolTip="閉じる" IconData="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z" >
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Close" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </controls:RoundButton>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <Grid Grid.Row="1" Background="{DynamicResource BackgroundBrushKey}">
+                    <ScrollViewer>
+                        <WrapPanel Orientation="Vertical" >
+                            <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding CommunityInfo.OwnerName,StringFormat=オーナー：{0}}"/>
+                            <TextBlock Text="{Binding CommunityInfo.OpeningDate,StringFormat=開設日：{0}}"/>
+                            <TextBlock Text="{Binding CommunityInfo.CommunityLevel,StringFormat=コミュニティレベル：{0:N0}}"/>
+                            <TextBlock Text="{Binding CommunityInfo.CommunityMember,StringFormat=コミュニティメンバー数：{0:N0}}"/>
+                            <TextBlock Text="{Binding CommunityInfo.CommunityMaxMember,StringFormat=コミュニティメンバー最大人数：{0:N0}}"/>
+                            <WrapPanel Orientation="Horizontal">
+                                <TextBlock>
+                                    <TextBlock.Resources>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Style.Setters>
+                                                <Setter Property="Text"  Value="お気に入りタグ："/>
+                                            </Style.Setters>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                    <Setter Property="Text" Value="" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding CommunityInfo.CommunityTags.Count}" Value="0">
+                                                    <Setter Property="Text" Value="" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Resources>
+                                </TextBlock>
+                                <ItemsControl ItemsSource="{Binding CommunityInfo.CommunityTags}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <TextBlock Text="{Binding}" Margin="5,0" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" Margin="2,0" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </WrapPanel>
                         </WrapPanel>
-                    </WrapPanel>
-                </ScrollViewer>
+                    </ScrollViewer>
+                </Grid>
             </Grid>
         </Grid>
-        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <Grid Background="{DynamicResource ActiveBackgroundBrushKey}">
-                <metro:TabView SelectedIndex="0" Style="{DynamicResource HorizontalViewStyle}" Height="38" ItemsSource="{Binding CommunityContentList}" />
+                <metro:TabView SelectedIndex="0" Style="{DynamicResource HorizontalViewStyle}" ItemsSource="{Binding CommunityContentList}" SelectedItem="{Binding SelectedList}" />
             </Grid>
             <Grid Grid.Row="1">
-                <ItemsControl  ItemsSource="{Binding CommunityContentList}" >
+                <ItemsControl  ItemsSource="{Binding CommunityContentList}">
                     <ItemsControl.Resources>
                         <DataTemplate DataType="{x:Type vm:CommunityNoticeViewModel}">
                             <v:CommunityNews />
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type vm:CommunityProfileViewModel}">
-                            <ScrollViewer>
-                                <ScrollViewer.Resources>
-                                    <Style TargetType="Hyperlink">
-                                        <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
-                                        <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
-                                    </Style>
-                                </ScrollViewer.Resources>
-                                <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding ProfileHtml}" Margin="3" TextWrapping="Wrap"/>
-                            </ScrollViewer>
+                            <controls:HtmlRenderer HtmlText="{Binding ProfileHtml}" />
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type vm:CommunityVideoViewModel}">
                             <v:CommunityVideo />
@@ -168,7 +150,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <metro:ProgressRing HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsActive}"  />
+                <metro:ProgressRing HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" IsActive="{Binding IsActive}"  />
             </Grid>
         </Grid>
     </Grid>

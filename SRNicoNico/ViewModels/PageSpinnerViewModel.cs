@@ -178,9 +178,11 @@ namespace SRNicoNico.ViewModels {
             switch(e.Key) {
                 case Key.Left:
                     LeftButtonClick();
+                    e.Handled = true;
                     break;
                 case Key.Right:
                     RightButtonClick();
+                    e.Handled = true;
                     break;
             }
         }

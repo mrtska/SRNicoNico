@@ -9,8 +9,8 @@
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:mm="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
              xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Action"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:CommunityNoticeViewModel}}">
@@ -20,47 +20,48 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <ListBox  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding CommunityMemberList}" >
-               
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type mm:NicoNicoCommunityMember}">
-                        <Border Padding="5">
-                            <Grid x:Name="grid">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="100" />
-                                    <RowDefinition Height="auto" />
-                                </Grid.RowDefinitions>
-                                <Image Source="{Binding ThumbNailUrl}" />
-                                <TextBlock Grid.Row="1" Text="{Binding Name}" HorizontalAlignment="Center" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel>
-                            <i:Interaction.Behaviors>
-                                <ei:FluidMoveBehavior AppliesTo="Children" Duration="0:0:0.4" >
-                                    <ei:FluidMoveBehavior.EaseY>
-                                        <CircleEase EasingMode="EaseOut"/>
-                                    </ei:FluidMoveBehavior.EaseY>
-                                    <ei:FluidMoveBehavior.EaseX>
-                                        <CircleEase EasingMode="EaseOut"/>
-                                    </ei:FluidMoveBehavior.EaseX>
-                                </ei:FluidMoveBehavior>
-                            </i:Interaction.Behaviors>
-                        </WrapPanel>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ListBox>
-
-            <metro:ProgressRing HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsActive}"  />
-            <misc:PageSpinner Grid.Row="1" />
-        </Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding CommunityMemberList}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type mm:NicoNicoCommunityMember}">
+                    <ContentControl Margin="5">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <a:NicoNicoOpenAction Url="{Binding UserUrl}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="100" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Image Source="{Binding ThumbNailUrl}" />
+                            <TextBlock Grid.Row="1" Text="{Binding Name}" HorizontalAlignment="Center" />
+                        </Grid>
+                    </ContentControl>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel>
+                        <i:Interaction.Behaviors>
+                            <ei:FluidMoveBehavior AppliesTo="Children" Duration="0:0:0.4" >
+                                <ei:FluidMoveBehavior.EaseY>
+                                    <CircleEase EasingMode="EaseOut"/>
+                                </ei:FluidMoveBehavior.EaseY>
+                                <ei:FluidMoveBehavior.EaseX>
+                                    <CircleEase EasingMode="EaseOut"/>
+                                </ei:FluidMoveBehavior.EaseX>
+                            </ei:FluidMoveBehavior>
+                        </i:Interaction.Behaviors>
+                    </WrapPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ListBox>
+        <metro:ProgressRing IsActive="{Binding IsActive}" />
+        <misc:PageSpinner Grid.Row="1" />
     </Grid>
 </UserControl>

@@ -3,15 +3,12 @@ using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoCommunity {
-
 
         private readonly string CommunityUrl;
 
@@ -172,6 +169,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
 
                     entry.ThumbnailUrl = video.SelectSingleNode("div[@class='videoContent']/div[@class='videoThumbnail']/a/img").Attributes["src"].Value;
+                    if (entry.ThumbnailUrl.StartsWith("//")) {
+
+                        entry.ThumbnailUrl = "https:" + entry.ThumbnailUrl;
+                    }
+
+
                     entry.ContentUrl = video.SelectSingleNode("div[@class='videoContent']/div[@class='videoThumbnail']/a").Attributes["href"].Value;
                     entry.Cmsid = Regex.Match(entry.ContentUrl, @"\d+$").Value;
 

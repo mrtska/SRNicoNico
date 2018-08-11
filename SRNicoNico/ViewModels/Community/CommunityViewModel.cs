@@ -36,6 +36,23 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
+
+
+        #region SelectedList変更通知プロパティ
+        private TabItemViewModel _SelectedList;
+
+        public TabItemViewModel SelectedList {
+            get { return _SelectedList; }
+            set { 
+                if (_SelectedList == value)
+                    return;
+                _SelectedList = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         public CommunityViewModel(string communityUrl) : base("コミュニティ") {
 
             CommunityInstance = new NicoNicoCommunity(this, communityUrl);
@@ -99,7 +116,13 @@ namespace SRNicoNico.ViewModels {
                     return;
                 }
             }
+            SelectedList?.KeyDown(e);
         }
+
+        public override void KeyUp(KeyEventArgs e) {
+            SelectedList?.KeyUp(e);
+        }
+
         public override bool CanShowHelp() {
             return true;
         }
