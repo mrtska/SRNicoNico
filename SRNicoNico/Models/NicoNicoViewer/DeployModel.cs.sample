@@ -1,10 +1,6 @@
 ﻿using Livet;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
@@ -14,8 +10,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         private const string DeployUrl = "url";
 
-        private const string SecretKey = "long long key";
-
+        private const string SecretKey = "secret";
 
         #region FilePath変更通知プロパティ
         private string _FilePath;
@@ -51,9 +46,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
             return str;
         }
-
-
-
     }
 #endif
 }
