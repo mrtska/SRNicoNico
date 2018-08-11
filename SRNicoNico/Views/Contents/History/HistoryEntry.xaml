@@ -11,12 +11,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="80"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
              d:DataContext="{d:DesignInstance {x:Type m:NicoNicoHistory}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
+            <a:NicoNicoOpenAction Url="{Binding VideoId,StringFormat='http://www.nicovideo.jp/watch/{0}'}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.ContextMenu>

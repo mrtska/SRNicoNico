@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Codeplex.Data;
+using HtmlAgilityPack;
 using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
-using HtmlAgilityPack;
-using SRNicoNico.ViewModels;
-using System.Text.RegularExpressions;
-using System.Web;
-using Codeplex.Data;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoHistory : NotificationObject {
@@ -25,7 +23,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //視聴時間から時間を抜き出す
         private static readonly Regex TimeRegex = new Regex(@"(\d{4})年(\d+)月(\d+)日.(\d+):(\d+)");
-
 
         #region AccountHistories変更通知プロパティ
         private ObservableSynchronizedCollection<NicoNicoHistoryEntry> _AccountHistories;
@@ -118,7 +115,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             if(File.Exists(LocalHistoryLocation)) {
 
-
                 try {
 
                     using(var stream = new StreamReader(LocalHistoryLocation)) {
@@ -166,7 +162,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public void SaveLocalHistory() {
 
             try {
-
                 dynamic root = new DynamicJson();
 
                 var array = new List<object>();
@@ -228,7 +223,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         to.Add(fromentry);
                     }
                 }
-                
                 SaveLocalHistory();
             });
         }
@@ -258,11 +252,5 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             return WatchDate.CompareTo(other.WatchDate);
         }
-
-        public void Open() {
-
-            NicoNicoOpener.Open("http://www.nicovideo.jp/watch/" + VideoId);
-        }
     }
-
 }
