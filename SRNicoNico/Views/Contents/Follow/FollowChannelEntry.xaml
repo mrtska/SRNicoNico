@@ -11,16 +11,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="50"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
-             d:DataContext="{d:DesignInstance {x:Type m:NicoNicoFollowChannelEntry}}"
-             >
+             d:DataContext="{d:DesignInstance {x:Type m:NicoNicoFollowChannelEntry}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    
     <UserControl.ContextMenu>
         <ContextMenu>
             <MenuItem Header="チャンネルをWebViewで開く">
@@ -49,11 +46,9 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="67*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Image Source="{Binding ThumbNailUrl}" Height="40" Margin="5"/>
-        <StackPanel Grid.Column="1" Margin="5">
-            <TextBlock Text="{Binding Title}" FontSize="18" />
-        </StackPanel>
+        <Image Source="{Binding ThumbNailUrl}" Height="40" Margin="5" />
+        <TextBlock Grid.Column="1" Margin="5" Text="{Binding Title}" FontSize="18" />
     </Grid>
 </UserControl>

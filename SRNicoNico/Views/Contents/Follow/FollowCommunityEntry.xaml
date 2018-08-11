@@ -11,7 +11,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="60"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
              d:DataContext="{d:DesignInstance {x:Type m:NicoNicoFollowCommunityEntry}}">
     <i:Interaction.Triggers>
@@ -53,7 +52,7 @@
         <StackPanel Grid.Column="1" Margin="5">
             <TextBlock Text="{Binding Title}" FontSize="18" />
             <TextBlock Text="{Binding Data}" Margin="10,0,0,0" />
-            <TextBlock Text="{Binding Description}" Margin="15,0,0,0" Foreground="#777777" />
+            <TextBlock Text="{Binding Description}" Margin="15,0,0,0" Foreground="{DynamicResource SemiActiveForegroundBrushKey}" />
         </StackPanel>
     </Grid>
 </UserControl>

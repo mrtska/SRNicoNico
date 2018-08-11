@@ -7,5 +7,6 @@
         <Setter Property="Height" Value="50" />
         <Setter Property="EllipseDiameter" Value="6" />
         <Setter Property="Panel.ZIndex" Value="2" />
+        <Setter Property="MaxSideLength" Value="40" />
     </Style>
 </ResourceDictionary>

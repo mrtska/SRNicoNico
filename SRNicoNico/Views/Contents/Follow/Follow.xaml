@@ -9,23 +9,19 @@
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             Background="{DynamicResource ThemeBrushKey}"
              d:DataContext="{d:DesignInstance {x:Type vm:FollowViewModel}}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="89*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Background="{DynamicResource BackgroundLevel1BrushKey}">
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="38" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="フォロー" VerticalAlignment="Center" FontSize="20" Height="30"/>
-
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="フォロー" VerticalAlignment="Center" FontSize="20"/>
             <ScrollViewer Grid.Row="1">
                 <metro:TabView SelectedIndex="0" SelectedItem="{Binding SelectedList}" ItemsSource="{Binding FavoriteList}" />
             </ScrollViewer>

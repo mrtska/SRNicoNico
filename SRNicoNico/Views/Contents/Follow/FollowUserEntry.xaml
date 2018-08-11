@@ -11,7 +11,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="80"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
              d:DataContext="{d:DesignInstance {x:Type m:NicoNicoFollowUserEntry}}">
     <i:Interaction.Triggers>
@@ -49,11 +48,10 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-
         <Image Width="50" Height="50" Margin="5,4" HorizontalAlignment="Left" VerticalAlignment="Top" Source="{Binding ThumbNailUrl}" />
         <StackPanel Grid.Column="1">
-            <TextBlock FontSize="18" Margin="0,2,0,0" VerticalAlignment="Top" Text="{Binding Name}" TextWrapping="Wrap" />
-            <TextBlock FontSize="12" Margin="0,3,0,0" VerticalAlignment="Top" Text="{Binding Description}" TextWrapping="Wrap" Foreground="#777777" TextTrimming="CharacterEllipsis" />
+            <TextBlock FontSize="18" Margin="0,2,0,0" Text="{Binding Name}" TextWrapping="Wrap" />
+            <TextBlock FontSize="12" Margin="0,3,0,0" Text="{Binding Description}" TextWrapping="Wrap" Foreground="{DynamicResource SemiActiveForegroundBrushKey}" TextTrimming="CharacterEllipsis" />
         </StackPanel>
     </Grid>
 </UserControl>
