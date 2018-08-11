@@ -13,7 +13,6 @@ namespace SRNicoNico.ViewModels {
 
         private Timer RefreshTimer;
 
-
         public LiveNotifyViewModel() : base("生放送通知") {
 
             Model = new NicoNicoLiveNotify();
@@ -36,7 +35,6 @@ namespace SRNicoNico.ViewModels {
 
 
         public async void Initialize() {
-
 
             IsActive = true;
             Status = "更新中";
@@ -73,6 +71,5 @@ namespace SRNicoNico.ViewModels {
 
             Messenger.Raise(new TransitionMessage(typeof(Views.StartHelpView), this, TransitionMode.NewOrActive));
         }
-
     }
 }

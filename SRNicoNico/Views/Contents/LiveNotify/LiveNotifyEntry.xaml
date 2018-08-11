@@ -11,7 +11,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="109.512"
              d:DesignWidth="596.915"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
              d:DataContext="{d:DesignInstance {x:Type m:NicoNicoLiveNotifyEntry}}">
     <UserControl.ContextMenu>
@@ -58,24 +57,16 @@
             <ColumnDefinition Width="60"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
-        <Image Source="{Binding ThumbNailUrl}" Width="50" Height="50"/>
-
+        <Image Source="{Binding ThumbNailUrl}" Width="50" Height="50" />
         <Grid Grid.Column="1">
-            <Grid.Resources>
-                <Style TargetType="Hyperlink">
-                    <EventSetter Event="RequestNavigate" Handler="OpenHyperLink"/>
-                    <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
-                </Style>
-            </Grid.Resources>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
             <TextBlock  b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding CommunityName}" />
-            <TextBlock Text="{Binding Title}" Grid.Row="1"/>
-            <TextBlock Text="{Binding StartTime}" Grid.Row="2"/>
+            <TextBlock Grid.Row="1" Text="{Binding Title}" />
+            <TextBlock Grid.Row="2" Text="{Binding StartTime}" />
         </Grid>
     </Grid>
 </UserControl>

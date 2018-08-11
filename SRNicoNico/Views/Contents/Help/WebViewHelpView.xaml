@@ -31,7 +31,6 @@
                 <metro:CaptionButton Grid.Column="1" WindowAction="Close" />
             </Grid>
         </Border>
-
         <ScrollViewer Grid.Row="2">
             <StackPanel Grid.Row="2" VerticalAlignment="Top">
                 <TextBlock Margin="10,0,0,0" TextWrapping="Wrap">

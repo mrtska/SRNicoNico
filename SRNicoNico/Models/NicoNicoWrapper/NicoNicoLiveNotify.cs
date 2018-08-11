@@ -45,15 +45,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     return null;
                 }
-
                 var outers = content.SelectNodes("div[@id='ch']/div/div[@class='outer']");
-
                 //終了
                 if(outers == null) {
 
                     return null;
                 }
-
                 foreach(var outer in outers) {
 
                     var entry = new NicoNicoLiveNotifyEntry();
@@ -61,12 +58,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     entry.CommunityUrl = outer.SelectSingleNode("a[1]").Attributes["href"].Value;
 
                     var img = outer.SelectSingleNode("a/img");
-
                     entry.ThumbNailUrl = img.Attributes["src"].Value;
                     entry.CommunityName = "<a href=\"" + entry.CommunityUrl + "\">" + img.Attributes["alt"].Value + "</a>";
 
                     var section = outer.SelectSingleNode("div");
-
                     entry.Title = HttpUtility.HtmlDecode(section.SelectSingleNode("h5/a").InnerText.Trim());
                     entry.LiveUrl = section.SelectSingleNode("h5/a").Attributes["href"].Value;
                     entry.StartTime = section.SelectSingleNode("p[@class='time']/small").InnerText;
