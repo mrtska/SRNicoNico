@@ -147,10 +147,5 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public bool IsWatched { get; set; }
 
         public string ContentUrl { get; set; }
-
-        public void Open() {
-
-            NicoNicoOpener.Open("http://www.nicovideo.jp/watch/" + Cmsid);
-        }
     }
 }

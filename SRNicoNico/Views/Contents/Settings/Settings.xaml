@@ -16,19 +16,15 @@
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
-        <Grid Background="{DynamicResource BackgroundLevel1BrushKey}">
-
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-
             <ScrollViewer>
                 <metro:TabView ItemsSource="{Binding SettingsList}" SelectedIndex="0" />
             </ScrollViewer>
             <StackPanel Grid.Row="1">
-
                 <Button Content="ログアウトする" HorizontalAlignment="Center" Margin="10">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
@@ -52,7 +48,6 @@
                 </Button>
             </StackPanel>
         </Grid>
-
         <ItemsControl Grid.Column="1" ItemsSource="{Binding SettingsList}" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:SettingsGeneralViewModel}">
@@ -74,7 +69,6 @@
                     <v:SettingsLive />
                 </DataTemplate>
             </ItemsControl.Resources>
-
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid />

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace SRNicoNico.Models.NicoNicoViewer {
+﻿namespace SRNicoNico.Models.NicoNicoViewer {
     public class GetRequestQuery {
 
         //元のURL

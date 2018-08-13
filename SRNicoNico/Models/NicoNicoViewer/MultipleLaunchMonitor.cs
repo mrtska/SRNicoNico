@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-
+﻿using Livet;
+using System;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Ipc;
-using Livet;
-using System.Windows;
-using System.Text.RegularExpressions;
 using System.Runtime.Remoting.Lifetime;
+using System.Threading;
+using System.Windows;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
     public class MultipleLaunchMonitor : IDisposable {

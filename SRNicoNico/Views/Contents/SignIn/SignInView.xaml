@@ -32,15 +32,15 @@
         <Border metro:MetroWindow.IsCaptionBar="True">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="1"  Text="{Binding SignInViewTitle}" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource ForegroundBrushKey}" FontSize="18" Margin="3,0,0,0" VerticalAlignment="Center" />
                 <metro:CaptionButton Grid.Column="2"  VerticalAlignment="Top" WindowAction="Close">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ExitButtonDown"/>
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ExitButtonDown" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </metro:CaptionButton>

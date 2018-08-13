@@ -9,10 +9,9 @@ namespace SRNicoNico.Views {
 
         private void RadioButton_Click(object sender, RoutedEventArgs e) {
 
-            if(sender is RadioButton) {
-                var radio = (RadioButton)sender;
-                var str = (string) radio.Content;
-                switch(str) {
+            if (sender is RadioButton radio) {
+                var str = (string)radio.Content;
+                switch (str) {
                     case "Blue":
                         App.ViewModelRoot.ThemeSelector.ChangeAccent(Service.EnumAccents.Blue);
                         break;

@@ -29,7 +29,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding ComputedTitle}" TextWrapping="Wrap" FontSize="14" />
                 <TextBlock Grid.Column="1" Text="{Binding CreatedAt,StringFormat='yy年M月d日 H時 m分'}" FontSize="12" />
-                <TextBlock Grid.Column="2" Foreground="Gray" Text="視聴済み" Margin="5,0,0,0">
+                <TextBlock Grid.Column="2" Text="視聴済み" FontWeight="Bold" Margin="5,0,0,0">
                     <TextBlock.Resources>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed" />

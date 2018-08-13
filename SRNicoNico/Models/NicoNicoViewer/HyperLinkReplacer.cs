@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
 
@@ -36,7 +32,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
             if(Settings.Instance.EnableTwitterLink) {
 
-
                 //TwitterのIDだった場合
                 desc = TwitterPattern.Replace(desc, new MatchEvaluator((match) => {
 
@@ -46,9 +41,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                     return "TwitterID:<a href=\"https://twitter.com/" + match.Groups[1].Value + "\">" + match.Groups[1].Value + "</a>";
                 }));
-
             }
-
             return desc;
         }
     }

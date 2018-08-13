@@ -10,19 +10,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="397.944"
              d:DesignWidth="802.057"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             Background="{DynamicResource ThemeBrushKey}"
              d:DataContext="{d:DesignInstance {x:Type vm:SettingsGeneralViewModel}}">
-    <WrapPanel Background="{DynamicResource ThemeBrushKey}">
+    <WrapPanel>
         <Border Margin="10" Width="200" Height="175" Background="Transparent">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseLeftButtonDown">
-                    <ei:ChangePropertyAction TargetObject="{Binding Source={x:Static m:Settings.Instance}}" PropertyName="VideoInfoPlacement" Value="Left"/>
+                    <ei:ChangePropertyAction TargetObject="{Binding Source={x:Static m:Settings.Instance}}" PropertyName="VideoInfoPlacement" Value="Left" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <Border.Resources>
                 <Style TargetType="Rectangle">
-                    <Setter Property="Stroke" Value="#FF555555" />
+                    <Setter Property="Stroke" Value="{DynamicResource ActiveBorderBrushKey}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Source={x:Static m:Settings.Instance},Path=VideoInfoPlacement}" Value="Left">
                             <Setter Property="Stroke" Value="{DynamicResource AccentBrushKey}" />
@@ -30,7 +28,7 @@
                     </Style.Triggers>
                 </Style>
                 <Style TargetType="TextBlock">
-                    <Setter Property="Foreground" Value="#FF555555" />
+                    <Setter Property="Foreground" Value="{DynamicResource SemiActiveForegroundBrushKey}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Source={x:Static m:Settings.Instance},Path=VideoInfoPlacement}" Value="Left">
                             <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
@@ -40,33 +38,31 @@
             </Border.Resources>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="左" FontSize="18" HorizontalAlignment="Center" />
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="3*" />
                     </Grid.ColumnDefinitions>
-
-                    <Rectangle StrokeThickness="1" Margin="5"/>
-                    <TextBlock Text="情報" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
-                    <Rectangle Grid.Column="1" StrokeThickness="1" Margin="5"/>
-                    <TextBlock Grid.Column="1" Text="動画/説明文" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Rectangle StrokeThickness="1" Margin="5" />
+                    <TextBlock Text="情報" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <Rectangle Grid.Column="1" StrokeThickness="1" Margin="5" />
+                    <TextBlock Grid.Column="1" Text="動画/説明文" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
             </Grid>
         </Border>
         <Border Margin="10" Width="200" Height="175" Background="Transparent">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseLeftButtonDown">
-                    <ei:ChangePropertyAction TargetObject="{Binding Source={x:Static m:Settings.Instance}}" PropertyName="VideoInfoPlacement" Value="Right"/>
+                    <ei:ChangePropertyAction TargetObject="{Binding Source={x:Static m:Settings.Instance}}" PropertyName="VideoInfoPlacement" Value="Right" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <Border.Resources>
                 <Style TargetType="Rectangle">
-                    <Setter Property="Stroke" Value="#FF555555" />
+                    <Setter Property="Stroke" Value="{DynamicResource ActiveBorderBrushKey}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Source={x:Static m:Settings.Instance},Path=VideoInfoPlacement}" Value="Right">
                             <Setter Property="Stroke" Value="{DynamicResource AccentBrushKey}" />
@@ -74,7 +70,7 @@
                     </Style.Triggers>
                 </Style>
                 <Style TargetType="TextBlock">
-                    <Setter Property="Foreground" Value="#FF555555" />
+                    <Setter Property="Foreground" Value="{DynamicResource SemiActiveForegroundBrushKey}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Source={x:Static m:Settings.Instance},Path=VideoInfoPlacement}" Value="Right">
                             <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
@@ -84,34 +80,31 @@
             </Border.Resources>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="右" FontSize="18" HorizontalAlignment="Center" />
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="3*" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-
-                    <Rectangle StrokeThickness="1" Margin="5"/>
-                    <TextBlock Text="動画/説明文" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
-                    <Rectangle Grid.Column="1" StrokeThickness="1" Margin="5"/>
-                    <TextBlock Grid.Column="1" Text="情報" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Rectangle StrokeThickness="1" Margin="5" />
+                    <TextBlock Text="動画/説明文" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <Rectangle Grid.Column="1" StrokeThickness="1" Margin="5" />
+                    <TextBlock Grid.Column="1" Text="情報" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
             </Grid>
         </Border>
-
         <Border Margin="10" Width="200" Height="175" Background="Transparent">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseLeftButtonDown">
-                    <ei:ChangePropertyAction TargetObject="{Binding Source={x:Static m:Settings.Instance}}" PropertyName="VideoInfoPlacement" Value="None"/>
+                    <ei:ChangePropertyAction TargetObject="{Binding Source={x:Static m:Settings.Instance}}" PropertyName="VideoInfoPlacement" Value="None" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <Border.Resources>
                 <Style TargetType="Rectangle">
-                    <Setter Property="Stroke" Value="#FF555555" />
+                    <Setter Property="Stroke" Value="{DynamicResource ActiveBorderBrushKey}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Source={x:Static m:Settings.Instance},Path=VideoInfoPlacement}" Value="None">
                             <Setter Property="Stroke" Value="{DynamicResource AccentBrushKey}" />
@@ -119,7 +112,7 @@
                     </Style.Triggers>
                 </Style>
                 <Style TargetType="TextBlock">
-                    <Setter Property="Foreground" Value="#FF555555" />
+                    <Setter Property="Foreground" Value="{DynamicResource SemiActiveForegroundBrushKey}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Source={x:Static m:Settings.Instance},Path=VideoInfoPlacement}" Value="None">
                             <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
@@ -134,13 +127,10 @@
                 </Grid.RowDefinitions>
                 <TextBlock Text="無" FontSize="18" HorizontalAlignment="Center" />
                 <Grid Grid.Row="1">
-
                     <Rectangle StrokeThickness="1" Margin="5" />
                     <TextBlock Text="動画/説明文" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
             </Grid>
         </Border>
-
-
     </WrapPanel>
 </UserControl>

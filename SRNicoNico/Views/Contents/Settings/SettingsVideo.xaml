@@ -9,16 +9,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             Background="{DynamicResource ThemeBrushKey}"
              d:DataContext="{d:DesignInstance {x:Type vm:SettingsGeneralViewModel}}">
     <ScrollViewer>
         <Grid Margin="10" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <StackPanel>
-                <TextBlock Text="動画設定" FontSize="20"/>
+                <TextBlock Text="動画設定" FontSize="20" />
                 <StackPanel Margin="5,0,0,0">
                     <HeaderedContentControl Background="Transparent">
                         <HeaderedContentControl.Header>

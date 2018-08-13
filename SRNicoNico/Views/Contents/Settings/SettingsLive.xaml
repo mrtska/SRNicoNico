@@ -9,27 +9,23 @@
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             Background="{DynamicResource ThemeBrushKey}"
              d:DataContext="{d:DesignInstance {x:Type vm:SettingsGeneralViewModel}}">
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
-
-        <Grid Margin="10" >
+        <Grid Margin="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <StackPanel>
-                <TextBlock FontSize="20" Text="生放送設定"/>
-
+                <TextBlock FontSize="20" Text="生放送設定" />
                 <StackPanel Margin="5,0,0,0">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="生放送通知の更新間隔" VerticalAlignment="Center"/>
+                        <TextBlock Text="生放送通知の更新間隔" VerticalAlignment="Center" />
                         <TextBox Margin="15,0,0,0" Width="30" Text="{Binding RefreshInterval,Mode=TwoWay}">
                             <i:Interaction.Behaviors>
                                 <b:TextBoxNumericOnlyBehavior />
                             </i:Interaction.Behaviors>
                         </TextBox>
-                        <TextBlock Text="分" VerticalAlignment="Center"/>
+                        <TextBlock Text="分" VerticalAlignment="Center" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

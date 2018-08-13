@@ -26,17 +26,16 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" metro:MetroWindow.IsCaptionBar="True">
-
+        <Border metro:MetroWindow.IsCaptionBar="True">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="確認" TextTrimming="CharacterEllipsis" FontSize="18" Margin="10,0,0,0" VerticalAlignment="Center" />
+                <TextBlock Text="確認" TextTrimming="CharacterEllipsis" FontSize="18" Margin="10,0,0,0" />
             </Grid>
         </Border>
-        <StackPanel Grid.Row="2" Height="80" VerticalAlignment="Top">
+        <StackPanel Grid.Row="1" Height="80" VerticalAlignment="Top">
             <TextBlock Text="設定を初期化しますか？(初期化後 自動的に再起動します)" HorizontalAlignment="Center" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="初期化" Margin="10">
@@ -48,7 +47,6 @@
                 </Button>
                 <Button Content="キャンセル" Margin="10">
                     <i:Interaction.Triggers>
-                        
                         <i:EventTrigger EventName="Click">
                             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CloseView" />
                         </i:EventTrigger>

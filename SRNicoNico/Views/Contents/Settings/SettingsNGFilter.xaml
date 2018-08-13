@@ -12,26 +12,24 @@
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             Background="{DynamicResource ThemeBrushKey}"
              d:DataContext="{d:DesignInstance {x:Type vm:SettingsNGFilterViewModel}}">
     <ScrollViewer>
         <Grid Margin="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <StackPanel>
                     <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="NGフィルター" FontSize="18" />
-                        <controls:RoundButton Grid.Column="1" Margin="10,0,0,0" IconHeight="20" Width="30" EllipseDiameter="25" Focusable="False" ToolTip="NGフィルタエントリ追加" HorizontalAlignment="Right" IconData="F1 M 35,19L 41,19L 41,35L 57,35L 57,41L 41,41L 41,57L 35,57L 35,41L 19,41L 19,35L 35,35L 35,19 Z" >
+                        <controls:RoundButton Grid.Column="1" Margin="10,0,0,0" IconHeight="20" Width="30" EllipseDiameter="25" Focusable="False" ToolTip="NGフィルタエントリ追加" IconData="F1 M 35,19L 41,19L 41,35L 57,35L 57,41L 41,41L 41,57L 35,57L 35,41L 19,41L 19,35L 35,35L 35,19 Z">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
                                     <l:LivetCallMethodAction MethodName="AddEmptyNGEntry" MethodTarget="{Binding}" />
@@ -39,10 +37,9 @@
                             </i:Interaction.Triggers>
                         </controls:RoundButton>
                     </Grid>
-
                     <ItemsControl ScrollViewer.CanContentScroll="True" ItemsSource="{Binding NGFilter.NGList,Mode=TwoWay}">
                         <ItemsControl.Resources>
-                            <conv:NGTypeConverter x:Key="ngconv"/>
+                            <conv:NGTypeConverter x:Key="ngconv" />
                             <DataTemplate DataType="{x:Type mm:NGCommentEntry}">
                                 <Grid Margin="0,0,0,1">
                                     <Grid.ColumnDefinitions>
@@ -52,7 +49,7 @@
                                         <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
                                     <CheckBox IsChecked="{Binding IsEnabled,Mode=TwoWay}" ToolTip="有効/無効切り替え"/>
-                                    <ComboBox Grid.Column="1" IsEnabled="{Binding IsEnabled}" SelectedIndex="{Binding Type,Converter={StaticResource ngconv},Mode=TwoWay}" >
+                                    <ComboBox Grid.Column="1" IsEnabled="{Binding IsEnabled}" SelectedIndex="{Binding Type,Converter={StaticResource ngconv},Mode=TwoWay}">
                                         <ComboBoxItem Content="コメント完全一致" />
                                         <ComboBoxItem Content="を含む" />
                                         <ComboBoxItem Content="ユーザーID" />
@@ -76,7 +73,6 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
-
                     <TextBlock FontSize="14" TextWrapping="Wrap">
                         ここで登録したNGエントリに該当するコメントは動画再生時にコメント一覧にすら表示されません。<LineBreak />
                         すでに開いている動画があった場合は更新したら反映されます。

@@ -1,17 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-using SRNicoNico.Models.NicoNicoViewer;
+﻿using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class SettingsLiveViewModel : TabItemViewModel {
@@ -33,6 +20,5 @@ namespace SRNicoNico.ViewModels {
         public SettingsLiveViewModel() : base("生放送") {
 
         }
-
     }
 }

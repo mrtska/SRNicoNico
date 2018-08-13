@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.IO;
-using System.Windows;
-using System.Windows.Media;
-
-using Codeplex.Data;
+﻿using Codeplex.Data;
 using Livet;
 using Newtonsoft.Json;
-using SRNicoNico.Models.NicoNicoWrapper;
-using System.Collections.Specialized;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using SRNicoNico.Views.Service;
+using System.IO;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Media;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
     public class Settings : NotificationObject {
