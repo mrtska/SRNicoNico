@@ -13,12 +13,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="100"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
              d:DataContext="{d:DesignInstance {x:Type vm:PublicMylistEntryViewModel}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
+            <a:NicoNicoOpenAction Url="{Binding Item.ContentUrl}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.ContextMenu>
@@ -64,5 +63,4 @@
             </ContentControl.Resources>
         </ContentControl>
     </StackPanel>
-
 </UserControl>

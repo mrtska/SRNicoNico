@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-
-using SRNicoNico.Models.NicoNicoWrapper;
+﻿using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.Models.NicoNicoWrapper;
+using System.Linq;
 using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
@@ -32,7 +21,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region IsEmpty変更通知プロパティ
         private bool _IsEmpty;
@@ -62,7 +50,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region MylistInfo変更通知プロパティ
         private NicoNicoPublicMylistGroupEntry _MylistInfo;
 
@@ -77,13 +64,10 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         public PublicMylistViewModel(string url) : base("公開マイリスト") {
 
             PublicMylistInstance = new NicoNicoPublicMylist(this, url);
         }
-
-        
 
         public async void Initialize() {
 
@@ -119,7 +103,6 @@ namespace SRNicoNico.ViewModels {
             Sort(SortIndex);
         }
         public void Refresh() {
-
 
             Initialize();
         }
@@ -215,7 +198,6 @@ namespace SRNicoNico.ViewModels {
                     sorted = tmp.OrderBy(r => r.Item.MylistCount);
                     break;
             }
-
             //一度空にする
             MylistList.Clear();
 

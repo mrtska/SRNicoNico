@@ -12,8 +12,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             Background="Transparent"
              d:DataContext="{d:DesignInstance {x:Type vm:RankingEntryViewModel}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -22,19 +20,19 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="30" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid Background="{DynamicResource BackgroundLevel1BrushKey}" >
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding Name}" FontSize="18" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding Name}" FontSize="18" Margin="10,0,0,0" VerticalAlignment="Center" />
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Text="ランキング順位：" FontSize="15" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                <ComboBox Grid.Column="1" Text="{Binding Page,Mode=TwoWay}" Margin="0,0,10,0" Width="100" HorizontalAlignment="Right" VerticalAlignment="Center" SelectedIndex="0" ToolTip="ランキング順位">
+                <TextBlock Text="ランキング順位：" FontSize="15" Margin="10,0,0,0" VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1" Text="{Binding Page,Mode=TwoWay}" Margin="0,0,10,0" Width="100" VerticalAlignment="Center" SelectedIndex="0" ToolTip="ランキング順位">
                     <ComboBoxItem Content="1-100" />
                     <ComboBoxItem Content="101-200" />
                     <ComboBoxItem Content="201-300" />
@@ -47,8 +45,7 @@
                     <ComboBoxItem Content="901-1000" />
                 </ComboBox>
             </StackPanel>
-
-            <controls:RoundButton Grid.Column="2" ToolTip="更新" IconHeight="20" EllipseDiameter="25" Focusable="False" HorizontalAlignment="Right" VerticalAlignment="Center" IconData="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z" Width="30"  >
+            <controls:RoundButton Grid.Column="2" ToolTip="更新" Focusable="False" Margin="0,0,5,0" IconData="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <l:LivetCallMethodAction MethodName="Refresh" MethodTarget="{Binding}" />
@@ -56,11 +53,9 @@
                 </i:Interaction.Triggers>
             </controls:RoundButton>
         </Grid>
-
-        <metro:ProgressRing Grid.Row="1" HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsActive}"  />
+        <metro:ProgressRing Grid.Row="1" IsActive="{Binding IsActive}"  />
         <TextBlock Grid.Row="1" Visibility="{Binding Model.IsPreparing,Converter={StaticResource BooleanToVisibilityConverter}}" Text="このランキングは存在しないか準備中です。" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center" />
-        
-        <ListBox Grid.Row="1"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding Model.RankingList}"  >
+        <ListBox Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Model.RankingList}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <v:RankingResultEntry />
@@ -68,5 +63,4 @@
             </ListBox.ItemTemplate>
         </ListBox>
     </Grid>
-
 </UserControl>

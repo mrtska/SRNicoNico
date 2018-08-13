@@ -12,8 +12,8 @@
              d:DataContext="{d:DesignInstance {x:Type vm:PlayListEntryViewModel}}">
     <Grid>
         <StackPanel>
-            <Image Source="{Binding ThumbNailUrl}" Height="90" Margin="5"/>
-            <TextBlock Text="{Binding Name}" FontSize="12" Margin="3,0" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+            <Image Source="{Binding ThumbNailUrl}" Height="90" Margin="5" />
+            <TextBlock Text="{Binding Name}" FontSize="12" Margin="3,0" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
         </StackPanel>
     </Grid>
 </UserControl>

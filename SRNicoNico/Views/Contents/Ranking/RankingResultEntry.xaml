@@ -9,15 +9,14 @@
              xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:a="clr-namespace:SRNicoNico.Views.Action"
              xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="80"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             d:DataContext="{d:DesignInstance {x:Type m:NicoNicoRankingEntry}}"
-             >
+             d:DataContext="{d:DesignInstance {x:Type m:NicoNicoRankingEntry}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
+            <a:NicoNicoOpenAction Url="{Binding ContentUrl}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.ContextMenu>
@@ -47,8 +46,8 @@
     </UserControl.ContextMenu>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel VerticalAlignment="Center">
@@ -87,12 +86,10 @@
                 </TextBlock.Style>
             </TextBlock>
         </StackPanel>
-
         <StackPanel Grid.Column="1" VerticalAlignment="Center">
             <Image Source="{Binding ThumbNail}"  Width="70" Height="40"/>
             <TextBlock Text="{Binding Length}" HorizontalAlignment="Right" />
         </StackPanel>
-
         <Grid Grid.Column="2">
             <StackPanel Margin="10,0,0,0">
                 <Grid>
@@ -101,25 +98,22 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Title}" FontSize="18" TextWrapping="Wrap" />
-                    <ContentControl Grid.Column="1" Margin="4,0,0,0">
-                        <ContentControl.Style>
-                            <Style TargetType="ContentControl">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsWatched}" Value="True">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="ContentControl">
-                                                    <TextBlock Text="視聴済み" Margin="0,2,10,0" Foreground="Gray" FontSize="12"  />
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ContentControl.Style>
+                    <ContentControl Grid.Column="1" Margin="4,0,0,0" Content="{Binding IsWatched}">
+                        <ContentControl.ContentTemplateSelector>
+                            <controls:BooleanDataTemplateSelector>
+                                <controls:BooleanDataTemplateSelector.TrueTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="視聴済み" Margin="0,2,10,0" FontSize="12" />
+                                    </DataTemplate>
+                                </controls:BooleanDataTemplateSelector.TrueTemplate>
+                                <controls:BooleanDataTemplateSelector.FalseTemplate>
+                                    <DataTemplate />
+                                </controls:BooleanDataTemplateSelector.FalseTemplate>
+                            </controls:BooleanDataTemplateSelector>
+                        </ContentControl.ContentTemplateSelector>
                     </ContentControl>
                 </Grid>
-                <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Description}" FontSize="14" Foreground="Gray" TextWrapping="Wrap" />
+                <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Description}" Foreground="{DynamicResource SemiActiveForegroundBrushKey}" FontSize="14" TextWrapping="Wrap" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -130,8 +124,7 @@
                         <TextBlock Text="{Binding CommentCount,StringFormat=コメント数:{0}}" Margin="10,0,0,0" FontSize="13" TextWrapping="Wrap" />
                         <TextBlock Text="{Binding MylistCount,StringFormat=マイリスト数:{0}}" Margin="10,0,0,0" FontSize="13" TextWrapping="Wrap" />
                     </StackPanel>
-
-                    <TextBlock Grid.Column="1" TextWrapping="Wrap" Text="{Binding PostAt}" FontSize="13" HorizontalAlignment="Right" Foreground="Red" />
+                    <TextBlock Grid.Column="1" TextWrapping="Wrap" Text="{Binding PostAt}" FontSize="13" Foreground="Red" />
                 </Grid>
             </StackPanel>
         </Grid>

@@ -2,7 +2,6 @@
 using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
@@ -228,11 +227,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //マイリスト数
         public string MylistCount { get; set; }
-
-        public void Open() {
-
-            NicoNicoOpener.Open(ContentUrl);
-        }
     }
 
     public enum RankingPeriod {

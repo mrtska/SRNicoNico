@@ -12,8 +12,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             Background="Transparent"
              d:DataContext="{d:DesignInstance {x:Type vm:RankingViewModel}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -22,24 +20,22 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="89*"/>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Grid Background="{DynamicResource BackgroundLevel1BrushKey}" >
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="38" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="ランキング" VerticalAlignment="Center" FontSize="20" Height="30"/>
-
+            <TextBlock TextWrapping="Wrap" Text="ランキング" FontSize="20" />
             <ScrollViewer Grid.Row="1">
-                <metro:TabView ItemsSource="{Binding RankingList}" SelectedIndex="{Binding SelectedIndex}"/>
+                <metro:TabView ItemsSource="{Binding RankingList}" SelectedIndex="{Binding SelectedIndex}" />
             </ScrollViewer>
             <StackPanel Grid.Row="2">
                 <TextBlock Text="ランキング集計期間" />
-                <ComboBox Margin="0,2,0,0" Text="{Binding Period,Mode=OneWayToSource}" SelectedIndex="{Binding Source={x:Static m:Settings.Instance},Path=RankingPeriodIndex}">
+                <ComboBox Margin="0,2,0,0" Text="{Binding Period, Mode=OneWayToSource}" SelectedIndex="{Binding Source={x:Static m:Settings.Instance},Path=RankingPeriodIndex}">
                     <ComboBoxItem Content="毎時"/>
                     <ComboBoxItem Content="24時間"/>
                     <ComboBoxItem Content="週間"/>
@@ -47,7 +43,7 @@
                     <ComboBoxItem Content="合計"/>
                 </ComboBox>
                 <TextBlock Margin="0,2,0,0" Text="ランキング集計対象" />
-                <ComboBox Margin="0,2,0,0" Text="{Binding Target,Mode=OneWayToSource}" SelectedIndex="{Binding Source={x:Static m:Settings.Instance},Path=RankingTargetIndex}">
+                <ComboBox Margin="0,2,0,0" Text="{Binding Target, Mode=OneWayToSource}" SelectedIndex="{Binding Source={x:Static m:Settings.Instance},Path=RankingTargetIndex}">
                     <ComboBoxItem Content="総合"/>
                     <ComboBoxItem Content="再生"/>
                     <ComboBoxItem Content="コメント"/>

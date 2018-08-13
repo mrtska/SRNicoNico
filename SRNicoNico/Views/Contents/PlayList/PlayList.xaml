@@ -14,26 +14,25 @@
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
-             d:DataContext="{d:DesignInstance {x:Type vm:PlayListEntryViewModel}}">
+             d:DataContext="{d:DesignInstance {x:Type vm:PlayListViewModel}}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Grid>
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="プレイリスト" FontSize="20" Height="30" Margin="5,0"/>
-                <controls:RoundButton Grid.Column="1" ToolTip="リピート切り替え" IconHeight="20" EllipseDiameter="25" Focusable="False">
+                <TextBlock Text="プレイリスト" FontSize="20" Height="30" Margin="5,0" />
+                <controls:RoundButton Grid.Column="1" ToolTip="リピート切り替え" Focusable="False">
                     <controls:RoundButton.Style>
                         <Style TargetType="{x:Type controls:RoundButton}">
                             <Style.Triggers>
@@ -52,27 +51,25 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </controls:RoundButton>
-
             </Grid>
             <metro:TabView Grid.Row="1" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" b:DragDropExtension.ScrollOnDragDrop="True"
-                           ScrollViewer.CanContentScroll="False"  ItemsSource="{Binding PlayList}" SelectedItem="{Binding SelectedPlayList}"
-                           Focusable="False" Background="{DynamicResource BackgroundLevel1BrushKey}" Style="{StaticResource TabViewWithScrollViewerStyle}"
-                           dd:DragDrop.DropHandler="{Binding}">
-                    <metro:TabView.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="Height" Value="auto"/>
+                           ScrollViewer.CanContentScroll="False" ItemsSource="{Binding PlayList}" SelectedItem="{Binding SelectedPlayList}"
+                           Focusable="False" Style="{StaticResource TabViewWithScrollViewerStyle}" dd:DragDrop.DropHandler="{Binding}">
+                <metro:TabView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}"  BasedOn="{StaticResource DefaultTabViewItemContainerStyle}">
+                        <Setter Property="Height" Value="auto" />
                         <Setter Property="dd:DragDrop.DragSourceIgnore" Value="True" />
                         <EventSetter Event="PreviewMouseDown" Handler="MouseDown" />
                     </Style>
                 </metro:TabView.ItemContainerStyle>
                     <metro:TabView.ItemTemplate>
-                        <DataTemplate DataType="{x:Type vm:PlayListViewModel}">
+                        <DataTemplate DataType="{x:Type vm:PlayListEntryViewModel}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Border dd:DragDrop.DragSourceIgnore="False" dd:DragDrop.UseDefaultDragAdorner="True"  Background="Transparent" Margin="5,10" BorderThickness="2,0,2,0" BorderBrush="DarkGray" Width="10" Opacity="0.2" Cursor="Hand" >
+                                <Border dd:DragDrop.DragSourceIgnore="False" dd:DragDrop.UseDefaultDragAdorner="True" Background="Transparent" Margin="5,10" BorderThickness="2,0,2,0" BorderBrush="DarkGray" Width="10" Opacity="0.2" Cursor="Hand">
                                     <Border.Effect>
                                         <DropShadowEffect RenderingBias="Quality" BlurRadius="2" Direction="350" ShadowDepth="1" Color="#FF111111" />
                                     </Border.Effect>
@@ -82,7 +79,6 @@
                         </DataTemplate>
                     </metro:TabView.ItemTemplate>
                 </metro:TabView>
-
         </Grid>
         <ContentControl Grid.Column="1" Content="{Binding Video}">
             <ContentControl.Resources>
@@ -90,7 +86,6 @@
                     <v:Video />
                 </DataTemplate>
             </ContentControl.Resources>
-
         </ContentControl>
     </Grid>
 </UserControl>

@@ -1,5 +1,4 @@
-﻿using Livet;
-using SRNicoNico.Models.NicoNicoWrapper;
+﻿using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
     public class RankingEntryViewModel : TabItemViewModel {
