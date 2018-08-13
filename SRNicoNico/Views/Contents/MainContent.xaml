@@ -15,11 +15,9 @@
             <ColumnDefinition Width="130"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
         <ScrollViewer>
             <StackPanel Background="{DynamicResource ActiveBackgroundBrushKey}">
                 <metro:TabView Focusable="False" ItemsSource="{Binding SystemItems}" SelectedValue="{Binding SelectedTab}" />
-
                 <Rectangle Height=".99" Margin="20,10" Fill="{DynamicResource InactiveForegroundBrushKey}" Opacity="0.5">
                     <Rectangle.Style>
                         <Style TargetType="Rectangle">
@@ -31,12 +29,9 @@
                         </Style>
                     </Rectangle.Style>
                 </Rectangle>
-
                 <metro:TabView Focusable="False" ItemsSource="{Binding UserItems}" SelectedValue="{Binding SelectedTab}" />
-
             </StackPanel>
         </ScrollViewer>
-
         <ItemsControl Grid.Column="1" ItemsSource="{Binding SystemItems}">
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:StartViewModel}">
@@ -76,7 +71,6 @@
                     <v:Deploy />
                 </DataTemplate>
             </ItemsControl.Resources>
-
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid />
@@ -88,7 +82,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
         <ItemsControl Grid.Column="1" ItemsSource="{Binding UserItems}">
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:VideoViewViewModel}">
@@ -107,7 +100,6 @@
                     <v:PlayList />
                 </DataTemplate>
             </ItemsControl.Resources>
-
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid />

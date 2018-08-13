@@ -13,32 +13,28 @@
              xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             Background="{DynamicResource ThemeBrushKey}"
              d:DataContext="{d:DesignInstance {x:Type vm:WebViewContentViewModel}}"
              DataContextChanged="UserControl_DataContextChanged">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
-
-                <controls:RoundButton Focusable="False" ToolTip="戻る" EllipseDiameter="30" IconWidth="30" HorizontalAlignment="Center" VerticalAlignment="Center" IsEnabled="{Binding CanGoBack}" IconData="F1 M 57,42L 57,34L 32.25,34L 42.25,24L 31.75,24L 17.75,38L 31.75,52L 42.25,52L 32.25,42L 57,42 Z" Margin="0,0,0,0" >
+                <controls:RoundButton Focusable="False" ToolTip="戻る" EllipseDiameter="30" IconWidth="30" HorizontalAlignment="Center" VerticalAlignment="Center" IsEnabled="{Binding CanGoBack}" IconData="F1 M 57,42L 57,34L 32.25,34L 42.25,24L 31.75,24L 17.75,38L 31.75,52L 42.25,52L 32.25,42L 57,42 Z">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="GoBack" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </controls:RoundButton>
-                <controls:RoundButton Focusable="False" ToolTip="次に進む" HorizontalAlignment="Center" VerticalAlignment="Center" IsEnabled="{Binding CanGoForward}" IconData="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z" Margin="0,0,0,0" >
+                <controls:RoundButton Focusable="False" ToolTip="次に進む" HorizontalAlignment="Center" VerticalAlignment="Center" IsEnabled="{Binding CanGoForward}" IconData="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="GoForward" />
@@ -46,19 +42,16 @@
                     </i:Interaction.Triggers>
                 </controls:RoundButton>
             </StackPanel>
-
             <metro:PromptTextBox Grid.Column="1" Prompt="URLまたは検索語句を入力" Text="{Binding Url,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" TextWrapping="NoWrap" Height="25">
                 <i:Interaction.Behaviors>
-                    <b:TextBoxEnterKeyBehavior Binding="{Binding}" UseMethodParameter="True" MethodName="Load"/>
+                    <b:TextBoxEnterKeyBehavior Binding="{Binding}" UseMethodParameter="True" MethodName="Load" />
                 </i:Interaction.Behaviors>
             </metro:PromptTextBox>
-            <CheckBox Grid.Column="2" ToolTip="リンクをNicoNicoViewerで開く" Margin="5"  IsChecked="{Binding OpenWithViewer,Mode=TwoWay}"/>
+            <CheckBox Grid.Column="2" ToolTip="リンクをNicoNicoViewerで開く" Margin="5"  IsChecked="{Binding OpenWithViewer,Mode=TwoWay}" />
         </Grid>
-        
         <WebBrowser x:Name="browser" Grid.Row="1" Focusable="True" metro2:WebBrowserHelper.AllowWebBrowserDrop="False" metro2:WebBrowserHelper.ScriptErrorsSuppressed="True" />
-
         <local:ManagedPopup IsOpen="{Binding IsActive}" AllowsTransparency="True" PlacementTarget="{Binding ElementName=browser}" Placement="Center">
-            <metro:ProgressRing Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" />
+            <metro:ProgressRing />
         </local:ManagedPopup>
     </Grid>
 </UserControl>
