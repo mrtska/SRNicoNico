@@ -5,8 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="600">
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="500" d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance {x:Type vm:OverViewViewModel}}">
     <UserControl.Resources>
         <Style TargetType="Hyperlink">
             <EventSetter Event="RequestNavigate" Handler="Hyperlink_RequestNavigate" />
@@ -23,7 +25,6 @@
                 </i:Interaction.Triggers>
             </Button>
         </StackPanel>
-
         <TextBlock Margin="20,0,0,0">
             このソフトウェアはオープンソースです。<LineBreak /><LineBreak />
             

@@ -11,16 +11,14 @@
              d:DataContext="{d:DesignInstance {x:Type vm:OSSViewModel}}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-
-        <Grid Background="{DynamicResource BackgroundLevel1BrushKey}">
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
             <ScrollViewer>
                 <metro:TabView ItemsSource="{Binding OSSList}" SelectedIndex="0" />
             </ScrollViewer>
         </Grid>
-
         <ItemsControl Grid.Column="1" ItemsSource="{Binding OSSList}">
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:OSSEntryViewModel}">

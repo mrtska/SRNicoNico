@@ -14,13 +14,11 @@
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
-        <Grid Background="{DynamicResource BackgroundLevel1BrushKey}">
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
             <ScrollViewer>
                 <metro:TabView ItemsSource="{Binding OtherList}" SelectedIndex="0" />
             </ScrollViewer>
         </Grid>
-
         <ItemsControl Grid.Column="1" ItemsSource="{Binding OtherList}">
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:OverViewViewModel}">
@@ -30,7 +28,6 @@
                     <v:OSS />
                 </DataTemplate>
             </ItemsControl.Resources>
-
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid />
