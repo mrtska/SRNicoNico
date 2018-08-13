@@ -41,7 +41,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
         #endregion
 
-
         #region IsEnd変更通知プロパティ
         private bool _IsEnd;
 
@@ -997,16 +996,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public string CommunityThumbnail { get; set; }
 
         public string CommunityUrl { get {
-
                 return "http://com.nicovideo.jp/community/" + CommunityId;
             }
         }
-
-        public void Open() {
-
-            NicoNicoOpener.Open(ContentUrl);
-        }
-
     }
 
     public class NicoNicoNicoRepoVideoEntry : NicoNicoNicoRepoResultEntry, IWatchable {

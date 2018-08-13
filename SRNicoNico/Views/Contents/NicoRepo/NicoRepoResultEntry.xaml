@@ -12,18 +12,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="100"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
              d:DataContext="{d:DesignInstance {x:Type m:NicoNicoNicoRepoResultEntry}}">
-    <UserControl.Resources>
-        <Style TargetType="Hyperlink">
-            <EventSetter Event="RequestNavigate" Handler="OpenHyperLink"/>
-            <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
-        </Style>
-    </UserControl.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
+            <a:NicoNicoOpenAction Url="{Binding ContentUrl}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.ContextMenu>

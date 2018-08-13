@@ -23,12 +23,12 @@
                 <controls:BooleanDataTemplateSelector>
                     <controls:BooleanDataTemplateSelector.TrueTemplate>
                         <DataTemplate>
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Text="お知らせがありません"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Text="お知らせがありません" />
                         </DataTemplate>
                     </controls:BooleanDataTemplateSelector.TrueTemplate>
                     <controls:BooleanDataTemplateSelector.FalseTemplate>
                         <DataTemplate>
-                            <ItemsControl  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CommunityNewsList}" >
+                            <ItemsControl  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CommunityNewsList}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type mm:NicoNicoCommunityNews}">
                                         <StackPanel Margin="5">
