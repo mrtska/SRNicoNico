@@ -6,15 +6,13 @@
              xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              mc:Ignorable="d" 
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
              d:DataContext="{d:DesignInstance {x:Type w:NicoNicoMylistBookEntry}}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="60"/>
-            <ColumnDefinition Width="67*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
         <Image Height="40" Width="50" Source="{Binding ThumbNailUrl}" Margin="0,10,0,0" />
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -22,9 +20,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
             <TextBlock FontSize="16" TextWrapping="Wrap" Text="{Binding Title}" Margin="5,2" />
-
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,0,0" >
                 <TextBlock Text="{Binding BookId, StringFormat=書籍ID：{0}}" Margin="0,0,15,0" />
                 <TextBlock Text="{Binding ViewCount, StringFormat=再生数：{0:N0}}" Margin="0,0,15,0" />

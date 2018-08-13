@@ -7,44 +7,30 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             Background="{DynamicResource ThemeBrushKey}"
              d:DataContext="{d:DesignInstance {x:Type vm:MylistResultViewModel}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Grid>
-        <ContentControl>
-            <ContentControl.Style>
-                <Style TargetType="ContentControl">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsEditMode}" Value="False">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ContentControl">
-                                        <v:MylistResultView />
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding IsEditMode}" Value="True">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ContentControl">
-                                        <v:MylistResultEditModeView />
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
+    <ContentControl Content="{Binding IsEditMode}">
+        <ContentControl.ContentTemplateSelector>
+            <controls:BooleanDataTemplateSelector>
+                <controls:BooleanDataTemplateSelector.TrueTemplate>
+                    <DataTemplate>
+                        <v:MylistResultEditModeView DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext}" />
+                    </DataTemplate>
+                </controls:BooleanDataTemplateSelector.TrueTemplate>
+                <controls:BooleanDataTemplateSelector.FalseTemplate>
+                    <DataTemplate>
+                        <v:MylistResultView DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext}" />
+                    </DataTemplate>
+                </controls:BooleanDataTemplateSelector.FalseTemplate>
+            </controls:BooleanDataTemplateSelector>
+        </ContentControl.ContentTemplateSelector>
         </ContentControl>
-
-    </Grid>
 </UserControl>

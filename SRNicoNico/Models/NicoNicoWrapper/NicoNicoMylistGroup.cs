@@ -1,11 +1,8 @@
 ﻿using Codeplex.Data;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.ViewModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -33,7 +30,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             Owner = owner;
         }
-
 
         //マイリスト一覧を取得
         public async Task<List<NicoNicoMylistGroupEntry>> GetMylistGroupAsync() {
@@ -166,12 +162,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 return false;
             }
         }
-
     }
-
     //マイリストグループ
     public class NicoNicoMylistGroupEntry {
-
 
         //追加日時 Unixタイム
         public string CreateTime { get; set; }

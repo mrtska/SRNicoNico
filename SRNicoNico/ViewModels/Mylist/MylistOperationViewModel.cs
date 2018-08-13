@@ -1,19 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
+﻿using Livet;
 using Livet.Messaging.Windows;
-using SRNicoNico.Models.NicoNicoWrapper;
-using System.Windows.Input;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace SRNicoNico.ViewModels {
     public enum MylistOperation {
@@ -24,8 +11,6 @@ namespace SRNicoNico.ViewModels {
     }
 
     public class MylistOperationViewModel : ViewModel {
-
-
 
         #region SelectedMylist変更通知プロパティ
         private DispatcherCollection<MylistResultEntryViewModel> _SelectedMylist = new DispatcherCollection<MylistResultEntryViewModel>(DispatcherHelper.UIDispatcher);
@@ -41,7 +26,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region TargetMylist変更通知プロパティ
         private MylistResultViewModel _TargetMylist;
 
@@ -55,7 +39,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         public bool IsCanceled { get; set; }
 
@@ -91,7 +74,6 @@ namespace SRNicoNico.ViewModels {
             Operation = MylistOperation.Delete;
             Close();
         }
-
 
         public void Cancel() {
 

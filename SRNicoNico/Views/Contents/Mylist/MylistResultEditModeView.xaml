@@ -14,8 +14,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
-             Background="{DynamicResource ThemeBrushKey}"
              d:DataContext="{d:DesignInstance {x:Type vm:MylistResultViewModel}}">
     <Grid>
         <Grid.RowDefinitions>
@@ -23,34 +21,29 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-
-        <Grid Background="{DynamicResource BackgroundLevel1BrushKey}">
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <ContentControl>
-                <ContentControl.Style>
-                    <Style TargetType="{x:Type ContentControl}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsDefList}" Value="True">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ContentControl}">
-                                            <TextBlock TextWrapping="Wrap" Text="{Binding Group.Name}" FontSize="20" VerticalAlignment="Center" />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ContentControl.Style>
-                <TextBox Margin="2" TextWrapping="Wrap" Text="{Binding Group.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="16" MaxLines="1" VerticalAlignment="Center" MaxLength="128" />
+            <ContentControl Content="{Binding IsDefList}">
+                <ContentControl.ContentTemplateSelector>
+                    <controls:BooleanDataTemplateSelector>
+                        <controls:BooleanDataTemplateSelector.TrueTemplate>
+                            <DataTemplate>
+                                <TextBlock DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},Path=DataContext}" TextWrapping="Wrap" Text="{Binding Group.Name}" FontSize="20" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </controls:BooleanDataTemplateSelector.TrueTemplate>
+                        <controls:BooleanDataTemplateSelector.FalseTemplate>
+                            <DataTemplate>
+                                <TextBox DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},Path=DataContext}" Margin="2" TextWrapping="Wrap" Text="{Binding Group.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="16" MaxLines="1" VerticalAlignment="Center" MaxLength="128" />
+                            </DataTemplate>
+                        </controls:BooleanDataTemplateSelector.FalseTemplate>
+                    </controls:BooleanDataTemplateSelector>
+                </ContentControl.ContentTemplateSelector>
             </ContentControl>
-
             <ComboBox Grid.Column="1" SelectedIndex="{Binding SortIndex}" Width="140" Margin="10,0" Height="22">
-
                 <ComboBoxItem Content="登録が新しい順" />
                 <ComboBoxItem Content="登録が古い順" />
                 <ComboBoxItem Content="タイトル昇順" />
@@ -68,9 +61,8 @@
                 <ComboBoxItem Content="マイリスト登録が多い順" />
                 <ComboBoxItem Content="マイリスト登録が少ない順" />
             </ComboBox>
-
             <StackPanel Grid.Column="2" Orientation="Horizontal">
-                <controls:RoundButton Margin="0,0,5,0" Focusable="False" VerticalAlignment="Center"  IconData="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"  >
+                <controls:RoundButton Margin="0,0,5,0" Focusable="False" IconData="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z">
                     <controls:RoundButton.Resources>
                         <Style TargetType="{x:Type controls:RoundButton}">
                             <Style.Setters>
@@ -78,20 +70,19 @@
                             </Style.Setters>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsDefList}" Value="True">
-                                    <Setter Property="IsEnabled" Value="False"/>
-                                    <Setter Property="ToolTip" Value="とりあえずマイリストは削除出来ません。"/>
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="ToolTip" Value="とりあえずマイリストは削除出来ません。" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </controls:RoundButton.Resources>
-                    
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="DeleteMylist" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </controls:RoundButton>
-                <controls:RoundButton ToolTip="更新" Margin="0,0,5,0" HorizontalAlignment="Right" IconData="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z">
+                <controls:RoundButton ToolTip="更新" Margin="0,0,5,0" IconData="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Refresh" />
@@ -100,9 +91,7 @@
                 </controls:RoundButton>
             </StackPanel>
         </Grid>
-
-        <metro:ProgressRing Grid.Row="1" HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsActive}"  />
-
+        <metro:ProgressRing Grid.Row="1" IsActive="{Binding IsActive}"  />
         <ContentControl Grid.Row="1">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
@@ -119,23 +108,21 @@
                     </Style.Triggers>
                 </Style>
             </ContentControl.Style>
-            <ListBox Name="targetList" dd:DragDrop.IsDragSource="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled"   SelectionMode="Multiple" ItemsSource="{Binding MylistList}" ItemContainerStyle="{StaticResource FlatMultiSelectionListBoxItem}" >
+            <ListBox Name="targetList" dd:DragDrop.IsDragSource="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Multiple" ItemsSource="{Binding MylistList}" ItemContainerStyle="{StaticResource FlatMultiSelectionListBoxItem}">
                 <ListBox.Resources>
                     <DataTemplate DataType="{x:Type vm:MylistResultEntryViewModel}">
                         <v:MylistResultEntry />
                     </DataTemplate>
                 </ListBox.Resources>
-
             </ListBox>
         </ContentControl>
-
-        <Grid Grid.Row="2" Background="{DynamicResource BackgroundLevel1BrushKey}">
+        <Grid Grid.Row="2" Background="{DynamicResource AlternationBackgroundBrushKey}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" >
+            <StackPanel Orientation="Horizontal">
                 <Button Content="すべて選択" Margin="4">
                     <i:Interaction.Triggers>
                         <ei:KeyTrigger Key="Esc" FiredOn="KeyUp">
@@ -150,7 +137,6 @@
                     </i:Interaction.Triggers>
                 </Button>
             </StackPanel>
-
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,4,4,4">
                 <Button Content="削除" ToolTip="選択したマイリストを削除します" Margin="5,0">
                     <Button.Style>
@@ -164,19 +150,18 @@
                     </Button.Style>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ShowDeleteView" MethodParameter="{Binding ElementName=targetList,Path=SelectedItems}"/>
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ShowDeleteView" MethodParameter="{Binding ElementName=targetList,Path=SelectedItems}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
                 <Button Content="確定" ToolTip="編集モードを終了します">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="UpdateMylist"/>
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="UpdateMylist" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
             </StackPanel>
         </Grid>
-
     </Grid>
 </UserControl>

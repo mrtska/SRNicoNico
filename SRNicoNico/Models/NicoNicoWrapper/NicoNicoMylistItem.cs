@@ -1,21 +1,16 @@
-﻿using System;
+﻿using Codeplex.Data;
+using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using SRNicoNico.ViewModels;
-using SRNicoNico.Models.NicoNicoViewer;
-using HtmlAgilityPack;
-using System.Web;
-using System.Text.RegularExpressions;
-using Codeplex.Data;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoMylistItem {
-
 
         //とりあえずマイリスト取得Api
         private const string DefListGetApi = "http://www.nicovideo.jp/api/deflist/list";
@@ -59,8 +54,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             Owner = owner;
         }
-
-
         //とりあえずマイリストを取得
         public async Task<List<NicoNicoMylistEntry>> GetDefListAsync() {
 
@@ -80,7 +73,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 Owner.Status = "とりあえずマイリストの取得に失敗しました";
                 return null;
             }
-
         }
 
         //とりあえずマイリストに追加
@@ -166,7 +158,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     request.RequestUri = new Uri(DefListUpdateApi);
                 }
-
                 request.Content = new FormUrlEncodedContent(pair);
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(request);
@@ -187,8 +178,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 return false;
             }
         }
-
-
         //マイリストを取得
         public async Task<List<NicoNicoMylistEntry>> GetMylistAsync(NicoNicoMylistGroupEntry group) {
 
@@ -338,7 +327,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(request);
 
-
                 dynamic json = DynamicJson.Parse(a);
                 if(json.status == "ok") {
 
@@ -433,7 +421,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //末尾に&が残ってるはずなので消す
             return text.Substring(0, text.Length - 1);
         }
-
 
         //jsonをパースしてリストに入れる
         private void StoreItems(string str, List<NicoNicoMylistEntry> ret) {
@@ -547,7 +534,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
     }
-
 
     //マイリストエントリ
     public abstract class NicoNicoMylistEntry {

@@ -14,7 +14,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="100"
              d:DesignWidth="600"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}"
              Background="Transparent"
              d:DataContext="{d:DesignInstance {x:Type vm:MylistResultEntryViewModel}}">
     <i:Interaction.Triggers>
@@ -64,7 +63,6 @@
                 </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
-
         <ContentControl>
             <ContentControl.Style>
                 <Style TargetType="ContentControl">
@@ -79,14 +77,14 @@
                                                     <Setter Property="Visibility" Value="Hidden" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Path=IsMouseOver}" Value="True">
-                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                            <Setter Property="Visibility" Value="Visible" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </controls:RoundButton.Style>
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Click">
-                                                    <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="IsDescriptionEditMode" Value="True"/>
+                                                    <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="IsDescriptionEditMode" Value="True" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                         </controls:RoundButton>
@@ -103,7 +101,7 @@
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="auto"/>
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Text="{Binding Item.Description}" AcceptsReturn="True" Margin="10,2" TextWrapping="Wrap" Foreground="#FF888888" Background="#FF333333" />
+                                            <TextBox Text="{Binding Item.Description}" AcceptsReturn="True" Margin="10,2" TextWrapping="Wrap" Foreground="{DynamicResource SemiActiveForegroundBrushKey}" Background="{DynamicResource SemiactiveBackgroundBrushKey}" />
                                             <controls:RoundButton Grid.Column="1" IconWidth="10" IconHeight="10" EllipseDiameter="16" ToolTip="完了" IconData="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z">
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="Click">
@@ -124,27 +122,25 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Item.Description}" Margin="10,2" TextWrapping="Wrap" Foreground="#FF888888" Background="#FF333333" />
+                <TextBlock Text="{Binding Item.Description}" Margin="10,2" TextWrapping="Wrap" Foreground="{DynamicResource SemiActiveForegroundBrushKey}" Background="{DynamicResource SemiactiveBackgroundBrushKey}" />
                 <controls:RoundButton Grid.Column="1" IconWidth="10" IconHeight="10" EllipseDiameter="16" ToolTip="マイリストコメント編集" IconData="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z">
                     <controls:RoundButton.Style>
                         <Style TargetType="{x:Type controls:RoundButton}">
                             <Setter Property="Visibility" Value="Hidden" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </controls:RoundButton.Style>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="IsDescriptionEditMode" Value="True"/>
+                            <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="IsDescriptionEditMode" Value="True" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </controls:RoundButton>
             </Grid>
         </ContentControl>
-
     </StackPanel>
-
 </UserControl>

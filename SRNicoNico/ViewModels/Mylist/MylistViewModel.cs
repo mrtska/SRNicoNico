@@ -1,25 +1,15 @@
-﻿using System;
+﻿using GongSolutions.Wpf.DragDrop;
+using Livet;
+using Livet.Messaging;
+using SRNicoNico.Models.NicoNicoWrapper;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-using SRNicoNico.Models.NicoNicoWrapper;
-using System.Windows.Input;
-using GongSolutions.Wpf.DragDrop;
 using System.Windows;
-using System.Collections;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class MylistViewModel : TabItemViewModel, IDropTarget {
-
 
         #region MylistList変更通知プロパティ
         private DispatcherCollection<TabItemViewModel> _MylistList = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
@@ -112,7 +102,6 @@ namespace SRNicoNico.ViewModels {
 
         public override void KeyDown(KeyEventArgs e) {
 
-
             if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
 
                 if(e.Key == Key.F5) {
@@ -126,21 +115,17 @@ namespace SRNicoNico.ViewModels {
 
         public void DragOver(IDropInfo dropInfo) {
 
-            if(dropInfo.TargetItem is MylistResultViewModel) {
+            if (dropInfo.TargetItem is MylistResultViewModel vm) {
 
-                var vm = (MylistResultViewModel)dropInfo.TargetItem;
-                
                 //とりあえずマイリストにコピー/移動はさせない
-                if(vm.IsDefList) {
+                if (vm.IsDefList) {
 
                     Status = "とりあえずマイリストに移動/コピーは出来ません";
                     return;
                 }
 
                 var count = 0;
-                if(dropInfo.Data is ICollection) {
-
-                    var data = (ICollection)dropInfo.Data;
+                if (dropInfo.Data is ICollection data) {
                     count = data.Count;
                 } else {
 
@@ -156,16 +141,11 @@ namespace SRNicoNico.ViewModels {
 
             Status = "";
 
-            if(dropInfo.TargetItem is MylistResultViewModel) {
-
-                var vm = (MylistResultViewModel)dropInfo.TargetItem;
-
+            if (dropInfo.TargetItem is MylistResultViewModel vm) {
                 var selectedList = new List<MylistResultEntryViewModel>();
 
-                if(dropInfo.Data is ICollection) {
-
-                    var data = (ICollection)dropInfo.Data;
-                    foreach(var list in data) {
+                if (dropInfo.Data is ICollection data) {
+                    foreach (var list in data) {
 
                         selectedList.Add((MylistResultEntryViewModel)list);
                     }
@@ -178,7 +158,7 @@ namespace SRNicoNico.ViewModels {
 
                 App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.MylistCopyOrMoveView), operation, TransitionMode.Modal));
 
-                if(operation.IsCanceled) {
+                if (operation.IsCanceled) {
 
                     return;
                 }
@@ -186,14 +166,14 @@ namespace SRNicoNico.ViewModels {
                 var token = await MylistInstance.GetMylistTokenAsync();
 
                 //マイリストコピー処理
-                if(operation.Operation == MylistOperation.Copy) {
+                if (operation.Operation == MylistOperation.Copy) {
 
-                    if(await MylistInstance.Item.CopyMylistAsync(selectedList, vm.Group, token)) {
+                    if (await MylistInstance.Item.CopyMylistAsync(selectedList, vm.Group, token)) {
 
-                        foreach(var entry in selectedList) {
+                        foreach (var entry in selectedList) {
 
                             //同じIDのマイリストがあったらコピーしない
-                            if(vm.MylistList.Where(e => e.Item.ItemId == entry.Item.ItemId).Count() == 0) {
+                            if (vm.MylistList.Where(e => e.Item.ItemId == entry.Item.ItemId).Count() == 0) {
 
                                 //ターゲット側マイリストに追加
                                 vm.MylistList.Add(entry);
@@ -205,14 +185,14 @@ namespace SRNicoNico.ViewModels {
                 }
 
                 //マイリスト移動処理
-                if(operation.Operation == MylistOperation.Move) {
+                if (operation.Operation == MylistOperation.Move) {
 
-                    if(await MylistInstance.Item.MoveMylistAsync(selectedList, vm.Group, token)) {
+                    if (await MylistInstance.Item.MoveMylistAsync(selectedList, vm.Group, token)) {
 
-                        foreach(var entry in selectedList) {
+                        foreach (var entry in selectedList) {
 
                             //同じIDのマイリストがあったら移動しない
-                            if(vm.MylistList.Where(e => e.Item.ItemId == entry.Item.ItemId).Count() == 0) {
+                            if (vm.MylistList.Where(e => e.Item.ItemId == entry.Item.ItemId).Count() == 0) {
 
                                 //ターゲット側マイリストに追加
                                 vm.MylistList.Add(entry);

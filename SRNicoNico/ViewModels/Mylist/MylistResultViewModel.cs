@@ -1,27 +1,17 @@
-﻿using System;
+﻿using Livet;
+using Livet.Messaging;
+using Livet.Messaging.Windows;
+using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.Models.NicoNicoWrapper;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-using SRNicoNico.Models.NicoNicoWrapper;
 using System.Windows.Input;
-using SRNicoNico.Models.NicoNicoViewer;
-using System.Collections;
-using System.Collections.ObjectModel;
 
 namespace SRNicoNico.ViewModels {
     public class MylistResultViewModel : TabItemViewModel {
 
         internal readonly NicoNicoMylist MylistInstance;
-
 
         #region Group変更通知プロパティ
         private NicoNicoMylistGroupEntry _Group;
@@ -37,7 +27,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region SelectedIndex変更通知プロパティ
         private int _SelectedIndex = 0;
 
@@ -51,7 +40,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region IsEmpty変更通知プロパティ
         private bool _IsEmpty;
@@ -67,7 +55,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region MylistList変更通知プロパティ
         private DispatcherCollection<MylistResultEntryViewModel> _MylistList = new DispatcherCollection<MylistResultEntryViewModel>(DispatcherHelper.UIDispatcher);
 
@@ -81,7 +68,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region IsEditMode変更通知プロパティ
         private bool _IsEditMode = false;
@@ -227,7 +213,6 @@ namespace SRNicoNico.ViewModels {
                     sorted = tmp.OrderBy(r => r.Item.MylistCount);
                     break;
             }
-
             //一度空にする
             MylistList.Clear();
 

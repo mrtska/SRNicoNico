@@ -85,7 +85,7 @@
                             <Setter TargetName="Bd" Property="BorderThickness" Value="1"/>
                             <Setter TargetName="Bd" Property="CornerRadius" Value="5"/>
                             <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentBrushKey}"/>
-                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentHighlightBrushKey}"/>
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentAlphaHighlightBrushKey}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="{DynamicResource InactiveForegroundBrushKey}"/>
