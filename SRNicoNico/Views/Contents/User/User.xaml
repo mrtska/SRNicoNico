@@ -20,38 +20,29 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="152"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="150" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <Image Width="130" Height="130" Source="{Binding Model.UserInfo.UserIconUrl}" />
-
         <Grid Grid.Column="1">
-            <Grid.Resources>
-                <Style TargetType="Hyperlink">
-                    <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
-                    <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
-                </Style>
-            </Grid.Resources>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock FontSize="20" Text="{Binding Model.UserInfo.UserName}" />
-                        <controls:RoundButton IsEnabled="{Binding IsActive,Converter={StaticResource Invert}}" EllipseDiameter="20" IconWidth="12" IconHeight="12" Margin="5,0,0,0" VerticalAlignment="Center" Focusable="False" HorizontalAlignment="Left">
+                        <controls:RoundButton IsEnabled="{Binding IsActive,Converter={StaticResource Invert}}" Margin="5,0,0,0" VerticalAlignment="Center" Focusable="False" HorizontalAlignment="Left">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
                                     <l:LivetCallMethodAction MethodName="ToggleFollow" MethodTarget="{Binding}" />
@@ -60,11 +51,11 @@
                             <controls:RoundButton.Style>
                                 <Style TargetType="{x:Type controls:RoundButton}">
                                     <Style.Triggers>
-                                        <DataTrigger  Binding="{Binding Model.UserInfo.IsFollow}" Value="False" >
+                                        <DataTrigger  Binding="{Binding Model.UserInfo.IsFollow}" Value="False">
                                             <Setter Property="ToolTip" Value="フォロー" />
                                             <Setter Property="IconData" Value="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
                                         </DataTrigger>
-                                        <DataTrigger  Binding="{Binding Model.UserInfo.IsFollow}" Value="True" >
+                                        <DataTrigger  Binding="{Binding Model.UserInfo.IsFollow}" Value="True">
                                             <Setter Property="ToolTip" Value="フォロー解除" />
                                             <Setter Property="IconData" Value="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
                                         </DataTrigger>
@@ -72,35 +63,26 @@
                                 </Style>
                             </controls:RoundButton.Style>
                         </controls:RoundButton>
-                        <ContentControl>
-                            <ContentControl.Resources>
-                                <Style TargetType="{x:Type Hyperlink}">
-                                    <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
-                                </Style>
-                            </ContentControl.Resources>
-                            <ContentControl.Style>
-                                <Style TargetType="{x:Type ContentControl}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Model.UserInfo.HasChannel}" Value="True">
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate TargetType="{x:Type ContentControl}">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <Image Margin="15,0,0,0" Width="25" Height="25" Source="{Binding Model.UserInfo.ChannelThumbNail}" />
-                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" ToolTip="{Binding Model.UserInfo.ChannelUrl}">
-                                                            <Hyperlink NavigateUri="{Binding Model.UserInfo.ChannelUrl}">
-                                                                <Run Text="{Binding Model.UserInfo.ChannelName}"/>
-                                                            </Hyperlink>
-                                                            </TextBlock>
-                                                        </StackPanel>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ContentControl.Style>
-
+                        <ContentControl Content="{Binding Model.UserInfo.HasChannel}">
+                            <ContentControl.ContentTemplateSelector>
+                                <controls:BooleanDataTemplateSelector>
+                                    <controls:BooleanDataTemplateSelector.TrueTemplate>
+                                        <DataTemplate>
+                                            <StackPanel DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext}" Orientation="Horizontal">
+                                                <Image Margin="15,0,0,0" Width="25" Height="25" Source="{Binding Model.UserInfo.ChannelThumbNail}" />
+                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" ToolTip="{Binding Model.UserInfo.ChannelUrl}">
+                                                    <Hyperlink NavigateUri="{Binding Model.UserInfo.ChannelUrl}">
+                                                        <Run Text="{Binding Model.UserInfo.ChannelName}"/>
+                                                    </Hyperlink>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </controls:BooleanDataTemplateSelector.TrueTemplate>
+                                    <controls:BooleanDataTemplateSelector.FalseTemplate>
+                                        <DataTemplate />
+                                    </controls:BooleanDataTemplateSelector.FalseTemplate>
+                                </controls:BooleanDataTemplateSelector>
+                            </ContentControl.ContentTemplateSelector>
                         </ContentControl>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
@@ -139,23 +121,21 @@
                         </Style>
                     </StackPanel.Resources>
                     <TextBlock TextTrimming="CharacterEllipsis">
-                        <Run FontSize="13" Text="{Binding Model.UserInfo.IdAndMemberType}"/>
+                        <Run FontSize="13" Text="{Binding Model.UserInfo.IdAndMemberType}" />
                     </TextBlock>
                     <TextBlock TextTrimming="CharacterEllipsis">
-                        <Run FontSize="13" Text="{Binding Model.UserInfo.FollowedCount,StringFormat='フォロワー：{0:N0} 人'}"/>
+                        <Run FontSize="13" Text="{Binding Model.UserInfo.FollowedCount,StringFormat='フォロワー：{0:N0} 人'}" />
                     </TextBlock>
                     <TextBlock TextTrimming="CharacterEllipsis">
-                        <Run FontSize="13" Text="{Binding Model.UserInfo.Level,StringFormat='レベル：{0}'}"/>
+                        <Run FontSize="13" Text="{Binding Model.UserInfo.Level,StringFormat='レベル：{0}'}" />
                     </TextBlock>
                     <TextBlock TextTrimming="CharacterEllipsis">
-                        <Run FontSize="13" Text="{Binding Model.UserInfo.StampExp,StringFormat='スタンプ経験値：{0} EXP'}"/>
+                        <Run FontSize="13" Text="{Binding Model.UserInfo.StampExp,StringFormat='スタンプ経験値：{0} EXP'}" />
                     </TextBlock>
                 </StackPanel>
             </StackPanel>
             <ScrollViewer Grid.Row="1">
-                <Grid>
-                    <TextBlock Foreground="#FFAAAAAA" TextWrapping="Wrap" Background="{DynamicResource BackgroundLevel1BrushKey}" b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Model.UserInfo.Description}"/>
-                </Grid>
+                <TextBlock TextWrapping="Wrap" Background="{DynamicResource AlternationBackgroundBrushKey}" b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Model.UserInfo.Description}" />
             </ScrollViewer>
         </Grid>
         <Grid Grid.Row="1" Grid.ColumnSpan="2">
@@ -163,12 +143,11 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
             <Grid Background="{DynamicResource ActiveBackgroundBrushKey}">
                 <metro:TabView SelectedIndex="0" Style="{DynamicResource HorizontalViewStyle}" Height="38" ItemsSource="{Binding UserContentList}" SelectedValue="{Binding SelectedList}" />
             </Grid>
             <Grid Grid.Row="1">
-                <ItemsControl  ItemsSource="{Binding UserContentList}" >
+                <ItemsControl  ItemsSource="{Binding UserContentList}">
                     <ItemsControl.Resources>
                         <DataTemplate DataType="{x:Type vm:UserNicoRepoViewModel}">
                             <v:UserNicoRepo />
@@ -191,7 +170,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <metro:ProgressRing HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsActive}"  />
+                <metro:ProgressRing IsActive="{Binding IsActive}" />
             </Grid>
         </Grid>
     </Grid>

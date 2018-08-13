@@ -9,6 +9,7 @@
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:UserMylistViewModel}}">
@@ -18,32 +19,30 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        <ContentControl>
-            <ContentControl.Resources>
-                <Style TargetType="ContentControl">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Model.Closed}" Value="True">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ContentControl">
-                                        <TextBlock Text="非公開です。" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Resources>
-            <Grid>
-                <ListBox  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding Model.MylistList}" >
-                    <ListBox.ItemTemplate>
-                        <DataTemplate DataType="{x:Type m:NicoNicoUserMylistEntry}">
-                            <v:UserMylistEntry />
+        <ContentControl Content="{Binding Model.Closed}">
+            <ContentControl.ContentTemplateSelector>
+                <controls:BooleanDataTemplateSelector>
+                    <controls:BooleanDataTemplateSelector.TrueTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="非公開です。" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" />
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <metro:ProgressRing Panel.ZIndex="2" HorizontalAlignment="Center" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsActive}"  />
-            </Grid>
+                    </controls:BooleanDataTemplateSelector.TrueTemplate>
+                    <controls:BooleanDataTemplateSelector.FalseTemplate>
+                        <DataTemplate>
+                            <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext}">
+                                <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding Model.MylistList}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type m:NicoNicoUserMylistEntry}">
+                                            <v:UserMylistEntry />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <metro:ProgressRing IsActive="{Binding IsActive}" />
+                            </Grid>
+                        </DataTemplate>
+                    </controls:BooleanDataTemplateSelector.FalseTemplate>
+                </controls:BooleanDataTemplateSelector>
+            </ContentControl.ContentTemplateSelector>
         </ContentControl>
     </Grid>
 </UserControl>

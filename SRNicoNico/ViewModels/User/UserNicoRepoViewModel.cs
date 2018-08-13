@@ -53,7 +53,6 @@ namespace SRNicoNico.ViewModels {
 
                 return;
             }
-
             IsActive = true;
 
             Owner.Status = "ニコレポ取得中：" + Name;

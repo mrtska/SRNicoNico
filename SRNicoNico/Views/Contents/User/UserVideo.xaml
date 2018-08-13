@@ -11,6 +11,7 @@
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
              xmlns:misc="clr-namespace:SRNicoNico.Views.Contents.Misc"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance {x:Type vm:UserVideoViewModel}}">
@@ -19,40 +20,36 @@
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-
     <Grid>
-        <ContentControl>
-            <ContentControl.Resources>
-                <Style TargetType="ContentControl">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Model.Closed}" Value="True">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ContentControl">
-                                        <TextBlock Text="非公開、又は動画を投稿していません。" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Resources>
-
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="25"/>
-                </Grid.RowDefinitions>
-                <ListBox   ItemsSource="{Binding Model.UserVideo}"  >
-                    <ListBox.ItemTemplate>
-                        <DataTemplate DataType="{x:Type m:NicoNicoSearchResultEntry}">
-                            <v:SearchResultEntry />
+        <ContentControl Content="{Binding Model.Closed}">
+            <ContentControl.ContentTemplateSelector>
+                <controls:BooleanDataTemplateSelector>
+                    <controls:BooleanDataTemplateSelector.TrueTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="非公開、又は動画を投稿していません。" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" />
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <misc:PageSpinner Grid.Row="2" />
-                <metro:ProgressRing Panel.ZIndex="2" HorizontalAlignment="Center" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsActive}" />
-            </Grid>
+                    </controls:BooleanDataTemplateSelector.TrueTemplate>
+                    <controls:BooleanDataTemplateSelector.FalseTemplate>
+                        <DataTemplate>
+                            <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="25" />
+                                </Grid.RowDefinitions>
+                                <ListBox ItemsSource="{Binding Model.UserVideo}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type m:NicoNicoSearchResultEntry}">
+                                            <v:SearchResultEntry />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <misc:PageSpinner Grid.Row="2" />
+                                <metro:ProgressRing IsActive="{Binding IsActive}" />
+                            </Grid>
+                        </DataTemplate>
+                    </controls:BooleanDataTemplateSelector.FalseTemplate>
+                </controls:BooleanDataTemplateSelector>
+            </ContentControl.ContentTemplateSelector>
         </ContentControl>
     </Grid>
 </UserControl>

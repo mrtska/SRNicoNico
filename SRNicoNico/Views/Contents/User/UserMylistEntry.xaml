@@ -12,11 +12,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="98.972" d:DesignWidth="616.71"
              d:DataContext="{d:DesignInstance {x:Type m:NicoNicoUserMylistEntry}}"
-             Background="Transparent"
-             Foreground="{DynamicResource ActiveForegroundBrushKey}">
+             Background="Transparent">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
+            <a:NicoNicoOpenAction Url="{Binding ContentUrl}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.ContextMenu>
@@ -49,20 +48,13 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-
         <StackPanel>
-            <StackPanel.Resources>
-                <Style TargetType="Hyperlink">
-                    <EventSetter Event="RequestNavigate" Handler="OpenHyperLink"/>
-                    <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
-                </Style>
-            </StackPanel.Resources>
             <TextBlock FontSize="18" Text="{Binding Name}" />
-            <TextBlock Margin="4" FontSize="12" TextWrapping="Wrap" Foreground="#FF888888" b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Description}" />
+            <TextBlock Margin="4" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource SemiActiveForegroundBrushKey}" b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Description}" />
         </StackPanel>
         <StackPanel Grid.Column="1" Orientation="Horizontal">
             <ContentControl>
-                <ContentControl.Resources>
+                <ContentControl.Style>
                     <Style TargetType="ContentControl">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ThumbNail1Available}" Value="True">
@@ -78,10 +70,10 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </ContentControl.Resources>
+                </ContentControl.Style>
             </ContentControl>
             <ContentControl>
-                <ContentControl.Resources>
+                <ContentControl.Style>
                     <Style TargetType="ContentControl">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ThumbNail2Available}" Value="True">
@@ -97,10 +89,10 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </ContentControl.Resources>
+                </ContentControl.Style>
             </ContentControl>
             <ContentControl>
-                <ContentControl.Resources>
+                <ContentControl.Style>
                     <Style TargetType="ContentControl">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ThumbNail3Available}" Value="True">
@@ -116,7 +108,7 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </ContentControl.Resources>
+                </ContentControl.Style>
             </ContentControl>
         </StackPanel>
     </Grid>
