@@ -18,7 +18,7 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type metro:TabView}">
                             <StackPanel Background="{TemplateBinding Background}">
-                                <StackPanel IsItemsHost="True" Orientation="Horizontal"/>
+                                <StackPanel IsItemsHost="True" Orientation="Horizontal" />
                             </StackPanel>
                         </ControlTemplate>
                     </Setter.Value>
@@ -57,39 +57,32 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
                 <metro:TabView SelectedIndex="0" Style="{DynamicResource VideoViewHorizontalViewStyle}" Height="38" ItemsSource="{Binding VideoList}" SelectedItem="{Binding SelectedList,Mode=TwoWay}">
                     <metro:TabView.ItemTemplate>
                         <DataTemplate DataType="{x:Type metro:ITabItem}">
-                            <Grid>
-                                <TextBlock Text="{Binding Name}" FontSize="14" Height="38" Width="130" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
-                            </Grid>
+                            <TextBlock Text="{Binding Name}" FontSize="14" Height="38" Width="130" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" />
                         </DataTemplate>
                     </metro:TabView.ItemTemplate>
                 </metro:TabView>
             </ScrollViewer>
         </Grid>
-
         <ItemsControl Grid.Row="1" ItemsSource="{Binding VideoList}">
-
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:VideoViewModel}">
                     <v:Video />
                 </DataTemplate>
             </ItemsControl.Resources>
-
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid />
@@ -101,6 +94,5 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
     </Grid>
 </UserControl>

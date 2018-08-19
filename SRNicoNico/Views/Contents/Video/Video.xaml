@@ -12,9 +12,9 @@
              Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <v:VideoHtml5 x:Key="html5" />
-        <v:VideoComment x:Key="comment"/>
+        <v:VideoComment x:Key="comment" />
         <v:VideoDescription x:Key="desc" />
-        <v:VideoUploaderInfo x:Key="info"/>
+        <v:VideoUploaderInfo x:Key="info" />
     </UserControl.Resources>
     <ContentControl>
         <ContentControl.Style>
@@ -26,14 +26,14 @@
                                 <ControlTemplate TargetType="ContentControl">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="280"/>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="280" />
                                         </Grid.ColumnDefinitions>
                                         <Grid>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="*"/>
-                                                <RowDefinition Height="auto"/>
-                                                <RowDefinition Height="{Binding SplitterHeight,Mode=TwoWay}"/>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="{Binding SplitterHeight,Mode=TwoWay}" />
                                             </Grid.RowDefinitions>
                                             <ContentControl Content="{StaticResource html5}" />
                                             <GridSplitter Grid.Row="1" Height="5" Focusable="True" ResizeDirection="Rows" Width="auto" />
@@ -43,8 +43,8 @@
                                         </Grid>
                                         <Grid Grid.Column="1">
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="*"/>
-                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="auto" />
                                             </Grid.RowDefinitions>
                                             <ContentControl DataContext="{Binding Comment}" Content="{StaticResource comment}" />
                                             <ContentControl Grid.Row="1" Content="{StaticResource info}" />
@@ -60,31 +60,25 @@
                                 <ControlTemplate TargetType="ContentControl">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="280"/>
-                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="280" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*"/>
                                                 <RowDefinition Height="auto"/>
                                             </Grid.RowDefinitions>
-
                                             <ContentControl DataContext="{Binding Comment}" Content="{StaticResource comment}" />
                                             <ContentControl Grid.Row="1" Content="{StaticResource info}" />
                                         </Grid>
-
                                         <Grid Grid.Column="1">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*"/>
                                                 <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="{Binding SplitterHeight,Mode=TwoWay}"/>
                                             </Grid.RowDefinitions>
-
                                             <ContentControl Content="{StaticResource html5}" />
-
                                             <GridSplitter Grid.Row="1" Height="5" Focusable="True" ResizeDirection="Rows" Width="auto" />
-
                                             <ScrollViewer Grid.Row="2">
                                                 <ContentControl Content="{StaticResource desc}" />
                                             </ScrollViewer>
@@ -105,22 +99,15 @@
                                                 <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="{Binding SplitterHeight,Mode=TwoWay}"/>
                                             </Grid.RowDefinitions>
-
                                             <ContentControl Content="{StaticResource html5}" />
-
                                             <GridSplitter Grid.Row="1" Height="5" Focusable="True" ResizeDirection="Rows" Width="auto" />
-
-
                                             <ScrollViewer Grid.Row="2" >
                                                 <StackPanel>
                                                     <ContentControl Content="{StaticResource desc}" />
-
                                                     <ContentControl Content="{StaticResource info}" />
                                                 </StackPanel>
                                             </ScrollViewer>
-  
                                         </Grid>
-
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -130,33 +117,23 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ContentControl">
-                                    <Grid>
-
-                                        <Grid Grid.Column="1">
+                                    <Grid Grid.Column="1">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*"/>
                                                 <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="{Binding SplitterHeight,Mode=TwoWay}"/>
                                             </Grid.RowDefinitions>
-
                                             <ContentControl Content="{StaticResource html5}" />
-
                                             <GridSplitter Grid.Row="1" Height="5" Focusable="True" ResizeDirection="Rows" Width="auto" />
-
                                             <ScrollViewer Grid.Row="2">
                                                 <ContentControl Content="{StaticResource desc}" />
                                             </ScrollViewer>
-
                                         </Grid>
-
-                                    </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
                     </DataTrigger>
-
                 </Style.Triggers>
-                
             </Style>
         </ContentControl.Style>
     </ContentControl>

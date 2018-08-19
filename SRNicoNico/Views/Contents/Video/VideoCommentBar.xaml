@@ -22,21 +22,17 @@
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="*" MaxWidth="100"/>
         </Grid.ColumnDefinitions>
-
         <TextBox x:Name="decoration" Text="{Binding Mail,Mode=TwoWay}" BorderThickness="0,0,1,0" FontSize="15" TextWrapping="Wrap">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="PreviewMouseDown">
-                    <ei:ChangePropertyAction TargetName="popup" PropertyName="IsOpen" Value="True"/>
+                    <ei:ChangePropertyAction TargetName="popup" PropertyName="IsOpen" Value="True" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TextBox>
-        <c:ManagedPopup x:Name="popup" AllowsTransparency="True" StaysOpen="False" Placement="Top"  PlacementTarget="{Binding ElementName=decoration}" PopupAnimation="Slide">
+        <c:ManagedPopup x:Name="popup" AllowsTransparency="True" StaysOpen="True" Placement="Top" PlacementTarget="{Binding ElementName=decoration}" PopupAnimation="Slide">
             <v:VideoCommentDecorator Opacity="0.9" VerticalAlignment="Center" />
-
         </c:ManagedPopup>
-
         <TextBox x:Name="comment" Grid.Column="1" BorderThickness="1,0,1,0" FontSize="15" AcceptsReturn="True" Text="{Binding Text,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-
         <Button Grid.Column="2" Content="コメント" Focusable="False"  IsEnabled="{Binding IsTextBoxEnabled}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">

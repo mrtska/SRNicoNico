@@ -17,17 +17,12 @@
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Background="{DynamicResource BackgroundLevel1BrushKey}">
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
             <StackPanel Orientation="Horizontal">
-                <ComboBox
-                    Width="112"
-                    Height="22"
-                    VerticalAlignment="Center"
-                    ItemsSource="{Binding CommentListList}"
-                    SelectedItem="{Binding SelectedList, Mode=TwoWay}">
+                <ComboBox Width="112" Height="22" VerticalAlignment="Center" ItemsSource="{Binding CommentListList}" SelectedItem="{Binding SelectedList, Mode=TwoWay}">
                     <ComboBox.Resources>
                         <DataTemplate DataType="{x:Type vm:VideoCommentListViewModel}">
                             <TextBlock Text="{Binding ListName}" />
@@ -35,14 +30,7 @@
                     </ComboBox.Resources>
                 </ComboBox>
             </StackPanel>
-
-            <TextBlock
-                Margin="5,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontSize="18"
-                Text="コメント" />
-
+            <TextBlock Margin="5,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Text="コメント" />
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <controls:RoundButton Margin="0,0,10,0" HorizontalAlignment="Right" Focusable="False" ToolTip="オートスクロール">
                     <i:Interaction.Triggers>
@@ -66,7 +54,6 @@
                                                         Fill="{TemplateBinding Foreground}" Stretch="Uniform" />
                                                     <Path Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" Fill="{DynamicResource ValidationErrorBrushKey}" Stretch="Uniform" />
                                                 </Grid>
-
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsFocused" Value="True">
                                                         <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource AccentBrushKey}" />
@@ -79,7 +66,6 @@
                                                         <Setter TargetName="ellipse" Property="Fill" Value="{DynamicResource AccentHighlightBrushKey}" />
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
-
                                             </ControlTemplate>
                                         </Setter.Value>
                                     </Setter>
@@ -129,7 +115,6 @@
                 <b:CommentAutoScrollBehavior AutoScrollEnabled="{Binding AutoScrollEnabled}" Vpos="{Binding CurrentVpos}" />
             </i:Interaction.Behaviors>
             <DataGrid.Columns d:DataContext="{d:DesignInstance {x:Type vm:VideoCommentEntryViewModel}}">
-
                 <DataGridTextColumn Width="40" Binding="{Binding Item.Vpos, Converter={StaticResource vpostd}, StringFormat=m:ss}" CanUserSort="False" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -171,6 +156,6 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <metro:ProgressRing Grid.Row="1" Width="50" Height="50" HorizontalAlignment="Center" Panel.ZIndex="2" EllipseDiameter="6" IsActive="{Binding IsActive}"  MaxSideLength="40" />
+        <metro:ProgressRing Grid.Row="1" IsActive="{Binding IsActive}" />
     </Grid>
 </UserControl>

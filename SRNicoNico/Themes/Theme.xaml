@@ -17,6 +17,7 @@
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ContextMenu.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.DataGrid.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.FlowDocument.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.GridSplliter.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.Hyperlink.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ListBox.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.MenuItem.xaml" />

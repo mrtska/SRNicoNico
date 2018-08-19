@@ -73,7 +73,6 @@ namespace SRNicoNico.Views {
 
                 if (type == NicoNicoUrlType.Video) {
 
-
                     link.ToolTip = text;
                 } else {
 
@@ -81,6 +80,5 @@ namespace SRNicoNico.Views {
                 }
             }
         }
-
     }
 }

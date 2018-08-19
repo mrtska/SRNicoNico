@@ -21,14 +21,13 @@
             <l:WindowInteractionMessageAction />
         </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
-
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <Border metro:MetroWindow.IsCaptionBar="True" >
+        <Border metro:MetroWindow.IsCaptionBar="True">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
@@ -39,7 +38,7 @@
                 <TextBlock Grid.Column="1"  Text="{Binding ApiData.Video.Title}" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource ForegroundBrushKey}" FontSize="18" Margin="3,0,0,0" VerticalAlignment="Center" />
                 <metro:CaptionButton Grid.Column="2" IsChecked="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type metro:MetroWindow}}, Path=Topmost, Mode=OneWayToSource}" ToolTip="常に手前に表示" Mode="Toggle" ToolTipService.ShowOnDisabled="False">
                     <metro:CaptionButton.Template>
-                        <ControlTemplate TargetType="metro:CaptionButton">
+                        <ControlTemplate TargetType="{x:Type metro:CaptionButton}">
                             <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
                                 <Grid Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                     <ContentPresenter x:Name="contentPresenter" />
@@ -66,9 +65,7 @@
                 <metro:SystemButtons Grid.Column="3" VerticalAlignment="Top" />
             </Grid>
         </Border>
-
         <ContentControl Grid.Row="1" Content="{Binding FullScreenWebBrowser,Mode=OneWay}" Background="Black" />
-
         <ContentControl Grid.Row="2" Content="{Binding FullScreenController,Mode=OneWay}" />
     </Grid>
 </metro:MetroWindow>

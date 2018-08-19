@@ -11,29 +11,27 @@
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}"
              Width="280"
              Height="175">
-    <Grid Background="{DynamicResource BackgroundLevel1BrushKey}">
+    <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="125"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="125" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="35" />
                     </Grid.RowDefinitions>
-                    <Image Margin="10,15,0,0" Source="{Binding ApiData.Video.ThumbNailUrl}" Width="100" Height="80" VerticalAlignment="Top" />
-
+                    <Image Margin="10,15,0,0" Source="{Binding ApiData.Video.ThumbNailUrl}" Width="100" Height="80" />
                     <Grid Grid.Row="1">
                         <Grid.Resources>
                             <Style TargetType="{x:Type Grid}">
@@ -48,7 +46,7 @@
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="投稿者" FontSize="18" Margin="5,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="投稿者" FontSize="18" Margin="5,0" VerticalAlignment="Center" />
                         <controls:RoundButton Grid.Column="1" IsEnabled="{Binding IsActive,Converter={StaticResource Invert}}" ToolTip="フォロー" EllipseDiameter="27" IconWidth="15" IconHeight="15" Margin="0,0,10,0" VerticalAlignment="Center" Focusable="False" HorizontalAlignment="Left">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
@@ -58,10 +56,10 @@
                             <controls:RoundButton.Style>
                                 <Style TargetType="{x:Type controls:RoundButton}">
                                     <Style.Triggers>
-                                        <DataTrigger  Binding="{Binding ApiData.IsUploaderFollowed}" Value="False" >
+                                        <DataTrigger  Binding="{Binding ApiData.IsUploaderFollowed}" Value="False">
                                             <Setter Property="IconData" Value="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
                                         </DataTrigger>
-                                        <DataTrigger  Binding="{Binding ApiData.IsUploaderFollowed}" Value="True" >
+                                        <DataTrigger  Binding="{Binding ApiData.IsUploaderFollowed}" Value="True">
                                             <Setter Property="IconData" Value="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -70,7 +68,6 @@
                         </controls:RoundButton>
                     </Grid>
                 </Grid>
-
                 <Viewbox Grid.Column="1" Stretch="Uniform">
                     <UniformGrid Columns="1" Margin="2" VerticalAlignment="Top" >
                         <TextBlock Margin="10,0,0,0" Text="{Binding ApiData.Video.Id, StringFormat=動画ID：{0},TargetNullValue=動画ID：}" />
@@ -96,7 +93,6 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ContentControl}">
-
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="auto"/>
@@ -122,17 +118,15 @@
                 </ContentControl.Style>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Margin="10,5,5,5" Width="40" Height="40" Source="{Binding ApiData.Owner.IconUrl}" />
-
-                    <Grid Grid.Column="1" Margin="3,0,0,0" >
-
+                    <Grid Grid.Column="1" Margin="3,0,0,0">
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="2" TextWrapping="Wrap" ToolTip="{Binding ApiData.Owner.UserUrl}">
-                        <Hyperlink NavigateUri="{Binding ApiData.Owner.UserUrl}">
-                            <Run FontSize="16" Text="{Binding ApiData.Owner.Nickname}" />
-                        </Hyperlink>
+                            <Hyperlink NavigateUri="{Binding ApiData.Owner.UserUrl}">
+                                <Run FontSize="16" Text="{Binding ApiData.Owner.Nickname}" />
+                            </Hyperlink>
                         </TextBlock>
                     </Grid>
                 </Grid>
@@ -161,7 +155,7 @@
                 </i:Interaction.Triggers>
             </controls:RoundButton>
         </UniformGrid>
-        <controls:ManagedPopup IsOpen="{Binding TweetPopupOpen}" StaysOpen="True" Placement="Bottom" >
+        <controls:ManagedPopup IsOpen="{Binding TweetPopupOpen}" StaysOpen="True" Placement="Bottom">
             <ContentControl Content="{Binding TweetBrowser}" Width="400" Height="300" />
         </controls:ManagedPopup>
     </Grid>

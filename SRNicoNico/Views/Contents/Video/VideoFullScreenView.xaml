@@ -35,7 +35,7 @@
         </c:ManagedPopup>
         <c:ManagedPopup x:Name="descPopup" AllowsTransparency="True" IsOpen="{Binding ShowFullScreenDescription,Mode=OneWay}" StaysOpen="True" Height="300" Placement="Bottom" VerticalOffset="-300" PopupAnimation="Fade">
             <ScrollViewer Height="300">
-                <Grid x:Name="box" x:FieldModifier="private" Grid.IsSharedSizeScope="True" Background="{DynamicResource BackgroundLevel1BrushKey}" Opacity="0.5" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualWidth}">
+                <Grid x:Name="box" x:FieldModifier="private" Grid.IsSharedSizeScope="True" Background="{DynamicResource AlternationBackgroundBrushKey}" Opacity="0.5" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualWidth}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
@@ -43,12 +43,10 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding ApiData.Video.Title}" FontSize="30" TextWrapping="Wrap"/>
-
                     <ItemsControl Grid.Row="1" ItemsSource="{Binding TagList}">
                         <ItemsControl.Resources>
                             <DataTemplate DataType="{x:Type vm:VideoTagViewModel}">
                                 <StackPanel d:DataContext="{x:Type vm:VideoTagViewModel}" Orientation="Horizontal">
-
                                     <Image Width="20" Height="20" Source="/SRNicoNico;component/Icons/Category.png" Margin="5,2">
                                         <Image.Resources>
                                             <Style TargetType="Image">
@@ -109,7 +107,6 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                     <TextBlock Grid.Row="2" Text="{Binding ApiData.Video.PostedDateTime, StringFormat=yyyy年MM月dd日 HH:mm:ss 投稿}" Margin="10,0,0,0" FontSize="20" />
-
                     <TextBlock Grid.Row="3" b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding ApiData.Video.Description}" TextWrapping="Wrap" FontSize="20" Margin="10,0,0,0">
                         <TextBlock.Resources>
                             <Style TargetType="Hyperlink">

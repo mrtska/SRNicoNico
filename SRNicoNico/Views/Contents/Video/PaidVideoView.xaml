@@ -22,29 +22,19 @@
         <l:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}">
             <l:WindowInteractionMessageAction />
         </l:InteractionMessageTrigger>
-
         <ei:KeyTrigger Key="Esc" FiredOn="KeyUp">
-            <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type metro:MetroWindow}}}" MethodName="Close"/>
+            <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type metro:MetroWindow}}}" MethodName="Close" />
         </ei:KeyTrigger>
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" metro:MetroWindow.IsCaptionBar="True">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="有料動画です。" TextTrimming="CharacterEllipsis" FontSize="17" Margin="10,0,0,0" VerticalAlignment="Center" />
-            </Grid>
+        <Border metro:MetroWindow.IsCaptionBar="True">
+            <TextBlock Text="有料動画です。" TextTrimming="CharacterEllipsis" FontSize="17" Margin="10,0,0,0" VerticalAlignment="Center" />
         </Border>
-
-        <StackPanel Grid.Row="2" VerticalAlignment="Top">
+        <StackPanel Grid.Row="1">
             <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center">
                 この動画は有料です。WebViewかブラウザで購入した後、<LineBreak />
                 更新ボタンを押してください。
@@ -67,14 +57,14 @@
                 <Button Content="更新" Margin="10">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Refresh"/>
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Refresh" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
                 <Button Content="閉じる" Margin="10">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Close"/>
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Close" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>

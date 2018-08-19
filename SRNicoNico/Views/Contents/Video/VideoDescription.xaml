@@ -14,21 +14,20 @@
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <ItemsControl ItemsSource="{Binding TagList}" Background="{DynamicResource BackgroundLevel1BrushKey}">
+        <ItemsControl ItemsSource="{Binding TagList}" Background="{DynamicResource AlternationBackgroundBrushKey}">
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:VideoTagViewModel}">
                     <StackPanel d:DataContext="{x:Type vm:VideoTagViewModel}" Orientation="Horizontal">
-
                         <Image Width="16" Height="16" Source="/SRNicoNico;component/Icons/Category.png" Margin="5,2">
                             <Image.Resources>
-                                <Style TargetType="Image">
+                                <Style TargetType="{x:Type Image}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Tag.Cat}" Value="False">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Setter Property="Visibility" Value="Collapsed" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -61,10 +60,10 @@
                                         </Setter>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Tag.Dic}" Value="False">
-                                                <Setter Property="Fill" Value="Gray"/>
+                                                <Setter Property="Fill" Value="Gray" />
                                                 <Setter Property="Effect">
                                                     <Setter.Value>
-                                                        <DropShadowEffect Color="Gray" RenderingBias="Quality"/>
+                                                        <DropShadowEffect Color="Gray" RenderingBias="Quality" />
                                                     </Setter.Value>
                                                 </Setter>
                                             </DataTrigger>
@@ -83,7 +82,6 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
         <TextBlock Grid.Row="1" Text="{Binding ApiData.Video.PostedDateTime, StringFormat=yyyy年MM月dd日 HH:mm:ss 投稿}" Margin="10,0,0,0" FontSize="14" />
-
         <TextBlock Grid.Row="2" b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding ApiData.Video.Description}" TextWrapping="Wrap" Margin="10,0,0,0">
             <TextBlock.Resources>
                 <Style TargetType="Hyperlink">
@@ -93,7 +91,6 @@
                 </Style>
             </TextBlock.Resources>
         </TextBlock>
-
-        <metro:ProgressRing Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Center" Panel.ZIndex="2" Width="50" Height="50" MaxSideLength="40" EllipseDiameter="6" Foreground="Gray" IsActive="{Binding IsActive, Mode=OneWay}" />
+        <metro:ProgressRing Grid.Row="2" IsActive="{Binding IsActive}" />
     </Grid>
 </UserControl>
