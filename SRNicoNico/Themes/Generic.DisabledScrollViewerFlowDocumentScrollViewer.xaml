@@ -8,13 +8,14 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="KeyboardNavigation.TabNavigation" Value="Local" />
+        <Setter Property="IsToolBarVisible" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:DisabledScrollViewerFlowDocumentScrollViewer}">
                     <Grid Language="ja-jp" Uid="Grid_26">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Margin="{TemplateBinding Padding}" Uid="Border_49">
                             <ScrollViewer x:Name="PART_ContentHost"  CanContentScroll="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Uid="ScrollViewer_8" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
