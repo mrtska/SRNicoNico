@@ -7,8 +7,8 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         private static readonly Regex UrlPattern = new Regex(@"http(s)?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?");
 
-        private static readonly Regex TwitterPattern = new Regex(@"[@|＠][A-z|0-9|_]{1,15}");
-        private static readonly Regex Twitter2Pattern = new Regex(@"TwitterID:([A-z|0-9|_]{1,15})");
+        private static readonly Regex TwitterPattern = new Regex(@"[@＠][A-z0-9_]{1,15}(\.|)");
+        private static readonly Regex Twitter2Pattern = new Regex(@"TwitterID:([A-z0-9_]{1,15})");
 
         private static readonly Regex MailAddressPattern = new Regex(@"[\x00-\x7f]+@[\x00-\x7f]+");
 
@@ -35,6 +35,11 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 //TwitterのIDだった場合
                 desc = TwitterPattern.Replace(desc, new MatchEvaluator((match) => {
 
+                    // 最後が.だったらメールアドレスなので弾く
+                    if(match.Value.EndsWith(".")) {
+
+                        return match.Value;
+                    }
                     return "<a href=\"https://twitter.com/" + match.Value.Substring(1) + "\">" + match.Value + "</a>";
                 }));
                 desc = Twitter2Pattern.Replace(desc, new MatchEvaluator((match) => {
