@@ -17,7 +17,6 @@
                    RenderOptions.BitmapScalingMode="HighQuality"
                    FontFamily="{Binding  Source={x:Static m:Settings.Instance},Path=UserSelectedFont,Mode=TwoWay}"
                    d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
-                
                    Title="{Binding Title}" Height="700" Width="600" 
                    PreviewKeyDown="MetroWindow_PreviewKeyDown"
                    PreviewMouseDown="MetroWindow_PreviewMouseDown"
@@ -26,11 +25,9 @@
         <i:EventTrigger EventName="ContentRendered">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize"/>
         </i:EventTrigger>
-
         <i:EventTrigger EventName="Closed">
             <l:DataContextDisposeAction/>
         </i:EventTrigger>
-
         <l:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}">
             <l:TransitionInteractionMessageAction />
             <l:WindowInteractionMessageAction />
@@ -40,13 +37,11 @@
         <l:WindowCloseCancelBehavior CloseCanceledCallbackMethodTarget="{Binding}" CloseCanceledCallbackMethodName="Closing" CanClose="{Binding CanClose}"/>
     </i:Interaction.Behaviors>
     <Grid>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
-
         <Border metro:MetroWindow.IsCaptionBar="True">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -92,10 +87,10 @@
                                     <Path x:Name="icon" Fill="{TemplateBinding Foreground}" Width="10" Height="20" Stretch="Uniform" Visibility="Visible" Data="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" RenderTransformOrigin="0.5,0.5" >
                                         <Path.RenderTransform>
                                             <TransformGroup>
-                                                <ScaleTransform/>
-                                                <SkewTransform/>
-                                                <RotateTransform Angle="8.797"/>
-                                                <TranslateTransform/>
+                                                <ScaleTransform />
+                                                <SkewTransform />
+                                                <RotateTransform Angle="8.797" />
+                                                <TranslateTransform />
                                             </TransformGroup>
                                         </Path.RenderTransform>
                                     </Path>
@@ -112,13 +107,11 @@
                 <metro:SystemButtons Grid.Column="4" />
             </Grid>
         </Border>
-
         <v:MainContent Grid.Row="1" DataContext="{Binding MainContent}" />
-
         <DockPanel x:Name="statusBar" x:FieldModifier="private" Grid.Row="2" Height="23" Background="{DynamicResource AccentBrushKey}" >
             <Border DockPanel.Dock="Right" Width="{Binding ActualWidth, ElementName=resizeGrip}" />
             <v:StatusBar DataContext="{Binding StatusBar}"/>
         </DockPanel>
-
+        <metro:ResizeGrip Grid.Row="1" Grid.RowSpan="2" x:Name="resizeGrip" x:FieldModifier="private" HorizontalAlignment="Right" VerticalAlignment="Bottom" WindowChrome.ResizeGripDirection="BottomRight" />
     </Grid>
 </metro:MetroWindow>
