@@ -7,7 +7,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:HtmlRenderer}">
-                        <local:DisabledScrollViewerFlowDocumentScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <local:DisabledScrollViewerFlowDocumentScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0" Padding="0">
                             <FlowDocument>
                                 <Paragraph b:ParagraphHtmlRenderingBehavior.RawHtmlText="{TemplateBinding HtmlText}" />
                             </FlowDocument>

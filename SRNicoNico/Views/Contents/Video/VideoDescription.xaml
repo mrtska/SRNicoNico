@@ -9,6 +9,7 @@
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="235.219" d:DesignWidth="484.319"
              d:DataContext="{d:DesignInstance {x:Type vm:VideoViewModel}}">
@@ -82,15 +83,15 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
         <TextBlock Grid.Row="1" Text="{Binding ApiData.Video.PostedDateTime, StringFormat=yyyy年MM月dd日 HH:mm:ss 投稿}" Margin="10,0,0,0" FontSize="14" />
-        <TextBlock Grid.Row="2" b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding ApiData.Video.Description}" TextWrapping="Wrap" Margin="10,0,0,0">
-            <TextBlock.Resources>
+        <controls:HtmlRenderer Grid.Row="2" HtmlText="{Binding ApiData.Video.Description}">
+            <controls:HtmlRenderer.Resources>
                 <Style TargetType="Hyperlink">
                     <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
                     <Setter Property="ToolTipService.ShowDuration" Value="100000" />
                     <EventSetter Event="Loaded" Handler="InitializeToolTip"/>
                 </Style>
-            </TextBlock.Resources>
-        </TextBlock>
+            </controls:HtmlRenderer.Resources>
+        </controls:HtmlRenderer>
         <metro:ProgressRing Grid.Row="2" IsActive="{Binding IsActive}" />
     </Grid>
 </UserControl>
