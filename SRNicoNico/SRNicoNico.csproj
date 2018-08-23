@@ -299,6 +299,7 @@
     <Compile Include="Views\Service\Accent\Blue.cs" />
     <Compile Include="Views\Service\Accent\Orange.cs" />
     <Compile Include="Views\Service\Accent\Purple.cs" />
+    <Compile Include="Views\Service\Theme\Light.cs" />
     <Compile Include="Views\Service\Theme\Dark.cs" />
     <Page Include="Themes\Accent\Purple.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -393,6 +394,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Theme\Light.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

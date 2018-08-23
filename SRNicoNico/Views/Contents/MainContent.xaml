@@ -16,7 +16,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer>
-            <StackPanel Background="{DynamicResource ActiveBackgroundBrushKey}">
+            <StackPanel>
                 <metro:TabView Focusable="False" ItemsSource="{Binding SystemItems}" SelectedValue="{Binding SelectedTab}" />
                 <Rectangle Height=".99" Margin="20,10" Fill="{DynamicResource InactiveForegroundBrushKey}" Opacity="0.5">
                     <Rectangle.Style>

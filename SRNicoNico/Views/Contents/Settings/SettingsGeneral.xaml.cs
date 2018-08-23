@@ -25,5 +25,21 @@ namespace SRNicoNico.Views {
                 Models.NicoNicoViewer.Settings.Instance.ThemeColor = str;
             }
         }
+
+        private void RadioButton_Click_Theme(object sender, RoutedEventArgs e) {
+
+            if (sender is RadioButton radio) {
+                var str = (string)radio.Content;
+                switch (str) {
+                    case "Dark":
+                        App.ViewModelRoot.ThemeSelector.ChangeTheme(Service.EnumThemes.Dark);
+                        break;
+                    case "Light":
+                        App.ViewModelRoot.ThemeSelector.ChangeTheme(Service.EnumThemes.Light);
+                        break;
+                }
+                Models.NicoNicoViewer.Settings.Instance.Theme = str;
+            }
+        }
     }
 }

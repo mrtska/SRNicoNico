@@ -30,6 +30,7 @@ namespace SRNicoNico.Views.Service {
             AccentMap[EnumAccents.Purple] = new Purple();
 
             ThemeMap[EnumThemes.Dark] = new Dark();
+            ThemeMap[EnumThemes.Light] = new Light();
         }
 
         public void ChangeAccent(EnumAccents accent) {

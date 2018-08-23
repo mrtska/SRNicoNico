@@ -140,7 +140,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
 
-
         //設定ファイルから各種プロパティにロードする
         public void Load() {
 
@@ -205,7 +204,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             return JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
         }
 
-
         #region DisableJumpCommand変更通知プロパティ
         private bool _DisableJumpCommand = false;
 
@@ -220,7 +218,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
         #endregion
-
 
         #region Volume変更通知プロパティ
         private int _Volume = 100;
@@ -267,7 +264,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
         #endregion
 
-
         #region IsMute変更通知プロパティ
         private bool _IsMute = false;
 
@@ -282,7 +278,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
         #endregion
-
 
         #region VideoInfoPlacement変更通知プロパティ
         private string _VideoInfoPlacement = "Right";
@@ -344,7 +339,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
         #endregion
 
-
         #region SearchHistory変更通知プロパティ
         private List<string> _SearchHistory = new List<string>();
 
@@ -359,7 +353,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
         #endregion
-
 
         #region Theme変更通知プロパティ
         private string _Theme = "Dark";
@@ -376,7 +369,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         }
         #endregion
 
-
         #region ThemeColor変更通知プロパティ
         private string _ThemeColor = "Orange";
 
@@ -391,8 +383,6 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
         #endregion
-
-
 
         #region UserSelectedFont変更通知プロパティ
         private FontFamily _UserSelectedFont = new FontFamily("Yu Gothic UI");

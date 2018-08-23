@@ -21,16 +21,16 @@
             <StackPanel>
                 <TextBlock FontSize="20" Text="一般設定" />
                 <StackPanel Margin="5,0,0,0">
-                    <TextBlock FontSize="18" Text="テーマ設定" />
+                    <!--<TextBlock FontSize="18" Text="テーマ設定" />
                     <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
                         <StackPanel.Resources>
                             <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
-                                <EventSetter Event="Click" Handler="RadioButton_Click"/>
+                                <EventSetter Event="Click" Handler="RadioButton_Click_Theme" />
                                 <Setter Property="FontSize" Value="18" />
                                 <Setter Property="Margin" Value="5,0,0,0" />
                             </Style>
                         </StackPanel.Resources>
-                        <RadioButton Content="Blue" Foreground="#FF007ACC" GroupName="Theme">
+                        <RadioButton Content="Dark" Foreground="Gray" GroupName="Theme">
                             <RadioButton.Style>
                                 <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
                                     <Style.Triggers>
@@ -41,7 +41,7 @@
                                 </Style>
                             </RadioButton.Style>
                         </RadioButton>
-                        <RadioButton Content="Orange" Foreground="#FFCA5100" GroupName="Theme">
+                        <RadioButton Content="Light" GroupName="Theme">
                             <RadioButton.Style>
                                 <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
                                     <Style.Triggers>
@@ -52,7 +52,39 @@
                                 </Style>
                             </RadioButton.Style>
                         </RadioButton>
-                        <RadioButton Content="Purple" Foreground="#FF68217A" GroupName="Theme">
+                    </StackPanel>-->
+                    <TextBlock FontSize="18" Text="アクセント設定" />
+                    <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                <EventSetter Event="Click" Handler="RadioButton_Click" />
+                                <Setter Property="FontSize" Value="18" />
+                                <Setter Property="Margin" Value="5,0,0,0" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <RadioButton Content="Blue" Foreground="#FF007ACC" GroupName="Accent">
+                            <RadioButton.Style>
+                                <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                    <Style.Triggers>
+                                        <DataTrigger  Binding="{Binding Source={x:Static m:Settings.Instance},Path=ThemeColor}" Value="Blue">
+                                            <Setter Property="IsChecked" Value="True" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RadioButton.Style>
+                        </RadioButton>
+                        <RadioButton Content="Orange" Foreground="#FFCA5100" GroupName="Accent">
+                            <RadioButton.Style>
+                                <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                    <Style.Triggers>
+                                        <DataTrigger  Binding="{Binding Source={x:Static m:Settings.Instance},Path=ThemeColor}" Value="Orange">
+                                            <Setter Property="IsChecked" Value="True" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RadioButton.Style>
+                        </RadioButton>
+                        <RadioButton Content="Purple" Foreground="#FF68217A" GroupName="Accent">
                             <RadioButton.Style>
                                 <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
                                     <Style.Triggers>
