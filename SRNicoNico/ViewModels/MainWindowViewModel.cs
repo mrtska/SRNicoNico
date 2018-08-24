@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
-using Livet;
-using Livet.Commands;
+﻿using Livet;
 using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
 using Livet.Messaging.Windows;
-using System.Windows.Input;
-using SRNicoNico.Models.NicoNicoWrapper;
-using System.Text.RegularExpressions;
 using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Views.Service;
+using System;
+using System.Linq;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class MainWindowViewModel : ViewModel {
@@ -22,7 +14,7 @@ namespace SRNicoNico.ViewModels {
         //現在のバージョン
         public double CurrentVersion {
 
-            get { return 1.21; }
+            get { return 1.22; }
         }
 
         #region Title変更通知プロパティ

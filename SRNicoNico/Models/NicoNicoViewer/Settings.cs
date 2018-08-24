@@ -295,7 +295,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         #endregion
 
         #region EnableTwitterLink変更通知プロパティ
-        private bool _EnableTwitterLink = false;
+        private bool _EnableTwitterLink = true;
 
         public bool EnableTwitterLink {
             get { return _EnableTwitterLink; }
