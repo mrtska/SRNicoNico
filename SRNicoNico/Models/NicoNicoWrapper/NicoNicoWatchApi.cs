@@ -193,8 +193,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                             Id = Convert.ToString(viewer.id),
                             Nickname = viewer.nickname,
-                            IsPremium = viewer.isPremium,
-                            IsPrivileged = viewer.isPrivileged,
+                            IsPremium = viewer.isPremium
                         };
 
                         ret.Context = new NicoNicoVideoContext() {
@@ -396,7 +395,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         Sex = (int)viewer.sex,
                         Age = (int)viewer.age,
                         IsPremium = viewer.isPremium,
-                        IsPrivileged = viewer.isPrivileged,
                         IsPostLocked = viewer.isPostLocked,
                         IsHtrzm = viewer.isHtrzm,
                         IsTwitterConnection = viewer.isTwitterConnection
@@ -1036,8 +1034,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //プレミアム会員か
         public bool IsPremium { get; set; }
-
-        public bool IsPrivileged { get; set; }
 
         //コメント規制されているか
         public bool IsPostLocked { get; set; }
