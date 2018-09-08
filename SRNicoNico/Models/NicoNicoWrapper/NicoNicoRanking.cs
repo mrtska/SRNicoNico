@@ -158,7 +158,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     item.PostAt = wrap.SelectSingleNode("p[contains(@class, 'itemTime')]").InnerText;
 
                     item.Length = wrap.SelectSingleNode("div[@class='itemThumbBox']/span").InnerText;
-                    item.ThumbNail = wrap.SelectSingleNode("div[@class='itemThumbBox']/div/a/img[2]").Attributes["data-original"].Value;
+                    item.ThumbNail = wrap.SelectSingleNode("div[@class='itemThumbBox']/div/a/img").Attributes["data-original"].Value;
 
                     var content = ranking.SelectSingleNode("div[@class='itemContent']");
 
@@ -172,6 +172,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     item.ViewCount = itemdata.SelectSingleNode("li[@class='count view']/span").InnerText;
                     item.CommentCount = itemdata.SelectSingleNode("li[@class='count comment']/span").InnerText;
                     item.MylistCount = itemdata.SelectSingleNode("li[@class='count mylist']/span").InnerText;
+                    
 
                     NicoNicoUtil.ApplyLocalHistory(item);
 
@@ -227,6 +228,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         //マイリスト数
         public string MylistCount { get; set; }
+
+        // 広告ポイント数
+        public string AdsCount { get; set; }
     }
 
     public enum RankingPeriod {
