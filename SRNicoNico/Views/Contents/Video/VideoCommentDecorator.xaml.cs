@@ -7,10 +7,9 @@ namespace SRNicoNico.Views {
         public VideoCommentDecorator() {
             InitializeComponent();
         }
-
         public void ApplyCommentColor(object sender, RoutedEventArgs e) {
 
-            if (DataContext is VideoPostCommentViewModel vm) {
+            if (DataContext is VideoCommentPostViewModel vm) {
                 var content = ((RadioButton)sender).Content as string;
 
                 if (content.Contains(",")) {

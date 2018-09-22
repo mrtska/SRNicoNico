@@ -4,7 +4,7 @@
     xmlns:nnv="clr-namespace:SRNicoNico.Models.NicoNicoViewer">
 
     <Style TargetType="{x:Type GridSplitter}">
-        <Setter Property="Background" Value="{DynamicResource SemiactiveBackgroundBrushKey}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrushKey}" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Template">

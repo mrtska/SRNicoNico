@@ -1,6 +1,6 @@
 
 /// <reference path="jquery.d.ts" />
-/// <reference path="commentlayer.ts" />
+
 
 
   class SWFVideoViewModelImpl {
@@ -29,7 +29,7 @@
             //動画の高さを現在のウィンドウの高さに
             this.Video.style.height = window.innerHeight + "px";
 
-            CommentViewModel.calcCommentSize(window.innerWidth, window.innerHeight);
+            GetComment().calcCommentSize(window.innerWidth, window.innerHeight);
         };
 
         //クリックして一時停止をハンドリングするために
@@ -38,12 +38,12 @@
             //左クリックのみ
             if (e.button == 0) {
 
-                invoke_host("click");
+                InvokeHost("click");
             }
         }
         window.onmousewheel = function (e) {
 
-            invoke_host("mousewheel", e.wheelDelta);
+            InvokeHost("mousewheel", e.wheelDelta);
         }
     }
     
@@ -79,7 +79,7 @@
 
         //objをJsonに変換してC#側に渡す
         var json = JSON.stringify(obj);
-        invoke_host("currenttime", json);
+        InvokeHost("currenttime", json);
         
     }
     //動画シーク
@@ -133,7 +133,6 @@
     }
 }
 
-VideoViewModel = new SWFVideoViewModelImpl();
 
 
 

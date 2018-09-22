@@ -135,7 +135,6 @@ namespace SRNicoNico.ViewModels {
 
             MainContent = new MainContentViewModel(this);
 
-
             MainContent.AddSystemTab(Start = new StartViewModel());
             MainContent.SelectedTab = Start;
             //
@@ -176,11 +175,11 @@ namespace SRNicoNico.ViewModels {
             MainContent.AddSystemTab(new DeployViewModel());
 #endif
 
+            // 起動時にアップデートがあるか確認する
             if (await UpdateChecker.IsUpdateAvailable()) {
 
                 Messenger.Raise(new TransitionMessage(typeof(Views.UpdateFoundView), new UpdaterViewModel(), TransitionMode.Modal));
             }
-
 
             var args = Environment.GetCommandLineArgs();
 

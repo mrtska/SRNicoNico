@@ -38,6 +38,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public NicoNicoSession(string userSession) {
 
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             HttpHandler = new HttpClientHandler();
             HttpHandler.UseCookies = true;
             HttpHandler.AllowAutoRedirect = false;

@@ -1,20 +1,13 @@
 ﻿using Livet;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SRNicoNico.ViewModels {
     public class MainContentViewModel : ViewModel {
 
-
         //左側のシステムタブのリスト
-        public DispatcherCollection<TabItemViewModel> SystemItems { get; set; }
+        public ObservableSynchronizedCollection<TabItemViewModel> SystemItems { get; set; }
 
-
-        public DispatcherCollection<TabItemViewModel> UserItems { get; set; }
-
+        public ObservableSynchronizedCollection<TabItemViewModel> UserItems { get; set; }
 
         #region SelectedTab変更通知プロパティ
         private TabItemViewModel _SelectedTab;
@@ -35,22 +28,19 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        //VideoView
-        public VideoViewViewModel VideoView { get; private set; }
+        // VideoTab
+        public VideoTabViewModel VideoTab { get; private set; }
 
         private MainWindowViewModel Owner;
 
         public MainContentViewModel(MainWindowViewModel owner) {
 
             Owner = owner;
-            SystemItems = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
-            UserItems = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
+            SystemItems = new ObservableSynchronizedCollection<TabItemViewModel>();
+            UserItems = new ObservableSynchronizedCollection<TabItemViewModel>();
 
-
-
-            VideoView = new VideoViewViewModel();
+            VideoTab = new VideoTabViewModel();
         }
-
 
         public void AddSystemTab(TabItemViewModel vm) {
 
@@ -81,17 +71,17 @@ namespace SRNicoNico.ViewModels {
         public void AddVideoView(VideoViewModel vm) {
             
             //UserItemsにVideoViewが無かったら追加する
-            if(!UserItems.Contains(VideoView)) {
+            if(!UserItems.Contains(VideoTab)) {
 
-                AddUserTab(VideoView);
+                AddUserTab(VideoTab);
             }
-            VideoView.Add(vm);
-            SelectedTab = VideoView;
+            VideoTab.Add(vm);
+            SelectedTab = VideoTab;
         }
 
         public void RemoveVideoView(VideoViewModel vm) {
 
-            var index = VideoView.VideoList.IndexOf(vm);
+            var index = VideoTab.VideoList.IndexOf(vm);
 
             if(index < 0) {
 
@@ -99,19 +89,18 @@ namespace SRNicoNico.ViewModels {
             }
             if(index == 0) {
 
-                VideoView.Remove(vm);
-                VideoView.SelectedList = VideoView.VideoList.FirstOrDefault();
+                VideoTab.Remove(vm);
+                VideoTab.SelectedList = VideoTab.VideoList.FirstOrDefault();
             } else {
 
-                VideoView.Remove(vm);
-                VideoView.SelectedList = VideoView.VideoList[index - 1];
+                VideoTab.Remove(vm);
+                VideoTab.SelectedList = VideoTab.VideoList[index - 1];
             }
 
-            if(VideoView.VideoList.Count == 0) {
+            if(VideoTab.VideoList.Count == 0) {
 
-                UserItems.Remove(VideoView);
+                UserItems.Remove(VideoTab);
             }
         }
-
     }
 }

@@ -1,264 +1,295 @@
 
-/// <reference path="jquery.d.ts" />
+namespace SRNicoNico.Video {
+    export class VideoViewModel {
 
+        WIDTH: number = 640;
+        HEIGHT: number = 360;
 
-class VideoViewModelImpl {
+        public Video: HTMLVideoElement;
 
-    WIDTH: number = 640;
-    HEIGHT: number = 360;
+        private loaded: boolean = false;
 
-    public Video: HTMLVideoElement;
+        private loop: number = -1;
 
-    private loaded: boolean = false;
+        public initialize(src: string, initialPos: number, autoplay: boolean) {
 
-    public initialize(src:string, initialPos:number, autoplay:boolean) {
+            //レイヤーを取得
+            this.Video = document.getElementById("player") as HTMLVideoElement;
 
-        //レイヤーを取得
-        this.Video = document.getElementById("player") as HTMLVideoElement;
-
-        //動画の高さをウィンドウの高さに合わせる
-        this.Video.style.height = window.innerHeight + "px";
-
-        //動画のURLを設定
-        this.Video.src = src;
-
-        //動画のメタデータロード後
-        this.Video.addEventListener("loadedmetadata", (e) => {
-
-            this.loaded = true;
-            //C#側に動画の長さを伝える
-            //invoke_host("duration", e.target.duration);
-            this.Video.currentTime = initialPos;
-            //C#側に動画の解像度を伝える
-            invoke_host("widtheight", this.Video.videoWidth + "×" + this.Video.videoHeight);
-
-            //動画のバッファした部分とか現在時間などをC#に送るメインループ
-            setInterval(() => this.videoloop(), 50); //50ms毎に実行すれば多分大丈夫かなと
-        });
-
-        //再生されたらコメントの一時停止を解除してC#側に伝える
-        this.Video.addEventListener("play", () => {
-
-            //動画バッファリング中に再生ボタンを押されてもコメントが動き出さないようにね
-            if (!this.bufferingDetected) {
-
-                CommentViewModel.resumeComment();
-            }
-            invoke_host("playstate", true);
-        });
-
-        //一時停止されたらコメントも一時停止してC#側に伝える
-        this.Video.addEventListener("pause", function () {
-
-            CommentViewModel.pauseComment();
-            invoke_host("playstate", false);
-        });
-
-        this.Video.addEventListener("ended", function () {
-
-            CommentViewModel.pauseComment();
-            invoke_host("playstate", false);
-            invoke_host("ended");
-        });
-
-        this.Video.addEventListener("playing", function () {
-
-            CommentViewModel.resumeComment();
-            invoke_host("playstate", true);
-            invoke_host("playing");
-        });
-
-        this.Video.addEventListener("waiting", function () {
-
-            CommentViewModel.pauseComment();
-            invoke_host("waiting");
-        });
-
-        this.Video.addEventListener("seeking", function () {
-
-            CommentViewModel.pauseComment();
-            invoke_host("seeking");
-        });
-        this.Video.addEventListener("seeked", function (e) {
-
-            CommentViewModel.purgeComment();
-
-            if (!(e.target as HTMLVideoElement).paused) {
-
-                invoke_host("playstate", true);
-            }
-
-            invoke_host("seeked");
-        });
-
-        this.Video.addEventListener("canplaythrough", function (e) {
-
-           // invoke_host("canplaythrough");
-        });
-        this.Video.addEventListener("progress", function (e) {
-
-            //invoke_host("progress");
-        });
-
-        //ウィンドウサイズが変わったら動画の高さやコメントのサイズを計算しなおす
-        window.onresize = (e) => {
-
-            //動画の高さを現在のウィンドウの高さに
+            //動画の高さをウィンドウの高さに合わせる
             this.Video.style.height = window.innerHeight + "px";
 
-            CommentViewModel.calcCommentSize(window.innerWidth, window.innerHeight);
+            //動画のURLを設定
+            this.Video.src = src;
 
-        };
+            //動画のメタデータロード後
+            this.Video.addEventListener("loadedmetadata", (e) => {
 
-        //クリックして一時停止をハンドリングするために
-        window.onclick = function () {
+                this.loaded = true;
+                this.Video.currentTime = initialPos;
+                InvokeHost("widtheight", this.Video.videoWidth + "×" + this.Video.videoHeight);
 
-            invoke_host("click");
-        }
-        window.onmousewheel = function (e) {
+                if (this.loop == -1) {
+                    //動画のバッファした部分とか現在時間などをC#に送るメインループ
+                    this.loop = setInterval(() => this.videoloop(), 50); //50ms毎に実行すれば多分大丈夫かなと
+                }
+            });
 
-            invoke_host("mousewheel", e.wheelDelta);
-        }
-        
-        if (autoplay) {
+            //再生されたらコメントの一時停止を解除してC#側に伝える
+            this.Video.addEventListener("play", () => {
 
-            this.Video.play();
-        } else {
+                //動画バッファリング中に再生ボタンを押されてもコメントが動き出さないようにね
+                if (!this.bufferingDetected) {
 
-            invoke_host("playstate", false);
-        }
-    }
-    
-    private currentPlayPos:number = 0;
-    private checkInterval:number = 50.0;
-    private lastPlayPos:number = 0;
-    public bufferingDetected:boolean = false;
+                    GetComment().resumeComment();
+                }
+                InvokeHost("playstate", true);
+            });
 
-    public videoloop() {
+            //一時停止されたらコメントも一時停止してC#側に伝える
+            this.Video.addEventListener("pause", function () {
 
-        this.currentPlayPos = this.Video.currentTime;
+                GetComment().pauseComment();
+                InvokeHost("playstate", false);
+            });
 
-        var offset = 1 / this.checkInterval;
+            this.Video.addEventListener("ended", function () {
 
-        if (!this.bufferingDetected && this.currentPlayPos < (this.lastPlayPos + offset) && !this.Video.paused && !this.Video.ended) {
+                GetComment().pauseComment();
+                InvokeHost("playstate", false);
+                InvokeHost("ended");
+            });
 
-            invoke_host("bufferingstart");
-            this.bufferingDetected = true;
-            CommentViewModel.pauseComment();
-        }
-        if (this.bufferingDetected && this.currentPlayPos > (this.lastPlayPos + offset) && !this.Video.paused && !this.Video.ended) {
+            this.Video.addEventListener("playing", function () {
 
-            invoke_host("bufferingend");
-            this.bufferingDetected = false;
-            CommentViewModel.resumeComment();
-        }
-        this.lastPlayPos = this.currentPlayPos;
+                GetComment().resumeComment();
+                InvokeHost("playstate", true);
+                InvokeHost("playing");
+            });
 
+            this.Video.addEventListener("waiting", function () {
 
-        //C#側に渡すパラメータ
-        var obj:any = {};
+                GetComment().pauseComment();
+                InvokeHost("waiting");
+            });
 
-        //コメント描画タイミングのvposや現在の再生時間をobjに詰め込む
-        obj.vpos = Math.floor(this.Video.currentTime * 100);
-        obj.time = this.Video.currentTime;
+            this.Video.addEventListener("seeking", function () {
 
-        //動画のバッファされた範囲をobjに突っ込む
-        var buffer = [];
-        for (var i = 0; i < this.Video.buffered.length; i++) {
+                GetComment().pauseComment();
+                InvokeHost("seeking");
+            });
+            this.Video.addEventListener("seeked", function (e) {
 
-            var range = {
-                start: this.Video.buffered.start(i),
-                end: this.Video.buffered.end(i)
+                GetComment().purgeComment();
+
+                if (!(e.target as HTMLVideoElement).paused) {
+
+                    InvokeHost("playstate", true);
+                }
+
+                InvokeHost("seeked");
+            });
+
+            this.Video.addEventListener("canplaythrough", function (e) {
+
+                // invoke_host("canplaythrough");
+            });
+            this.Video.addEventListener("progress", function (e) {
+
+                //invoke_host("progress");
+            });
+
+            //ウィンドウサイズが変わったら動画の高さやコメントのサイズを計算しなおす
+            window.onresize = (e) => {
+
+                //動画の高さを現在のウィンドウの高さに
+                this.Video.style.height = window.innerHeight + "px";
+
+                GetComment().calcCommentSize(window.innerWidth, window.innerHeight);
+
             };
-            buffer.push(range);
-        }
-        obj.buffered = buffer;
 
+            //クリックして一時停止をハンドリングするために
+            window.onclick = function () {
 
-        //再生した部分の範囲をobjに突っ込む
-        var played = [];
-        for (var i = 0; i < this.Video.played.length; i++) {
+                InvokeHost("click");
+            }
+            window.onmousewheel = function (e) {
 
-            var range = {
-                start: this.Video.played.start(i),
-                end: this.Video.played.end(i)
-            };
-            played.push(range);
-        }
-        obj.played = played;
+                InvokeHost("mousewheel", e.wheelDelta);
+            }
 
-        //objをJsonに変換してC#側に渡す
-        var json = JSON.stringify(obj);
-        invoke_host("currenttime", json);
+            if (autoplay) {
 
-        if (this.Video.buffered.length == 1) {
+                this.Video.play();
+                InvokeHost("playstate", true);
+            } else {
 
-            if (this.Video.buffered.end(0) == this.Video.duration) {
-
-                invoke_host("alldataloaded");
+                InvokeHost("playstate", false);
             }
         }
-    }
-    //動画シーク
-    public seek(pos:number):void {
 
-        if(this.Video && this.loaded) {
+        private currentPlayPos: number = 0;
+        private checkInterval: number = 50.0;
+        private lastPlayPos: number = 0;
+        public bufferingDetected: boolean = false;
 
-            this.Video.currentTime = pos;
+        public videoloop() {
+
+            this.currentPlayPos = this.Video.currentTime;
+
+            var offset = 1 / this.checkInterval;
+
+            if (!this.bufferingDetected && this.currentPlayPos < (this.lastPlayPos + offset) && !this.Video.paused && !this.Video.ended) {
+
+                InvokeHost("bufferingstart");
+                this.bufferingDetected = true;
+                GetComment().pauseComment();
+            }
+            if (this.bufferingDetected && this.currentPlayPos > (this.lastPlayPos + offset) && !this.Video.paused && !this.Video.ended) {
+
+                InvokeHost("bufferingend");
+                this.bufferingDetected = false;
+                GetComment().resumeComment();
+            }
+            this.lastPlayPos = this.currentPlayPos;
+
+
+            //C#側に渡すパラメータ
+            var obj: any = {};
+
+            //コメント描画タイミングのvposや現在の再生時間をobjに詰め込む
+            obj.vpos = Math.floor(this.Video.currentTime * 100);
+            obj.time = this.Video.currentTime;
+
+            //動画のバッファされた範囲をobjに突っ込む
+            var buffer = [];
+            for (var i = 0; i < this.Video.buffered.length; i++) {
+
+                var range = {
+                    start: this.Video.buffered.start(i),
+                    end: this.Video.buffered.end(i)
+                };
+                buffer.push(range);
+            }
+            obj.buffered = buffer;
+
+
+            //再生した部分の範囲をobjに突っ込む
+            var played = [];
+            for (var i = 0; i < this.Video.played.length; i++) {
+
+                var range = {
+                    start: this.Video.played.start(i),
+                    end: this.Video.played.end(i)
+                };
+                played.push(range);
+            }
+            obj.played = played;
+
+            //objをJsonに変換してC#側に渡す
+            var json = JSON.stringify(obj);
+            InvokeHost("currenttime", json);
+
+            if (this.Video.buffered.length == 1) {
+
+                if (this.Video.buffered.end(0) == this.Video.duration) {
+
+                    InvokeHost("alldataloaded");
+                }
+            }
+        }
+        //動画シーク
+        public seek(pos: number): void {
+
+            if (this.Video && this.loaded) {
+
+                this.Video.currentTime = pos;
+            }
+        }
+        //一時停止
+        public pause(): void {
+
+            if (this.Video) {
+
+                this.Video.pause();
+            }
+        }
+        //再開
+        public play() {
+
+            if (this.Video) {
+
+                this.Video.play();
+            }
+        }
+        //音量調整
+        public setVolume(volume: number): void {
+
+            if (this.Video) {
+
+                this.Video.volume = volume;
+            }
+        }
+        //再生倍率
+        public setRate(rate: number): void {
+
+            if (this.Video) {
+
+                this.Video.defaultPlaybackRate = rate;
+                this.Video.playbackRate = rate;
+            }
+        }
+        //現在のVposを取得
+        public getVpos(): number {
+
+            if (this.Video) {
+
+                return this.Video.currentTime * 100;
+            }
+            return 0;
+        }
+        //動画の横幅を返す 動画データではなくvideoタグの横幅
+        public getVideoWidth(): number {
+
+            return this.Video.clientWidth;
         }
     }
-    //一時停止
-    public pause():void {
+    export var ViewModel: VideoViewModel = new VideoViewModel();
 
-        if(this.Video) {
-
-            this.Video.pause();
-        }
-    }
-    //再開
-    public play() {
-
-        if(this.Video) {
-
-            this.Video.play();
-        }
-    }
-    //音量調整
-    public setVolume(volume:number):void {
-
-        if(this.Video) {
-
-            this.Video.volume = volume;
-        }
-    }
-    //再生倍率
-    public setRate(rate:number):void {
-
-        if(this.Video) {
-
-            this.Video.playbackRate = rate;
-        }
-    }
-    //現在のVposを取得
-    public getVpos():number {
-
-        if(this.Video) {
-
-            return this.Video.currentTime * 100;
-        }
-        return 0;
-    }
-    //動画の横幅を返す 動画データではなくvideoタグの横幅
-    public getVideoWidth(): number {
-
-        return this.Video.clientWidth;
-    }
 }
 
-let VideoViewModel:any = new VideoViewModelImpl();
+function GetVideo(): SRNicoNico.Video.VideoViewModel  {
 
+    return SRNicoNico.Video.ViewModel;
+}
 
+function Video$Initialize(src: string, initialPos: number, autoplay: boolean) {
 
+    SRNicoNico.Video.ViewModel.initialize(src, initialPos, autoplay);
+}
+function Video$Pause() {
 
+    SRNicoNico.Video.ViewModel.pause();
+}
+function Video$Resume() {
 
+    SRNicoNico.Video.ViewModel.play();
+}
+function Video$Seek(pos: number) {
 
+    SRNicoNico.Video.ViewModel.seek(pos);
+}
+function Video$SetVolume(vol: number) {
+
+    SRNicoNico.Video.ViewModel.setVolume(vol);
+}
+function Video$SetRate(rate: number) {
+
+    SRNicoNico.Video.ViewModel.setRate(rate);
+}
+
+window.addEventListener("load", function () {
+
+    InvokeHost("ready");
+});

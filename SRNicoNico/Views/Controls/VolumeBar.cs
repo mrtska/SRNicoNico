@@ -17,7 +17,7 @@ namespace SRNicoNico.Views.Controls {
 
         // Using a DependencyProperty as the backing store for ThumbPos.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ThumbPosProperty =
-            DependencyProperty.Register("ThumbPos", typeof(double), typeof(VolumeBar), new PropertyMetadata(0.0D));
+            DependencyProperty.Register("ThumbPos", typeof(double), typeof(VolumeBar), new PropertyMetadata(50.0D));
 
         public double Volume {
             get { return (double)GetValue(VolumeProperty); }
@@ -31,7 +31,6 @@ namespace SRNicoNico.Views.Controls {
                 var bar = obj as VolumeBar;
 
                 bar.ThumbPos = bar.Volume - (10 * (bar.Volume / 100));
-
             }));
 
         public bool IsMute {

@@ -1,21 +1,14 @@
-﻿using System;
+﻿using Livet;
+using SRNicoNico.Models.NicoNicoWrapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.ComponentModel;
-using System.Threading;
 using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-
-using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
     public class VideoCommentEntryViewModel : ViewModel {
+
 
         #region Item変更通知プロパティ
         private NicoNicoCommentEntry _Item;
@@ -23,7 +16,7 @@ namespace SRNicoNico.ViewModels {
         public NicoNicoCommentEntry Item {
             get { return _Item; }
             set { 
-                if(_Item == value)
+                if (_Item == value)
                     return;
                 _Item = value;
                 RaisePropertyChanged();
@@ -31,17 +24,16 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        private readonly VideoCommentViewModel Owner;
+        private readonly VideoHtml5Handler Handler;
 
-        public VideoCommentEntryViewModel(VideoCommentViewModel owner, NicoNicoCommentEntry vm) {
+        public VideoCommentEntryViewModel(NicoNicoCommentEntry entry, VideoHtml5Handler handler) {
 
-            Owner = owner;
-            Item = vm;
+            Item = entry;
+            Handler = handler;
         }
-
         public void JumpTo() {
 
-            Owner.Owner.Handler.Seek(Item.Vpos / 100.0D);
+            Handler.Seek(Item.Vpos / 100.0D);
         }
 
         public void AddCommentIntoNGFilter() {
@@ -53,8 +45,5 @@ namespace SRNicoNico.ViewModels {
 
             App.ViewModelRoot.Setting.NGFilter.AddNGEntry(NGType.UserId, Item.UserId);
         }
-
-
-
     }
 }

@@ -11,6 +11,7 @@ namespace SRNicoNico.ViewModels {
                     return;
                 Settings.Instance.CommentAlpha = value;
                 RaisePropertyChanged();
+                ApplyConfig();
             }
         }
         #endregion
@@ -70,9 +71,9 @@ namespace SRNicoNico.ViewModels {
 
         public void ApplyConfig() {
 
-            foreach(var video in App.ViewModelRoot.MainContent.VideoView.VideoList) {
+            foreach(var video in App.ViewModelRoot.MainContent.VideoTab.VideoList) {
 
-                video.Comment.ApplyFontSize();
+                video.Comment.ApplyCommentConfiguration();
             }
         }
     }

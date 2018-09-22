@@ -1,13 +1,10 @@
 ﻿<!DOCTYPE html>
-
 <html lang="ja" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-
     <style>
         html {
         }
-
         body {
             margin: 0px;
             padding: 0px;
@@ -16,14 +13,12 @@
             height: 100%;
             -ms-user-select: none;
         }
-
         .commentlayer {
             position: fixed;
             z-index: 100;
             overflow: hidden;
             cursor: inherit;
         }
-
         span {
             position: fixed;
             padding: 0px;
@@ -36,18 +31,13 @@
             cursor: inherit;
         }
     </style>
-    <script src="./jquery-3.1.0.js"></script>
+    <script src="./jquery-3.3.1.js"></script>
     <script src="./jquery.keyframes.js"></script>
     <script src="./videoplayer.js"></script>
     <script src="./commentlayer.js"></script>
 </head>
 <body oncontextmenu="return false;">
-
-
     <div id="commentlayer"></div>
     <video id="player" preload="auto" autobuffer="true" style="width: 100%; height: 100%"></video>
-
-
-
 </body>
 </html>

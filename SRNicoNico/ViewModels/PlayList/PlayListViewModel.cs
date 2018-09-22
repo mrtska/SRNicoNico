@@ -189,36 +189,36 @@ namespace SRNicoNico.ViewModels {
         //指定したプレイリストエントリに飛ぶ
         public void Jump(PlayListEntryViewModel entry) {
 
-            if(Video == null) {
+            //if(Video == null) {
 
-                Video = new VideoViewModel(entry.ContentUrl);
-                Video.VideoEnded += (obj, e) => {
+            //    Video = new VideoViewModel(entry.ContentUrl);
+            //    Video.VideoEnded += (obj, e) => {
 
-                    if(Video.IsRepeat) {
+            //        if(Video.IsRepeat) {
 
-                        return;
-                    }
+            //            return;
+            //        }
 
-                    if(SelectedPlayList == PlayList.Last() && !IsRepeat) {
+            //        if(SelectedPlayList == PlayList.Last() && !IsRepeat) {
 
-                        if(Video.IsFullScreen) {
+            //            if(Video.IsFullScreen) {
 
-                            Window.GetWindow(Video.FullScreenWebBrowser)?.Close();
-                        }
-                    } else {
+            //                Window.GetWindow(Video.FullScreenWebBrowser)?.Close();
+            //            }
+            //        } else {
 
-                        Next();
-                    }
-                };
-                Video.CloseRequest += (obj, e) => {
+            //            Next();
+            //        }
+            //    };
+            //    Video.CloseRequest += (obj, e) => {
 
-                    App.ViewModelRoot.MainContent.RemoveUserTab(this);
-                };
-            } else {
+            //        App.ViewModelRoot.MainContent.RemoveUserTab(this);
+            //    };
+            //} else {
 
-                Video.VideoUrl = entry.ContentUrl;
-                Video.Initialize();
-            }
+            //    Video.VideoUrl = entry.ContentUrl;
+            //    Video.Initialize();
+            //}
         }
         
         public void DragOver(IDropInfo dropInfo) {

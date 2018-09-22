@@ -1,17 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-
+﻿using Livet;
 using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.ViewModels {
@@ -22,8 +9,8 @@ namespace SRNicoNico.ViewModels {
 
         public string ListName {
             get { return _ListName; }
-            set { 
-                if(_ListName == value)
+            set {
+                if (_ListName == value)
                     return;
                 _ListName = value;
                 RaisePropertyChanged();
@@ -32,12 +19,12 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
         #region CommentList変更通知プロパティ
-        private DispatcherCollection<VideoCommentEntryViewModel> _CommentList = new DispatcherCollection<VideoCommentEntryViewModel>(DispatcherHelper.UIDispatcher);
+        private ObservableSynchronizedCollection<VideoCommentEntryViewModel> _CommentList;
 
-        public DispatcherCollection<VideoCommentEntryViewModel> CommentList {
+        public ObservableSynchronizedCollection<VideoCommentEntryViewModel> CommentList {
             get { return _CommentList; }
             set { 
-                if(_CommentList == value)
+                if (_CommentList == value)
                     return;
                 _CommentList = value;
                 RaisePropertyChanged();
@@ -45,20 +32,24 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        internal NicoNicoCommentList CommentListInstance;
+        public NicoNicoCommentList ListInstance;
 
-        public VideoCommentListViewModel(NicoNicoCommentList instance) {
+        public VideoCommentListViewModel(NicoNicoCommentList instance, VideoHtml5Handler handler) {
 
-            CommentListInstance = instance;
+            ListInstance = instance;
             ListName = instance.ListName;
+            CommentList = new ObservableSynchronizedCollection<VideoCommentEntryViewModel>();
+            foreach(var entry in instance.CommentList) {
+
+                //コメントをふるいにかける
+                App.ViewModelRoot.Setting.NGFilter.Filter(entry);
+
+                if (entry.Rejected) {
+
+                    continue;
+                }
+                CommentList.Add(new VideoCommentEntryViewModel(entry, handler));
+            }
         }
-
-
-
-
-
-
-
-
     }
 }

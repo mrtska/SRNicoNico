@@ -84,8 +84,8 @@
         </ItemsControl>
         <ItemsControl Grid.Column="1" ItemsSource="{Binding UserItems}">
             <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type vm:VideoViewViewModel}">
-                    <v:VideoView />
+                <DataTemplate DataType="{x:Type vm:VideoTabViewModel}">
+                    <v:VideoTabView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:UserViewModel}">
                     <v:User />

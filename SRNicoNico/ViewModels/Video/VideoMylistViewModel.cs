@@ -1,19 +1,11 @@
-﻿using System;
+﻿using Livet;
+using Livet.Messaging;
+using SRNicoNico.Models.NicoNicoWrapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.ComponentModel;
-using System.Threading;
 using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-
-using SRNicoNico.Models.NicoNicoWrapper;
-using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.ViewModels {
     public class VideoMylistViewModel : ViewModel {
@@ -24,11 +16,11 @@ namespace SRNicoNico.ViewModels {
 
 
         #region MylistList変更通知プロパティ
-        private DispatcherCollection<NicoNicoMylistGroupEntry> _MylistList = new DispatcherCollection<NicoNicoMylistGroupEntry>(DispatcherHelper.UIDispatcher);
+        private ObservableSynchronizedCollection<NicoNicoMylistGroupEntry> _MylistList = new ObservableSynchronizedCollection<NicoNicoMylistGroupEntry>();
 
-        public DispatcherCollection<NicoNicoMylistGroupEntry> MylistList {
+        public ObservableSynchronizedCollection<NicoNicoMylistGroupEntry> MylistList {
             get { return _MylistList; }
-            set { 
+            set {
                 if (_MylistList == value)
                     return;
                 _MylistList = value;
@@ -43,7 +35,7 @@ namespace SRNicoNico.ViewModels {
 
         public NicoNicoMylistGroupEntry SelectedMylist {
             get { return _SelectedMylist; }
-            set { 
+            set {
                 if (_SelectedMylist == value)
                     return;
                 _SelectedMylist = value;
@@ -58,7 +50,7 @@ namespace SRNicoNico.ViewModels {
 
         public string MylistDescription {
             get { return _MylistDescription; }
-            set { 
+            set {
                 if (_MylistDescription == value)
                     return;
                 _MylistDescription = value;
@@ -75,7 +67,7 @@ namespace SRNicoNico.ViewModels {
 
         public async void AddDeflist() {
 
-            await MylistInstance.Item.AddDefListAsync(Owner.ApiData.Video.Id, Owner.ApiData.Context.CsrfToken);
+            await MylistInstance.Item.AddDefListAsync(Owner.Model.ApiData.VideoId, Owner.Model.ApiData.CsrfToken);
         }
 
         public async void OpenMylistView() {
@@ -84,20 +76,20 @@ namespace SRNicoNico.ViewModels {
             //Viewを出す前に最新のマイリスト一覧を取得する
             var list = await MylistInstance.Group.GetMylistGroupAsync();
 
-            if(list != null) {
+            if (list != null) {
 
-                foreach(var group in list) {
+                foreach (var group in list) {
 
                     MylistList.Add(group);
                 }
 
-                App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.AddMylistView), this, TransitionMode.Modal));
+                App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.VideoAddMylistView), this, TransitionMode.Modal));
             }
         }
 
         public async void AddMylistCore() {
 
-            await MylistInstance.Item.AddMylistAsync(SelectedMylist, Owner.ApiData.Video.Id, MylistDescription, Owner.ApiData.Context.CsrfToken);
+            await MylistInstance.Item.AddMylistAsync(SelectedMylist, Owner.Model.ApiData.VideoId, MylistDescription, Owner.Model.ApiData.CsrfToken);
             MylistDescription = "";
         }
     }

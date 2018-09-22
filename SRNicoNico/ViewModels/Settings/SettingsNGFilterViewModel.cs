@@ -50,49 +50,49 @@ namespace SRNicoNico.ViewModels {
 
         public void Filter(NicoNicoCommentEntry entry) {
 
-            if(Settings.Instance.HideWiiUComment) {
+            if (Settings.Instance.HideWiiUComment) {
 
-                if(entry.Mail.Contains("device:WiiU")) {
-
-                    entry.Rejected = true;
-                    return;
-                }
-            }
-            if(Settings.Instance.Hide3DSComment) {
-                
-                if(entry.Mail.Contains("device:3DS")) {
+                if (entry.Mail.Contains("device:WiiU")) {
 
                     entry.Rejected = true;
                     return;
                 }
             }
+            if (Settings.Instance.Hide3DSComment) {
 
-            switch(Settings.Instance.NGSharedLevel) {
+                if (entry.Mail.Contains("device:3DS")) {
+
+                    entry.Rejected = true;
+                    return;
+                }
+            }
+
+            switch (Settings.Instance.NGSharedLevel) {
                 case "無":
                     break;
                 case "弱":
-                    if(entry.Score <= -10000) {
+                    if (entry.Score <= -10000) {
 
                         entry.Rejected = true;
                         return;
                     }
                     break;
                 case "中":
-                    if(entry.Score <= -4800) {
+                    if (entry.Score <= -4800) {
 
                         entry.Rejected = true;
                         return;
                     }
                     break;
                 case "強":
-                    if(entry.Score <= -1000) {
+                    if (entry.Score <= -1000) {
 
                         entry.Rejected = true;
                         return;
                     }
                     break;
                 case "最強":
-                    if(entry.Score < 0) {
+                    if (entry.Score < 0) {
 
                         entry.Rejected = true;
                         return;
@@ -100,16 +100,16 @@ namespace SRNicoNico.ViewModels {
                     break;
             }
 
-            foreach(var ng in NGFilter.NGList) {
+            foreach (var ng in NGFilter.NGList) {
 
-                if(!ng.IsEnabled) {
+                if (!ng.IsEnabled) {
 
                     continue;
                 }
-                switch(ng.Type) {
+                switch (ng.Type) {
                     case NGType.RegEx:
 
-                        if(Regex.Match(entry.Content, ng.Content).Success) {
+                        if (Regex.Match(entry.Content, ng.Content).Success) {
 
                             entry.Rejected = true;
                             return;
@@ -117,7 +117,7 @@ namespace SRNicoNico.ViewModels {
                         break;
                     case NGType.Command:
 
-                        if(entry.Mail.Contains(ng.Content)) {
+                        if (entry.Mail.Contains(ng.Content)) {
 
                             entry.Rejected = true;
                             return;
@@ -126,7 +126,7 @@ namespace SRNicoNico.ViewModels {
                         break;
                     case NGType.UserId:
 
-                        if(entry.UserId == ng.Content) {
+                        if (entry.UserId == ng.Content) {
 
                             entry.Rejected = true;
                             return;
@@ -134,7 +134,7 @@ namespace SRNicoNico.ViewModels {
                         break;
                     case NGType.Word:
 
-                        if(entry.Content == ng.Content) {
+                        if (entry.Content == ng.Content) {
 
                             entry.Rejected = true;
                             return;
@@ -142,7 +142,7 @@ namespace SRNicoNico.ViewModels {
                         break;
                     case NGType.WordContains:
 
-                        if(entry.Content.Contains(ng.Content)) {
+                        if (entry.Content.Contains(ng.Content)) {
 
                             entry.Rejected = true;
                             return;

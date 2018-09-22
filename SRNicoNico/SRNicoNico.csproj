@@ -34,6 +34,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +45,19 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <TypeScriptTarget>ES3</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir>E:\Development\SRNicoNico\SRNicoNico\bin\Debug\Html</TypeScriptOutDir>
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -53,6 +67,19 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <TypeScriptTarget>ES3</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir>E:\Development\SRNicoNico\SRNicoNico\bin\Release\Html</TypeScriptOutDir>
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -82,8 +109,8 @@
       <HintPath>..\packages\gong-wpf-dragdrop.1.1.0\lib\net46\GongSolutions.Wpf.DragDrop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.8.5.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.8.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.8.7.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.8.7\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Livet, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b0b1d3f711ef38cb, processorArchitecture=MSIL">
       <HintPath>..\packages\LivetCask.1.3.1.0\lib\net45\Livet.dll</HintPath>
@@ -160,15 +187,15 @@
     <Compile Include="Models\NicoNicoWrapper\NicoNicoNGFilter.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylist.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylistGroup.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoNicoNicoScriptInterpreter.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoPublicMylist.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoScript\NicoScriptBase.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoScript\NicoScriptJump.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoScript\NicoScriptReverse.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoScript\NicoScriptReplace.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoScript\NicoScriptDefault.cs" />
     <Compile Include="Models\NicoNicoWrapper\User\NicoNicoUserVideo.cs" />
     <Compile Include="Models\NicoNicoWrapper\User\NicoNicoUserMylist.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Video\NicoNicoComment.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Video\NicoNicoCommentEntry.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Video\NicoNicoCommentList.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Video\NicoNicoVideo.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Video\NicoNicoVideoWithPlaylistToken.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Video\NicoNicoWatchApi.cs" />
     <Compile Include="Themes\Theme.Hyperlink.xaml.cs">
       <DependentUpon>Theme.Hyperlink.xaml</DependentUpon>
     </Compile>
@@ -180,6 +207,16 @@
     <Compile Include="ViewModels\Deploy\DeployViewModel.cs" />
     <Compile Include="ViewModels\Misc\UpdaterViewModel.cs" />
     <Compile Include="ViewModels\Mylist\MylistOperationViewModel.cs" />
+    <Compile Include="ViewModels\Video\VideoCommentEntryViewModel.cs" />
+    <Compile Include="ViewModels\Video\VideoCommentListViewModel.cs" />
+    <Compile Include="ViewModels\Video\VideoCommentPostViewModel.cs" />
+    <Compile Include="ViewModels\Video\VideoCommentViewModel.cs" />
+    <Compile Include="ViewModels\Video\VideoHtml5Handler.cs" />
+    <Compile Include="ViewModels\Video\VideoMylistViewModel.cs" />
+    <Compile Include="ViewModels\Video\VideoPaymentViewModel.cs" />
+    <Compile Include="ViewModels\Video\VideoPopupViewModel.cs" />
+    <Compile Include="ViewModels\Video\VideoTabViewModel.cs" />
+    <Compile Include="ViewModels\Video\VideoViewModel.cs" />
     <Compile Include="ViewModels\PlayList\PlayListEntryViewModel.cs" />
     <Compile Include="ViewModels\PlayList\PlayListViewModel.cs" />
     <Compile Include="ViewModels\PublicMylist\PublicMylistEntryViewModel.cs" />
@@ -187,8 +224,6 @@
     <Compile Include="ViewModels\Settings\SettingsNGFilterViewModel.cs" />
     <Compile Include="ViewModels\Settings\SettingsLiveViewModel.cs" />
     <Compile Include="ViewModels\Settings\SettingsCommentViewModel.cs" />
-    <Compile Include="ViewModels\Video\PaidVideoViewModel.cs" />
-    <Compile Include="ViewModels\Video\VideoMylistViewModel.cs" />
     <Compile Include="Views\Action\NicoNicoOpenAction.cs" />
     <Compile Include="Views\Behavior\DragDropExtension.cs" />
     <Compile Include="Views\Behavior\ParagraphHtmlRenderingBehavior.cs" />
@@ -238,6 +273,45 @@
     <Compile Include="Views\Contents\Mylist\RemoveMylistView.xaml.cs">
       <DependentUpon>RemoveMylistView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contents\Video\Video.xaml.cs">
+      <DependentUpon>Video.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoWindowFullScreen.xaml.cs">
+      <DependentUpon>VideoWindowFullScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoPaymentView.xaml.cs">
+      <DependentUpon>VideoPaymentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoAddMylistView.xaml.cs">
+      <DependentUpon>VideoAddMylistView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoComment.xaml.cs">
+      <DependentUpon>VideoComment.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoCommentDecorator.xaml.cs">
+      <DependentUpon>VideoCommentDecorator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoController.xaml.cs">
+      <DependentUpon>VideoController.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoDescription.xaml.cs">
+      <DependentUpon>VideoDescription.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoFullScreen.xaml.cs">
+      <DependentUpon>VideoFullScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoHtml5.xaml.cs">
+      <DependentUpon>VideoHtml5.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoInformation.xaml.cs">
+      <DependentUpon>VideoInformation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoPopup.xaml.cs">
+      <DependentUpon>VideoPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Video\VideoTabView.xaml.cs">
+      <DependentUpon>VideoTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\NicoRepo\NicoRepoResultGenericEntry.xaml.cs">
       <DependentUpon>NicoRepoResultGenericEntry.xaml</DependentUpon>
     </Compile>
@@ -277,18 +351,10 @@
     <Compile Include="Views\Contents\Settings\SettingsComment.xaml.cs">
       <DependentUpon>SettingsComment.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Contents\Video\PaidVideoView.xaml.cs">
-      <DependentUpon>PaidVideoView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\Video\AddMylistView.xaml.cs">
-      <DependentUpon>AddMylistView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\Video\WindowFullScreenView.xaml.cs">
-      <DependentUpon>WindowFullScreenView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\BooleanDataTemplateSelector.cs" />
     <Compile Include="Views\Controls\DisabledScrollViewerFlowDocumentScrollViewer.cs" />
     <Compile Include="Views\Controls\HtmlRenderer.cs" />
+    <Compile Include="Views\Controls\StateRoundButton.cs" />
     <Compile Include="Views\Controls\RoundButton.cs" />
     <Compile Include="Views\Converter\NGTypeConverter.cs" />
     <Compile Include="Views\ExitConfirmView.xaml.cs">
@@ -314,6 +380,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Generic.DisabledScrollViewerFlowDocumentScrollViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.StateRoundButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -573,6 +643,58 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Contents\Video\Video.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoWindowFullScreen.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoPaymentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoAddMylistView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoComment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoCommentDecorator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoController.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoDescription.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoFullScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoHtml5.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoInformation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Video\VideoTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Contents\NicoRepo\NicoRepoResultGenericEntry.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -729,58 +851,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Contents\Video\PaidVideoView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\Video\AddMylistView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\Video\VideoCommentBar.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\Video\VideoCommentDecorator.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\Video\WindowFullScreenView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\Video\VideoFullScreenView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\Video\VideoHtml5.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\Video\VideoController.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\Video\VideoUploaderInfo.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\Video\VideoDescription.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\Video\VideoComment.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\Video\Video.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\Video\VideoView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Contents\WebView\WebViewContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -808,13 +878,12 @@
     <Compile Include="Models\NicoNicoViewer\UnixTime.cs" />
     <Compile Include="Models\NicoNicoViewer\RequestFailed.cs" />
     <Compile Include="Models\NicoNicoViewer\Settings.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoNicoComment.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoHistory.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylistItem.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoNicoRepo.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoNicoDmc.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Video\NicoNicoDmc.cs" />
     <Compile Include="Models\NicoNicoWrapper\User\NicoNicoUser.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoNicoStoryBoard.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Video\NicoNicoStoryBoard.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoLiveNotify.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoWatchApi.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoSearch.cs" />
@@ -858,14 +927,6 @@
     <Compile Include="ViewModels\User\UserMylistViewModel.cs" />
     <Compile Include="ViewModels\User\UserNicoRepoViewModel.cs" />
     <Compile Include="ViewModels\User\UserViewModel.cs" />
-    <Compile Include="ViewModels\Video\VideoCommentListViewModel.cs" />
-    <Compile Include="ViewModels\Video\VideoCommentEntryViewModel.cs" />
-    <Compile Include="ViewModels\Video\VideoPostCommentViewModel.cs" />
-    <Compile Include="ViewModels\Video\VideoCommentViewModel.cs" />
-    <Compile Include="ViewModels\Video\VideoHtml5Handler.cs" />
-    <Compile Include="ViewModels\Video\VideoViewModel.cs" />
-    <Compile Include="ViewModels\Video\VideoTagViewModel.cs" />
-    <Compile Include="ViewModels\Video\VideoViewViewModel.cs" />
     <Compile Include="ViewModels\WebView\WebViewContentViewModel.cs" />
     <Compile Include="ViewModels\WebView\WebViewViewModel.cs" />
     <Compile Include="Views\Action\OpenWebViewAction.cs" />
@@ -1036,36 +1097,6 @@
     <Compile Include="Views\Contents\User\User.xaml.cs">
       <DependentUpon>User.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Contents\Video\VideoCommentBar.xaml.cs">
-      <DependentUpon>VideoCommentBar.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\Video\VideoCommentDecorator.xaml.cs">
-      <DependentUpon>VideoCommentDecorator.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\Video\VideoFullScreenView.xaml.cs">
-      <DependentUpon>VideoFullScreenView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\Video\VideoHtml5.xaml.cs">
-      <DependentUpon>VideoHtml5.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\Video\VideoController.xaml.cs">
-      <DependentUpon>VideoController.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\Video\VideoUploaderInfo.xaml.cs">
-      <DependentUpon>VideoUploaderInfo.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\Video\VideoDescription.xaml.cs">
-      <DependentUpon>VideoDescription.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\Video\VideoComment.xaml.cs">
-      <DependentUpon>VideoComment.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\Video\Video.xaml.cs">
-      <DependentUpon>Video.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\Video\VideoView.xaml.cs">
-      <DependentUpon>VideoView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Contents\WebView\WebViewContent.xaml.cs">
       <DependentUpon>WebViewContent.xaml</DependentUpon>
     </Compile>
@@ -1101,15 +1132,9 @@
     </Compile>
     <None Include="app.config" />
     <None Include="Documentation\Theme.md" />
-    <None Include="Html\Flash\NicoNicoRTMPPlayer.as3proj" />
-    <None Include="Html\Flash\NicoNicoSWFPlayer.as3proj" />
-    <None Include="Html\Flash\src\NicoNicoPlayerBase.as" />
-    <None Include="Html\Flash\src\NicoNicoRTMPPlayer.as" />
-    <None Include="Html\Flash\src\NicoNicoSWFPlayer.as" />
-    <None Include="Html\Flash\src\org\libspark\utils\ForcibleLoader.as" />
-    <None Include="Html\Flash\src\SecureNetConnection.as" />
     <None Include="Microsoft.TypeScript.props" />
     <None Include="Models\NicoNicoViewer\DeployModel.cs.sample" />
+    <None Include="Models\NicoNicoWrapper\Video\sample.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -1117,22 +1142,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\Category.png" />
-    <Content Include="Html\commentlayer.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Html\Flash\NicoNicoRTMPPlayer.swf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Html\Flash\NicoNicoSWFPlayer.swf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Html\jquery-3.1.0.js">
+    <Content Include="Html\jquery-3.3.1.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Html\jquery.keyframes.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Html\videoflashplayer.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Html\videortmp.html">
@@ -1144,9 +1157,6 @@
     <Content Include="Html\videohtml5.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Html\videoplayer.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Icons\production.ico" />
     <Content Include="InfrastructureAssemblies\Design\Livet.Design.dll" />
     <Content Include="InfrastructureAssemblies\Livet.dll" />
@@ -1154,9 +1164,7 @@
     <Content Include="InfrastructureAssemblies\Microsoft.Expression.Interactions.dll" />
     <Content Include="InfrastructureAssemblies\System.Windows.Interactivity.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Html\Flash\bin\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>

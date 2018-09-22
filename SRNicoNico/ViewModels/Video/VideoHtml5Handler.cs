@@ -1,22 +1,19 @@
 ﻿using Codeplex.Data;
+using Livet;
 using Livet.Messaging;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Views.Controls;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Interop;
 
 namespace SRNicoNico.ViewModels {
-    public class VideoHtml5Handler : IObjectForScriptable, IDisposable {
+    public class VideoHtml5Handler : NotificationObject, IObjectForScriptable, IDisposable {
 
         [DllImport("urlmon.dll")]
         [PreserveSig]
@@ -26,306 +23,588 @@ namespace SRNicoNico.ViewModels {
         public const int FEATURE_LOCALMACHINE_LOCKDOWN = 8;
         public const int SET_FEATURE_ON_PROCESS = 0x00000002;
 
-        private WebBrowser Browser;
+        #region WebBrowser変更通知プロパティ
+        private WebBrowser _WebBrowser;
 
-        private VideoViewModel Owner;
+        public WebBrowser WebBrowser {
+            get { return _WebBrowser; }
+            set { 
+                if (_WebBrowser == value)
+                    return;
+                _WebBrowser = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region ContentControl変更通知プロパティ
+        private ContentControl _ContentControl = new ContentControl();
+
+        public ContentControl ContentControl {
+            get { return _ContentControl; }
+            set { 
+                if (_ContentControl == value)
+                    return;
+                _ContentControl = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region FullScreenContentControl変更通知プロパティ
+        private ContentControl _FullScreenContentControl = new ContentControl();
+
+        public ContentControl FullScreenContentControl {
+            get { return _FullScreenContentControl; }
+            set { 
+                if (_FullScreenContentControl == value)
+                    return;
+                _FullScreenContentControl = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region IsPlaying変更通知プロパティ
+        private bool _IsPlaying;
+        public bool IsPlaying {
+            get { return _IsPlaying; }
+            set { 
+                if (_IsPlaying == value)
+                    return;
+                _IsPlaying = value;
+                RaisePropertyChanged();
+                if(value) {
+
+                    Resume();
+                } else {
+
+                    Pause();
+                }
+            }
+        }
+        #endregion
+
+        #region IsFullScreen変更通知プロパティ
+        private bool _IsFullScreen = false;
+
+        public bool IsFullScreen {
+            get { return _IsFullScreen; }
+            set {
+                if (_IsFullScreen == value)
+                    return;
+                _IsFullScreen = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region CurrentTime変更通知プロパティ
+        private double _CurrentTime;
+
+        public double CurrentTime {
+            get { return _CurrentTime; }
+            set { 
+                if (_CurrentTime == value)
+                    return;
+                _CurrentTime = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region PlayedRange変更通知プロパティ
+        private ObservableSynchronizedCollection<TimeRange> _PlayedRange = new ObservableSynchronizedCollection<TimeRange>();
+
+        public ObservableSynchronizedCollection<TimeRange> PlayedRange {
+            get { return _PlayedRange; }
+            set {
+                if (_PlayedRange == value)
+                    return;
+                _PlayedRange = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region BufferedRange変更通知プロパティ
+        private ObservableSynchronizedCollection<TimeRange> _BufferedRange = new ObservableSynchronizedCollection<TimeRange>();
+
+        public ObservableSynchronizedCollection<TimeRange> BufferedRange {
+            get { return _BufferedRange; }
+            set {
+                if (_BufferedRange == value)
+                    return;
+                _BufferedRange = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region VolumeIcon変更通知プロパティ
+        private string _VolumeIcon;
+
+        public string VolumeIcon {
+            get { return _VolumeIcon; }
+            set { 
+                if (_VolumeIcon == value)
+                    return;
+                _VolumeIcon = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region IsMute変更通知プロパティ
+        public bool IsMute {
+            get { return Settings.Instance.IsMute; }
+            set {
+                Settings.Instance.IsMute = value;
+                ApplyVolume();
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Volume変更通知プロパティ
+        private int _Volume = 0;
+
+        public int Volume {
+            get { return _Volume; }
+            set {
+                if (value > 100) {
+
+                    value = 100;
+                } else if (value < 0) {
+
+                    value = 0;
+                }
+                _Volume = value;
+                Settings.Instance.Volume = value;
+                RaisePropertyChanged();
+                ApplyVolume();
+            }
+        }
+        #endregion
+
+        #region IsRepeat変更通知プロパティ
+        private bool _IsRepeat;
+
+        public bool IsRepeat {
+            get { return _IsRepeat; }
+            set {
+                if (_IsRepeat == value)
+                    return;
+                _IsRepeat = value;
+                Settings.Instance.IsRepeat = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region CurrentVideoQuality変更通知プロパティ
+        private NicoNicoDmcVideoQuality _CurrentVideoQuality;
+
+        public NicoNicoDmcVideoQuality CurrentVideoQuality {
+            get { return _CurrentVideoQuality; }
+            set { 
+                if (_CurrentVideoQuality == value)
+                    return;
+                _CurrentVideoQuality = value;
+                RaisePropertyChanged();
+                ReestablishDmcSession();
+            }
+        }
+        #endregion
+
+        #region CurrentAudioQuality変更通知プロパティ
+        private NicoNicoDmcAudioQuality _CurrentAudioQuality;
+
+        public NicoNicoDmcAudioQuality CurrentAudioQuality {
+            get { return _CurrentAudioQuality; }
+            set { 
+                if (_CurrentAudioQuality == value)
+                    return;
+                _CurrentAudioQuality = value;
+                RaisePropertyChanged();
+                ReestablishDmcSession();
+            }
+        }
+        #endregion
+
+        #region PlayRate変更通知プロパティ
+        private double _PlayRate = 1.0D;
+
+        public double PlayRate {
+            get { return _PlayRate; }
+            set { 
+                if (_PlayRate == value)
+                    return;
+                _PlayRate = value;
+                RaisePropertyChanged();
+                WebBrowser?.InvokeScript("Video$SetRate", value);
+            }
+        }
+        #endregion
+
+        #region Resolution変更通知プロパティ
+        private string _Resolution;
+
+        public string Resolution {
+            get { return _Resolution; }
+            set {
+                if (_Resolution == value)
+                    return;
+                _Resolution = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region ShowFullScreenController変更通知プロパティ
+        private bool _ShowFullScreenController;
+
+        public bool ShowFullScreenController {
+            get { return _ShowFullScreenController; }
+            set { 
+                if (_ShowFullScreenController == value)
+                    return;
+                _ShowFullScreenController = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region ShowFullScreenCommentBar変更通知プロパティ
+        private bool _ShowFullScreenCommentBar;
+
+        public bool ShowFullScreenCommentBar {
+            get { return _ShowFullScreenCommentBar; }
+            set { 
+                if (_ShowFullScreenCommentBar == value)
+                    return;
+                _ShowFullScreenCommentBar = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         //新仕様動画で使う
-        private Timer DmcHeartBeatTimer = new Timer(8000.0D);
+        private Timer DmcHeartBeatTimer;
 
-        private NicoNicoVideoType VideoType;
+        private readonly VideoViewModel Owner;
+        private readonly NicoNicoWatchApi ApiData;
+        
 
-        public VideoHtml5Handler(WebBrowser browser) {
+        private VideoCommentViewModel Comment;
 
-            Browser = browser;
-            
-            //忌々しいアクティブコンテンツ云々を無効にする WebBrowserの初期化時にこの値がリセットされるので
-            //新しくWebBrowserのインスタンスを生成する度に呼ばないとだめっぽいね
-            CoInternetSetFeatureEnabled(FEATURE_LOCALMACHINE_LOCKDOWN, SET_FEATURE_ON_PROCESS, false);
-            
-            Browser.ObjectForScripting = new ObjectForScripting(this);
-            //
-            Browser.LoadCompleted += async (obj, e) => {
+        public VideoHtml5Handler(VideoViewModel vm, NicoNicoWatchApi api) {
 
-                var autoPlay = Settings.Instance.AutoPlay;
-
-                //プレイリストなら強制的にtrue
-                if(Owner.IsPlayList()) {
-
-                    autoPlay = true;
-                }
-
-                if (string.IsNullOrEmpty(Owner.ApiData.Video.SmileInfo.Url) || Owner.ApiData.Context.IsNeedPayment) {
-
-                    App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.PaidVideoView), new PaidVideoViewModel(Owner), TransitionMode.NewOrActive));
-                    return;
-                }
-
-                if (Owner.ApiData.Video.DmcInfo != null && !Owner.ApiData.Video.Title.Contains("ドットバイドット")) {
-
-                    var dmc = new NicoNicoDmcSession(Owner.ApiData.Video.DmcInfo);
-                    var session = await dmc.CreateAsync();
-
-
-                    if(DmcHeartBeatTimer != null) {
-
-                        DmcHeartBeatTimer.Elapsed += async (state, ev) => {
-
-                            await dmc.HeartbeatAsync(session.Id);
-                        };
-
-                        DmcHeartBeatTimer.Enabled = true;
-                    }
-
-                    Browser?.InvokeScript("VideoViewModel$initialize", new object[] { session.ContentUri, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, autoPlay });
-                } else {
-
-                    if(VideoType == NicoNicoVideoType.RTMP) {
-
-                        Browser.InvokeScript("VideoViewModel$initialize", new object[] { Owner.ApiData.Video.SmileInfo.Url + "^" + Owner.ApiData.FmsToken, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, autoPlay });
-                    } else {
-
-                        Browser.InvokeScript("VideoViewModel$initialize", new object[] { Owner.ApiData.Video.SmileInfo.Url, Owner.ApiData.Context.InitialPlaybackPosition ?? 0, autoPlay });
-                    }
-
-                }
-
-
-                if(VideoType == NicoNicoVideoType.SWF || VideoType == NicoNicoVideoType.RTMP) {
-
-                    Owner.ChangePlayRateAvalilable = PlayBackRateAvalilableReason.NotSupportVideo;
-                } else {
-
-                    Owner.ChangePlayRateAvalilable = PlayBackRateAvalilableReason.Available;
-                }
-
-                Owner.Volume = Owner.Volume;
-
-            };
-
-            //ブラウザにキーボードイベントが走らないようにする
-            //走られると+とか押された時に動画の再生速度とかが変わっちゃうんだよね
-            //それはちょっと困る
-            Browser.PreviewKeyDown += (obj, e) => {
-
-                e.Handled = true;
-            };
-
+            Owner = vm ?? throw new ArgumentNullException(nameof(vm));
+            ApiData = api ?? throw new ArgumentNullException(nameof(api));
+            Initialize();
         }
 
+        private async void ReestablishDmcSession() {
 
-        //ASを呼ぶ
-        public void InvokeScript(string func, params string[] args) {
+            if (DmcHeartBeatTimer != null) {
 
-            //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
-            if(Browser != null && Browser.IsLoaded) {
-                try {
+                // Timerが既に動いていた場合セッションを削除する
+                DmcHeartBeatTimer.Stop();
+                DmcHeartBeatTimer.Dispose();
+                await ApiData.DmcInfo.DeleteAsync();
 
-                    if(args.Length == 0) {
+                // 再度Dmc用TokenとSignatureを取得する
+                var video = new NicoNicoVideoWithPlaylistToken(ApiData.VideoId, ApiData.PlaylistToken);
+                var str = await video.Initialize();
+                if(string.IsNullOrEmpty(str)) {
 
-                        Browser.Dispatcher.BeginInvoke((Action)(() => Browser.InvokeScript(func)));
-                    } else {
-
-                        Browser.Dispatcher.BeginInvoke((Action)(() => Browser.InvokeScript(func, args)));
-                    }
-                } catch(Exception e) when(e is COMException || e is ObjectDisposedException) {
-
-                    Console.WriteLine("COMException：" + func);
                     return;
                 }
+                var json = DynamicJson.Parse(str);
+                ApiData.DmcInfo = new NicoNicoDmc(json.video.dmcInfo.session_api);
+
+                await EstablishDmcSession();
+                // セッションを張り直したのでWebBrowser側に伝える
+                WebBrowser.InvokeScript("Video$Initialize", new object[] { ApiData.VideoUrl, CurrentTime, IsPlaying });
+                ApplyVolume();
             }
         }
-        public void Initialize(VideoViewModel vm) {
 
-            Owner = vm;
+        private async Task EstablishDmcSession() {
 
-            if(Owner.ApiData.Video.Id.Contains("nm")) {
+            // ハートビート開始
+            if (ApiData.DmcHeartbeatRequired) {
 
-                VideoType = NicoNicoVideoType.SWF;
+                if (CurrentVideoQuality == null || CurrentAudioQuality == null) {
 
-                Browser.Source = new Uri(GetSWFPlayerPath());
-            } else if(Owner.ApiData.Video.SmileInfo.Url.Contains("rtmp")) {
+                    throw new NullReferenceException("Qualityをnullには出来ません");
+                }
 
-                VideoType = NicoNicoVideoType.RTMP;
+                ApiData.VideoUrl = await ApiData.DmcInfo.CreateAsync(CurrentVideoQuality, CurrentAudioQuality);
 
-                Browser.Source = new Uri(GetRTMPPlayerPath());
+                DmcHeartBeatTimer = new Timer(ApiData.DmcInfo.HeartbeatLifeTime / 3);
+                DmcHeartBeatTimer.Elapsed += async (state, e) => await ApiData.DmcInfo.HeartbeatAsync();
+                DmcHeartBeatTimer.Start();
+            }
+        }
+
+        private async void Initialize() {
+
+            if (ApiData.DmcHeartbeatRequired) {
+
+                CurrentVideoQuality = ApiData.DmcInfo.Videos.First();
+                CurrentAudioQuality = ApiData.DmcInfo.Audios.First();
+                await EstablishDmcSession();
+            }
+
+            IsRepeat = Settings.Instance.IsRepeat;
+
+            WebBrowser = new WebBrowser();
+            CoInternetSetFeatureEnabled(FEATURE_LOCALMACHINE_LOCKDOWN, SET_FEATURE_ON_PROCESS, false);
+
+            ContentControl.Content = WebBrowser;
+            WebBrowser.ObjectForScripting = new ObjectForScripting(this);
+            WebBrowser.Navigate(GetHtml5PlayerPath());
+        }
+
+        public void Resume() {
+
+            WebBrowser.InvokeScript("Video$Resume");
+        }
+        public void Pause() {
+
+            WebBrowser.InvokeScript("Video$Pause");
+        }
+
+        internal void Seek(double pos) {
+
+            if (pos < 0) {
+
+                pos = 0;
+            } else if (pos > ApiData.Duration) {
+
+                pos = ApiData.Duration;
+            }
+            WebBrowser.InvokeScript("Video$Seek", new object[] { pos });
+        }
+        private void SetVolumeIcon() {
+
+            if (IsMute) {
+
+                VolumeIcon = "Mute";
+                return;
+            }
+            if (Volume == 0) {
+
+                VolumeIcon = "s0";
+            } else if (Volume < 30) {
+
+                VolumeIcon = "s30";
+            } else if (Volume < 80) {
+
+                VolumeIcon = "s80";
+            } else if (Volume <= 100) {
+
+                VolumeIcon = "s100";
+            }
+        }
+
+        private void ApplyVolume() {
+
+            SetVolumeIcon();
+            if (IsMute) {
+
+                WebBrowser.InvokeScript("Video$SetVolume", 0);
             } else {
 
-                if(Owner.ApiData.Video.MovieType == "flv") {
-
-                    VideoType = NicoNicoVideoType.FLV;
-                } else {
-                    
-                    if(Owner.ApiData.Video.DmcInfo != null) {
-
-                        VideoType = NicoNicoVideoType.New;
-                    } else {
-
-                        VideoType = NicoNicoVideoType.MP4;
-                    }
-                }
-                Browser.Source = new Uri(GetHtml5PlayerPath());
+                WebBrowser.InvokeScript("Video$SetVolume", Volume / 100.0);
             }
-
         }
 
+        public void ToggleFullscreen() {
 
-        protected internal void Play() {
+            if(IsFullScreen) {
 
-            
-            InvokeScript("VideoViewModel$play");
+                ReturnToNormalScreen();
+            } else {
+
+                EnterFullScreen();
+            }
         }
 
-        protected internal void Pause() {
+        public void EnterFullScreen() {
 
-
-            InvokeScript("VideoViewModel$pause");
-        }
-
-        protected internal void Seek(double pos) {
-
-            if(Owner.ApiData == null) {
+            if(IsFullScreen) {
 
                 return;
             }
+            IsFullScreen = true;
+            ContentControl.Content = null;
+            FullScreenContentControl.Content = WebBrowser;
+            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.VideoFullScreen), Owner, TransitionMode.Normal));
 
-            if(pos < 0) {
+            Window.GetWindow(ContentControl).Visibility = Visibility.Hidden;
 
-                pos = 0;
-            } else if(pos > Owner.ApiData.Video.Duration) {
+        }
+        public void EnterWindowFullScreen() {
 
-                pos = Owner.ApiData.Video.Duration;
+            if (IsFullScreen) {
+
+                return;
             }
+            IsFullScreen = true;
+            ContentControl.Content = null;
+            FullScreenContentControl.Content = WebBrowser;
+            // App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.VideoWindowFullScreen), Owner, TransitionMode.UnKnown));
+            new Views.VideoWindowFullScreen() {
 
-            InvokeScript("VideoViewModel$seek", pos.ToString());
+                DataContext = Owner,
+                Visibility = Visibility.Visible
+            };
+        }
+
+        public void ReturnToNormalScreen() {
+
+            if (!IsFullScreen) {
+
+                return;
+            }
+            IsFullScreen = false;
+            FullScreenContentControl.Content = null;
+            ContentControl.Content = WebBrowser;
+            Window.GetWindow(ContentControl).Visibility = Visibility.Visible;
+            Window.GetWindow(FullScreenContentControl)?.Close();
         }
 
 
 
-        //JSから呼ばれる
+        public void AttachComment(VideoCommentViewModel comment) {
+
+            Comment = comment;
+        }
+
         public void Invoked(string cmd, string args) {
 
             switch(cmd) {
+                case "ready": // ブラウザ側の準備が出来た
+                    WebBrowser.InvokeScript("Video$Initialize", new object[] { ApiData.VideoUrl, 0, Settings.Instance.AutoPlay });
+                    Volume = Settings.Instance.Volume;
+                    break;
                 case "widtheight":
-                    Owner.Resolution = args;
-                    break;
-                case "bufferingstart":
-                    Owner.IsBuffering = true;
-                    break;
-                case "bufferingend":
-                    Owner.IsBuffering = false;
+                    Resolution = args;
                     break;
                 case "playstate":
-                    if(!string.IsNullOrEmpty(args)) {
-
-                        Owner.IsPlaying = bool.Parse(args);
-                    }
+                    IsPlaying = bool.Parse(args);
                     break;
                 case "click":
+                    if (Settings.Instance.ClickOnPause) {
 
-                    if(Settings.Instance.ClickOnPause) {
-
-                        Owner.TogglePlay();
-                    }
-                    break;
-                case "mousewheel":
-                    if(!string.IsNullOrEmpty(args)) {
-
-                        var vol = int.Parse(args);
-
-                        if(vol >= 0) {
-
-                            Owner.Volume += 2;
-                        } else {
-
-                            Owner.Volume -= 2;
-                        }
+                        IsPlaying ^= true;
                     }
                     break;
                 case "currenttime": {
 
                         dynamic json = DynamicJson.Parse(args);
+                        CurrentTime = json.time;
+                        Comment?.CommentTick((int) json.vpos);
 
-                        if(json.played()) {
+                        if (json.played()) {
 
-                            Owner.PlayedRange.Clear();
+                            PlayedRange.Clear();
+                            foreach (var play in json.played) {
 
-                            foreach(var play in json.played) {
+                                var time = new TimeRange() { StartTime = play.start, EndTime = play.end };
+                                var temp = ApiData.Duration / (time.EndTime - time.StartTime);
+                                var width = IsFullScreen ? FullScreenContentControl.ActualWidth : ContentControl.ActualWidth;
 
-                                Owner.PlayedRange.Add(new TimeRange() { StartTime = play.start, EndTime = play.end });
+                                time.Start = width / (ApiData.Duration / time.StartTime);
+                                time.Width = width / temp;
+                                PlayedRange.Add(time);
                             }
                         }
+                        if (json.buffered()) {
 
-                        if(json.buffered()) {
+                            BufferedRange.Clear();
+                            foreach (var buffer in json.buffered) {
 
-                            Owner.BufferedRange.Clear();
+                                var time = new TimeRange() { StartTime = buffer.start, EndTime = buffer.end };
+                                var temp = ApiData.Duration / (time.EndTime - time.StartTime);
+                                var width = IsFullScreen ? FullScreenContentControl.ActualWidth : ContentControl.ActualWidth;
 
-                            foreach(var buffer in json.buffered) {
-
-                                Owner.BufferedRange.Add(new TimeRange() { StartTime = buffer.start, EndTime = buffer.end });
+                                time.Start = width / (ApiData.Duration / time.StartTime);
+                                time.Width = width / temp;
+                                BufferedRange.Add(time);
                             }
                         }
-
-                        if(json.time()) {
-
-                            Owner.CurrentTime = json.time;
-                        }
-
-                        if(json.vpos()) {
-
-                            if(Owner.Comment.CommentVisibility) {
-
-                                Owner.Comment.CommentTick((int)json.vpos);
-                            }
-                        }
-                        
                         break;
                     }
-                case "ended": {
+                case "mousewheel":
+                    if (!string.IsNullOrEmpty(args)) {
 
-                        if(Owner.IsRepeat) {
-                            
-                            Owner.Restart();
-                            Play();
+                        var vol = int.Parse(args);
+
+                        if (vol >= 0) {
+
+                            Volume += 2;
                         } else {
 
-                            if(Owner.IsFullScreen && !Owner.IsPlayList()) {
+                            Volume -= 2;
+                        }
+                    }
+                    break;
+                case "alldataloaded":
+                    if(ApiData.DmcHeartbeatRequired) {
+                        DmcHeartBeatTimer.Enabled = false;
+                    }
+                    break;
+                case "ended": {
 
-                                Window.GetWindow(Owner.FullScreenWebBrowser)?.Close();
+                        if (IsRepeat) {
+
+                            Seek(0);
+                            Resume();
+                        } else {
+
+                            if (IsFullScreen/* && !Owner.IsPlayList()*/) {
+
+                                ReturnToNormalScreen();
                             }
                         }
-
-                        if(Owner.ApiData != null) {
+                        if (ApiData != null) {
 
                             //現在再生位置を初期化する
-                            Owner.WatchiApiInstance.RecordPlaybackPositionAsync(Owner.ApiData, 0);
+                            //WatchiApiInstance.RecordPlaybackPositionAsync(ApiData, 0);
                         }
-
-                        Owner.VideoEnd();
                         break;
                     }
                 case "showcontroller": {
 
-                        Owner.ShowFullScreenController = true;
+                        ShowFullScreenController = true;
+                        ShowFullScreenCommentBar = true;
                         break;
                     }
                 case "hidecontroller": {
 
-                        if(!Settings.Instance.AlwaysShowSeekBar) {
+                        if (!Settings.Instance.AlwaysShowSeekBar) {
 
-                            Owner.ShowFullScreenController = false;
+                            ShowFullScreenController = false;
+                        }
+                        if(!Owner.Comment.Post.IsFocused) {
+                            ShowFullScreenCommentBar = false;
                         }
                         break;
                     }
-                case "alldataloaded":
-                    DmcHeartBeatTimer.Enabled = false;
-                    break;
                 default:
-                    Console.WriteLine("Invoked: " + cmd);
+                    Console.WriteLine("cmd: " + cmd + " args: " + args);
                     break;
             }
         }
-        
+
         private string GetHtml5PlayerPath() {
 
             var cur = NicoNicoUtil.CurrentDirectory;
@@ -351,10 +630,10 @@ namespace SRNicoNico.ViewModels {
 
         public void Dispose() {
 
-            ((IDisposable)DmcHeartBeatTimer).Dispose();
+            WebBrowser.Dispose();
+            WebBrowser = null;
+            DmcHeartBeatTimer?.Dispose();
             DmcHeartBeatTimer = null;
-            Browser.Dispose();
-            Browser = null;
         }
     }
 }

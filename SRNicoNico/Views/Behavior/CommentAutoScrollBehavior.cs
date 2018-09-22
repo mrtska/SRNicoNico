@@ -42,16 +42,15 @@ namespace SRNicoNico.Views.Behavior {
                 return;
             }
 #endif
-
             var instance = obj as CommentAutoScrollBehavior;
-            var collection = instance.AssociatedObject.ItemsSource as DispatcherCollection<VideoCommentEntryViewModel>;
-            
-            if(collection == null || !instance.AutoScrollEnabled || instance.AssociatedObject.IsMouseOver || collection.Count == 0) {
+
+            if (!(instance.AssociatedObject.ItemsSource is ObservableSynchronizedCollection<VideoCommentEntryViewModel> collection) ||
+                !instance.AutoScrollEnabled || instance.AssociatedObject.IsMouseOver || collection.Count == 0) {
 
                 return;
             }
             var col = collection.Where(e => e.Item.Vpos <= (int)(p.NewValue)).LastOrDefault();
-            if(col == null) {
+            if (col == null) {
 
                 return;
             }

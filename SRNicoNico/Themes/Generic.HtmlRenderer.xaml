@@ -4,11 +4,12 @@
     xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
     xmlns:b="clr-namespace:SRNicoNico.Views.Behavior">
     <Style TargetType="{x:Type local:HtmlRenderer}">
+        <Setter Property="Padding" Value="5" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:HtmlRenderer}">
-                        <local:DisabledScrollViewerFlowDocumentScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0" Padding="0">
-                            <FlowDocument>
+                        <local:DisabledScrollViewerFlowDocumentScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <FlowDocument PagePadding="{TemplateBinding Padding}">
                                 <Paragraph b:ParagraphHtmlRenderingBehavior.RawHtmlText="{TemplateBinding HtmlText}" />
                             </FlowDocument>
                         </local:DisabledScrollViewerFlowDocumentScrollViewer>

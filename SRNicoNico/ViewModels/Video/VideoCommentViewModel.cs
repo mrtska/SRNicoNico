@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-
-using SRNicoNico.Models.NicoNicoWrapper;
+﻿using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
-using System.Text.RegularExpressions;
+using SRNicoNico.Models.NicoNicoWrapper;
+using System;
+using System.Linq;
 
 namespace SRNicoNico.ViewModels {
     public class VideoCommentViewModel : ViewModel {
@@ -25,7 +13,7 @@ namespace SRNicoNico.ViewModels {
         public bool IsActive {
             get { return _IsActive; }
             set { 
-                if(_IsActive == value)
+                if (_IsActive == value)
                     return;
                 _IsActive = value;
                 RaisePropertyChanged();
@@ -33,15 +21,37 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        #region CommentListList変更通知プロパティ
-        private DispatcherCollection<VideoCommentListViewModel> _CommentListList = new DispatcherCollection<VideoCommentListViewModel>(DispatcherHelper.UIDispatcher);
+        #region CommentVisibility変更通知プロパティ
+        private bool _CommentVisibility = true;
 
-        public DispatcherCollection<VideoCommentListViewModel> CommentListList {
-            get { return _CommentListList; }
+        public bool CommentVisibility {
+            get { return _CommentVisibility; }
             set { 
-                if(_CommentListList == value)
+                if (_CommentVisibility == value)
                     return;
-                _CommentListList = value;
+                _CommentVisibility = value;
+                Settings.Instance.CommentVisibility = value;
+                if (value) {
+
+                    Handler?.WebBrowser?.InvokeScript("Comment$Show");
+                } else {
+
+                    Handler?.WebBrowser?.InvokeScript("Comment$Hide");
+                }
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region CommentList変更通知プロパティ
+        private ObservableSynchronizedCollection<VideoCommentListViewModel> _CommentList;
+
+        public ObservableSynchronizedCollection<VideoCommentListViewModel> CommentList {
+            get { return _CommentList; }
+            set { 
+                if (_CommentList == value)
+                    return;
+                _CommentList = value;
                 RaisePropertyChanged();
             }
         }
@@ -53,7 +63,7 @@ namespace SRNicoNico.ViewModels {
         public VideoCommentListViewModel SelectedList {
             get { return _SelectedList; }
             set { 
-                if(_SelectedList == value)
+                if (_SelectedList == value)
                     return;
                 _SelectedList = value;
                 RaisePropertyChanged();
@@ -61,47 +71,29 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        #region CommentVisibility変更通知プロパティ
-        public bool CommentVisibility {
-            get { return Settings.Instance.CommentVisibility; }
-            set {
-                if(Settings.Instance.CommentVisibility == value)
+        #region Post変更通知プロパティ
+        private VideoCommentPostViewModel _Post;
+
+        public VideoCommentPostViewModel Post {
+            get { return _Post; }
+            set { 
+                if (_Post == value)
                     return;
-                Settings.Instance.CommentVisibility = value;
-                if(value) {
-
-
-                    Owner?.Handler?.InvokeScript("CommentViewModel$show_comment");
-                } else {
-
-                    Owner?.Handler?.InvokeScript("CommentViewModel$hide_comment");
-                }
+                _Post = value;
                 RaisePropertyChanged();
             }
         }
         #endregion
 
         #region AutoScrollEnabled変更通知プロパティ
+        private bool _AutoScrollEnabled = true;
+
         public bool AutoScrollEnabled {
-            get { return Settings.Instance.CommentAutoScroll; }
+            get { return _AutoScrollEnabled; }
             set { 
-                if(Settings.Instance.CommentAutoScroll == value)
+                if (_AutoScrollEnabled == value)
                     return;
-                Settings.Instance.CommentAutoScroll = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region CanComment変更通知プロパティ
-        private bool _CanComment = false;
-
-        public bool CanComment {
-            get { return _CanComment; }
-            set { 
-                if(_CanComment == value)
-                    return;
-                _CanComment = value;
+                _AutoScrollEnabled = value;
                 RaisePropertyChanged();
             }
         }
@@ -113,7 +105,7 @@ namespace SRNicoNico.ViewModels {
         public int CurrentVpos {
             get { return _CurrentVpos; }
             set { 
-                if(_CurrentVpos == value)
+                if (_CurrentVpos == value)
                     return;
                 _CurrentVpos = value;
                 RaisePropertyChanged();
@@ -121,232 +113,140 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-        #region Post変更通知プロパティ
-        private VideoPostCommentViewModel _Post;
+        internal readonly NicoNicoComment Model;
 
-        public VideoPostCommentViewModel Post {
-            get { return _Post; }
-            set { 
-                if(_Post == value)
-                    return;
-                _Post = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
+        internal readonly VideoHtml5Handler Handler;
 
-        //ニコスクリプト
-        private List<NicoScriptBase> NicoScript;
-
-        internal NicoNicoComment CommentInstance;
-
-        internal VideoViewModel Owner;
-
-        private bool Initialized = false;
-
-        public VideoCommentViewModel(VideoViewModel vm) {
-
-            Owner = vm;
-            CommentInstance = new NicoNicoComment(vm);
-            Post = new VideoPostCommentViewModel(this);
-        }
-
-        
-
-        public async Task Initialize() {
+        public VideoCommentViewModel(NicoNicoWatchApi apiData, VideoHtml5Handler handler) {
 
             IsActive = true;
+            CommentVisibility = Settings.Instance.CommentVisibility;
+            Model = new NicoNicoComment(apiData);
+            Post = new VideoCommentPostViewModel(this, apiData);
+            Handler = handler;
+            Initialize();
+        }
 
-            CommentListList.Clear();
+        public async void Initialize() {
 
-            var lists = await CommentInstance.GetAllCommentAsync();
+            CommentList = new ObservableSynchronizedCollection<VideoCommentListViewModel>();
+            var a = await Model.GetAllCommentAsync();
+            foreach(var list in a) {
 
-            if(lists == null) {
-
-                return;
+                list.Sort();
+                CommentList.Add(new VideoCommentListViewModel(list, Handler));
             }
 
-            //コメントを取得できるやつは取得する
-            foreach(var list in lists) {
+            SelectedList = CommentList.SingleOrDefault(e => e.ListInstance.Composite.IsDefaultPostTarget);
 
-                var listlist = new VideoCommentListViewModel(list);
-                
-                foreach(var entry in list.CommentList) {
-                    
-                    //コメントをふるいにかける
-                    App.ViewModelRoot.Setting.NGFilter.Filter(entry);
+            Handler.WebBrowser?.InvokeScript("Comment$Initialize");
+            ApplyCommentConfiguration();
+            if (CommentVisibility) {
 
-                    if(entry.Rejected) {
-
-                        continue;
-                    }
-
-                    //投稿者コメントでかつ@で始まるニコスクリプトだったら
-                    if(entry.IsUploader && entry.Content.StartsWith("@")) {
-
-                        var match = Regex.Match(entry.Content, @"(\@.+?)($| )");
-
-                        //ニコスクリプトをパースしてリストに追加
-                        if(match.Success) {
-
-                            if(NicoScript == null) {
-
-                                NicoScript = new List<NicoScriptBase>();
-                            }
-
-                            var script = NicoNicoNicoScriptInterpreter.GetScriptInstance(this, entry);
-                            if(script != null) {
-
-                                NicoScript.Add(script);
-                                entry.NicoScript = script;
-                            }
-                        }
-                    }
-                    listlist.CommentList.Add(new VideoCommentEntryViewModel(this, entry));
-                }
-
-                CommentListList.Add(listlist);
-            }
-
-            if(CommentListList.Count > 0) {
-
-                SelectedList = CommentListList.First();
-            }
-
-            IsActive = false;
-            CanComment = true;
-            Owner?.Handler?.InvokeScript("CommentViewModel$initialize");
-            ApplyFontSize();
-            if(CommentVisibility) {
-
-                Owner?.Handler?.InvokeScript("CommentViewModel$show_comment");
+                Handler.WebBrowser?.InvokeScript("Comment$Show");
             } else {
 
-                Owner?.Handler?.InvokeScript("CommentViewModel$hide_comment");
+                Handler.WebBrowser?.InvokeScript("Comment$Hide");
             }
+            Handler.AttachComment(this);
+            IsActive = false;
+        }
 
-            Initialized = true;
+        public void ApplyCommentConfiguration() {
+
+            ;
+            Handler.WebBrowser?.InvokeScript("Comment$SetBaseSize", Settings.Instance.CommentSize);
+            Handler.WebBrowser?.InvokeScript("Comment$SetOpacity", Settings.Instance.CommentAlpha);
+
+        }
+
+        public void ToggleAutoScroll() {
+
+            AutoScrollEnabled ^= true;
+        }
+        public async void Refresh() {
+
+            var ret = await Model.RefreshCommentAsync(SelectedList.ListInstance);
+            SelectedList.CommentList.Clear();
+            ret.Sort();
+            foreach (var entry in ret.CommentList) {
+
+                //コメントをふるいにかける
+                App.ViewModelRoot.Setting.NGFilter.Filter(entry);
+
+                if (entry.Rejected) {
+
+                    continue;
+                }
+                SelectedList.CommentList.Add(new VideoCommentEntryViewModel(entry, Handler));
+            }
         }
 
         public void CommentTick(int vpos) {
-            
-            if(!Initialized) {
 
-                return;
-            }
+            CurrentVpos = vpos;
 
-            //同じだったら無視
-            if(CurrentVpos == vpos) {
+            foreach (var list in CommentList) {
 
-                return;
-            }
+                if(list.ListInstance.CommentType == CommentType.NicoScript) {
 
+                    continue;
+                }
 
-            foreach(var list in CommentListList) {
-
-                foreach(var entry in list.CommentList) {
+                foreach (var entry in list.CommentList) {
 
                     var item = entry.Item;
 
                     //描画が終わる時間よりも現在時間のほうが大きかったらまだまだ
-                    if(item.Vend < vpos) {
+                    if (item.Vend < vpos) {
 
                         item.IsRendering = false;
                         continue;
                     }
 
                     //コメントリストは描画順でソートされているのでvposより大きいやつが来たらそれ以降は無視
-                    if(item.Vpos > vpos) {
+                    if (item.Vpos > vpos) {
 
                         item.IsRendering = false;
                         continue;
                     }
 
                     //投稿者コメントでかつニコスクリプトだったら
-                    if(item.IsUploader && item.NicoScript != null && item.NicoScript.AffectOtherComments) {
+                    if (item.IsUploader/* && item.NicoScript != null && item.NicoScript.AffectOtherComments*/) {
 
                         continue;
                     }
 
-                    if(!item.IsRendering && vpos >= item.Vpos && vpos <= item.Vend) {
+                    if (!item.IsRendering && vpos >= item.Vpos && vpos <= item.Vend) {
 
                         item.IsRendering = true;
 
 
                         //ニコスクリプトが存在したら対象の
-                        if(NicoScript != null) {
+                        //if (NicoScript != null) {
 
-                            foreach(var script in NicoScript) {
+                        //    foreach (var script in NicoScript) {
 
-                                if(script.AffectOtherComments) {
+                        //        if (script.AffectOtherComments) {
 
-                                    script.ExecuteIfValidTime(item);
-                                }
-                            }
-                        }
+                        //            script.ExecuteIfValidTime(item);
+                        //        }
+                        //    }
+                        //}
 
-                        if(item.NicoScript != null && !item.NicoScript.AffectOtherComments) {
+                        //if (item.NicoScript != null && !item.NicoScript.AffectOtherComments) {
 
-                            item.NicoScript.Execute(null);
-                            continue;
-                        }
-                        Owner?.Handler?.InvokeScript("CommentViewModel$dispatch", item.ToJson());
+                        //    item.NicoScript.Execute(null);
+                        //    continue;
+                        //}
+                        item.DefaultCommentSize = Settings.Instance.CommentSize;
+                        item.Opacity = Settings.Instance.CommentAlpha / 100.0;
+                        Handler.WebBrowser?.InvokeScript("Comment$Dispatch", item.ToJson());
                     }
                 }
             }
-            CurrentVpos = vpos;
-
-        }
-
-        public async void Refresh() {
-
-            IsActive = true;
-
-            var targetList = CommentListList.Select(e => e.CommentListInstance).ToList();
-
-            CommentListList.Clear();
-
-            //コメントを取得できるやつは取得する
-            foreach (var list in await CommentInstance.RefreshCommentAsync(targetList)) {
-
-                var listlist = new VideoCommentListViewModel(list);
-
-                foreach (var entry in list.CommentList) {
-
-                    listlist.CommentList.Add(new VideoCommentEntryViewModel(this, entry));
-                }
-
-                CommentListList.Add(listlist);
-            }
 
 
-            if (CommentListList.Count > 0) {
-
-                SelectedList = CommentListList.First();
-            }
-
-            IsActive = false;
-            CanComment = true;
-            Owner?.Handler?.InvokeScript("CommentViewModel$initialize");
-            if (CommentVisibility) {
-
-                Owner?.Handler?.InvokeScript("CommentViewModel$show_comment");
-            } else {
-
-                Owner?.Handler?.InvokeScript("CommentViewModel$hide_comment");
-            }
-
-
-        }
-
-        public void ApplyFontSize() {
-
-            Owner?.Handler?.InvokeScript("CommentViewModel$setbasesize", Settings.Instance.CommentSize);
-        }
-
-        public void ToggleAutoScroll() {
-
-            AutoScrollEnabled ^= true;
         }
 
     }
