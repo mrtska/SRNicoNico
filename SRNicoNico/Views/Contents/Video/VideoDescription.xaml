@@ -82,7 +82,9 @@
         <TextBlock Grid.Row="1" Text="{Binding Model.ApiData.PostedAt, StringFormat=yyyy年MM月dd日 HH:mm:ss 投稿}" Margin="5" FontSize="14" />
         <controls:HtmlRenderer HtmlText="{Binding Model.ApiData.Description}" Margin="5,0">
             <controls:HtmlRenderer.Resources>
-                <Style TargetType="{x:Type Hyperlink}" BasedOn="{StaticResource {x:Type Hyperlink}}">
+                <Style TargetType="{x:Type Hyperlink}">
+                    <EventSetter Event="MouseDown" Handler="Hyperlink_MouseDown" />
+                    <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
                     <Setter Property="ToolTipService.ShowDuration" Value="0x7FFFFFFF" />
                     <EventSetter Event="MouseEnter" Handler="Hyperlink_Loaded" />
                 </Style>

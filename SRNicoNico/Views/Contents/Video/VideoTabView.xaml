@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:v="clr-namespace:SRNicoNico.Views"             
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance {x:Type vm:VideoTabViewModel}}">
@@ -18,7 +22,12 @@
             <metro:TabView SelectedIndex="0" Style="{DynamicResource VideoViewHorizontalViewStyle}" Height="38" ItemsSource="{Binding VideoList}" SelectedItem="{Binding SelectedList,Mode=TwoWay}">
                 <metro:TabView.ItemTemplate>
                     <DataTemplate DataType="{x:Type metro:ITabItem}">
-                        <TextBlock Text="{Binding Name}" FontSize="14" Height="38" Width="130" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" />
+                        <Grid Height="38" Width="130" Background="Transparent">
+                            <i:Interaction.Behaviors>
+                                <b:MouseMiddleClickHandleBehavior />
+                            </i:Interaction.Behaviors>
+                            <TextBlock Text="{Binding Name}" FontSize="14" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" />
+                        </Grid>
                     </DataTemplate>
                 </metro:TabView.ItemTemplate>
             </metro:TabView>

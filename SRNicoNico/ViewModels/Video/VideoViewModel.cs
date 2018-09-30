@@ -140,18 +140,33 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public NicoNicoVideo Model { get; set; }
+
+
+        #region Model変更通知プロパティ
+        private NicoNicoVideo _Model;
+
+        public NicoNicoVideo Model {
+            get { return _Model; }
+            set { 
+                if (_Model == value)
+                    return;
+                _Model = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         public VideoViewModel(string url) : base(url) {
 
             VideoUrl = url;
-            Model = new NicoNicoVideo(url);
         }
 
         public async void Initialize() {
 
             IsActive = true;
             Status = "動画情報取得中";
+            Model = new NicoNicoVideo(VideoUrl);
             Status = await Model.GetVideoDataAsync();
 
             if(Model.ApiData == null) {
@@ -230,6 +245,13 @@ namespace SRNicoNico.ViewModels {
         public void Refresh() {
 
             Html5Handler?.Dispose();
+            Initialize();
+        }
+
+        public void Refresh(string url) {
+
+            Html5Handler?.Dispose();
+            VideoUrl = url;
             Initialize();
         }
 
