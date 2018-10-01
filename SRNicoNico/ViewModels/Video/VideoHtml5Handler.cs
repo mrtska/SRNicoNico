@@ -499,6 +499,8 @@ namespace SRNicoNico.ViewModels {
                 case "ready": // ブラウザ側の準備が出来た
                     WebBrowser.InvokeScript("Video$Initialize", new object[] { ApiData.VideoUrl, 0, Settings.Instance.AutoPlay });
                     Volume = Settings.Instance.Volume;
+                    // 再生速度をUIと同期
+                    WebBrowser?.InvokeScript("Video$SetRate", PlayRate);
                     Owner.PostInitialize();
                     break;
                 case "widtheight":
