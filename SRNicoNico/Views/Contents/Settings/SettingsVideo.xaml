@@ -18,22 +18,13 @@
             <StackPanel>
                 <TextBlock Text="動画設定" FontSize="20" />
                 <StackPanel Margin="5,0,0,0">
-                    <HeaderedContentControl Background="Transparent">
-                        <HeaderedContentControl.Header>
-                            <TextBlock Text="動画情報の位置" FontSize="18" />
-                        </HeaderedContentControl.Header>
-                        <v:SettingsVideoInfoPlacement />
-                    </HeaderedContentControl>
                     <HeaderedContentControl Margin="0,10,0,0">
-                        <HeaderedContentControl.Header>
-                            <TextBlock Text="その他" FontSize="18" />
-                        </HeaderedContentControl.Header>
                         <StackPanel HorizontalAlignment="Left">
                             <CheckBox Content="動画を自動的に再生する" ToolTip="連続再生には適用されません。" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AutoPlay}" />
                             <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AlwaysShowSeekBar}" />
                             <CheckBox Content="動画をクリックしたら一時停止/再生する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=ClickOnPause}" />
-                            <CheckBox Content="レジューム再生を使用する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=UseResumePlay}" />
-                            <CheckBox Content="@ジャンプコマンドを無効にする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=DisableJumpCommand}" ToolTip="連続再生などで鬱陶しい場合は無効にしてください" />
+                            <CheckBox IsEnabled="False" Content="レジューム再生を使用する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=UseResumePlay}" />
+                            <CheckBox IsEnabled="False" Content="@ジャンプコマンドを無効にする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=DisableJumpCommand}" ToolTip="連続再生などで鬱陶しい場合は無効にしてください" />
                             <CheckBox Content="ウィンドウフルスクリーンをデフォルトにする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=UseWindowMode}" />
                         </StackPanel>
                     </HeaderedContentControl>
