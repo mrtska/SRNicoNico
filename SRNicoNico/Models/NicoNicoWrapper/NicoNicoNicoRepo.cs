@@ -954,7 +954,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
     public class NicoNicoNextButtonEntry : INicoRepo { }
 
-    public class NicoNicoNicoRepoResultEntry : INicoRepo {
+    public class NicoNicoNicoRepoResultEntry : NotificationObject, INicoRepo {
 
         //ニコレポの固有ID
         public string Id { get; set; }
@@ -976,7 +976,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //内容のURL
         public string ContentUrl { get; set; }
 
-        public bool IsWatched { get; set; }
+
+        #region IsWatched変更通知プロパティ
+        private bool _IsWatched;
+
+        public bool IsWatched {
+            get { return _IsWatched; }
+            set { 
+                if (_IsWatched == value)
+                    return;
+                _IsWatched = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         public string SenderName { get; set; }
 
@@ -998,6 +1012,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public string CommunityUrl { get {
                 return "http://com.nicovideo.jp/community/" + CommunityId;
             }
+        }
+
+        public void Open() {
+
+            IsWatched = true;
+            NicoNicoOpener.Open(ContentUrl);
         }
     }
 

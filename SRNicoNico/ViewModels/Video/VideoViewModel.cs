@@ -205,6 +205,9 @@ namespace SRNicoNico.ViewModels {
                 if(Model.ApiData.IsNeedPayment) {
 
                     App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.VideoPaymentView), new VideoPaymentViewModel(this), TransitionMode.NewOrActive));
+                } else {
+
+                    App.ViewModelRoot.History.Refresh();
                 }
             }
         }

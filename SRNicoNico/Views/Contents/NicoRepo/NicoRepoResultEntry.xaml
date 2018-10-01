@@ -16,7 +16,7 @@
              d:DataContext="{d:DesignInstance {x:Type m:NicoNicoNicoRepoResultEntry}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
-            <a:NicoNicoOpenAction Url="{Binding ContentUrl}" />
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.ContextMenu>

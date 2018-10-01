@@ -29,19 +29,19 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         //URLから適当なViewを開く
         public static TabItemViewModel Open(string url) {
 
-            if(url.StartsWith("http://www.nicovideo.jp/watch/")) {
+            if(url.Contains("www.nicovideo.jp/watch/")) {
 
                 var vm = new VideoViewModel(url);
                 App.ViewModelRoot.MainContent.AddVideoView(vm);
                 return vm;
             }
-            if(url.StartsWith("http://www.nicovideo.jp/user/")) {
+            if(url.Contains("www.nicovideo.jp/user/")) {
 
                 var vm = new UserViewModel(url);
                 App.ViewModelRoot.MainContent.AddUserTab(vm);
                 return vm;
             }
-            if(url.StartsWith("http://www.nicovideo.jp/mylist/")) {
+            if(url.Contains("www.nicovideo.jp/mylist/")) {
 
                 var vm = new PublicMylistViewModel(url);
                 App.ViewModelRoot.MainContent.AddUserTab(vm);
