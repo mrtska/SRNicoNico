@@ -124,7 +124,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         }
                     }
                 }
-            } catch(Exception) {
+            } catch(Exception e) {
+                ;
             }
         }
     }

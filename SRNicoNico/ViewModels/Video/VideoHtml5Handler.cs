@@ -296,17 +296,14 @@ namespace SRNicoNico.ViewModels {
         //新仕様動画で使う
         private Timer DmcHeartBeatTimer;
 
-        private readonly VideoViewModel Owner;
-        private readonly NicoNicoWatchApi ApiData;
+        private VideoViewModel Owner;
+        private NicoNicoWatchApi ApiData;
         
 
         private VideoCommentViewModel Comment;
 
-        public VideoHtml5Handler(VideoViewModel vm, NicoNicoWatchApi api) {
+        public VideoHtml5Handler() {
 
-            Owner = vm ?? throw new ArgumentNullException(nameof(vm));
-            ApiData = api ?? throw new ArgumentNullException(nameof(api));
-            Initialize();
         }
 
         private async void ReestablishDmcSession() {
@@ -353,8 +350,10 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        private async void Initialize() {
+        internal async void Initialize(VideoViewModel vm, NicoNicoWatchApi api) {
 
+            Owner = vm ?? throw new ArgumentNullException(nameof(vm));
+            ApiData = api ?? throw new ArgumentNullException(nameof(api));
             if (ApiData.DmcHeartbeatRequired) {
 
                 CurrentVideoQuality = ApiData.DmcInfo.Videos.First();
@@ -367,7 +366,13 @@ namespace SRNicoNico.ViewModels {
             WebBrowser = new WebBrowser();
             CoInternetSetFeatureEnabled(FEATURE_LOCALMACHINE_LOCKDOWN, SET_FEATURE_ON_PROCESS, false);
 
-            ContentControl.Content = WebBrowser;
+            if(IsFullScreen) {
+
+                FullScreenContentControl.Content = WebBrowser;
+            } else {
+
+                ContentControl.Content = WebBrowser;
+            }
             WebBrowser.ObjectForScripting = new ObjectForScripting(this);
             WebBrowser.Navigate(GetHtml5PlayerPath());
         }
@@ -494,6 +499,7 @@ namespace SRNicoNico.ViewModels {
                 case "ready": // ブラウザ側の準備が出来た
                     WebBrowser.InvokeScript("Video$Initialize", new object[] { ApiData.VideoUrl, 0, Settings.Instance.AutoPlay });
                     Volume = Settings.Instance.Volume;
+                    Owner.PostInitialize();
                     break;
                 case "widtheight":
                     Resolution = args;
@@ -570,7 +576,7 @@ namespace SRNicoNico.ViewModels {
                             Resume();
                         } else {
 
-                            if (IsFullScreen/* && !Owner.IsPlayList()*/) {
+                            if (IsFullScreen && !Owner.IsPlayList) {
 
                                 ReturnToNormalScreen();
                             }
@@ -580,6 +586,7 @@ namespace SRNicoNico.ViewModels {
                             //現在再生位置を初期化する
                             //WatchiApiInstance.RecordPlaybackPositionAsync(ApiData, 0);
                         }
+                        Owner.VideoEnd();
                         break;
                     }
                 case "showcontroller": {

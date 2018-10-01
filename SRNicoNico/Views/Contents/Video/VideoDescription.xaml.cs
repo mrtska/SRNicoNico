@@ -33,7 +33,7 @@ namespace SRNicoNico.Views {
 
                     var time = url.Substring(1);
 
-                    vm?.Html5Handler?.Seek(NicoNicoUtil.ConvertTime((time)));
+                    vm?.Html5Handler?.Seek(NicoNicoUtil.ConvertTime(time));
                 } else {
 
                     if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftShift) || NicoNicoOpener.GetType(e.Uri.OriginalString) != NicoNicoUrlType.Video) {

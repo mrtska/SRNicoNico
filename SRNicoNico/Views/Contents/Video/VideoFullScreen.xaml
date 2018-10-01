@@ -23,6 +23,7 @@
         PreviewKeyUp="Window_PreviewKeyUp"
         Foreground="{DynamicResource ForegroundBrushKey}"
         Title="{Binding Model.ApiData.Title}"
+        WindowStartupLocation="CenterOwner"
         x:Name="window">
     <Grid>
         <Grid.RowDefinitions>
@@ -307,12 +308,13 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
-                    <TextBlock Grid.Row="2" Text="{Binding ApiData.Video.PostedDateTime, StringFormat=yyyy年MM月dd日 HH:mm:ss 投稿}" Margin="10,0,0,0" FontSize="20" />
+                    <TextBlock Grid.Row="2" Text="{Binding Model.ApiData.PostedAt, StringFormat=yyyy年MM月dd日 HH:mm:ss 投稿}" Margin="10,0,0,0" FontSize="20" />
                     <controls:HtmlRenderer Grid.Row="3" HtmlText="{Binding Model.ApiData.Description}" FontSize="20" Margin="10,0">
                         <controls:HtmlRenderer.Resources>
-                            <Style TargetType="{x:Type Hyperlink}" BasedOn="{StaticResource {x:Type Hyperlink}}">
+                            <Style TargetType="{x:Type Hyperlink}">
                                 <Setter Property="ToolTipService.ShowDuration" Value="0x7FFFFFFF" />
                                 <EventSetter Event="MouseEnter" Handler="Hyperlink_Loaded" />
+                                <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
                             </Style>
                         </controls:HtmlRenderer.Resources>
                     </controls:HtmlRenderer>

@@ -67,25 +67,25 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-#endregion
+        #endregion
 
-    #region SelectedPlayList変更通知プロパティ
-        private PlayListEntryViewModel _SelectedPlayList;
+        #region SelectedPlayList変更通知プロパティ
+            private PlayListEntryViewModel _SelectedPlayList;
 
-        public PlayListEntryViewModel SelectedPlayList {
-            get { return _SelectedPlayList; }
-            set {
-                if(_SelectedPlayList == value ||  value == null)
-                    return;
-                Jump(value);
-                _SelectedPlayList = value;
-                RaisePropertyChanged();
+            public PlayListEntryViewModel SelectedPlayList {
+                get { return _SelectedPlayList; }
+                set {
+                    if(_SelectedPlayList == value ||  value == null)
+                        return;
+                    Jump(value);
+                    _SelectedPlayList = value;
+                    RaisePropertyChanged();
+                }
             }
-        }
-    #endregion
+        #endregion
 
 
-    #region IsRepeat変更通知プロパティ
+         #region IsRepeat変更通知プロパティ
         private bool _IsRepeat;
 
         public bool IsRepeat {
@@ -189,36 +189,35 @@ namespace SRNicoNico.ViewModels {
         //指定したプレイリストエントリに飛ぶ
         public void Jump(PlayListEntryViewModel entry) {
 
-            //if(Video == null) {
+            if (Video == null) {
 
-            //    Video = new VideoViewModel(entry.ContentUrl);
-            //    Video.VideoEnded += (obj, e) => {
+                Video = new VideoViewModel(entry.ContentUrl);
+                Video.VideoEnded += (obj, e) => {
 
-            //        if(Video.IsRepeat) {
+                    if (Video.Html5Handler.IsRepeat) {
 
-            //            return;
-            //        }
+                        return;
+                    }
 
-            //        if(SelectedPlayList == PlayList.Last() && !IsRepeat) {
+                    if (SelectedPlayList == PlayList.Last() && !IsRepeat) {
 
-            //            if(Video.IsFullScreen) {
+                        if (Video.Html5Handler.IsFullScreen) {
 
-            //                Window.GetWindow(Video.FullScreenWebBrowser)?.Close();
-            //            }
-            //        } else {
+                            Window.GetWindow(Video.Html5Handler.WebBrowser)?.Close();
+                        }
+                    } else {
 
-            //            Next();
-            //        }
-            //    };
-            //    Video.CloseRequest += (obj, e) => {
+                        Next();
+                    }
+                };
+                Video.CloseRequest += (obj, e) => {
 
-            //        App.ViewModelRoot.MainContent.RemoveUserTab(this);
-            //    };
-            //} else {
+                    App.ViewModelRoot.MainContent.RemoveUserTab(this);
+                };
+            } else {
 
-            //    Video.VideoUrl = entry.ContentUrl;
-            //    Video.Initialize();
-            //}
+                Video.Initialize(entry.ContentUrl);
+            }
         }
         
         public void DragOver(IDropInfo dropInfo) {
@@ -244,12 +243,11 @@ namespace SRNicoNico.ViewModels {
 
             var itemsControl = dropInfo.VisualTarget as ItemsControl;
             if(itemsControl != null) {
-                var editableItems = itemsControl.Items as IEditableCollectionView;
-                if(editableItems != null) {
+                if (itemsControl.Items is IEditableCollectionView editableItems) {
                     var newItemPlaceholderPosition = editableItems.NewItemPlaceholderPosition;
-                    if(newItemPlaceholderPosition == NewItemPlaceholderPosition.AtBeginning && insertIndex == 0) {
+                    if (newItemPlaceholderPosition == NewItemPlaceholderPosition.AtBeginning && insertIndex == 0) {
                         ++insertIndex;
-                    } else if(newItemPlaceholderPosition == NewItemPlaceholderPosition.AtEnd && insertIndex == itemsControl.Items.Count) {
+                    } else if (newItemPlaceholderPosition == NewItemPlaceholderPosition.AtEnd && insertIndex == itemsControl.Items.Count) {
                         --insertIndex;
                     }
                 }

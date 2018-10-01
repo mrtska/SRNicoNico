@@ -138,6 +138,11 @@ namespace SRNicoNico.ViewModels {
             }
 
             SelectedList = CommentList.SingleOrDefault(e => e.ListInstance.Composite.IsDefaultPostTarget);
+            IsActive = false;
+        }
+
+        public void PostInitialize() {
+
 
             Handler.WebBrowser?.InvokeScript("Comment$Initialize");
             ApplyCommentConfiguration();
@@ -149,8 +154,8 @@ namespace SRNicoNico.ViewModels {
                 Handler.WebBrowser?.InvokeScript("Comment$Hide");
             }
             Handler.AttachComment(this);
-            IsActive = false;
         }
+
 
         public void ApplyCommentConfiguration() {
 

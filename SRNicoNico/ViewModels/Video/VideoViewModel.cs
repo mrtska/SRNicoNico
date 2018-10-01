@@ -10,6 +10,21 @@ using System.Windows.Input;
 namespace SRNicoNico.ViewModels {
     public class VideoViewModel : TabItemViewModel {
 
+        public event EventHandler CloseRequest;
+
+        public event EventHandler VideoEnded;
+        internal void VideoEnd() {
+
+            VideoEnded?.Invoke(this, EventArgs.Empty);
+        }
+        internal bool IsPlayList {
+
+            get {
+                //プレイリストはこのイベントを使う
+                //もうちょっとなんとかならんかったんかな・・・
+                return VideoEnded != null;
+            }
+        }
         #region VideoUrl変更通知プロパティ
         private string _VideoUrl;
 
@@ -51,7 +66,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
         #endregion
-
 
         #region Mylist変更通知プロパティ
         private VideoMylistViewModel _Mylist;
@@ -108,7 +122,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region Favorited変更通知プロパティ
         private bool _Favorited;
 
@@ -140,8 +153,6 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-
-
         #region Model変更通知プロパティ
         private NicoNicoVideo _Model;
 
@@ -160,6 +171,14 @@ namespace SRNicoNico.ViewModels {
         public VideoViewModel(string url) : base(url) {
 
             VideoUrl = url;
+            Html5Handler = new VideoHtml5Handler();
+        }
+
+        public void Initialize(string url) {
+
+            VideoUrl = url;
+            Html5Handler?.Dispose();
+            Initialize();
         }
 
         public async void Initialize() {
@@ -175,7 +194,7 @@ namespace SRNicoNico.ViewModels {
             } else {
 
                 Name = Model.ApiData.Title;
-                Html5Handler = new VideoHtml5Handler(this, Model.ApiData);
+                Html5Handler.Initialize(this, Model.ApiData);
                 Comment = new VideoCommentViewModel(Model.ApiData, Html5Handler);
                 Mylist = new VideoMylistViewModel(this);
 
@@ -188,6 +207,14 @@ namespace SRNicoNico.ViewModels {
                     App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.VideoPaymentView), new VideoPaymentViewModel(this), TransitionMode.NewOrActive));
                 }
             }
+        }
+
+        /// <summary>
+        /// WebBrowserコントロールの初期化が終わった後呼ばれる
+        /// </summary>
+        internal void PostInitialize() {
+
+            Comment.PostInitialize();
         }
 
         public void TogglePlay() {
@@ -258,7 +285,14 @@ namespace SRNicoNico.ViewModels {
         public void Close() {
 
             Html5Handler?.Dispose();
-            App.ViewModelRoot.MainContent.RemoveVideoView(this);
+            if (IsPlayList) {
+
+                CloseRequest?.Invoke(this, EventArgs.Empty);
+            } else {
+
+                //VideoViewから削除 VideoViewに無かったらスルーされる
+                App.ViewModelRoot.MainContent.RemoveVideoView(this);
+            }
         }
 
         public override void KeyUp(KeyEventArgs e) {

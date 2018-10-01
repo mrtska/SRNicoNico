@@ -9,6 +9,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Navigation;
 
 namespace SRNicoNico.Views {
     public partial class VideoFullScreen : Window {
@@ -48,6 +49,25 @@ namespace SRNicoNico.Views {
             if (DataContext is VideoViewModel vm) {
 
                 vm.KeyUp(e);
+            }
+        }
+
+        public void OpenHyperLink(object sender, RequestNavigateEventArgs e) {
+
+            var url = e.Uri.OriginalString;
+
+            if (DataContext is VideoViewModel vm) {
+
+                if (url.StartsWith("#")) {
+
+                    var time = url.Substring(1);
+
+                    vm?.Html5Handler?.Seek(NicoNicoUtil.ConvertTime(time));
+                } else {
+
+                    //URLを書き換えて再読込
+                    vm.Refresh(e.Uri.OriginalString);
+                }
             }
         }
 

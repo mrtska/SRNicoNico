@@ -184,6 +184,9 @@ namespace SRNicoNico.Views.Controls {
                         try {
 
                             StoryBoardImage = Imaging.CreateBitmapSourceFromHBitmap(hBitMap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                        } catch(Exception ee) {
+
+                            ;
                         } finally {
 
                             DeleteObject(hBitMap);
