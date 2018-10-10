@@ -629,7 +629,7 @@ namespace SRNicoNico.ViewModels {
 
         public void Dispose() {
 
-            WebBrowser.Dispose();
+            WebBrowser?.Dispose();
             WebBrowser = null;
             DmcHeartBeatTimer?.Dispose();
             DmcHeartBeatTimer = null;

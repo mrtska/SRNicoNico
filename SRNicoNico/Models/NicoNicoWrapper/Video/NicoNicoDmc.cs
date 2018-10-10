@@ -161,7 +161,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     return;
                 }
-                SessionApi = DynamicJson.Parse(a).data;
+
+                var json = DynamicJson.Parse(a);
+
+                if(json.data()) {
+
+                    SessionApi = json.data;
+                }
 
                 return;
             } catch (RequestFailed) {
