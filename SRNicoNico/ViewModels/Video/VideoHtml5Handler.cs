@@ -375,7 +375,7 @@ namespace SRNicoNico.ViewModels {
                 ContentControl.Content = WebBrowser;
             }
             WebBrowser.ObjectForScripting = new ObjectForScripting(this);
-            WebBrowser.Navigate(GetHtml5PlayerPath());
+            WebBrowser.Navigate(new Uri(GetHtml5PlayerPath()));
         }
 
         public void Resume() {
