@@ -406,13 +406,7 @@ namespace SRNicoNico.ViewModels {
                     ToggleMute();
                     break;
                 case Key.F:
-                    if (Settings.Instance.UseWindowMode ^ e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control)) {
-
-                        Html5Handler?.EnterWindowFullScreen();
-                    } else {
-
-                        Html5Handler?.ToggleFullscreen();
-                    }
+                    Html5Handler?.ToggleFullscreen();
                     break;
                 case Key.S:
                     Restart();

@@ -5,6 +5,7 @@ using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Views.Controls;
 using System;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -438,7 +439,13 @@ namespace SRNicoNico.ViewModels {
                 ReturnToNormalScreen();
             } else {
 
-                EnterFullScreen();
+                if (Settings.Instance.UseWindowMode) {
+
+                    EnterWindowFullScreen();
+                } else {
+
+                    EnterFullScreen();
+                }
             }
         }
 
@@ -617,24 +624,7 @@ namespace SRNicoNico.ViewModels {
         private string GetHtml5PlayerPath() {
 
             var cur = NicoNicoUtil.CurrentDirectory;
-            return cur + "Html/videohtml5.html";
-        }
-
-        private string GetFlashPlayerPath() {
-
-            var cur = NicoNicoUtil.CurrentDirectory;
-            return cur + "Html/videoflash.html";
-        }
-        private string GetSWFPlayerPath() {
-
-            var cur = NicoNicoUtil.CurrentDirectory;
-            return cur + "Html/videoswf.html";
-        }
-
-        private string GetRTMPPlayerPath() {
-
-            var cur = NicoNicoUtil.CurrentDirectory;
-            return cur + "Html/videortmp.html";
+            return Path.Combine(cur, "Html/videohtml5.html");
         }
 
         public void Dispose() {
