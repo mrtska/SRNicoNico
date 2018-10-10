@@ -1173,7 +1173,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Html\videoflashplayer.ts" />
     <TypeScriptCompile Include="Html\videoplayer.ts" />
     <None Include="Html\jquery-keyframes.d.ts" />
     <None Include="Html\jquery.d.ts" />

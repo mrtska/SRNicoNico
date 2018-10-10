@@ -221,7 +221,7 @@ namespace SRNicoNico.Comment {
 
             //コメントレイヤーに追加
             //先に追加しないとclientWidthなどが正しく取得できない そりゃそうだ
-            this.Layer.appendChild(entry.Element);
+            entry.Element = this.Layer.appendChild(entry.Element) as HTMLSpanElement;
 
             //描画中リストに追加
             this.RenderingCommentList.push(entry);
@@ -292,22 +292,19 @@ namespace SRNicoNico.Comment {
                 $(entry.Element).keyframes({
                     "0%": {
 
-                        //初期値をgetXで取得する しないとシークした時に全てのコメントが右から始まってしまって気持ち悪い
-                        opacity: 0
+                        opacity: GetVideo().Video.paused ? entry.Opacity : 0
                     },
                     "2%, 98%": {
 
-                        //初期値をgetXで取得する しないとシークした時に全てのコメントが右から始まってしまって気持ち悪い
                         opacity: entry.Opacity
                     },
                     "100%": {
 
-                        //終わりはコメントの横幅を-にしたもの つまりコメントが見えなくなるまで
                         opacity: 0
                     },
                 }, {
 
-                        duration: this.getDuration(entry, GetVideo().getVpos()),  //コメント表示時間 普通は4秒
+                        duration: this.getDuration(entry, GetVideo().getVpos()) - 300,  //コメント表示時間
                         easing: "linear",
                         count: 1    //ループされても困る
                     }, () => {
@@ -371,7 +368,7 @@ namespace SRNicoNico.Comment {
 
 
                     //同じコメントナンバーだったらやり直し
-                    if (target.Number == entry.Number || target.IsUploader != entry.IsUploader) {
+                    if (target.Number == entry.Number && target.IsUploader == entry.IsUploader) {
 
                         continue;
                     }
@@ -387,7 +384,6 @@ namespace SRNicoNico.Comment {
                             //上下コメントはどう頑張っても入らないのでMath.randomでテキトーな位置に描画する
                             if (offsetY + target.Element.clientHeight > entry.getTop()) {
 
-
                                 if (target.Position == "shita") {
 
                                     offsetY = entry.getTop() - target.Element.clientHeight - 1;
@@ -402,7 +398,7 @@ namespace SRNicoNico.Comment {
 
                                 if (target.Position == "ue") {
 
-                                    offsetY = entry.getTop() + entry.Element.clientHeight + 1;
+                                    offsetY = entry.getTop() + target.Element.clientHeight + 1;
 
                                     if (offsetY + target.Element.clientHeight > window.innerHeight) {
 

@@ -217,7 +217,7 @@ namespace SRNicoNico.ViewModels {
                     }
 
                     //投稿者コメントでかつニコスクリプトだったら
-                    if (item.IsUploader/* && item.NicoScript != null && item.NicoScript.AffectOtherComments*/) {
+                    if (item.IsUploader && (item.Content.StartsWith("/") || item.Content.StartsWith("@"))/* && item.NicoScript != null && item.NicoScript.AffectOtherComments*/) {
 
                         continue;
                     }

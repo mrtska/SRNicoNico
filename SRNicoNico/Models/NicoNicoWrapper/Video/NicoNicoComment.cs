@@ -93,18 +93,38 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
                 array.Add(new { ping = new { content = "ps:" + PacketId % IdLimit } });
 
-                object thread = new {
+                object thread = null;
 
-                    fork = composite.Fork ? 1 : 0,
-                    language = 0,
-                    nicoru = 0,
-                    scores = 1,
-                    thread = composite.Id,
-                    user_id = ApiData.ViewerInfo.Id,
-                    userkey = ApiData.UserKey,
-                    version = "20090904",
-                    with_global = 1
-                };
+                if(composite.Fork) {
+
+                    thread = new {
+
+                        fork = 1,
+                        language = 0,
+                        nicoru = 0,
+                        scores = 1,
+                        thread = composite.Id,
+                        user_id = ApiData.ViewerInfo.Id,
+                        userkey = ApiData.UserKey,
+                        version = "20090904",
+                        with_global = 1,
+                        res_from = -1000
+                    };
+                } else {
+
+                    thread = new {
+
+                        fork = 0,
+                        language = 0,
+                        nicoru = 0,
+                        scores = 1,
+                        thread = composite.Id,
+                        user_id = ApiData.ViewerInfo.Id,
+                        userkey = ApiData.UserKey,
+                        version = "20090904",
+                        with_global = 1
+                    };
+                }
 
                 var threadkey = "";
                 var force184 = "";

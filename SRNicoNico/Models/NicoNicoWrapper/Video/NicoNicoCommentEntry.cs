@@ -134,67 +134,68 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //Mailをバラして各パラメータに入れる
         internal void DisassembleMail() {
 
-            if (Mail.Contains("ue")) {
-
-                Position = "ue";
-                Duration = 3000;
-            } else if (Mail.Contains("shita")) {
-
-                Position = "shita";
-                Duration = 3000;
-            } else {
-
-                Position = "naka";
-                Duration = 4000;
-            }
+            Position = "naka";
+            Duration = 4000;
             Vend = Vpos + (Duration / 10);
-
             CommentColor = "#FFFFFF";
+            CommentSize = "regular";
+            Font = "defont";
 
-            //色を反映させる
-            foreach (var key in NicoNicoOfficialCommentColor.Keys) {
+            foreach (var m in Mail.Split(' ')) {
 
-                if (Mail.Contains(key)) {
 
-                    CommentColor = NicoNicoOfficialCommentColor[key];
-                    break;
+                if (m == "ue") {
+
+                    Position = "ue";
+                    Duration = 3000;
                 }
-            }
+                if (m  == "shita") {
 
-            //#xxxxxxで指定された色を取得する
-            var result = TripletColor.Match(Mail);
-            if (result.Success) {
+                    Position = "shita";
+                    Duration = 3000;
+                }
 
-                CommentColor = result.Value;
-            }
+                //色を反映させる
+                foreach (var key in NicoNicoOfficialCommentColor.Keys) {
 
-            //コメントサイズ
-            if (Mail.Contains("big")) {
+                    if (m == key) {
 
-                CommentSize = "big";
-            } else if (Mail.Contains("small")) {
+                        CommentColor = NicoNicoOfficialCommentColor[key];
+                        break;
+                    }
+                }
 
-                CommentSize = "small";
-            } else {
+                //#xxxxxxで指定された色を取得する
+                var result = TripletColor.Match(m);
+                if (result.Success) {
 
-                CommentSize = "regular";
-            }
+                    CommentColor = result.Value;
+                }
 
-            //フォントを設定
-            if (Mail.Contains("gothic")) {
+                //コメントサイズ
+                if (m == "big") {
 
-                Font = "gothic";
-            } else if (Mail.Contains("mincho")) {
+                    CommentSize = "big";
+                }
+                if (m == "small") {
 
-                Font = "mincho";
-            } else {
+                    CommentSize = "small";
+                }
 
-                Font = "defont";
-            }
+                //フォントを設定
+                if (m == "gothic") {
 
-            if (Mail.Contains("full")) {
+                    Font = "gothic";
+                }
+                if (m == "mincho") {
 
-                Full = true;
+                    Font = "mincho";
+                }
+
+                if (m == "full") {
+
+                    Full = true;
+                }
             }
 
             //投稿者コメントの秒数指定コメント
