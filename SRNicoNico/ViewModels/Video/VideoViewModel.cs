@@ -190,7 +190,6 @@ namespace SRNicoNico.ViewModels {
 
             if(Model.ApiData == null) {
 
-                IsActive = false;
             } else {
 
                 Name = Model.ApiData.Title;

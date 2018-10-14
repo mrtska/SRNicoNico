@@ -380,11 +380,11 @@ namespace SRNicoNico.ViewModels {
 
         public void Resume() {
 
-            WebBrowser.InvokeScript("Video$Resume");
+            WebBrowser?.InvokeScript("Video$Resume");
         }
         public void Pause() {
 
-            WebBrowser.InvokeScript("Video$Pause");
+            WebBrowser?.InvokeScript("Video$Pause");
         }
 
         internal void Seek(double pos) {
@@ -396,7 +396,7 @@ namespace SRNicoNico.ViewModels {
 
                 pos = ApiData.Duration;
             }
-            WebBrowser.InvokeScript("Video$Seek", new object[] { pos });
+            WebBrowser?.InvokeScript("Video$Seek", new object[] { pos });
         }
         private void SetVolumeIcon() {
 
