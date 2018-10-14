@@ -114,7 +114,7 @@ namespace SRNicoNico.Views.Controls {
             var hwnd = ((HwndSource)PresentationSource.FromVisual(Child)).Handle;
 
             if (GetWindowRect(hwnd, out var rect)) {
-                SetWindowPos(hwnd, Topmost ? -2 : -1, rect.Left, rect.Top, (int)Width, (int)Height, SWP_NOACTIVATE);
+                SetWindowPos(hwnd, Topmost ? -1 : -2, rect.Left, rect.Top, (int)Width, (int)Height, SWP_NOACTIVATE);
             }
         }
 

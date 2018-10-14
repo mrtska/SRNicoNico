@@ -398,7 +398,7 @@ namespace SRNicoNico.Comment {
 
                                 if (target.Position == "ue") {
 
-                                    offsetY = entry.getTop() + target.Element.clientHeight + 1;
+                                    offsetY = entry.getTop() + entry.Element.clientHeight + 1;
 
                                     if (offsetY + target.Element.clientHeight > window.innerHeight) {
 
