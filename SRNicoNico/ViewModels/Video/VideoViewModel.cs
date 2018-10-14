@@ -197,7 +197,11 @@ namespace SRNicoNico.ViewModels {
                 Comment = new VideoCommentViewModel(Model.ApiData, Html5Handler);
                 Mylist = new VideoMylistViewModel(this);
 
-                Favorited = Model.ApiData.UploaderInfo.Followed;
+                if(Model.ApiData.UploaderInfo != null) {
+
+                    Favorited = Model.ApiData.UploaderInfo.Followed;
+                }
+
                 IsActive = false;
                 ControllerState = true;
 
