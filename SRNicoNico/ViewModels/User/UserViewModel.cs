@@ -7,7 +7,7 @@ using System.Windows.Input;
 namespace SRNicoNico.ViewModels {
     public class UserViewModel : TabItemViewModel {
 
-        private static readonly Regex UserUrlPattern = new Regex(@"http://www.nicovideo.jp/user/\d+");
+        private static readonly Regex UserUrlPattern = new Regex(@"https://www.nicovideo.jp/user/\d+");
 
         #region UserPageUrl変更通知プロパティ
         private string _UserPageUrl;

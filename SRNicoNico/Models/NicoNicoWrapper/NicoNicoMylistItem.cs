@@ -13,40 +13,40 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoMylistItem {
 
         //とりあえずマイリスト取得Api
-        private const string DefListGetApi = "http://www.nicovideo.jp/api/deflist/list";
+        private const string DefListGetApi = "https://www.nicovideo.jp/api/deflist/list";
 
         //とりあえずマイリスト登録Api
-        private const string DefListAddApi = "http://www.nicovideo.jp/api/deflist/add";
+        private const string DefListAddApi = "https://www.nicovideo.jp/api/deflist/add";
 
         //とりあえずマイリスト複製Api
-        private const string DefListCopyApi = "http://www.nicovideo.jp/api/deflist/copy";
+        private const string DefListCopyApi = "https://www.nicovideo.jp/api/deflist/copy";
 
         //とりあえずマイリスト移動Api
-        private const string DefListMoveApi = "http://www.nicovideo.jp/api/deflist/move";
+        private const string DefListMoveApi = "https://www.nicovideo.jp/api/deflist/move";
 
         //とりあえずマイリストコメント更新Api
-        private const string DefListUpdateApi = "http://www.nicovideo.jp/api/deflist/update";
+        private const string DefListUpdateApi = "https://www.nicovideo.jp/api/deflist/update";
 
         //とりあえずマイリスト削除Api
-        private const string DefListDeleteApi = "http://www.nicovideo.jp/api/deflist/delete";
+        private const string DefListDeleteApi = "https://www.nicovideo.jp/api/deflist/delete";
 
         //マイリスト取得Api
-        private const string MylistGetApi = "http://www.nicovideo.jp/api/mylist/list";
+        private const string MylistGetApi = "https://www.nicovideo.jp/api/mylist/list";
 
         //マイリスト追加Api
-        private const string MylistAddApi = "http://www.nicovideo.jp/api/mylist/add";
+        private const string MylistAddApi = "https://www.nicovideo.jp/api/mylist/add";
 
         //マイリスト複製Api
-        private const string MylistCopyApi = "http://www.nicovideo.jp/api/mylist/copy";
+        private const string MylistCopyApi = "https://www.nicovideo.jp/api/mylist/copy";
 
         //マイリスト移動Api
-        private const string MylistMoveApi = "http://www.nicovideo.jp/api/mylist/move";
+        private const string MylistMoveApi = "https://www.nicovideo.jp/api/mylist/move";
 
         //マイリストコメント更新Api
-        private const string MylistUpdateApi = "http://www.nicovideo.jp/api/mylist/update";
+        private const string MylistUpdateApi = "https://www.nicovideo.jp/api/mylist/update";
 
         //マイリスト削除Api
-        private const string MylistDeleteApi = "http://www.nicovideo.jp/api/mylist/delete";
+        private const string MylistDeleteApi = "https://www.nicovideo.jp/api/mylist/delete";
 
         private TabItemViewModel Owner;
 
@@ -401,7 +401,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             var text = "&";
 
-            foreach(MylistResultEntryViewModel vm in source) {
+            foreach(var vm in source) {
 
                 if(vm.Item is NicoNicoMylistVideoEntry) {
 
@@ -450,7 +450,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 data.UpdateTime = (long)entry.update_time;
 
                                 data.VideoId = item.video_id;
-                                data.ContentUrl = "http://www.nicovideo.jp/watch/" + data.VideoId;
+                                data.ContentUrl = "https://www.nicovideo.jp/watch/" + data.VideoId;
                                 data.Title = HttpUtility.HtmlDecode(item.title);
                                 data.ThumbNailUrl = item.thumbnail_url;
                                 data.FirstRetrieve = (long)item.first_retrieve;

@@ -78,7 +78,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         private RankingTarget Target;
 
-        private const string ApiBaseUrl = "http://www.nicovideo.jp/ranking/{0}/{1}/";
+        private const string ApiBaseUrl = "https://www.nicovideo.jp/ranking/{0}/{1}/";
         private string ApiUrl = string.Empty;
 
         #region RankingList変更通知プロパティ
@@ -162,7 +162,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     var content = ranking.SelectSingleNode("div[@class='itemContent']");
 
-                    item.ContentUrl = "http://www.nicovideo.jp/" + content.SelectSingleNode("p/a").Attributes["href"].Value;
+                    item.ContentUrl = "https://www.nicovideo.jp/" + content.SelectSingleNode("p/a").Attributes["href"].Value;
                     item.Title = content.SelectSingleNode("p/a").InnerText;
 
                     item.Description = content.SelectSingleNode("div[@class='wrap']/p[@class='itemDescription ranking']").InnerText;

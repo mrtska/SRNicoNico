@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoMylist {
 
-        private const string MylistTop = "http://www.nicovideo.jp/my/mylist";
+        private const string MylistTop = "https://www.nicovideo.jp/my/mylist";
 
         //マイリストグループ関連の処理
         public NicoNicoMylistGroup Group { get; private set; }

@@ -17,7 +17,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public async Task<string> Initialize() {
 
-            var query = new GetRequestQuery("http://www.nicovideo.jp/watch/" + VideoId);
+            var query = new GetRequestQuery("https://www.nicovideo.jp/watch/" + VideoId);
             query.AddQuery("mode", "pc_html5");
             query.AddQuery("eco", 0);
             query.AddQuery("playlist_token", PlaylistToken);

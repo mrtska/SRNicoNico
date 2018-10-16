@@ -76,7 +76,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     //h4タグ
                     var h4 = node.SelectSingleNode("div/h4");
 
-                    entry.ContentUrl = "http://www.nicovideo.jp/" + h4.SelectSingleNode("a").Attributes["href"].Value;
+                    entry.ContentUrl = "https://www.nicovideo.jp/" + h4.SelectSingleNode("a").Attributes["href"].Value;
 
                     //名前取得
                     entry.Name = HttpUtility.HtmlDecode(h4.SelectSingleNode("a").InnerText.Trim());

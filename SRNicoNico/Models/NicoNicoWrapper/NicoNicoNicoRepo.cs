@@ -114,11 +114,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 GetRequestQuery query;
                 if (Regex.IsMatch(Type, @"\d+")) {
 
-                    query = new GetRequestQuery("http://www.nicovideo.jp/api/nicorepo/timeline/user/" + Type);
+                    query = new GetRequestQuery("https://www.nicovideo.jp/api/nicorepo/timeline/user/" + Type);
                     query.AddQuery("client_app", "pc_profilerepo");
                 } else {
 
-                    query = new GetRequestQuery("http://www.nicovideo.jp/api/nicorepo/timeline/my/" + Type);
+                    query = new GetRequestQuery("https://www.nicovideo.jp/api/nicorepo/timeline/my/" + Type);
                     query.AddQuery("client_app", "pc_myrepo");
                 }
                 
@@ -137,7 +137,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     item.SenderId = (int)sender.id;
                     item.SenderName = sender.nickname;
-                    item.SenderUrl = "http://www.nicovideo.jp/user/" + sender.id;
+                    item.SenderUrl = "https://www.nicovideo.jp/user/" + sender.id;
                     item.SenderThumbnail = sender.icons.tags.defaultValue.urls.s50x50;
                 }
                 void storeSenderChannel(NicoNicoNicoRepoResultEntry item, dynamic sender) {
@@ -151,7 +151,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     item.SenderId = (int)sender.id;
                     item.SenderName = sender.name;
-                    item.SenderUrl = "http://com.nicovideo.jp/community/" + sender.id;
+                    item.SenderUrl = "https://com.nicovideo.jp/community/" + sender.id;
                     item.SenderThumbnail = sender.thumbnailUrl.small;
                 }
                 void storeCommunity(NicoNicoNicoRepoResultEntry item, dynamic com) {
@@ -174,7 +174,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     item.VideoThumbnail = video.thumbnailUrl.normal;
                     item.VideoTitle = video.title;
                     item.VideoWatchPageId = video.videoWatchPageId;
-                    item.ContentUrl = "http://www.nicovideo.jp/watch/" + item.VideoWatchPageId;
+                    item.ContentUrl = "https://www.nicovideo.jp/watch/" + item.VideoWatchPageId;
                 }
                 void storeLive(NicoNicoNicoRepoLiveEntry item, dynamic program) {
 
@@ -183,7 +183,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     item.IsPayProgram = program.isPayProgram;
                     item.ProgramThumbnail = program.thumbnailUrl;
                     item.ProgramTitle = program.title;
-                    item.ContentUrl = "http://live.nicovideo.jp/watch/" + item.ProgramId;
+                    item.ContentUrl = "https://live.nicovideo.jp/watch/" + item.ProgramId;
                 }
 
                 if(!json.data()) {
@@ -554,7 +554,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 storeSenderUser(item, sender);
                                 storeArticle(item as NicoNicoNicoRepoGenericEntry, article);
 
-                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが マイリスト <a href=\"http://www.nicovideo.jp/mylist/" + entry.mylist.id + "\">{1}</a> にブロマガを登録しました。", item.SenderName, entry.mylist.name);
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが マイリスト <a href=\"https://www.nicovideo.jp/mylist/" + entry.mylist.id + "\">{1}</a> にブロマガを登録しました。", item.SenderName, entry.mylist.name);
                                 break;
                             }
                         case "nicovideo.user.mylist.add.book": {
@@ -571,7 +571,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 };
                                 storeSenderUser(item, sender);
 
-                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが マイリスト <a href=\"http://www.nicovideo.jp/mylist/" + mylist.id + "\">{1}</a> に書籍を登録しました。", item.SenderName, mylist.name);
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが マイリスト <a href=\"https://www.nicovideo.jp/mylist/" + mylist.id + "\">{1}</a> に書籍を登録しました。", item.SenderName, mylist.name);
                                 break;
                             }
                         case "nicovideo.user.mylist.add.manga.episode": {
@@ -589,7 +589,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 };
                                 storeSenderUser(item, sender);
 
-                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが マイリスト <a href=\"http://www.nicovideo.jp/mylist/" + mylist.id + "\">{1}</a> にマンガ <a href=\"" + manga.urls.pcUrl + "\">{2}</a> を登録しました。", item.SenderName, mylist.name, manga.title);
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが マイリスト <a href=\"https://www.nicovideo.jp/mylist/" + mylist.id + "\">{1}</a> にマンガ <a href=\"" + manga.urls.pcUrl + "\">{2}</a> を登録しました。", item.SenderName, mylist.name, manga.title);
                                 break;
                             }
                         case "nicovideo.user.mylist.add.video": {
@@ -602,7 +602,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 storeSenderUser(item, sender);
                                 storeVideo(item as NicoNicoNicoRepoVideoEntry, video);
 
-                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが マイリスト <a href=\"http://www.nicovideo.jp/mylist/" + mylist.id + "\">{1}</a> に動画を登録しました。", item.SenderName, mylist.name);
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが マイリスト <a href=\"https://www.nicovideo.jp/mylist/" + mylist.id + "\">{1}</a> に動画を登録しました。", item.SenderName, mylist.name);
                                 break;
                             }
                         case "nicovideo.user.mylist.followed_announce": {
@@ -613,11 +613,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 item = new NicoNicoNicoRepoGenericEntry() {
 
                                     ContentTitle = mylist.name,
-                                    ContentUrl = "http://www.nicovideo.jp/mylist/" + mylist.id
+                                    ContentUrl = "https://www.nicovideo.jp/mylist/" + mylist.id
                                 };
                                 storeSenderUser(item, sender);
 
-                                item.ComputedTitle = string.Format("あなたの マイリスト <a href=\"http://www.nicovideo.jp/mylist/" + mylist.id + "\">{0}</a> を <a href=\"" + item.SenderUrl + "\">{1}</a> さんがフォローしました。", mylist.name, item.SenderName);
+                                item.ComputedTitle = string.Format("あなたの マイリスト <a href=\"https://www.nicovideo.jp/mylist/" + mylist.id + "\">{0}</a> を <a href=\"" + item.SenderUrl + "\">{1}</a> さんがフォローしました。", mylist.name, item.SenderName);
                                 break;
                             }
                         case "nicovideo.user.nicogame.update":
@@ -630,7 +630,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                                     ContentTitle = game.title,
                                     ContentId = game.id,
-                                    ContentUrl = "http://game.nicovideo.jp/atsumaru/games/" + game.id,
+                                    ContentUrl = "https://game.nicovideo.jp/atsumaru/games/" + game.id,
                                     ContentThumbnail = game.thumbnailUrl
                                 };
                                 storeSenderUser(item, sender);
@@ -685,8 +685,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                                     ContentId = stamp.code,
                                     ContentTitle = stamp.name,
-                                    ContentThumbnail = "http://nicovideo.cdn.nimg.jp/uni/img/stamp/" + stamp.code + ".gif",
-                                    ContentUrl = "http://www.nicovideo.jp/stamp/" + stamp.code
+                                    ContentThumbnail = "https://nicovideo.cdn.nimg.jp/uni/img/stamp/" + stamp.code + ".gif",
+                                    ContentUrl = "https://www.nicovideo.jp/stamp/" + stamp.code
                                 };
                                 storeSenderUser(item, sender);
 

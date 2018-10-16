@@ -7,7 +7,7 @@ using System.Web;
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoLiveNotify : NotificationObject {
 
-        private const string LiveUrl = "http://www.nicovideo.jp/my/live";
+        private const string LiveUrl = "https://www.nicovideo.jp/my/live";
 
         #region NowLiveList変更通知プロパティ
         private ObservableSynchronizedCollection<NicoNicoLiveNotifyEntry> _NowLiveList;

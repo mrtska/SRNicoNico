@@ -10,19 +10,19 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoMylistGroup {
 
         //マイリスト一覧取得Api
-        private const string MylistGroupApi = "http://www.nicovideo.jp/api/mylistgroup/list";
+        private const string MylistGroupApi = "https://www.nicovideo.jp/api/mylistgroup/list";
 
         //マイリスト作成Api
-        private const string MylistGroupCreateApi = "http://www.nicovideo.jp/api/mylistgroup/add";
+        private const string MylistGroupCreateApi = "https://www.nicovideo.jp/api/mylistgroup/add";
 
         //マイリスト更新Api
-        private const string MylistGroupUpdateApi = "http://www.nicovideo.jp/api/mylistgroup/update";
+        private const string MylistGroupUpdateApi = "https://www.nicovideo.jp/api/mylistgroup/update";
 
         //マイリスト削除Api
-        private const string MylistGroupDeleteApi = "http://www.nicovideo.jp/api/mylistgroup/delete";
+        private const string MylistGroupDeleteApi = "https://www.nicovideo.jp/api/mylistgroup/delete";
 
         //とりあえずマイリスト取得Api
-        private const string DefListGetApi = "http://www.nicovideo.jp/api/deflist/list";
+        private const string DefListGetApi = "https://www.nicovideo.jp/api/deflist/list";
 
         private TabItemViewModel Owner;
 

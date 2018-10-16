@@ -25,21 +25,21 @@
             <MenuItem Header="WebViewで開く">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <a:OpenWebViewAction Url="{Binding Cmsid, StringFormat='http://www.nicovideo.jp/watch/{0}'}" />
+                        <a:OpenWebViewAction Url="{Binding Cmsid, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
             <MenuItem Header="ブラウザで開く">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <ei:LaunchUriOrFileAction Path="{Binding Cmsid,StringFormat='http://www.nicovideo.jp/watch/{0}'}" />
+                        <ei:LaunchUriOrFileAction Path="{Binding Cmsid,StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
             <MenuItem Header="URLをクリップボードにコピー">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <a:CopyToClipBoardAction Text="{Binding Cmsid,StringFormat='http://www.nicovideo.jp/watch/{0}'}"/>
+                        <a:CopyToClipBoardAction Text="{Binding Cmsid,StringFormat='https://www.nicovideo.jp/watch/{0}'}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>

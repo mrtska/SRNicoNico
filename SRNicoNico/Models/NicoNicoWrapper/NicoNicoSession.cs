@@ -17,11 +17,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //サインインURL
         private const string SignInURL = "https://secure.nicovideo.jp/secure/login?site=niconico";
 
-        //アカウント権限
+        //User Agent
         private const string UserAgent = "SRNicoNico/1.0 (@m__gl user/23425727)";
 
         //ニコニコトップ
-        private const string NicoNicoTop = "http://www.nicovideo.jp/";
+        private const string NicoNicoTop = "https://www.nicovideo.jp/";
 
         //Http通信用
         private HttpClient HttpClient;
@@ -148,8 +148,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             System.Diagnostics.Debug.WriteLine("Access:" + response.RequestMessage.RequestUri + " ResponseCode:" + response.StatusCode);
 
+            if(response.StatusCode == HttpStatusCode.Redirect) {
+
+                return await GetResponseAsync(response.Headers.Location.OriginalString);
+            }
+
             //レスポンスヘッダにユーザーIDが無かったらログイン失敗
-            if (response.RequestMessage.RequestUri.OriginalString.Contains("http://www.nicovideo.jp/") && !response.Headers.Contains("x-niconico-id")) {
+            if (response.RequestMessage.RequestUri.OriginalString.Contains("www.nicovideo.jp/") && !response.Headers.Contains("x-niconico-id")) {
 
                 App.ViewModelRoot.CurrentUser = await App.ViewModelRoot.SignIn.SignInAsync();
                 //もう一度同じリクエストを飛ばす
@@ -180,7 +185,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         //ユーザーIDを取得
                         UserId = response.Headers.GetValues("x-niconico-id").Single();
 
-                        var cookie = HttpHandler.CookieContainer.GetCookies(new Uri("http://nicovideo.jp/")).Cast<Cookie>()
+                        var cookie = HttpHandler.CookieContainer.GetCookies(new Uri("https://nicovideo.jp/")).Cast<Cookie>()
                                             .Where(c => c.Name == "user_session" && c.Path == "/").OrderByDescending(c => c.Expires.Ticks).First();
 
                         if(cookie != null && cookie.Expires != null) {

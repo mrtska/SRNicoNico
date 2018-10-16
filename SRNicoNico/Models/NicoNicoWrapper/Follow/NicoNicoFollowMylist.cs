@@ -49,7 +49,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             try {
 
                 //取得するURL
-                var url = "http://www.nicovideo.jp/my/fav/mylist";
+                var url = "https://www.nicovideo.jp/my/fav/mylist";
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
 
@@ -79,7 +79,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 MylistList.Clear();
 
                 //取得するURL
-                var url = "http://www.nicovideo.jp/my/fav/mylist?page=" + page;
+                var url = "https://www.nicovideo.jp/my/fav/mylist?page=" + page;
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
 
@@ -91,7 +91,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     var mylist = new NicoNicoFollowMylistEntry();
 
                     mylist.Title = HttpUtility.HtmlDecode(outer.SelectSingleNode("h5/a").InnerText.Trim());
-                    mylist.MylistPageUrl = "http://www.nicovideo.jp" + outer.SelectSingleNode("h5/a").Attributes["href"].Value;
+                    mylist.MylistPageUrl = "https://www.nicovideo.jp" + outer.SelectSingleNode("h5/a").Attributes["href"].Value;
 
                     //URLがJSになってる時は削除されている
                     if (mylist.MylistPageUrl.Contains("javascript:")) {

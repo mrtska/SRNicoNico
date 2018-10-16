@@ -119,7 +119,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     entry.ViewCounter = int.Parse(metadata.SelectSingleNode("li[@class='play']").InnerText.Trim().Split(':')[1].Replace(",", ""));
                     entry.CommentCounter = int.Parse(metadata.SelectSingleNode("li[@class='comment']").InnerText.Trim().Split(':')[1].Replace(",", ""));
                     entry.MylistCounter = int.Parse(metadata.SelectSingleNode("li[@class='mylist']/a").InnerText.Trim().Replace(",", ""));
-                    entry.ContentUrl = "http://www.nicovideo.jp/watch/" + entry.Cmsid;
+                    entry.ContentUrl = "https://www.nicovideo.jp/watch/" + entry.Cmsid;
 
                     NicoNicoUtil.ApplyLocalHistory(entry);
                     UserVideo.Add(entry);

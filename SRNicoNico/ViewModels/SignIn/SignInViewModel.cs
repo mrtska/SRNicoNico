@@ -68,7 +68,7 @@ namespace SRNicoNico.ViewModels {
                                     continue;
                                 }
 
-                                App.SetCookie(new Uri("http://nicovideo.jp/"), "user_session=" + session.Key);
+                                App.SetCookie(new Uri("https://nicovideo.jp/"), "user_session=" + session.Key);
 
                                 var status = await session.VerifySignInAsync();
                                 if(status == SigninStatus.Success) {
@@ -89,8 +89,6 @@ namespace SRNicoNico.ViewModels {
                     //例外吐いて読み込めなかったらファイルを消して作り直す
                 } catch(Exception) {
 
-                    //同じ名前のディレクトリなんか作るやつおらんやろ～
-                    //いたら非常に困ります
                     if(Directory.Exists(NicoNicoUtil.OptionDirectory + UserSessionName)) {
 
                         Directory.Delete(NicoNicoUtil.OptionDirectory + UserSessionName, true);
@@ -106,15 +104,9 @@ namespace SRNicoNico.ViewModels {
                 }
             } else {
 
-
-
                 return new List<NicoNicoSessionUser>() { await SignInAsync() };
             }
         }
-
-
-
-
 
         public async Task<NicoNicoSessionUser> SignInAsync() {
 
@@ -122,7 +114,7 @@ namespace SRNicoNico.ViewModels {
                 //前のCookieを削除
                 var expiration = DateTime.UtcNow - TimeSpan.FromDays(1);
                 string str = string.Format("{0}=; expires={1}; path=/; domain=.nicovideo.jp", "user_session", expiration.ToString("R"));
-                App.SetCookie(new Uri("http://nicovideo.jp/"), str);
+                App.SetCookie(new Uri("https://nicovideo.jp/"), str);
             }
             
             var userSession = "";
@@ -133,7 +125,7 @@ namespace SRNicoNico.ViewModels {
             pollingTimer.Elapsed += async (o, e) => {
 
                 //Cookieをブラウザから取得
-                var cookie = App.GetCookie(new Uri("http://nicovideo.jp/"));
+                var cookie = App.GetCookie(new Uri("https://nicovideo.jp/"));
 
                 foreach(var entry in cookie.Split(';')) {
 
@@ -148,10 +140,8 @@ namespace SRNicoNico.ViewModels {
 
                         var session = new NicoNicoSession(userSession);
 
-                        //Sucessにならないのはおかしいんだけどね
                         var status = await session.VerifySignInAsync();
 
-                        //メンテナンス中なら落とす 迷惑になると思うし
                         if(status == SigninStatus.ServiceUnavailable) {
 
                             MessageBox.Show("メンテナンス中か、サーバーが落ちています。");
@@ -164,7 +154,7 @@ namespace SRNicoNico.ViewModels {
                             //前のCookieを削除
                             var expiration = DateTime.UtcNow - TimeSpan.FromDays(1);
                             string str = string.Format("{0}=; expires={1}; path=/; domain=.nicovideo.jp", "user_session", expiration.ToString("R"));
-                            App.SetCookie(new Uri("http://nicovideo.jp/"), str);
+                            App.SetCookie(new Uri("https://nicovideo.jp/"), str);
                         }
 
                         if(status == SigninStatus.Success) {
@@ -185,10 +175,9 @@ namespace SRNicoNico.ViewModels {
 
                 var session = new NicoNicoSession(userSession);
 
-                //Sucessにならないのはおかしいんだけどね
                 var status = await session.VerifySignInAsync();
 
-                //メンテナンス中なら落とす 迷惑になると思うし
+                //メンテナンス中なら落とす
                 if(status == SigninStatus.ServiceUnavailable) {
 
                     MessageBox.Show("メンテナンス中か、サーバーが落ちています。");
@@ -230,18 +219,14 @@ namespace SRNicoNico.ViewModels {
 
             var str = json.ToString();
 
-            var writer = new StreamWriter(NicoNicoUtil.OptionDirectory + UserSessionName);
+            using (var writer = new StreamWriter(NicoNicoUtil.OptionDirectory + UserSessionName)) {
 
-            writer.AutoFlush = true;
-            writer.WriteLine(Convert.ToBase64String(Encoding.UTF8.GetBytes(str)));
-
-            writer.Close();
-
+                writer.WriteLine(Convert.ToBase64String(Encoding.UTF8.GetBytes(str)));
+            }
         }
         public void ExitButtonDown() {
 
             Application.Current.Shutdown();
         }
-
     }
 }

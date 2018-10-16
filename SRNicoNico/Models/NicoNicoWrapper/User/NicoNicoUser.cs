@@ -15,10 +15,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private static readonly Regex GlobalHashRegex = new Regex(@"Globals\.hash.+'(.+?)';");
 
         //ユーザーリムーブAPI
-        private const string UserUnFollowApi = "http://www.nicovideo.jp/api/watchitem/delete";
+        private const string UserUnFollowApi = "https://www.nicovideo.jp/api/watchitem/delete";
 
         //ユーザーフォローAPI
-        private const string UserFollowApi = "http://www.nicovideo.jp/api/watchitem/add";
+        private const string UserFollowApi = "https://www.nicovideo.jp/api/watchitem/add";
 
         #region UserInfo変更通知プロパティ
         private NicoNicoUserEntry _UserInfo;

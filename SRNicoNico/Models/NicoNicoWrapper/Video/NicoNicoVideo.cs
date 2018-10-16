@@ -137,7 +137,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     api.UploaderInfo = new UploaderInfo {
                         Id = json.owner.id,
                         ThumbnailUrl = json.owner.iconURL,
-                        UploaderUrl = "http://www.nicovideo.jp/user/" + json.owner.id,
+                        UploaderUrl = "https://www.nicovideo.jp/user/" + json.owner.id,
                         IsChannel = false
                     };
                     api.UploaderInfo.Name = $"<a href='{api.UploaderInfo.UploaderUrl}'>{json.owner.nickname}</a>";

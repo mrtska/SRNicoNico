@@ -883,7 +883,6 @@
     <Compile Include="Models\NicoNicoWrapper\User\NicoNicoUser.cs" />
     <Compile Include="Models\NicoNicoWrapper\Video\NicoNicoStoryBoard.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoLiveNotify.cs" />
-    <Compile Include="Models\NicoNicoWrapper\NicoNicoWatchApi.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoSearch.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoSession.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoSessionUser.cs" />

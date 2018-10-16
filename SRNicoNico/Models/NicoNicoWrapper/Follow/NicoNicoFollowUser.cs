@@ -46,7 +46,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             try {
 
                 //取得するURL
-                var url = "http://www.nicovideo.jp/my/fav/user";
+                var url = "https://www.nicovideo.jp/my/fav/user";
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
 
@@ -75,7 +75,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 UserList.Clear();
                 //取得するURL
-                var url = "http://www.nicovideo.jp/my/fav/user?page=" + page;
+                var url = "https://www.nicovideo.jp/my/fav/user?page=" + page;
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
 
@@ -87,7 +87,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     var user = new NicoNicoFollowUserEntry();
 
                     user.Name = outer.SelectSingleNode("div/h5/a").InnerText.Trim();
-                    user.UserPageUrl = "http://www.nicovideo.jp" + outer.SelectSingleNode("div/h5/a").Attributes["href"].Value;
+                    user.UserPageUrl = "https://www.nicovideo.jp" + outer.SelectSingleNode("div/h5/a").Attributes["href"].Value;
 
                     user.ThumbNailUrl = outer.SelectSingleNode("div/a/img").Attributes["src"].Value;
 

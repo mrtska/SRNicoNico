@@ -14,7 +14,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoSearch : NotificationObject {
 
         //検索API
-        private const string SearchURL = "http://ext.nicovideo.jp/api/search/";
+        private const string SearchURL = "https://ext.nicovideo.jp/api/search/";
 
         //検索結果
         #region SearchResult変更通知プロパティ
@@ -97,7 +97,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         };
 
                         node.FirstRetrieve = node.FirstRetrieve.Replace('-', '/');
-                        node.ContentUrl = "http://www.nicovideo.jp/watch/" + node.Cmsid;
+                        node.ContentUrl = "https://www.nicovideo.jp/watch/" + node.Cmsid;
 
                         NicoNicoUtil.ApplyLocalHistory(node);
 

@@ -94,7 +94,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var ret = new NicoNicoPublicMylistGroupEntry();
 
-                ret.OwnerName = @"<a href=""http://www.nicovideo.jp/user/" + userid + @""">" + nickname + "</a> さんの公開マイリスト";
+                ret.OwnerName = @"<a href=""https://www.nicovideo.jp/user/" + userid + @""">" + nickname + "</a> さんの公開マイリスト";
                 ret.Name = mylistname;
                 ret.Description = description;
 
@@ -151,7 +151,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 data.UpdateTime = (long)entry.update_time;
 
                                 data.VideoId = item.video_id;
-                                data.ContentUrl = "http://www.nicovideo.jp/watch/" + data.VideoId;
+                                data.ContentUrl = "https://www.nicovideo.jp/watch/" + data.VideoId;
                                 data.Title = HttpUtility.HtmlDecode(item.title);
                                 data.ThumbNailUrl = item.thumbnail_url;
                                 data.FirstRetrieve = (long)item.first_retrieve;

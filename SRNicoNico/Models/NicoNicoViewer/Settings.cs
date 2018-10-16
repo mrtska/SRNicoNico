@@ -1204,7 +1204,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
 
         #region WebViewDefaultPage変更通知プロパティ
-        private string _WebViewDefaultPage = "http://www.nicovideo.jp/";
+        private string _WebViewDefaultPage = "https://www.nicovideo.jp/";
 
         public string WebViewDefaultPage {
             get { return _WebViewDefaultPage; }

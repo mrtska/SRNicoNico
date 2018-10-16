@@ -14,10 +14,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoHistory : NotificationObject {
 
         //視聴履歴ページ
-        private const string HistoryUrl = "http://www.nicovideo.jp/my/history";
+        private const string HistoryUrl = "https://www.nicovideo.jp/my/history";
 
         //視聴履歴を返すAPI 全部はとってきてくれないのでボツ
-        private const string HistoryApiUrl = "http://www.nicovideo.jp/api/videoviewhistory/list";
+        private const string HistoryApiUrl = "https://www.nicovideo.jp/api/videoviewhistory/list";
 
         private static readonly string LocalHistoryLocation = NicoNicoUtil.OptionDirectory + "localhistory";
 
@@ -83,7 +83,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         //削除・非公開の動画はURLにドメインが含まれていない
                         if (item.ThumbNailUrl.Contains("deleted")) {
 
-                            item.ThumbNailUrl = "http://www.nicovideo.jp/" + item.ThumbNailUrl;
+                            item.ThumbNailUrl = "https://www.nicovideo.jp/" + item.ThumbNailUrl;
                         }
 
                         item.Title = entry.SelectSingleNode("div/h5/a").InnerText.Trim();

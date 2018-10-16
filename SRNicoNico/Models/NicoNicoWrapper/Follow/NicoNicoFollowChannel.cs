@@ -47,7 +47,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             try {
 
                 //取得するURL
-                var url = "http://www.nicovideo.jp/my/channel";
+                var url = "https://www.nicovideo.jp/my/channel";
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
 
@@ -78,7 +78,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 ChannelList.Clear();
 
                 //取得するURL
-                var url = "http://www.nicovideo.jp/my/channel?page=" + page;
+                var url = "https://www.nicovideo.jp/my/channel?page=" + page;
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
 
