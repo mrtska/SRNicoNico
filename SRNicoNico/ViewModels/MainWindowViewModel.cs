@@ -145,8 +145,14 @@ namespace SRNicoNico.ViewModels {
 
         public async void Initialize() {
 
+            // 起動時にアップデートがあるか確認する
+            if (await UpdateChecker.IsUpdateAvailable()) {
+
+                Messenger.Raise(new TransitionMessage(typeof(Views.UpdateFoundView), new UpdaterViewModel(), TransitionMode.Modal));
+            }
+
             //自動的にサインインする サインイン情報がなければ
-            foreach(var user in await SignIn.AutoSignIn()) {
+            foreach (var user in await SignIn.AutoSignIn()) {
 
                 UserList.Add(user);
             }
@@ -174,12 +180,6 @@ namespace SRNicoNico.ViewModels {
 #if DEBUG
             MainContent.AddSystemTab(new DeployViewModel());
 #endif
-
-            // 起動時にアップデートがあるか確認する
-            if (await UpdateChecker.IsUpdateAvailable()) {
-
-                Messenger.Raise(new TransitionMessage(typeof(Views.UpdateFoundView), new UpdaterViewModel(), TransitionMode.Modal));
-            }
 
             var args = Environment.GetCommandLineArgs();
 
