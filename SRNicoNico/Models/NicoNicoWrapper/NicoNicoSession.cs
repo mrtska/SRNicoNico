@@ -9,6 +9,7 @@ using System.Net;
 using System.Threading.Tasks;
 using SRNicoNico.Models.NicoNicoViewer;
 using System.IO;
+using System.Windows;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
 
@@ -156,9 +157,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             //レスポンスヘッダにユーザーIDが無かったらログイン失敗
             if (response.RequestMessage.RequestUri.OriginalString.Contains("www.nicovideo.jp/") && !response.Headers.Contains("x-niconico-id")) {
 
-                App.ViewModelRoot.CurrentUser = await App.ViewModelRoot.SignIn.SignInAsync();
-                //もう一度同じリクエストを飛ばす
-                return await GetResponseAsync(response.RequestMessage);
+                //App.ViewModelRoot.CurrentUser = await App.ViewModelRoot.SignIn.SignInAsync();
+                MessageBox.Show("セッションが切れました。再度ログインしてください。メンテナンスに入った場合もこの通知が出る場合があります。");
+                Environment.Exit(0);
+                return null;
             } else {
 
                 return response;
@@ -172,7 +174,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //ニコニコTOPにレスポンスヘッダを要求する
                 var message = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
 
-                using(var response = await HttpClient.SendAsync(message, HttpCompletionOption.ResponseHeadersRead)) {
+                using(var response = await GetResponseAsync(message)) {
 
                     //成功したら
                     if(response.StatusCode == HttpStatusCode.OK) {
@@ -192,6 +194,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                             return SigninStatus.Success;
                         }
+                    }
+
+                    if(response.StatusCode == HttpStatusCode.ServiceUnavailable) {
+
+                        return SigninStatus.ServiceUnavailable;
                     }
                 }
 

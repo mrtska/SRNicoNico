@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using Codeplex.Data;
 using Livet;
 using Livet.Messaging;
 using Livet.Messaging.Windows;
 using SRNicoNico.Models.NicoNicoWrapper;
-using Codeplex.Data;
-using System.Timers;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace SRNicoNico.ViewModels {
 
-    
+
     public class SignInViewModel : ViewModel {
 
         private const string UserSessionName = "user.session";
@@ -120,7 +119,7 @@ namespace SRNicoNico.ViewModels {
             var userSession = "";
 
             //ブラウザのCookieをポーリングしてログインしてるか確認
-            var pollingTimer = new Timer(1000);
+            var pollingTimer = new System.Timers.Timer(1000);
 
             pollingTimer.Elapsed += async (o, e) => {
 
@@ -180,8 +179,14 @@ namespace SRNicoNico.ViewModels {
                 //メンテナンス中なら落とす
                 if(status == SigninStatus.ServiceUnavailable) {
 
+#pragma warning disable CS4014 // この呼び出しを待たないため、現在のメソッドの実行は、呼び出しが完了する前に続行します
+                    Task.Run(() => {
+
+                        Thread.Sleep(8000);
+                        Environment.Exit(0);
+                    });
+#pragma warning restore CS4014 // この呼び出しを待たないため、現在のメソッドの実行は、呼び出しが完了する前に続行します
                     MessageBox.Show("メンテナンス中か、サーバーが落ちています。");
-                    Environment.Exit(0);
                 }
 
                 //失敗した時に前のセッションを消す
