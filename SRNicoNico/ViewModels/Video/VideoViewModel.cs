@@ -401,6 +401,7 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case Key.Space:
                     TogglePlay();
+                    e.Handled = true;
                     break;
                 case Key.R:
                     ToggleRepeat();

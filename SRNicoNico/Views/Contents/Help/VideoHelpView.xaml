@@ -35,7 +35,7 @@
                     ショートカットがかなりありますのでご活用ください。<LineBreak /><LineBreak />
                     ツイートボタンを押すとポップアップでツイート画面が出ます。<LineBreak />
                     ツイートするとポップアップは自動的に閉じられます。<LineBreak />
-                    ツイートしない場合はEscで閉じられます。<LineBreak /><LineBreak />
+                    ツイートしない場合はEscか再度ボタンを押すと閉じられます。<LineBreak /><LineBreak />
                     フルスクリーンボタンを右クリックするとウィンドウフルスクリーンか通常か選べます。<LineBreak /><LineBreak />
                     184コメントはデフォルトがOFFなので気にする方はコメントデコレータを開いて設定してください。<LineBreak /><LineBreak />
                     再生速度を等倍に戻したい場合は、スライダーを右クリックしてください。<LineBreak />
@@ -51,11 +51,11 @@
                         M：ミュート切り替え<LineBreak/>
                         R：リピート切り替え<LineBreak/>
                         F：フルスクリーン切り替え<LineBreak/>
-                        Shift+F：ウィンドウフルスクリーン切り替え<LineBreak/>
+                        Ctrl+F：ウィンドウフルスクリーン切り替え<LineBreak/>
                         ↑↓：音量＋ー5<LineBreak/>
                         ←→：＋ー10秒シーク<LineBreak/>
                         Enter：コメントパレット表示<LineBreak/>
-                        Esc：コメントパレット非表示、フルスクリーン解除<LineBreak/>
+                        Esc：フルスクリーン解除<LineBreak/>
                         Ctrl+W：動画を閉じる<LineBreak />
                         フルスクリーン時、D長押し：動画説明文を押している間表示する
                 </TextBlock>

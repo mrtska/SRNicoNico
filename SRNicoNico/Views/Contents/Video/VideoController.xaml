@@ -217,7 +217,7 @@
             </controls:ManagedPopup>
             <metro:PromptTextBox x:Name="comment" Grid.Column="1" Prompt="コメントを入力..."  BorderThickness="1,0,1,0" Text="{Binding Text,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Behaviors>
-                    <b:TextBoxEnterKeyBehavior Binding="{Binding}" MethodName="Post"  />
+                    <b:TextBoxEnterKeyBehavior Binding="{Binding}" MethodName="Post" />
                 </i:Interaction.Behaviors>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="GotKeyboardFocus">

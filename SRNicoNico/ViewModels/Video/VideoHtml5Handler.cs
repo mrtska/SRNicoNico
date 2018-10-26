@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
     public class VideoHtml5Handler : NotificationObject, IObjectForScriptable, IDisposable {
@@ -78,7 +79,7 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
                 if(value) {
 
-                    Resume();
+                     Resume();
                 } else {
 
                     Pause();
@@ -425,10 +426,10 @@ namespace SRNicoNico.ViewModels {
             SetVolumeIcon();
             if (IsMute) {
 
-                WebBrowser.InvokeScript("Video$SetVolume", 0);
+                InvokeScript("Video$SetVolume", "0");
             } else {
 
-                WebBrowser.InvokeScript("Video$SetVolume", Volume / 100.0);
+                InvokeScript("Video$SetVolume", (Volume / 100.0).ToString());
             }
         }
 
@@ -439,7 +440,7 @@ namespace SRNicoNico.ViewModels {
                 ReturnToNormalScreen();
             } else {
 
-                if (Settings.Instance.UseWindowMode) {
+                if (Settings.Instance.UseWindowMode ^ Keyboard.IsKeyDown(Key.LeftCtrl)) {
 
                     EnterWindowFullScreen();
                 } else {
@@ -493,7 +494,26 @@ namespace SRNicoNico.ViewModels {
             Window.GetWindow(FullScreenContentControl)?.Close();
         }
 
+        public void InvokeScript(string func, params object[] args) {
 
+            //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
+            if (WebBrowser != null && WebBrowser.IsLoaded) {
+                try {
+
+                    if (args.Length == 0) {
+
+                        WebBrowser.Dispatcher.BeginInvoke((Action)(() => WebBrowser.InvokeScript(func)));
+                    } else {
+
+                        WebBrowser.Dispatcher.BeginInvoke((Action)(() => WebBrowser.InvokeScript(func, args)));
+                    }
+                } catch (Exception e) when (e is COMException || e is ObjectDisposedException) {
+
+                    Console.WriteLine("COMException：" + func);
+                    return;
+                }
+            }
+        }
 
         public void AttachComment(VideoCommentViewModel comment) {
 
@@ -504,10 +524,10 @@ namespace SRNicoNico.ViewModels {
 
             switch(cmd) {
                 case "ready": // ブラウザ側の準備が出来た
-                    WebBrowser.InvokeScript("Video$Initialize", new object[] { ApiData.VideoUrl, 0, Settings.Instance.AutoPlay || Owner.IsPlayList });
+                    InvokeScript("Video$Initialize", ApiData.VideoUrl, 0, Settings.Instance.AutoPlay || Owner.IsPlayList);
                     Volume = Settings.Instance.Volume;
                     // 再生速度をUIと同期
-                    WebBrowser?.InvokeScript("Video$SetRate", PlayRate);
+                    InvokeScript("Video$SetRate", PlayRate);
                     Owner.PostInitialize();
                     break;
                 case "widtheight":
