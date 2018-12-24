@@ -34,6 +34,8 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
+        private string PreviousSearchText;
+
         #region SearchType変更通知プロパティ
         private SearchType _SearchType;
 
@@ -85,6 +87,7 @@ namespace SRNicoNico.ViewModels {
 
             Status = "検索中:" + SearchText;
 
+            PreviousSearchText = SearchText;
             CurrentPage = 1;
             Search(SearchText);
         }
@@ -145,17 +148,13 @@ namespace SRNicoNico.ViewModels {
 
         public void SearchPage(int page) {
 
-            Search(SearchText, page);
+            Search(PreviousSearchText, page);
         }
 
         public void SearchWithHistory(string tex) {
 
             SearchText = tex;
             Search();
-        }
-
-        public void SearchWithHistory() {
-
         }
 
         #region DeleteHistoryCommand
@@ -183,10 +182,8 @@ namespace SRNicoNico.ViewModels {
 
                 ret.Add(s);
             }
-
             Settings.Instance.SearchHistory = ret;
         }
-
 
         public void MakePlayList() {
 
