@@ -3,6 +3,7 @@ using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
 using System;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoRanking : NotificationObject {
@@ -165,14 +166,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     item.ContentUrl = "https://www.nicovideo.jp/" + content.SelectSingleNode("p/a").Attributes["href"].Value;
                     item.Title = content.SelectSingleNode("p/a").InnerText;
 
-                    item.Description = content.SelectSingleNode("div[@class='wrap']/p[@class='itemDescription ranking']").InnerText;
+                    item.Description = HttpUtility.HtmlDecode(content.SelectSingleNode("div[@class='wrap']/p[@class='itemDescription ranking']").InnerText);
 
                     var itemdata = content.SelectSingleNode("div[@class='itemData']/ul");
 
                     item.ViewCount = itemdata.SelectSingleNode("li[@class='count view']/span").InnerText;
                     item.CommentCount = itemdata.SelectSingleNode("li[@class='count comment']/span").InnerText;
                     item.MylistCount = itemdata.SelectSingleNode("li[@class='count mylist']/span").InnerText;
-                    
 
                     NicoNicoUtil.ApplyLocalHistory(item);
 
