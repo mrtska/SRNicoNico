@@ -149,7 +149,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             System.Diagnostics.Debug.WriteLine("Access:" + response.RequestMessage.RequestUri + " ResponseCode:" + response.StatusCode);
 
-            if(response.StatusCode == HttpStatusCode.Redirect) {
+            if(response.StatusCode == HttpStatusCode.Redirect || response.StatusCode == HttpStatusCode.Moved) {
 
                 return await GetResponseAsync(response.Headers.Location.OriginalString);
             }
