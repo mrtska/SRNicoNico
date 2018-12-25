@@ -4889,7 +4889,7 @@ namespace SRNicoNico.Views.Converter {
 
                     if (attributeValue != null) {
 
-                        if (Models.NicoNicoViewer.Settings.Instance.Theme == "Dark" && Regex.IsMatch(attributeValue, "#[a-fA-F0-9]+$")) {
+                        if (Models.NicoNicoViewer.Settings.Instance.Theme == "Dark" && Regex.IsMatch(attributeValue, "#[a-fA-F0-9]{1,8}$")) {
 
                             var color = (Color) ColorConverter.ConvertFromString(attributeValue);
                             
