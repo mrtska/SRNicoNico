@@ -35,6 +35,11 @@ namespace SRNicoNico.Video {
                 }
             });
 
+            this.Video.addEventListener("keydown", (e) => {
+
+                e.preventDefault();
+            });
+
             //再生されたらコメントの一時停止を解除してC#側に伝える
             this.Video.addEventListener("play", () => {
 

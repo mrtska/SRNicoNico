@@ -6,10 +6,12 @@
              xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance {x:Type vm:SettingsGeneralViewModel}}">
+             d:DataContext="{d:DesignInstance {x:Type vm:SettingsVideoViewModel}}">
     <ScrollViewer>
         <Grid Margin="10" >
             <Grid.RowDefinitions>
@@ -18,16 +20,23 @@
             <StackPanel>
                 <TextBlock Text="動画設定" FontSize="20" />
                 <StackPanel Margin="5,0,0,0">
-                    <HeaderedContentControl Margin="0,10,0,0">
-                        <StackPanel HorizontalAlignment="Left">
-                            <CheckBox Content="動画を自動的に再生する" ToolTip="連続再生には適用されません。" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AutoPlay}" />
-                            <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AlwaysShowSeekBar}" />
-                            <CheckBox Content="動画をクリックしたら一時停止/再生する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=ClickOnPause}" />
-                            <CheckBox IsEnabled="False" Content="レジューム再生を使用する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=UseResumePlay}" />
-                            <CheckBox IsEnabled="False" Content="@ジャンプコマンドを無効にする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=DisableJumpCommand}" ToolTip="連続再生などで鬱陶しい場合は無効にしてください" />
-                            <CheckBox Content="ウィンドウフルスクリーンをデフォルトにする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=UseWindowMode}" />
+                    <StackPanel HorizontalAlignment="Left" Margin="10,0,0,0">
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="カーソルキーでのシーク量 (秒)：" />
+                            <TextBox Text="{Binding Source={x:Static m:Settings.Instance},Path=VideoSeekAmount, UpdateSourceTrigger=PropertyChanged}" Width="60" MaxLength="3" ToolTip="1 ～ 200">
+                                <i:Interaction.Behaviors>
+                                    <b:TextBoxNumericOnlyBehavior />
+                                </i:Interaction.Behaviors>
+                            </TextBox>
                         </StackPanel>
-                    </HeaderedContentControl>
+                        <CheckBox Content="動画を自動的に再生する" ToolTip="連続再生には適用されません。" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AutoPlay}" />
+                        <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AlwaysShowSeekBar}" />
+                        <CheckBox Content="動画をクリックしたら一時停止/再生する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=ClickOnPause}" />
+                        <CheckBox IsEnabled="False" Content="レジューム再生を使用する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=UseResumePlay}" />
+                        <CheckBox IsEnabled="False" Content="@ジャンプコマンドを無効にする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=DisableJumpCommand}" ToolTip="連続再生などで鬱陶しい場合は無効にしてください" />
+                        <CheckBox Content="ウィンドウフルスクリーンをデフォルトにする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=UseWindowMode}" />
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </Grid>

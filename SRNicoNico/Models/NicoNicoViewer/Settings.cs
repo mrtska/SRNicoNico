@@ -1267,6 +1267,28 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         #endregion
 
 
+        #region VideoSeekAmount変更通知プロパティ
+        private int _VideoSeekAmount = 10;
+
+        public int VideoSeekAmount {
+            get { return _VideoSeekAmount; }
+            set { 
+                if (_VideoSeekAmount == value)
+                    return;
+                if(value < 0) {
+
+                    value = 0;
+                } else if(value > 200) {
+
+                    value = 200;
+                }
+                _VideoSeekAmount = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
 
 
 

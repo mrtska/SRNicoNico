@@ -425,10 +425,10 @@ namespace SRNicoNico.ViewModels {
                     Html5Handler.Volume += 5;
                     break;
                 case Key.Right:
-                    Html5Handler?.Seek(Html5Handler.CurrentTime + 10);
+                    Html5Handler?.Seek(Html5Handler.CurrentTime + Settings.Instance.VideoSeekAmount);
                     break;
                 case Key.Left:
-                    Html5Handler?.Seek(Html5Handler.CurrentTime - 10);
+                    Html5Handler?.Seek(Html5Handler.CurrentTime - Settings.Instance.VideoSeekAmount);
                     break;
                 case Key.C:
                     ToggleComment();

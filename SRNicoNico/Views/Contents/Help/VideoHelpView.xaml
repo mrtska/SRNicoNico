@@ -53,7 +53,7 @@
                         F：フルスクリーン切り替え<LineBreak/>
                         Ctrl+F：ウィンドウフルスクリーン切り替え<LineBreak/>
                         ↑↓：音量＋ー5<LineBreak/>
-                        ←→：＋ー10秒シーク<LineBreak/>
+                        ←→：設定で指定した秒数をシーク (デフォルトは10)<LineBreak/>
                         Enter：コメントパレット表示<LineBreak/>
                         Esc：フルスクリーン解除<LineBreak/>
                         Ctrl+W：動画を閉じる<LineBreak />

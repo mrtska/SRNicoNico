@@ -245,7 +245,7 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _PlayRate = value;
                 RaisePropertyChanged();
-                WebBrowser?.InvokeScript("Video$SetRate", value);
+                InvokeScript("Video$SetRate", value);
             }
         }
         #endregion
@@ -365,7 +365,12 @@ namespace SRNicoNico.ViewModels {
 
             IsRepeat = Settings.Instance.IsRepeat;
 
-            WebBrowser = new WebBrowser();
+            WebBrowser = new WebBrowser() { Focusable = false };
+
+            WebBrowser.PreviewKeyDown += (s, e) => {
+
+                Owner.KeyDown(e);
+            };
             CoInternetSetFeatureEnabled(FEATURE_LOCALMACHINE_LOCKDOWN, SET_FEATURE_ON_PROCESS, false);
 
             if(IsFullScreen) {
