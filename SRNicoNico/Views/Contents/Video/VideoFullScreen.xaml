@@ -256,7 +256,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding Model.ApiData.Title}" FontSize="30" TextWrapping="Wrap"/>
-                    <ItemsControl ItemsSource="{Binding Model.ApiData.Tags}" Background="{DynamicResource AlternationBackgroundBrushKey}">
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Model.ApiData.Tags}" Background="{DynamicResource AlternationBackgroundBrushKey}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type nnw:VideoTag}">
                                 <StackPanel Orientation="Horizontal">

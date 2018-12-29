@@ -329,7 +329,7 @@ namespace SRNicoNico.ViewModels {
 
                 await EstablishDmcSession();
                 // セッションを張り直したのでWebBrowser側に伝える
-                WebBrowser.InvokeScript("Video$Initialize", new object[] { ApiData.VideoUrl, CurrentTime, IsPlaying });
+                InvokeScript("Video$Initialize", new object[] { ApiData.VideoUrl, CurrentTime, IsPlaying });
                 ApplyVolume();
             }
         }
@@ -381,11 +381,11 @@ namespace SRNicoNico.ViewModels {
 
         public void Resume() {
 
-            WebBrowser?.InvokeScript("Video$Resume");
+            InvokeScript("Video$Resume");
         }
         public void Pause() {
 
-            WebBrowser?.InvokeScript("Video$Pause");
+            InvokeScript("Video$Pause");
         }
 
         internal void Seek(double pos) {
@@ -397,7 +397,7 @@ namespace SRNicoNico.ViewModels {
 
                 pos = ApiData.Duration;
             }
-            WebBrowser?.InvokeScript("Video$Seek", new object[] { pos });
+            InvokeScript("Video$Seek", new object[] { pos });
         }
         private void SetVolumeIcon() {
 
@@ -497,7 +497,7 @@ namespace SRNicoNico.ViewModels {
         public void InvokeScript(string func, params object[] args) {
 
             //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
-            if (WebBrowser != null && WebBrowser.IsLoaded) {
+            if (WebBrowser != null && WebBrowser.IsInitialized) {
                 try {
 
                     if (args.Length == 0) {

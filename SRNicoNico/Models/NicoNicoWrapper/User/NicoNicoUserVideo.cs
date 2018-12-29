@@ -106,6 +106,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     var thumb = outer.SelectSingleNode("div[@class='thumbContainer']");
 
                     entry.Cmsid = thumb.SelectSingleNode("a").Attributes["href"].Value.Substring(6);
+                    entry.Cmsid = entry.Cmsid.Split('?')[0];
+
                     entry.ThumbnailUrl = thumb.SelectSingleNode("a/img").Attributes["src"].Value;
                     entry.Length = thumb.SelectSingleNode("span[@class='videoTime']").InnerText.Trim();
 
