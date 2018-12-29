@@ -396,6 +396,9 @@ namespace SRNicoNico.ViewModels {
             }
 
             switch (e.Key) {
+                case Key.Escape:
+                    TweetPopupOpen = false;
+                    break;
                 case Key.F5:
                     Refresh();
                     break;

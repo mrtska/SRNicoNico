@@ -18,9 +18,9 @@
                    FontFamily="{Binding  Source={x:Static m:Settings.Instance},Path=UserSelectedFont,Mode=TwoWay}"
                    d:DataContext="{d:DesignInstance {x:Type vm:MainWindowViewModel}}"
                    Title="{Binding Title}" Height="700" Width="600" 
-                   PreviewKeyDown="MetroWindow_PreviewKeyDown"
+                   KeyDown="MetroWindow_PreviewKeyDown"
                    PreviewMouseDown="MetroWindow_PreviewMouseDown"
-                   PreviewKeyUp="MetroWindow_PreviewKeyUp">
+                   KeyUp="MetroWindow_PreviewKeyUp">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="ContentRendered">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize"/>
