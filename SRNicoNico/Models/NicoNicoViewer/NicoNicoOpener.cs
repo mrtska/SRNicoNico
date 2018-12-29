@@ -1,6 +1,8 @@
 ﻿using SRNicoNico.ViewModels;
 using System;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Windows.Input;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
     public class NicoNicoOpener {
@@ -28,6 +30,13 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         //URLから適当なViewを開く
         public static TabItemViewModel Open(string url) {
+
+            if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
+
+                Process.Start(url);
+                return null;
+            }
+
 
             if(url.Contains("www.nicovideo.jp/watch/")) {
 

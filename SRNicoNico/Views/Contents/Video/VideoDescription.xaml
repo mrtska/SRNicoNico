@@ -44,7 +44,7 @@
                         <Canvas Background="Transparent" Width="14" Height="14" ToolTip="{Binding Name}" Cursor="Hand">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
-                                    <a:OpenWebViewAction Url="{Binding Url}" />
+                                    <a:NicoNicoOpenAction Url="{Binding Url}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <Path Width="14" Height="14" Stretch="Uniform" Data="M10,10v7H90v-7ZM50,17l-5,13h3l5,-13ZM20,30h60v60h-5v-55h-50v55h-5ZM25,58h50v5h-50ZM25,83h50v5h-50Z">
