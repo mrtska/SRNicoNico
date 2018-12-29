@@ -174,7 +174,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //ニコニコTOPにレスポンスヘッダを要求する
                 var message = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
 
-                using(var response = await GetResponseAsync(message)) {
+                using(var response = await HttpClient.SendAsync(message)) {
 
                     //成功したら
                     if(response.StatusCode == HttpStatusCode.OK) {
