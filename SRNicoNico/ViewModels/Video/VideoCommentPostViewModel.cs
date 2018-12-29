@@ -109,7 +109,6 @@ namespace SRNicoNico.ViewModels {
         }
         #endregion
 
-
         #region PostPending変更通知プロパティ
         private bool _PostPending = false;
 
@@ -147,7 +146,8 @@ namespace SRNicoNico.ViewModels {
         public VideoCommentPostViewModel(VideoCommentViewModel vm, NicoNicoWatchApi apiData) {
 
             Owner = vm;
-            Use184 = Settings.Instance.Use184;
+            Use184 = true;
+
             ApiData = apiData;
 
             Initialize();

@@ -215,7 +215,17 @@
                 </i:Interaction.Triggers>
                 <v:VideoCommentDecorator VerticalAlignment="Center" />
             </controls:ManagedPopup>
-            <metro:PromptTextBox x:Name="comment" Grid.Column="1" Prompt="コメントを入力..."  BorderThickness="1,0,1,0" Text="{Binding Text,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <metro:PromptTextBox x:Name="comment" Grid.Column="1"  BorderThickness="1,0,1,0" Text="{Binding Text,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <metro:PromptTextBox.Resources>
+                    <Style TargetType="metro:PromptTextBox">
+                        <Setter Property="Prompt" Value="コメントを入力..." />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Use184}" Value="False">
+                                <Setter Property="Prompt" Value="コメントを入力... (184解除中)" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </metro:PromptTextBox.Resources>
                 <i:Interaction.Behaviors>
                     <b:TextBoxEnterKeyBehavior Binding="{Binding}" MethodName="Post" />
                 </i:Interaction.Behaviors>
