@@ -84,7 +84,7 @@
             <controls:HtmlRenderer.Resources>
                 <Style TargetType="{x:Type Hyperlink}">
                     <EventSetter Event="MouseDown" Handler="Hyperlink_MouseDown" />
-                    <EventSetter Event="RequestNavigate" Handler="OpenHyperLink" />
+                    <EventSetter Event="Click" Handler="OpenHyperLink" />
                     <Setter Property="ToolTipService.ShowDuration" Value="0x7FFFFFFF" />
                     <EventSetter Event="MouseEnter" Handler="Hyperlink_Loaded" />
                 </Style>

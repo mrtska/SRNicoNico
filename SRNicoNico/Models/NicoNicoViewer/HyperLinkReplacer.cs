@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using HtmlAgilityPack;
+using System.Text.RegularExpressions;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
 
@@ -15,7 +16,21 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             //URLをハイパーリンク化する
         public static string Replace(string desc) {
 
-            if(Settings.Instance.EnableUrlLink) {
+            {
+                var doc = new HtmlDocument();
+                doc.LoadHtml(desc);
+                var a = doc.DocumentNode.SelectNodes("//a[@class='seekTime']");
+                if(a != null) {
+
+                    foreach (var entry in a) {
+
+                        entry.Attributes["href"].Value = entry.InnerText.Trim();
+                    }
+                    desc = doc.DocumentNode.InnerHtml;
+                }
+            }
+
+            if (Settings.Instance.EnableUrlLink) {
 
                 //普通のURLだったら
                 desc = UrlPattern.Replace(desc, new MatchEvaluator((match) => {

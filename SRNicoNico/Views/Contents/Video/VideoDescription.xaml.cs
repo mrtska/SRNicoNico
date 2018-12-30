@@ -15,18 +15,25 @@ namespace SRNicoNico.Views {
         }
         private void Hyperlink_MouseDown(object sender, MouseButtonEventArgs e) {
 
-            if(e.MiddleButton == MouseButtonState.Pressed && DataContext is VideoViewModel vm) {
-
-                var link = (Hyperlink)sender;
+            var link = (Hyperlink)sender;
+            if (e.MiddleButton == MouseButtonState.Pressed && DataContext is VideoViewModel vm && link.NavigateUri != null) {
 
                 vm?.Html5Handler?.Pause();
                 NicoNicoOpener.Open(link.NavigateUri.OriginalString);
             }
         }
-        public void OpenHyperLink(object sender, RequestNavigateEventArgs e) {
+        public void OpenHyperLink(object sender, RoutedEventArgs e) {
 
-            var url = e.Uri.OriginalString;
+            var link = (Hyperlink)sender;
+            var url = "";
 
+            if (link.NavigateUri != null) {
+
+                url = link.NavigateUri.OriginalString;
+            } else {
+
+                url = ((Run)link.Inlines.FirstInline).Text;
+            }
             if (DataContext is VideoViewModel vm) {
 
                 if (url.StartsWith("#")) {
@@ -36,14 +43,14 @@ namespace SRNicoNico.Views {
                     vm?.Html5Handler?.Seek(NicoNicoUtil.ConvertTime(time));
                 } else {
 
-                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftShift) || NicoNicoOpener.GetType(e.Uri.OriginalString) != NicoNicoUrlType.Video) {
+                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftShift) || NicoNicoOpener.GetType(url) != NicoNicoUrlType.Video) {
 
                         vm?.Html5Handler?.Pause();
-                        NicoNicoOpener.Open(e.Uri.OriginalString);
+                        NicoNicoOpener.Open(url);
                     } else {
 
                         //URLを書き換えて再読込
-                        vm.Refresh(e.Uri.OriginalString);
+                        vm.Refresh(url);
                     }
                 }
             }
@@ -53,7 +60,7 @@ namespace SRNicoNico.Views {
         private void Hyperlink_Loaded(object sender, RoutedEventArgs e) {
 
             var link = (Hyperlink)sender;
-            if(DataContext is VideoViewModel vm) {
+            if(DataContext is VideoViewModel vm && link.NavigateUri != null) {
 
                 var uri = link.NavigateUri.OriginalString;
 
