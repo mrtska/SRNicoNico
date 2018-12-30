@@ -13,6 +13,11 @@
              d:DesignWidth="596.915"
              Background="Transparent"
              d:DataContext="{d:DesignInstance {x:Type m:NicoNicoLiveNotifyEntry}}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="MouseDoubleClick">
+            <a:NicoNicoOpenAction Url="{Binding LiveUrl}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <UserControl.ContextMenu>
         <ContextMenu>
             <MenuItem Header="WebViewで開く">

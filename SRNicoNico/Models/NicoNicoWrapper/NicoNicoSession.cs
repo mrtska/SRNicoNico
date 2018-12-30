@@ -25,8 +25,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         private const string NicoNicoTop = "https://www.nicovideo.jp/";
 
         //Http通信用
-        private HttpClient HttpClient;
-        private HttpClientHandler HttpHandler;
+        private readonly HttpClient HttpClient;
+        public readonly HttpClientHandler HttpHandler;
 
 
         //ユーザーID
@@ -54,10 +54,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //Cookieを設定する
         public void SetUserSession(string userSession) {
 
-            var cookieKey = new Cookie("user_session", userSession, "/", ".nicovideo.jp");
-            var html5 = new Cookie("watch_html5", "1", "/", ".nicovideo.jp");
-            HttpHandler.CookieContainer.Add(cookieKey);
-            HttpHandler.CookieContainer.Add(html5);
+            HttpHandler.CookieContainer.Add(new Cookie("user_session", userSession, "/", ".nicovideo.jp"));
+            HttpHandler.CookieContainer.Add(new Cookie("watch_html5", "1", "/", ".nicovideo.jp"));
+            HttpHandler.CookieContainer.Add(new Cookie("official_player_name", "alies", "/", ".live2.nicovideo.jp"));
+            HttpHandler.CookieContainer.Add(new Cookie("player_version", "leo", "/", ".live2.nicovideo.jp"));
             Key = userSession;
         }
     

@@ -35,6 +35,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,7 +55,7 @@
     <TypeScriptOutFile />
     <TypeScriptOutDir>E:\Development\SRNicoNico\SRNicoNico\bin\Debug\Html</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
-    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptNoEmitOnError>False</TypeScriptNoEmitOnError>
     <TypeScriptSourceMap>False</TypeScriptSourceMap>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
@@ -112,8 +113,8 @@
       <HintPath>..\packages\gong-wpf-dragdrop.1.1.0\lib\net46\GongSolutions.Wpf.DragDrop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.8.8.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.8.8\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.8.9.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.8.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Livet, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b0b1d3f711ef38cb, processorArchitecture=MSIL">
       <HintPath>..\packages\LivetCask.1.3.1.0\lib\net45\Livet.dll</HintPath>
@@ -149,6 +150,7 @@
     <Reference Include="StatefulModel, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StatefulModel.Standard.0.1.0\lib\netstandard2.0\StatefulModel.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\LivetCask.1.3.1.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -180,10 +182,13 @@
     </ApplicationDefinition>
     <Compile Include="Models\NicoNicoViewer\DeployModel.cs" />
     <Compile Include="Models\NicoNicoViewer\UpdateChecker.cs" />
+    <Compile Include="Models\NicoNicoViewer\WebSocketExtension.cs" />
     <Compile Include="Models\NicoNicoWrapper\Follow\NicoNicoFollowCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\Follow\NicoNicoFollowMylist.cs" />
     <Compile Include="Models\NicoNicoWrapper\Follow\NicoNicoFollowChannel.cs" />
     <Compile Include="Models\NicoNicoWrapper\Follow\NicoNicoFollowUser.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Live\NicoNicoLive.cs" />
+    <Compile Include="Models\NicoNicoWrapper\Live\NicoNicoLiveApi.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoCommunity.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoNGFilter.cs" />
     <Compile Include="Models\NicoNicoWrapper\NicoNicoMylist.cs" />
@@ -206,6 +211,9 @@
     <Compile Include="ViewModels\Community\CommunityViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityNoticeViewModel.cs" />
     <Compile Include="ViewModels\Deploy\DeployViewModel.cs" />
+    <Compile Include="ViewModels\Live\LiveHtml5Handler.cs" />
+    <Compile Include="ViewModels\Live\LiveViewModel.cs" />
+    <Compile Include="ViewModels\Live\TimeshiftViewModel.cs" />
     <Compile Include="ViewModels\Misc\UpdaterViewModel.cs" />
     <Compile Include="ViewModels\Mylist\MylistOperationViewModel.cs" />
     <Compile Include="ViewModels\Video\VideoCommentEntryViewModel.cs" />
@@ -259,6 +267,18 @@
     </Compile>
     <Compile Include="Views\Contents\Help\SearchHelpView.xaml.cs">
       <DependentUpon>SearchHelpView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Live\Live.xaml.cs">
+      <DependentUpon>Live.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Live\LiveComment.xaml.cs">
+      <DependentUpon>LiveComment.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Live\LiveDescription.xaml.cs">
+      <DependentUpon>LiveDescription.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\Live\LiveHtml5.xaml.cs">
+      <DependentUpon>LiveHtml5.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\Misc\PageSpinner.xaml.cs">
       <DependentUpon>PageSpinner.xaml</DependentUpon>
@@ -580,6 +600,22 @@
     <Page Include="Views\Contents\LiveNotify\LiveNotify.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Contents\Live\Live.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Live\LiveComment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Live\LiveDescription.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\Live\LiveHtml5.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Contents\MainContent.xaml">
       <SubType>Designer</SubType>
@@ -1136,10 +1172,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\Category.png" />
+    <Content Include="Html\hls.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Html\jquery-3.3.1.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Html\jquery.keyframes.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Html\livehtml5.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Html\videohtml5.html">
@@ -1172,6 +1214,8 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Html\hls.js.d.ts" />
+    <TypeScriptCompile Include="Html\liveplayer.ts" />
     <TypeScriptCompile Include="Html\videoplayer.ts" />
     <None Include="Html\jquery-keyframes.d.ts" />
     <None Include="Html\jquery.d.ts" />
