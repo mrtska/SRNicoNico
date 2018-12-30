@@ -12,7 +12,7 @@ namespace SRNicoNico.Live {
 
         private loop: number = -1;
 
-        public initialize(src: string, initialPos: number, autoplay: boolean) {
+        constructor(src: string, initialPos: number, autoplay: boolean) {
 
             //レイヤーを取得
             this.Video = document.getElementById("player") as HTMLVideoElement;
@@ -100,10 +100,10 @@ namespace SRNicoNico.Live {
                 InvokeHost("progress");
             });
             
-            this.Video.addEventListener("onerror", function (e: ErrorEvent) {
+            this.Video.addEventListener("onerror", function (e) {
 
-                InvokeHost(e.error);
-            });
+                InvokeHost("error");
+            });this.Video.onerror
 
             //ウィンドウサイズが変わったら動画の高さやコメントのサイズを計算しなおす
             window.onresize = (e) => {
@@ -120,10 +120,10 @@ namespace SRNicoNico.Live {
 
                 InvokeHost("click");
             }
-            window.onmousewheel = function (e) {
+            window.onwheel = function (e: WheelEvent) {
 
-                InvokeHost("mousewheel", e.wheelDelta);
-            }
+                InvokeHost("mousewheel", e.deltaY);
+            };
 
         }
 
@@ -253,7 +253,7 @@ namespace SRNicoNico.Live {
             return this.Video.clientWidth;
         }
     }
-    export var ViewModel: LiveViewModel = new LiveViewModel();
+    export var ViewModel: LiveViewModel;
 
 }
 
@@ -264,7 +264,7 @@ function GetLive(): SRNicoNico.Live.LiveViewModel {
 
 function Live$Initialize(src: string, initialPos: number, autoplay: boolean) {
 
-    SRNicoNico.Live.ViewModel.initialize(src, initialPos, autoplay);
+    SRNicoNico.Live.ViewModel = new SRNicoNico.Live.LiveViewModel(src, initialPos, autoplay);
 }
 function Live$Pause() {
 

@@ -1162,6 +1162,8 @@
     </Compile>
     <None Include="app.config" />
     <None Include="Documentation\Theme.md" />
+    <None Include="Html\base.scss" />
+    <None Include="package.json" />
     <None Include="Microsoft.TypeScript.props" />
     <None Include="Models\NicoNicoViewer\DeployModel.cs.sample" />
     <None Include="Models\NicoNicoWrapper\Video\sample.json" />
@@ -1169,12 +1171,11 @@
       <SubType>Designer</SubType>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="webpack.config.js" />
     <Resource Include="Icons\Category.png" />
-    <Content Include="Html\hls.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Html\jquery-3.3.1.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1214,11 +1215,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Html\hls.js.d.ts" />
     <TypeScriptCompile Include="Html\liveplayer.ts" />
-    <TypeScriptCompile Include="Html\videoplayer.ts" />
+    <TypeScriptCompile Include="Html\videohtml5.ts" />
+    <None Include="Html\videoplayer.ts" />
     <None Include="Html\jquery-keyframes.d.ts" />
-    <None Include="Html\jquery.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Html\commentlayer.ts" />

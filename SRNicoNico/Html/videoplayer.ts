@@ -1,5 +1,15 @@
 
+
 namespace SRNicoNico.Video {
+
+    export function InvokeHost(cmd: string, args: any = ""): void {
+
+        if(window.external != null && cmd != null) {
+
+        window.external.InvokeFromJavaScript(cmd, args);
+        }
+    }
+
     export class VideoViewModel {
 
         WIDTH: number = 640;
@@ -11,7 +21,7 @@ namespace SRNicoNico.Video {
 
         private loop: number = -1;
 
-        public initialize(src: string, initialPos: number, autoplay: boolean) {
+        constructor(src: string, initialPos: number, autoplay: boolean) {
 
             //レイヤーを取得
             this.Video = document.getElementById("player") as HTMLVideoElement;
@@ -119,9 +129,9 @@ namespace SRNicoNico.Video {
 
                 InvokeHost("click");
             }
-            window.onmousewheel = function (e) {
+            window.onwheel = function (e: WheelEvent) {
 
-                InvokeHost("mousewheel", e.wheelDelta);
+                InvokeHost("mousewheel", e.deltaY);
             }
 
             if (autoplay) {
@@ -260,41 +270,52 @@ namespace SRNicoNico.Video {
             return this.Video.clientWidth;
         }
     }
-    export var ViewModel: VideoViewModel = new VideoViewModel();
-
+    export var ViewModel: VideoViewModel;
 }
 
 function GetVideo(): SRNicoNico.Video.VideoViewModel  {
 
     return SRNicoNico.Video.ViewModel;
 }
+eval("window.GetVideo = GetVideo;");
 
 function Video$Initialize(src: string, initialPos: number, autoplay: boolean) {
 
-    SRNicoNico.Video.ViewModel.initialize(src, initialPos, autoplay);
+    SRNicoNico.Video.ViewModel = new SRNicoNico.Video.VideoViewModel(src, initialPos, autoplay);
 }
+eval("window.Video$Initialize = Video$Initialize;");
+
 function Video$Pause() {
 
     SRNicoNico.Video.ViewModel.pause();
 }
+eval("window.Video$Pause = Video$Pause;");
+
 function Video$Resume() {
 
     SRNicoNico.Video.ViewModel.play();
 }
+eval("window.Video$Resume = Video$Resume;");
+
 function Video$Seek(pos: number) {
 
     SRNicoNico.Video.ViewModel.seek(pos);
 }
+eval("window.Video$Seek = Video$Seek;");
+
 function Video$SetVolume(vol: number) {
 
     SRNicoNico.Video.ViewModel.setVolume(vol);
 }
+eval("window.Video$SetVolume = Video$SetVolume;");
+
 function Video$SetRate(rate: number) {
 
     SRNicoNico.Video.ViewModel.setRate(rate);
 }
+eval("window.Video$SetRate = Video$SetRate;");
 
 window.addEventListener("load", function () {
 
-    InvokeHost("ready");
+    SRNicoNico.Video.InvokeHost("ready");
 });

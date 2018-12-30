@@ -246,7 +246,7 @@ namespace SRNicoNico.ViewModels {
                         //}
                         item.DefaultCommentSize = Settings.Instance.CommentSize;
                         item.Opacity = Settings.Instance.CommentAlpha / 100.0;
-                        Handler.WebBrowser?.InvokeScript("Comment$Dispatch", item.ToJson());
+                        Handler.InvokeScript("Comment$Dispatch", item.ToJson());
                     }
                 }
             }

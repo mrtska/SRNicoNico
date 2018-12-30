@@ -1,6 +1,4 @@
 
-/// <reference path="jquery.d.ts" />
-/// <reference path="jquery-keyframes.d.ts" />
 
 declare class VideoViewModel {
 
@@ -12,7 +10,7 @@ declare class VideoViewModel {
 
 interface External {
 
-    InvokeFromJavaScript(cmd, args);
+    InvokeFromJavaScript(cmd: string, args: string | number): void;
 }
 
 function InvokeHost(cmd: string, args: any = ""): void {
@@ -67,7 +65,7 @@ namespace SRNicoNico.Comment {
         public Element: HTMLSpanElement;
 
 
-        deserialize(json: any): void {
+        constructor(json: any) {
 
             this.Number = json.Number;
             this.Vpos = json.Vpos;
@@ -84,6 +82,7 @@ namespace SRNicoNico.Comment {
 
             this.Content = json.Content;
 
+            this.Element = document.createElement("span");
             this.Element.innerText = this.Content;
 
             if (this.JustPosted) {
@@ -119,7 +118,7 @@ namespace SRNicoNico.Comment {
         RenderingCommentList: Array<CommentEntry> = new Array<CommentEntry>();
 
 
-        public initialize() {
+        constructor() {
 
             //レイヤーを取得
             this.Layer = document.getElementById("commentlayer") as HTMLDivElement;
@@ -173,10 +172,7 @@ namespace SRNicoNico.Comment {
 
         public dispatchComment(jsonStr: string): void {
 
-            let entry: CommentEntry = new CommentEntry();
-            entry.Element = document.createElement("span");
-
-            entry.deserialize(JSON.parse(jsonStr));
+            let entry: CommentEntry = new CommentEntry(JSON.parse(jsonStr));
 
             //上コメント 流れるコメント以外は基本３秒表示
             if (entry.Position == "ue") {
@@ -530,39 +526,48 @@ namespace SRNicoNico.Comment {
         }
     }
 
-    export var ViewModel: CommentViewModel = new CommentViewModel();
+    export var ViewModel: CommentViewModel
 }
 
 function Comment$Initialize() {
 
-    SRNicoNico.Comment.ViewModel.initialize();
+    SRNicoNico.Comment.ViewModel = new SRNicoNico.Comment.CommentViewModel();
 }
+eval("window.Comment$Initialize = Comment$Initialize;");
+
 
 function Comment$Hide() {
 
     SRNicoNico.Comment.ViewModel.hideComment();
 }
+eval("window.Comment$Hide = Comment$Hide;");
+
 function Comment$Show() {
 
     SRNicoNico.Comment.ViewModel.showComment();
 }
+eval("window.Comment$Show = Comment$Show;");
 
-function Comment$Dispatch(json) {
+function Comment$Dispatch(json: any) {
 
     SRNicoNico.Comment.ViewModel.dispatchComment(json);
 }
+eval("window.Comment$Dispatch = Comment$Dispatch;");
 
-function Comment$SetOpacity(op) {
+function Comment$SetOpacity(op: number) {
 
     SRNicoNico.Comment.ViewModel.setOpacity(op);
 }
+eval("window.Comment$SetOpacity = Comment$SetOpacity;");
 
-function Comment$SetBaseSize(str) {
+function Comment$SetBaseSize(str: string) {
 
     SRNicoNico.Comment.ViewModel.setBaseSize(str);
 }
+eval("window.Comment$SetBaseSize = Comment$SetBaseSize;");
+
 function GetComment(): SRNicoNico.Comment.CommentViewModel {
 
     return SRNicoNico.Comment.ViewModel;
 }
-
+eval("window.GetComment = GetComment;");

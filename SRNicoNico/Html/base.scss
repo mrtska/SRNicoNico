@@ -1,0 +1,30 @@
+﻿html {
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    background-color: black;
+    height: 100%;
+    -ms-user-select: none;
+}
+
+.commentlayer {
+    position: fixed;
+    z-index: 100;
+    overflow: hidden;
+    cursor: inherit;
+}
+
+span {
+    position: fixed;
+    padding: 0px;
+    margin: 0px;
+    font-family: Arial;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-shadow: 1px 1px 1px #000;
+    cursor: inherit;
+}
