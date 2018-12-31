@@ -1,5 +1,6 @@
 ﻿using Codeplex.Data;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
@@ -10,16 +11,21 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         public static async Task<bool> IsUpdateAvailable() {
 
-            try {
+            using (var httpClient = new HttpClient()) {
 
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(CheckUrl);
+                try {
 
-                var json = DynamicJson.Parse(a);
-                return App.ViewModelRoot.CurrentVersion < json.version;
-            } catch(Exception) {
+                    var a = await httpClient.GetStringAsync(CheckUrl);
 
-                return false;
+                    var json = DynamicJson.Parse(a);
+                    return App.ViewModelRoot.CurrentVersion < json.version;
+                } catch (Exception) {
+
+                    return false;
+                }
             }
+
+
         }
     }
 }
