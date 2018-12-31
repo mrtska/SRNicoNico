@@ -4,8 +4,8 @@
   "repository": "https://github.com/mrtska/SRNicoNico",
   "description": "NicoNicoViewer is playing niconico without web browser.",
   "scripts": {
-    "webpack": "webpack --mode=development --display-error-details",
-    "webpack-prod": "webpack --mode=production"
+    "webpack": "webpack --display-error-details --config webpack.dev.js",
+    "webpack-prod": "webpack --config webpack.prod.js"
   },
   "dependencies": {
     "vue": "2.5.21",
@@ -13,8 +13,10 @@
   },
   "devDependencies": {
     "@types/jquery": "3.3.29",
+    "@types/hls.js": "0.10.2",
     "webpack": "4.28.3",
     "webpack-cli": "3.1.2",
+    "webpack-merge": "4.1.5",
     "autoprefixer": "9.4.3",
     "typescript": "3.2.2",
     "ts-loader": "5.3.2",

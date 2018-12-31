@@ -211,6 +211,7 @@
     <Compile Include="ViewModels\Community\CommunityViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityNoticeViewModel.cs" />
     <Compile Include="ViewModels\Deploy\DeployViewModel.cs" />
+    <Compile Include="ViewModels\Live\LiveCommentViewModel.cs" />
     <Compile Include="ViewModels\Live\LiveHtml5Handler.cs" />
     <Compile Include="ViewModels\Live\LiveViewModel.cs" />
     <Compile Include="ViewModels\Live\TimeshiftViewModel.cs" />
@@ -1175,6 +1176,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="webpack.config.js" />
+    <Content Include="webpack.dev.js" />
+    <Content Include="webpack.prod.js" />
     <Resource Include="Icons\Category.png" />
     <Content Include="Html\jquery-3.3.1.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1215,6 +1218,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Html\livehtml5.ts" />
     <TypeScriptCompile Include="Html\liveplayer.ts" />
     <TypeScriptCompile Include="Html\videohtml5.ts" />
     <None Include="Html\videoplayer.ts" />
