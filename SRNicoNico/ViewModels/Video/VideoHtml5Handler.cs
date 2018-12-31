@@ -507,10 +507,10 @@ namespace SRNicoNico.ViewModels {
 
                     if (args.Length == 0) {
 
-                        WebBrowser.Dispatcher.BeginInvoke((Action)(() => WebBrowser.InvokeScript(func)));
+                        WebBrowser.Dispatcher.BeginInvoke((Action)(() => WebBrowser?.InvokeScript(func)));
                     } else {
 
-                        WebBrowser.Dispatcher.BeginInvoke((Action)(() => WebBrowser.InvokeScript(func, args)));
+                        WebBrowser.Dispatcher.BeginInvoke((Action)(() => WebBrowser?.InvokeScript(func, args)));
                     }
                 } catch (Exception e) when (e is COMException || e is ObjectDisposedException) {
 
