@@ -129,10 +129,10 @@ namespace SRNicoNico.Video {
 
                 InvokeHost("click");
             }
-            window.onwheel = function (e: WheelEvent) {
+            window.addEventListener("wheel", function (e: WheelEvent) {
 
-                InvokeHost("mousewheel", e.deltaY);
-            }
+                InvokeHost("mousewheel", -e.deltaY);
+            });
 
             if (autoplay) {
 
