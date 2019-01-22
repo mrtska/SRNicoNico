@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 
 using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.Models.NicoNicoWrapper;
+
 namespace SRNicoNico.Views.Converter {
 
     [ValueConversion(typeof(int), typeof(DateTime))]
@@ -14,7 +16,7 @@ namespace SRNicoNico.Views.Converter {
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
 
-            return DateTime.Today.Add(TimeSpan.FromMilliseconds(System.Convert.ToInt32(value) * 10));
+            return NicoNicoUtil.ConvertTime(System.Convert.ToInt32(value) / 100);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

@@ -113,7 +113,7 @@
                 <b:CommentAutoScrollBehavior AutoScrollEnabled="{Binding AutoScrollEnabled}" Vpos="{Binding CurrentVpos}" />
             </i:Interaction.Behaviors>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="40" Binding="{Binding Item.Vpos, Converter={StaticResource vpostd}, StringFormat=m:ss}" CanUserSort="False" IsReadOnly="True">
+                <DataGridTextColumn Width="45" Binding="{Binding Item.Vpos, Converter={StaticResource vpostd}}" CanUserSort="False" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="ContextMenu" Value="{StaticResource comment}" />
