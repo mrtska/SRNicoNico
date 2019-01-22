@@ -188,7 +188,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 if(video.dmcInfo != null) {
 
-                    api.DmcInfo = new NicoNicoDmc(video.dmcInfo.session_api);
+                    api.DmcInfo = new NicoNicoDmc(video.dmcInfo);
                     api.DmcHeartbeatRequired = true;
 
                     if (video.dmcInfo.storyboard_session_api != null) {

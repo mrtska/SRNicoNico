@@ -24,19 +24,19 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public int HeartbeatLifeTime { get; private set; }
 
-        public NicoNicoDmc(dynamic session_api) {
+        public NicoNicoDmc(dynamic dmcInfo) {
 
-            FirstSessionApi = session_api;
-            HeartbeatLifeTime = (int) session_api.heartbeat_lifetime;
+            FirstSessionApi = dmcInfo.session_api;
+            HeartbeatLifeTime = (int) dmcInfo.session_api.heartbeat_lifetime;
 
             Videos = new List<NicoNicoDmcVideoQuality>();
-            foreach (var video in session_api.videos) {
+            foreach (var video in dmcInfo.quality.videos) {
 
-                Videos.Add(new NicoNicoDmcVideoQuality(video));
+                Videos.Add(new NicoNicoDmcVideoQuality(video.id, (int) video.bitrate));
             }
 
             Audios = new List<NicoNicoDmcAudioQuality>();
-            foreach (var audio in session_api.audios) {
+            foreach (var audio in dmcInfo.session_api.audios) {
 
                 Audios.Add(new NicoNicoDmcAudioQuality(audio));
             }
@@ -194,6 +194,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             Codec = str[1];
             Bitrate = str[2];
             Resolution = str[3];
+        }
+
+        public NicoNicoDmcVideoQuality(string id, int bitrate) {
+
+            Raw = id;
+            var str = id.Split('_');
+
+            Codec = str[1];
+            Resolution = str[str.Length - 1];
+            Bitrate = (bitrate / 1000 / 1000) + "Mbps";
         }
     }
     public class NicoNicoDmcAudioQuality {

@@ -586,7 +586,7 @@ namespace SRNicoNico.ViewModels {
                 case "mousewheel":
                     if (!string.IsNullOrEmpty(args)) {
 
-                        var vol = int.Parse(args);
+                        var vol = double.Parse(args);
 
                         if (vol >= 0) {
 
