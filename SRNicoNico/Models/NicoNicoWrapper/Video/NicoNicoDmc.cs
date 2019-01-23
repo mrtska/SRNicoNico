@@ -32,13 +32,19 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             Videos = new List<NicoNicoDmcVideoQuality>();
             foreach (var video in dmcInfo.quality.videos) {
 
-                Videos.Add(new NicoNicoDmcVideoQuality(video.id, (int) video.bitrate));
+                if(video.available) {
+
+                    Videos.Add(new NicoNicoDmcVideoQuality(video.id, (int)video.bitrate));
+                }
             }
 
             Audios = new List<NicoNicoDmcAudioQuality>();
-            foreach (var audio in dmcInfo.session_api.audios) {
+            foreach (var audio in dmcInfo.quality.audios) {
 
-                Audios.Add(new NicoNicoDmcAudioQuality(audio));
+                if(audio.available) {
+
+                    Audios.Add(new NicoNicoDmcAudioQuality(audio.id, (int) audio.bitrate));
+                }
             }
         }
 
@@ -203,7 +209,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             Codec = str[1];
             Resolution = str[str.Length - 1];
-            Bitrate = (bitrate / 1000 / 1000) + "Mbps";
+
+            if(bitrate < 1000000) {
+
+                Bitrate = (bitrate / 1000) + "Kbps";
+            } else {
+
+                Bitrate = (bitrate / 1000 / 1000) + "Mbps";
+            }
         }
     }
     public class NicoNicoDmcAudioQuality {
@@ -213,12 +226,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public string Bitrate { get; private set; }
 
-        public NicoNicoDmcAudioQuality(string raw) {
+        public NicoNicoDmcAudioQuality(string raw, int bitrate) {
 
             Raw = raw;
             var str = raw.Split('_');
             Codec = str[1];
-            Bitrate = str[2];
+            Bitrate = bitrate / 1000 + "Kbps";
         }
     }
 }

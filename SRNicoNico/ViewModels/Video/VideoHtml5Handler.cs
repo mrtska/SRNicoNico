@@ -325,7 +325,7 @@ namespace SRNicoNico.ViewModels {
                     return;
                 }
                 var json = DynamicJson.Parse(str);
-                ApiData.DmcInfo = new NicoNicoDmc(json.video.dmcInfo.session_api);
+                ApiData.DmcInfo = new NicoNicoDmc(json.video.dmcInfo);
 
                 await EstablishDmcSession();
                 // セッションを張り直したのでWebBrowser側に伝える
