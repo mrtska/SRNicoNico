@@ -35,9 +35,10 @@ namespace SRNicoNico.Views {
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e) {
 
             if (DataContext is VideoViewModel vm) {
-                if (e.Key == Key.Escape) {
+                if (e.Key == Key.Escape || e.Key == Key.F) {
 
-                    vm.Html5Handler?.ReturnToNormalScreen();
+                    Close();
+                    e.Handled = true;
                     return;
                 }
                 vm.KeyDown(e);

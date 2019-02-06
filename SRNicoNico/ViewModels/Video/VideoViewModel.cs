@@ -398,9 +398,11 @@ namespace SRNicoNico.ViewModels {
             switch (e.Key) {
                 case Key.Escape:
                     TweetPopupOpen = false;
+                    e.Handled = true;
                     break;
                 case Key.F5:
                     Refresh();
+                    e.Handled = true;
                     break;
                 case Key.Space:
                     TogglePlay();
@@ -408,30 +410,39 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case Key.R:
                     ToggleRepeat();
+                    e.Handled = true;
                     break;
                 case Key.M:
                     ToggleMute();
+                    e.Handled = true;
                     break;
                 case Key.F:
                     Html5Handler?.ToggleFullscreen();
+                    e.Handled = true;
                     break;
                 case Key.S:
                     Restart();
+                    e.Handled = true;
                     break;
                 case Key.Down:
                     Html5Handler.Volume -= 5;
+                    e.Handled = true;
                     break;
                 case Key.Up:
                     Html5Handler.Volume += 5;
+                    e.Handled = true;
                     break;
                 case Key.Right:
                     Html5Handler?.Seek(Html5Handler.CurrentTime + Settings.Instance.VideoSeekAmount);
+                    e.Handled = true;
                     break;
                 case Key.Left:
                     Html5Handler?.Seek(Html5Handler.CurrentTime - Settings.Instance.VideoSeekAmount);
+                    e.Handled = true;
                     break;
                 case Key.C:
                     ToggleComment();
+                    e.Handled = true;
                     break;
             }
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
