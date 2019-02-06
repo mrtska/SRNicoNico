@@ -95,11 +95,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                             item.Length = time.InnerText.Trim();
                         }
-                        var date = TimeRegex.Match(entry.SelectSingleNode("div[@class='section']/p").ChildNodes["#text"].InnerText.Trim());
+                        var date = TimeRegex.Match(entry.SelectSingleNode("div[@class='section VideoItem-videoDetail']/p").ChildNodes["#text"].InnerText.Trim());
                         
                         //これはひどい
                         item.WatchDate = UnixTime.ToUnixTime(new DateTime(int.Parse(date.Groups[1].Value), int.Parse(date.Groups[2].Value), int.Parse(date.Groups[3].Value), int.Parse(date.Groups[4].Value), int.Parse(date.Groups[5].Value), 0));
-                        item.WatchCount = entry.SelectSingleNode("div[@class='section']/p/span").InnerText;
+                        item.WatchCount = entry.SelectSingleNode("div[@class='section VideoItem-videoDetail']/p/span").InnerText;
 
                         AccountHistories.Add(item);
                     }
