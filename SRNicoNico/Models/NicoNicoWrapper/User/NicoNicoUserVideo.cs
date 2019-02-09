@@ -54,7 +54,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var doc = new HtmlDocument();
                 doc.LoadHtml(a);
 
-                var content = doc.DocumentNode.SelectSingleNode("//div[@class='content']");
+                var content = doc.DocumentNode.SelectSingleNode("//div[@id='video']");
 
                 var count = content.SelectSingleNode("h3").InnerText;
 
@@ -84,8 +84,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var doc = new HtmlDocument();
                 doc.LoadHtml(a);
 
-                var content = doc.DocumentNode.SelectSingleNode("//div[@class='content']");
-                var outers = content.SelectNodes("div[@class='articleBody']/div[@class='outer']");
+                var content = doc.DocumentNode.SelectSingleNode("//div[@id='video']");
+                var outers = content.SelectNodes("div[@class='articleBody']/div[@class='outer VideoItem']");
 
                 //終了
                 if(outers == null) {
@@ -103,15 +103,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     var entry = new NicoNicoSearchResultEntry();
 
-                    var thumb = outer.SelectSingleNode("div[@class='thumbContainer']");
+                    var thumb = outer.SelectSingleNode("div[@class='thumbContainer VideoThumbnailContainer']");
 
                     entry.Cmsid = thumb.SelectSingleNode("a").Attributes["href"].Value.Substring(6);
                     entry.Cmsid = entry.Cmsid.Split('?')[0];
 
-                    entry.ThumbnailUrl = thumb.SelectSingleNode("a/img").Attributes["src"].Value;
+                    entry.ThumbnailUrl = thumb.SelectSingleNode("a/img").Attributes["data-original"].Value;
                     entry.Length = thumb.SelectSingleNode("span[@class='videoTime']").InnerText.Trim();
 
-                    var section = outer.SelectSingleNode("div[@class='section']");
+                    var section = outer.SelectSingleNode("div[@class='section VideoItem-videoDetail']");
 
                     entry.Title = HttpUtility.HtmlDecode(section.SelectSingleNode("h5/a").InnerText.Trim());
                     entry.FirstRetrieve = section.SelectSingleNode("p").InnerText.Trim();

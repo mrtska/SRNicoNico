@@ -59,12 +59,11 @@ namespace SRNicoNico {
             MainWindow.Show();
         }
 
-
         //集約エラーハンドラ
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
             //ハンドルされない例外の処理 このメソッドが終わると
             MessageBox.Show(
-                "不明なエラーが発生しました。可能であれば、この文章をコピーして作者に報告していただれば幸いです。Ctrl+Cでコピーできます。\n動画再生時に起きた場合は動画IDを添えてください。\n ExceptionObject:" + e.ExceptionObject,
+                "Version: " + ViewModelRoot.CurrentVersion + "\n不明なエラーが発生しました。可能であれば、この文章をコピーして作者に報告していただれば幸いです。Ctrl+Cでコピーできます。\n動画再生時に起きた場合は動画IDを添えてください。\n ExceptionObject:" + e.ExceptionObject,
                 "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
             
         }

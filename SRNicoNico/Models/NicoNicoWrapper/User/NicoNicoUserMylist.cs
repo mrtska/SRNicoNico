@@ -58,7 +58,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var doc = new HtmlDocument();
                 doc.LoadHtml(a);
 
-                var content = doc.DocumentNode.SelectSingleNode("//div[@class='content']");
+                var content = doc.DocumentNode.SelectSingleNode("//div[@id='mylist']");
 
                 var outers = content.SelectNodes("div[@class='articleBody']/div[@class='outer']");
 
