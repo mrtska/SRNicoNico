@@ -30,6 +30,9 @@
                 <CheckBox HorizontalAlignment="Left" Content="踊ってみた" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingDancing}" />
                 <CheckBox HorizontalAlignment="Left" Content="VOCALOID" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingVOCALOID}" />
                 <CheckBox HorizontalAlignment="Left" Content="ニコニコインディーズ" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingIndies}" />
+                <CheckBox HorizontalAlignment="Left" Content="ASMR" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingASMR}" />
+                <CheckBox HorizontalAlignment="Left" Content="MMD" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingMMD}" />
+                <CheckBox HorizontalAlignment="Left" Content="バーチャル" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingVirtual}" />
                 <CheckBox HorizontalAlignment="Left" Content="生活・一般・スポ" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingLifeSports}" />
                 <CheckBox HorizontalAlignment="Left" Content="動物" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingAnimal}" />
                 <CheckBox HorizontalAlignment="Left" Content="料理" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingCooking}" />
@@ -39,6 +42,7 @@
                 <CheckBox HorizontalAlignment="Left" Content="ニコニコ動画講座" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingNicoNicoDougaLecture}" />
                 <CheckBox HorizontalAlignment="Left" Content="車載動画" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingDriveVideo}" />
                 <CheckBox HorizontalAlignment="Left" Content="歴史" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingHistory}" />
+                <CheckBox HorizontalAlignment="Left" Content="鉄道" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingTrain}" />
                 <CheckBox HorizontalAlignment="Left" Content="政治" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingPolitics}" />
                 <CheckBox HorizontalAlignment="Left" Content="科学・技術" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingScienceTech}" />
                 <CheckBox HorizontalAlignment="Left" Content="科学" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingScience}" />
@@ -53,6 +57,7 @@
                 <CheckBox HorizontalAlignment="Left" Content="アイドルマスター" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingIdolmaster}" />
                 <CheckBox HorizontalAlignment="Left" Content="ラジオ" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingRadio}" />
                 <CheckBox HorizontalAlignment="Left" Content="描いてみた" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingDrawing}" />
+                <CheckBox HorizontalAlignment="Left" Content="TRPG" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingTRPG}" />
                 <CheckBox HorizontalAlignment="Left" Content="その他合算" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingOtherTotal}" />
                 <CheckBox HorizontalAlignment="Left" Content="例のアレ" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingReinoAre}" />
                 <CheckBox HorizontalAlignment="Left" Content="日記" FontSize="12" IsChecked="{Binding Source={x:Static m:Settings.Instance}, Path=RankingDiary}" />
