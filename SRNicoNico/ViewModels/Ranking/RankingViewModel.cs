@@ -117,6 +117,21 @@ namespace SRNicoNico.ViewModels {
 
                 RankingList.Add(new RankingEntryViewModel(this, "ニコニコインディーズ", "nicoindies"));
             }
+            
+            if (Settings.Instance.RankingASMR) {
+
+                RankingList.Add(new RankingEntryViewModel(this, "ASMR", "asmr"));
+            }
+
+            if (Settings.Instance.RankingMMD) {
+
+                RankingList.Add(new RankingEntryViewModel(this, "MMD", "mmd"));
+            }
+
+            if (Settings.Instance.RankingVirtual) {
+
+                RankingList.Add(new RankingEntryViewModel(this, "バーチャル", "virtual"));
+            }
 
             if (Settings.Instance.RankingLifeSports) {
 
@@ -163,6 +178,11 @@ namespace SRNicoNico.ViewModels {
                 RankingList.Add(new RankingEntryViewModel(this, "歴史", "history"));
             }
 
+            if (Settings.Instance.RankingTrain) {
+
+                RankingList.Add(new RankingEntryViewModel(this, "鉄道", "train"));
+            }
+
             if (Settings.Instance.RankingPolitics) {
 
                 RankingList.Add(new RankingEntryViewModel(this, "政治", "g_politics"));
@@ -201,7 +221,6 @@ namespace SRNicoNico.ViewModels {
             if (Settings.Instance.RankingAnime) {
 
                 RankingList.Add(new RankingEntryViewModel(this, "アニメ", "anime"));
-
             }
 
             if (Settings.Instance.RankingGame) {
@@ -232,6 +251,11 @@ namespace SRNicoNico.ViewModels {
             if (Settings.Instance.RankingDrawing) {
 
                 RankingList.Add(new RankingEntryViewModel(this, "描いてみた", "draw"));
+            }
+
+            if (Settings.Instance.RankingTRPG) {
+
+                RankingList.Add(new RankingEntryViewModel(this, "TRPG", "trpg"));
             }
 
             if (Settings.Instance.RankingOtherTotal) {

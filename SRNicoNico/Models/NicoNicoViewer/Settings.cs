@@ -771,6 +771,54 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         #endregion
 
 
+        #region RankingASMR変更通知プロパティ
+        private bool _RankingASMR = false;
+
+        public bool RankingASMR {
+            get { return _RankingASMR; }
+            set {
+                if(_RankingASMR == value)
+                    return;
+                _RankingASMR = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingMMD変更通知プロパティ
+        private bool _RankingMMD = false;
+
+        public bool RankingMMD {
+            get { return _RankingMMD; }
+            set {
+                if(_RankingMMD == value)
+                    return;
+                _RankingMMD = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+        #region RankingVirtual変更通知プロパティ
+        private bool _RankingVirtual = false;
+
+        public bool RankingVirtual {
+            get { return _RankingVirtual; }
+            set {
+                if(_RankingVirtual == value)
+                    return;
+                _RankingVirtual = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
         #region RankingLifeSports変更通知プロパティ
         private bool _RankingLifeSports = true;
 
@@ -908,6 +956,22 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 if(_RankingHistory == value)
                     return;
                 _RankingHistory = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+         #region RankingTrain変更通知プロパティ
+        private bool _RankingTrain = false;
+
+        public bool RankingTrain {
+            get { return _RankingTrain; }
+            set {
+                if(_RankingTrain == value)
+                    return;
+                _RankingTrain = value;
                 RaisePropertyChanged();
                 Save();
             }
@@ -1132,6 +1196,22 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 if(_RankingDrawing == value)
                     return;
                 _RankingDrawing = value;
+                RaisePropertyChanged();
+                Save();
+            }
+        }
+        #endregion
+
+
+         #region RankingTRPG変更通知プロパティ
+        private bool _RankingTRPG = false;
+
+        public bool RankingTRPG {
+            get { return _RankingTRPG; }
+            set {
+                if(_RankingTRPG == value)
+                    return;
+                _RankingTRPG = value;
                 RaisePropertyChanged();
                 Save();
             }
