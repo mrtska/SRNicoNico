@@ -103,7 +103,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     var entry = new NicoNicoSearchResultEntry();
 
-                    var thumb = outer.SelectSingleNode("div[@class='thumbContainer VideoThumbnailContainer']");
+                    var thumb = outer.SelectSingleNode("div/div[@class='thumbContainer VideoThumbnailContainer']");
 
                     entry.Cmsid = thumb.SelectSingleNode("a").Attributes["href"].Value.Substring(6);
                     entry.Cmsid = entry.Cmsid.Split('?')[0];

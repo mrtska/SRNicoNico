@@ -211,7 +211,6 @@
     <Compile Include="ViewModels\Community\CommunityViewModel.cs" />
     <Compile Include="ViewModels\Community\CommunityNoticeViewModel.cs" />
     <Compile Include="ViewModels\Deploy\DeployViewModel.cs" />
-    <Compile Include="ViewModels\Live\LiveCommentViewModel.cs" />
     <Compile Include="ViewModels\Live\LiveHtml5Handler.cs" />
     <Compile Include="ViewModels\Live\LiveViewModel.cs" />
     <Compile Include="ViewModels\Live\TimeshiftViewModel.cs" />
