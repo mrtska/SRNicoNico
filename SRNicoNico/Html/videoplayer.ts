@@ -1,4 +1,5 @@
 
+import * as videojs from "video.js";
 
 namespace SRNicoNico.Video {
 
@@ -29,8 +30,20 @@ namespace SRNicoNico.Video {
             //動画の高さをウィンドウの高さに合わせる
             this.Video.style.height = window.innerHeight + "px";
 
-            //動画のURLを設定
-            this.Video.src = src;
+            var player = videojs.default(this.Video, {
+                autoplay: autoplay
+            });
+            player.src({
+                src: src
+            });
+            
+            player.on("hls-aes", (args: any) => {
+
+                alert(args);
+
+            });
+
+            //this.Video.play();
 
             //動画のメタデータロード後
             this.Video.addEventListener("loadedmetadata", (e) => {

@@ -108,6 +108,9 @@
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\gong-wpf-dragdrop.1.1.0\lib\net46\GongSolutions.Wpf.DragDrop.dll</HintPath>
@@ -1155,6 +1158,7 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="app.config" />
+    <None Include="app.manifest" />
     <None Include="Documentation\Theme.md" />
     <None Include="Html\base.scss" />
     <None Include="package.json" />

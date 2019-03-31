@@ -571,3 +571,4 @@ function GetComment(): SRNicoNico.Comment.CommentViewModel {
     return SRNicoNico.Comment.ViewModel;
 }
 eval("window.GetComment = GetComment;");
+

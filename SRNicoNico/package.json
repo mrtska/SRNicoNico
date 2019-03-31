@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "vue": "2.5.21",
-    "hls.js": "0.12.2"
+    "hls.js": "0.12.4",
+    "video.js": "7.5.3"
   },
   "devDependencies": {
     "@types/jquery": "3.3.29",
-    "@types/hls.js": "0.10.2",
+    "@types/hls.js": "0.12.3",
+    "@types/video.js": "7.2.10",
     "webpack": "4.28.3",
     "webpack-cli": "3.1.2",
     "webpack-merge": "4.1.5",

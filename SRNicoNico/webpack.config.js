@@ -4,8 +4,7 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        "videohtml5": "Html/videohtml5.ts",
-        "livehtml5": "Html/livehtml5.ts"
+        "videohtml5": "Html/videohtml5.ts"
     },
     output: {
         filename: "[name].js"

@@ -87,7 +87,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                         var node = new NicoNicoSearchResultEntry() {
                             Cmsid = entry.id,
-                            Title = HttpUtility.HtmlDecode(entry.title_short),
+                            Title = HttpUtility.HtmlDecode(entry.title),
                             ViewCounter = (int)entry.view_counter,
                             CommentCounter = (int)entry.num_res,
                             MylistCounter = (int)entry.mylist_counter,

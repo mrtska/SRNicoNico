@@ -137,6 +137,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// 要課金
         /// </summary>
         public bool IsNeedPayment { get; set; }
+
+        /// <summary>
+        /// 動画が暗号化されているか
+        /// </summary>
+        public bool IsEncryptedVideo { get; set; }
     }
 
     public class UploaderInfo {

@@ -24,10 +24,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public int HeartbeatLifeTime { get; private set; }
 
+        private dynamic Encryption;
+
+        /// <summary>
+        /// トラッキングID
+        /// </summary>
+        public string TrackingId { get; private set; }
+
         public NicoNicoDmc(dynamic dmcInfo) {
 
             FirstSessionApi = dmcInfo.session_api;
             HeartbeatLifeTime = (int) dmcInfo.session_api.heartbeat_lifetime;
+            if(dmcInfo.encryption()) {
+
+                Encryption = dmcInfo.encryption;
+            }
 
             Videos = new List<NicoNicoDmcVideoQuality>();
             foreach (var video in dmcInfo.quality.videos) {
@@ -68,7 +79,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     parameters = new {
                         http_parameters = new {
                             parameters = new {
-                                http_output_download_parameters = new {}
+                                hls_parameters = new {
+                                    use_well_known_port = "yes",
+                                    use_ssl = "yes",
+                                    transfer_preset = "standard2",
+                                    segment_duration = 5000
+                                }
                             }
                         }
                     }
@@ -81,7 +97,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     }
                 },
                 content_auth = new {
-                    auth_type = FirstSessionApi.auth_types.http,
+                    auth_type = FirstSessionApi.auth_types.hls,
                     FirstSessionApi.content_key_timeout,
                     service_id = "nicovideo",
                     FirstSessionApi.service_user_id
@@ -91,6 +107,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 },
                 FirstSessionApi.priority
             };
+
+            if(Encryption != null) {
+                json.session.protocol.parameters.http_parameters.parameters.hls_parameters.encryption = new {
+                    hls_encryption_v1 = new {
+                        Encryption.hls_encryption_v1.encrypted_key,
+                        Encryption.hls_encryption_v1.key_uri
+                    }
+                };
+            }
+
             var mux = new {
                 video_src_ids = new List<string>(),
                 audio_src_ids = new List<string>()

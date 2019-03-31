@@ -195,3 +195,6 @@ ModelManifest.xml
 /SRNicoNico/Icons
 /SRNicoNico/Flash/bin-debug
 /SRNicoNico/Models/NicoNicoViewer/DeployModel.cs
+/SRNicoNico/Html/videohtml5.js
+/SRNicoNico/Html/livehtml5.js
+/SRNicoNico/Html/liveplayer.js

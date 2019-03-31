@@ -61,11 +61,11 @@ namespace SRNicoNico.Models.NicoNicoViewer {
                 var vm = new CommunityViewModel(url);
                 App.ViewModelRoot.MainContent.AddUserTab(vm);
                 return vm;
-            } else if(url.Contains("://live.nicovideo.jp/") || url.Contains("://live2.nicovideo.jp/")) {
+            //} else if(url.Contains("://live.nicovideo.jp/") || url.Contains("://live2.nicovideo.jp/")) {
 
-                var vm = new LiveViewModel(url);
-                App.ViewModelRoot.MainContent.AddUserTab(vm);
-                return vm;
+            //    var vm = new LiveViewModel(url);
+            //    App.ViewModelRoot.MainContent.AddUserTab(vm);
+            //    return vm;
 
             } else {
 
@@ -97,10 +97,10 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
                 return NicoNicoUrlType.Community;
             }
-            if (url.Contains("://live2.nicovideo.jp/")) {
+            //if (url.Contains("://live2.nicovideo.jp/")) {
 
-                return NicoNicoUrlType.Live;
-            }
+            //    return NicoNicoUrlType.Live;
+            //}
 
             return NicoNicoUrlType.Other;
         }
