@@ -1,4 +1,5 @@
-
+import { GetVideo } from "./videoplayer";
+import "./external";
 
 declare class VideoViewModel {
 
@@ -8,18 +9,9 @@ declare class VideoViewModel {
     public getVideoWidth(): number;
 }
 
-interface External {
 
-    InvokeFromJavaScript(cmd: string, args: string | number): void;
-}
 
-function InvokeHost(cmd: string, args: any = ""): void {
 
-    if (window.external != null && cmd != null) {
-
-        window.external.InvokeFromJavaScript(cmd, args);
-    }
-}
 
 namespace SRNicoNico.Comment {
 
@@ -566,7 +558,7 @@ function Comment$SetBaseSize(str: string) {
 }
 eval("window.Comment$SetBaseSize = Comment$SetBaseSize;");
 
-function GetComment(): SRNicoNico.Comment.CommentViewModel {
+export function GetComment(): SRNicoNico.Comment.CommentViewModel {
 
     return SRNicoNico.Comment.ViewModel;
 }

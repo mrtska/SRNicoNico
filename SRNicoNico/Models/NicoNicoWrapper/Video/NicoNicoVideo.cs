@@ -11,11 +11,26 @@ using System.Threading.Tasks;
 using System.Web;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
+
+    /// <summary>
+    /// 動画再生に係る諸々のバックエンド処理
+    /// </summary>
     public class NicoNicoVideo : NotificationObject {
 
+        /// <summary>
+        /// チャンネルをフォローする時に使うAPI
+        /// </summary>
         private const string FavChannelApiUrl = "https://ch.nicovideo.jp/api/addbookmark";
+
+        /// <summary>
+        /// チャンネルのフォローを外す時に使うAPI
+        /// </summary>
         private const string UnfavChannelApiUrl = "https://ch.nicovideo.jp/api/deletebookmark";
 
+        /// <summary>
+        /// ユーザーをフォローしたりフォロー解除したりする時に使うAPI
+        /// {0}は対象のユーザーID
+        /// </summary>
         private const string FavUserApiUrl = "https://public.api.nicovideo.jp/v1/user/followees/niconico-users/{0}.json";
 
         #region ApiData変更通知プロパティ
@@ -32,13 +47,25 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
         #endregion
 
+        /// <summary>
+        /// 対象の動画URL
+        /// </summary>
         private readonly string VideoUrl;
 
         public NicoNicoVideo(string url) {
 
+            if(string.IsNullOrEmpty(url)) {
+
+                throw new ArgumentNullException(nameof(url));
+            }
+
             VideoUrl = url;
         }
 
+        /// <summary>
+        /// 動画情報を取得する
+        /// </summary>
+        /// <returns>失敗した場合のエラーメッセージ</returns>
         public async Task<string> GetVideoDataAsync() {
 
             try {
@@ -50,7 +77,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     response = await App.ViewModelRoot.CurrentUser.Session.GetResponseAsync(response.Headers.Location.OriginalString);
                 }
 
-                //削除された動画は404を律儀に返してくる
+                //削除された動画は404が返ってくる
                 if (response.StatusCode == HttpStatusCode.NotFound) {
 
                     return "動画が削除されている可能性があります";
@@ -63,23 +90,26 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
 
                 //Cookieを取得してWebBrowserの方に反映させる
-                //これがないと動画を取得しようとしても403が返ってくる
+                //これがないと動画を取得しようとしても403が返ってくる(smilevideoの場合)
                 if (response.Headers.TryGetValues("Set-Cookie", out var cookie)) {
+
+                    var nicovideo = new Uri("http://nicovideo.jp/");
 
                     foreach (string s in cookie) {
 
                         foreach (string ss in s.Split(';')) {
 
-                            App.SetCookie(new Uri("http://nicovideo.jp/"), ss);
+                            App.SetCookie(nicovideo, ss);
                         }
                     }
                 }
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml(await response.Content.ReadAsStringAsync());
-
+                
                 var container = doc.DocumentNode.SelectSingleNode("//div[@id='js-initial-watch-data']");
 
+                // Flashじゃないと再生出来ない動画は弾く
                 if(container == null) {
 
                     return "この動画はNicoNicoViewerでは再生できません";
@@ -91,6 +121,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     RootJson = json,
                     PlaylistToken = env.playlistToken
                 };
+
                 //動画情報
                 var video = json.video;
 
@@ -186,6 +217,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 api.IsNeedPayment = json.context.isNeedPayment;
                 api.InitialPlaybackPosition =  json.context.initialPlaybackPosition != null ? (int) json.context.initialPlaybackPosition : 0;
 
+                //要課金動画はdmcInfoがないのでここで終了させる
+                if(api.IsNeedPayment) {
+
+                    ApiData = api;
+                    return "";
+                }
+                
                 if(video.dmcInfo != null) {
 
                     api.DmcInfo = new NicoNicoDmc(video.dmcInfo);
@@ -193,13 +231,28 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     if (video.dmcInfo.storyboard_session_api != null) {
 
-                        // ストーリーボード取得
-                        await Task.Run(async () => {
+                        // ストーリーボードを非同期で取得
+                        _ = Task.Run(async () => {
 
                             api.StoryBoard = new NicoNicoStoryBoard(video.dmcInfo.storyboard_session_api);
                             await api.StoryBoard.GetStoryBoardAsync();
                         });
                     }
+                    
+                    // トラッキングIDを送る
+                    // 送らないと暗号化済み動画で複合キーが正しく取得出来ない
+                    var query = new GetRequestQuery("https://nvapi.nicovideo.jp/v1/2ab0cbaa/watch");
+                    query.AddQuery("t", Uri.EscapeDataString(video.dmcInfo.tracking_id));
+
+                    var request = new HttpRequestMessage(HttpMethod.Get, query.TargetUrl);
+                    request.Headers.Add("Origin", "https://www.nicovideo.jp");
+                    request.Headers.Referrer = new Uri(VideoUrl);
+                    request.Headers.Add("X-Frontend-Id", "6");
+                    request.Headers.Add("X-Frontend-Version", "0");
+
+                    await App.ViewModelRoot.CurrentUser.Session.GetResponseAsync(request);
+                    //------
+
                 } else {
 
                     api.VideoUrl = video.smileInfo.url;

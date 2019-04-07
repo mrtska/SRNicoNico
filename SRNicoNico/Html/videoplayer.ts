@@ -1,15 +1,9 @@
 
-import * as videojs from "video.js";
+import * as Hls from "hls.js";
+import { GetComment } from "./commentlayer";
+import "./external";
 
 namespace SRNicoNico.Video {
-
-    export function InvokeHost(cmd: string, args: any = ""): void {
-
-        if(window.external != null && cmd != null) {
-
-        window.external.InvokeFromJavaScript(cmd, args);
-        }
-    }
 
     export class VideoViewModel {
 
@@ -30,20 +24,41 @@ namespace SRNicoNico.Video {
             //動画の高さをウィンドウの高さに合わせる
             this.Video.style.height = window.innerHeight + "px";
 
-            var player = videojs.default(this.Video, {
-                autoplay: autoplay
-            });
-            player.src({
-                src: src
-            });
-            
-            player.on("hls-aes", (args: any) => {
+            InvokeHost("src " + src);
 
-                alert(args);
+            if (src.indexOf("master.m3u8") >= 0) {
 
-            });
 
-            //this.Video.play();
+                if (Hls.isSupported()) {
+
+                    var hls = new Hls();
+                    hls.loadSource(src);
+                    hls.attachMedia(this.Video);
+                    hls.config.enableSoftwareAES = true;
+                    hls.config.enableWorker = true;
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+
+                    });
+                    hls.on(Hls.Events.KEY_LOADED, () => {
+
+
+                    });
+                    hls.on(Hls.Events.ERROR, (data, error) => {
+
+                        InvokeHost("error" + JSON.stringify(error));
+                    });
+
+                } else {
+
+                    alert("お使いのバージョンのOSでは再生できません。");
+                    return;
+                }
+            } else {
+
+                this.Video.src = src;
+            }
+
+
 
             //動画のメタデータロード後
             this.Video.addEventListener("loadedmetadata", (e) => {
@@ -286,7 +301,7 @@ namespace SRNicoNico.Video {
     export var ViewModel: VideoViewModel;
 }
 
-function GetVideo(): SRNicoNico.Video.VideoViewModel  {
+export function GetVideo(): SRNicoNico.Video.VideoViewModel {
 
     return SRNicoNico.Video.ViewModel;
 }
@@ -330,5 +345,5 @@ eval("window.Video$SetRate = Video$SetRate;");
 
 window.addEventListener("load", function () {
 
-    SRNicoNico.Video.InvokeHost("ready");
+    InvokeHost("ready");
 });

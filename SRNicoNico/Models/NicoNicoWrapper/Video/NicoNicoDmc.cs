@@ -14,7 +14,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// すべてdynamicで解決する
         /// </summary>
-        private readonly dynamic FirstSessionApi;
+        /// 
+        private readonly dynamic DmcInfo;
         private dynamic SessionApi;
         //
         public List<NicoNicoDmcVideoQuality> Videos { get; set; }
@@ -22,8 +23,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         //オーディオコーデック
         public List<NicoNicoDmcAudioQuality> Audios { get; set; }
 
-        public int HeartbeatLifeTime { get; private set; }
-
+        private bool IsEncrypted = false;
         private dynamic Encryption;
 
         /// <summary>
@@ -33,58 +33,85 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public NicoNicoDmc(dynamic dmcInfo) {
 
-            FirstSessionApi = dmcInfo.session_api;
-            HeartbeatLifeTime = (int) dmcInfo.session_api.heartbeat_lifetime;
-            if(dmcInfo.encryption()) {
+            DmcInfo = dmcInfo;
+            Initialize();
+        }
 
-                Encryption = dmcInfo.encryption;
+        private void Initialize() {
+
+            if (DmcInfo.encryption()) {
+
+                IsEncrypted = true;
+                Encryption = DmcInfo.encryption;
             }
 
             Videos = new List<NicoNicoDmcVideoQuality>();
-            foreach (var video in dmcInfo.quality.videos) {
+            foreach (var video in DmcInfo.quality.videos) {
 
-                if(video.available) {
+                if (video.available) {
 
                     Videos.Add(new NicoNicoDmcVideoQuality(video.id, (int)video.bitrate));
                 }
             }
 
             Audios = new List<NicoNicoDmcAudioQuality>();
-            foreach (var audio in dmcInfo.quality.audios) {
+            foreach (var audio in DmcInfo.quality.audios) {
 
-                if(audio.available) {
+                if (audio.available) {
 
-                    Audios.Add(new NicoNicoDmcAudioQuality(audio.id, (int) audio.bitrate));
+                    Audios.Add(new NicoNicoDmcAudioQuality(audio.id, (int)audio.bitrate));
                 }
             }
         }
+
+        public int GetHeartBeatLifeTime() {
+
+            if(DmcInfo == null) {
+
+                throw new InvalidOperationException("初期化処理が走っていない");
+            }
+            return (int)DmcInfo.session_api.heartbeat_lifetime;
+        }
+
 
         public async Task<string> CreateAsync(NicoNicoDmcVideoQuality videoQuality, NicoNicoDmcAudioQuality audioQuality) {
 
             dynamic json = new DynamicJson();
 
+            var availableProtocols = DmcInfo.session_api.protocols;
+            var isOnlyHls = true;
+            foreach (var protocol in availableProtocols) {
+
+                if(protocol == "http") {
+
+                    isOnlyHls = false;
+                }
+            }
+
             json.session = new {
-                FirstSessionApi.recipe_id,
-                FirstSessionApi.content_id,
+                DmcInfo.session_api.recipe_id,
+                DmcInfo.session_api.content_id,
                 content_type = "movie",
                 content_src_id_sets = new List<dynamic>(),
                 timing_constraint = "unlimited",
                 keep_method = new {
                     heartbeat = new {
-                        lifetime = HeartbeatLifeTime
+                        lifetime = (int)DmcInfo.session_api.heartbeat_lifetime
                     }
                 },
                 protocol = new {
                     name = "http",
                     parameters = new {
                         http_parameters = new {
-                            parameters = new {
+                            parameters =  isOnlyHls ? (object) new {
                                 hls_parameters = new {
                                     use_well_known_port = "yes",
                                     use_ssl = "yes",
                                     transfer_preset = "standard2",
                                     segment_duration = 5000
                                 }
+                            } : new {
+                                http_output_download_parameters = new { }
                             }
                         }
                     }
@@ -92,23 +119,23 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 content_uri = "",
                 session_operation_auth = new {
                     session_operation_auth_by_signature = new {
-                        token = SessionApi?.session.session_operation_auth.session_operation_auth_by_signature.token ?? FirstSessionApi.token,
-                        signature = SessionApi?.session.session_operation_auth.session_operation_auth_by_signature.signature ?? FirstSessionApi.signature
+                        token = SessionApi?.session.session_operation_auth.session_operation_auth_by_signature.token ?? DmcInfo.session_api.token,
+                        signature = SessionApi?.session.session_operation_auth.session_operation_auth_by_signature.signature ?? DmcInfo.session_api.signature
                     }
                 },
                 content_auth = new {
-                    auth_type = FirstSessionApi.auth_types.hls,
-                    FirstSessionApi.content_key_timeout,
+                    auth_type = DmcInfo.session_api.auth_types.hls,
+                    DmcInfo.session_api.content_key_timeout,
                     service_id = "nicovideo",
-                    FirstSessionApi.service_user_id
+                    DmcInfo.session_api.service_user_id
                 },
                 client_info = new {
-                    player_id = SessionApi?.session.client_info.player_id ?? FirstSessionApi.player_id
+                    player_id = SessionApi?.session.client_info.player_id ?? DmcInfo.session_api.player_id
                 },
-                FirstSessionApi.priority
+                DmcInfo.session_api.priority
             };
 
-            if(Encryption != null) {
+            if(IsEncrypted) {
                 json.session.protocol.parameters.http_parameters.parameters.hls_parameters.encryption = new {
                     hls_encryption_v1 = new {
                         Encryption.hls_encryption_v1.encrypted_key,
@@ -128,7 +155,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             try {
                 var str = json.ToString();
 
-                dynamic session = FirstSessionApi.urls[0];
+                dynamic session = DmcInfo.session_api.urls[0];
 
                 var query = new GetRequestQuery(session.url);
                 query.AddQuery("_format", "json");
@@ -154,7 +181,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             try {
 
-                var query = new GetRequestQuery(FirstSessionApi.urls[0].url + "/" + SessionApi.session.id);
+                var query = new GetRequestQuery(DmcInfo.session_api.urls[0].url + "/" + SessionApi.session.id);
                 query.AddQuery("_format", "json");
                 query.AddQuery("_method", "DELETE");
 
@@ -178,7 +205,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             try {
 
-                var query = new GetRequestQuery(FirstSessionApi.urls[0].url + "/" + SessionApi.session.id);
+                var query = new GetRequestQuery(DmcInfo.session_api.urls[0].url + "/" + SessionApi.session.id);
                 query.AddQuery("_format", "json");
                 query.AddQuery("_method", "PUT");
 

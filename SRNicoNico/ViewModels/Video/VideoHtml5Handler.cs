@@ -346,7 +346,7 @@ namespace SRNicoNico.ViewModels {
 
                 ApiData.VideoUrl = await ApiData.DmcInfo.CreateAsync(CurrentVideoQuality, CurrentAudioQuality);
 
-                DmcHeartBeatTimer = new Timer(ApiData.DmcInfo.HeartbeatLifeTime / 3);
+                DmcHeartBeatTimer = new Timer(ApiData.DmcInfo.GetHeartBeatLifeTime() / 3);
                 DmcHeartBeatTimer.Elapsed += async (state, e) => await ApiData.DmcInfo.HeartbeatAsync();
                 DmcHeartBeatTimer.Start();
             }

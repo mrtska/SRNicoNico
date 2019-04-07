@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SRNicoNico</RootNamespace>
     <AssemblyName>SRNicoNico</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -108,9 +108,7 @@
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\gong-wpf-dragdrop.1.1.0\lib\net46\GongSolutions.Wpf.DragDrop.dll</HintPath>
@@ -1182,9 +1180,6 @@
     <Content Include="Html\jquery.keyframes.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Html\livehtml5.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Html\videohtml5.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1215,8 +1210,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Html\livehtml5.ts" />
-    <TypeScriptCompile Include="Html\liveplayer.ts" />
+    <TypeScriptCompile Include="Html\external.ts" />
     <TypeScriptCompile Include="Html\videohtml5.ts" />
     <None Include="Html\videoplayer.ts" />
     <None Include="Html\jquery-keyframes.d.ts" />
