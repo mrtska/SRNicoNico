@@ -26,6 +26,7 @@ namespace SRNicoNico.Video {
 
             InvokeHost("src " + src);
 
+            // HLSの場合
             if (src.indexOf("master.m3u8") >= 0) {
 
 
@@ -34,7 +35,7 @@ namespace SRNicoNico.Video {
                     var hls = new Hls();
                     hls.loadSource(src);
                     hls.attachMedia(this.Video);
-                    hls.config.enableSoftwareAES = true;
+                    hls.config.enableSoftwareAES = false;
                     hls.config.enableWorker = true;
                     hls.on(Hls.Events.MANIFEST_PARSED, () => {
 

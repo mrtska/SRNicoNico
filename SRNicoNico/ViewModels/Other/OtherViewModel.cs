@@ -21,6 +21,7 @@ namespace SRNicoNico.ViewModels {
 
             OtherList.Add(new OverViewViewModel(this));
             OtherList.Add(new OSSViewModel());
+            OtherList.Add(new PrivacyPolicyViewModel());
         }
     }
 }

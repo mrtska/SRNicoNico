@@ -28,11 +28,11 @@
                                             </Hyperlink><LineBreak />
                                             <Hyperlink NavigateUri="https://twitter.com/Grabacr07" ToolTip="https://twitter.com/Grabacr07" >
                                                 @Grabacr07
-                                            </Hyperlink><LineBreak /><LineBreak />                                        
+                                            </Hyperlink><LineBreak /><LineBreak />
                                             ライセンス : MIT License<LineBreak />
                                             The MIT License (MIT)<LineBreak /><LineBreak />
 
-                                            Copyright (c) 2015 Grabacr07<LineBreak /><LineBreak />
+                                            Copyright (c) 2014 Manato KAMEYA<LineBreak /><LineBreak />
 
                                             Permission is hereby granted, free of charge, to any person obtaining a copy<LineBreak />
                                             of this software and associated documentation files (the "Software"), to deal<LineBreak />
@@ -65,7 +65,7 @@
                                 <ScrollViewer>
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="MetroTrilithon 0.2.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Run Text="MetroTrilithon 0.3.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
                                             <Hyperlink NavigateUri="https://github.com/Grabacr07/MetroTrilithon" >
                                                 https://github.com/Grabacr07/MetroTrilithon
                                             </Hyperlink><LineBreak />
@@ -77,7 +77,7 @@
                                             ライセンス : MIT License<LineBreak />
                                             The MIT License (MIT)<LineBreak /><LineBreak />
 
-                                            Copyright (c) 2015 Grabacr07<LineBreak /><LineBreak />
+                                            Copyright (c) 2015 Manato KAMEYA<LineBreak /><LineBreak />
 
                                             Permission is hereby granted, free of charge, to any person obtaining a copy<LineBreak />
                                             of this software and associated documentation files (the "Software"), to deal<LineBreak />
@@ -155,9 +155,9 @@
                                 <ScrollViewer>
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Livet 1.3.1" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
-                                            <Hyperlink NavigateUri="http://ugaya40.hateblo.jp/entry/livet"  >
-                                                http://ugaya40.hateblo.jp/entry/livet
+                                            <Run Text="Livet 2.2.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="https://github.com/ugaya40/Livet"  >
+                                                https://github.com/ugaya40/Livet
                                             </Hyperlink><LineBreak />
                                             <Hyperlink NavigateUri="https://twitter.com/ugaya40" ToolTip="https://twitter.com/ugaya40"  >
                                                 @ugaya40
@@ -192,7 +192,7 @@
                                 <ScrollViewer>
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Newtonsoft.Json 11.0.2" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Run Text="Newtonsoft.Json 12.0.1" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
                                             <Hyperlink NavigateUri="http://www.newtonsoft.com/json"  >
                                                 http://www.newtonsoft.com/json
                                             </Hyperlink><LineBreak /><LineBreak />                                        
@@ -402,7 +402,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.<LineBreak /><LineBreak />
                                 <ScrollViewer>
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="HtmlAgilityPack 1.8.4" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Run Text="HtmlAgilityPack 1.11.2" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
                                             htmlをパースするために使用しているライブラリです。<LineBreak /><LineBreak />
                                             <Hyperlink NavigateUri="http://htmlagilitypack.codeplex.com/"  >
                                                 http://htmlagilitypack.codeplex.com/
@@ -452,7 +452,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.<LineBreak /><LineBreak />
                                 <ScrollViewer>
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="gong-wpf-dragdrop 0.1.4.3" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Run Text="gong-wpf-dragdrop 2.0.1" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
                                             <Hyperlink NavigateUri="https://github.com/punker76/gong-wpf-dragdrop" >
                                                 https://github.com/punker76/gong-wpf-dragdrop
                                             </Hyperlink><LineBreak /><LineBreak />                                        
@@ -495,30 +495,39 @@ OTHER DEALINGS IN THE FONT SOFTWARE.<LineBreak /><LineBreak />
                         </Setter.Value>
                     </Setter>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Name}" Value="ForcibleLoader">
+                <DataTrigger Binding="{Binding Name}" Value="hls.js">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="UserControl">
                                 <ScrollViewer>
                                     <StackPanel Margin="10">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="ForcibleLoader" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
-                                            <Hyperlink NavigateUri="http://www.libspark.org/wiki/yossy/ForcibleLoader" >
-                                                http://www.libspark.org/wiki/yossy/ForcibleLoader
-                                            </Hyperlink><LineBreak /><LineBreak />                                        
+                                            <Run Text="hls.js v0.12.4 modified by mrtska" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="https://github.com/mrtska/hls.js/tree/iecompatible" >
+                                                https://github.com/mrtska/hls.js/tree/iecompatible
+                                            </Hyperlink><LineBreak /><LineBreak />
 
-            
-                                            ライセンス : MIT License<LineBreak />
-                                            The MIT License (MIT)<LineBreak /><LineBreak />
 
-                                            Copyright (c) 2007-2009 BeInteractive! (www.be-interactive.org) and Spark project  (www.libspark.org)<LineBreak /><LineBreak />
+                                            ライセンス : Apache License 2.0<LineBreak />
 
-                                            Permission is hereby granted, free of charge, to any person obtaining a copy<LineBreak />
-                                            of this software and associated documentation files (the "Software"), to deal<LineBreak />
-                                            in the Software without restriction, including without limitation the rights<LineBreak />
-                                            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<LineBreak />
-                                            copies of the Software, and to permit persons to whom the Software is<LineBreak />
-                                            furnished to do so, subject to the following conditions:<LineBreak /><LineBreak />
+                                            Copyright (c) 2017 Dailymotion (http://www.dailymotion.com)<LineBreak /><LineBreak />
+
+                                            Licensed under the Apache License, Version 2.0 (the "License");<LineBreak />
+                                            you may not use this file except in compliance with the License.<LineBreak />
+                                            You may obtain a copy of the License at<LineBreak /><LineBreak />
+                                                http://www.apache.org/licenses/LICENSE-2.0<LineBreak /><LineBreak />
+                                            Unless required by applicable law or agreed to in writing, software<LineBreak />
+                                            distributed under the License is distributed on an "AS IS" BASIS,<LineBreak />
+                                            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<LineBreak />
+                                            See the License for the specific language governing permissions and<LineBreak />
+                                            limitations under the License.<LineBreak /><LineBreak />
+                                            
+                                            src/remux/mp4-generator.js and src/demux/exp-golomb.js implementation in this project<LineBreak />
+                                            are derived from the HLS library for video.js (https://github.com/videojs/videojs-contrib-hls)<LineBreak /><LineBreak />
+                                            
+                                            That work is also covered by the Apache 2 License, following copyright:<LineBreak />
+                                            Copyright (c) 2013-2015 Brightcove<LineBreak /><LineBreak /><LineBreak />
+
 
                                             The above copyright notice and this permission notice shall be included in<LineBreak />
                                             all copies or substantial portions of the Software.<LineBreak /><LineBreak />

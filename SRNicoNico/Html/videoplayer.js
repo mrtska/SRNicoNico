@@ -23,12 +23,13 @@ var SRNicoNico;
                 //動画の高さをウィンドウの高さに合わせる
                 this.Video.style.height = window.innerHeight + "px";
                 InvokeHost("src " + src);
+                // HLSの場合
                 if (src.indexOf("master.m3u8") >= 0) {
                     if (Hls.isSupported()) {
                         var hls = new Hls();
                         hls.loadSource(src);
                         hls.attachMedia(this.Video);
-                        hls.config.enableSoftwareAES = true;
+                        hls.config.enableSoftwareAES = false;
                         hls.config.enableWorker = true;
                         hls.on(Hls.Events.MANIFEST_PARSED, function () {
                         });
