@@ -529,6 +529,12 @@ namespace SRNicoNico.ViewModels {
 
             switch(cmd) {
                 case "ready": // ブラウザ側の準備が出来た
+
+                    if (IsWindows7() && ApiData.VideoUrl.Contains("master.m3u8")) {
+
+                        Owner.Status = "この動画はWindows 7では再生出来ません。";
+                        return;
+                    }
                     InvokeScript("Video$Initialize", ApiData.VideoUrl, 0, Settings.Instance.AutoPlay || Owner.IsPlayList);
                     Volume = Settings.Instance.Volume;
                     // 再生速度をUIと同期
@@ -644,6 +650,16 @@ namespace SRNicoNico.ViewModels {
                     Console.WriteLine("cmd: " + cmd + " args: " + args);
                     break;
             }
+        }
+
+        private bool IsWindows7() {
+
+            var os = Environment.OSVersion;
+            if(os.Version.Major == 6 && os.Version.Minor == 1) {
+
+                return true;
+            }
+            return false;
         }
 
         private string GetHtml5PlayerPath() {

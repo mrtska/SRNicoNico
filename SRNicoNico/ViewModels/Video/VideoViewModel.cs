@@ -374,7 +374,7 @@ namespace SRNicoNico.ViewModels {
                 return;
             }
 
-            if(Comment.Post.IsFocused) {
+            if(Comment.Post.IsFocused || TweetPopupOpen) {
 
                 return;
             }

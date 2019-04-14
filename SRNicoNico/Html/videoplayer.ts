@@ -316,31 +316,38 @@ eval("window.Video$Initialize = Video$Initialize;");
 
 function Video$Pause() {
 
-    SRNicoNico.Video.ViewModel.pause();
+    if (SRNicoNico.Video.ViewModel) {
+        SRNicoNico.Video.ViewModel.pause();
+    }
 }
 eval("window.Video$Pause = Video$Pause;");
 
 function Video$Resume() {
 
-    SRNicoNico.Video.ViewModel.play();
+    if (SRNicoNico.Video.ViewModel) {
+        SRNicoNico.Video.ViewModel.play();
+    }
 }
 eval("window.Video$Resume = Video$Resume;");
 
 function Video$Seek(pos: number) {
-
-    SRNicoNico.Video.ViewModel.seek(pos);
+    if (SRNicoNico.Video.ViewModel) {
+        SRNicoNico.Video.ViewModel.seek(pos);
+    }
 }
 eval("window.Video$Seek = Video$Seek;");
 
 function Video$SetVolume(vol: number) {
-
-    SRNicoNico.Video.ViewModel.setVolume(vol);
+    if (SRNicoNico.Video.ViewModel) {
+        SRNicoNico.Video.ViewModel.setVolume(vol);
+    }
 }
 eval("window.Video$SetVolume = Video$SetVolume;");
 
 function Video$SetRate(rate: number) {
-
-    SRNicoNico.Video.ViewModel.setRate(rate);
+    if (SRNicoNico.Video.ViewModel) {
+        SRNicoNico.Video.ViewModel.setRate(rate);
+    }
 }
 eval("window.Video$SetRate = Video$SetRate;");
 
