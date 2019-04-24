@@ -68,7 +68,7 @@ namespace SRNicoNico.ViewModels {
                                 }
 
                                 App.SetCookie(new Uri("https://nicovideo.jp/"), "user_session=" + session.Key);
-
+                                
                                 var status = await session.VerifySignInAsync();
                                 if(status == SigninStatus.Success) {
 
@@ -77,8 +77,11 @@ namespace SRNicoNico.ViewModels {
 
                                     SignInViewTitle = "自動サインイン失敗";
                                     list.Add(await SignInAsync());
+                                } else {
+
+                                    list.Add(await SignInAsync());
                                 }
-                                    
+
                             }
 
                             return list;//  new NicoNicoUser(new NicoNicoSession());

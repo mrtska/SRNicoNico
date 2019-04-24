@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("StarRing")]
 [assembly: AssemblyProduct("NicoNicoViewer")]
-[assembly: AssemblyCopyright("Copyright c  2015-2017 mrtska")]
+[assembly: AssemblyCopyright("Copyright c  2015-2019 mrtska")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

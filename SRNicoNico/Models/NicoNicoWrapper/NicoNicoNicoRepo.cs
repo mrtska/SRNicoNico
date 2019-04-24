@@ -430,6 +430,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 item.ComputedTitle = string.Format("チャンネル <a href=\"" + item.SenderUrl + "\">{0}</a>  に動画が追加されました。", item.SenderName);
                                 break;
                             }
+                        case "nicommunity.community.no_privileged.levelup":
+                        case "nicommunity.community.privileged.levelup":
                         case "nicovideo.community.level.raise": {
 
                                 var sender = entry.senderCommunity;
@@ -438,7 +440,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 storeSenderCommunity(item, sender);
                                 item.ContentUrl = item.CommunityUrl;
 
-                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> の コミュニティレベルが {1} になりました。 {2} が付与されました。", item.SenderName, entry.actionLog.newHighestLevel, entry.actionLog.communityLevelPrivilege);
+                                if(((string)entry.topic).Contains("no_")) {
+
+                                    item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> の コミュニティレベルが {1} になりました。", item.SenderName, entry.actionLog.newHighestLevel);
+                                } else {
+
+                                    item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> の コミュニティレベルが {1} になりました。 {2} が付与されました。", item.SenderName, entry.actionLog.newHighestLevel, entry.actionLog.communityLevelPrivilege);
+                                }
                                 break;
                             }
                         case "nicovideo.user.app.install": {
@@ -471,6 +479,26 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが記事を投稿しました。", item.SenderName);
                                 break;
                             }
+                        case "nicommunity.user.community_news.created": {
+
+                                var sender = entry.senderNiconicoUser;
+                                var com = entry.communityForFollower;
+                                var notice = entry.communityNotice() ? entry.communityNotice : entry.communityNews;
+
+                                item = new NicoNicoNicoRepoGenericEntry() {
+
+                                    ContentTitle = notice.title
+                                };
+                                storeSenderUser(item, sender);
+                                storeCommunity(item, com);
+
+                                var itemc = item as NicoNicoNicoRepoGenericEntry;
+                                itemc.ContentThumbnail = item.CommunityThumbnail;
+                                itemc.ContentUrl = item.CommunityUrl;
+
+                                item.ComputedTitle = string.Format("お知らせ {0} を コミュニティ <a href=\"" + item.CommunityUrl + "\">{1}</a> に追加しました。", ((NicoNicoNicoRepoGenericEntry)item).ContentTitle, item.CommunityName);
+                                break;
+                            }
                         case "nicovideo.user.community.info.add": {
 
                                 var sender = entry.senderNiconicoUser;
@@ -491,7 +519,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a>  コミュニティ <a href=\"" + item.CommunityUrl + "\">{1}</a> にお知らせを追加しました。", item.SenderName, item.CommunityName);
                                 break;
                             }
-                        case "nicovideo.user.community.video.add": {
+                        case "nicovideo.user.community.video.add":
+                        case "nicommunity.user.video.registered": {
 
                                 var sender = entry.senderNiconicoUser;
                                 var com = entry.communityForFollower;
@@ -620,7 +649,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 item.ComputedTitle = string.Format("あなたの マイリスト <a href=\"https://www.nicovideo.jp/mylist/" + mylist.id + "\">{0}</a> を <a href=\"" + item.SenderUrl + "\">{1}</a> さんがフォローしました。", mylist.name, item.SenderName);
                                 break;
                             }
+                        case "nicogame.user.game.update":
                         case "nicovideo.user.nicogame.update":
+                        case "nicogame.user.game.upload":
                         case "nicovideo.user.nicogame.upload": {
 
                                 var sender = entry.senderNiconicoUser;
