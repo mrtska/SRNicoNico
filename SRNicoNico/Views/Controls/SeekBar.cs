@@ -163,8 +163,14 @@ namespace SRNicoNico.Views.Controls {
 
         private void SeekBar_PreviewMouseMove(object sender, MouseEventArgs e) {
 
+            // 動画読み込み時にシークバー上でマウスを動かすとダメ
+            if (VideoTime == 0) {
+
+                return;
+            }
             var x = e.GetPosition(this).X;
             var amount = (x / ActualWidth * VideoTime);
+
             var iamount = (int)amount;
 
             if(amount <= VideoTime && amount >= 0) {
