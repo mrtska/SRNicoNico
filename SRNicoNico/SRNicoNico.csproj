@@ -1172,7 +1172,6 @@
     <None Include="package.json" />
     <None Include="Microsoft.TypeScript.props" />
     <None Include="Models\NicoNicoViewer\DeployModel.cs.sample" />
-    <None Include="Models\NicoNicoWrapper\Video\sample.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

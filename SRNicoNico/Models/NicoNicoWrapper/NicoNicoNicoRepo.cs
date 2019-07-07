@@ -46,7 +46,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public bool IsEnd {
             get { return _IsEnd; }
-            set { 
+            set {
                 if (_IsEnd == value)
                     return;
                 _IsEnd = value;
@@ -62,7 +62,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public ObservableSynchronizedCollection<INicoRepo> NicoRepoList {
             get { return _NicoRepoList; }
-            set { 
+            set {
                 if (_NicoRepoList == value)
                     return;
                 _NicoRepoList = value;
@@ -106,7 +106,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
             try {
 
-                if(NicoRepoList.LastOrDefault() is NicoNicoNextButtonEntry button) {
+                if (NicoRepoList.LastOrDefault() is NicoNicoNextButtonEntry button) {
 
                     NicoRepoList.Remove(button);
                 }
@@ -121,7 +121,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     query = new GetRequestQuery("https://www.nicovideo.jp/api/nicorepo/timeline/my/" + Type);
                     query.AddQuery("client_app", "pc_myrepo");
                 }
-                
+
                 if (!string.IsNullOrEmpty(Next)) {
 
                     query.AddQuery("cursor", Next);
@@ -185,8 +185,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     item.ProgramTitle = program.title;
                     item.ContentUrl = "https://live.nicovideo.jp/watch/" + item.ProgramId;
                 }
+                void storeGame(NicoNicoNicoRepoGenericEntry item, dynamic game) {
 
-                if(!json.data()) {
+                    item.ContentId = game.id.ToString();
+                    item.ContentTitle = game.title;
+                    item.ContentUrl = "https://game.nicovideo.jp/atsumaru/games/" + game.id;
+                    item.ContentThumbnail = game.thumbnailUrl;
+                }
+
+                if (!json.data()) {
 
                     return "ニコニコ側でエラーが発生しました";
                 }
@@ -197,7 +204,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     NicoNicoNicoRepoResultEntry item = null;
 
                     //Console.WriteLine(entry.topic);
-                    switch(entry.topic) {
+                    switch (entry.topic) {
                         case "live.channel.program.onairs":
                         case "live.channel.program.reserve": {
 
@@ -329,6 +336,31 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                                 break;
                             }
+                        case "nicoad.user.advertise.game": {
+
+                                var sender = entry.senderNiconicoUser;
+                                var game = entry.game;
+
+                                item = new NicoNicoNicoRepoGenericEntry();
+                                storeSenderUser(item, sender);
+                                storeGame(item as NicoNicoNicoRepoGenericEntry, game);
+
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんがニコニ広告しました。", item.SenderName);
+                                break;
+                            }
+                        case "nicoad.user.advertised.game.announce": {
+
+                                var sender = entry.senderNiconicoUser;
+                                var game = entry.game;
+
+                                item = new NicoNicoNicoRepoGenericEntry();
+                                storeSenderUser(item, sender);
+                                storeGame(item as NicoNicoNicoRepoGenericEntry, game);
+
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんのゲームが {1} さんにニコニ広告されました。", item.SenderName, entry.nicoad.advertiserName);
+
+                                break;
+                            }
                         case "nicoseiga.user.illust.clip":
                         case "nicoseiga.user.illust.upload": {
 
@@ -343,7 +375,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                     ContentUrl = seiga.urls.pcUrl
                                 };
                                 storeSenderUser(item, sender);
-                                
+
 
                                 if (((string)entry.topic).EndsWith("clip")) {
 
@@ -397,7 +429,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                     ContentUrl = content.watchUrls.pcUrl
                                 };
                                 storeSenderChannel(item, sender);
-                                
+
 
                                 item.ComputedTitle = string.Format("チャンネル <a href=\"" + item.SenderUrl + "\">{0}</a>  に記事が追加されました。", item.SenderName);
                                 break;
@@ -440,7 +472,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 storeSenderCommunity(item, sender);
                                 item.ContentUrl = item.CommunityUrl;
 
-                                if(((string)entry.topic).Contains("no_")) {
+                                if (((string)entry.topic).Contains("no_")) {
 
                                     item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> の コミュニティレベルが {1} になりました。", item.SenderName, entry.actionLog.newHighestLevel);
                                 } else {
@@ -873,7 +905,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     item.Visible = entry.isVisible;
                     item.Muted = entry.isMuted;
 
-                    if(item is NicoNicoNicoRepoVideoEntry ve) {
+                    if (item is NicoNicoNicoRepoVideoEntry ve) {
 
                         NicoNicoUtil.ApplyLocalHistory(ve);
                     }
@@ -885,7 +917,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     }
                 }
 
-                if(UnFilteredNicoRepoList.Count == 0) {
+                if (UnFilteredNicoRepoList.Count == 0) {
 
                     IsEmpty = true;
                     return "";
@@ -894,18 +926,18 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 Next = UnFilteredNicoRepoList.Last().Id;
 
                 var datac = 0;
-                foreach(var data in json.data) {
+                foreach (var data in json.data) {
 
                     datac++;
                 }
 
                 var errorc = 0;
-                foreach(var error in json.errors) {
+                foreach (var error in json.errors) {
 
                     errorc++;
                 }
 
-                if((datac + errorc) == 25) {
+                if ((datac + errorc) == 25) {
 
                     NicoRepoList.Add(new NicoNicoNextButtonEntry());
                 } else {
@@ -914,9 +946,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
 
                 return "";
-            } catch(RequestFailed e) {
+            } catch (RequestFailed e) {
 
-                if(e.FailedType == FailedType.Failed) {
+                if (e.FailedType == FailedType.Failed) {
 
                     return "ニコレポの取得に失敗しました";
                 } else {
@@ -941,7 +973,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     NicoRepoList.Add(entry);
                 }
             }
-            if(hasButton) {
+            if (hasButton) {
 
                 NicoRepoList.Add(new NicoNicoNextButtonEntry());
             }
@@ -1013,7 +1045,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public bool IsWatched {
             get { return _IsWatched; }
-            set { 
+            set {
                 if (_IsWatched == value)
                     return;
                 _IsWatched = value;
@@ -1040,7 +1072,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public string CommunityThumbnail { get; set; }
 
-        public string CommunityUrl { get {
+        public string CommunityUrl {
+            get {
                 return "http://com.nicovideo.jp/community/" + CommunityId;
             }
         }
