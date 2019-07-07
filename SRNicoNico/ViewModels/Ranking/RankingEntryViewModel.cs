@@ -34,8 +34,8 @@ namespace SRNicoNico.ViewModels {
         public async void Initialize(int page) {
 
             IsActive = true;
-            Owner.Status = "ランキング読み込み中:" + Name;
-            Owner.Status = await Model.GetRankingAsync(Category, page);
+            Owner.Status = "ランキングは開発中です";
+            //Owner.Status = await Model.GetRankingAsync(Category, page);
 
             IsActive = false;
         }

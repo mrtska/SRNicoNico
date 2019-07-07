@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Codeplex.Data;
+using HtmlAgilityPack;
 using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
 using System;
@@ -79,8 +80,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         private RankingTarget Target;
 
-        private const string ApiBaseUrl = "https://www.nicovideo.jp/ranking/{0}/{1}/";
-        private string ApiUrl = string.Empty;
+        private const string ApiUrl = "https://www.nicovideo.jp/ranking/";
 
         #region RankingList変更通知プロパティ
         private ObservableSynchronizedCollection<NicoNicoRankingEntry> _RankingList;
@@ -124,67 +124,81 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             Period = period;
             Target = target;
 
-            ApiUrl = string.Format(ApiBaseUrl, TransTarget(Target), TransPeriod(Period)) + "{0}?page={1}";
+            //ApiUrl = string.Format(ApiUrl, TransTarget(Target), TransPeriod(Period)) + "{0}?page={1}";
         }
  
-        public async Task<string> GetRankingAsync(string category, int page) {
+        public async Task<string> GetRankingAsync() {
 
             try {
 
                 RankingList.Clear();
 
                 IsPreparing = false;
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(string.Format(ApiUrl, category, page));
+                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(ApiUrl);
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml(a);
 
-                var nodes = doc.DocumentNode.SelectNodes("//div[@class='contentBody video videoList01']/ul/li");
-                if(nodes == null) {
+                var node = doc.DocumentNode.SelectSingleNode("//div[@id='MatrixRanking-app']");
+                if (node == null) {
 
                     IsPreparing = true;
                     return null;
                 }
-                
-                //ランキングページから各種データをXPathで取得
-                foreach(var ranking in nodes) {
 
-                    var item = new NicoNicoRankingEntry();
+                var rankingData = node.Attributes["data-app"].Value;
+                rankingData = HttpUtility.HtmlDecode(rankingData);
 
-                    item.Rank = ranking.SelectSingleNode("div[@class='rankingNumWrap']/p[@class='rankingNum']").InnerText;
-                    item.RankingPoint = ranking.SelectSingleNode("div[@class='rankingNumWrap']/p[@class='rankingPt']").InnerText;
+                var json = DynamicJson.Parse(rankingData);
 
-                    var wrap = ranking.SelectSingleNode("div[@class='videoList01Wrap']");
+                foreach(var lane in json.lanes) {
 
-                    item.PostAt = wrap.SelectSingleNode("p[contains(@class, 'itemTime')]").InnerText;
 
-                    item.Length = wrap.SelectSingleNode("div[@class='itemThumbBox']/span").InnerText;
-                    item.ThumbNail = wrap.SelectSingleNode("div[@class='itemThumbBox']/div/a/img").Attributes["data-original"].Value;
 
-                    var content = ranking.SelectSingleNode("div[@class='itemContent']");
 
-                    item.ContentUrl = "https://www.nicovideo.jp/" + content.SelectSingleNode("p/a").Attributes["href"].Value;
-                    item.Title = content.SelectSingleNode("p/a").InnerText;
 
-                    item.Description = HttpUtility.HtmlDecode(content.SelectSingleNode("div[@class='wrap']/p[@class='itemDescription ranking']").InnerText);
-
-                    var itemdata = content.SelectSingleNode("div[@class='itemData']/ul");
-
-                    item.ViewCount = itemdata.SelectSingleNode("li[@class='count view']/span").InnerText;
-                    item.CommentCount = itemdata.SelectSingleNode("li[@class='count comment']/span").InnerText;
-                    item.MylistCount = itemdata.SelectSingleNode("li[@class='count mylist']/span").InnerText;
-
-                    NicoNicoUtil.ApplyLocalHistory(item);
-
-                    //そのページのランキングは存在しないか準備中
-                    if (item.Rank == "1" && page != 1) {
-
-                        IsPreparing = true;
-                        break;
-                    }
-
-                    RankingList.Add(item);
                 }
+
+                ;
+                //ランキングページから各種データをXPathで取得
+                //foreach(var ranking in node) {
+
+                //    var item = new NicoNicoRankingEntry();
+
+                //    item.Rank = ranking.SelectSingleNode("div[@class='rankingNumWrap']/p[@class='rankingNum']").InnerText;
+                //    item.RankingPoint = ranking.SelectSingleNode("div[@class='rankingNumWrap']/p[@class='rankingPt']").InnerText;
+
+                //    var wrap = ranking.SelectSingleNode("div[@class='videoList01Wrap']");
+
+                //    item.PostAt = wrap.SelectSingleNode("p[contains(@class, 'itemTime')]").InnerText;
+
+                //    item.Length = wrap.SelectSingleNode("div[@class='itemThumbBox']/span").InnerText;
+                //    item.ThumbNail = wrap.SelectSingleNode("div[@class='itemThumbBox']/div/a/img").Attributes["data-original"].Value;
+
+                //    var content = ranking.SelectSingleNode("div[@class='itemContent']");
+
+                //    item.ContentUrl = "https://www.nicovideo.jp/" + content.SelectSingleNode("p/a").Attributes["href"].Value;
+                //    item.Title = content.SelectSingleNode("p/a").InnerText;
+
+                //    item.Description = HttpUtility.HtmlDecode(content.SelectSingleNode("div[@class='wrap']/p[@class='itemDescription ranking']").InnerText);
+
+                //    var itemdata = content.SelectSingleNode("div[@class='itemData']/ul");
+
+                //    item.ViewCount = itemdata.SelectSingleNode("li[@class='count view']/span").InnerText;
+                //    item.CommentCount = itemdata.SelectSingleNode("li[@class='count comment']/span").InnerText;
+                //    item.MylistCount = itemdata.SelectSingleNode("li[@class='count mylist']/span").InnerText;
+
+                //    NicoNicoUtil.ApplyLocalHistory(item);
+
+                //    //そのページのランキングは存在しないか準備中
+                //    if (item.Rank == "1" && page != 1) {
+
+                //        IsPreparing = true;
+                //        break;
+                //    }
+
+                //    RankingList.Add(item);
+                //}
                 return "";
             } catch(RequestFailed) {
 
