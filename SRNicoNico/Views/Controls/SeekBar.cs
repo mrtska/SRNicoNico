@@ -164,7 +164,7 @@ namespace SRNicoNico.Views.Controls {
         private void SeekBar_PreviewMouseMove(object sender, MouseEventArgs e) {
 
             // 動画読み込み時にシークバー上でマウスを動かすとダメ
-            if (VideoTime == 0) {
+            if (((long) VideoTime) == 0 || ((long) ActualWidth) == 0) {
 
                 return;
             }
@@ -190,8 +190,9 @@ namespace SRNicoNico.Views.Controls {
                         try {
 
                             StoryBoardImage = Imaging.CreateBitmapSourceFromHBitmap(hBitMap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                        } catch(Exception ee) {
+                        } catch(Exception) {
 
+                            // 握りつぶす 握りつぶしても特に問題は無い
                             ;
                         } finally {
 
