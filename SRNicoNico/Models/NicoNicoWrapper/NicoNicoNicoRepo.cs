@@ -563,7 +563,26 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 storeCommunity(item, com);
                                 storeVideo(item as NicoNicoNicoRepoVideoEntry, video);
 
-                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a>  コミュニティ <a href=\"" + item.CommunityUrl + "\">{1}</a> に動画を追加しました。", item.SenderName, item.CommunityName);
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a>  コミュニティ <a href=\"" + item.CommunityUrl + "\">{1}</a> に動画を登録しました。", item.SenderName, item.CommunityName);
+                                break;
+                            }
+                        case "nicommunity.user.illust.registered": {
+
+                                var sender = entry.senderNiconicoUser;
+                                var com = entry.communityForFollower;
+                                var seiga = entry.illustImage;
+
+                                item = new NicoNicoNicoRepoSeigaEntry() {
+                                    SeigaId = seiga.id,
+                                    SeigaTitle = seiga.title,
+                                    SeigaThumbnail = seiga.thumbnailUrl,
+                                    SeigaUrl = seiga.urls.pcUrl,
+                                    ContentUrl = seiga.urls.pcUrl
+                                };
+                                storeSenderUser(item, sender);
+                                storeCommunity(item, com);
+
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a>  コミュニティ <a href=\"" + item.CommunityUrl + "\">{1}</a> にイラストを登録しました。", item.SenderName, item.CommunityName);
                                 break;
                             }
                         case "nicovideo.user.community_member_only_video.upload": {
