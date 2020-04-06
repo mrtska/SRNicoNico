@@ -135,7 +135,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 api.MylistCount = (int) video.mylistCount;
                 api.CommentCount = (int) json.thread.commentCount;
 
-                api.HighestRank = (int?) json.context.highestRank;
+                api.HighestRank = (int?) json.context.highestGenreRanking.rank;
                 api.YesterdayRank = (int?) json.context.yesterdayRank;
 
                 api.Tags = new List<VideoTag>();
