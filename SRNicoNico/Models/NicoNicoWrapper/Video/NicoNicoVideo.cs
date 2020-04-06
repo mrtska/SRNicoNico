@@ -134,9 +134,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 api.ViewCount = (int) video.viewCount;
                 api.MylistCount = (int) video.mylistCount;
                 api.CommentCount = (int) json.thread.commentCount;
-
-                api.HighestRank = (int?) json.context.highestGenreRanking.rank;
-                api.YesterdayRank = (int?) json.context.yesterdayRank;
+                
+                api.HighestRank = (int?)json.context.highestGenreRanking?.rank ?? null;
 
                 api.Tags = new List<VideoTag>();
                 foreach(var jsontag in json.tags) {
