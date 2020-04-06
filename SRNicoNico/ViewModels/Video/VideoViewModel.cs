@@ -452,8 +452,10 @@ namespace SRNicoNico.ViewModels {
                         Refresh();
                         break;
                     case Key.W:
-                        Close();
-                        e.Handled = true;
+                        if (!Html5Handler.IsFullScreen) {
+                            Close();
+                            e.Handled = true;
+                        }
                         break;
                 }
             }
