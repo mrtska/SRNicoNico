@@ -417,6 +417,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                                 }
                                 break;
                             }
+                        case "blomaga.channel.channel_article.publish":
                         case "nicovideo.channel.blomaga.upload": {
 
                                 var sender = entry.senderChannel;
