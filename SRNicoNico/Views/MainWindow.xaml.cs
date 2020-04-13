@@ -1,7 +1,7 @@
-﻿using System.Windows;
+﻿using MetroRadiance.UI.Controls;
 
 namespace SRNicoNico {
-    public partial class MainWindow : Window {
+    public partial class MainWindow : MetroWindow {
         public MainWindow() {
             InitializeComponent();
         }
