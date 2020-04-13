@@ -5,6 +5,9 @@ using Livet;
 using Unity;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// MainWindowクラスのDataContext
+    /// </summary>
     public class MainWindowViewModel : ViewModel {
 
         /// <summary>
@@ -15,10 +18,36 @@ namespace SRNicoNico.ViewModels {
             get { return 2.00; }
         }
 
-        public MainWindowViewModel(IUnityContainer container) {
+#if DEBUG
+        private string _Title = "NicoNicoViewer Debug Build ";
+#else
+        private string _Title = "NicoNicoViewer";
+#endif
+        public string Title {
+            get { return _Title; }
+            set { 
+                if (_Title == value)
+                    return;
+                _Title = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public MainContentViewModel MainContent { get; private set; }
+
+
+        public MainWindowViewModel() {
 
         }
 
+        /// <summary>
+        /// 各ViewModelを初期化する
+        /// </summary>
+        /// <param name="container"></param>
+        public void Initialize(IUnityContainer container) {
+
+            MainContent = container.Resolve<MainContentViewModel>();
+        }
 
     }
 }

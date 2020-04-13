@@ -15,7 +15,10 @@ namespace SRNicoNico {
             var container = new UnityContainer();
             RegisterServices(container);
 
-            MainWindow = new MainWindow() { DataContext = container.Resolve<MainWindowViewModel>() };
+            var vm = container.Resolve<MainWindowViewModel>();
+            vm.Initialize(container);
+
+            MainWindow = new MainWindow() { DataContext = vm };
             MainWindow.Show();
         }
 
@@ -24,6 +27,8 @@ namespace SRNicoNico {
         /// </summary>
         /// <param name="container">コンテナエンジン</param>
         private void RegisterServices(IUnityContainer container) {
+
+            container.RegisterType<MainWindowViewModel>(TypeLifetime.Singleton);
 
             container.RegisterType<NicoNicoSessionService>(TypeLifetime.Singleton);
         }

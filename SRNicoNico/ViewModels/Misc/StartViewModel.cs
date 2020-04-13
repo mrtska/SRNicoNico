@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// スタートページクラスのDataContext
+    /// </summary>
+    public class StartViewModel : TabItemViewModel {
+
+        public double CurrentVersion { get; private set; }
+
+        public StartViewModel(MainWindowViewModel vm) : base("スタート") {
+
+            CurrentVersion = vm.CurrentVersion;
+        }
+
+
+
+    }
+}
