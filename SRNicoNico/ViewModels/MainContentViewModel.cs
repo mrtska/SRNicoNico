@@ -44,6 +44,7 @@ namespace SRNicoNico.ViewModels {
         private void Initialize(IUnityContainer container) {
 
             SystemItems.Add(container.Resolve<StartViewModel>());
+            SystemItems.Add(container.Resolve<WebViewViewModel>());
 
 
             // スタートページをデフォルトで開くようにする

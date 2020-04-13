@@ -7,7 +7,7 @@ namespace SRNicoNico.Views.Behaviors {
     /// <summary>
     /// 初期URL以外に遷移しようとした時にブラウザでリンクを開くようにするBehavior
     /// </summary>
-    public class WebViewNavigationBehavior : Behavior<WebView> {
+    public class WebViewNavigationBehavior : Behavior<Microsoft.Toolkit.Wpf.UI.Controls.WebView> {
 
         protected override void OnAttached() {
             base.OnAttached();

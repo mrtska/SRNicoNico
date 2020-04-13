@@ -23,4 +23,16 @@
     <Folder Include="Views\Converters\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\Contents\WebView\WebViewContent.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\Contents\WebView\WebViewContent.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>
