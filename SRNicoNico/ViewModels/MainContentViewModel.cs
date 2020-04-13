@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Linq;
 using Livet;
 using Unity;
 
@@ -22,6 +20,19 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public ObservableSynchronizedCollection<TabItemViewModel> UserItems { get; private set; }
 
+        private TabItemViewModel _SelectedItem;
+        /// <summary>
+        /// 現在選択されているタブ
+        /// </summary>
+        public TabItemViewModel SelectedItem {
+            get { return _SelectedItem; }
+            set { 
+                if (_SelectedItem == value)
+                    return;
+                _SelectedItem = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public MainContentViewModel(IUnityContainer container) {
 
@@ -33,6 +44,10 @@ namespace SRNicoNico.ViewModels {
         private void Initialize(IUnityContainer container) {
 
             SystemItems.Add(container.Resolve<StartViewModel>());
+
+
+            // スタートページをデフォルトで開くようにする
+            SelectedItem = SystemItems.First();
         }
 
     }
