@@ -4,6 +4,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <Platforms>x86;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,21 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Views\Actions\" />
     <Folder Include="Views\Converters\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Views\Contents\WebView\WebViewContent.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="Views\Contents\WebView\WebViewContent.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
 
 </Project>

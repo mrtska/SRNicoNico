@@ -64,13 +64,11 @@ namespace SRNicoNico.Views.Behaviors {
 
 
         protected override void OnAttached() {
-            base.OnAttached();
 
             AssociatedObject.KeyDown += TextBox_KeyDown;
         }
 
         protected override void OnDetaching() {
-            base.OnDetaching();
 
             AssociatedObject.KeyDown -= TextBox_KeyDown;
         }
@@ -101,7 +99,7 @@ namespace SRNicoNico.Views.Behaviors {
             if (UseProperty) {
 
                 var pass = type.GetProperty(PropertyName);
-                pass.SetValue(Binding, int.Parse(AssociatedObject.Text));
+                pass?.SetValue(Binding, int.Parse(AssociatedObject.Text));
             }
 
             // メソッドの引数をつかう
@@ -109,12 +107,12 @@ namespace SRNicoNico.Views.Behaviors {
 
                 // 引数有りで実行する
                 var method = type.GetMethod(MethodName, new[] { typeof(string) });
-                method.Invoke(Binding, new[] { AssociatedObject.Text });
+                method?.Invoke(Binding, new[] { AssociatedObject.Text });
             } else {
 
                 // 引数無しでメソッドを呼び出す
                 var method = type.GetMethod(MethodName);
-                method.Invoke(Binding, null);
+                method?.Invoke(Binding, null);
             }
         }
     }

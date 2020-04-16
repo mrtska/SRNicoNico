@@ -20,11 +20,11 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public ObservableSynchronizedCollection<TabItemViewModel> UserItems { get; private set; }
 
-        private TabItemViewModel _SelectedItem;
+        private TabItemViewModel? _SelectedItem;
         /// <summary>
         /// 現在選択されているタブ
         /// </summary>
-        public TabItemViewModel SelectedItem {
+        public TabItemViewModel? SelectedItem {
             get { return _SelectedItem; }
             set { 
                 if (_SelectedItem == value)
@@ -49,6 +49,9 @@ namespace SRNicoNico.ViewModels {
 
             // スタートページをデフォルトで開くようにする
             SelectedItem = SystemItems.First();
+
+            // すべてのViewModelをCompositeDisposableに登録する
+            SystemItems.ToList().ForEach(vm => CompositeDisposable.Add(vm));
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Input;
 using Livet;
 using Unity;
 
@@ -33,7 +34,7 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public MainContentViewModel MainContent { get; private set; }
+        public MainContentViewModel? MainContent { get; private set; }
 
 
         public MainWindowViewModel() {
@@ -43,10 +44,24 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// 各ViewModelを初期化する
         /// </summary>
-        /// <param name="container"></param>
+        /// <param name="container">DIコンテナ</param>
         public void Initialize(IUnityContainer container) {
 
             MainContent = container.Resolve<MainContentViewModel>();
+            CompositeDisposable.Add(MainContent);
+        }
+
+        public void KeyDown(KeyEventArgs e) {
+
+            MainContent?.SelectedItem?.KeyDown(e);
+        }
+        public void KeyUp(KeyEventArgs e) {
+
+            MainContent?.SelectedItem?.KeyUp(e);
+        }
+        public void MouseDown(MouseButtonEventArgs e) {
+
+            MainContent?.SelectedItem?.MouseDown(e);
         }
 
     }

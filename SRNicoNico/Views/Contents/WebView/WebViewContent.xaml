@@ -8,7 +8,7 @@
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
-             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls" xmlns:uwp="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls.WebView"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance {x:Type vm:WebViewContentViewModel}}">
@@ -39,7 +39,7 @@
                     </i:Interaction.Triggers>
                 </controls:RoundButton>
             </StackPanel>
-            <metro:PromptTextBox Grid.Column="1" Prompt="URLまたは検索語句を入力" Text="{Binding Url,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="NoWrap" Height="25">
+            <metro:PromptTextBox Grid.Column="1" Prompt="URLまたは検索語句を入力" Text="{Binding CurrentUrl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="NoWrap" Height="25">
                 <i:Interaction.Behaviors>
                     <b:TextBoxEnterKeyBehavior Binding="{Binding}" UseMethodParameter="True" MethodName="Load" />
                 </i:Interaction.Behaviors>

@@ -1,4 +1,5 @@
-﻿using Livet;
+﻿using System.Windows.Input;
+using Livet;
 using MetroRadiance.UI.Controls;
 
 namespace SRNicoNico.ViewModels {
@@ -7,11 +8,11 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class TabItemViewModel : ViewModel, ITabItem {
 
-        private string _Name;
+        private string? _Name;
         /// <summary>
         /// タブに表示する名前
         /// </summary>
-        public string Name {
+        public string? Name {
             get { return _Name; }
             set { 
                 if (_Name == value)
@@ -53,6 +54,23 @@ namespace SRNicoNico.ViewModels {
 
             Name = tabName;
         }
+
+        /// <summary>
+        /// このタブを開いている時にキーボードを叩くと呼ばれる
+        /// </summary>
+        /// <param name="e">キーイベント</param>
+        public virtual void KeyDown(KeyEventArgs e) { }
+        /// <summary>
+        /// このタブを開いている時にキーボードを叩くと呼ばれる
+        /// </summary>
+        /// <param name="e">キーイベント</param>
+        public virtual void KeyUp(KeyEventArgs e) { }
+
+        /// <summary>
+        /// このタブを開いている時にマウスのクリックなどをすると呼ばれる
+        /// </summary>
+        /// <param name="e">マウスイベント</param>
+        public virtual void MouseDown(MouseButtonEventArgs e) { }
 
     }
 }
