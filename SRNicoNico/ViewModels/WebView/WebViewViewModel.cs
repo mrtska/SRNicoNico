@@ -42,7 +42,7 @@ namespace SRNicoNico.ViewModels {
             // 1つもWebViewを開いていない時は自動的に開く
             if (WebViewItems.Count == 0) {
                 
-                AddNewTab();
+                AddNewTab(true);
             }
         }
 
@@ -50,10 +50,10 @@ namespace SRNicoNico.ViewModels {
         /// 指定したURLでWebViewのタブを開く
         /// </summary>
         /// <param name="url">URL</param>
-        /// <param name="forceUseWebView"></param>
-        public void AddTab(string url, bool forceUseWebView = false) {
+        /// <param name="useViewer">リンクをNicoNicoViewerで開くか</param>
+        public void AddTab(string url, bool useViewer = false) {
 
-            var tab = new WebViewContentViewModel(url);
+            var tab = new WebViewContentViewModel(this, url, useViewer);
 
             // リストに追加し、選択状態にする
             WebViewItems.Add(tab);
@@ -65,9 +65,9 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// 新しいタブを開く
         /// </summary>
-        public void AddNewTab() {
+        public void AddNewTab(bool useViewer = false) {
 
-            AddTab(Settings.Instance.DefaultWebViewPageUrl);
+            AddTab(Settings.Instance.DefaultWebViewPageUrl, useViewer);
         }
 
         /// <summary>

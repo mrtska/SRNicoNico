@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Livet;
 using Microsoft.Toolkit.Wpf.UI.Controls;
 
@@ -8,11 +9,11 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class WebViewContentViewModel : TabItemViewModel {
 
-        private string? _CurrentUrl;
+        private string _CurrentUrl;
         /// <summary>
         /// 現在表示しているページのURL
         /// </summary>
-        public string? CurrentUrl {
+        public string CurrentUrl {
             get { return _CurrentUrl; }
             set { 
                 if (_CurrentUrl == value)
@@ -50,16 +51,33 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private bool _OpenWithViewer;
+        /// <summary>
+        /// 動画リンクをNicoNicoViewerで開くかどうか
+        /// </summary>
+        public bool OpenWithViewer {
+            get { return _OpenWithViewer; }
+            set { 
+                if (_OpenWithViewer == value)
+                    return;
+                _OpenWithViewer = value;
+                RaisePropertyChanged();
+            }
+        }
+
         /// <summary>
         /// WebViewの実装 現時点でDeprecated
         /// そのうちWebView2に実装を変更する必要有り
         /// </summary>
         public WebView WebView { get; private set; }
 
+        private readonly WebViewViewModel Owner;
 
-        public WebViewContentViewModel(string initialUrl) : base(initialUrl) {
+        public WebViewContentViewModel(WebViewViewModel vm, string initialUrl, bool useViewer) : base(initialUrl) {
 
+            Owner = vm;
             CurrentUrl = initialUrl;
+            OpenWithViewer = useViewer;
             WebView = new WebView { Source = new Uri(initialUrl) };
             Initialize();
         }
@@ -74,6 +92,13 @@ namespace SRNicoNico.ViewModels {
             // ページ遷移が始まった時に呼ばれる
             WebView.NavigationStarting += (o, e) => {
 
+                if (OpenWithViewer) {
+
+                    // TODO: ここにNicoNicoViewerで開く処理
+                    e.Cancel = true;
+                    return;
+                }
+
                 CurrentUrl = e.Uri.OriginalString;
                 Name = CurrentUrl;
             };
@@ -85,13 +110,11 @@ namespace SRNicoNico.ViewModels {
                 CanGoForward = WebView.CanGoForward;
                 Name = WebView.DocumentTitle;
             };
-            WebView.PreviewMouseDown += (o, e) => {
 
-                ;
-            };
-            WebView.PreviewKeyDown += (o, e) => {
+            // target=_blankなどのリンクやShift+Clickした時に呼ばれる
+            WebView.NewWindowRequested += (o, e) => {
 
-                ;
+                Owner.AddTab(e.Uri.OriginalString, OpenWithViewer);
             };
         }
 
@@ -115,6 +138,24 @@ namespace SRNicoNico.ViewModels {
             if (WebView.CanGoForward) {
 
                 WebView.GoForward();
+            }
+        }
+
+        private readonly Regex UrlRegex = new Regex(@"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+");
+
+        /// <summary>
+        /// 指定されたURLをロードする
+        /// アドレスバーにURLを入力した時にも呼ばれる
+        /// </summary>
+        /// <param name="url">遷移したいURL</param>
+        public void Load(string url) {
+
+            if (UrlRegex.Match(url).Success) {
+
+                WebView.Navigate(url);
+            } else {
+
+                WebView.Navigate("https://www.google.co.jp/search?q=" + url);
             }
         }
 

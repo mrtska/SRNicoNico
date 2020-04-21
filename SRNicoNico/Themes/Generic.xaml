@@ -2,6 +2,7 @@
     <ResourceDictionary.MergedDictionaries>
 
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.RoundButton.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.ToggleSwitch.xaml" />
 
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

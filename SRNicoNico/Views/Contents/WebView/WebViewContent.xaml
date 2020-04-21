@@ -44,7 +44,8 @@
                     <b:TextBoxEnterKeyBehavior Binding="{Binding}" UseMethodParameter="True" MethodName="Load" />
                 </i:Interaction.Behaviors>
             </metro:PromptTextBox>
-            <CheckBox Grid.Column="2" ToolTip="リンクをNicoNicoViewerで開く" Margin="5" IsChecked="{Binding OpenWithViewer,Mode=TwoWay}" />
+
+            <controls:ToggleSwitch Grid.Column="2" ToolTip="リンクをNicoNicoViewerで開く" IsOn="{Binding OpenWithViewer, Mode=TwoWay}" Margin="5,0" />
         </Grid>
         <ContentControl Grid.Row="1" Content="{Binding WebView, Mode=OneTime}" />
     </Grid>
