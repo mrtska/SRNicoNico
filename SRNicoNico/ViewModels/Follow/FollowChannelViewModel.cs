@@ -14,27 +14,10 @@ namespace SRNicoNico.ViewModels {
             Model = new NicoNicoFollowChannel();
         }
 
-        public async void Initialize() {
+        public void Initialize() {
 
             IsActive = true;
             Owner.Status = "フォローチャンネル数を取得中";
-            Owner.Status = await Model.FetchFollowedChannelCountAsync();
-
-            if(Model.ChannelCount == 0) {
-
-                IsActive = false;
-                Owner.Status = "フォローしているチャンネルはありません。";
-                return;
-            }
-
-            if(Model.ChannelCount != -1) {
-
-                MaxPages = (Model.ChannelCount / 10) + 1;
-            } else {
-
-                return;
-            }
-
             CurrentPage = 1;
             GetPage();
         }
@@ -45,6 +28,14 @@ namespace SRNicoNico.ViewModels {
             Owner.Status = "フォローチャンネルを取得中";
             Owner.Status = await Model.GetFollowedChannelAsync(CurrentPage);
             IsActive = false;
+            if (Model.ChannelCount != -1) {
+
+                MaxPages = (Model.ChannelCount / 25) + 1;
+            }
+            if (Model.ChannelCount == 0) {
+
+                Owner.Status = "フォローしているチャンネルはありません。";
+            }
         }
 
         public void Refresh() {

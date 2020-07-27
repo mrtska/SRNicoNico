@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Codeplex.Data;
+using HtmlAgilityPack;
 using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
 using System.Text.RegularExpressions;
@@ -77,22 +78,23 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 ChannelList.Clear();
 
-                //取得するURL
-                var url = "https://www.nicovideo.jp/my/channel?page=" + page;
-
+                var url = "https://public.api.nicovideo.jp/v1/user/followees/channels.json?limit=25&offset=" + (25 * (page - 1));
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
 
-                var doc = new HtmlDocument();
-                doc.LoadHtml(a);
+                var json = DynamicJson.Parse(a);
+                if (json.meta.status != 200) {
 
-                foreach (var outer in doc.DocumentNode.SelectNodes("//div[@class='articleBody']/div[@class='outer']")) {
+                    return "フォローしているチャンネルの取得に失敗しました";
+                }
+                ChannelCount = (int)json.meta.total;
+
+                foreach (var item in json.data) {
 
                     var channel = new NicoNicoFollowChannelEntry();
 
-                    channel.Title = HttpUtility.HtmlDecode(outer.SelectSingleNode("div/h5/a").InnerText.Trim());
-                    channel.ChannelUrl = outer.SelectSingleNode("div/h5/a").Attributes["href"].Value;
-
-                    channel.ThumbNailUrl = outer.SelectSingleNode("div/a/img").Attributes["src"].Value;
+                    channel.Title = item.name;
+                    channel.ChannelUrl = item.url;
+                    channel.ThumbNailUrl = item.thumbnailUrl;
 
                     ChannelList.Add(channel);
                 }

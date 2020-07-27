@@ -1,6 +1,8 @@
-﻿using HtmlAgilityPack;
+﻿using Codeplex.Data;
+using HtmlAgilityPack;
 using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -74,26 +76,32 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             try {
 
                 UserList.Clear();
-                //取得するURL
-                var url = "https://www.nicovideo.jp/my/fav/user?page=" + page;
 
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
+                var query = new GetRequestQuery("https://nvapi.nicovideo.jp/v1/users/me/following/users");
+                query.AddQuery("pageSize", 600);
+                query.AddQuery("page", 1);
 
-                var doc = new HtmlDocument();
-                doc.LoadHtml(a);
+                var request = new HttpRequestMessage(HttpMethod.Get, query.TargetUrl);
+                request.Headers.Add("X-Frontend-Id", "6");
+                request.Headers.Add("X-Frontend-Version", "0");
+                request.Headers.Add("X-Niconico-Language", "ja-jp");
 
-                foreach (var outer in doc.DocumentNode.SelectNodes("//div[@class='articleBody']/div[@class='outer']")) {
+                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(request);
 
-                    var user = new NicoNicoFollowUserEntry();
+                var json = DynamicJson.Parse(a);
+                if (json.meta.status != 200) {
 
-                    user.Name = outer.SelectSingleNode("div/h5/a").InnerText.Trim();
-                    user.UserPageUrl = "https://www.nicovideo.jp" + outer.SelectSingleNode("div/h5/a").Attributes["href"].Value;
+                    return "フォローしているユーザーの取得に失敗しました";
+                }
 
-                    user.ThumbNailUrl = outer.SelectSingleNode("div/a/img").Attributes["src"].Value;
+                foreach (var entry in json.data.items) {
 
-                    //説明文がないユーザーはなしにする
-                    var p = outer.SelectSingleNode("div/p");
-                    user.Description = p == null ? "" : p.InnerText.Trim();
+                    var user = new NicoNicoFollowUserEntry {
+                        Name = entry.nickname,
+                        UserPageUrl = $"https://www.nicovideo.jp/user/{entry.id}",
+                        ThumbNailUrl = entry.icons.small,
+                        Description = entry.strippedDescription
+                    };
 
                     UserList.Add(user);
                 }

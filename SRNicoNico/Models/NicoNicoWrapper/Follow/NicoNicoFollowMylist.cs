@@ -1,6 +1,9 @@
-﻿using HtmlAgilityPack;
+﻿using Codeplex.Data;
+using HtmlAgilityPack;
 using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
+using System;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -14,7 +17,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public int MylistCount {
             get { return _MylistCount; }
-            set { 
+            set {
                 if (_MylistCount == value)
                     return;
                 _MylistCount = value;
@@ -29,7 +32,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public ObservableSynchronizedCollection<NicoNicoFollowMylistEntry> MylistList {
             get { return _MylistList; }
-            set { 
+            set {
                 if (_MylistList == value)
                     return;
                 _MylistList = value;
@@ -77,41 +80,39 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             try {
                 MylistList.Clear();
+                var query = new GetRequestQuery("https://nvapi.nicovideo.jp/v1/users/me/mylists");
+                query.AddQuery("sampleItemCount", 1);
 
-                //取得するURL
-                var url = "https://www.nicovideo.jp/my/fav/mylist?page=" + page;
+                var request = new HttpRequestMessage(HttpMethod.Get, query.TargetUrl);
+                request.Headers.Add("X-Frontend-Id", "6");
+                request.Headers.Add("X-Frontend-Version", "0");
+                request.Headers.Add("X-Niconico-Language", "ja-jp");
 
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
+                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(request);
 
-                var doc = new HtmlDocument();
-                doc.LoadHtml(a);
+                var json = DynamicJson.Parse(a);
+                if (json.meta.status != 200) {
 
-                foreach (var outer in doc.DocumentNode.SelectNodes("//div[@class='articleBody']/div[@class='outer']")) {
+                    return "フォローしているユーザーの取得に失敗しました";
+                }
 
-                    var mylist = new NicoNicoFollowMylistEntry();
+                foreach (var item in json.data.mylists) {
 
-                    mylist.Title = HttpUtility.HtmlDecode(outer.SelectSingleNode("h5/a").InnerText.Trim());
-                    mylist.MylistPageUrl = "https://www.nicovideo.jp" + outer.SelectSingleNode("h5/a").Attributes["href"].Value;
+                    var mylist = new NicoNicoFollowMylistEntry {
+                        Title = item.name,
+                        MylistPageUrl = $"https://www.nicovideo.jp/my/mylist/{item.id}",
+                        Description = item.description
+                    };
 
-                    //URLがJSになってる時は削除されている
-                    if (mylist.MylistPageUrl.Contains("javascript:")) {
-
-                        mylist.Deleted = true;
-                    }
-
-                    //説明文がないマイリストはなしにする
-                    var p = outer.SelectSingleNode("p[@class='mylistDescription']");
-                    mylist.Description = p != null ? HttpUtility.HtmlDecode(p.InnerText.Trim()) : "";
-
-                    var inner = outer.SelectSingleNode("div[@class='inner']");
-                    if (inner != null) {
+                    foreach (var sample in item.sampleItems) {
 
                         mylist.HasVideoLink = true;
-                        mylist.ThumbNailUrl = inner.SelectSingleNode("div/a/img").Attributes["src"].Value;
-                        mylist.VideoTitle = HttpUtility.HtmlDecode(inner.SelectSingleNode("div/p/a").InnerText.Trim());
-                        mylist.VideoUrl = inner.SelectSingleNode("div/p/a").Attributes["href"].Value;
-                        mylist.PostedAt = inner.SelectSingleNode("div/p/span").InnerText.Trim();
+                        mylist.ThumbNailUrl = sample.video.thumbnail.url;
+                        mylist.VideoTitle = sample.video.title;
+                        mylist.VideoUrl = $"https://www.nicovideo.jp/watch/{sample.watchId}";
+                        mylist.PostedAt = DateTime.Parse(sample.video.registeredAt).ToString();
                     }
+
                     MylistList.Add(mylist);
                 }
 

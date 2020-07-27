@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Codeplex.Data;
+using HtmlAgilityPack;
 using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
 using System.Text.RegularExpressions;
@@ -77,28 +78,25 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 CommunityList.Clear();
 
                 //取得するURL
-                var url = "https://www.nicovideo.jp/my/community?page=" + page;
+                var url = "https://public.api.nicovideo.jp/v1/user/followees/communities.json?limit=25&offset=" + (25 * (page - 1));
 
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
 
-                var doc = new HtmlDocument();
-                doc.LoadHtml(a);
+                var json = DynamicJson.Parse(a);
+                if (json.meta.status != 200) {
 
-                foreach (var outer in doc.DocumentNode.SelectNodes("//div[@class='articleBody']/div[@class='outer']")) {
+                    return "フォローしているコミュニティの取得に失敗しました";
+                }
+                CommunityCount = (int) json.meta.total;
 
-                    var community = new NicoNicoFollowCommunityEntry();
+                foreach (var item in json.data) {
 
-                    community.Title = HttpUtility.HtmlDecode(outer.SelectSingleNode("div/h5/a").InnerText.Trim());
-                    community.CommunityUrl = outer.SelectSingleNode("div/h5/a").Attributes["href"].Value;
-
-                    community.ThumbNailUrl = outer.SelectSingleNode("div/a/img").Attributes["src"].Value;
-
-                    var data = outer.SelectSingleNode("div/ul");
-
-                    community.Data = data.SelectSingleNode("li[1]").InnerText.Trim();
-
-                    var p = outer.SelectSingleNode("div/p");
-                    community.Description = p.Attributes["class"] == null ? HttpUtility.HtmlDecode(p.InnerText.Trim()) : "";
+                    var community = new NicoNicoFollowCommunityEntry {
+                        Title = item.name,
+                        CommunityUrl = $"https://com.nicovideo.jp/community/{item.globalId}",
+                        ThumbNailUrl = item.thumbnailUrl.normal,
+                        //Description = item.description
+                    };
 
                     CommunityList.Add(community);
                 }

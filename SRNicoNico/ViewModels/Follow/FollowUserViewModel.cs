@@ -14,29 +14,21 @@ namespace SRNicoNico.ViewModels {
             Model = new NicoNicoFollowUser();
         }
 
-        public async void Initialize() {
+        public void Initialize() {
 
             IsActive = true;
             Owner.Status = "フォローユーザー数を取得中";
-            Owner.Status = await Model.FetchFollowedUserCountAsync();
+            MaxPages = 0;
+            CurrentPage = 1;
+            GetPage();
 
-            if(Model.UserCount == 0) {
+            if (Model.UserCount == 0) {
 
                 IsActive = false;
                 Owner.Status = "フォローしているユーザーはいません。";
                 return;
             }
 
-            if(Model.UserCount != -1) {
-
-                MaxPages = (Model.UserCount / 20) + 1;
-            } else {
-
-                return;
-            }
-
-            CurrentPage = 1;
-            GetPage();
         }
 
         public async void GetPage() {
