@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -14,10 +15,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoHistory : NotificationObject {
 
         //視聴履歴ページ
-        private const string HistoryUrl = "https://www.nicovideo.jp/my/history";
+        private const string HistoryUrl = "https://www.nicovideo.jp/my/history/video";
 
         //視聴履歴を返すAPI 全部はとってきてくれないのでボツ
-        private const string HistoryApiUrl = "https://www.nicovideo.jp/api/videoviewhistory/list";
+        private const string HistoryApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/watch/history";
 
         private static readonly string LocalHistoryLocation = NicoNicoUtil.OptionDirectory + "localhistory";
 
@@ -29,7 +30,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public ObservableSynchronizedCollection<NicoNicoHistoryEntry> AccountHistories {
             get { return _AccountHistories; }
-            set { 
+            set {
                 if (_AccountHistories == value)
                     return;
                 _AccountHistories = value;
@@ -43,7 +44,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public DispatcherCollection<NicoNicoHistoryEntry> LocalHistries {
             get { return _LocalHistries; }
-            set { 
+            set {
                 if (_LocalHistries == value)
                     return;
                 _LocalHistries = value;
@@ -63,49 +64,40 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 AccountHistories.Clear();
 
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(HistoryUrl);
+                var query = new GetRequestQuery(HistoryApiUrl);
+                query.AddQuery("pageSize", 200);
+                query.AddQuery("page", 1);
 
-                var doc = new HtmlDocument();
-                doc.LoadHtml(a);
+                var request = new HttpRequestMessage(HttpMethod.Get, query.TargetUrl);
+                request.Headers.Add("X-Frontend-Id", "6");
+                request.Headers.Add("X-Frontend-Version", "0");
+                request.Headers.Add("X-Niconico-Language", "ja-jp");
 
-                var list = doc.DocumentNode.SelectNodes("//div[@id='historyList']/div");
 
+                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(request);
 
-                if(list != null) {
+                var json = DynamicJson.Parse(a);
+                if (json.meta.status != 200) {
 
-                    foreach(var entry in list) {
+                    return "アカウントの視聴履歴の取得に失敗しました";
+                }
 
-                        var item = new NicoNicoHistoryEntry();
+                foreach (var entry in json.data.items) {
 
-                        item.VideoId = entry.SelectSingleNode("div/h5/a").Attributes["href"].Value.Substring(6);
-                        item.ThumbNailUrl = entry.SelectSingleNode("div/a/img").Attributes["data-original"].Value;
+                    var item = new NicoNicoHistoryEntry {
 
-                        //削除・非公開の動画はURLにドメインが含まれていない
-                        if (item.ThumbNailUrl.Contains("deleted")) {
+                        VideoId = entry.watchId,
+                        ThumbNailUrl = entry.video.thumbnail.url,
+                        Title = entry.video.title,
+                        Length = NicoNicoUtil.ConvertTime((int)entry.video.duration),
+                        WatchDate = UnixTime.ToUnixTime(DateTime.Parse(entry.lastViewedAt)),
+                        WatchCount = $"視聴回数{entry.views.ToString()}回"
+                    };
 
-                            item.ThumbNailUrl = "https://www.nicovideo.jp/" + item.ThumbNailUrl;
-                        }
-
-                        item.Title = entry.SelectSingleNode("div/h5/a").InnerText.Trim();
-
-                        //削除された動画だとぬるぽになる
-                        var time = entry.SelectSingleNode("div/span[@class='videoTime']");
-
-                        if(time != null) {
-
-                            item.Length = time.InnerText.Trim();
-                        }
-                        var date = TimeRegex.Match(entry.SelectSingleNode("div[@class='section VideoItem-videoDetail']/p").ChildNodes["#text"].InnerText.Trim());
-                        
-                        //これはひどい
-                        item.WatchDate = UnixTime.ToUnixTime(new DateTime(int.Parse(date.Groups[1].Value), int.Parse(date.Groups[2].Value), int.Parse(date.Groups[3].Value), int.Parse(date.Groups[4].Value), int.Parse(date.Groups[5].Value), 0));
-                        item.WatchCount = entry.SelectSingleNode("div[@class='section VideoItem-videoDetail']/p/span").InnerText;
-
-                        AccountHistories.Add(item);
-                    }
+                    AccountHistories.Add(item);
                 }
                 return "";
-            } catch(RequestFailed) {
+            } catch (RequestFailed) {
 
                 return "アカウントの視聴履歴の取得に失敗しました";
             }
@@ -113,18 +105,18 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public async Task<string> GetLocalHistoryAsync() {
 
-            if(File.Exists(LocalHistoryLocation)) {
+            if (File.Exists(LocalHistoryLocation)) {
 
                 try {
 
-                    using(var stream = new StreamReader(LocalHistoryLocation)) {
+                    using (var stream = new StreamReader(LocalHistoryLocation)) {
 
                         var coll = new DispatcherCollection<NicoNicoHistoryEntry>(DispatcherHelper.UIDispatcher);
 
                         var a = Encoding.UTF8.GetString(Convert.FromBase64String(await stream.ReadToEndAsync()));
                         dynamic json = DynamicJson.Parse(a);
-                            
-                        foreach(var entry in json.history) {
+
+                        foreach (var entry in json.history) {
 
                             var item = new NicoNicoHistoryEntry();
 
@@ -132,7 +124,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                             item.ThumbNailUrl = entry.thumbnail_url;
                             item.Title = entry.title;
                             item.Length = entry.length;
-                            item.WatchDate = (long) entry.watchdate;
+                            item.WatchDate = (long)entry.watchdate;
                             item.WatchCount = entry.watchcount;
 
                             coll.Add(item);
@@ -140,8 +132,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         LocalHistries = coll;
                         return "";
                     }
-                } catch(Exception) {
-                            
+                } catch (Exception) {
+
                     return "ローカルの視聴履歴の取得に失敗しました。ファイルが壊れている可能性があります";
                 }
 
@@ -151,7 +143,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 //ファイルがないときはアカウントの視聴履歴をコピーして使う
                 LocalHistries = new DispatcherCollection<NicoNicoHistoryEntry>(DispatcherHelper.UIDispatcher);
-                foreach(var entry in AccountHistories) {
+                foreach (var entry in AccountHistories) {
 
                     LocalHistries.Add(entry);
                 }
@@ -170,18 +162,18 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 list.Sort();
                 list.Reverse();
 
-                foreach(var entry in list) {
+                foreach (var entry in list) {
 
                     array.Add(new { video_id = entry.VideoId, thumbnail_url = entry.ThumbNailUrl, title = entry.Title, length = entry.Length, watchdate = entry.WatchDate, watchcount = entry.WatchCount });
                 }
                 root.history = array;
 
-                using(var writer = new StreamWriter(new FileStream(LocalHistoryLocation, FileMode.Create))) {
+                using (var writer = new StreamWriter(new FileStream(LocalHistoryLocation, FileMode.Create))) {
 
                     writer.WriteLine(Convert.ToBase64String(Encoding.UTF8.GetBytes(root.ToString())));
                     writer.Flush();
                 }
-            } catch(Exception) {
+            } catch (Exception) {
 
             }
         }
