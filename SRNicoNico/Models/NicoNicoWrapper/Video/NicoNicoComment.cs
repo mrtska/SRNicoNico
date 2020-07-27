@@ -87,7 +87,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             foreach (var composite in ApiData.ThreadInfo.Composites) {
 
                 //アクティブじゃないコメントスレッドは無視
-                if (!composite.IsActive) {
+                if (!composite.IsActive || composite.Label != "default") {
 
                     continue;
                 }
