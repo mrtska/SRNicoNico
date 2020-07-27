@@ -10,7 +10,7 @@ namespace SRNicoNico.ViewModels {
         public UserMylistViewModel(UserViewModel vm) : base("マイリスト") {
 
             Owner = vm;
-            Model = new NicoNicoUserMylist(vm.UserPageUrl);
+            Model = new NicoNicoUserMylist(vm.Model.UserInfo.UserId);
         }
 
         public async void Initialize() {

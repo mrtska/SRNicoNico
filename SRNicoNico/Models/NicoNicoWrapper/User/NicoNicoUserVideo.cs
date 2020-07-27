@@ -1,6 +1,9 @@
-﻿using HtmlAgilityPack;
+﻿using Codeplex.Data;
+using HtmlAgilityPack;
 using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
+using System;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -29,7 +32,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public ObservableSynchronizedCollection<NicoNicoSearchResultEntry> UserVideo {
             get { return _UserVideo; }
-            set { 
+            set {
                 if (_UserVideo == value)
                     return;
                 _UserVideo = value;
@@ -38,11 +41,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
         #endregion
 
-        private readonly string UserPageUrl;
+        public int VideoCount { get; set; }
 
-        public NicoNicoUserVideo(string url) {
+        private readonly string UserId;
 
-            UserPageUrl = url;
+        public NicoNicoUserVideo(string id) {
+
+            UserId = id;
             UserVideo = new ObservableSynchronizedCollection<NicoNicoSearchResultEntry>();
         }
 
@@ -50,7 +55,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             try {
 
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(UserPageUrl + "/video");
+                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(UserId + "/video");
                 var doc = new HtmlDocument();
                 doc.LoadHtml(a);
 
@@ -60,14 +65,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var match = Regex.Match(count, @"(\d+)");
 
-                if(match.Success) {
+                if (match.Success) {
 
                     return int.Parse(match.Groups[1].Value);
                 } else {
 
                     return 0;
                 }
-            } catch(RequestFailed) {
+            } catch (RequestFailed) {
 
                 return 0;
             }
@@ -76,59 +81,49 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public async Task<string> GetUserVideoAsync(int page) {
 
             UserVideo.Clear();
-            var url = UserPageUrl + "/video?page=" + page;
 
             try {
 
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
-                var doc = new HtmlDocument();
-                doc.LoadHtml(a);
+                var query = new GetRequestQuery($"https://nvapi.nicovideo.jp/v1/users/{UserId}/videos");
+                query.AddQuery("pageSize", 25);
+                query.AddQuery("page", page);
+                query.AddQuery("sortKey", "registeredAt");
+                query.AddQuery("sortOrder", "desc");
 
-                var content = doc.DocumentNode.SelectSingleNode("//div[@id='video']");
-                var outers = content.SelectNodes("div[@class='articleBody']/div[@class='outer VideoItem']");
+                var request = new HttpRequestMessage(HttpMethod.Get, query.TargetUrl);
+                request.Headers.Add("X-Frontend-Id", "6");
+                request.Headers.Add("X-Frontend-Version", "0");
+                request.Headers.Add("X-Niconico-Language", "ja-jp");
 
-                //終了
-                if(outers == null) {
+                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(request);
 
-                    return "";
+                var json = DynamicJson.Parse(a);
+                if (json.meta.status != 200) {
+
+                    return "投稿動画の取得に失敗しました";
                 }
+                VideoCount = (int) json.data.totalCount;
 
-                foreach(var outer in outers) {
+                foreach (var item in json.data.items) {
 
-                    //フォームだったら飛ばす
-                    if(outer.SelectSingleNode("form") != null) {
-
-                        continue;
-                    }
-
-                    var entry = new NicoNicoSearchResultEntry();
-
-                    var thumb = outer.SelectSingleNode("div/div[@class='thumbContainer VideoThumbnailContainer']");
-
-                    entry.Cmsid = thumb.SelectSingleNode("a").Attributes["href"].Value.Substring(6);
-                    entry.Cmsid = entry.Cmsid.Split('?')[0];
-
-                    entry.ThumbnailUrl = thumb.SelectSingleNode("a/img").Attributes["data-original"].Value;
-                    entry.Length = thumb.SelectSingleNode("span[@class='videoTime']").InnerText.Trim();
-
-                    var section = outer.SelectSingleNode("div[@class='section VideoItem-videoDetail']");
-
-                    entry.Title = HttpUtility.HtmlDecode(section.SelectSingleNode("h5/a").InnerText.Trim());
-                    entry.FirstRetrieve = section.SelectSingleNode("p").InnerText.Trim();
-
-                    var metadata = section.SelectSingleNode("div[@class='dataOuter']/ul");
-
-                    entry.ViewCounter = int.Parse(metadata.SelectSingleNode("li[@class='play']").InnerText.Trim().Split(':')[1].Replace(",", ""));
-                    entry.CommentCounter = int.Parse(metadata.SelectSingleNode("li[@class='comment']").InnerText.Trim().Split(':')[1].Replace(",", ""));
-                    entry.MylistCounter = int.Parse(metadata.SelectSingleNode("li[@class='mylist']/a").InnerText.Trim().Replace(",", ""));
-                    entry.ContentUrl = "https://www.nicovideo.jp/watch/" + entry.Cmsid;
+                    var entry = new NicoNicoSearchResultEntry {
+                        Cmsid = item.id,
+                        ThumbnailUrl = item.thumbnail.url,
+                        Length = NicoNicoUtil.ConvertTime((int)item.duration),
+                        Title = item.title,
+                        FirstRetrieve = DateTime.Parse(item.registeredAt).ToString(),
+                        ViewCounter = (int)item.count.view,
+                        CommentCounter = (int)item.count.comment,
+                        MylistCounter = (int)item.count.mylist,
+                        ContentUrl = $"https://www.nicovideo.jp/watch/{item.id}"
+                    };
 
                     NicoNicoUtil.ApplyLocalHistory(entry);
                     UserVideo.Add(entry);
                 }
 
                 return "";
-            } catch(RequestFailed) {
+            } catch (RequestFailed) {
 
                 return "投稿動画の取得に失敗しました。";
             }

@@ -10,12 +10,11 @@ namespace SRNicoNico.ViewModels {
         public UserVideoViewModel(UserViewModel vm) : base("投稿動画") {
 
             Owner = vm;
-            Model = new NicoNicoUserVideo(vm.UserPageUrl);
+            Model = new NicoNicoUserVideo(vm.Model.UserInfo.UserId);
         }
 
         public async void Initialize() {
 
-            MaxPages = await Model.GetUserVideoCountAsync() / 30 + 1;
             CurrentPage = 1;
             GetPage();
         }
@@ -30,6 +29,7 @@ namespace SRNicoNico.ViewModels {
             IsActive = true;
             Owner.Status = "投稿動画を取得中";
             Owner.Status = await Model.GetUserVideoAsync(CurrentPage);
+            MaxPages = Model.VideoCount / 25 + 1;
             IsActive = false;
         }
     }

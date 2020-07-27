@@ -1,7 +1,10 @@
-﻿using HtmlAgilityPack;
+﻿using Codeplex.Data;
+using HtmlAgilityPack;
 using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
+using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -40,85 +43,43 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         }
         #endregion
 
-        private readonly string UserPageUrl;
+        private readonly string UserId;
 
-        public NicoNicoUserMylist(string url) {
+        public NicoNicoUserMylist(string id) {
 
-            UserPageUrl = url;
+            UserId = id;
             MylistList = new ObservableSynchronizedCollection<NicoNicoUserMylistEntry>();
         }
 
         public async Task<string> GetUserMylistAsync() {
 
-            var url = UserPageUrl + "/mylist";
-
             try {
 
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(url);
-                var doc = new HtmlDocument();
-                doc.LoadHtml(a);
+                var query = new GetRequestQuery($"https://nvapi.nicovideo.jp/v1/users/{UserId}/mylists");
+                query.AddQuery("sampleItemCount", 3);
 
-                var content = doc.DocumentNode.SelectSingleNode("//div[@id='mylist']");
+                var request = new HttpRequestMessage(HttpMethod.Get, query.TargetUrl);
+                request.Headers.Add("X-Frontend-Id", "6");
+                request.Headers.Add("X-Frontend-Version", "0");
+                request.Headers.Add("X-Niconico-Language", "ja-jp");
 
-                var outers = content.SelectNodes("div[@class='articleBody']/div[@class='outer']");
+                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(request);
 
-                //終了
-                if (outers == null) {
+                var json = DynamicJson.Parse(a);
+                if (json.meta.status != 200) {
 
-                    Closed = true;
-                    return "";
+                    return "ユーザーマイリストの取得に失敗しました";
                 }
-                //ニコレポタイムライン走査
-                foreach (var node in outers) {
 
-                    var entry = new NicoNicoUserMylistEntry();
+                foreach (var item in json.data.mylists) {
 
-                    //h4タグ
-                    var h4 = node.SelectSingleNode("div/h4");
+                    var mylist = new NicoNicoUserMylistEntry {
+                        Name = item.name,
+                        ContentUrl = $"https://www.nicovideo.jp/user/{UserId}/mylist/{item.id}",
+                        Description = item.description
+                    };
 
-                    entry.ContentUrl = "https://www.nicovideo.jp/" + h4.SelectSingleNode("a").Attributes["href"].Value;
-
-                    //名前取得
-                    entry.Name = HttpUtility.HtmlDecode(h4.SelectSingleNode("a").InnerText.Trim());
-
-                    //説明文取得
-                    var desc = node.SelectSingleNode("div/p[@data-nico-mylist-desc-full='true']");
-                    entry.Description = desc == null ? "" : desc.InnerText.Trim();
-
-                    entry.Description = HyperLinkReplacer.Replace(entry.Description);
-
-                    //サムネイル取得
-                    var thumb1 = node.SelectSingleNode("div/ul/li[1]/img");
-                    var thumb2 = node.SelectSingleNode("div/ul/li[2]/img");
-                    var thumb3 = node.SelectSingleNode("div/ul/li[3]/img");
-
-                    if (thumb1 != null) {
-
-                        entry.ThumbNail1Available = true;
-                        entry.ThumbNail1Url = thumb1.Attributes["src"].Value;
-                        entry.ThumbNail1ToolTip = HttpUtility.HtmlDecode(thumb1.Attributes["alt"].Value);
-                    } else {
-                        goto next;
-                    }
-
-                    if (thumb2 != null) {
-
-                        entry.ThumbNail2Available = true;
-                        entry.ThumbNail2Url = thumb2.Attributes["src"].Value;
-                        entry.ThumbNail2ToolTip = HttpUtility.HtmlDecode(thumb2.Attributes["alt"].Value);
-                    } else {
-                        goto next;
-                    }
-
-                    if (thumb3 != null) {
-
-                        entry.ThumbNail3Available = true;
-                        entry.ThumbNail3Url = thumb3.Attributes["src"].Value;
-                        entry.ThumbNail3ToolTip = HttpUtility.HtmlDecode(thumb3.Attributes["alt"].Value);
-                    }
-
-                    next:
-                    MylistList.Add(entry);
+                    MylistList.Add(mylist);
                 }
 
                 return "";

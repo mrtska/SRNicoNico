@@ -99,7 +99,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             try {
 
-                var ret = new NicoNicoUserEntry();
 
                 //ユーザーページのhtmlを取得
                 var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(UserPageUrl);
@@ -107,45 +106,28 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 //htmlをロード
                 var doc = new HtmlDocument();
                 doc.LoadHtml(a);
+                var ret = new NicoNicoUserEntry();
 
                 //ユーザープロファイル
-                var detail = doc.DocumentNode.SelectSingleNode("//div[@class='userDetail']");
-                var profile = detail.SelectSingleNode("div[@class='profile']");
-                var account = profile.SelectSingleNode("div[@class='account']");
+                var div = doc.DocumentNode.SelectSingleNode("//div[@id='js-initial-userpage-data']");
+                var data = DynamicJson.Parse(HttpUtility.HtmlDecode(div.Attributes["data-initial-data"].Value));
 
-                ret.UserIconUrl = detail.SelectSingleNode("div[@class='avatar']/img").Attributes["src"].Value;
-                ret.UserName = profile.SelectSingleNode("h2").InnerText.Trim();
-                ret.IdAndMemberType = account.SelectSingleNode("p[@class='accountNumber']").InnerText.Trim();
+                var details = data.userDetails.userDetails;
+                var user = details.user;
 
-                var desc = profile.SelectSingleNode("ul[@class='userDetailComment channel_open_mt0']/li/p/span");
-
-                ret.Description = desc != null ? desc.InnerHtml : "";
-
-                var stats = profile.SelectSingleNode("div[@class='stats channel_open_mb8']/ul");
-
-                ret.FollowedCount = int.Parse(stats.SelectSingleNode("li/span").InnerText, System.Globalization.NumberStyles.AllowThousands);
-                ret.Level = int.Parse(stats.SelectSingleNode("li/a[@class='user-level-num']").InnerText, System.Globalization.NumberStyles.AllowThousands);
-                ret.StampExp = int.Parse(stats.SelectSingleNode("li/a/span").InnerText, System.Globalization.NumberStyles.AllowThousands);
-
-                ret.CsrfToken = GlobalHashRegex.Match(a).Groups[1].Value;
-
-                ret.UserId = Regex.Match(UserPageUrl, @"user/(\d+)").Groups[1].Value;
+                ret.UserIconUrl = user.icons.large;
+                ret.UserName = user.nickname;
+                ret.IdAndMemberType = $"{user.id} {user.registeredVersion} {(user.isPremium ? "プレミアム会員" : "一般会員")}";
+                ret.Description = user.description;
+                ret.FollowedCount = (int) user.followerCount;
+                ret.Level = (int) user.userLevel.currentLevel;
+                ret.UserId = user.id.ToString();
                 ret.UserPageUrl = UserPageUrl;
 
-                var watching = profile.SelectSingleNode("div[@class='watching']");
-                ret.IsFollow = watching != null;
-
-                var channel = profile.SelectSingleNode("div[@class='channel_open_box']");
-                if(channel != null) {
-
-                    ret.HasChannel = true;
-                    ret.ChannelName = channel.SelectSingleNode("p/a").InnerText;
-                    ret.ChannelThumbNail = channel.SelectSingleNode("img").Attributes["src"].Value;
-                    ret.ChannelUrl = channel.SelectSingleNode("p/a").Attributes["href"].Value;
-                }
+                ret.IsFollow = details.followStatus.isFollowing;
 
                 //html特殊文字をデコード
-                ret.Description = HttpUtility.HtmlDecode(ret.Description);
+                //ret.Description = HttpUtility.HtmlDecode(ret.Description);
 
                 //URLをハイパーリンク化する エンコードされてると正しく動かない
                 ret.Description = HyperLinkReplacer.Replace(ret.Description);
