@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Codeplex.Data;
+using HtmlAgilityPack;
 using Livet;
 using SRNicoNico.Models.NicoNicoViewer;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using System.Web;
 namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoLiveNotify : NotificationObject {
 
-        private const string LiveUrl = "https://www.nicovideo.jp/my/live";
+        private const string FollowUrl = "https://live.nicovideo.jp/follow";
 
         #region NowLiveList変更通知プロパティ
         private ObservableSynchronizedCollection<NicoNicoLiveNotifyEntry> _NowLiveList;
@@ -34,40 +35,52 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 NowLiveList.Clear();
 
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(LiveUrl);
+                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(FollowUrl);
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml(a);
 
-                var content = doc.DocumentNode.SelectSingleNode("//div[@class='content']");
+                var data = doc.DocumentNode.SelectSingleNode("//script[@id='embedded-data']");
 
-                if(content == null) {
+                if (data == null) {
 
-                    return null;
+                    return "生放送の取得に失敗しました";
                 }
-                var outers = content.SelectNodes("div[@id='ch']/div/div[@class='outer']");
-                //終了
-                if(outers == null) {
 
-                    return null;
-                }
-                foreach(var outer in outers) {
+                var json = DynamicJson.Parse(HttpUtility.HtmlDecode(data.Attributes["data-props"].Value));
+
+                foreach (var item in json.view.followedProgramListSection.programList) {
 
                     var entry = new NicoNicoLiveNotifyEntry();
 
-                    entry.CommunityUrl = outer.SelectSingleNode("a[1]").Attributes["href"].Value;
+                    switch (item.providerType) {
+                        case "official":
 
-                    var img = outer.SelectSingleNode("a/img");
-                    entry.ThumbNailUrl = img.Attributes["src"].Value;
-                    entry.CommunityName = "<a href=\"" + entry.CommunityUrl + "\">" + img.Attributes["alt"].Value + "</a>";
+                            entry.CommunityUrl = $"https://ch.nicovideo.jp/{item.socialGroup.id}";
+                            break;
+                        case "channel":
 
-                    var section = outer.SelectSingleNode("div");
-                    entry.Title = HttpUtility.HtmlDecode(section.SelectSingleNode("h5/a").InnerText.Trim());
-                    entry.LiveUrl = section.SelectSingleNode("h5/a").Attributes["href"].Value;
-                    entry.StartTime = section.SelectSingleNode("p[@class='time']/small").InnerText;
+                            entry.CommunityUrl = $"https://ch.nicovideo.jp/{item.socialGroup.id}";
+                            break;
+                        case "community":
+                            entry.CommunityUrl = $"https://com.nicovideo.jp/community/{item.socialGroup.id}";
+                            break;
+                    }
+                    entry.CommunityName = "<a href=\"" + entry.CommunityUrl + "\">" + item.socialGroup.name + "</a>";
+
+                    entry.ThumbNailUrl = item.thumbnailUrl;
+                    if (string.IsNullOrEmpty(entry.ThumbNailUrl)) {
+
+                        entry.ThumbNailUrl = item.socialGroup.thumbnailUrl;
+                    }
+
+                    entry.Title = item.title;
+                    entry.LiveUrl = item.watchPageUrl;
+                    entry.StartTime = UnixTime.FromUnixTime((long)item.beginAt / 1000).ToString();
 
                     NowLiveList.Add(entry);
                 }
+
                 return "";
             } catch(RequestFailed) {
 
