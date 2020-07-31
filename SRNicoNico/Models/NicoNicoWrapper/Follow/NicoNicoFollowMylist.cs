@@ -80,7 +80,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
             try {
                 MylistList.Clear();
-                var query = new GetRequestQuery("https://nvapi.nicovideo.jp/v1/users/me/mylists");
+                var query = new GetRequestQuery("https://nvapi.nicovideo.jp/v1/users/me/following/mylists");
                 query.AddQuery("sampleItemCount", 1);
 
                 var request = new HttpRequestMessage(HttpMethod.Get, query.TargetUrl);
@@ -98,13 +98,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 foreach (var item in json.data.mylists) {
 
+                    if (item.status == "deleted") {
+
+                        continue;
+                    }
+
+                    var detail = item.detail;
+
                     var mylist = new NicoNicoFollowMylistEntry {
-                        Title = item.name,
-                        MylistPageUrl = $"https://www.nicovideo.jp/my/mylist/{item.id}",
-                        Description = item.description
+                        Title = detail.name,
+                        MylistPageUrl = $"https://www.nicovideo.jp/mylist/{detail.id}",
+                        Description = detail.description
                     };
 
-                    foreach (var sample in item.sampleItems) {
+                    foreach (var sample in detail.sampleItems) {
 
                         mylist.HasVideoLink = true;
                         mylist.ThumbNailUrl = sample.video.thumbnail.url;
