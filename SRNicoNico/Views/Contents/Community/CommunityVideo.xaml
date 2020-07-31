@@ -20,8 +20,9 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        <ContentControl Content="{Binding IsEmpty}">
-            <ContentControl.ContentTemplateSelector>
+        <TextBlock Text="対応中のため現在使用出来ません" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <ContentControl>
+            <!--<ContentControl.ContentTemplateSelector>
                 <controls:BooleanDataTemplateSelector>
                     <controls:BooleanDataTemplateSelector.TrueTemplate>
                         <DataTemplate>
@@ -48,7 +49,7 @@
                         </DataTemplate>
                     </controls:BooleanDataTemplateSelector.FalseTemplate>
                 </controls:BooleanDataTemplateSelector>
-            </ContentControl.ContentTemplateSelector>
+            </ContentControl.ContentTemplateSelector>-->
         </ContentControl>
     </Grid>
 </UserControl>

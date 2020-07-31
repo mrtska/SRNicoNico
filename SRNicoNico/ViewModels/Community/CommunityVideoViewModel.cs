@@ -33,7 +33,7 @@ namespace SRNicoNico.ViewModels {
         #endregion
 
         //OwnerViewModel
-        private CommunityViewModel Community;
+        private readonly CommunityViewModel Community;
 
         public CommunityVideoViewModel(CommunityViewModel vm) : base("動画", int.MaxValue) {
 
@@ -46,7 +46,7 @@ namespace SRNicoNico.ViewModels {
 
             CommunityVideoList.Clear();
 
-            var videos = await Community.CommunityInstance.GetCommunityVideoAsync(page);
+            var videos = await Community.CommunityInstance.GetCommunityVideoAsync(Community.CommunityInfo.Id, page);
 
             if(videos != null) {
 
@@ -56,27 +56,19 @@ namespace SRNicoNico.ViewModels {
                 }
             }
             IsActive = false;
+            MaxPages = CommunityVideoList.Count / 20 + 1;
         }
 
-        public async void Initialize() {
+        public void Initialize() {
 
             IsActive = true;
-            var count = await Community.CommunityInstance.GetCommunityVideoCountAsync();
+            //GetPage(1);
 
-            if(count <= 0) {
-
-                IsEmpty = true;
-                IsActive = false;
-                return;
-            }
-
-            MaxPages = count / 20 + 1;
-            GetPage(1);
         }
 
         public override void SpinPage() {
 
-            GetPage(CurrentPage);
+            //GetPage(CurrentPage);
         }
     }
 }

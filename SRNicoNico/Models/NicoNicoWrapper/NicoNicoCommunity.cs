@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Codeplex.Data;
+using HtmlAgilityPack;
 using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.ViewModels;
 using System;
@@ -12,7 +13,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         private readonly string CommunityUrl;
 
-        private TabItemViewModel Owner;
+        private readonly TabItemViewModel Owner;
 
         public NicoNicoCommunity(TabItemViewModel vm, string url) {
 
@@ -39,6 +40,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     return null;
                 }
 
+                ret.Id = Regex.Match(new Uri(CommunityUrl).AbsolutePath, @"(\d+)").Groups[1].Value;
 
                 ret.CommunityUrl = CommunityUrl;
                 ret.ThumbnailUrl = header.SelectSingleNode("div/div/div/a/img").Attributes["src"].Value;
@@ -136,20 +138,31 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         }
 
-        public async Task<List<NicoNicoCommunityVideoEntry>> GetCommunityVideoAsync(int page) {
+        public async Task<List<NicoNicoCommunityVideoEntry>> GetCommunityVideoAsync(string id, int page) {
 
             try {
 
                 Owner.Status = "コミュニティ動画取得中";
 
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(CommunityUrl.Replace("community", "video") + "?page=" + page);
+                var query = new GetRequestQuery($"https://com.nicovideo.jp/api/v1/communities/{id}/contents/videos.json");
+                query.AddQuery("limit", "20");
+                query.AddQuery("offset", (page - 1) * 20);
+                query.AddQuery("sort", "c");
+                query.AddQuery("direction", "d");
+                query.AddQuery("_", DateTimeOffset.Now.ToUnixTimeMilliseconds());
 
-                var doc = new HtmlDocument();
-                doc.LoadHtml(a);
+                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(query.TargetUrl);
 
+
+                var json = DynamicJson.Parse(a);
+
+                if (json.meta.status != 200) {
+
+                    return null;
+                }
                 var ret = new List<NicoNicoCommunityVideoEntry>();
 
-                foreach(var video in doc.DocumentNode.SelectNodes("//li[@class='videoItem']")) {
+                foreach (var video in json.data.contents) {
 
                     var entry = new NicoNicoCommunityVideoEntry();
 
@@ -269,6 +282,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     }
 
     public class NicoNicoCommunityEntry {
+
+        public string Id { get; set; }
 
         //コミュニティURL
         public string CommunityUrl { get; set; }
