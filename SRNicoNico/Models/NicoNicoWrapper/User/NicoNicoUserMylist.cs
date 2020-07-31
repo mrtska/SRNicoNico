@@ -75,7 +75,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                     var mylist = new NicoNicoUserMylistEntry {
                         Name = item.name,
-                        ContentUrl = $"https://www.nicovideo.jp/user/{UserId}/mylist/{item.id}",
+                        ContentUrl = $"https://www.nicovideo.jp/mylist/{item.id}",
                         Description = item.description
                     };
 
