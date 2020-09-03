@@ -30,14 +30,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var query = new GetRequestQuery($"https://nvapi.nicovideo.jp/v2/mylists/{MylistId}");
                 query.AddQuery("page", 1);
-                query.AddQuery("pageSize", 200);
+                query.AddQuery("pageSize", 300);
 
                 var request = new HttpRequestMessage(HttpMethod.Get, query.TargetUrl);
                 request.Headers.Add("X-Frontend-Id", "6");
                 request.Headers.Add("X-Frontend-Version", "0");
                 request.Headers.Add("X-Niconico-Language", "ja-jp");
 
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(request);
+                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(request).ConfigureAwait(false);
 
                 var json = DynamicJson.Parse(a);
                 if (json.meta.status != 200) {
