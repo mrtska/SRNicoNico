@@ -915,6 +915,19 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                                 break;
                             }
+                        case "nicovideo.video.first_liked_by_user": {
+
+                                var sender = entry.senderNiconicoUser;
+                                var video = entry.video;
+
+                                item = new NicoNicoNicoRepoVideoEntry();
+                                storeSenderUser(item, sender);
+                                storeVideo(item as NicoNicoNicoRepoVideoEntry, video);
+
+                                item.ComputedTitle = string.Format("<a href=\"" + item.SenderUrl + "\">{0}</a> さんが 動画を「いいね！」しました。", item.SenderName);
+
+                                break;
+                            }
                         default:
                             throw new InvalidOperationException("対応していないニコレポを検出しました。" + entry.topic);
                     }
