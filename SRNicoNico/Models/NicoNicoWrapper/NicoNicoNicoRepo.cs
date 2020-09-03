@@ -923,7 +923,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     item.Topic = entry.topic;
                     item.CreatedAt = DateTime.Parse(entry.createdAt);
                     item.Visible = entry.isVisible;
-                    item.Muted = entry.isMuted;
+                    item.Muted = entry.isMuted() ? entry.isMuted : false;
 
                     if (item is NicoNicoNicoRepoVideoEntry ve) {
 
