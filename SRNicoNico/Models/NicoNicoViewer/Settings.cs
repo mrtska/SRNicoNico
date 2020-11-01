@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 
 namespace SRNicoNico.Models.NicoNicoViewer {
@@ -34,7 +33,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
         /// </summary>
         public string DefaultWebViewPageUrl {
             get {
-                return RoamingValues.TryGetValue(nameof(DefaultWebViewPageUrl), out var value) && value != null ? (string) value : "https://www.nicovideo.jp/";
+                return RoamingValues.TryGetValue(nameof(DefaultWebViewPageUrl), out var value) && value != null ? (string)value : "https://www.nicovideo.jp/";
             }
             set {
                 RoamingValues[nameof(DefaultWebViewPageUrl)] = value;
@@ -43,13 +42,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
 
         private Settings() {
 
-            try {
-
-                RoamingValues = ApplicationData.Current.RoamingSettings.Values;
-            } catch (InvalidOperationException) {
-
-                RoamingValues = new Dictionary<string, object?>();
-            }
+            RoamingValues = ApplicationData.Current.RoamingSettings.Values;
         }
     }
 }

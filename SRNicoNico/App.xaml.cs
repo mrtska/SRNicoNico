@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using SRNicoNico.Services;
 using SRNicoNico.ViewModels;
 using SRNicoNico.Views;
@@ -13,7 +12,7 @@ namespace SRNicoNico {
 
         protected override void OnStartup(StartupEventArgs e) {
             base.OnStartup(e);
-            
+
             var container = new UnityContainer();
             RegisterServices(container);
 
@@ -22,6 +21,7 @@ namespace SRNicoNico {
 
             MainWindow = new MainWindow { DataContext = vm };
             MainWindow.Visibility = Visibility.Visible;
+            MainWindow.Activate();
         }
 
         /// <summary>

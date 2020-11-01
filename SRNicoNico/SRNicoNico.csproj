@@ -6,16 +6,19 @@
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <Platforms>x86;x64</Platforms>
+    <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.23" />
-    <PackageReference Include="LivetCask" Version="3.2.2.2" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.26" />
+    <PackageReference Include="LivetCask" Version="3.2.3.1" />
     <PackageReference Include="MetroRadiance.Core" Version="2.4.0" NoWarn="NU1701" />
     <PackageReference Include="MetroRadiance.Chrome" Version="2.2.0" NoWarn="NU1701" />
     <PackageReference Include="MetroRadiance" Version="2.4.0" NoWarn="NU1701" />
-    <PackageReference Include="Microsoft.Toolkit.Wpf.UI.Controls.WebView" Version="6.0.0" />
-    <PackageReference Include="Unity" Version="5.11.5" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.674-prerelease" />
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.19041.1" />
+    <PackageReference Include="Unity" Version="5.11.7" />
     <PackageReference Include="Utf8Json" Version="1.3.7" />
   </ItemGroup>
 

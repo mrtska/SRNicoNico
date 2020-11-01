@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using Livet;
-using Microsoft.Toolkit.Wpf.UI.Controls;
+using Microsoft.Web.WebView2.Wpf;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
@@ -9,11 +9,11 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class WebViewContentViewModel : TabItemViewModel {
 
-        private string _CurrentUrl;
+        private string? _CurrentUrl;
         /// <summary>
         /// 現在表示しているページのURL
         /// </summary>
-        public string CurrentUrl {
+        public string? CurrentUrl {
             get { return _CurrentUrl; }
             set { 
                 if (_CurrentUrl == value)
@@ -66,26 +66,26 @@ namespace SRNicoNico.ViewModels {
         }
 
         /// <summary>
-        /// WebViewの実装 現時点でDeprecated
-        /// そのうちWebView2に実装を変更する必要有り
+        /// WebViewの実装
         /// </summary>
-        public WebView WebView { get; private set; }
+        public WebView2 WebView { get; private set; }
 
         private readonly WebViewViewModel Owner;
 
         public WebViewContentViewModel(WebViewViewModel vm, string initialUrl, bool useViewer) : base(initialUrl) {
-
+            
             Owner = vm;
             CurrentUrl = initialUrl;
             OpenWithViewer = useViewer;
-            WebView = new WebView { Source = new Uri(initialUrl) };
+
+            WebView = new WebView2 { Source = new Uri(initialUrl) };
             Initialize();
         }
 
         /// <summary>
         /// WebViewを初期化する
         /// </summary>
-        private void Initialize() {
+        private async void Initialize() {
             
             CompositeDisposable.Add(WebView);
 
@@ -95,11 +95,11 @@ namespace SRNicoNico.ViewModels {
                 if (OpenWithViewer) {
 
                     // TODO: ここにNicoNicoViewerで開く処理
-                    e.Cancel = true;
-                    return;
+                    //e.Cancel = true;
+                    //return;
                 }
 
-                CurrentUrl = e.Uri.OriginalString;
+                CurrentUrl = e.Uri;
                 Name = CurrentUrl;
             };
 
@@ -108,13 +108,14 @@ namespace SRNicoNico.ViewModels {
 
                 CanGoBack = WebView.CanGoBack;
                 CanGoForward = WebView.CanGoForward;
-                Name = WebView.DocumentTitle;
+                Name = WebView.CoreWebView2.DocumentTitle;
             };
 
+            await WebView.EnsureCoreWebView2Async();
             // target=_blankなどのリンクやShift+Clickした時に呼ばれる
-            WebView.NewWindowRequested += (o, e) => {
+            WebView.CoreWebView2.NewWindowRequested += (o, e) => {
 
-                Owner.AddTab(e.Uri.OriginalString, OpenWithViewer);
+                Owner.AddTab(e.Uri, OpenWithViewer);
             };
         }
 
@@ -152,19 +153,20 @@ namespace SRNicoNico.ViewModels {
 
             if (UrlRegex.Match(url).Success) {
 
-                WebView.Navigate(url);
+                WebView.CoreWebView2.Navigate(url);
             } else {
 
-                WebView.Navigate("https://www.google.co.jp/search?q=" + url);
+                WebView.CoreWebView2.Navigate("https://www.google.co.jp/search?q=" + url);
             }
         }
 
         /// <summary>
         /// WebViewを更新する
         /// </summary>
-        public void Refresh() {
+        public async void Refresh() {
 
-            WebView.Refresh();
+            //var cookie = await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Network.getCookies", @"["".nicovideo.jp""]");
+            WebView.Reload();
         }
     }
 }

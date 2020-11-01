@@ -42,7 +42,7 @@ namespace SRNicoNico.ViewModels {
             // 1つもWebViewを開いていない時は自動的に開く
             if (WebViewItems.Count == 0) {
                 
-                AddNewTab(true);
+                AddNewTab();
             }
         }
 
@@ -65,9 +65,9 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// 新しいタブを開く
         /// </summary>
-        public void AddNewTab(bool useViewer = false) {
+        public void AddNewTab() {
 
-            AddTab(Settings.Instance.DefaultWebViewPageUrl, useViewer);
+            AddTab(Settings.Instance.DefaultWebViewPageUrl, true);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public void Home() {
 
-            SelectedItem?.WebView.Navigate(new Uri(Settings.Instance.DefaultWebViewPageUrl));
+            SelectedItem?.WebView.CoreWebView2.Navigate(Settings.Instance.DefaultWebViewPageUrl);
         }
 
         /// <summary>
