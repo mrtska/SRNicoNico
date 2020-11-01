@@ -36,6 +36,8 @@ namespace SRNicoNico.ViewModels {
 
         public MainContentViewModel? MainContent { get; private set; }
 
+        public SignInViewModel? SignIn { get; private set; }
+
 
         public MainWindowViewModel() {
 
@@ -49,7 +51,18 @@ namespace SRNicoNico.ViewModels {
 
             MainContent = container.Resolve<MainContentViewModel>();
             CompositeDisposable.Add(MainContent);
+
+            SignIn = container.Resolve<SignInViewModel>();
         }
+
+        /// <summary>
+        /// MainWindowがロードされた時に呼ばれる
+        /// </summary>
+        public void OnLoaded() {
+
+            SignIn.Initialize();
+        }
+
 
         public void KeyDown(KeyEventArgs e) {
 

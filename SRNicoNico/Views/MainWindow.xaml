@@ -14,11 +14,19 @@
                    WindowStyle="SingleBorderWindow"
                    RenderOptions.BitmapScalingMode="HighQuality"
                    IsRestoringWindowPlacement="True"
+                   FontFamily="Segoe UI Emoji"
                    Title="MainWindow" Height="700" Width="900">
     <i:Interaction.Behaviors>
         <b:WindowInputEventBehavior />
     </i:Interaction.Behaviors>
     <i:Interaction.Triggers>
+        <i:EventTrigger EventName="ContentRendered">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnLoaded" />
+        </i:EventTrigger>
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}">
+            <l:TransitionInteractionMessageAction />
+            <l:WindowInteractionMessageAction />
+        </l:InteractionMessageTrigger>
         <i:EventTrigger EventName="Closed">
             <l:DataContextDisposeAction />
         </i:EventTrigger>
