@@ -49,7 +49,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var json = DynamicJson.Parse(HttpUtility.HtmlDecode(data.Attributes["data-props"].Value));
 
-                foreach (var item in json.view.followedProgramListSection.programList) {
+                foreach (var item in json.view.followedOnairBroadcastStatusProgramListSection.programList) {
 
                     var entry = new NicoNicoLiveNotifyEntry();
 
