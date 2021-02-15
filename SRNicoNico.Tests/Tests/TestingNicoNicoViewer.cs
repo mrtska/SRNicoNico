@@ -1,4 +1,5 @@
-﻿using SRNicoNico.Models.NicoNicoViewer;
+﻿using System;
+using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Services;
 
 namespace SRNicoNico.Tests {
@@ -13,7 +14,11 @@ namespace SRNicoNico.Tests {
 
         public TestingNicoNicoViewer() {
 
-            TestSessionService = new NicoNicoSessionService(this, this);
+            TestSessionService = new NicoNicoSessionService(this, this) {
+                // SessionServiceがサインインダイアログを表示させようとしているということは認証に失敗しているということ
+                SignInDialogHandler = () => throw new InvalidOperationException("認証に失敗しました")
+            };
+            TestSessionService.StoreSession(UserSession);
         }
         
         public double CurrentVersion => 2;
