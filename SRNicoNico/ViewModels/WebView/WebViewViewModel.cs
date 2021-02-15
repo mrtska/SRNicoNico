@@ -10,6 +10,8 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class WebViewViewModel : TabItemViewModel {
 
+        private readonly ISettings Settings;
+
         /// <summary>
         /// WebViewのリスト
         /// </summary>
@@ -29,8 +31,9 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public WebViewViewModel(MainWindowViewModel vm) : base("WebView") {
+        public WebViewViewModel(ISettings settings, MainWindowViewModel vm) : base("WebView") {
 
+            Settings = settings;
             WebViewItems = new ObservableSynchronizedCollection<WebViewContentViewModel>();
         }
 
@@ -67,7 +70,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public void AddNewTab() {
 
-            AddTab(Settings.Instance.DefaultWebViewPageUrl, true);
+            AddTab(Settings.DefaultWebViewPageUrl, true);
         }
 
         /// <summary>
@@ -100,7 +103,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public void Home() {
 
-            SelectedItem?.WebView.CoreWebView2.Navigate(Settings.Instance.DefaultWebViewPageUrl);
+            SelectedItem?.WebView.CoreWebView2.Navigate(Settings.DefaultWebViewPageUrl);
         }
 
         /// <summary>
@@ -133,7 +136,7 @@ namespace SRNicoNico.ViewModels {
                 switch (e.Key) {
                     case Key.T:     // Ctrl+T 新しいタブを追加
 
-                        AddTab(Settings.Instance.DefaultWebViewPageUrl);
+                        AddTab(Settings.DefaultWebViewPageUrl);
                         e.Handled = true;
                         break;
                     case Key.W:   // Ctrl+W 現在のタブを消す

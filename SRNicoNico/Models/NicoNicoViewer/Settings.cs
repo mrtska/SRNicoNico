@@ -7,12 +7,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
     /// アプリの設定を管理する
     /// UWPのAPIを使用する
     /// </summary>
-    public sealed class Settings {
-
-        /// <summary>
-        /// シングルトン
-        /// </summary>
-        public static Settings Instance { get; private set; } = new Settings();
+    public sealed class Settings : ISettings {
 
         private readonly IDictionary<string, object?> RoamingValues;
 
@@ -40,7 +35,7 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             }
         }
 
-        private Settings() {
+        public Settings() {
 
             RoamingValues = ApplicationData.Current.RoamingSettings.Values;
         }

@@ -16,6 +16,14 @@ namespace SRNicoNico.Services {
         Task<HttpResponseMessage> GetAsync(string url);
 
         /// <summary>
+        /// GETリクエストを指定したHTTPヘッダと一緒に送信する
+        /// </summary>
+        /// <param name="url">リクエストを送信するURL GETクエリも必要であれば付ける</param>
+        /// <param name="additionalHeaders">HTTPヘッダのリスト</param>
+        /// <returns>HTTPレスポンス</returns>
+        Task<HttpResponseMessage> GetAsync(string url, IDictionary<string, string>? additionalHeaders);
+
+        /// <summary>
         /// POSTリクエストを送信する
         /// json版
         /// </summary>

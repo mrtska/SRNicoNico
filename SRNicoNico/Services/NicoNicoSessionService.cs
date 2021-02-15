@@ -23,6 +23,18 @@ namespace SRNicoNico.Services {
         /// </summary>
         private const string NicoNicoTop = "https://www.nicovideo.jp/";
 
+        /// <summary>
+        /// 一部のAPIで必要になるHTTPヘッダ
+        /// </summary>
+        public static readonly Dictionary<string, string> ApiHeaders = new Dictionary<string, string> {
+            ["X-Frontend-Id"] = "6",
+            ["X-Frontend-Version"] = "0",
+            ["X-Niconico-Language"] = "ja-jp"
+        };
+
+        private readonly ISettings Settings;
+
+        // メインで使うHTTPクライアント
         private readonly HttpClient HttpClient;
         private readonly HttpClientHandler HttpClientHandler;
 
@@ -31,7 +43,9 @@ namespace SRNicoNico.Services {
         /// </summary>
         public Func<Task> SignInDialogHandler { get; set; }
 
-        public NicoNicoSessionService(INicoNicoViewer nicoNicoViewer) {
+        public NicoNicoSessionService(INicoNicoViewer nicoNicoViewer, ISettings settings) {
+
+            Settings = settings;
 
             // Cookieを使用するように
             // リダイレクトはしないように
@@ -56,7 +70,7 @@ namespace SRNicoNico.Services {
         /// <returns>サインインしている場合はTrue</returns>
         public async ValueTask<bool> VerifyAsync() {
 
-            var session = Settings.Instance.UserSession;
+            var session = Settings.UserSession;
 
             if (string.IsNullOrEmpty(session)) {
 
@@ -87,19 +101,41 @@ namespace SRNicoNico.Services {
         /// <param name="userSession">セッションCookieの値</param>
         public void StoreSession(string userSession) {
 
-            Settings.Instance.UserSession = userSession;
+            Settings.UserSession = userSession;
             HttpClientHandler.CookieContainer.Add(new Cookie("user_session", userSession, "/", ".nicovideo.jp"));
         }
 
+        /// <summary>
+        /// 指定したHTTPリクエストにHTTPヘッダを追加する
+        /// </summary>
+        /// <param name="request">HTTPリクエスト</param>
+        /// <param name="headers">追加したいHTTPヘッダのリスト nullの場合は何もしない</param>
+        /// <returns>HTTPリクエスト</returns>
+        private HttpRequestMessage WithHttpHeaders(HttpRequestMessage request, IDictionary<string, string>? headers) {
+
+            if (headers != null) {
+                foreach (var (key, value) in headers) {
+
+                    request.Headers.Add(key, value);
+                }
+            }
+            return request;
+        }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> GetAsync(string url) {
+        public Task<HttpResponseMessage> GetAsync(string url) {
 
-            var result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, url));
+            return GetAsync(url, null);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> GetAsync(string url, IDictionary<string, string>? addtionalHeaders) {
+
+            var result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Get, url), addtionalHeaders));
             if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
                 // サインインダイアログを表示して再ログインさせる
                 await SignInDialogHandler();
-                result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, url));
+                result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Get, url), addtionalHeaders));
             }
 
             return result;

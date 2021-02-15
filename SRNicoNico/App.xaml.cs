@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using SRNicoNico.Models.NicoNicoViewer;
 using SRNicoNico.Services;
 using SRNicoNico.ViewModels;
 using SRNicoNico.Views;
@@ -30,6 +31,8 @@ namespace SRNicoNico {
         /// <param name="container">コンテナエンジン</param>
         private void RegisterServices(IUnityContainer container) {
 
+            container.RegisterType<ISettings, Settings>(TypeLifetime.Singleton);
+            
             container.RegisterType<INicoNicoViewer, MainWindowViewModel>(TypeLifetime.Singleton);
 
             container.RegisterType<ISessionService, NicoNicoSessionService>(TypeLifetime.Singleton);
