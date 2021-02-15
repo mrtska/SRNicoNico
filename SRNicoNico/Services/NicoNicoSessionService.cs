@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using SRNicoNico.Models.NicoNicoViewer;
 
@@ -8,7 +10,7 @@ namespace SRNicoNico.Services {
     /// <summary>
     /// ニコニコにHTTPアクセスを提供するサービス
     /// </summary>
-    public sealed class NicoNicoSessionService {
+    public sealed class NicoNicoSessionService : ISessionService {
 
         /// <summary>
         /// NicoNicoViewerのUserAgent
@@ -27,7 +29,7 @@ namespace SRNicoNico.Services {
         /// <summary>
         /// サインインダイアログを表示する関数
         /// </summary>
-        public Func<Task>? SignInDialogHandler { get; set; }
+        public Func<Task> SignInDialogHandler { get; set; }
 
         public NicoNicoSessionService(INicoNicoViewer nicoNicoViewer) {
 
@@ -43,6 +45,8 @@ namespace SRNicoNico.Services {
             HttpClient = new HttpClient(HttpClientHandler, true);
             HttpClient.DefaultRequestHeaders.Add("User-Agent", string.Format(UserAgent, nicoNicoViewer.CurrentVersion));
             HttpClient.Timeout = TimeSpan.FromSeconds(30);
+
+            SignInDialogHandler = () => { return Task.CompletedTask; };
         }
 
         /// <summary>
@@ -52,23 +56,13 @@ namespace SRNicoNico.Services {
         /// <returns>サインインしている場合はTrue</returns>
         public async ValueTask<bool> VerifyAsync() {
 
-            if (SignInDialogHandler == null) {
-
-                // SignInDialogHandlerを設定しなされ
-                throw new InvalidOperationException();
-            }
-
             var session = Settings.Instance.UserSession;
 
             if (string.IsNullOrEmpty(session)) {
 
                 // サインインダイアログを表示させる
                 await SignInDialogHandler();
-                // サインイン後は値が更新されているので再代入する
-                session = Settings.Instance.UserSession;
             }
-
-            HttpClientHandler.CookieContainer.Add(new Cookie("user_session", session, "/", ".nicovideo.jp"));
 
             var verifyRequest = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
             var result = await HttpClient.SendAsync(verifyRequest);
@@ -94,18 +88,68 @@ namespace SRNicoNico.Services {
         public void StoreSession(string userSession) {
 
             Settings.Instance.UserSession = userSession;
+            HttpClientHandler.CookieContainer.Add(new Cookie("user_session", userSession, "/", ".nicovideo.jp"));
         }
 
 
-        public async Task<HttpResponseMessage> SendAsync() {
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> GetAsync(string url) {
 
-            throw new NotImplementedException();
+            var result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, url));
+            if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
+                // サインインダイアログを表示して再ログインさせる
+                await SignInDialogHandler();
+                result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, url));
+            }
+
+            return result;
         }
 
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> PostAsync(string url, string json) {
 
+            var result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, url) {
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            });
+            if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
+                // サインインダイアログを表示して再ログインさせる
+                await SignInDialogHandler();
+                result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, url) {
+                    Content = new StringContent(json, Encoding.UTF8, "application/json")
+                });
+            }
 
+            return result;
+        }
 
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string> formData) {
 
+            var result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, url) {
+                Content = new FormUrlEncodedContent(formData)
+            });
+            if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
+                // サインインダイアログを表示して再ログインさせる
+                await SignInDialogHandler();
+                result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, url) {
+                    Content = new FormUrlEncodedContent(formData)
+                });
+            }
 
+            return result;
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> DeleteAsync(string url) {
+
+            var result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Delete, url));
+            if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
+                // サインインダイアログを表示して再ログインさせる
+                await SignInDialogHandler();
+                result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Delete, url));
+            }
+
+            return result;
+        }
     }
 }

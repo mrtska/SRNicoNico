@@ -32,7 +32,7 @@ namespace SRNicoNico {
 
             container.RegisterType<INicoNicoViewer, MainWindowViewModel>(TypeLifetime.Singleton);
 
-            container.RegisterType<NicoNicoSessionService>(TypeLifetime.Singleton);
+            container.RegisterType<ISessionService, NicoNicoSessionService>(TypeLifetime.Singleton);
         }
     }
 }
