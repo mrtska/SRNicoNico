@@ -29,6 +29,6 @@ namespace SRNicoNico.Tests {
         /// <summary>
         /// テストで使うセッション
         /// </summary>
-        public string UserSession { get; set; } = "";
+        public string UserSession { get; set; } = Constants.UserSession;
     }
 }
