@@ -13,8 +13,8 @@ namespace SRNicoNico.Services {
         /// <summary>
         /// アカウントの視聴履歴を取得できる分だけ返す
         /// </summary>
-        /// <returns>アカウントの視聴履歴</returns>
-        Task<List<HistoryEntry>> GetAccountHistoryAsync();
+        /// <returns>アカウントの視聴履歴 取得に失敗した場合はnull</returns>
+        Task<List<HistoryEntry>?> GetAccountHistoryAsync();
 
 
 

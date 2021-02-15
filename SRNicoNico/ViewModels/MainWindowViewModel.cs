@@ -1,21 +1,12 @@
 ﻿using System.Windows.Input;
 using Livet;
-using SRNicoNico.Services;
 using Unity;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
     /// MainWindowクラスのDataContext
     /// </summary>
-    public class MainWindowViewModel : ViewModel, INicoNicoViewer {
-
-        /// <summary>
-        /// 現在のバージョン
-        /// </summary>
-        public double CurrentVersion {
-
-            get { return 2.00; }
-        }
+    public class MainWindowViewModel : ViewModel {
 
 #if DEBUG
         private string _Title = "NicoNicoViewer Debug Build ";
@@ -32,25 +23,22 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public MainContentViewModel? MainContent { get; private set; }
+        public MainContentViewModel MainContent { get; private set; }
 
-        public SignInViewModel? SignIn { get; private set; }
-
-
-        public MainWindowViewModel() {
-
-        }
+        public SignInViewModel SignIn { get; private set; }
 
         /// <summary>
         /// 各ViewModelを初期化する
         /// </summary>
         /// <param name="container">DIコンテナ</param>
-        public void Initialize(IUnityContainer container) {
+        public MainWindowViewModel(IUnityContainer container) {
+
+            // MainWindowのMessangerをDIに登録しておく
+            container.RegisterInstance(Messenger);
 
             MainContent = container.Resolve<MainContentViewModel>();
-            CompositeDisposable.Add(MainContent);
-
             SignIn = container.Resolve<SignInViewModel>();
+            CompositeDisposable.Add(MainContent);
         }
 
         /// <summary>
@@ -58,21 +46,21 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public void OnLoaded() {
 
-            SignIn?.Initialize();
+            SignIn.Initialize();
         }
 
 
         public void KeyDown(KeyEventArgs e) {
 
-            MainContent?.SelectedItem?.KeyDown(e);
+            MainContent.SelectedItem?.KeyDown(e);
         }
         public void KeyUp(KeyEventArgs e) {
 
-            MainContent?.SelectedItem?.KeyUp(e);
+            MainContent.SelectedItem?.KeyUp(e);
         }
         public void MouseDown(MouseButtonEventArgs e) {
 
-            MainContent?.SelectedItem?.MouseDown(e);
+            MainContent.SelectedItem?.MouseDown(e);
         }
 
     }

@@ -1,5 +1,5 @@
 ﻿using System;
-using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.Models;
 using SRNicoNico.Services;
 
 namespace SRNicoNico.Tests {

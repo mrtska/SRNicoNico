@@ -24,9 +24,14 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async Task<List<HistoryEntry>> GetAccountHistoryAsync() {
+        public async Task<List<HistoryEntry>?> GetAccountHistoryAsync() {
 
             var result = await SessionService.GetAsync(HistoryApiUrl, NicoNicoSessionService.ApiHeaders);
+
+            if (!result.IsSuccessStatusCode) {
+
+                return null;
+            }
             
             throw new NotImplementedException();
         }

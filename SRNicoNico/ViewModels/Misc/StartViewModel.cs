@@ -1,4 +1,6 @@
-﻿namespace SRNicoNico.ViewModels {
+﻿using SRNicoNico.Models;
+
+namespace SRNicoNico.ViewModels {
     /// <summary>
     /// スタートページクラスのDataContext
     /// </summary>
@@ -9,7 +11,7 @@
         /// </summary>
         public double CurrentVersion { get; private set; }
 
-        public StartViewModel(MainWindowViewModel vm) : base("スタート") {
+        public StartViewModel(INicoNicoViewer vm) : base("スタート") {
 
             CurrentVersion = vm.CurrentVersion;
         }

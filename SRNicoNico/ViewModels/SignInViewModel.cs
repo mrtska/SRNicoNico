@@ -37,9 +37,9 @@ namespace SRNicoNico.ViewModels {
 
         private readonly InteractionMessenger MainWindowMessenger;
 
-        public SignInViewModel(MainWindowViewModel vm, NicoNicoSessionService sessionService) {
+        public SignInViewModel(InteractionMessenger mainWindowMessanger, NicoNicoSessionService sessionService) {
 
-            MainWindowMessenger = vm.Messenger;
+            MainWindowMessenger = mainWindowMessanger;
             SessionService = sessionService;
         }
 

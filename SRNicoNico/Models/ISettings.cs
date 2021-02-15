@@ -1,4 +1,4 @@
-﻿namespace SRNicoNico.Models.NicoNicoViewer {
+﻿namespace SRNicoNico.Models {
     /// <summary>
     /// 設定項目
     /// </summary>

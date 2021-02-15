@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Input;
 using Livet;
-using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.Models;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
@@ -31,7 +31,7 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public WebViewViewModel(ISettings settings, MainWindowViewModel vm) : base("WebView") {
+        public WebViewViewModel(ISettings settings) : base("WebView") {
 
             Settings = settings;
             WebViewItems = new ObservableSynchronizedCollection<WebViewContentViewModel>();

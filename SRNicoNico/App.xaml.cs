@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using SRNicoNico.Models.NicoNicoViewer;
+using SRNicoNico.Models;
 using SRNicoNico.Services;
 using SRNicoNico.ViewModels;
 using SRNicoNico.Views;
@@ -17,10 +17,7 @@ namespace SRNicoNico {
             var container = new UnityContainer();
             RegisterServices(container);
 
-            var vm = container.Resolve<MainWindowViewModel>();
-            vm.Initialize(container);
-
-            MainWindow = new MainWindow { DataContext = vm };
+            MainWindow = new MainWindow { DataContext = container.Resolve<MainWindowViewModel>() };
             MainWindow.Visibility = Visibility.Visible;
             MainWindow.Activate();
         }
@@ -33,7 +30,7 @@ namespace SRNicoNico {
 
             container.RegisterType<ISettings, Settings>(TypeLifetime.Singleton);
             
-            container.RegisterType<INicoNicoViewer, MainWindowViewModel>(TypeLifetime.Singleton);
+            container.RegisterType<INicoNicoViewer, NicoNicoViewer>(TypeLifetime.Singleton);
 
             container.RegisterType<ISessionService, NicoNicoSessionService>(TypeLifetime.Singleton);
         }

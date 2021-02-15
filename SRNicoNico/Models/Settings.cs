@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Windows.Storage;
 
-namespace SRNicoNico.Models.NicoNicoViewer {
+namespace SRNicoNico.Models {
     /// <summary>
     /// アプリの設定を管理する
     /// UWPのAPIを使用する

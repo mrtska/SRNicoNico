@@ -1,4 +1,4 @@
-﻿namespace SRNicoNico.Services {
+﻿namespace SRNicoNico.Models {
     public interface INicoNicoViewer {
         /// <summary>
         /// NicoNicoViewerのバージョン
