@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Web.WebView2.Core;
-using Microsoft.Web.WebView2.Wpf;
 using SRNicoNico.Models.NicoNicoViewer;
 
 namespace SRNicoNico.Services {
@@ -19,7 +14,7 @@ namespace SRNicoNico.Services {
         /// NicoNicoViewerのUserAgent
         /// フォークして改造する人は書き換えてください
         /// </summary>
-        private const string UserAgent = "SRNicoNico/2.0 (@m__gl user/23425727)";
+        private const string UserAgent = "SRNicoNico/{0:F1} (@m__gl user/23425727)";
 
         /// <summary>
         /// ニコニコのトップページURL
@@ -32,9 +27,9 @@ namespace SRNicoNico.Services {
         /// <summary>
         /// サインインダイアログを表示する関数
         /// </summary>
-        public Func<Task> SignInDialogHandler { get; set; }
+        public Func<Task>? SignInDialogHandler { get; set; }
 
-        public NicoNicoSessionService() {
+        public NicoNicoSessionService(INicoNicoViewer nicoNicoViewer) {
 
             // Cookieを使用するように
             // リダイレクトはしないように
@@ -46,7 +41,7 @@ namespace SRNicoNico.Services {
             };
 
             HttpClient = new HttpClient(HttpClientHandler, true);
-            HttpClient.DefaultRequestHeaders.Add("User-Agent", UserAgent);
+            HttpClient.DefaultRequestHeaders.Add("User-Agent", string.Format(UserAgent, nicoNicoViewer.CurrentVersion));
             HttpClient.Timeout = TimeSpan.FromSeconds(30);
         }
 
@@ -57,19 +52,49 @@ namespace SRNicoNico.Services {
         /// <returns>サインインしている場合はTrue</returns>
         public async ValueTask<bool> VerifyAsync() {
 
+            if (SignInDialogHandler == null) {
+
+                // SignInDialogHandlerを設定しなされ
+                throw new InvalidOperationException();
+            }
+
             var session = Settings.Instance.UserSession;
 
             if (string.IsNullOrEmpty(session)) {
 
+                // サインインダイアログを表示させる
                 await SignInDialogHandler();
+                // サインイン後は値が更新されているので再代入する
+                session = Settings.Instance.UserSession;
             }
 
+            HttpClientHandler.CookieContainer.Add(new Cookie("user_session", session, "/", ".nicovideo.jp"));
 
+            var verifyRequest = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
+            var result = await HttpClient.SendAsync(verifyRequest);
 
+            var flags = result.Headers.GetValues("x-niconico-authflag");
 
-            return true;
+            foreach (var flag in flags) {
+
+                // 値が0ではなかったらログイン成功判定
+                if (flag != "0") {
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
+        /// <summary>
+        /// セッションを保存する
+        /// </summary>
+        /// <param name="userSession">セッションCookieの値</param>
+        public void StoreSession(string userSession) {
+
+            Settings.Instance.UserSession = userSession;
+        }
 
 
         public async Task<HttpResponseMessage> SendAsync() {

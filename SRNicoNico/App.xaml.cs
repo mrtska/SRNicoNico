@@ -30,7 +30,7 @@ namespace SRNicoNico {
         /// <param name="container">コンテナエンジン</param>
         private void RegisterServices(IUnityContainer container) {
 
-            container.RegisterType<MainWindowViewModel>(TypeLifetime.Singleton);
+            container.RegisterType<INicoNicoViewer, MainWindowViewModel>(TypeLifetime.Singleton);
 
             container.RegisterType<NicoNicoSessionService>(TypeLifetime.Singleton);
         }

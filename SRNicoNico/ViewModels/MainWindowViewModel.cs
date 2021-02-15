@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Livet;
+using SRNicoNico.Services;
 using Unity;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
     /// MainWindowクラスのDataContext
     /// </summary>
-    public class MainWindowViewModel : ViewModel {
+    public class MainWindowViewModel : ViewModel, INicoNicoViewer {
 
         /// <summary>
         /// 現在のバージョン
@@ -60,7 +58,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public void OnLoaded() {
 
-            SignIn.Initialize();
+            SignIn?.Initialize();
         }
 
 
