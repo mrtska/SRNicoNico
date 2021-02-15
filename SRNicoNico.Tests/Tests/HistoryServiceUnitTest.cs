@@ -22,22 +22,22 @@ namespace SRNicoNico.Tests {
         [Fact]
         public async Task GetAccountHistoryUnitTest() {
 
-            var result = await HistoryService.GetAccountHistoryAsync();
+            await foreach (var history in HistoryService.GetAccountHistoryAsync()) {
 
-            Assert.NotEmpty(result);
+                // 値が取れているかの確認
+                Assert.False(string.IsNullOrEmpty(history.VideoId));
+                Assert.False(string.IsNullOrEmpty(history.Title));
+                Assert.NotNull(history.ShortDescription);
+                Assert.False(string.IsNullOrEmpty(history.ThumbnailUrl));
+                Assert.True(history.PostedAt != default);
+                Assert.True(history.WatchedAt != default);
+                Assert.True(history.WatchCount > 0);
+                Assert.True(history.ViewCount > 0);
+                Assert.True(history.Duration > 0);
 
-            // 最初の1つ目だけ確認する
-            var history = result[0];
-
-            // 値が取れているかの確認
-            Assert.False(string.IsNullOrEmpty(history.VideoId));
-            Assert.False(string.IsNullOrEmpty(history.Title));
-            Assert.NotNull(history.ShortDescription);
-            Assert.False(string.IsNullOrEmpty(history.ThmbnailUrl));
-            Assert.True(history.PostedAt != default);
-            Assert.True(history.WatchedAt != default);
-            Assert.True(history.WatchCount > 0);
-            Assert.True(history.ViewCount > 0);
+                // 最初の1つ目だけ確認する
+                break;
+            }
         }
     }
 }

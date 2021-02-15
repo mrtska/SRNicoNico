@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using DynaJson;
+using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.Services {
@@ -24,16 +26,39 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async Task<List<HistoryEntry>?> GetAccountHistoryAsync() {
+        public async IAsyncEnumerable<HistoryEntry>? GetAccountHistoryAsync() {
 
-            var result = await SessionService.GetAsync(HistoryApiUrl, NicoNicoSessionService.ApiHeaders);
+            var result = await SessionService.GetAsync(HistoryApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
-                return null;
+                throw new StatusErrorException(result.StatusCode);
             }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync());
             
-            throw new NotImplementedException();
+            foreach (var entry in json.data.items) {
+
+                if (entry == null) {
+                    continue;
+                }
+                var video = entry.video;
+                var count = video.count;
+                yield return new HistoryEntry {
+
+                    VideoId = video.id,
+                    ShortDescription = video.shortDescription,
+                    ThumbnailUrl = video.thumbnail.listingUrl,
+                    Title = video.title,
+                    PostedAt = DateTimeOffset.Parse(video.registeredAt),
+                    WatchedAt = DateTimeOffset.Parse(entry.lastViewedAt),
+                    ViewCount = (int) count.view,
+                    CommentCount = (int)count.comment,
+                    MylistCount = (int)count.mylist,
+                    WatchCount = (int)entry.views,
+                    Duration = (int)video.duration,
+                    PlaybackPosition = (int)entry.playbackPosition
+                };
+            }
         }
     }
 }

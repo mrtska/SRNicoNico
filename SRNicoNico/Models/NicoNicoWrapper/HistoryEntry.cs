@@ -20,7 +20,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// 動画のサムネイルURL
         /// </summary>
-        public string? ThmbnailUrl { get; set; }
+        public string? ThumbnailUrl { get; set; }
 
         /// <summary>
         /// 動画タイトル
@@ -30,12 +30,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// 動画投稿日時
         /// </summary>
-        public DateTime PostedAt { get; set; }
+        public DateTimeOffset PostedAt { get; set; }
 
         /// <summary>
         /// 視聴日時
         /// </summary>
-        public DateTime WatchedAt { get; set; }
+        public DateTimeOffset WatchedAt { get; set; }
 
         /// <summary>
         /// 動画の再生数
@@ -56,5 +56,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// 視聴回数
         /// </summary>
         public int WatchCount { get; set; }
+
+        /// <summary>
+        /// 動画の長さ 秒単位
+        /// </summary>
+        public int Duration { get; set; }
+
+        /// <summary>
+        /// 再生した位置
+        /// </summary>
+        public int PlaybackPosition { get; set; }
     }
 }
