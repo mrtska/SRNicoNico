@@ -15,7 +15,7 @@ namespace SRNicoNico.ViewModels {
 #endif
         public string Title {
             get { return _Title; }
-            set { 
+            set {
                 if (_Title == value)
                     return;
                 _Title = value;
@@ -44,11 +44,17 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// MainWindowがロードされた時に呼ばれる
         /// </summary>
-        public void OnLoaded() {
+        public async void OnLoaded() {
 
-            SignIn.Initialize();
+            if (await SignIn.EnsureSignedInAsync()) {
+
+                // 正常にサインイン出来たらサインイン後に使用できるタブを追加する
+                MainContent.PostInitialize();
+            } else {
+
+                // ログインしたのにサインイン出来なかった
+            }
         }
-
 
         public void KeyDown(KeyEventArgs e) {
 

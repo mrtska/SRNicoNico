@@ -34,20 +34,28 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private readonly IUnityContainer UnityContainer;
+
         public MainContentViewModel(IUnityContainer container) {
 
+            UnityContainer = container;
             SystemItems = new ObservableSynchronizedCollection<TabItemViewModel>();
             UserItems = new ObservableSynchronizedCollection<TabItemViewModel>();
-            Initialize(container);
-        }
-
-        private void Initialize(IUnityContainer container) {
 
             SystemItems.Add(container.Resolve<StartViewModel>());
-            SystemItems.Add(container.Resolve<WebViewViewModel>());
 
             // スタートページをデフォルトで開くようにする
             SelectedItem = SystemItems.First();
+
+        }
+        
+        /// <summary>
+        /// サインイン完了後に表示するタブをリストに追加する
+        /// </summary>
+        public void PostInitialize() {
+            
+            SystemItems.Add(UnityContainer.Resolve<WebViewViewModel>());
+            SystemItems.Add(UnityContainer.Resolve<HistoryViewModel>());
 
             // すべてのViewModelをCompositeDisposableに登録する
             SystemItems.ToList().ForEach(vm => CompositeDisposable.Add(vm));

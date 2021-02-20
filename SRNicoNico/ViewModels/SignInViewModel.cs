@@ -43,7 +43,11 @@ namespace SRNicoNico.ViewModels {
             SessionService = sessionService;
         }
 
-        public async void Initialize() {
+        /// <summary>
+        /// サインイン状態にする
+        /// </summary>
+        /// <returns></returns>
+        public ValueTask<bool> EnsureSignedInAsync() {
 
             // SessionServiceがサインインを必要とした時に呼ばれる
             SessionService.SignInDialogHandler = () => {
@@ -51,7 +55,7 @@ namespace SRNicoNico.ViewModels {
                 return ActivateSignInDialogAsync();
             };
 
-            var a = await SessionService.VerifyAsync();
+            return SessionService.VerifyAsync();
         }
 
         public Task ActivateSignInDialogAsync() {

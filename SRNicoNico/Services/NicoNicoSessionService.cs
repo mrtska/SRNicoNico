@@ -64,19 +64,10 @@ namespace SRNicoNico.Services {
         }
 
         /// <summary>
-        /// 既にサインインしているか確認する
-        /// このメソッドを呼ぶ前にSignInDialogHandlerに値を設定すること
+        /// ニコニコのTOPページにHEADリクエストを送信してCookieが生きているか確認する
         /// </summary>
-        /// <returns>サインインしている場合はTrue</returns>
-        public async ValueTask<bool> VerifyAsync() {
-
-            var session = Settings.UserSession;
-
-            if (string.IsNullOrEmpty(session)) {
-
-                // サインインダイアログを表示させる
-                await SignInDialogHandler();
-            }
+        /// <returns>trueならログイン成功</returns>
+        private async ValueTask<bool> VerifyAuthAsync() {
 
             var verifyRequest = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
             var result = await HttpClient.SendAsync(verifyRequest);
@@ -91,8 +82,38 @@ namespace SRNicoNico.Services {
                     return true;
                 }
             }
-
             return false;
+        }
+
+        /// <summary>
+        /// 既にサインインしているか確認する
+        /// このメソッドを呼ぶ前にSignInDialogHandlerに値を設定すること
+        /// </summary>
+        /// <returns>サインインしている場合はTrue</returns>
+        public async ValueTask<bool> VerifyAsync() {
+
+            var session = Settings.UserSession;
+
+            if (string.IsNullOrEmpty(session)) {
+
+                // サインインダイアログを表示させる
+                await SignInDialogHandler();
+            }
+
+            // Cookieを保存する
+            HttpClientHandler.CookieContainer.Add(new Cookie("user_session", session, "/", ".nicovideo.jp"));
+
+            var result = await VerifyAuthAsync();
+            if (result) {
+
+                return true;
+            }
+
+            // トークンが使えなかったのでサインインダイアログを表示させる
+            await SignInDialogHandler();
+
+            // もう一度確認する
+            return await VerifyAuthAsync();
         }
 
         /// <summary>
