@@ -50,6 +50,36 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+
+        private bool _IsActive;
+        /// <summary>
+        /// 現在読込中かどうか
+        /// 基本的にプログレスバーなどを表示するフラグとして使う
+        /// </summary>
+        public bool IsActive {
+            get { return _IsActive; }
+            set { 
+                if (_IsActive == value)
+                    return;
+                _IsActive = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _Status = string.Empty;
+        /// <summary>
+        /// ステータスバーに表示する文字列
+        /// </summary>
+        public string Status {
+            get { return _Status; }
+            set { 
+                if (_Status == value)
+                    return;
+                _Status = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public TabItemViewModel(string tabName = "") {
 
             Name = tabName;

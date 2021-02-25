@@ -12,10 +12,14 @@ namespace SRNicoNico {
     public partial class App : Application {
 
         protected override void OnStartup(StartupEventArgs e) {
-            base.OnStartup(e);
 
             var container = new UnityContainer();
+#if DEBUG
+            container.AddExtension(new Diagnostic()); // デバッグ起動時は診断拡張を追加しておく
+#endif
             RegisterServices(container);
+
+            base.OnStartup(e);
 
             MainWindow = new MainWindow { DataContext = container.Resolve<MainWindowViewModel>() };
             MainWindow.Visibility = Visibility.Visible;
@@ -33,6 +37,7 @@ namespace SRNicoNico {
             container.RegisterType<INicoNicoViewer, NicoNicoViewer>(TypeLifetime.Singleton);
 
             container.RegisterType<ISessionService, NicoNicoSessionService>(TypeLifetime.Singleton);
+            container.RegisterType<IHistoryService, NicoNicoHistoryService>(TypeLifetime.Singleton);
         }
     }
 }

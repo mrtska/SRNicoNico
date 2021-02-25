@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Threading;
+using System.Windows.Input;
 using Livet;
 using Unity;
 
@@ -23,9 +25,40 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private string _Status = string.Empty;
+        /// <summary>
+        /// ステータスバーに表示する文字列
+        /// </summary>
+        public string Status {
+            get { return _Status; }
+            set { 
+                if (_Status == value)
+                    return;
+                _Status = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _CurrentTime = string.Empty;
+        /// <summary>
+        /// ステータスバーに表示する現在時刻
+        /// </summary>
+        public string CurrentTime {
+            get { return _CurrentTime; }
+            set { 
+                if (_CurrentTime == value)
+                    return;
+                _CurrentTime = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public MainContentViewModel MainContent { get; private set; }
 
         public SignInViewModel SignIn { get; private set; }
+
+        // 時刻更新用のタイマー
+        private readonly Timer Timer;
 
         /// <summary>
         /// 各ViewModelを初期化する
@@ -39,6 +72,11 @@ namespace SRNicoNico.ViewModels {
             MainContent = container.Resolve<MainContentViewModel>();
             SignIn = container.Resolve<SignInViewModel>();
             CompositeDisposable.Add(MainContent);
+
+            Timer = new Timer(o => {
+                CurrentTime = DateTime.Now.ToString();
+            }, null, 0, 1000);
+            CompositeDisposable.Add(Timer);
         }
 
         /// <summary>
@@ -46,10 +84,14 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public async void OnLoaded() {
 
+            Status = "サインイン中";
+
             if (await SignIn.EnsureSignedInAsync()) {
 
                 // 正常にサインイン出来たらサインイン後に使用できるタブを追加する
                 MainContent.PostInitialize();
+                MainContent.RegisterStatusChangeAction(status => Status = status);
+                Status = "サインイン完了";
             } else {
 
                 // ログインしたのにサインイン出来なかった

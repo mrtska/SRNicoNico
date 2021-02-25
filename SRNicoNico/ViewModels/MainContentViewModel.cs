@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Livet;
 using Unity;
 
@@ -26,15 +27,19 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public TabItemViewModel? SelectedItem {
             get { return _SelectedItem; }
-            set { 
+            set {
                 if (_SelectedItem == value)
                     return;
                 _SelectedItem = value;
                 RaisePropertyChanged();
+                if (value != null) {
+                    StatusChangedAction?.Invoke(value.Status);
+                }
             }
         }
 
         private readonly IUnityContainer UnityContainer;
+        private Action<string>? StatusChangedAction;
 
         public MainContentViewModel(IUnityContainer container) {
 
@@ -48,17 +53,36 @@ namespace SRNicoNico.ViewModels {
             SelectedItem = SystemItems.First();
 
         }
-        
+
         /// <summary>
         /// サインイン完了後に表示するタブをリストに追加する
         /// </summary>
         public void PostInitialize() {
-            
+
             SystemItems.Add(UnityContainer.Resolve<WebViewViewModel>());
             SystemItems.Add(UnityContainer.Resolve<HistoryViewModel>());
 
-            // すべてのViewModelをCompositeDisposableに登録する
-            SystemItems.ToList().ForEach(vm => CompositeDisposable.Add(vm));
+            SystemItems.ToList().ForEach(vm => {
+
+                // すべてのViewModelをCompositeDisposableに登録する
+                CompositeDisposable.Add(vm);
+
+                // Statusを監視する
+                vm.PropertyChanged += (o, e) => {
+
+                    var tabItem = (TabItemViewModel)o;
+                    if (e.PropertyName == nameof(TabItemViewModel.Status)) {
+
+                        StatusChangedAction?.Invoke(tabItem.Status);
+                    }
+                };
+            });
+
+        }
+
+        public void RegisterStatusChangeAction(Action<string> action) {
+
+            StatusChangedAction = action;
         }
 
     }

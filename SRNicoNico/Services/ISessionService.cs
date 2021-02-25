@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -7,6 +8,24 @@ namespace SRNicoNico.Services {
     /// セッションやHTTPリクエストの処理を提供するサービス
     /// </summary>
     public interface ISessionService {
+
+        /// <summary>
+        /// サインインダイアログを表示する関数
+        /// </summary>
+        Func<Task> SignInDialogHandler { get; set; }
+
+        /// <summary>
+        /// 既にサインインしているか確認する
+        /// このメソッドを呼ぶ前にSignInDialogHandlerに値を設定すること
+        /// </summary>
+        /// <returns>サインインしている場合はTrue</returns>
+        ValueTask<bool> VerifyAsync();
+
+        /// <summary>
+        /// セッションを保存する
+        /// </summary>
+        /// <param name="userSession">セッションCookieの値</param>
+        void StoreSession(string value);
 
         /// <summary>
         /// GETリクエストを送信する

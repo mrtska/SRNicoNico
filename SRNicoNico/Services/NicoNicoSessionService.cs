@@ -85,11 +85,7 @@ namespace SRNicoNico.Services {
             return false;
         }
 
-        /// <summary>
-        /// 既にサインインしているか確認する
-        /// このメソッドを呼ぶ前にSignInDialogHandlerに値を設定すること
-        /// </summary>
-        /// <returns>サインインしている場合はTrue</returns>
+        /// <inheritdoc />
         public async ValueTask<bool> VerifyAsync() {
 
             var session = Settings.UserSession;
@@ -116,10 +112,7 @@ namespace SRNicoNico.Services {
             return await VerifyAuthAsync();
         }
 
-        /// <summary>
-        /// セッションを保存する
-        /// </summary>
-        /// <param name="userSession">セッションCookieの値</param>
+        /// <inheritdoc />
         public void StoreSession(string userSession) {
 
             Settings.UserSession = userSession;

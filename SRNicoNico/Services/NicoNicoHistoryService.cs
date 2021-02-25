@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using DynaJson;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
@@ -26,7 +24,7 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<HistoryEntry>? GetAccountHistoryAsync() {
+        public async IAsyncEnumerable<HistoryEntry> GetAccountHistoryAsync() {
 
             var result = await SessionService.GetAsync(HistoryApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
@@ -34,8 +32,8 @@ namespace SRNicoNico.Services {
 
                 throw new StatusErrorException(result.StatusCode);
             }
-            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync());
-            
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
             foreach (var entry in json.data.items) {
 
                 if (entry == null) {
@@ -51,7 +49,7 @@ namespace SRNicoNico.Services {
                     Title = video.title,
                     PostedAt = DateTimeOffset.Parse(video.registeredAt),
                     WatchedAt = DateTimeOffset.Parse(entry.lastViewedAt),
-                    ViewCount = (int) count.view,
+                    ViewCount = (int)count.view,
                     CommentCount = (int)count.comment,
                     MylistCount = (int)count.mylist,
                     WatchCount = (int)entry.views,

@@ -19,7 +19,7 @@ namespace SRNicoNico.ViewModels {
 
         private const string SignInUrl = "https://account.nicovideo.jp/login";
 
-        private readonly NicoNicoSessionService SessionService;
+        private readonly ISessionService SessionService;
 
         private WebView2? _WebView;
         /// <summary>
@@ -37,7 +37,7 @@ namespace SRNicoNico.ViewModels {
 
         private readonly InteractionMessenger MainWindowMessenger;
 
-        public SignInViewModel(InteractionMessenger mainWindowMessanger, NicoNicoSessionService sessionService) {
+        public SignInViewModel(InteractionMessenger mainWindowMessanger, ISessionService sessionService) {
 
             MainWindowMessenger = mainWindowMessanger;
             SessionService = sessionService;

@@ -163,9 +163,8 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// WebViewを更新する
         /// </summary>
-        public async void Refresh() {
+        public void Refresh() {
 
-            //var cookie = await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Network.getCookies", @"["".nicovideo.jp""]");
             WebView.Reload();
         }
     }
