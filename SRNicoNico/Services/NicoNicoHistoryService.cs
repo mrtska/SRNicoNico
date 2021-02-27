@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DynaJson;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
@@ -57,6 +58,23 @@ namespace SRNicoNico.Services {
                     PlaybackPosition = (int)entry.playbackPosition
                 };
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> DeleteAccountHistoryAsync(string videoId) {
+
+            var query = new GetRequestQueryBuilder(HistoryApiUrl)
+                .AddQuery("target", videoId);
+
+            var result = await SessionService.DeleteAsync(query.Build(), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+
+            if (result.IsSuccessStatusCode) {
+
+                var content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var json = JsonObject.Parse(content);
+                return json.meta.status == 200;
+            }
+            return false;
         }
     }
 }

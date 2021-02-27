@@ -9,11 +9,13 @@ namespace SRNicoNico.Tests {
     /// </summary>
     public class HistoryServiceUnitTest {
 
+        private readonly ISessionService SessionService;
         private readonly IHistoryService HistoryService;
 
         public HistoryServiceUnitTest() {
 
-            HistoryService = new NicoNicoHistoryService(TestingNicoNicoViewer.Instance.TestSessionService);
+            SessionService = TestingNicoNicoViewer.Instance.TestSessionService;
+            HistoryService = new NicoNicoHistoryService(SessionService);
         }
 
         /// <summary>
@@ -38,6 +40,24 @@ namespace SRNicoNico.Tests {
                 // 最初の1つ目だけ確認する
                 break;
             }
+        }
+
+        /// <summary>
+        /// アカウントの視聴履歴が削除出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task DeleteAccountHistoryUnitTest() {
+
+            // sm9を視聴履歴に追加する 無くても削除API自体は成功するっぽいけど
+            await SessionService.GetAsync("https://www.nicovideo.jp/watch/sm9");
+
+            // ちょっと待つ
+            await Task.Delay(1000);
+
+            var result = await HistoryService.DeleteAccountHistoryAsync("sm9");
+
+            // trueなら成功
+            Assert.True(result);
         }
     }
 }

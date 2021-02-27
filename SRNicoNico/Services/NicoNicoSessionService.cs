@@ -31,6 +31,15 @@ namespace SRNicoNico.Services {
             ["X-Frontend-Version"] = "0",
             ["X-Niconico-Language"] = "ja-jp"
         };
+        /// <summary>
+        /// 一部のAPIで必要になるHTTPヘッダ ajax版
+        /// </summary>
+        public static readonly Dictionary<string, string> AjaxApiHeaders = new Dictionary<string, string> {
+            ["X-Frontend-Id"] = "6",
+            ["X-Frontend-Version"] = "0",
+            ["X-Niconico-Language"] = "ja-jp",
+            ["X-Request-With"] = "https://www.nicovideo.jp"
+        };
 
         private readonly ISettings Settings;
 
@@ -190,15 +199,20 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> DeleteAsync(string url) {
+        public Task<HttpResponseMessage> DeleteAsync(string url) {
 
-            var result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Delete, url));
+            return DeleteAsync(url, null);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> DeleteAsync(string url, IDictionary<string, string>? addtionalHeaders) {
+
+            var result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Delete, url), addtionalHeaders)).ConfigureAwait(false);
             if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
                 // サインインダイアログを表示して再ログインさせる
                 await SignInDialogHandler();
-                result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Delete, url));
+                result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Delete, url), addtionalHeaders)).ConfigureAwait(false);
             }
-
             return result;
         }
     }

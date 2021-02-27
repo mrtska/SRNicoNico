@@ -66,5 +66,13 @@ namespace SRNicoNico.Services {
         /// <param name="url">リクエストを送信するURL</param>
         /// <returns>HTTPレスポンス</returns>
         Task<HttpResponseMessage> DeleteAsync(string url);
+
+        /// <summary>
+        /// DELETEリクエストを指定したHTTPヘッダと一緒に送信する
+        /// </summary>
+        /// <param name="url">リクエストを送信するURL GETクエリも必要であれば付ける</param>
+        /// <param name="additionalHeaders">HTTPヘッダのリスト</param>
+        /// <returns>HTTPレスポンス</returns>
+        Task<HttpResponseMessage> DeleteAsync(string url, IDictionary<string, string>? additionalHeaders);
     }
 }
