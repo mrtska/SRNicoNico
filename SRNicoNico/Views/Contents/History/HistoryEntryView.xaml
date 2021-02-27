@@ -3,11 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              d:DataContext="{d:DesignInstance Type=w:HistoryEntry}"
              mc:Ignorable="d" 
-             d:DesignHeight="80" d:DesignWidth="600">
+             d:DesignHeight="80" d:DesignWidth="600"
+             Background="Transparent">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
@@ -36,6 +36,5 @@
                 <TextBlock Text="{Binding WatchCount, StringFormat='{}{0:N0}回視聴'}" Foreground="Red" />
             </StackPanel>
         </StackPanel>
-
     </Grid>
 </UserControl>

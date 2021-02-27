@@ -21,6 +21,11 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public ObservableSynchronizedCollection<TabItemViewModel> UserItems { get; private set; }
 
+        /// <summary>
+        /// WebViewのViewModel
+        /// </summary>
+        public WebViewViewModel? WebView { get; private set; }
+
         private TabItemViewModel? _SelectedItem;
         /// <summary>
         /// 現在選択されているタブ
@@ -51,7 +56,6 @@ namespace SRNicoNico.ViewModels {
 
             // スタートページをデフォルトで開くようにする
             SelectedItem = SystemItems.First();
-
         }
 
         /// <summary>
@@ -59,7 +63,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public void PostInitialize() {
 
-            SystemItems.Add(UnityContainer.Resolve<WebViewViewModel>());
+            SystemItems.Add(WebView = UnityContainer.Resolve<WebViewViewModel>());
             SystemItems.Add(UnityContainer.Resolve<HistoryViewModel>());
 
             SystemItems.ToList().ForEach(vm => {

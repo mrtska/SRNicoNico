@@ -7,7 +7,9 @@
 
         <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.xaml" />
 
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ContextMenu.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ListBox.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.MenuItem.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ScrollViewer.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.TabView.xaml" />
     </ResourceDictionary.MergedDictionaries>

@@ -9,6 +9,7 @@
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
              d:DataContext="{d:DesignInstance Type=vm:AccountHistoryViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -39,7 +40,39 @@
         <ListBox Grid.Row="1" ItemsSource="{Binding HistoryItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.Resources>
                 <DataTemplate DataType="{x:Type w:HistoryEntry}">
-                    <v:HistoryEntryView />
+                    <v:HistoryEntryView>
+                        <v:HistoryEntryView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="視聴履歴を削除する">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </MenuItem>
+                                <MenuItem Header="WebViewで開く">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <a:WebViewOpenAction Url="{Binding VideoId,StringFormat='https://www.nicovideo.jp/watch/{0}'}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </MenuItem>
+                                <MenuItem Header="ブラウザで開く">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <i:LaunchUriOrFileAction Path="{Binding VideoId,StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </MenuItem>
+                                <MenuItem Header="URLをクリップボードにコピー">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <a:CopyToClipBoardAction Text="{Binding VideoId,StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </MenuItem>
+                            </ContextMenu>
+                        </v:HistoryEntryView.ContextMenu>
+                    </v:HistoryEntryView>
                 </DataTemplate>
             </ListBox.Resources>
         </ListBox>
