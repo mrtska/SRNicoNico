@@ -18,10 +18,12 @@ namespace SRNicoNico.Services {
 
 
         private readonly ISessionService SessionService;
+        private readonly ViewerDbContext DbContext;
 
-        public NicoNicoHistoryService(ISessionService sessionService) {
+        public NicoNicoHistoryService(ISessionService sessionService, ViewerDbContext dbContext) {
 
             SessionService = sessionService;
+            DbContext = dbContext;
         }
 
         /// <inheritdoc />

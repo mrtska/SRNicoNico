@@ -11,15 +11,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210228114205_InitialDbContextMigration.cs" />
+    <Compile Remove="Migrations\20210228114205_InitialDbContextMigration.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DynaJson" Version="2.2.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.30" />
     <PackageReference Include="LivetCask" Version="3.2.3.2" />
     <PackageReference Include="MetroRadiance.Core" Version="2.4.0" NoWarn="NU1701" />
     <PackageReference Include="MetroRadiance.Chrome" Version="2.2.0" NoWarn="NU1701" />
     <PackageReference Include="MetroRadiance" Version="2.4.0" NoWarn="NU1701" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.790-prerelease" />
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.19041.1" />
     <PackageReference Include="Unity" Version="5.11.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 

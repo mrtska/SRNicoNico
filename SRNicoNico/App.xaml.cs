@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Threading;
+using Microsoft.EntityFrameworkCore;
 using SRNicoNico.Models;
 using SRNicoNico.Services;
 using SRNicoNico.ViewModels;
@@ -24,8 +27,10 @@ namespace SRNicoNico {
 #endif
             RegisterServices(container);
 
-            base.OnStartup(e);
+            ConfigureDbContext(container);
 
+            base.OnStartup(e);
+            MessageBox.Show(Assembly.GetExecutingAssembly().Location);
 
             MainWindow = new MainWindow { DataContext = container.Resolve<MainWindowViewModel>() };
             MainWindow.Visibility = Visibility.Visible;
@@ -33,13 +38,24 @@ namespace SRNicoNico {
         }
 
         /// <summary>
+        /// DbContextを初期化する
+        /// </summary>
+        /// <param name="container">DIコンテナ</param>
+        private void ConfigureDbContext(IUnityContainer container) {
+
+            var dbContext = container.Resolve<ViewerDbContext>();
+            dbContext.Database.Migrate();
+        }
+
+        /// <summary>
         /// 各サービスをDIコンテナに登録する
         /// </summary>
-        /// <param name="container">コンテナエンジン</param>
+        /// <param name="container">DIコンテナ</param>
         private void RegisterServices(IUnityContainer container) {
 
+            container.RegisterType<ViewerDbContext>(TypeLifetime.Singleton);
+
             container.RegisterType<ISettings, Settings>(TypeLifetime.Singleton);
-            
             container.RegisterType<INicoNicoViewer, NicoNicoViewer>(TypeLifetime.Singleton);
 
             container.RegisterType<ISessionService, NicoNicoSessionService>(TypeLifetime.Singleton);

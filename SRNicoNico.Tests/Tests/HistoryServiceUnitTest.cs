@@ -15,7 +15,7 @@ namespace SRNicoNico.Tests {
         public HistoryServiceUnitTest() {
 
             SessionService = TestingNicoNicoViewer.Instance.TestSessionService;
-            HistoryService = new NicoNicoHistoryService(SessionService);
+            HistoryService = new NicoNicoHistoryService(SessionService, null);
         }
 
         /// <summary>
