@@ -51,6 +51,7 @@ namespace SRNicoNico.ViewModels {
             Task.Run(() => {
 
                 HistoryItems.Add(UnityContainer.Resolve<AccountHistoryViewModel>());
+                HistoryItems.Add(UnityContainer.Resolve<LocalHistoryViewModel>());
 
                 // 子ViewModelのStatusを監視する
                 HistoryItems.ToList().ForEach(vm => {

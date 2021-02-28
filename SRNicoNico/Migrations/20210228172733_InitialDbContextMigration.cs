@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SRNicoNico.Migrations {
     public partial class InitialDbContextMigration : Migration {
@@ -13,8 +12,8 @@ namespace SRNicoNico.Migrations {
                     ThumbnailUrl = table.Column<string>(nullable: false),
                     Duration = table.Column<int>(nullable: false),
                     WatchCount = table.Column<int>(nullable: false),
-                    PostedAt = table.Column<DateTime>(nullable: false),
-                    LastWatchedAt = table.Column<DateTime>(nullable: false)
+                    PostedAt = table.Column<long>(nullable: false),
+                    LastWatchedAt = table.Column<long>(nullable: false)
                 },
                 constraints: table => {
                     table.PrimaryKey("PK_LocalHistory", x => x.VideoId);

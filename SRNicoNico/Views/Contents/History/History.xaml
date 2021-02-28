@@ -28,6 +28,9 @@
                 <DataTemplate DataType="{x:Type vm:AccountHistoryViewModel}">
                     <v:AccountHistory />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:LocalHistoryViewModel}">
+                    <v:LocalHistory />
+                </DataTemplate>
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

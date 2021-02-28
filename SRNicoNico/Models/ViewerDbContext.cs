@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SRNicoNico.Entities;
 
 namespace SRNicoNico.Models {
@@ -18,8 +19,12 @@ namespace SRNicoNico.Models {
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
             // 最終視聴日にインデックスを付ける
-            modelBuilder.Entity<LocalHistory>().ToTable(nameof(LocalHistory))
-                .HasIndex(i => i.LastWatchedAt);
+            var history = modelBuilder.Entity<LocalHistory>().ToTable(nameof(LocalHistory));
+            history.HasIndex(i => i.LastWatchedAt);
+            history.Property(p => p.LastWatchedAt)
+                .HasConversion(new DateTimeOffsetToBinaryConverter());
+            history.Property(p => p.PostedAt)
+                .HasConversion(new DateTimeOffsetToBinaryConverter());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {

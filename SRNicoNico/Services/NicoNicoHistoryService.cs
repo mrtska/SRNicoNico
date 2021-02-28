@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DynaJson;
+using Microsoft.EntityFrameworkCore;
+using SRNicoNico.Entities;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 
@@ -77,6 +80,74 @@ namespace SRNicoNico.Services {
                 return json.meta.status == 200;
             }
             return false;
+        }
+
+        /// <inheritdoc />
+        public IAsyncEnumerable<LocalHistory> GetLocalHistoryAsync() {
+
+            return DbContext.LocalHistories.AsNoTracking().OrderByDescending(o => o.LastWatchedAt).AsAsyncEnumerable();
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> DeleteLocalHistoryAsync(string videoId) {
+
+            var history = await DbContext.LocalHistories.SingleOrDefaultAsync(s => s.VideoId == videoId).ConfigureAwait(false);
+            // 履歴がDBに存在しなかったらそのまま終了する
+            if (history == null) {
+
+                return false;
+            }
+            DbContext.LocalHistories.Remove(history);
+
+            await DbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> SyncLocalHistoryAsync(IEnumerable<HistoryEntry> histories) {
+
+            var dic = await DbContext.LocalHistories.AsNoTracking().ToDictionaryAsync(t => t.VideoId).ConfigureAwait(false);
+
+            foreach (var history in histories) {
+
+                if (dic.ContainsKey(history.VideoId!)) {
+
+                    DbContext.LocalHistories.Update(new LocalHistory {
+
+                        VideoId = history.VideoId!,
+                        Title = history.Title!,
+                        ShortDescription = history.ShortDescription!,
+                        ThumbnailUrl = history.ThumbnailUrl!,
+                        Duration = history.Duration,
+                        WatchCount = history.WatchCount,
+                        PostedAt = history.PostedAt,
+                        LastWatchedAt = history.WatchedAt
+                    });
+                } else {
+
+                    DbContext.LocalHistories.Add(new LocalHistory {
+
+                        VideoId = history.VideoId!,
+                        Title = history.Title!,
+                        ShortDescription = history.ShortDescription!,
+                        ThumbnailUrl = history.ThumbnailUrl!,
+                        Duration = history.Duration,
+                        WatchCount = history.WatchCount,
+                        PostedAt = history.PostedAt,
+                        LastWatchedAt = history.WatchedAt
+                    });
+                }
+            }
+            await DbContext.SaveChangesAsync();
+
+            return false;
+        }
+
+        /// <inheritdoc />
+        public Task<bool> HasWatchedAsync(string videoId) {
+
+            return DbContext.LocalHistories.AnyAsync(a => a.VideoId == videoId);
         }
     }
 }

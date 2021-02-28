@@ -1,26 +1,25 @@
 ﻿using System.Windows.Input;
 using Livet;
-using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.Entities;
 using SRNicoNico.Services;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
-    /// アカウント視聴履歴ページのViewModel
+    /// ローカル視聴履歴ページのViewModel
     /// </summary>
-    public class AccountHistoryViewModel : TabItemViewModel {
+    public class LocalHistoryViewModel : TabItemViewModel {
 
         /// <summary>
-        /// アカウントの視聴履歴のリスト
+        /// ローカルの視聴履歴のリスト
         /// </summary>
-        public ObservableSynchronizedCollection<HistoryEntry> HistoryItems { get; private set; }
+        public ObservableSynchronizedCollection<LocalHistory> HistoryItems { get; private set; }
 
         private readonly IHistoryService HistoryService;
-        //private readonly IMylistService MylistService;
 
-        public AccountHistoryViewModel(IHistoryService historyService) : base("アカウント") {
+        public LocalHistoryViewModel(IHistoryService historyService) : base("ローカル") {
 
             HistoryService = historyService;
-            HistoryItems = new ObservableSynchronizedCollection<HistoryEntry>();
+            HistoryItems = new ObservableSynchronizedCollection<LocalHistory>();
         }
 
         /// <summary>
@@ -29,30 +28,28 @@ namespace SRNicoNico.ViewModels {
         public async void Loaded() {
 
             IsActive = true;
-            Status = "アカウントの視聴履歴を取得中";
+            Status = "ローカルの視聴履歴を取得中";
             HistoryItems.Clear();
 
             // 視聴履歴を取得する
-            await foreach (var entry in HistoryService.GetAccountHistoryAsync()) {
+            await foreach (var entry in HistoryService.GetLocalHistoryAsync()) {
 
                 HistoryItems.Add(entry);
             }
-            // ローカル視聴履歴に非同期で反映させる
-            await HistoryService.SyncLocalHistoryAsync(HistoryItems);
 
             Status = "";
             IsActive = false;
         }
 
         /// <summary>
-        /// アカウントの視聴履歴を削除する
+        /// ローカルの視聴履歴を削除する
         /// </summary>
         /// <param name="videoId">削除したい動画</param>
-        public async void DeleteAccountHistory(HistoryEntry entry) {
+        public async void DeleteLocalHistory(LocalHistory entry) {
 
             Status = $"{entry.VideoId}の視聴履歴を削除中";
 
-            if (await HistoryService.DeleteAccountHistoryAsync(entry.VideoId!)) {
+            if (await HistoryService.DeleteLocalHistoryAsync(entry.VideoId!)) {
 
                 HistoryItems.Remove(entry);
                 Status = $"{entry.VideoId}の視聴履歴を削除しました";

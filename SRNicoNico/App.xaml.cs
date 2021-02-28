@@ -30,7 +30,6 @@ namespace SRNicoNico {
             ConfigureDbContext(container);
 
             base.OnStartup(e);
-            MessageBox.Show(Assembly.GetExecutingAssembly().Location);
 
             MainWindow = new MainWindow { DataContext = container.Resolve<MainWindowViewModel>() };
             MainWindow.Visibility = Visibility.Visible;

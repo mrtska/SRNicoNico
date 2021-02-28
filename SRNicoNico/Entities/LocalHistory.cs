@@ -42,12 +42,12 @@ namespace SRNicoNico.Entities {
         /// <summary>
         /// 動画投稿日時
         /// </summary>
-        public DateTime PostedAt { get; set; }
+        public DateTimeOffset PostedAt { get; set; }
 
         /// <summary>
         /// 最終視聴日 INDEX
         /// </summary>
-        public DateTime LastWatchedAt { get; set; }
+        public DateTimeOffset LastWatchedAt { get; set; }
 
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     }
