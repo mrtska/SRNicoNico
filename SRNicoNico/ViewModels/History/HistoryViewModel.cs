@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Livet;
 using SRNicoNico.Services;
 using Unity;
@@ -9,11 +10,11 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class HistoryViewModel : TabItemViewModel {
 
-        private ObservableSynchronizedCollection<TabItemViewModel> _HistoryItems = new ObservableSynchronizedCollection<TabItemViewModel>();
+        private DispatcherCollection<TabItemViewModel> _HistoryItems = new DispatcherCollection<TabItemViewModel>(App.UIDispatcher);
         /// <summary>
         /// 履歴のタブのリスト
         /// </summary>
-        public ObservableSynchronizedCollection<TabItemViewModel> HistoryItems {
+        public DispatcherCollection<TabItemViewModel> HistoryItems {
             get { return _HistoryItems; }
             set { 
                 if (_HistoryItems == value)
@@ -46,23 +47,27 @@ namespace SRNicoNico.ViewModels {
 
         public void Loaded() {
 
-            HistoryItems.Add(UnityContainer.Resolve<AccountHistoryViewModel>());
+            // 別のスレッドで各要素を初期化する
+            Task.Run(() => {
 
-            // 子ViewModelのStatusを監視する
-            HistoryItems.ToList().ForEach(vm => {
+                HistoryItems.Add(UnityContainer.Resolve<AccountHistoryViewModel>());
 
-                vm.PropertyChanged += (o, e) => {
+                // 子ViewModelのStatusを監視する
+                HistoryItems.ToList().ForEach(vm => {
 
-                    var tabItem = (TabItemViewModel)o;
-                    if (e.PropertyName == nameof(Status)) {
+                    vm.PropertyChanged += (o, e) => {
 
-                        Status = tabItem.Status;
-                    }
-                };
+                        var tabItem = (TabItemViewModel)o;
+                        if (e.PropertyName == nameof(Status)) {
+
+                            Status = tabItem.Status;
+                        }
+                    };
+                });
+
+                // アカウントの視聴履歴をデフォルト値とする
+                SelectedItem = HistoryItems.First();
             });
-
-            // アカウントの視聴履歴をデフォルト値とする
-            SelectedItem = HistoryItems.First();
         }
 
 

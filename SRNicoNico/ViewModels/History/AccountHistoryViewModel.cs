@@ -43,6 +43,24 @@ namespace SRNicoNico.ViewModels {
         }
 
         /// <summary>
+        /// アカウントの視聴履歴を削除する
+        /// </summary>
+        /// <param name="videoId">削除したい動画</param>
+        public async void DeleteAccountHistory(HistoryEntry entry) {
+
+            Status = $"{entry.VideoId}の視聴履歴を削除中";
+
+            if (await HistoryService.DeleteAccountHistoryAsync(entry.VideoId!)) {
+
+                HistoryItems.Remove(entry);
+                Status = $"{entry.VideoId}の視聴履歴を削除しました";
+            } else {
+
+                Status = $"{entry.VideoId}の視聴履歴の削除に失敗しました";
+            }
+        }
+
+        /// <summary>
         /// 更新ボタンが押された時に実行される
         /// </summary>
         public void Reload() {

@@ -9,7 +9,7 @@
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
-             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Actions" xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              d:DataContext="{d:DesignInstance Type=vm:AccountHistoryViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -40,12 +40,13 @@
         <ListBox Grid.Row="1" ItemsSource="{Binding HistoryItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.Resources>
                 <DataTemplate DataType="{x:Type w:HistoryEntry}">
-                    <v:HistoryEntryView>
+                    <v:HistoryEntryView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}">
                         <v:HistoryEntryView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="視聴履歴を削除する">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Click">
+                                            <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},Path=PlacementTarget.Tag}" MethodName="DeleteAccountHistory" MethodParameter="{Binding}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </MenuItem>
@@ -76,5 +77,6 @@
                 </DataTemplate>
             </ListBox.Resources>
         </ListBox>
+        <metro:ProgressRing Grid.Row="1" IsActive="{Binding IsActive}" />
     </Grid>
 </UserControl>

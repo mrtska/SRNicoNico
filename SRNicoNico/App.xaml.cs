@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Threading;
 using SRNicoNico.Models;
 using SRNicoNico.Services;
 using SRNicoNico.ViewModels;
@@ -11,7 +12,11 @@ namespace SRNicoNico {
     /// </summary>
     public partial class App : Application {
 
+        public static Dispatcher? UIDispatcher;
+
         protected override void OnStartup(StartupEventArgs e) {
+
+            UIDispatcher = Dispatcher;
 
             var container = new UnityContainer();
 #if DEBUG
@@ -20,6 +25,7 @@ namespace SRNicoNico {
             RegisterServices(container);
 
             base.OnStartup(e);
+
 
             MainWindow = new MainWindow { DataContext = container.Resolve<MainWindowViewModel>() };
             MainWindow.Visibility = Visibility.Visible;
