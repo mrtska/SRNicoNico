@@ -15,6 +15,7 @@ namespace SRNicoNico.Services {
         /// アカウントの視聴履歴を取得できる分だけ返す
         /// </summary>
         /// <returns>アカウントの視聴履歴 取得に失敗した場合はnull</returns>
+        /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
         IAsyncEnumerable<HistoryEntry> GetAccountHistoryAsync();
 
         /// <summary>
