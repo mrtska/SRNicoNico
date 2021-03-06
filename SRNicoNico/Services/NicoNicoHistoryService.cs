@@ -32,7 +32,11 @@ namespace SRNicoNico.Services {
         /// <inheritdoc />
         public async IAsyncEnumerable<HistoryEntry> GetAccountHistoryAsync() {
 
-            var result = await SessionService.GetAsync(HistoryApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            var query = new GetRequestQueryBuilder(HistoryApiUrl)
+                .AddQuery("pageSize", 200)
+                .AddQuery("page", 1);
+
+            var result = await SessionService.GetAsync(query.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
