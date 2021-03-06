@@ -1,8 +1,10 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
 
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.PageSpinner.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.RoundButton.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Generic.ToggleSwitch.xaml" />
 
     </ResourceDictionary.MergedDictionaries>
+
 </ResourceDictionary>

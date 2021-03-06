@@ -58,6 +58,7 @@ namespace SRNicoNico {
             container.RegisterType<INicoNicoViewer, NicoNicoViewer>(TypeLifetime.Singleton);
 
             container.RegisterType<ISessionService, NicoNicoSessionService>(TypeLifetime.Singleton);
+            container.RegisterType<IUserService, NicoNicoUserService>(TypeLifetime.Singleton);
             container.RegisterType<IHistoryService, NicoNicoHistoryService>(TypeLifetime.Singleton);
         }
     }

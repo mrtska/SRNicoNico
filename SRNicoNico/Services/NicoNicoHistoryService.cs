@@ -21,12 +21,12 @@ namespace SRNicoNico.Services {
 
 
         private readonly ISessionService SessionService;
-        private readonly ViewerDbContext DbContext;
+        private readonly ViewerDbContext ReadOnlyDbContext;
 
         public NicoNicoHistoryService(ISessionService sessionService, ViewerDbContext dbContext) {
 
             SessionService = sessionService;
-            DbContext = dbContext;
+            ReadOnlyDbContext = dbContext;
         }
 
         /// <inheritdoc />
@@ -89,21 +89,22 @@ namespace SRNicoNico.Services {
         /// <inheritdoc />
         public IAsyncEnumerable<LocalHistory> GetLocalHistoryAsync() {
 
-            return DbContext.LocalHistories.AsNoTracking().OrderByDescending(o => o.LastWatchedAt).AsAsyncEnumerable();
+            return ReadOnlyDbContext.LocalHistories.AsNoTracking().OrderByDescending(o => o.LastWatchedAt).AsAsyncEnumerable();
         }
 
         /// <inheritdoc />
         public async Task<bool> DeleteLocalHistoryAsync(string videoId) {
 
-            var history = await DbContext.LocalHistories.SingleOrDefaultAsync(s => s.VideoId == videoId).ConfigureAwait(false);
+            using var dbContext = new ViewerDbContext();
+            var history = await dbContext.LocalHistories.SingleOrDefaultAsync(s => s.VideoId == videoId).ConfigureAwait(false);
             // 履歴がDBに存在しなかったらそのまま終了する
             if (history == null) {
 
                 return false;
             }
-            DbContext.LocalHistories.Remove(history);
+            dbContext.LocalHistories.Remove(history);
 
-            await DbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return true;
         }
@@ -111,13 +112,14 @@ namespace SRNicoNico.Services {
         /// <inheritdoc />
         public async Task<bool> SyncLocalHistoryAsync(IEnumerable<HistoryEntry> histories) {
 
-            var dic = await DbContext.LocalHistories.AsNoTracking().ToDictionaryAsync(t => t.VideoId).ConfigureAwait(false);
+            using var dbContext = new ViewerDbContext();
+            var dic = await dbContext.LocalHistories.AsNoTracking().ToDictionaryAsync(t => t.VideoId).ConfigureAwait(false);
 
             foreach (var history in histories) {
 
                 if (dic.ContainsKey(history.VideoId!)) {
 
-                    DbContext.LocalHistories.Update(new LocalHistory {
+                    dbContext.LocalHistories.Update(new LocalHistory {
 
                         VideoId = history.VideoId!,
                         Title = history.Title!,
@@ -130,7 +132,7 @@ namespace SRNicoNico.Services {
                     });
                 } else {
 
-                    DbContext.LocalHistories.Add(new LocalHistory {
+                    dbContext.LocalHistories.Add(new LocalHistory {
 
                         VideoId = history.VideoId!,
                         Title = history.Title!,
@@ -143,7 +145,7 @@ namespace SRNicoNico.Services {
                     });
                 }
             }
-            await DbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return false;
         }
@@ -151,7 +153,7 @@ namespace SRNicoNico.Services {
         /// <inheritdoc />
         public Task<bool> HasWatchedAsync(string videoId) {
 
-            return DbContext.LocalHistories.AnyAsync(a => a.VideoId == videoId);
+            return ReadOnlyDbContext.LocalHistories.AsNoTracking().AnyAsync(a => a.VideoId == videoId);
         }
     }
 }

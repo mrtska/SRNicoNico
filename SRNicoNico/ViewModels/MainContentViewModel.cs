@@ -64,6 +64,7 @@ namespace SRNicoNico.ViewModels {
         public void PostInitialize() {
 
             SystemItems.Add(WebView = UnityContainer.Resolve<WebViewViewModel>());
+            SystemItems.Add(UnityContainer.Resolve<FollowViewModel>());
             SystemItems.Add(UnityContainer.Resolve<HistoryViewModel>());
 
             SystemItems.ToList().ForEach(vm => {

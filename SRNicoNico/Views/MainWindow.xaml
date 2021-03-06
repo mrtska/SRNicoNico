@@ -15,6 +15,9 @@
                    RenderOptions.BitmapScalingMode="HighQuality"
                    IsRestoringWindowPlacement="True"
                    FontFamily="Segoe UI Emoji"
+                   TextOptions.TextFormattingMode="Display"
+                   TextOptions.TextHintingMode="Auto"
+                   TextOptions.TextRenderingMode="ClearType"
                    Title="MainWindow" Height="700" Width="900">
     <i:Interaction.Behaviors>
         <b:WindowInputEventBehavior />
