@@ -18,7 +18,7 @@ namespace SRNicoNico.Services {
         /// <returns>ユーザーリスト 総数が多い場合はpageを使って取得する</returns>
         /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
         Task<UserList> GetFollowedUsersAsync(int page = 1, int pageSize = 100);
-
+        
         /// <summary>
         /// 自分がフォローしているタグを返す
         /// </summary>
@@ -26,6 +26,12 @@ namespace SRNicoNico.Services {
         /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
         IAsyncEnumerable<TagEntry> GetFollowedTagsAsync();
 
+        /// <summary>
+        /// 自分がフォローしているマイリストを返す
+        /// </summary>
+        /// <returns>マイリストのリスト</returns>
+        /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
+        IAsyncEnumerable<MylistEntry> GetFollowedMylistsAsync();
 
     }
 }
