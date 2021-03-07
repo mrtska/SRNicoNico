@@ -19,7 +19,12 @@ namespace SRNicoNico.Services {
         /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
         Task<UserList> GetFollowedUsersAsync(int page = 1, int pageSize = 100);
 
-
+        /// <summary>
+        /// 自分がフォローしているタグを返す
+        /// </summary>
+        /// <returns>タグのリスト</returns>
+        /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
+        IAsyncEnumerable<TagEntry> GetFollowedTagsAsync();
 
 
     }

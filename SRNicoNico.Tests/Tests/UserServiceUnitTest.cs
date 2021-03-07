@@ -40,5 +40,21 @@ namespace SRNicoNico.Tests {
                 break;
             }
         }
+        /// <summary>
+        /// 自分がフォローしているタグを正しく取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetFollowedTagsUnitTest() {
+
+            await foreach (var user in UserService.GetFollowedTagsAsync()) {
+
+                Assert.NotNull(user.Name);
+                Assert.NotNull(user.Summary);
+                Assert.NotEqual(default, user.FollowedAt);
+
+                // 最初の一つだけ確認する
+                break;
+            }
+        }
     }
 }

@@ -16,10 +16,12 @@ namespace SRNicoNico.Services {
         /// 自分がフォローしているユーザーを取得するAPI
         /// </summary>
         private const string FollowingUsersApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/following/users";
-
+        /// <summary>
+        /// 自分がフォローしているタグを取得するAPI
+        /// </summary>
+        private const string FollowingTagsApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/following/tags";
 
         private readonly ISessionService SessionService;
-
 
         public NicoNicoUserService(ISessionService sessionService) {
 
@@ -33,7 +35,6 @@ namespace SRNicoNico.Services {
 
                 throw new ArgumentException("pageに0以下を指定しないで");
             }
-
             var ret = new UserList();
 
             var query = new GetRequestQueryBuilder(FollowingUsersApiUrl)
@@ -66,9 +67,32 @@ namespace SRNicoNico.Services {
                     IsPremium = user.isPremium
                 });
             }
-
             ret.Entries = list;
             return ret;
+        }
+
+        /// <inheritdoc />
+        public async IAsyncEnumerable<TagEntry> GetFollowedTagsAsync() {
+
+            var result = await SessionService.GetAsync(FollowingTagsApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            foreach (var entry in json.data.tags) {
+
+                if (entry == null) {
+                    continue;
+                }
+                yield return new TagEntry {
+                    Name = entry.name,
+                    Summary = entry.nicodicSummary,
+                    FollowedAt = DateTimeOffset.Parse(entry.followedAt)
+                };
+            }
         }
     }
 }
