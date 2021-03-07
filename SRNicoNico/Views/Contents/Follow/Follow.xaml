@@ -28,8 +28,8 @@
                 <DataTemplate DataType="{x:Type vm:UserFollowViewModel}">
                     <v:UserFollow />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:LocalHistoryViewModel}">
-                    <v:LocalHistory />
+                <DataTemplate DataType="{x:Type vm:TagFollowViewModel}">
+                    <v:TagFollow />
                 </DataTemplate>
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>

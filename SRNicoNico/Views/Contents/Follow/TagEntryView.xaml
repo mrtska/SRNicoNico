@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="SRNicoNico.Views.TagEntryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
+             d:DataContext="{d:DesignInstance Type=w:TagEntry}"
+             mc:Ignorable="d" 
+             d:DesignHeight="80" d:DesignWidth="600"
+             Background="Transparent">
+        <StackPanel Margin="5,0,0,0">
+            <TextBlock FontSize="16" Text="{Binding Name}" />
+            <TextBlock Text="{Binding Summary}" ToolTip="{Binding Summary}" TextWrapping="Wrap" Foreground="Gray" />
+        <TextBlock Text="{Binding FollowedAt, StringFormat='フォロー日時： yyyy年 M月 d日 H時mm分'}" TextTrimming="WordEllipsis" TextWrapping="Wrap" />
+        </StackPanel>
+</UserControl>

@@ -89,7 +89,7 @@ namespace SRNicoNico.Services {
                 }
                 yield return new TagEntry {
                     Name = entry.name,
-                    Summary = entry.nicodicSummary,
+                    Summary = $"{entry.nicodicSummary}…",
                     FollowedAt = DateTimeOffset.Parse(entry.followedAt)
                 };
             }
