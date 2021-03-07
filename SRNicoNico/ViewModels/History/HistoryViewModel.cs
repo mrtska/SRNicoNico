@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Livet;
 using SRNicoNico.Services;
 using Unity;
@@ -71,6 +72,8 @@ namespace SRNicoNico.ViewModels {
             });
         }
 
-
+        public override void KeyDown(KeyEventArgs e) {
+            SelectedItem?.KeyDown(e);
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace SRNicoNico.ViewModels {
         }
 
         /// <summary>
-        /// 視聴履歴を非同期で取得する
+        /// フォローしているユーザーを非同期で取得する
         /// </summary>
         public void Loaded() {
 

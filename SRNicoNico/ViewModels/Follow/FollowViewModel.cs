@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Livet;
 using Unity;
 
@@ -50,6 +51,7 @@ namespace SRNicoNico.ViewModels {
             Task.Run(() => {
 
                 FollowItems.Add(UnityContainer.Resolve<UserFollowViewModel>());
+                FollowItems.Add(UnityContainer.Resolve<TagFollowViewModel>());
 
                 // 子ViewModelのStatusを監視する
                 FollowItems.ToList().ForEach(vm => {
@@ -64,11 +66,13 @@ namespace SRNicoNico.ViewModels {
                     };
                 });
 
-                // アカウントの視聴履歴をデフォルト値とする
+                // ユーザーフォローをデフォルト値とする
                 SelectedItem = FollowItems.First();
             });
         }
 
-
+        public override void KeyDown(KeyEventArgs e) {
+            SelectedItem?.KeyDown(e);
+        }
     }
 }
