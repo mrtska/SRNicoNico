@@ -1,6 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:SRNicoNico.Views.Controls" xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:l="http://schemas.livet-mvvm.net/2011/wpf">
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
+                    xmlns:controls="clr-namespace:SRNicoNico.Views.Controls">
 
     <Style TargetType="{x:Type controls:PageSpinner}">
         <Setter Property="Template">
@@ -16,7 +19,19 @@
                             </Grid.RowDefinitions>
                             
                             <ContentPresenter />
-                            <Grid Grid.Row="1">
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <StackPanel.Resources>
+                                    <Style TargetType="StackPanel">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding MaxPages}" Value="1">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding MaxPages}" Value="0">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Resources>
                                 <TextBlock Text="{Binding MaxPages,StringFormat=1ページ ~ {0}ページ}" FontSize="16" VerticalAlignment="Center" Margin="5,0"/>
                                 <Button Content="←" Padding="3" IsEnabled="{Binding LeftButtonEnabled}">
                                     <i:Interaction.Triggers>
@@ -38,7 +53,7 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </Button>
-                            </Grid>
+                            </StackPanel>
                         </Grid>
                     </Border>
                 </ControlTemplate>

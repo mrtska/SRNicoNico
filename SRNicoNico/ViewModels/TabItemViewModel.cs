@@ -50,13 +50,12 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-
         private bool _IsActive;
         /// <summary>
         /// 現在読込中かどうか
         /// 基本的にプログレスバーなどを表示するフラグとして使う
         /// </summary>
-        public bool IsActive {
+        public virtual bool IsActive {
             get { return _IsActive; }
             set { 
                 if (_IsActive == value)

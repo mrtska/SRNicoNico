@@ -17,7 +17,7 @@ namespace SRNicoNico.ViewModels {
 
         private readonly IUserService UserService;
 
-        public UserFollowViewModel(IUserService userService) : base("ユーザー") {
+        public UserFollowViewModel(IUserService userService) : base("ユーザー", 100) {
 
             UserService = userService;
             UserItems = new ObservableSynchronizedCollection<UserEntry>();
@@ -26,28 +26,9 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// 視聴履歴を非同期で取得する
         /// </summary>
-        public async void Loaded() {
+        public void Loaded() {
 
-            IsActive = true;
-            Status = "フォローしているユーザーを取得中";
-            UserItems.Clear();
-            try {
-
-                var result = await UserService.GetFollowedUsersAsync();
-
-                foreach (var entry in result.Entries!) {
-
-                    UserItems.Add(entry);
-                }
-
-                Status = "";
-            } catch (StatusErrorException e) {
-
-                Status = $"フォローしているユーザーを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
-            }
-
-
-            IsActive = false;
+            SpinPage(1);
         }
 
         /// <summary>
@@ -69,8 +50,30 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public override void SpinPage(int page) {
-            throw new System.NotImplementedException();
+        public override async void SpinPage(int page) {
+            base.SpinPage(page);
+
+            IsActive = true;
+            Status = "フォローしているユーザーを取得中";
+            UserItems.Clear();
+            try {
+
+                var result = await UserService.GetFollowedUsersAsync(page);
+                Total = result.Total;
+
+                foreach (var entry in result.Entries!) {
+
+                    UserItems.Add(entry);
+                }
+
+                Status = "";
+            } catch (StatusErrorException e) {
+
+                Status = $"フォローしているユーザーを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+            } finally {
+
+                IsActive = false;
+            }
         }
     }
 }

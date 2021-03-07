@@ -27,7 +27,7 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async Task<UserList> GetFollowedUsersAsync(int page = 1) {
+        public async Task<UserList> GetFollowedUsersAsync(int page = 1, int pageSize = 100) {
 
             if (page < 1) {
 
@@ -37,7 +37,8 @@ namespace SRNicoNico.Services {
             var ret = new UserList();
 
             var query = new GetRequestQueryBuilder(FollowingUsersApiUrl)
-                .AddQuery("pageSize", 100);
+                .AddQuery("pageSize", pageSize)
+                .AddQuery("page", page);
 
             var result = await SessionService.GetAsync(query.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
