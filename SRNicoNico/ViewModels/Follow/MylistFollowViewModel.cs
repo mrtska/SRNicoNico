@@ -6,42 +6,42 @@ using SRNicoNico.Services;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
-    /// タグフォローページのViewModel
+    /// マイリストフォローページのViewModel
     /// </summary>
-    public class TagFollowViewModel : TabItemViewModel {
+    public class MylistFollowViewModel : TabItemViewModel {
 
         /// <summary>
-        /// フォローしているタグのリスト
+        /// フォローしているマイリストのリスト
         /// </summary>
-        public ObservableSynchronizedCollection<TagEntry> TagItems { get; private set; }
+        public ObservableSynchronizedCollection<MylistEntry> MylistItems { get; private set; }
 
         private readonly IUserService UserService;
 
-        public TagFollowViewModel(IUserService userService) : base("タグ") {
+        public MylistFollowViewModel(IUserService userService) : base("マイリスト") {
 
             UserService = userService;
-            TagItems = new ObservableSynchronizedCollection<TagEntry>();
+            MylistItems = new ObservableSynchronizedCollection<MylistEntry>();
         }
 
         /// <summary>
-        /// フォローしているタグを非同期で取得する
+        /// フォローしているマイリストを非同期で取得する
         /// </summary>
         public async void Loaded() {
 
             IsActive = true;
-            Status = "フォローしているタグを取得中";
-            TagItems.Clear();
+            Status = "フォローしているマイリストを取得中";
+            MylistItems.Clear();
             try {
 
-                await foreach (var entry in UserService.GetFollowedTagsAsync()) {
+                await foreach (var entry in UserService.GetFollowedMylistsAsync()) {
 
-                    TagItems.Add(entry);
+                    MylistItems.Add(entry);
                 }
 
                 Status = string.Empty;
             } catch (StatusErrorException e) {
 
-                Status = $"フォローしているタグを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+                Status = $"フォローしているマイリストを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
             } finally {
 
                 IsActive = false;

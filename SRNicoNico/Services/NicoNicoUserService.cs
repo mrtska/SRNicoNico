@@ -125,7 +125,7 @@ namespace SRNicoNico.Services {
 
                     yield return new MylistEntry {
                         Status = status,
-                        Id = entry.id
+                        Id = entry.id.ToString()
                     };
                     continue;
                 }

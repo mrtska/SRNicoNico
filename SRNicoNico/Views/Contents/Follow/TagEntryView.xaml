@@ -8,9 +8,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="600"
              Background="Transparent">
-        <StackPanel Margin="5,0,0,0">
-            <TextBlock FontSize="16" Text="{Binding Name}" />
-            <TextBlock Text="{Binding Summary}" ToolTip="{Binding Summary}" TextWrapping="Wrap" Foreground="Gray" />
+    <StackPanel Margin="5,0,0,0">
+        <TextBlock FontSize="16" Text="{Binding Name}" />
+        <TextBlock Text="{Binding Summary}" ToolTip="{Binding Summary}" TextWrapping="Wrap" Foreground="Gray" />
         <TextBlock Text="{Binding FollowedAt, StringFormat='フォロー日時： yyyy年 M月 d日 H時mm分'}" TextTrimming="WordEllipsis" TextWrapping="Wrap" />
-        </StackPanel>
+    </StackPanel>
 </UserControl>
