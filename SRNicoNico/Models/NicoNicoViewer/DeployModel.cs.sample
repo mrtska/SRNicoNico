@@ -36,13 +36,14 @@ namespace SRNicoNico.Models.NicoNicoViewer {
             var client = new HttpClient();
 
             var request = new HttpRequestMessage(HttpMethod.Post, DeployUrl);
-            request.Headers.Add("token", SecretKey);
-            request.Headers.Add("version", App.ViewModelRoot.CurrentVersion.ToString());
 
-            request.Content = new StreamContent(File.Open(FilePath, FileMode.Open));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", SecretKey);
 
-            var res = await client.SendAsync(request);
-            var str = await res.Content.ReadAsStringAsync();
+            var content = new MultipartFormDataContent();
+            content.Add(new StreamContent(File.Open(FilePath, FileMode.Open)), "file", "file");
+            content.Add(new StringContent(App.ViewModelRoot.CurrentVersion.ToString()), "version");
+
+            request.Content = content;
 
             return str;
         }
