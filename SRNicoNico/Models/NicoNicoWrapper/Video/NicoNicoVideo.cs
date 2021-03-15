@@ -38,7 +38,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public NicoNicoWatchApi ApiData {
             get { return _ApiData; }
-            set { 
+            set {
                 if (_ApiData == value)
                     return;
                 _ApiData = value;
@@ -54,7 +54,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public NicoNicoVideo(string url) {
 
-            if(string.IsNullOrEmpty(url)) {
+            if (string.IsNullOrEmpty(url)) {
 
                 throw new ArgumentNullException(nameof(url));
             }
@@ -106,11 +106,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var doc = new HtmlDocument();
                 doc.LoadHtml(await response.Content.ReadAsStringAsync());
-                
+
                 var container = doc.DocumentNode.SelectSingleNode("//div[@id='js-initial-watch-data']");
 
                 // Flashじゃないと再生出来ない動画は弾く
-                if(container == null) {
+                if (container == null) {
 
                     return "この動画はNicoNicoViewerでは再生できません";
                 }
@@ -126,26 +126,25 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 var video = json.video;
 
                 api.VideoId = video.id;
-                api.Title = video.originalTitle;
-                api.ThumbnailUrl = video.largeThumbnailURL ?? video.thumbnailURL;
+                api.Title = video.title;
+                api.ThumbnailUrl = video.thumbnail.url;
                 api.Description = HyperLinkReplacer.Replace(video.description);
-                api.PostedAt = DateTime.Parse(video.postedDateTime);
-                api.Duration = (int) video.duration;
-                api.ViewCount = (int) video.viewCount;
-                api.MylistCount = (int) video.mylistCount;
-                api.CommentCount = (int) json.thread.commentCount;
-                
-                api.HighestRank = (int?)json.context.highestGenreRanking?.rank ?? null;
+                api.PostedAt = DateTime.Parse(video.registeredAt);
+                api.Duration = (int)video.duration;
+                api.ViewCount = (int)video.count.view;
+                api.MylistCount = (int)video.count.mylist;
+                api.CommentCount = (int)video.count.comment;
+
+                api.HighestRank = null;//(int?)json.context.highestGenreRanking?.rank ?? null;
 
                 api.Tags = new List<VideoTag>();
-                foreach(var jsontag in json.tags) {
+                foreach (var jsontag in json.tag.items) {
 
                     var tag = new VideoTag {
-                        Id = jsontag.id,
                         Name = jsontag.name,
                         IsCategory = jsontag.isCategory,
                         IsCategoryCandidate = jsontag.isCategoryCandidate,
-                        IsDictionaryExists = jsontag.isDictionaryExists,
+                        IsDictionaryExists = jsontag.isNicodicArticleExists,
                         IsLocked = jsontag.isLocked
                     };
                     tag.Url = "http://dic.nicovideo.jp/a/" + tag.Name;
@@ -158,49 +157,44 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                     Id = json.viewer.id.ToString(),
                     Nickname = json.viewer.nickname.ToString(),
                     IsPremium = json.viewer.isPremium,
-                    NicosId = json.viewer.nicosid
                 };
 
-                
-                if(json.owner != null) {
+
+                if (json.owner != null) {
 
                     api.UploaderInfo = new UploaderInfo {
-                        Id = json.owner.id,
-                        ThumbnailUrl = json.owner.iconURL,
+                        Id = json.owner.id.ToString(),
+                        ThumbnailUrl = json.owner.iconUrl,
                         UploaderUrl = "https://www.nicovideo.jp/user/" + json.owner.id,
                         IsChannel = false
                     };
                     api.UploaderInfo.Name = $"<a href='{api.UploaderInfo.UploaderUrl}'>{json.owner.nickname}</a>";
+                    api.UploaderInfo.Followed = json.owner.viewer.isFollowing;
 
-                    var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(string.Format(FavUserApiUrl, api.UploaderInfo.Id));
-                    var ret = DynamicJson.Parse(a);
-                    api.UploaderInfo.Followed = ret.data.following;
-
-                } else if(json.channel != null) {
+                } else if (json.channel != null) {
 
                     api.UploaderInfo = new UploaderInfo {
                         Id = json.channel.id,
-                        // https://public.api.nicovideo.jp/v1/channels.json?channelIds=2633724&responseGroup=detail もしURLハードコーディングでアイコンが出なくなったら諦めて素直にAPI叩く
-                        ThumbnailUrl = "https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/ch" + json.channel.id + ".jpg",
+                        ThumbnailUrl =json.channel.thumbnail.url,
                         UploaderUrl = "http://ch.nicovideo.jp/ch" + json.channel.id,
                         IsChannel = true,
-                        Followed = json.channel.isFavorited
+                        Followed = json.channel.viewer.follow.isFollowed
                     };
                     api.UploaderInfo.Name = $"<a href='{api.UploaderInfo.UploaderUrl}'>{json.channel.name}</a>";
                 }
 
                 var thread = new ThreadInfo {
-                    ServerUrl = json.thread.serverUrl.Replace("api/", "api.json/"),
+                    ServerUrl = json.comment.server.url.Replace("api/", "api.json/"),
                     Composites = new List<CommentComposite>()
                 };
-                foreach (var composite in json.commentComposite.threads) {
+                foreach (var composite in json.comment.threads) {
 
                     thread.Composites.Add(new CommentComposite() {
 
                         Id = composite.id.ToString(),
                         Fork = composite.fork == 1,
                         IsActive = composite.isActive,
-                        PostKeyStatus = (int) composite.postkeyStatus,
+                        PostKeyStatus = (int)composite.postkeyStatus,
                         IsDefaultPostTarget = composite.isDefaultPostTarget,
                         IsThreadKeyRequired = composite.isThreadkeyRequired,
                         IsLeafRequired = composite.isLeafRequired,
@@ -211,37 +205,37 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
                 api.ThreadInfo = thread;
 
-                api.CsrfToken = json.context.csrfToken;
-                api.UserKey = json.context.userkey;
-                api.IsNeedPayment = json.context.isNeedPayment;
-                api.InitialPlaybackPosition =  json.context.initialPlaybackPosition != null ? (int) json.context.initialPlaybackPosition : 0;
+                //api.CsrfToken = json.context.csrfToken;
+                api.UserKey = json.comment.keys.userKey;
+                api.IsNeedPayment = video.isAuthenticationRequired;
+                api.InitialPlaybackPosition = (int?)json.player.initialPlayback?.positionSec ?? 0;
 
                 //要課金動画はdmcInfoがないのでここで終了させる
-                if(api.IsNeedPayment) {
+                if (api.IsNeedPayment) {
 
                     ApiData = api;
                     return "";
                 }
-                
-                if(video.dmcInfo != null) {
 
-                    api.DmcInfo = new NicoNicoDmc(video.dmcInfo);
+                if (json.media != null) {
+
+                    api.DmcInfo = new NicoNicoDmc(json.media);
                     api.DmcHeartbeatRequired = true;
 
-                    if (video.dmcInfo.storyboard_session_api != null) {
+                    if (json.media.delivery.storyboard != null) {
 
                         // ストーリーボードを非同期で取得
                         _ = Task.Run(async () => {
 
-                            api.StoryBoard = new NicoNicoStoryBoard(video.dmcInfo.storyboard_session_api);
+                            api.StoryBoard = new NicoNicoStoryBoard(json.media.delivery.storyboard);
                             await api.StoryBoard.GetStoryBoardAsync();
                         });
                     }
-                    
+
                     // トラッキングIDを送る
                     // 送らないと暗号化済み動画で複合キーが正しく取得出来ない
                     var query = new GetRequestQuery("https://nvapi.nicovideo.jp/v1/2ab0cbaa/watch");
-                    query.AddQuery("t", Uri.EscapeDataString(video.dmcInfo.tracking_id));
+                    query.AddQuery("t", Uri.EscapeDataString(json.media.delivery.trackingId));
 
                     var request = new HttpRequestMessage(HttpMethod.Get, query.TargetUrl);
                     request.Headers.Add("Origin", "https://www.nicovideo.jp");
@@ -258,7 +252,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 }
                 ApiData = api;
                 return "";
-            } catch(RequestFailed) {
+            } catch (RequestFailed) {
 
                 return "動画情報の取得に失敗しました";
             }
@@ -277,7 +271,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
                 var ret = DynamicJson.Parse(a);
                 return ret.status == "succeed";
-            } catch(RequestFailed) {
+            } catch (RequestFailed) {
 
                 return false;
             }

@@ -66,13 +66,13 @@ namespace SRNicoNico.Views {
 
                 if(NicoNicoOpener.GetType(uri) == NicoNicoUrlType.Video) {
 
-                    var id = Regex.Match(uri, "watch/(.+)").Groups[1].Value;
-                    var newvm = new VideoPopupViewModel(id, vm.Model.ApiData.PlaylistToken);
-                    var tip = new VideoPopup() {
-                        DataContext = newvm
-                    };
+                    //var id = Regex.Match(uri, "watch/(.+)").Groups[1].Value;
+                    //var newvm = new VideoPopupViewModel(id, vm.Model.ApiData.PlaylistToken);
+                    //var tip = new VideoPopup() {
+                    //    DataContext = newvm
+                    //};
 
-                    link.ToolTip = tip;
+                    link.ToolTip = uri;
                 } else {
 
                     link.ToolTip = uri;

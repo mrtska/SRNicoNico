@@ -26,13 +26,13 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public NicoNicoStoryBoard(dynamic session_api) {
 
-            Initialize(session_api);
+            Initialize(session_api.session);
         }
-        private void Initialize(dynamic session_api) {
+        private void Initialize(dynamic session) {
 
             dynamic json = new DynamicJson();
 
-            var api = session_api.urls[0];
+            var api = session.urls[0];
 
             var query = new GetRequestQuery(api.url);
             query.AddQuery("_format", "json");
@@ -40,18 +40,18 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             ApiUrl = query.TargetUrl;
 
             json.session = new {
-                session_api.recipe_id,
-                session_api.content_id,
+                recipe_id = session.recipeId,
+                content_id = session.contentId,
                 content_type = "video",
                 content_src_id_sets = new[] {
                     new {
-                        content_src_ids = (object[]) session_api.videos
+                        content_src_ids = (object[]) session.videos
                     }
                 },
                 timing_constraint = "unlimited",
                 keep_method = new {
                     heartbeat = new {
-                        lifetime = session_api.heartbeat_lifetime
+                        lifetime = session.heartbeatLifetime
                     }
                 },
                 protocol = new {
@@ -60,8 +60,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                         http_parameters = new {
                             parameters = new {
                                 storyboard_download_parameters = new {
-                                    use_well_known_port = api.is_well_known_port ? "yes" : "no",
-                                    use_ssl = api.is_ssl ? "yes" : "no"
+                                    use_well_known_port = api.isWellKnownPort ? "yes" : "no",
+                                    use_ssl = api.isSsl ? "yes" : "no"
                                 }
                             }
                         }
@@ -70,20 +70,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 content_uri = "",
                 session_operation_auth = new {
                     session_operation_auth_by_signature = new {
-                        session_api.token,
-                        session_api.signature
+                        session.token,
+                        session.signature
                     }
                 },
                 content_auth = new {
-                    auth_type = session_api.auth_types.storyboard,
-                    session_api.content_key_timeout,
+                    auth_type = session.authTypes.storyboard,
+                    content_key_timeout = session.contentKeyTimeout,
                     service_id = "nicovideo",
-                    session_api.service_user_id
+                    service_user_id = session.serviceUserId
                 },
                 client_info = new {
-                    session_api.player_id
+                    player_id = session.playerId
                 },
-                session_api.priority
+                session.priority
             };
             Payload = json;
         }

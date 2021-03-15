@@ -318,14 +318,14 @@ namespace SRNicoNico.ViewModels {
                 await ApiData.DmcInfo.DeleteAsync();
 
                 // 再度Dmc用TokenとSignatureを取得する
-                var video = new NicoNicoVideoWithPlaylistToken(ApiData.VideoId, ApiData.PlaylistToken);
-                var str = await video.Initialize();
-                if(string.IsNullOrEmpty(str)) {
+                //var video = new NicoNicoVideoWithPlaylistToken(ApiData.VideoId, ApiData.PlaylistToken);
+                //var str = await video.Initialize();
+                //if(string.IsNullOrEmpty(str)) {
 
-                    return;
-                }
-                var json = DynamicJson.Parse(str);
-                ApiData.DmcInfo = new NicoNicoDmc(json.video.dmcInfo);
+                //    return;
+                ///}
+                //var json = DynamicJson.Parse(str);
+                //ApiData.DmcInfo = new NicoNicoDmc(json.video.dmcInfo);
 
                 await EstablishDmcSession();
                 // セッションを張り直したのでWebBrowser側に伝える
@@ -503,6 +503,12 @@ namespace SRNicoNico.ViewModels {
 
             //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
             if (WebBrowser != null && WebBrowser.IsInitialized) {
+
+                if (ApiData.IsNeedPayment) {
+
+                    return;
+                }
+
                 try {
 
                     if (args.Length == 0) {

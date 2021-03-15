@@ -24,7 +24,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             query.AddQuery("watch_harmful", 2);
             query.AddQuery("continue_watching", 1);
 
-            var json = DynamicJson.Parse(await App.ViewModelRoot.CurrentUser.Session.GetAsync(query.TargetUrl));
+            var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync(query.TargetUrl);
+
+            var json = DynamicJson.Parse(a);
 
             if(json.status != "ok") {
 
