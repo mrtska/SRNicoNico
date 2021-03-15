@@ -212,7 +212,7 @@ namespace SRNicoNico.Services {
                 yield return new ChannelEntry {
                     BodyPrice = (int)entry.bodyPrice,
                     CanAdmit = entry.canAdmit,
-                    Description = entry.description,
+                    Description = entry.description.Replace("<br>", ""), // タグを削除する
                     Id = entry.id.ToString(),
                     IsAdult = entry.isAdult,
                     IsFree = entry.isFree,
