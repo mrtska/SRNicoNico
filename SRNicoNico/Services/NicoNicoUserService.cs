@@ -25,6 +25,10 @@ namespace SRNicoNico.Services {
         /// 自分がフォローしているマイリストを取得するAPI
         /// </summary>
         private const string FollowingMylistsApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/following/mylists";
+        /// <summary>
+        /// 自分がフォローしているチャンネルを取得するAPI
+        /// </summary>
+        private const string FollowingChannelsApiUrl = "https://public.api.nicovideo.jp/v1/user/followees/channels.json";
 
 
         private readonly ISessionService SessionService;
@@ -182,6 +186,44 @@ namespace SRNicoNico.Services {
                     OwnerName = detail.owner.name,
                     OwnerType = detail.owner.ownerType,
                     SampleItems = videos
+                };
+            }
+        }
+
+        /// <inheritdoc />
+        public async IAsyncEnumerable<ChannelEntry> GetFollowedChannelsAsync() {
+
+            var query = new GetRequestQueryBuilder(FollowingChannelsApiUrl)
+                .AddQuery("limit", 100);
+
+            var result = await SessionService.GetAsync(query.Build()).ConfigureAwait(false);
+
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            foreach (var entry in json.data) {
+
+                if (entry == null) {
+                    continue;
+                }
+                yield return new ChannelEntry {
+                    BodyPrice = (int)entry.bodyPrice,
+                    CanAdmit = entry.canAdmit,
+                    Description = entry.description,
+                    Id = entry.id.ToString(),
+                    IsAdult = entry.isAdult,
+                    IsFree = entry.isFree,
+                    Name = entry.name,
+                    OwnerName = entry.ownerName,
+                    Price = (int)entry.price,
+                    ScreenName = entry.screenName,
+                    IsJoining = entry.session.joining,
+                    ThumbnailSmallUrl = entry.thumbnailSmallUrl,
+                    ThumbnailUrl = entry.thumbnailUrl,
+                    Url = entry.url
                 };
             }
         }

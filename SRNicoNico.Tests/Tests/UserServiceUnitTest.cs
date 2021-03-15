@@ -98,5 +98,27 @@ namespace SRNicoNico.Tests {
                 break;
             }
         }
+
+        /// <summary>
+        /// 自分がフォローしているチャンネルを正しく取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetFollowedChannelsUnitTest() {
+
+            await foreach (var channel in UserService.GetFollowedChannelsAsync()) {
+
+                Assert.NotNull(channel.Description);
+                Assert.NotNull(channel.Id);
+                Assert.NotNull(channel.Name);
+                Assert.NotNull(channel.OwnerName);
+                Assert.NotNull(channel.ScreenName);
+                Assert.NotNull(channel.ThumbnailSmallUrl);
+                Assert.NotNull(channel.ThumbnailUrl);
+                Assert.NotNull(channel.Url);
+
+                // 最初の一つだけ確認する
+                break;
+            }
+        }
     }
 }

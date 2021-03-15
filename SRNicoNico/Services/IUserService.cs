@@ -33,5 +33,13 @@ namespace SRNicoNico.Services {
         /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
         IAsyncEnumerable<MylistEntry> GetFollowedMylistsAsync();
 
+        /// <summary>
+        /// 自分がフォローしているチャンネルを返す
+        /// </summary>
+        /// <returns>チャンネルのリスト</returns>
+        /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
+        IAsyncEnumerable<ChannelEntry> GetFollowedChannelsAsync();
+
+
     }
 }
