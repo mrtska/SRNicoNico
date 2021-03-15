@@ -34,6 +34,9 @@
                 <DataTemplate DataType="{x:Type vm:MylistFollowViewModel}">
                     <v:MylistFollow />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:ChannelFollowViewModel}">
+                    <v:ChannelFollow />
+                </DataTemplate>
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
