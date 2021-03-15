@@ -53,7 +53,7 @@ namespace SRNicoNico.ViewModels {
 
             MylistList.Clear();
 
-            MylistList.Add(new MylistResultViewModel(this, MylistInstance));
+            //MylistList.Add(new MylistResultViewModel(this, MylistInstance));
 
             var groups = await MylistInstance.Group.GetMylistGroupAsync();
 
