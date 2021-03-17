@@ -120,5 +120,33 @@ namespace SRNicoNico.Tests {
                 break;
             }
         }
+
+        /// <summary>
+        /// 自分がフォローしているコミュニティを正しく取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetFollowedCommunitiesUnitTest() {
+
+            var result = await UserService.GetFollowedCommunitiesAsync();
+
+            Assert.NotEqual(0, result.Total);
+
+            foreach (var community in result.Entries) {
+
+                Assert.NotEqual(default, community.CreateTime);
+                Assert.NotNull(community.Description);
+                Assert.NotNull(community.GlobalId);
+                Assert.NotNull(community.Id);
+                Assert.NotEqual(0, community.Level);
+                Assert.NotNull(community.Name);
+                Assert.NotNull(community.OwnerId);
+                Assert.NotNull(community.Tags);
+                Assert.NotNull(community.ThumbnailUrl);
+                Assert.NotEqual(0, community.UserCount);
+
+                // 最初の一つだけ確認する
+                break;
+            }
+        }
     }
 }

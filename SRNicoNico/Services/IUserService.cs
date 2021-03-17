@@ -40,6 +40,13 @@ namespace SRNicoNico.Services {
         /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
         IAsyncEnumerable<ChannelEntry> GetFollowedChannelsAsync();
 
-
+        /// <summary>
+        /// 自分がフォローしているコミュニティを返す
+        /// </summary>
+        /// <param name="page">ページ数</param>
+        /// <param name="pageSize">1ページのアイテムの数</param>
+        /// <returns>コミュニティリスト 総数が多い場合はpageを使って取得する</returns>
+        /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
+        Task<CommunityList> GetFollowedCommunitiesAsync(int page = 1, int pageSize = 100);
     }
 }

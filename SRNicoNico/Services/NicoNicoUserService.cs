@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DynaJson;
@@ -29,7 +30,10 @@ namespace SRNicoNico.Services {
         /// 自分がフォローしているチャンネルを取得するAPI
         /// </summary>
         private const string FollowingChannelsApiUrl = "https://public.api.nicovideo.jp/v1/user/followees/channels.json";
-
+        /// <summary>
+        /// 自分がフォローしているコミュニティを取得するAPI
+        /// </summary>
+        private const string FollowingCommunitiesApiUrl = "https://public.api.nicovideo.jp/v1/user/followees/communities.json";
 
         private readonly ISessionService SessionService;
 
@@ -226,6 +230,76 @@ namespace SRNicoNico.Services {
                     Url = entry.url
                 };
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<CommunityList> GetFollowedCommunitiesAsync(int page = 1, int pageSize = 100) {
+
+            if (page < 1) {
+
+                throw new ArgumentException("pageに0以下を指定しないで");
+            }
+            var ret = new CommunityList();
+
+            var query = new GetRequestQueryBuilder(FollowingCommunitiesApiUrl)
+                .AddQuery("limit", pageSize)
+                .AddQuery("page", page);
+
+            var result = await SessionService.GetAsync(query.Build()).ConfigureAwait(false);
+
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            ret.Page = page;
+            ret.Total = (int)json.meta.total;
+
+            var list = new List<CommunityEntry>();
+            foreach (var community in json.data) {
+
+                if (community == null) {
+                    continue;
+                }
+                var entry = new CommunityEntry {
+                    CreateTime = DateTimeOffset.Parse(community.createTime),
+                    Description = community.description.Replace("<br>", ""), // タグを削除する
+                    GlobalId = community.globalId,
+                    Id = community.id.ToString(),
+                    Level = (int)community.level,
+                    Name = community.name,
+                    CommunityAutoAcceptEntry = community.optionFlags.communityAutoAcceptEntry,
+                    CommunityBlomaga = community.optionFlags.communityBlomaga,
+                    CommunityHideLiveArchives = community.optionFlags.communityHideLiveArchives,
+                    CommunityIconInspectionMobile = community.optionFlags.communityIconInspectionMobile() ? community.optionFlags.communityIconInspectionMobile : null,
+                    CommunityInvalidBbs = community.optionFlags.communityInvalidBbs,
+                    CommunityPrivLiveBroadcastNew = community.optionFlags.communityPrivLiveBroadcastNew,
+                    CommunityPrivUserAuth = community.optionFlags.communityPrivUserAuth,
+                    CommunityPrivVideoPost = community.optionFlags.communityPrivVideoPost,
+                    CommunityShownNewsNum = (int)community.optionFlags.communityShownNewsNum,
+                    CommunityUserInfoRequired = community.optionFlags.communityUserInfoRequired,
+                    OwnerId = community.ownerId.ToString(),
+                    Status = FastEnum.Parse<CommunityStatus>(community.status, true),
+                    ThreadCount = (int)community.threadCount,
+                    ThreadMax = (int)community.threadMax,
+                    ThumbnailUrl = community.thumbnailUrl.normal,
+                    UserCount = (int)community.userCount
+                };
+                var tags = new List<string>();
+                foreach (var tag in community.tags) {
+                    
+                    if (tag == null) {
+                        continue;
+                    }
+                    tags.Add(tag.text);
+                }
+                entry.Tags = tags;
+
+                list.Add(entry);
+            }
+            ret.Entries = list;
+            return ret;
         }
     }
 }
