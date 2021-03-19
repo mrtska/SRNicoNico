@@ -54,6 +54,7 @@ namespace SRNicoNico.ViewModels {
                 FollowItems.Add(UnityContainer.Resolve<TagFollowViewModel>());
                 FollowItems.Add(UnityContainer.Resolve<MylistFollowViewModel>());
                 FollowItems.Add(UnityContainer.Resolve<ChannelFollowViewModel>());
+                FollowItems.Add(UnityContainer.Resolve<CommunityFollowViewModel>());
 
                 // 子ViewModelのStatusを監視する
                 FollowItems.ToList().ForEach(vm => {

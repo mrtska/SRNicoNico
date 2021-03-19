@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DynaJson;
 using FastEnumUtility;
@@ -243,7 +244,7 @@ namespace SRNicoNico.Services {
 
             var query = new GetRequestQueryBuilder(FollowingCommunitiesApiUrl)
                 .AddQuery("limit", pageSize)
-                .AddQuery("page", page);
+                .AddQuery("offset", (page - 1) * pageSize);
 
             var result = await SessionService.GetAsync(query.Build()).ConfigureAwait(false);
 
@@ -264,7 +265,7 @@ namespace SRNicoNico.Services {
                 }
                 var entry = new CommunityEntry {
                     CreateTime = DateTimeOffset.Parse(community.createTime),
-                    Description = community.description.Replace("<br>", ""), // タグを削除する
+                    Description = Regex.Replace(community.description, "<.*?>", string.Empty).Trim(), // タグを削除する
                     GlobalId = community.globalId,
                     Id = community.id.ToString(),
                     Level = (int)community.level,
