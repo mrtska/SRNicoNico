@@ -42,6 +42,9 @@
                 <DataTemplate DataType="{x:Type vm:FollowViewModel}">
                     <v:Follow />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:NicoRepoViewModel}">
+                    <v:NicoRepo />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
                     <v:History />
                 </DataTemplate>

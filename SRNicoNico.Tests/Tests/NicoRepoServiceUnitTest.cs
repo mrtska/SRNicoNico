@@ -55,7 +55,7 @@ namespace SRNicoNico.Tests {
         public async Task GetNicoRepoAllUnitTest() {
 
             AssertNicoRepo(await NicoRepoService.GetNicoRepoAsync(NicoRepoType.All, NicoRepoFilter.All));
-            AssertNicoRepo(await NicoRepoService.GetNicoRepoAsync(NicoRepoType.Me, NicoRepoFilter.All));
+            AssertNicoRepo(await NicoRepoService.GetNicoRepoAsync(NicoRepoType.Self, NicoRepoFilter.All));
             AssertNicoRepo(await NicoRepoService.GetNicoRepoAsync(NicoRepoType.User, NicoRepoFilter.All));
             AssertNicoRepo(await NicoRepoService.GetNicoRepoAsync(NicoRepoType.Channel, NicoRepoFilter.All));
             AssertNicoRepo(await NicoRepoService.GetNicoRepoAsync(NicoRepoType.Community, NicoRepoFilter.All));

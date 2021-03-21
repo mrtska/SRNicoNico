@@ -6,27 +6,27 @@ using Unity;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
-    /// フォローページのViewModel
+    /// ニコレポページのViewModel
     /// </summary>
-    public class FollowViewModel : TabItemViewModel {
+    public class NicoRepoViewModel : TabItemViewModel {
 
-        private DispatcherCollection<TabItemViewModel> _FollowItems = new DispatcherCollection<TabItemViewModel>(App.UIDispatcher);
+        private DispatcherCollection<TabItemViewModel> _NicoRepoListItems = new DispatcherCollection<TabItemViewModel>(App.UIDispatcher);
         /// <summary>
-        /// フォローのタブのリスト
+        /// ニコレポのタブのリスト
         /// </summary>
-        public DispatcherCollection<TabItemViewModel> FollowItems {
-            get { return _FollowItems; }
+        public DispatcherCollection<TabItemViewModel> NicoRepoItems {
+            get { return _NicoRepoListItems; }
             set { 
-                if (_FollowItems == value)
+                if (_NicoRepoListItems == value)
                     return;
-                _FollowItems = value;
+                _NicoRepoListItems = value;
                 RaisePropertyChanged();
             }
         }
 
         private TabItemViewModel? _SelectedItem;
         /// <summary>
-        /// 現在選択されているタブ デフォルトはフォローしているユーザー
+        /// 現在選択されているタブ デフォルトはすべて
         /// </summary>
         public TabItemViewModel? SelectedItem {
             get { return _SelectedItem; }
@@ -40,7 +40,7 @@ namespace SRNicoNico.ViewModels {
 
         private readonly IUnityContainer UnityContainer;
 
-        public FollowViewModel(IUnityContainer unityContainer) : base("フォロー") {
+        public NicoRepoViewModel(IUnityContainer unityContainer) : base("ニコレポ") {
 
             UnityContainer = unityContainer;
         }
@@ -50,14 +50,15 @@ namespace SRNicoNico.ViewModels {
             // 別のスレッドで各要素を初期化する
             Task.Run(() => {
 
-                FollowItems.Add(UnityContainer.Resolve<UserFollowViewModel>());
-                FollowItems.Add(UnityContainer.Resolve<TagFollowViewModel>());
-                FollowItems.Add(UnityContainer.Resolve<MylistFollowViewModel>());
-                FollowItems.Add(UnityContainer.Resolve<ChannelFollowViewModel>());
-                FollowItems.Add(UnityContainer.Resolve<CommunityFollowViewModel>());
+                NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListAllViewModel>());
+                NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListSelfViewModel>());
+                NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListUserViewModel>());
+                NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListChannelViewModel>());
+                NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListCommunityViewModel>());
+                NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListMylistViewModel>());
 
                 // 子ViewModelのStatusを監視する
-                FollowItems.ToList().ForEach(vm => {
+                NicoRepoItems.ToList().ForEach(vm => {
 
                     vm.PropertyChanged += (o, e) => {
 
@@ -69,8 +70,8 @@ namespace SRNicoNico.ViewModels {
                     };
                 });
 
-                // ユーザーフォローをデフォルト値とする
-                SelectedItem = FollowItems.First();
+                // 「すべて」をデフォルト値とする
+                SelectedItem = NicoRepoItems.First();
             });
         }
 

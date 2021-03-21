@@ -72,7 +72,7 @@ namespace SRNicoNico.Services {
         /// 自分
         /// </summary>
         [Label("self")]
-        Me,
+        Self,
         /// <summary>
         /// ユーザー
         /// </summary>
