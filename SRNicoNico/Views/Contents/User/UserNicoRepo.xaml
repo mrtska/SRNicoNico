@@ -40,7 +40,7 @@
                                         <ColumnDefinition Width="auto" />
                                         <ColumnDefinition Width="auto" />
                                     </Grid.ColumnDefinitions>
-                                    <ComboBox Grid.Column="1" Width="160" Height="22" VerticalContentAlignment="Center" Margin="0,0,10,0" SelectedIndex="0" Text="{Binding Filter,Mode=OneWayToSource}">
+                                    <ComboBox Grid.Column="1" Width="160" Height="22" VerticalContentAlignment="Center" Margin="0,0,10,0" SelectedIndex="0" Text="{Binding Filter,Mode=OneWayToSource}" IsEnabled="False" ToolTip="現在フィルターは使用できません">
                                         <ComboBoxItem Content="すべて" />
                                         <ComboBoxItem Content="動画投稿のみ" />
                                         <ComboBoxItem Content="生放送開始のみ" />

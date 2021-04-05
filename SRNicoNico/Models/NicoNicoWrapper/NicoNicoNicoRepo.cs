@@ -11,6 +11,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     public class NicoNicoNicoRepo : NotificationObject {
 
         private const string NicoRepoApiUrl = "https://public.api.nicovideo.jp/v1/timelines/nicorepo/last-1-month/my/pc/entries.json";
+        private const string NicoRepoUserApiUrl = "https://public.api.nicovideo.jp/v1/timelines/nicorepo/last-1-month/users/{0}/pc/entries.json";
 
         private static readonly Dictionary<string, string> RankingSpan = new Dictionary<string, string>();
         private static readonly Dictionary<string, string> RankingType = new Dictionary<string, string>();
@@ -85,10 +86,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             NicoRepoList = new ObservableSynchronizedCollection<INicoRepo>();
         }
 
-
+        private readonly string UserId;
 
         public NicoNicoNicoRepo(string userId) {
 
+            UserId = userId;
+            NicoRepoList = new ObservableSynchronizedCollection<INicoRepo>();
         }
 
 
@@ -110,11 +113,17 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public async Task<NicoRepoList> GetNicoRepoAsync(NicoRepoType type, NicoRepoFilter filter, string untilId = null) {
 
             var query = new GetRequestQuery(NicoRepoApiUrl);
+            if (UserId != null) {
 
-            if (type != NicoRepoType.All) {
+                query = new GetRequestQuery(string.Format(NicoRepoUserApiUrl, UserId));
+            } else {
 
-                query.AddQuery("list", type.GetLabel()!);
+                if (type != NicoRepoType.All) {
+
+                    query.AddQuery("list", type.GetLabel()!);
+                }
             }
+
             if (filter != NicoRepoFilter.All) {
 
                 query.AddQuery("object[type]", filter.GetLabel()!);
@@ -247,19 +256,19 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
                 case "すべて":
                     return true;
                 case "動画投稿のみ":
-                    if (item.MuteContext.Trigger.EndsWith("video_upload")) {
+                    if (item.MuteContext?.Trigger.EndsWith("video_upload") ?? false) {
 
                         return true;
                     }
                     return false;
                 case "生放送開始のみ":
-                    if (item.MuteContext.Trigger.EndsWith("program_onairs")) {
+                    if (item.MuteContext?.Trigger.EndsWith("program_onairs") ?? false) {
 
                         return true;
                     }
                     return false;
                 case "マイリスト登録のみ":
-                    if (item.MuteContext.Trigger.Contains("mylist_add")) {
+                    if (item.MuteContext?.Trigger.Contains("mylist_add") ?? false) {
 
                         return true;
                     }
