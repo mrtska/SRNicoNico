@@ -24,21 +24,21 @@
             <MenuItem Header="WebViewで開く">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <a:OpenWebViewAction Url="{Binding ContentUrl}" />
+                        <a:OpenWebViewAction Url="{Binding ObjectUrl}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
             <MenuItem Header="ブラウザで開く">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <ei:LaunchUriOrFileAction Path="{Binding ContentUrl}" />
+                        <ei:LaunchUriOrFileAction Path="{Binding ObjectUrl}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
             <MenuItem Header="URLをクリップボードにコピー">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <a:CopyToClipBoardAction Text="{Binding ContentUrl}" />
+                        <a:CopyToClipBoardAction Text="{Binding ObjectUrl}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MenuItem>
