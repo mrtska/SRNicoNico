@@ -1,5 +1,6 @@
 ﻿using Livet;
 using Livet.Messaging;
+using SRNicoNico.Models.NicoNicoWrapper;
 using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
@@ -43,12 +44,12 @@ namespace SRNicoNico.ViewModels {
 
             IsActive = true;
             NicoRepoList.Clear();
-            NicoRepoList.Add(new NicoRepoResultViewModel(this, "すべて", "all"));
-            NicoRepoList.Add(new NicoRepoResultViewModel(this, "自分", "self"));
-            NicoRepoList.Add(new NicoRepoResultViewModel(this, "ユーザー", "followingUser"));
-            NicoRepoList.Add(new NicoRepoResultViewModel(this, "チャンネル", "followingChannel"));
-            NicoRepoList.Add(new NicoRepoResultViewModel(this, "コミュニティ", "followingCommunity"));
-            NicoRepoList.Add(new NicoRepoResultViewModel(this, "マイリスト", "followingMylist"));
+            NicoRepoList.Add(new NicoRepoResultViewModel(this, "すべて", NicoRepoType.All));
+            NicoRepoList.Add(new NicoRepoResultViewModel(this, "自分", NicoRepoType.Self));
+            NicoRepoList.Add(new NicoRepoResultViewModel(this, "ユーザー", NicoRepoType.User));
+            NicoRepoList.Add(new NicoRepoResultViewModel(this, "チャンネル", NicoRepoType.Channel));
+            NicoRepoList.Add(new NicoRepoResultViewModel(this, "コミュニティ", NicoRepoType.Community));
+            NicoRepoList.Add(new NicoRepoResultViewModel(this, "マイリスト", NicoRepoType.Mylist));
 
             IsActive = false;
         }

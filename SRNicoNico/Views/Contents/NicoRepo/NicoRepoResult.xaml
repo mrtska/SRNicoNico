@@ -64,7 +64,7 @@
             </ContentControl.Style>
             <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Model.NicoRepoList}">
                 <ListBox.Resources>
-                    <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoResultEntry}">
+                    <DataTemplate DataType="{x:Type m:NicoRepoEntry}">
                         <v:NicoRepoResultEntry />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type m:NicoNicoNextButtonEntry}">

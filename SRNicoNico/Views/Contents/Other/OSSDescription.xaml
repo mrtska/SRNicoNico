@@ -546,6 +546,51 @@ OTHER DEALINGS IN THE FONT SOFTWARE.<LineBreak /><LineBreak />
                         </Setter.Value>
                     </Setter>
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="FastEnum">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="UserControl">
+                                <ScrollViewer>
+                                    <StackPanel Margin="10">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="FastEnum 1.6.0" FontSize="24" FontWeight="Bold"/><LineBreak /><LineBreak />
+                                            <Hyperlink NavigateUri="https://github.com/xin9le/FastEnum" >
+                                                https://github.com/xin9le/FastEnum
+                                            </Hyperlink><LineBreak />
+                                            <Hyperlink NavigateUri="https://twitter.com/xin9le" ToolTip="https://twitter.com/xin9le" >
+                                                @xin9le
+                                            </Hyperlink><LineBreak /><LineBreak />                                        
+
+            
+                                            ライセンス : MIT License<LineBreak />
+                                            The MIT License (MIT)<LineBreak /><LineBreak />
+
+                                            Copyright (c) 2019 Takaaki Suzuki<LineBreak /><LineBreak />
+
+                                            Permission is hereby granted, free of charge, to any person obtaining a copy<LineBreak />
+                                            of this software and associated documentation files (the "Software"), to deal<LineBreak />
+                                            in the Software without restriction, including without limitation the rights<LineBreak />
+                                            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<LineBreak />
+                                            copies of the Software, and to permit persons to whom the Software is<LineBreak />
+                                            furnished to do so, subject to the following conditions:<LineBreak /><LineBreak />
+
+                                            The above copyright notice and this permission notice shall be included in<LineBreak />
+                                            all copies or substantial portions of the Software.<LineBreak /><LineBreak />
+
+                                            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<LineBreak />
+                                            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<LineBreak />
+                                            FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE<LineBreak />
+                                            AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<LineBreak />
+                                            LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<LineBreak />
+                                            OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN<LineBreak />
+                                            THE SOFTWARE.<LineBreak />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
 
             </Style.Triggers>
         </Style>

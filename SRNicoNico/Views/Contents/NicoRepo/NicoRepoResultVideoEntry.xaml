@@ -9,47 +9,46 @@
              d:DesignHeight="70"
              d:DesignWidth="600"
              Background="Transparent"
-             d:DataContext="{d:DesignInstance {x:Type m:NicoNicoNicoRepoVideoEntry}}">
+             d:DataContext="{d:DesignInstance {x:Type m:NicoRepoEntry}}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Image Source="{Binding SenderThumbnail}" Height="40" Margin="5" />
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid Margin="5">
+        <Image Source="{Binding ActorIconUrl}" ToolTip="{Binding ActorName}" Margin="5" Height="50" Width="50" />
+        <StackPanel Grid.Column="1" Margin="5,0,0,0">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding ComputedTitle}" TextWrapping="Wrap" FontSize="14" />
-                <TextBlock Grid.Column="1" Text="{Binding CreatedAt,StringFormat='yy年M月d日 H時 m分'}" FontSize="12" />
-                <TextBlock Grid.Column="2" Text="視聴済み" FontWeight="Bold" Margin="5,0,0,0">
-                    <TextBlock.Resources>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsWatched}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Resources>
-                </TextBlock>
+                <TextBlock FontSize="14" b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Title}" TextWrapping="Wrap" />
+                <TextBlock Grid.Column="1" Text="{Binding UpdatedAt, StringFormat=yyyy年M月d日 H時m分}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" />
             </Grid>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Image Source="{Binding VideoThumbnail}" Height="40" Stretch="Uniform" Margin="2" />
-                <TextBlock Grid.Column="1" Margin="5,0,0,0" Text="{Binding VideoTitle}" TextWrapping="Wrap" VerticalAlignment="Center" />
-            </Grid>
-        </Grid>
+            <ContentControl>
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ObjectName}" Value="{x:Null}">
+                                <Setter Property="Content" Value="{x:Null}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="{Binding ObjectImageUrl}" Margin="5" Width="40" Height="30" />
+                                    <TextBlock Grid.Column="1" Text="{Binding ObjectName}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                </Grid>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </StackPanel>
     </Grid>
+
 </UserControl>

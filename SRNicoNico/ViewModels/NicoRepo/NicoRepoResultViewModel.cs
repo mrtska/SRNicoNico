@@ -36,7 +36,7 @@ namespace SRNicoNico.ViewModels {
 
         private readonly NicoRepoViewModel Owner;
 
-        public NicoRepoResultViewModel(NicoRepoViewModel owner, string title, string api) : base(title) {
+        public NicoRepoResultViewModel(NicoRepoViewModel owner, string title, NicoRepoType api) : base(title) {
 
             Owner = owner;
             Model = new NicoNicoNicoRepo(api);

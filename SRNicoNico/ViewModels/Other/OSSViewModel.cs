@@ -27,6 +27,7 @@ namespace SRNicoNico.ViewModels {
             OSSList.Add(new OSSEntryViewModel("DynamicJson"));
             OSSList.Add(new OSSEntryViewModel("Material Design Icons"));
             OSSList.Add(new OSSEntryViewModel("HtmlAgilityPack"));
+            OSSList.Add(new OSSEntryViewModel("FastEnum"));
             OSSList.Add(new OSSEntryViewModel("gong-wpf-dragdrop"));
             OSSList.Add(new OSSEntryViewModel("hls.js"));
         }

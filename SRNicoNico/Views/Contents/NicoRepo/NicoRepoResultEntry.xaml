@@ -13,7 +13,7 @@
              d:DesignHeight="100"
              d:DesignWidth="600"
              Background="Transparent"
-             d:DataContext="{d:DesignInstance {x:Type m:NicoNicoNicoRepoResultEntry}}">
+             d:DataContext="{d:DesignInstance {x:Type m:NicoRepoEntry}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Open" />
@@ -47,7 +47,7 @@
     <Grid>
         <ContentControl Content="{Binding}">
             <ContentControl.Resources>
-                <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoLiveEntry}">
+                <!--<DataTemplate DataType="{x:Type m:NicoNicoNicoRepoLiveEntry}">
                     <v:NicoRepoResultLiveEntry />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoSeigaEntry}">
@@ -58,13 +58,13 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoGenericEntry}">
                     <v:NicoRepoResultGenericEntry />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoVideoEntry}">
+                </DataTemplate>-->
+                <DataTemplate DataType="{x:Type m:NicoRepoEntry}">
                     <v:NicoRepoResultVideoEntry />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type m:NicoNicoNicoRepoNoContentEntry}">
+                <!--<DataTemplate DataType="{x:Type m:NicoNicoNicoRepoNoContentEntry}">
                     <v:NicoRepoResultNoContentEntry />
-                </DataTemplate>
+                </DataTemplate>-->
             </ContentControl.Resources>
         </ContentControl>
     </Grid>
