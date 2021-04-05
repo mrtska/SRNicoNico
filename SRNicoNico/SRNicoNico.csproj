@@ -342,23 +342,8 @@
     <Compile Include="Views\Contents\Video\VideoTabView.xaml.cs">
       <DependentUpon>VideoTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Contents\NicoRepo\NicoRepoResultGenericEntry.xaml.cs">
-      <DependentUpon>NicoRepoResultGenericEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\NicoRepo\NicoRepoResultMangaEntry.xaml.cs">
-      <DependentUpon>NicoRepoResultMangaEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\NicoRepo\NicoRepoResultNoContentEntry.xaml.cs">
-      <DependentUpon>NicoRepoResultNoContentEntry.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Contents\NicoRepo\NicoRepoResultVideoEntry.xaml.cs">
       <DependentUpon>NicoRepoResultVideoEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\NicoRepo\NicoRepoResultSeigaEntry.xaml.cs">
-      <DependentUpon>NicoRepoResultSeigaEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contents\NicoRepo\NicoRepoResultLiveEntry.xaml.cs">
-      <DependentUpon>NicoRepoResultLiveEntry.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\PlayList\PlayList.xaml.cs">
       <DependentUpon>PlayList.xaml</DependentUpon>
@@ -745,27 +730,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Contents\NicoRepo\NicoRepoResultGenericEntry.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\NicoRepo\NicoRepoResultMangaEntry.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\NicoRepo\NicoRepoResultNoContentEntry.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Contents\NicoRepo\NicoRepoResultVideoEntry.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\NicoRepo\NicoRepoResultSeigaEntry.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Contents\NicoRepo\NicoRepoResultLiveEntry.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
