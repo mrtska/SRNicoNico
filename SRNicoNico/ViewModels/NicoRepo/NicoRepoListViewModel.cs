@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.Generic;
+using System.Windows.Input;
+using FastEnumUtility;
 using Livet;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
@@ -14,6 +16,35 @@ namespace SRNicoNico.ViewModels {
         /// ニコレポタイプ
         /// </summary>
         public abstract NicoRepoType NicoRepoType { get; }
+
+        /// <summary>
+        /// フィルター
+        /// </summary>
+        public abstract IEnumerable<NicoRepoFilter> FilterItems { get; }
+
+        /// <summary>
+        /// 全て有効
+        /// </summary>
+        public static IEnumerable<NicoRepoFilter> FilterAll { get; } = FastEnum.GetValues<NicoRepoFilter>();
+        /// <summary>
+        /// すべてのみ
+        /// </summary>
+        public static IEnumerable<NicoRepoFilter> FilterOnlyAll { get; } = new List<NicoRepoFilter> { NicoRepoFilter.All }.AsReadOnly();
+
+        private NicoRepoFilter _SelectedFilter = NicoRepoFilter.All;
+        /// <summary>
+        /// 現在選択されているフィルター
+        /// </summary>
+        public NicoRepoFilter SelectedFilter {
+            get { return _SelectedFilter; }
+            set { 
+                if (_SelectedFilter == value)
+                    return;
+                _SelectedFilter = value;
+                Reload();
+                RaisePropertyChanged();
+            }
+        }
 
         /// <summary>
         /// ニコレポのリスト
@@ -38,7 +69,7 @@ namespace SRNicoNico.ViewModels {
             NicoRepoItems.Clear();
             try {
 
-                var result = await NicoRepoService.GetNicoRepoAsync(NicoRepoType, NicoRepoFilter.All);
+                var result = await NicoRepoService.GetNicoRepoAsync(NicoRepoType, SelectedFilter);
 
                 foreach (var entry in result.Entries!) {
 

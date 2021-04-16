@@ -1,4 +1,5 @@
-﻿using SRNicoNico.Services;
+﻿using System.Collections.Generic;
+using SRNicoNico.Services;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
@@ -8,6 +9,9 @@ namespace SRNicoNico.ViewModels {
 
         /// <inheritdoc />     
         public override NicoRepoType NicoRepoType => NicoRepoType.Self;
+
+        /// <inheritdoc />
+        public override IEnumerable<NicoRepoFilter> FilterItems => FilterOnlyAll;
 
         public NicoRepoListSelfViewModel(INicoRepoService nicorepoService) : base(nicorepoService, "自分") {
         }

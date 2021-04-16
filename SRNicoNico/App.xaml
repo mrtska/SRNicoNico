@@ -6,6 +6,7 @@
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converter:DurationConverter x:Key="DurationConverter" />
+            <converter:EnumDisplayConverter x:Key="EnumDisplayConverter" />
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.xaml" />

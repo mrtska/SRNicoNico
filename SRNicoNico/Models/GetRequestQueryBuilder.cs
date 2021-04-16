@@ -16,6 +16,24 @@ namespace SRNicoNico.Models {
         }
 
         /// <summary>
+        /// 生のクエリを追加する
+        /// 既に=で分割されている文字列
+        /// </summary>
+        /// <param name="rawQuery">=を含むkeyとvalueのペア</param>
+        /// <returns>this</returns>
+        public GetRequestQueryBuilder AddRawQuery(string rawQuery) {
+
+            if (!TargetUrl.Contains("?")) {
+
+                TargetUrl += $"?{rawQuery}";
+            } else {
+
+                TargetUrl += $"&{rawQuery}";
+            }
+            return this;
+        }
+
+        /// <summary>
         /// クエリを追加する
         /// </summary>
         /// <param name="key">クエリのキー</param>
@@ -23,7 +41,7 @@ namespace SRNicoNico.Models {
         /// <returns>this</returns>
         public GetRequestQueryBuilder AddQuery(string key, string value) {
 
-            var raw = $"{key}={value}";
+            var raw = $"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(value)}";
 
             if (!TargetUrl.Contains("?")) {
 
@@ -34,6 +52,7 @@ namespace SRNicoNico.Models {
             }
             return this;
         }
+
         public GetRequestQueryBuilder AddQuery(string key, int value) {
 
             return AddQuery(key, value.ToString());

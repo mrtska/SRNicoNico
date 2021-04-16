@@ -34,10 +34,14 @@
                         </Style.Triggers>
                         <Setter Property="Content">
                             <Setter.Value>
-                                <StackPanel Orientation="Horizontal">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
                                     <Image Source="{Binding ObjectImageUrl}" Margin="5" Width="40" Height="30" />
-                                    <TextBlock Text="{Binding ObjectName}" TextWrapping="Wrap" VerticalAlignment="Center" />
-                                </StackPanel>
+                                    <TextBlock Grid.Column="1" Text="{Binding ObjectName}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                </Grid>
                             </Setter.Value>
                         </Setter>
                     </Style>

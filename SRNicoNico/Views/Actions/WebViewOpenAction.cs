@@ -20,7 +20,7 @@ namespace SRNicoNico.Views.Actions {
         protected override void Invoke(object parameter) {
 
             // MainWindowからMainWindowViewModelを経由してWebViewを開くようにする
-            if (Application.Current.MainWindow.DataContext is MainWindowViewModel vm) {
+            if (!string.IsNullOrEmpty(Url) && Application.Current.MainWindow.DataContext is MainWindowViewModel vm) {
 
                 vm.MainContent.WebView?.AddTab(Url, false);
                 // WebViewをActiveにする

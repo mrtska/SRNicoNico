@@ -36,7 +36,7 @@ namespace SRNicoNico.Services {
             }
             if (filter != NicoRepoFilter.All) {
 
-                query.AddQuery("object[type]", filter.GetLabel()!);
+                query.AddRawQuery(filter.GetLabel()!);
             }
 
             var result = await SessionService.GetAsync(query.Build()).ConfigureAwait(false);
@@ -49,8 +49,8 @@ namespace SRNicoNico.Services {
 
             var ret = new NicoRepoList {
                 HasNext = json.meta.hasNext,
-                MinId = json.meta.minId,
-                MaxId = json.meta.maxId
+                MinId = json.meta.minId() ? json.meta.minId : null,
+                MaxId = json.meta.maxId() ? json.meta.maxId : null
             };
 
             var entries = new List<NicoRepoEntry>();

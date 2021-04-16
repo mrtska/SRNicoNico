@@ -21,8 +21,6 @@ namespace SRNicoNico.Tests {
 
         private void AssertNicoRepo(NicoRepoList result) {
 
-            Assert.NotNull(result.MaxId);
-            Assert.NotNull(result.MinId);
             Assert.NotNull(result.Entries);
 
             foreach (var nicorepo in result.Entries) {
