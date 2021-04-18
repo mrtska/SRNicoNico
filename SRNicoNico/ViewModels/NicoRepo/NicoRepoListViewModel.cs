@@ -73,6 +73,11 @@ namespace SRNicoNico.ViewModels {
 
                 foreach (var entry in result.Entries!) {
 
+                    // ユーザー情報があればタイトルに追加する
+                    if (!string.IsNullOrEmpty(entry.ActorName) && !string.IsNullOrEmpty(entry.ActorUrl)) {
+
+                        entry.Title = @$"<a href=""{entry.ActorUrl}"">{entry.ActorName}</a> が {entry.Title}";
+                    }
                     NicoRepoItems.Add(entry);
                 }
 

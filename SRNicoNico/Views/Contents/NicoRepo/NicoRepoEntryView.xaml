@@ -16,37 +16,37 @@
         </Grid.ColumnDefinitions>
         <Image Source="{Binding ActorIconUrl}" ToolTip="{Binding ActorName}" Margin="5" Height="50" Width="50" />
         <StackPanel Grid.Column="1" Margin="5,0,0,0">
+            <TextBlock FontSize="14" b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Title}" TextWrapping="Wrap" />
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock FontSize="14" b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Title}" TextWrapping="Wrap" />
-                <TextBlock Grid.Column="1" Text="{Binding UpdatedAt, StringFormat=yyyy年M月d日 H時m分}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" />
+                <ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ObjectName}" Value="{x:Null}">
+                                    <Setter Property="Content" Value="{x:Null}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="{Binding ObjectImageUrl}" Margin="5" Width="40" Height="30" />
+                                        <TextBlock Grid.Column="1" Text="{Binding ObjectName}" TextWrapping="Wrap"  VerticalAlignment="Center" />
+                                    </Grid>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+                <TextBlock Grid.Column="1" Text="{Binding UpdatedAt, StringFormat=yyyy年M月d日 H時m分}" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,0,10,0" />
             </Grid>
-            <ContentControl>
-                <ContentControl.Style>
-                    <Style TargetType="{x:Type ContentControl}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ObjectName}" Value="{x:Null}">
-                                <Setter Property="Content" Value="{x:Null}" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                        <Setter Property="Content">
-                            <Setter.Value>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <Image Source="{Binding ObjectImageUrl}" Margin="5" Width="40" Height="30" />
-                                    <TextBlock Grid.Column="1" Text="{Binding ObjectName}" TextWrapping="Wrap" VerticalAlignment="Center" />
-                                </Grid>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ContentControl.Style>
-            </ContentControl>
         </StackPanel>
     </Grid>
 </UserControl>
