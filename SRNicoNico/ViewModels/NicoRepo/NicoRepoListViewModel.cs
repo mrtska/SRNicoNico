@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using FastEnumUtility;
 using Livet;
@@ -51,12 +52,35 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public ObservableSynchronizedCollection<NicoRepoEntry> NicoRepoItems { get; private set; }
 
+        /// <summary>
+        /// 次のページがあるかどうか
+        /// </summary>
+        private bool HasNext;
+
         private readonly INicoRepoService NicoRepoService;
 
         public NicoRepoListViewModel(INicoRepoService nicorepoService, string tabName) : base(tabName) {
 
             NicoRepoService = nicorepoService;
             NicoRepoItems = new ObservableSynchronizedCollection<NicoRepoEntry>();
+        }
+
+        /// <summary>
+        /// リストにニコレポを追加する
+        /// データの加工もする
+        /// </summary>
+        /// <param name="entries">追加したいニコレポのリスト</param>
+        private void AddEntries(IEnumerable<NicoRepoEntry> entries) {
+
+            foreach (var entry in entries) {
+
+                // ユーザー情報があればタイトルに追加する
+                if (!string.IsNullOrEmpty(entry.ActorName) && !string.IsNullOrEmpty(entry.ActorUrl)) {
+
+                    entry.Title = @$"<a href=""{entry.ActorUrl}"">{entry.ActorName}</a> が {entry.Title}";
+                }
+                NicoRepoItems.Add(entry);
+            }
         }
 
         /// <summary>
@@ -70,21 +94,43 @@ namespace SRNicoNico.ViewModels {
             try {
 
                 var result = await NicoRepoService.GetNicoRepoAsync(NicoRepoType, SelectedFilter);
+                HasNext = result.HasNext;
 
-                foreach (var entry in result.Entries!) {
-
-                    // ユーザー情報があればタイトルに追加する
-                    if (!string.IsNullOrEmpty(entry.ActorName) && !string.IsNullOrEmpty(entry.ActorUrl)) {
-
-                        entry.Title = @$"<a href=""{entry.ActorUrl}"">{entry.ActorName}</a> が {entry.Title}";
-                    }
-                    NicoRepoItems.Add(entry);
-                }
+                AddEntries(result.Entries!);
 
                 Status = "";
             } catch (StatusErrorException e) {
 
-                Status = $"フォローしているユーザーを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+                Status = $"ニコレポを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+            } finally {
+
+                IsActive = false;
+            }
+        }
+
+        /// <summary>
+        /// ニコレポを更に読み込む
+        /// </summary>
+        public async void LoadMore() {
+
+            // 次のページが無いか、ロード中の場合は無視
+            if (!HasNext || IsActive) {
+                return;
+            }
+            IsActive = true;
+            Status = "ニコレポを取得中";
+            try {
+
+                // 最後のニコレポのIDから後ろを取得する
+                var result = await NicoRepoService.GetNicoRepoAsync(NicoRepoType, SelectedFilter, NicoRepoItems.Last().Id);
+                HasNext = result.HasNext;
+
+                AddEntries(result.Entries!);
+
+                Status = "";
+            } catch (StatusErrorException e) {
+
+                Status = $"ニコレポを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
             } finally {
 
                 IsActive = false;

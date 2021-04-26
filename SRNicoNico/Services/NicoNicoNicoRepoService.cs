@@ -38,6 +38,10 @@ namespace SRNicoNico.Services {
 
                 query.AddRawQuery(filter.GetLabel()!);
             }
+            if (!string.IsNullOrEmpty(untilId)) {
+
+                query.AddQuery("untilId", untilId);
+            }
 
             var result = await SessionService.GetAsync(query.Build()).ConfigureAwait(false);
 
