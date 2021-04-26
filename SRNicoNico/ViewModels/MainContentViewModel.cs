@@ -66,6 +66,8 @@ namespace SRNicoNico.ViewModels {
             SystemItems.Add(WebView = UnityContainer.Resolve<WebViewViewModel>());
             SystemItems.Add(UnityContainer.Resolve<FollowViewModel>());
             SystemItems.Add(UnityContainer.Resolve<NicoRepoViewModel>());
+            SystemItems.Add(UnityContainer.Resolve<WatchLaterViewModel>());
+            SystemItems.Add(UnityContainer.Resolve<MylistViewModel>());
             SystemItems.Add(UnityContainer.Resolve<HistoryViewModel>());
 
             SystemItems.ToList().ForEach(vm => {
@@ -83,13 +85,8 @@ namespace SRNicoNico.ViewModels {
                     }
                 };
             });
-
         }
 
-        public void RegisterStatusChangeAction(Action<string> action) {
-
-            StatusChangedAction = action;
-        }
-
+        public void RegisterStatusChangeAction(Action<string> action) => StatusChangedAction = action;
     }
 }

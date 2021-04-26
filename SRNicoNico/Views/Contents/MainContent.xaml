@@ -45,6 +45,12 @@
                 <DataTemplate DataType="{x:Type vm:NicoRepoViewModel}">
                     <v:NicoRepo />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:WatchLaterViewModel}">
+                    <v:WatchLater />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:MylistViewModel}">
+                    <v:Mylist />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
                     <v:History />
                 </DataTemplate>
