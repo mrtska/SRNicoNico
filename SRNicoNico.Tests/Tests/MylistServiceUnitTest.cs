@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using SRNicoNico.Models.NicoNicoWrapper;
+﻿using System.Threading.Tasks;
 using SRNicoNico.Services;
 using Xunit;
 
@@ -34,7 +31,7 @@ namespace SRNicoNico.Tests {
             foreach (var entry in result.Entries) {
 
                 Assert.NotEqual(default, entry.AddedAt);
-                Assert.NotEqual(0, entry.ItemId);
+                Assert.NotNull(entry.ItemId);
                 Assert.NotNull(entry.Memo);
                 Assert.NotNull(entry.Status);
 
@@ -48,10 +45,13 @@ namespace SRNicoNico.Tests {
 
                 //Assert.NotNull(entry.LatestCommentSummary);
 
-                Assert.NotNull(entry.OwnerIconUrl);
-                Assert.NotNull(entry.OwnerId);
-                Assert.NotNull(entry.OwnerName);
                 Assert.NotNull(entry.OwnerType);
+                if (entry.OwnerType != "hidden") {
+
+                    Assert.NotNull(entry.OwnerIconUrl);
+                    Assert.NotNull(entry.OwnerId);
+                    Assert.NotNull(entry.OwnerName);
+                }
 
                 Assert.NotEqual(default, entry.RegisteredAt);
                 Assert.NotNull(entry.ShortDescription);
@@ -60,8 +60,21 @@ namespace SRNicoNico.Tests {
                 Assert.NotNull(entry.Type);
                 Assert.NotNull(entry.WatchId);
             }
-
-
         }
+    
+        /// <summary>
+        /// あとで見るに追加と削除が出来ることのテスト
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task AddAndDeleteWatchLaterUnitTest() {
+
+            var result = await MylistService.AddWatchLaterAsync("sm9", null);
+            Assert.True(result);
+
+            result = await MylistService.DeleteWatchLaterAsync("1173108780");
+            Assert.True(result);
+        }
+
     }
 }

@@ -1,19 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using FastEnumUtility;
-using SRNicoNico.Models.NicoNicoWrapper.WatchLater;
+using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.Services {
     /// <summary>
     /// あとで見るとマイリストを操作する処理を提供するサービス
     /// </summary>
     public interface IMylistService {
-
+        /// <summary>
+        /// あとで見るを取得する
+        /// </summary>
+        /// <param name="sortKey">並び順</param>
+        /// <param name="page">ページ番号</param>
+        /// <returns>あとで見るのリスト</returns>
         Task<WatchLaterList> GetWatchLaterAsync(MylistSortKey sortKey, int page);
 
+        /// <summary>
+        /// 指定した動画IDの動画をあとで見るに登録する
+        /// </summary>
+        /// <param name="watchId">動画ID</param>
+        /// <param name="memo">マイリストメモ</param>
+        /// <returns>成功したらTrue</returns>
+        Task<bool> AddWatchLaterAsync(string watchId, string? memo);
+
+        /// <summary>
+        /// 指定したアイテムIDのあとで見るに登録された動画を削除する
+        /// </summary>
+        /// <param name="itemIds">削除したい動画のアイテムID</param>
+        /// <returns>成功したらTrue</returns>
+        Task<bool> DeleteWatchLaterAsync(params string[] itemIds);
 
     }
     /// <summary>

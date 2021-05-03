@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SRNicoNico.Models.NicoNicoWrapper.WatchLater {
+namespace SRNicoNico.Models.NicoNicoWrapper {
     /// <summary>
     /// あとで見るの情報
     /// </summary>
@@ -12,7 +12,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper.WatchLater {
         /// <summary>
         /// アイテムID
         /// </summary>
-        public int ItemId { get; set; }
+        public string? ItemId { get; set; }
         /// <summary>
         /// メモ
         /// マイリストコメント的なもの
@@ -75,7 +75,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper.WatchLater {
         public string? OwnerName { get; set; }
         /// <summary>
         /// 動画投稿者の種類
-        /// userかchannelか
+        /// userかchannelかhidden
         /// </summary>
         public string? OwnerType { get; set; }
         /// <summary>
@@ -111,5 +111,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper.WatchLater {
         /// 動画のIDかな？
         /// </summary>
         public string? WatchId { get; set; }
+        /// <summary>
+        /// 動画URL
+        /// </summary>
+        public string? VideoUrl { get; set; }
     }
 }

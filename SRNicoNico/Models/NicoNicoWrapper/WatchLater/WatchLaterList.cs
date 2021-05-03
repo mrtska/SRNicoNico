@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SRNicoNico.Models.NicoNicoWrapper.WatchLater {
+namespace SRNicoNico.Models.NicoNicoWrapper {
     /// <summary>
     /// 「あとで見る」のリスト
     /// </summary>

@@ -1,8 +1,10 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
+using FastEnumUtility;
 using Livet;
-using Unity;
+using SRNicoNico.Models;
+using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.Services;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
@@ -10,66 +12,157 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class WatchLaterViewModel : TabItemViewModel {
 
-        private DispatcherCollection<TabItemViewModel> _NicoRepoListItems = new DispatcherCollection<TabItemViewModel>(App.UIDispatcher);
+        private readonly IMylistService MylistService;
+
         /// <summary>
-        /// ニコレポのタブのリスト
+        /// 次のページがあるかどうか
         /// </summary>
-        public DispatcherCollection<TabItemViewModel> NicoRepoItems {
-            get { return _NicoRepoListItems; }
+        private bool HasNext;
+        private int CurrentPage;
+
+        private MylistSortKey _SelectedMylistSortKey = MylistSortKey.AddedAtDesc;
+        /// <summary>
+        /// あとで見るのソート順
+        /// </summary>
+        public MylistSortKey SelectedMylistSortKey {
+            get { return _SelectedMylistSortKey; }
             set { 
-                if (_NicoRepoListItems == value)
+                if (_SelectedMylistSortKey == value)
                     return;
-                _NicoRepoListItems = value;
+                _SelectedMylistSortKey = value;
+                RaisePropertyChanged();
+                Reload();
+            }
+        }
+
+        private int? _TotalCount;
+        /// <summary>
+        /// あとで見るに登録されている動画の総数
+        /// </summary>
+        public int? TotalCount {
+            get { return _TotalCount; }
+            set { 
+                if (_TotalCount == value)
+                    return;
+                _TotalCount = value;
                 RaisePropertyChanged();
             }
         }
 
-        private TabItemViewModel? _SelectedItem;
         /// <summary>
-        /// 現在選択されているタブ デフォルトはすべて
+        /// あとで見るのリスト
         /// </summary>
-        public TabItemViewModel? SelectedItem {
-            get { return _SelectedItem; }
-            set { 
-                if (_SelectedItem == value)
-                    return;
-                _SelectedItem = value;
-                RaisePropertyChanged();
+        public ObservableSynchronizedCollection<WatchLaterEntry> WatchLaterItems { get; private set; }
+
+        /// <summary>
+        /// マイリストのソート順のリスト
+        /// </summary>
+        public IEnumerable<MylistSortKey> SortKeyItems { get; } = FastEnum.GetValues<MylistSortKey>();
+
+        public WatchLaterViewModel(IMylistService mylistService) : base("あとで見る") {
+
+            MylistService = mylistService;
+            WatchLaterItems = new ObservableSynchronizedCollection<WatchLaterEntry>();
+        }
+
+        /// <summary>
+        /// あとで見るを非同期で取得する
+        /// </summary>
+        public async void Loaded() {
+
+            IsActive = true;
+            Status = "あとで見るを取得中";
+            WatchLaterItems.Clear();
+            try {
+
+                CurrentPage = 1;
+                var result = await MylistService.GetWatchLaterAsync(SelectedMylistSortKey, CurrentPage);
+                HasNext = result.HasNext;
+                TotalCount = result.TotalCount;
+
+                foreach (var entry in result.Entries!) {
+
+                    WatchLaterItems.Add(entry);
+                }
+                Status = "";
+            } catch (StatusErrorException e) {
+
+                Status = $"あとで見るを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+            } finally {
+
+                IsActive = false;
             }
         }
 
-        private readonly IUnityContainer UnityContainer;
+        /// <summary>
+        /// あとで見るを更に読み込む
+        /// </summary>
+        public async void LoadMore() {
 
-        public WatchLaterViewModel(IUnityContainer unityContainer) : base("あとで見る") {
+            // 次のページが無いか、ロード中の場合は無視
+            if (!HasNext || IsActive) {
+                return;
+            }
+            IsActive = true;
+            Status = "あとで見るを取得中";
+            try {
 
-            UnityContainer = unityContainer;
+                // 次のページを取得する
+                var result = await MylistService.GetWatchLaterAsync(SelectedMylistSortKey, ++CurrentPage);
+                HasNext = result.HasNext;
+
+                foreach (var entry in result.Entries!) {
+
+                    WatchLaterItems.Add(entry);
+                }
+                Status = "";
+            } catch (StatusErrorException e) {
+
+                Status = $"あとで見るを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+            } finally {
+
+                IsActive = false;
+            }
         }
 
-        public void Loaded() {
+        /// <summary>
+        /// あとで見るから削除する
+        /// </summary>
+        /// <param name="entry">削除したいあとで見るの動画情報</param>
+        public async void DeleteWatchLater(WatchLaterEntry entry) {
 
-            // 別のスレッドで各要素を初期化する
-            Task.Run(() => {
+            IsActive = true;
+            Status = "あとで見るから動画を削除中";
+            try {
 
-                // 子ViewModelのStatusを監視する
-                NicoRepoItems.ToList().ForEach(vm => {
+                var result = await MylistService.DeleteWatchLaterAsync(entry.ItemId!);
+                if (result) {
 
-                    vm.PropertyChanged += (o, e) => {
+                    WatchLaterItems.Remove(entry);
+                    Status = "動画を削除しました。";
+                } else {
 
-                        var tabItem = (TabItemViewModel)o;
-                        if (e.PropertyName == nameof(Status)) {
+                    Status = "あとで見るから動画を削除出来ませんでした。";
+                }
+            } catch (StatusErrorException e) {
 
-                            Status = tabItem.Status;
-                        }
-                    };
-                });
+                Status = $"あとで見るから動画を削除出来ませんでした。 ステータスコード: {e.StatusCode}";
+            } finally {
 
-                // 「すべて」をデフォルト値とする
-                SelectedItem = NicoRepoItems.First();
-            });
+                IsActive = false;
+            }
+        }
+
+        public void Reload() {
+
+            Loaded();
         }
 
         public override void KeyDown(KeyEventArgs e) {
-            SelectedItem?.KeyDown(e);
+
+            if (e.Key == Key.F5) {
+                Reload();
+            }
         }
     }
 }

@@ -79,7 +79,7 @@ namespace SRNicoNico.Services {
         private async ValueTask<bool> VerifyAuthAsync() {
 
             var verifyRequest = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
-            var result = await HttpClient.SendAsync(verifyRequest);
+            var result = await HttpClient.SendAsync(verifyRequest).ConfigureAwait(false);
 
             var flags = result.Headers.GetValues("x-niconico-authflag");
 
@@ -102,23 +102,23 @@ namespace SRNicoNico.Services {
             if (string.IsNullOrEmpty(session)) {
 
                 // サインインダイアログを表示させる
-                await SignInDialogHandler();
+                await SignInDialogHandler().ConfigureAwait(false);
             }
 
             // Cookieを保存する
             HttpClientHandler.CookieContainer.Add(new Cookie("user_session", session, "/", ".nicovideo.jp"));
 
-            var result = await VerifyAuthAsync();
+            var result = await VerifyAuthAsync().ConfigureAwait(false);
             if (result) {
 
                 return true;
             }
 
             // トークンが使えなかったのでサインインダイアログを表示させる
-            await SignInDialogHandler();
+            await SignInDialogHandler().ConfigureAwait(false);
 
             // もう一度確認する
-            return await VerifyAuthAsync();
+            return await VerifyAuthAsync().ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -154,50 +154,61 @@ namespace SRNicoNico.Services {
         /// <inheritdoc />
         public async Task<HttpResponseMessage> GetAsync(string url, IDictionary<string, string>? addtionalHeaders) {
 
-            var result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Get, url), addtionalHeaders));
+            var result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Get, url), addtionalHeaders)).ConfigureAwait(false);
             if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
                 // サインインダイアログを表示して再ログインさせる
-                await SignInDialogHandler();
-                result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Get, url), addtionalHeaders));
+                await SignInDialogHandler().ConfigureAwait(false);
+                result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Get, url), addtionalHeaders)).ConfigureAwait(false);
             }
 
             return result;
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> PostAsync(string url, string json) {
+        public Task<HttpResponseMessage> PostAsync(string url, string json) {
 
-            var result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, url) {
+            return PostAsync(url, json, null);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> PostAsync(string url, string json, IDictionary<string, string>? additionalHeaders) {
+
+            var result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Post, url) {
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
-            });
+            }, additionalHeaders)).ConfigureAwait(false);
             if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
                 // サインインダイアログを表示して再ログインさせる
-                await SignInDialogHandler();
-                result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, url) {
+                await SignInDialogHandler().ConfigureAwait(false);
+                result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Post, url) {
                     Content = new StringContent(json, Encoding.UTF8, "application/json")
-                });
+                }, additionalHeaders)).ConfigureAwait(false);
             }
 
             return result;
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string> formData) {
+        public Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string> formData) {
 
-            var result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, url) {
+            return PostAsync(url, formData, null);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string> formData, IDictionary<string, string>? additionalHeaders) {
+
+            var result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Post, url) {
                 Content = new FormUrlEncodedContent(formData)
-            });
+            }, additionalHeaders)).ConfigureAwait(false);
             if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
                 // サインインダイアログを表示して再ログインさせる
-                await SignInDialogHandler();
-                result = await HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, url) {
+                await SignInDialogHandler().ConfigureAwait(false);
+                result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Post, url) {
                     Content = new FormUrlEncodedContent(formData)
-                });
+                }, additionalHeaders)).ConfigureAwait(false);
             }
 
             return result;
         }
-
         /// <inheritdoc />
         public Task<HttpResponseMessage> DeleteAsync(string url) {
 
@@ -210,7 +221,7 @@ namespace SRNicoNico.Services {
             var result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Delete, url), addtionalHeaders)).ConfigureAwait(false);
             if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
                 // サインインダイアログを表示して再ログインさせる
-                await SignInDialogHandler();
+                await SignInDialogHandler().ConfigureAwait(false);
                 result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Delete, url), addtionalHeaders)).ConfigureAwait(false);
             }
             return result;

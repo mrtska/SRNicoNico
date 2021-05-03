@@ -52,6 +52,16 @@ namespace SRNicoNico.Services {
         Task<HttpResponseMessage> PostAsync(string url, string json);
 
         /// <summary>
+        /// POSTリクエストを指定したHTTPヘッダと一緒に送信する
+        /// json版
+        /// </summary>
+        /// <param name="url">リクエストを送信するURL</param>
+        /// <param name="json">POSTするJson</param>
+        /// <param name="additionalHeaders">HTTPヘッダのリスト</param>
+        /// <returns>HTTPレスポンス</returns>
+        Task<HttpResponseMessage> PostAsync(string url, string json, IDictionary<string, string>? additionalHeaders);
+
+        /// <summary>
         /// POSTリクエストを送信する
         /// x-www-form-urlencoded版
         /// </summary>
@@ -59,6 +69,16 @@ namespace SRNicoNico.Services {
         /// <param name="formData">POSTするフォームデータ</param>
         /// <returns>HTTPレスポンス</returns>
         Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string> formData);
+
+        /// <summary>
+        /// POSTリクエストを指定したHTTPヘッダと一緒に送信する
+        /// x-www-form-urlencoded版
+        /// </summary>
+        /// <param name="url">リクエストを送信するURL</param>
+        /// <param name="formData">POSTするフォームデータ</param>
+        /// <param name="additionalHeaders">HTTPヘッダのリスト</param>
+        /// <returns>HTTPレスポンス</returns>
+        Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string> formData, IDictionary<string, string>? additionalHeaders);
 
         /// <summary>
         /// DELETEリクエストを送信する
