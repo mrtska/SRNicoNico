@@ -9,32 +9,54 @@
              d:DesignHeight="80" d:DesignWidth="600"
              Background="Transparent">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid Width="100">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
-            <Image Source="{Binding ThumbnailUrl}" Margin="5,5,0,0" MaxHeight="60" />
-            <TextBlock Grid.Row="1" Text="{Binding Duration, Converter={StaticResource DurationConverter}}" HorizontalAlignment="Right" />
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid Width="100">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Image Source="{Binding ThumbnailUrl}" Margin="5,5,0,0" MaxHeight="60" />
+                <TextBlock Grid.Row="1" Text="{Binding Duration, Converter={StaticResource DurationConverter}}" HorizontalAlignment="Right" />
+            </Grid>
+            <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                <TextBlock FontSize="16" Text="{Binding Title}" />
+                <TextBlock Text="{Binding ShortDescription}" TextWrapping="Wrap" Foreground="Gray" Margin="0,3" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Id, StringFormat=動画ID：{0}}" Margin="0,0,5,0" />
+                    <TextBlock Text="{Binding ViewCount, StringFormat=再生数：{0:N0}}" Margin="0,0,5,0" />
+                    <TextBlock Text="{Binding CommentCount, StringFormat=コメント数：{0:N0}}" Margin="0,0,5,0" />
+                    <TextBlock Text="{Binding MylistCount, StringFormat=マイリスト数：{0:N0}}" Margin="0,0,5,0" />
+                    <TextBlock Text="{Binding LikeCount, StringFormat=いいね数：{0:N0}}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding RegisteredAt, StringFormat='投稿日時：yyyy年 M月 d日 H時mm分'}" Margin="0,0,5,0" />
+                    <TextBlock Text="{Binding AddedAt, StringFormat='追加日時：yyyy年 M月 d日 H時mm分'}" Margin="0,0,5,0" />
+                </StackPanel>
+            </StackPanel>
         </Grid>
-        <StackPanel Grid.Column="1" Margin="5,0,0,0">
-            <TextBlock FontSize="16" Text="{Binding Title}" />
-            <TextBlock Text="{Binding ShortDescription}" TextWrapping="Wrap" Foreground="Gray" Margin="0,3" />
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Id, StringFormat=動画ID：{0}}" Margin="0,0,5,0" />
-                <TextBlock Text="{Binding ViewCount, StringFormat=再生数：{0:N0}}" Margin="0,0,5,0" />
-                <TextBlock Text="{Binding CommentCount, StringFormat=コメント数：{0:N0}}" Margin="0,0,5,0" />
-                <TextBlock Text="{Binding MylistCount, StringFormat=マイリスト数：{0:N0}}" Margin="0,0,5,0" />
-                <TextBlock Text="{Binding LikeCount, StringFormat=いいね数：{0:N0}}" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding RegisteredAt, StringFormat='投稿日時：yyyy年 M月 d日 H時mm分'}" Margin="0,0,5,0" />
-                <TextBlock Text="{Binding AddedAt, StringFormat='追加日時：yyyy年 M月 d日 H時mm分'}" Margin="0,0,5,0" />
-            </StackPanel>
-        </StackPanel>
+        <ContentControl Grid.Row="1">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Memo.Length}" Value="0">
+                            <Setter Property="Content" Value="{x:Null}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                    <Setter Property="Content">
+                        <Setter.Value>
+                            <TextBlock Text="{Binding Memo}"  Margin="10,2" TextWrapping="Wrap" Foreground="{DynamicResource SemiActiveForegroundBrushKey}" Background="{DynamicResource SemiactiveBackgroundBrushKey}" />
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
     </Grid>
 </UserControl>

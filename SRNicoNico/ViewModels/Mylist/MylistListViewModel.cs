@@ -42,6 +42,32 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private string? _Description;
+        /// <summary>
+        /// マイリスト説明文
+        /// </summary>
+        public string? Description {
+            get { return _Description; }
+            set { 
+                if (_Description == value)
+                    return;
+                _Description = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _FollowerCount;
+
+        public int FollowerCount {
+            get { return _FollowerCount; }
+            set { 
+                if (_FollowerCount == value)
+                    return;
+                _FollowerCount = value;
+                RaisePropertyChanged();
+            }
+        }
+
         /// <summary>
         /// マイリストのリスト
         /// </summary>
@@ -59,15 +85,17 @@ namespace SRNicoNico.ViewModels {
         private int CurrentPage;
 
         private readonly IMylistService MylistService;
+        private readonly string MylistId;
 
-        public MylistListViewModel(IMylistService mylistService) {
+        public MylistListViewModel(IMylistService mylistService, string mylistId) {
 
             MylistService = mylistService;
             MylistItems = new ObservableSynchronizedCollection<MylistEntry>();
+            MylistId = mylistId;
         }
 
         /// <summary>
-        /// ニコレポを非同期で取得する
+        /// マイリストを非同期で取得する
         /// </summary>
         public async void Loaded() {
 
@@ -76,13 +104,22 @@ namespace SRNicoNico.ViewModels {
             MylistItems.Clear();
             try {
 
-                //var result = await MylistService.GetMylistsAsync();
+                CurrentPage = 1;
+                var result = await MylistService.GetMylistAsync(MylistId, SelectedMylistSortKey, CurrentPage);
+                HasNext = result.HasNext;
+                TotalCount = result.TotalItemCount;
+                Description = result.Description;
+                FollowerCount = result.FollowerCount;
 
+                foreach (var entry in result.Entries!) {
+
+                    MylistItems.Add(entry);
+                }
 
                 Status = "";
             } catch (StatusErrorException e) {
 
-                Status = $"ニコレポを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+                Status = $"マイリストを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
             } finally {
 
                 IsActive = false;
@@ -90,7 +127,7 @@ namespace SRNicoNico.ViewModels {
         }
 
         /// <summary>
-        /// ニコレポを更に読み込む
+        /// マイリストを更に読み込む
         /// </summary>
         public async void LoadMore() {
 
@@ -99,18 +136,22 @@ namespace SRNicoNico.ViewModels {
                 return;
             }
             IsActive = true;
-            Status = "ニコレポを取得中";
+            Status = "マイリストを取得中";
             try {
 
-                // 最後のニコレポのIDから後ろを取得する
-                //var result = await NicoRepoService.GetNicoRepoAsync(NicoRepoType, SelectedFilter, NicoRepoItems.Last().Id);
-                //HasNext = result.HasNext;
+                var result = await MylistService.GetMylistAsync(MylistId, SelectedMylistSortKey, ++CurrentPage);
+                HasNext = result.HasNext;
+                TotalCount = result.TotalItemCount;
 
+                foreach (var entry in result.Entries!) {
+
+                    MylistItems.Add(entry);
+                }
 
                 Status = "";
             } catch (StatusErrorException e) {
 
-                Status = $"ニコレポを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+                Status = $"マイリストを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
             } finally {
 
                 IsActive = false;

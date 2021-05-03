@@ -1,10 +1,11 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using FastEnumUtility;
 using Livet;
 using SRNicoNico.Models;
 using SRNicoNico.Services;
 using Unity;
+using Unity.Resolution;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
@@ -61,10 +62,10 @@ namespace SRNicoNico.ViewModels {
 
                 await foreach (var result in MylistService.GetMylistsAsync()) {
 
-                    var vm = UnityContainer.Resolve<MylistListViewModel>();
+                    var vm = UnityContainer.Resolve<MylistListViewModel>(new ParameterOverride("mylistId", result.Id));
 
                     vm.Name = result.Name;
-
+                    vm.SelectedMylistSortKey = FastEnum.Parse<MylistSortKey>(result.DefaultSortKey + result.DefaultSortOrder, true);
 
                     MylistListItems.Add(vm);
                 }
