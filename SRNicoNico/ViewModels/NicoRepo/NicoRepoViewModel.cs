@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Livet;
 using Unity;
@@ -10,13 +9,13 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class NicoRepoViewModel : TabItemViewModel {
 
-        private DispatcherCollection<TabItemViewModel> _NicoRepoListItems = new DispatcherCollection<TabItemViewModel>(App.UIDispatcher);
+        private ObservableSynchronizedCollection<TabItemViewModel> _NicoRepoListItems = new ObservableSynchronizedCollection<TabItemViewModel>();
         /// <summary>
         /// ニコレポのタブのリスト
         /// </summary>
-        public DispatcherCollection<TabItemViewModel> NicoRepoItems {
+        public ObservableSynchronizedCollection<TabItemViewModel> NicoRepoItems {
             get { return _NicoRepoListItems; }
-            set { 
+            set {
                 if (_NicoRepoListItems == value)
                     return;
                 _NicoRepoListItems = value;
@@ -30,7 +29,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public TabItemViewModel? SelectedItem {
             get { return _SelectedItem; }
-            set { 
+            set {
                 if (_SelectedItem == value)
                     return;
                 _SelectedItem = value;
@@ -45,34 +44,33 @@ namespace SRNicoNico.ViewModels {
             UnityContainer = unityContainer;
         }
 
+        /// <summary>
+        /// ニコレポの一覧をインスタンス化する
+        /// </summary>
         public void Loaded() {
 
-            // 別のスレッドで各要素を初期化する
-            Task.Run(() => {
+            NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListAllViewModel>());
+            NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListSelfViewModel>());
+            NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListUserViewModel>());
+            NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListChannelViewModel>());
+            NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListCommunityViewModel>());
+            NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListMylistViewModel>());
 
-                NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListAllViewModel>());
-                NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListSelfViewModel>());
-                NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListUserViewModel>());
-                NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListChannelViewModel>());
-                NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListCommunityViewModel>());
-                NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListMylistViewModel>());
+            // 子ViewModelのStatusを監視する
+            NicoRepoItems.ToList().ForEach(vm => {
 
-                // 子ViewModelのStatusを監視する
-                NicoRepoItems.ToList().ForEach(vm => {
+                vm.PropertyChanged += (o, e) => {
 
-                    vm.PropertyChanged += (o, e) => {
+                    var tabItem = (TabItemViewModel)o;
+                    if (e.PropertyName == nameof(Status)) {
 
-                        var tabItem = (TabItemViewModel)o;
-                        if (e.PropertyName == nameof(Status)) {
-
-                            Status = tabItem.Status;
-                        }
-                    };
-                });
-
-                // 「すべて」をデフォルト値とする
-                SelectedItem = NicoRepoItems.First();
+                        Status = tabItem.Status;
+                    }
+                };
             });
+
+            // 「すべて」をデフォルト値とする
+            SelectedItem = NicoRepoItems.First();
         }
 
         public override void KeyDown(KeyEventArgs e) {
