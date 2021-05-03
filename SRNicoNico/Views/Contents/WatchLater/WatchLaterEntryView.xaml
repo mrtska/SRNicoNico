@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
-             d:DataContext="{d:DesignInstance Type=w:WatchLaterEntry}"
+             d:DataContext="{d:DesignInstance Type=w:MylistEntry}"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="600"
              Background="Transparent">

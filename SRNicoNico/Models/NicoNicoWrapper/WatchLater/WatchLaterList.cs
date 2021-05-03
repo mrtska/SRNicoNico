@@ -22,6 +22,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// あとで見るのリスト
         /// TotalCountと同じ数とは限らない
         /// </summary>
-        public IEnumerable<WatchLaterEntry>? Entries { get; set; } 
+        public IEnumerable<MylistEntry>? Entries { get; set; } 
     }
 }

@@ -13,14 +13,14 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// フォローしているマイリストのリスト
         /// </summary>
-        public ObservableSynchronizedCollection<MylistEntry> MylistItems { get; private set; }
+        public ObservableSynchronizedCollection<UserMylistEntry> MylistItems { get; private set; }
 
         private readonly IUserService UserService;
 
         public MylistFollowViewModel(IUserService userService) : base("マイリスト") {
 
             UserService = userService;
-            MylistItems = new ObservableSynchronizedCollection<MylistEntry>();
+            MylistItems = new ObservableSynchronizedCollection<UserMylistEntry>();
         }
 
         /// <summary>

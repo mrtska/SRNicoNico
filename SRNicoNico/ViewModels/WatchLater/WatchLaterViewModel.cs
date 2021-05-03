@@ -52,7 +52,7 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// あとで見るのリスト
         /// </summary>
-        public ObservableSynchronizedCollection<WatchLaterEntry> WatchLaterItems { get; private set; }
+        public ObservableSynchronizedCollection<MylistEntry> WatchLaterItems { get; private set; }
 
         /// <summary>
         /// マイリストのソート順のリスト
@@ -62,7 +62,7 @@ namespace SRNicoNico.ViewModels {
         public WatchLaterViewModel(IMylistService mylistService) : base("あとで見る") {
 
             MylistService = mylistService;
-            WatchLaterItems = new ObservableSynchronizedCollection<WatchLaterEntry>();
+            WatchLaterItems = new ObservableSynchronizedCollection<MylistEntry>();
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace SRNicoNico.ViewModels {
         /// あとで見るから削除する
         /// </summary>
         /// <param name="entry">削除したいあとで見るの動画情報</param>
-        public async void DeleteWatchLater(WatchLaterEntry entry) {
+        public async void DeleteWatchLater(MylistEntry entry) {
 
             IsActive = true;
             Status = "あとで見るから動画を削除中";

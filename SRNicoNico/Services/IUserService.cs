@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SRNicoNico.Models.NicoNicoWrapper;
 
@@ -31,7 +29,7 @@ namespace SRNicoNico.Services {
         /// </summary>
         /// <returns>マイリストのリスト</returns>
         /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
-        IAsyncEnumerable<MylistEntry> GetFollowedMylistsAsync();
+        IAsyncEnumerable<UserMylistEntry> GetFollowedMylistsAsync();
 
         /// <summary>
         /// 自分がフォローしているチャンネルを返す

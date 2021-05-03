@@ -209,6 +209,30 @@ namespace SRNicoNico.Services {
 
             return result;
         }
+
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> PutAsync(string url, IDictionary<string, string> formData) {
+
+            return PutAsync(url, formData, null);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> PutAsync(string url, IDictionary<string, string> formData, IDictionary<string, string>? additionalHeaders) {
+
+            var result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Put, url) {
+                Content = new FormUrlEncodedContent(formData)
+            }, additionalHeaders)).ConfigureAwait(false);
+            if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
+                // サインインダイアログを表示して再ログインさせる
+                await SignInDialogHandler().ConfigureAwait(false);
+                result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Put, url) {
+                    Content = new FormUrlEncodedContent(formData)
+                }, additionalHeaders)).ConfigureAwait(false);
+            }
+
+            return result;
+        }
+
         /// <inheritdoc />
         public Task<HttpResponseMessage> DeleteAsync(string url) {
 

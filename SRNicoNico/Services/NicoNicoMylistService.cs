@@ -51,7 +51,7 @@ namespace SRNicoNico.Services {
                 HasNext = watchLater.hasNext,
                 TotalCount = (int)watchLater.totalCount
             };
-            var entries = new List<WatchLaterEntry>();
+            var entries = new List<MylistEntry>();
 
             foreach (var entry in watchLater.items) {
 
@@ -59,7 +59,7 @@ namespace SRNicoNico.Services {
                     continue;
                 }
                 var video = entry.video;
-                entries.Add(new WatchLaterEntry {
+                entries.Add(new MylistEntry {
                     AddedAt = DateTimeOffset.Parse(entry.addedAt),
                     ItemId = entry.itemId.ToString(),
                     Memo = entry.memo,
@@ -159,14 +159,14 @@ namespace SRNicoNico.Services {
                 if (mylist == null) {
                     continue;
                 }
-                var sampleItems = new List<WatchLaterEntry>();
+                var sampleItems = new List<MylistEntry>();
                 foreach (var sampleItem in mylist.sampleItems) {
 
                     if (sampleItem == null) {
                         continue;
                     }
                     var video = sampleItem.video;
-                    sampleItems.Add(new WatchLaterEntry {
+                    sampleItems.Add(new MylistEntry {
                         AddedAt = DateTimeOffset.Parse(sampleItem.addedAt),
                         ItemId = sampleItem.itemId.ToString(),
                         Memo = sampleItem.description, // あとで見るはmemoだけどマイリストはdescription

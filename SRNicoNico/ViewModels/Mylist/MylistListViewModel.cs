@@ -45,7 +45,7 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// マイリストのリスト
         /// </summary>
-        public ObservableSynchronizedCollection<WatchLaterEntry> MylistItems { get; private set; }
+        public ObservableSynchronizedCollection<MylistEntry> MylistItems { get; private set; }
 
         /// <summary>
         /// マイリストのソート順のリスト
@@ -63,7 +63,7 @@ namespace SRNicoNico.ViewModels {
         public MylistListViewModel(IMylistService mylistService) {
 
             MylistService = mylistService;
-            MylistItems = new ObservableSynchronizedCollection<WatchLaterEntry>();
+            MylistItems = new ObservableSynchronizedCollection<MylistEntry>();
         }
 
         /// <summary>

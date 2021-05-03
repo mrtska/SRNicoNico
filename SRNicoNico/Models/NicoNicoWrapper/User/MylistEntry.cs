@@ -5,7 +5,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     /// <summary>
     /// ユーザーがフォローしているマイリスト情報
     /// </summary>
-    public class MylistEntry {
+    public class UserMylistEntry {
 
         /// <summary>
         /// マイリストの公開状態

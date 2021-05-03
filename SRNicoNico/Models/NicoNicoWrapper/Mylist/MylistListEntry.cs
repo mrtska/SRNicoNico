@@ -69,6 +69,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// マイリストに含まれている動画のサンプル
         /// </summary>
-        public IEnumerable<WatchLaterEntry>? SampleItems { get; set; }
+        public IEnumerable<MylistEntry>? SampleItems { get; set; }
     }
 }

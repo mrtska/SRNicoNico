@@ -81,6 +81,25 @@ namespace SRNicoNico.Services {
         Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string> formData, IDictionary<string, string>? additionalHeaders);
 
         /// <summary>
+        /// PUTリクエストを送信する
+        /// x-www-form-urlencoded版
+        /// </summary>
+        /// <param name="url">リクエストを送信するURL</param>
+        /// <param name="formData">フォームデータ</param>
+        /// <returns>HTTPレスポンス</returns>
+        Task<HttpResponseMessage> PutAsync(string url, IDictionary<string, string> formData);
+
+        /// <summary>
+        /// PUTリクエストを指定したHTTPヘッダと一緒に送信する
+        /// x-www-form-urlencoded版
+        /// </summary>
+        /// <param name="url">リクエストを送信するURL</param>
+        /// <param name="formData">フォームデータ</param>
+        /// <param name="additionalHeaders">HTTPヘッダのリスト</param>
+        /// <returns>HTTPレスポンス</returns>
+        Task<HttpResponseMessage> PutAsync(string url, IDictionary<string, string> formData, IDictionary<string, string>? additionalHeaders);
+
+        /// <summary>
         /// DELETEリクエストを送信する
         /// </summary>
         /// <param name="url">リクエストを送信するURL</param>

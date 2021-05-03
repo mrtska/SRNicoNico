@@ -4,7 +4,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     /// <summary>
     /// あとで見るの情報
     /// </summary>
-    public class WatchLaterEntry {
+    public class MylistEntry {
         /// <summary>
         /// あとで見るに追加された日時
         /// </summary>

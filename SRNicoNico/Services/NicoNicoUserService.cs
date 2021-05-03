@@ -111,7 +111,7 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<MylistEntry> GetFollowedMylistsAsync() {
+        public async IAsyncEnumerable<UserMylistEntry> GetFollowedMylistsAsync() {
 
             var query = new GetRequestQueryBuilder(FollowingMylistsApiUrl)
                 .AddQuery("sampleItemCount", 3);
@@ -132,7 +132,7 @@ namespace SRNicoNico.Services {
                 var status = FastEnum.Parse<MylistStatus>(entry.status, true);
                 if (status != MylistStatus.Public) {
 
-                    yield return new MylistEntry {
+                    yield return new UserMylistEntry {
                         Status = status,
                         Id = entry.id.ToString()
                     };
@@ -174,7 +174,7 @@ namespace SRNicoNico.Services {
                     });
                 }
 
-                yield return new MylistEntry {
+                yield return new UserMylistEntry {
                     Status = status,
                     Id = entry.id.ToString(),
                     CreatedAt = DateTimeOffset.Parse(detail.createdAt),
