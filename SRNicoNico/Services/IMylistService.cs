@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using FastEnumUtility;
 using SRNicoNico.Models.NicoNicoWrapper;
@@ -30,6 +31,13 @@ namespace SRNicoNico.Services {
         /// <param name="itemIds">削除したい動画のアイテムID</param>
         /// <returns>成功したらTrue</returns>
         Task<bool> DeleteWatchLaterAsync(params string[] itemIds);
+
+        /// <summary>
+        /// マイリストの一覧を取得する
+        /// </summary>
+        /// <param name="sampleItemCount">含めたい動画数 デフォルトは0</param>
+        /// <returns>マイリストの一覧</returns>
+        IAsyncEnumerable<MylistListEntry> GetMylistsAsync(int sampleItemCount = 0);
 
     }
     /// <summary>

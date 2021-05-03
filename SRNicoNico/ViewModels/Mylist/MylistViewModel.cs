@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Livet;
+using SRNicoNico.Services;
 using Unity;
 
 namespace SRNicoNico.ViewModels {
@@ -10,16 +11,16 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class MylistViewModel : TabItemViewModel {
 
-        private DispatcherCollection<TabItemViewModel> _NicoRepoListItems = new DispatcherCollection<TabItemViewModel>(App.UIDispatcher);
+        private DispatcherCollection<TabItemViewModel> _MylistListItems = new DispatcherCollection<TabItemViewModel>(App.UIDispatcher);
         /// <summary>
-        /// ニコレポのタブのリスト
+        /// マイリストのタブのリスト
         /// </summary>
-        public DispatcherCollection<TabItemViewModel> NicoRepoItems {
-            get { return _NicoRepoListItems; }
+        public DispatcherCollection<TabItemViewModel> MylistListItems {
+            get { return _MylistListItems; }
             set { 
-                if (_NicoRepoListItems == value)
+                if (_MylistListItems == value)
                     return;
-                _NicoRepoListItems = value;
+                _MylistListItems = value;
                 RaisePropertyChanged();
             }
         }
@@ -39,20 +40,24 @@ namespace SRNicoNico.ViewModels {
         }
 
         private readonly IUnityContainer UnityContainer;
+        private readonly IMylistService MylistService;
 
-        public MylistViewModel(IUnityContainer unityContainer) : base("マイリスト") {
+        public MylistViewModel(IUnityContainer unityContainer, IMylistService mylistService) : base("マイリスト") {
 
             UnityContainer = unityContainer;
+            MylistService = mylistService;
         }
 
+        /// <summary>
+        /// マイリストの一覧を非同期で取得する
+        /// </summary>
         public void Loaded() {
 
             // 別のスレッドで各要素を初期化する
             Task.Run(() => {
 
-
                 // 子ViewModelのStatusを監視する
-                NicoRepoItems.ToList().ForEach(vm => {
+                MylistListItems.ToList().ForEach(vm => {
 
                     vm.PropertyChanged += (o, e) => {
 
@@ -65,7 +70,7 @@ namespace SRNicoNico.ViewModels {
                 });
 
                 // 「すべて」をデフォルト値とする
-                SelectedItem = NicoRepoItems.First();
+                SelectedItem = MylistListItems.FirstOrDefault();
             });
         }
 

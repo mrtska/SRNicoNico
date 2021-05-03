@@ -39,7 +39,7 @@ namespace SRNicoNico.Tests {
                 //Assert.NotEqual(0, entry.CommentCount);
                 //Assert.NotEqual(0, entry.MylistCount);
                 //Assert.NotEqual(0, entry.LikeCount);
-                
+
                 Assert.NotEqual(0, entry.Duration);
                 Assert.NotNull(entry.Id);
 
@@ -61,11 +61,10 @@ namespace SRNicoNico.Tests {
                 Assert.NotNull(entry.WatchId);
             }
         }
-    
+
         /// <summary>
         /// あとで見るに追加と削除が出来ることのテスト
         /// </summary>
-        /// <returns></returns>
         [Fact]
         public async Task AddAndDeleteWatchLaterUnitTest() {
 
@@ -76,5 +75,33 @@ namespace SRNicoNico.Tests {
             Assert.True(result);
         }
 
+        /// <summary>
+        /// マイリストの一覧が取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetMylistsUnitTest() {
+
+            await foreach (var result in MylistService.GetMylistsAsync(1)) {
+
+                Assert.NotEqual(default, result.CreatedAt);
+                Assert.NotNull(result.DefaultSortKey);
+                Assert.NotNull(result.DefaultSortOrder);
+                Assert.NotNull(result.Description);
+                Assert.NotNull(result.Id);
+                Assert.NotNull(result.Name);
+
+                Assert.NotNull(result.OwnerType);
+                if (result.OwnerType != "hidden") {
+
+                    Assert.NotNull(result.OwnerIconUrl);
+                    Assert.NotNull(result.OwnerId);
+                    Assert.NotNull(result.OwnerName);
+                }
+
+                Assert.NotNull(result.SampleItems);
+
+                break;
+            }
+        }
     }
 }

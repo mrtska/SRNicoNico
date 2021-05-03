@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using DynaJson;
 using FastEnumUtility;
@@ -18,7 +17,10 @@ namespace SRNicoNico.Services {
         /// あとで見るのAPIエンドポイント
         /// </summary>
         private const string WatchLaterApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/watch-later";
-
+        /// <summary>
+        /// マイリストのAPIエンドポイント
+        /// </summary>
+        private const string MylistApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/mylists";
 
         private readonly ISessionService SessionService;
 
@@ -35,7 +37,7 @@ namespace SRNicoNico.Services {
                 .AddQuery("pageSize", 100)
                 .AddQuery("page", page);
 
-            var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
@@ -138,5 +140,84 @@ namespace SRNicoNico.Services {
             return json.meta.status == 200;
         }
 
+        /// <inheritdoc />
+        public async IAsyncEnumerable<MylistListEntry> GetMylistsAsync(int sampleItemCount = 0) {
+
+            var builder = new GetRequestQueryBuilder(MylistApiUrl)
+                .AddQuery("sampleItemCount", sampleItemCount);
+
+            var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            foreach (var mylist in json.data.mylists) {
+
+                if (mylist == null) {
+                    continue;
+                }
+                var sampleItems = new List<WatchLaterEntry>();
+                foreach (var sampleItem in mylist.sampleItems) {
+
+                    if (sampleItem == null) {
+                        continue;
+                    }
+                    var video = sampleItem.video;
+                    sampleItems.Add(new WatchLaterEntry {
+                        AddedAt = DateTimeOffset.Parse(sampleItem.addedAt),
+                        ItemId = sampleItem.itemId.ToString(),
+                        Memo = sampleItem.description, // あとで見るはmemoだけどマイリストはdescription
+                        Status = sampleItem.status,
+
+                        ViewCount = (int)video.count.view,
+                        CommentCount = (int)video.count.comment,
+                        MylistCount = (int)video.count.mylist,
+                        LikeCount = (int)video.count.like,
+
+                        Duration = (int)video.duration,
+                        Id = video.id,
+                        IsChannelVideo = video.isChannelVideo,
+                        IsPaymentRequired = video.isPaymentRequired,
+                        LatestCommentSummary = video.latestCommentSummary,
+
+                        OwnerIconUrl = video.owner.iconUrl,
+                        OwnerId = video.owner.id,
+                        OwnerName = video.owner.name,
+                        OwnerType = video.owner.ownerType,
+
+                        PlaybackPosition = (int?)video.playbackPosition,
+                        RegisteredAt = DateTimeOffset.Parse(video.registeredAt),
+                        RequireSensitiveMasking = video.requireSensitiveMasking,
+                        ShortDescription = video.shortDescription,
+                        ThumbnailUrl = video.thumbnail.listingUrl,
+                        Title = video.title,
+                        Type = video.type,
+
+                        WatchId = sampleItem.watchId,
+                        VideoUrl = $"https://www.nicovideo.jp/watch/{video.id}"
+                    });
+                }
+                yield return new MylistListEntry {
+                    CreatedAt = DateTimeOffset.Parse(mylist.createdAt),
+                    DefaultSortKey = mylist.defaultSortKey,
+                    DefaultSortOrder = mylist.defaultSortOrder,
+                    Description = mylist.description,
+                    FollowerCount = (int)mylist.followerCount,
+                    Id = mylist.id.ToString(),
+                    IsFollowing = mylist.isFollowing,
+                    IsPublic = mylist.isPublic,
+                    ItemsCount = (int)mylist.itemsCount,
+                    Name = mylist.name,
+                    OwnerIconUrl = mylist.owner.iconUrl,
+                    OwnerId = mylist.owner.id,
+                    OwnerName = mylist.owner.name,
+                    OwnerType = mylist.owner.ownerType,
+                    SampleItems = sampleItems
+                };
+            }
+        }
     }
 }
