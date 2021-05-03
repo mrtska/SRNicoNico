@@ -39,6 +39,15 @@ namespace SRNicoNico.Services {
         /// <returns>マイリストの一覧</returns>
         IAsyncEnumerable<MylistListEntry> GetMylistsAsync(int sampleItemCount = 0);
 
+        /// <summary>
+        /// 指定したマイリストIDのマイリストを取得する
+        /// </summary>
+        /// <param name="mylistId">マイリストID</param>
+        /// <param name="sortKey">並び順</param>
+        /// <param name="page">ページ</param>
+        /// <returns>マイリストの詳細</returns>
+        Task<Mylist> GetMylistAsync(string mylistId, MylistSortKey sortKey, int page);
+
     }
     /// <summary>
     /// マイリストやあとで見るのソート順のキー

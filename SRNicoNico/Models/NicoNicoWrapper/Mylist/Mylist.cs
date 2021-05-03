@@ -32,6 +32,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// </summary>
         public bool HasNext { get; set; }
         /// <summary>
+        /// マイリストのID
+        /// </summary>
+        public string? Id { get; set; }
+        /// <summary>
         /// マイリストをフォローしているかどうか
         /// </summary>
         public bool IsFollowing { get; set; }
@@ -40,9 +44,32 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// </summary>
         public bool IsPublic { get; set; }
         /// <summary>
+        /// マイリスト名
+        /// </summary>
+        public string? Name { get; set; }
+        /// <summary>
         /// マイリストに含まれている動画の総数
         /// </summary>
         public int TotalItemCount { get; set; }
+
+        /// <summary>
+        /// 動画投稿者のサムネイルURL
+        /// </summary>
+        public string? OwnerIconUrl { get; set; }
+        /// <summary>
+        /// 動画投稿者のID
+        /// </summary>
+        public string? OwnerId { get; set; }
+        /// <summary>
+        /// 動画投稿者の名前
+        /// </summary>
+        public string? OwnerName { get; set; }
+        /// <summary>
+        /// 動画投稿者の種類
+        /// userかchannelかhidden
+        /// </summary>
+        public string? OwnerType { get; set; }
+
         /// <summary>
         /// あとで見るのリスト
         /// TotalCountと同じ数とは限らない

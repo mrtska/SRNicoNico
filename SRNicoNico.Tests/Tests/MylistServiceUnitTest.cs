@@ -91,16 +91,71 @@ namespace SRNicoNico.Tests {
                 Assert.NotNull(result.Name);
 
                 Assert.NotNull(result.OwnerType);
-                if (result.OwnerType != "hidden") {
-
-                    Assert.NotNull(result.OwnerIconUrl);
-                    Assert.NotNull(result.OwnerId);
-                    Assert.NotNull(result.OwnerName);
-                }
+                Assert.NotNull(result.OwnerIconUrl);
+                Assert.NotNull(result.OwnerId);
+                Assert.NotNull(result.OwnerName);
 
                 Assert.NotNull(result.SampleItems);
 
+                // 最初の一つだけを確認する
                 break;
+            }
+        }
+
+        /// <summary>
+        /// 特定のマイリストの詳細が取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetMylistUnitTest() {
+
+            // mrtskaのテスト用公開マイリスト
+            // mrtskaのアカウントでないとこのテストは動かないと思われる
+            var result = await MylistService.GetMylistAsync("70670861", MylistSortKey.AddedAtDesc, 1);
+
+            Assert.NotNull(result.DefaultSortKey);
+            Assert.NotNull(result.DefaultSortOrder);
+            Assert.NotNull(result.Description);
+            Assert.NotNull(result.Id);
+            Assert.NotNull(result.Name);
+
+            Assert.NotNull(result.OwnerType);
+            Assert.NotNull(result.OwnerIconUrl);
+            Assert.NotNull(result.OwnerId);
+            Assert.NotNull(result.OwnerName);
+
+            Assert.NotNull(result.Entries);
+
+            foreach (var entry in result.Entries) {
+
+                Assert.NotEqual(default, entry.AddedAt);
+                Assert.NotNull(entry.ItemId);
+                Assert.NotNull(entry.Memo);
+                Assert.NotNull(entry.Status);
+
+                //Assert.NotEqual(0, entry.ViewCount);
+                //Assert.NotEqual(0, entry.CommentCount);
+                //Assert.NotEqual(0, entry.MylistCount);
+                //Assert.NotEqual(0, entry.LikeCount);
+
+                Assert.NotEqual(0, entry.Duration);
+                Assert.NotNull(entry.Id);
+
+                //Assert.NotNull(entry.LatestCommentSummary);
+
+                Assert.NotNull(entry.OwnerType);
+                if (entry.OwnerType != "hidden") {
+
+                    Assert.NotNull(entry.OwnerIconUrl);
+                    Assert.NotNull(entry.OwnerId);
+                    Assert.NotNull(entry.OwnerName);
+                }
+
+                Assert.NotEqual(default, entry.RegisteredAt);
+                Assert.NotNull(entry.ShortDescription);
+                Assert.NotNull(entry.ThumbnailUrl);
+                Assert.NotNull(entry.Title);
+                Assert.NotNull(entry.Type);
+                Assert.NotNull(entry.WatchId);
             }
         }
     }
