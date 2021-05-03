@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Livet;
+using SRNicoNico.Models;
 using SRNicoNico.Services;
 using Unity;
 
@@ -11,13 +12,13 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class MylistViewModel : TabItemViewModel {
 
-        private DispatcherCollection<TabItemViewModel> _MylistListItems = new DispatcherCollection<TabItemViewModel>(App.UIDispatcher);
+        private ObservableSynchronizedCollection<TabItemViewModel> _MylistListItems = new ObservableSynchronizedCollection<TabItemViewModel>();
         /// <summary>
         /// マイリストのタブのリスト
         /// </summary>
-        public DispatcherCollection<TabItemViewModel> MylistListItems {
+        public ObservableSynchronizedCollection<TabItemViewModel> MylistListItems {
             get { return _MylistListItems; }
-            set { 
+            set {
                 if (_MylistListItems == value)
                     return;
                 _MylistListItems = value;
@@ -27,11 +28,11 @@ namespace SRNicoNico.ViewModels {
 
         private TabItemViewModel? _SelectedItem;
         /// <summary>
-        /// 現在選択されているタブ デフォルトはすべて
+        /// 現在選択されているタブ デフォルトは一番上のマイリスト
         /// </summary>
         public TabItemViewModel? SelectedItem {
             get { return _SelectedItem; }
-            set { 
+            set {
                 if (_SelectedItem == value)
                     return;
                 _SelectedItem = value;
@@ -51,30 +52,71 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// マイリストの一覧を非同期で取得する
         /// </summary>
-        public void Loaded() {
+        public async void Loaded() {
 
-            // 別のスレッドで各要素を初期化する
-            Task.Run(() => {
+            IsActive = true;
+            Status = "マイリストの一覧を取得中";
+            MylistListItems.Clear();
+            try {
 
-                // 子ViewModelのStatusを監視する
-                MylistListItems.ToList().ForEach(vm => {
+                await foreach (var result in MylistService.GetMylistsAsync()) {
 
-                    vm.PropertyChanged += (o, e) => {
+                    var vm = UnityContainer.Resolve<MylistListViewModel>();
 
-                        var tabItem = (TabItemViewModel)o;
-                        if (e.PropertyName == nameof(Status)) {
+                    vm.Name = result.Name;
 
-                            Status = tabItem.Status;
-                        }
-                    };
-                });
 
-                // 「すべて」をデフォルト値とする
-                SelectedItem = MylistListItems.FirstOrDefault();
+                    MylistListItems.Add(vm);
+                }
+
+            } catch (StatusErrorException e) {
+
+                Status = $"マイリストの一覧を取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+            } finally {
+
+                IsActive = false;
+            }
+
+            // 子ViewModelのStatusを監視する
+            MylistListItems.ToList().ForEach(vm => {
+
+                vm.PropertyChanged += (o, e) => {
+
+                    var tabItem = (TabItemViewModel)o;
+                    if (e.PropertyName == nameof(Status)) {
+
+                        Status = tabItem.Status;
+                    }
+                };
             });
+
+            // 一番上をデフォルト値とする
+            SelectedItem = MylistListItems.FirstOrDefault();
         }
 
+        /// <summary>
+        /// 再読み込み
+        /// </summary>
+        public void Reload() {
+
+            Loaded();
+        }
+
+        public void CreateMylist() {
+
+            ;
+        }
+        
+
         public override void KeyDown(KeyEventArgs e) {
+        
+            // Ctrl + F5でマイリストの一覧をリロードする
+            if (e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control) && e.Key == Key.F5) {
+
+                Reload();
+                return;
+            }
+            // Ctrl + F5以外は下位のViewModelに渡す            
             SelectedItem?.KeyDown(e);
         }
     }

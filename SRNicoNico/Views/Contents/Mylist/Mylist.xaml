@@ -8,7 +8,8 @@
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:v="clr-namespace:SRNicoNico.Views"
-             d:DataContext="{d:DesignInstance Type=vm:NicoRepoViewModel}"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
+             d:DataContext="{d:DesignInstance Type=vm:MylistViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <i:Interaction.Triggers>
@@ -18,16 +19,52 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="130" />
+            <ColumnDefinition Width="150" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ScrollViewer>
-            <metro:TabView Focusable="False" Background="#252627" ItemsSource="{Binding NicoRepoItems}" SelectedValue="{Binding SelectedItem}" />
-        </ScrollViewer>
-        <ItemsControl Grid.Column="1" ItemsSource="{Binding NicoRepoItems}">
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="マイリスト" VerticalAlignment="Center" FontSize="20" Height="30" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <controls:RoundButton IsEnabled="{Binding IsActive, Converter={StaticResource InvertBoolConverter}}" Margin="0,0,5,0" Focusable="False" ToolTip="マイリスト作成" IconData="F1 M 35,19L 41,19L 41,35L 57,35L 57,41L 41,41L 41,57L 35,57L 35,41L 19,41L 19,35L 35,35L 35,19 Z" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <l:LivetCallMethodAction MethodName="AddMylist" MethodTarget="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </controls:RoundButton>
+                    <controls:RoundButton IsEnabled="{Binding IsActive, Converter={StaticResource InvertBoolConverter}}" Focusable="False" ToolTip="すべて更新" IconData="{StaticResource ReloadIcon}" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <l:LivetCallMethodAction MethodName="Reload" MethodTarget="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </controls:RoundButton>
+                </StackPanel>
+            </Grid>
+            <ScrollViewer Grid.Row="1">
+                <metro:TabView Focusable="False" ItemsSource="{Binding MylistListItems}" SelectedValue="{Binding SelectedItem}">
+                    <metro:TabView.ItemTemplate>
+                        <DataTemplate DataType="{x:Type metro:ITabItem}">
+                            <TextBlock Margin="3,0,0,0" Text="{Binding Name}" ToolTip="{Binding Name}" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+                        </DataTemplate>
+                    </metro:TabView.ItemTemplate>
+                </metro:TabView>
+            </ScrollViewer>
+            <metro:ProgressRing Grid.Row="1" IsActive="{Binding IsActive}" />
+        </Grid>
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding MylistListItems}">
             <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type vm:NicoRepoListViewModel}">
-                    <v:NicoRepoResult />
+                <DataTemplate DataType="{x:Type vm:MylistListViewModel}">
+                    <v:MylistResult />
                 </DataTemplate>
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
