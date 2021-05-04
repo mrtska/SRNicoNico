@@ -68,7 +68,7 @@ namespace SRNicoNico.Services {
         /// <param name="url">リクエストを送信するURL</param>
         /// <param name="formData">POSTするフォームデータ</param>
         /// <returns>HTTPレスポンス</returns>
-        Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string> formData);
+        Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string>? formData);
 
         /// <summary>
         /// POSTリクエストを指定したHTTPヘッダと一緒に送信する
@@ -78,7 +78,7 @@ namespace SRNicoNico.Services {
         /// <param name="formData">POSTするフォームデータ</param>
         /// <param name="additionalHeaders">HTTPヘッダのリスト</param>
         /// <returns>HTTPレスポンス</returns>
-        Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string> formData, IDictionary<string, string>? additionalHeaders);
+        Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string>? formData, IDictionary<string, string>? additionalHeaders);
 
         /// <summary>
         /// PUTリクエストを送信する

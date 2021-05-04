@@ -188,22 +188,22 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string> formData) {
+        public Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string>? formData) {
 
             return PostAsync(url, formData, null);
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string> formData, IDictionary<string, string>? additionalHeaders) {
+        public async Task<HttpResponseMessage> PostAsync(string url, IDictionary<string, string>? formData, IDictionary<string, string>? additionalHeaders) {
 
             var result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Post, url) {
-                Content = new FormUrlEncodedContent(formData)
+                Content = formData != null ? new FormUrlEncodedContent(formData) : null
             }, additionalHeaders)).ConfigureAwait(false);
             if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
                 // サインインダイアログを表示して再ログインさせる
                 await SignInDialogHandler().ConfigureAwait(false);
                 result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Post, url) {
-                    Content = new FormUrlEncodedContent(formData)
+                    Content = formData != null ? new FormUrlEncodedContent(formData) : null
                 }, additionalHeaders)).ConfigureAwait(false);
             }
 

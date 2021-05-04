@@ -158,5 +158,20 @@ namespace SRNicoNico.Tests {
                 Assert.NotNull(entry.WatchId);
             }
         }
+
+        /// <summary>
+        /// マイリストに追加と削除が出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task AddAndDeleteMylistUnitTest() {
+
+            // mrtskaのテスト用公開マイリスト
+            // mrtskaのアカウントでないとこのテストは動かないと思われる
+            var result = await MylistService.AddMylistItemAsync("70670861", "sm9", null);
+            Assert.True(result);
+
+            result = await MylistService.DeleteMylistItemAsync("70670861", "1173108780");
+            Assert.True(result);
+        }
     }
 }

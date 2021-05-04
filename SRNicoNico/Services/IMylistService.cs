@@ -48,6 +48,24 @@ namespace SRNicoNico.Services {
         /// <returns>マイリストの詳細</returns>
         Task<Mylist> GetMylistAsync(string mylistId, MylistSortKey sortKey, int page);
 
+        /// <summary>
+        /// 指定したマイリストに動画を追加する
+        /// </summary>
+        /// <param name="mylistId">動画を追加したいマイリストのID</param>
+        /// <param name="watchId">動画ID</param>
+        /// <param name="memo">メモ 任意</param>
+        /// <returns>成功したらTrue</returns>
+        Task<bool> AddMylistItemAsync(string mylistId, string watchId, string? memo);
+
+        /// <summary>
+        /// 指定したマイリストから動画を削除する
+        /// 複数動画を指定可
+        /// </summary>
+        /// <param name="mylistId">削除対象があるマイリストのID</param>
+        /// <param name="itemIds">削除対象の動画のアイテムID</param>
+        /// <returns>成功したらTrue</returns>
+        Task<bool> DeleteMylistItemAsync(string mylistId, params string[] itemIds);
+
     }
     /// <summary>
     /// マイリストやあとで見るのソート順のキー

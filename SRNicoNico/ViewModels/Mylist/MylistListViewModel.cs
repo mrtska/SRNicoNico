@@ -159,6 +159,34 @@ namespace SRNicoNico.ViewModels {
         }
 
         /// <summary>
+        /// マイリストを削除する
+        /// </summary>
+        /// <param name="entry">削除したいマイリスト</param>
+        public async void DeleteMylist(MylistEntry entry) {
+
+            IsActive = true;
+            Status = "マイリストを削除中";
+            try {
+
+                var result = await MylistService.DeleteMylistItemAsync(MylistId, entry.ItemId!);
+                if (result) {
+
+                    MylistItems.Remove(entry);
+                    Status = "動画を削除しました。";
+                } else {
+
+                    Status = "マイリストから動画を削除出来ませんでした。";
+                }
+            } catch (StatusErrorException e) {
+
+                Status = $"マイリストの削除に失敗しました。 ステータスコード: {e.StatusCode}";
+            } finally {
+
+                IsActive = false;
+            }
+        }
+
+        /// <summary>
         /// 更新ボタンが押された時に実行される
         /// </summary>
         public void Reload() {

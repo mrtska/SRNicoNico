@@ -302,5 +302,56 @@ namespace SRNicoNico.Services {
                 Entries = items
             };
         }
+
+        /// <inheritdoc />
+        public async Task<bool> AddMylistItemAsync(string mylistId, string itemId, string? memo) {
+
+            if (string.IsNullOrEmpty(mylistId)) {
+
+                throw new ArgumentNullException(nameof(mylistId));
+            }
+            if (string.IsNullOrEmpty(itemId)) {
+
+                throw new ArgumentNullException(nameof(itemId));
+            }
+
+            var builder = new GetRequestQueryBuilder($"{MylistApiUrl}/{mylistId}/items")
+                .AddQuery("itemId", itemId)
+                .AddQuery("description", memo ?? string.Empty);
+            // (IDictionary<string, string>?)null はちょっとダサいのでどうにかしたい
+            var result = await SessionService.PostAsync(builder.Build(), (IDictionary<string, string>?)null, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+
+            // 200番台か409以外だったらエラーとする
+            if (!result.IsSuccessStatusCode && result.StatusCode != HttpStatusCode.Conflict) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            // 201なら成功
+            return json.meta.status == 201;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> DeleteMylistItemAsync(string mylistId, params string[] itemIds) {
+
+            if (string.IsNullOrEmpty(mylistId)) {
+
+                throw new ArgumentNullException(nameof(mylistId));
+            }
+
+            var builder = new GetRequestQueryBuilder($"{MylistApiUrl}/{mylistId}/items")
+                .AddQuery("itemIds", string.Join(',', itemIds.Distinct()));
+
+            var result = await SessionService.DeleteAsync(builder.Build(), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+
+            // 200番台か404以外だったらエラーとする
+            if (!result.IsSuccessStatusCode && result.StatusCode != HttpStatusCode.NotFound) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            // 200なら成功
+            return json.meta.status == 200;
+        }
     }
 }

@@ -104,7 +104,7 @@
                                     <MenuItem Header="マイリストから削除する">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="Click">
-                                                <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},Path=PlacementTarget.Tag}" MethodName="DeleteWatchLater" MethodParameter="{Binding}" />
+                                                <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},Path=PlacementTarget.Tag}" MethodName="DeleteMylist" MethodParameter="{Binding}" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </MenuItem>
