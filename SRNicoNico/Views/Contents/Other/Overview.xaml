@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="SRNicoNico.Views.Overview"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance {x:Type vm:OverviewViewModel}}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Margin="10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" TextTrimming="CharacterEllipsis" FontSize="20" />
+            <Button Grid.Column="1" Content="アップデートの確認">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CheckUpdate" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+        </Grid>
+        <ScrollViewer Grid.Row="1">
+            <TextBlock TextWrapping="Wrap" Margin="20,10,0,0">
+                このソフトウェアはオープンソースです。<LineBreak />
+                MITライセンスでGitHub上で公開されています。<LineBreak /><LineBreak />
+            
+                ソースコード: 
+                <Hyperlink NavigateUri="https://github.com/mrtska/SRNicoNico">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="RequestNavigate">
+                            <i:LaunchUriOrFileAction Path="https://github.com/mrtska/SRNicoNico" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    https://github.com/mrtska/SRNicoNico
+                </Hyperlink>
+                <LineBreak />
+                作者Twitter: 
+                <Hyperlink NavigateUri="https://twitter.com/m__gl" ToolTip="https://twitter.com/m__gl">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="RequestNavigate">
+                            <i:LaunchUriOrFileAction Path="https://twitter.com/m__gl" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    @m__gl
+                </Hyperlink>
+                <LineBreak /><LineBreak />
+            
+                            ライセンス : MIT License<LineBreak />
+                ﻿The MIT License (MIT)<LineBreak /><LineBreak />
+
+                Copyright (c) 2015-2021 mrtska<LineBreak /><LineBreak />
+
+                Permission is hereby granted, free of charge, to any person obtaining a copy<LineBreak />
+                of this software and associated documentation files (the "Software"), to deal<LineBreak />
+                in the Software without restriction, including without limitation the rights<LineBreak />
+                to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<LineBreak />
+                copies of the Software, and to permit persons to whom the Software is<LineBreak />
+                furnished to do so, subject to the following conditions:<LineBreak /><LineBreak />
+
+                The above copyright notice and this permission notice shall be included in<LineBreak />
+                all copies or substantial portions of the Software.<LineBreak /><LineBreak />
+
+                THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<LineBreak />
+                IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<LineBreak />
+                FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE<LineBreak />
+                AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<LineBreak />
+                LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<LineBreak />
+                OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN<LineBreak />
+                THE SOFTWARE.<LineBreak />
+            </TextBlock>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

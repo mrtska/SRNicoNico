@@ -54,6 +54,9 @@
                 <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
                     <v:History />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:OtherViewModel}">
+                    <v:Other />
+                </DataTemplate>
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
