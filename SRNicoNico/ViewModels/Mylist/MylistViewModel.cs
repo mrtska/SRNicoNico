@@ -62,13 +62,13 @@ namespace SRNicoNico.ViewModels {
 
                 await foreach (var result in MylistService.GetMylistsAsync()) {
 
-                    var vm = UnityContainer.Resolve<MylistListViewModel>(new ParameterOverride("mylistId", result.Id));
+                    var vm = UnityContainer.Resolve<MylistListViewModel>(new ParameterOverride("mylistId", result.Id),
+                        new ParameterOverride("defaultSortKey", FastEnum.Parse<MylistSortKey>(result.DefaultSortKey + result.DefaultSortOrder, true)));
 
                     vm.Name = result.Name;
                     vm.FollowerCount = result.FollowerCount;
                     vm.TotalCount = result.ItemsCount;
                     vm.Description = result.Description;
-                    vm.SelectedMylistSortKey = FastEnum.Parse<MylistSortKey>(result.DefaultSortKey + result.DefaultSortOrder, true);
 
                     MylistListItems.Add(vm);
                 }

@@ -13,7 +13,7 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class MylistListViewModel : TabItemViewModel {
 
-        private MylistSortKey _SelectedMylistSortKey = MylistSortKey.AddedAtDesc;
+        private MylistSortKey _SelectedMylistSortKey;
         /// <summary>
         /// マイリストのソート順
         /// </summary>
@@ -87,11 +87,12 @@ namespace SRNicoNico.ViewModels {
         private readonly IMylistService MylistService;
         private readonly string MylistId;
 
-        public MylistListViewModel(IMylistService mylistService, string mylistId) {
+        public MylistListViewModel(IMylistService mylistService, string mylistId, MylistSortKey defaultSortKey) {
 
             MylistService = mylistService;
             MylistItems = new ObservableSynchronizedCollection<MylistEntry>();
             MylistId = mylistId;
+            _SelectedMylistSortKey = defaultSortKey;
         }
 
         /// <summary>
