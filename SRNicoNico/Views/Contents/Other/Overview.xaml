@@ -14,13 +14,13 @@
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid Margin="10,0">
+        <Grid Background="#252627">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" TextTrimming="CharacterEllipsis" FontSize="20" />
-            <Button Grid.Column="1" Content="アップデートの確認">
+            <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" TextTrimming="CharacterEllipsis" FontSize="20" Margin="10,0" />
+            <Button Grid.Column="1" Content="アップデートの確認" Margin="10,0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CheckUpdate" />

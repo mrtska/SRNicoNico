@@ -14,10 +14,10 @@
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" TextTrimming="CharacterEllipsis" FontSize="20" Margin="10,0" />
+        <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" TextTrimming="CharacterEllipsis" FontSize="20" Background="#252627" Padding="10,0" />
         <ScrollViewer Grid.Row="1">
             <StackPanel>
-                <TextBlock TextWrapping="Wrap" Margin="20,10,0,0">
+                <TextBlock TextWrapping="Wrap" Margin="10,10,0,0">
                     NicoNicoViewerで使われているオープンソースソフトウェアの一覧です。<LineBreak /><LineBreak />
                     <Run Text="MetroRadiance 2.4.0" FontSize="24" FontWeight="Bold" /><LineBreak /><LineBreak />
                         <Hyperlink NavigateUri="https://github.com/Grabacr07/MetroRadiance">
