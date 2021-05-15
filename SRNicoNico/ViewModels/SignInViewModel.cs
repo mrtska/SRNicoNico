@@ -58,34 +58,37 @@ namespace SRNicoNico.ViewModels {
             return SessionService.VerifyAsync();
         }
 
-        public Task ActivateSignInDialogAsync() {
+        public async Task ActivateSignInDialogAsync() {
 
-            WebView = new WebView2 {
-                Source = new Uri(SignInUrl)
-            };
-            WebView.CoreWebView2InitializationCompleted += (o, e) => {
-                WebView.CoreWebView2.WebResourceResponseReceived += async (o, e) => {
+            await App.UIDispatcher!.InvokeAsync(new Action(() => {
 
-                    // トップページに遷移した時にCookieの値を確認する
-                    if (e.Request.Uri.EndsWith("nicovideo.jp/")) {
-
-                        var cookies = await WebView.CoreWebView2.CookieManager.GetCookiesAsync("https://nicovideo.jp/");
-                        var session = cookies.SingleOrDefault(s => s.Name == "user_session");
-                        if (session != null) {
-
-                            // セッションCookieを保存してサインインウィンドウを閉じる
-                            SessionService.StoreSession(session.Value);
-                            await Messenger.RaiseAsync(new WindowActionMessage(WindowAction.Close, "SignIn"));
-
-                            WebView.Dispose();
-                        } else {
-                            // トップページに遷移したのにCookieが無かった場合は再度サインインページに遷移する
-                            WebView.Source = new Uri(SignInUrl);
-                        }
-                    }
+                WebView = new WebView2 {
+                    Source = new Uri(SignInUrl)
                 };
-            };
-            return MainWindowMessenger.RaiseAsync(new TransitionMessage(typeof(SignInView), this, TransitionMode.Modal));
+                WebView.CoreWebView2InitializationCompleted += (o, e) => {
+                    WebView.CoreWebView2.WebResourceResponseReceived += async (o, e) => {
+
+                        // トップページに遷移した時にCookieの値を確認する
+                        if (e.Request.Uri.EndsWith("nicovideo.jp/")) {
+
+                            var cookies = await WebView.CoreWebView2.CookieManager.GetCookiesAsync("https://nicovideo.jp/");
+                            var session = cookies.SingleOrDefault(s => s.Name == "user_session");
+                            if (session != null) {
+
+                                // セッションCookieを保存してサインインウィンドウを閉じる
+                                SessionService.StoreSession(session.Value);
+                                await Messenger.RaiseAsync(new WindowActionMessage(WindowAction.Close, "SignIn"));
+
+                                WebView.Dispose();
+                            } else {
+                                // トップページに遷移したのにCookieが無かった場合は再度サインインページに遷移する
+                                WebView.Source = new Uri(SignInUrl);
+                            }
+                        }
+                    };
+                };
+            }));
+            await MainWindowMessenger.RaiseAsync(new TransitionMessage(typeof(SignInView), this, TransitionMode.Modal));
         }
 
         /// <summary>
