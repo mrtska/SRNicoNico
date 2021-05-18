@@ -17,6 +17,8 @@ namespace SRNicoNico {
 
         public static Dispatcher? UIDispatcher;
 
+        public static IUnityContainer? UnityContainer { get; private set; }
+
         protected override void OnStartup(StartupEventArgs e) {
 
             UIDispatcher = Dispatcher;
@@ -30,6 +32,8 @@ namespace SRNicoNico {
             ConfigureDbContext(container);
 
             base.OnStartup(e);
+
+            UnityContainer = container;
 
             MainWindow = new MainWindow { DataContext = container.Resolve<MainWindowViewModel>() };
             MainWindow.Visibility = Visibility.Visible;
@@ -62,6 +66,8 @@ namespace SRNicoNico {
             container.RegisterType<INicoRepoService, NicoNicoNicoRepoService>(TypeLifetime.Singleton);
             container.RegisterType<IMylistService, NicoNicoMylistService>(TypeLifetime.Singleton);
             container.RegisterType<IHistoryService, NicoNicoHistoryService>(TypeLifetime.Singleton);
+
+            container.RegisterType<IVideoService, NicoNicoVideoService>(TypeLifetime.Singleton);
         }
     }
 }

@@ -30,5 +30,9 @@ namespace SRNicoNico.Tests {
         /// テストで使うセッション
         /// </summary>
         public string UserSession { get; set; } = Constants.UserSession;
+
+        public void OpenUrl(string url) {
+            throw new NotImplementedException();
+        }
     }
 }

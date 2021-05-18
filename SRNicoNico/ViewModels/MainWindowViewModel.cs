@@ -73,6 +73,9 @@ namespace SRNicoNico.ViewModels {
             SignIn = container.Resolve<SignInViewModel>();
             CompositeDisposable.Add(MainContent);
 
+            // MainContentのViewModelもDIに登録しておく
+            container.RegisterInstance(MainContent);
+
             Timer = new Timer(o => {
                 CurrentTime = DateTime.Now.ToString();
             }, null, 0, 1000);

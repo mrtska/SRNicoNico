@@ -19,7 +19,7 @@ namespace SRNicoNico.ViewModels {
         /// ユーザータブのリスト
         /// 動画やユーザーページなど
         /// </summary>
-        public ObservableSynchronizedCollection<TabItemViewModel> UserItems { get; private set; }
+        public DispatcherCollection<TabItemViewModel> UserItems { get; private set; }
 
         /// <summary>
         /// WebViewのViewModel
@@ -46,16 +46,22 @@ namespace SRNicoNico.ViewModels {
         private readonly IUnityContainer UnityContainer;
         private Action<string>? StatusChangedAction;
 
+        private readonly VideoTabViewModel VideoTab;
+
         public MainContentViewModel(IUnityContainer container) {
 
             UnityContainer = container;
             SystemItems = new ObservableSynchronizedCollection<TabItemViewModel>();
-            UserItems = new ObservableSynchronizedCollection<TabItemViewModel>();
+            UserItems = new DispatcherCollection<TabItemViewModel>(App.UIDispatcher);
 
             SystemItems.Add(container.Resolve<StartViewModel>());
 
             // スタートページをデフォルトで開くようにする
             SelectedItem = SystemItems.First();
+
+            VideoTab = new VideoTabViewModel(() => {
+                UserItems.Remove(VideoTab!);
+            });
         }
 
         /// <summary>
@@ -86,6 +92,22 @@ namespace SRNicoNico.ViewModels {
                     }
                 };
             });
+        }
+
+        /// <summary>
+        /// 動画タブ管理用ViewModelに動画のViewModelを追加する
+        /// </summary>
+        /// <param name="vm"></param>
+        public void AddVideoTab(VideoViewModel vm) {
+
+            VideoTab.Add(vm);
+            // 動画タブが表に表示されていなければ表示する
+            if (!UserItems.Contains(VideoTab)) {
+
+                UserItems.Add(VideoTab);
+            }
+            // 表示を切り替える
+            SelectedItem = VideoTab;
         }
 
         public void RegisterStatusChangeAction(Action<string> action) => StatusChangedAction = action;

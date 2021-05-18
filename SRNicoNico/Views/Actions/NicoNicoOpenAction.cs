@@ -1,6 +1,7 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.Xaml.Behaviors;
+using SRNicoNico.Models;
+using Unity;
 
 namespace SRNicoNico.Views.Actions {
     /// <summary>
@@ -16,10 +17,14 @@ namespace SRNicoNico.Views.Actions {
             set { SetValue(UrlProperty, value); }
         }
         public static readonly DependencyProperty UrlProperty =
-            DependencyProperty.Register(nameof(Url), typeof(string), typeof(NicoNicoOpenAction), new PropertyMetadata(0));
+            DependencyProperty.Register(nameof(Url), typeof(string), typeof(NicoNicoOpenAction), new PropertyMetadata(""));
 
         protected override void Invoke(object parameter) {
-            throw new NotImplementedException();
+
+            var nnv = App.UnityContainer!.Resolve<INicoNicoViewer>();
+
+            // URLを最適なUIで開く
+            nnv.OpenUrl(Url);
         }
     }
 }
