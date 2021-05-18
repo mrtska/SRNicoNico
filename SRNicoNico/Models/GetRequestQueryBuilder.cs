@@ -69,6 +69,10 @@ namespace SRNicoNico.Models {
 
             return AddQuery(key, value.ToString());
         }
+        public GetRequestQueryBuilder AddQuery(string key, bool value) {
+
+            return AddQuery(key, value.ToString().ToLower());
+        }
 
         /// <summary>
         /// クエリをビルドしてURLを取得する
