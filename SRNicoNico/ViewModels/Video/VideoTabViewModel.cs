@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Livet;
-using SRNicoNico.Models.NicoNicoWrapper;
-using SRNicoNico.Services;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
@@ -11,10 +7,11 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class VideoTabViewModel : TabItemViewModel {
 
-
-        private ObservableSynchronizedCollection<VideoViewModel> _TabItems = new ObservableSynchronizedCollection<VideoViewModel>();
-
-        public ObservableSynchronizedCollection<VideoViewModel> TabItems {
+        private DispatcherCollection<VideoViewModel> _TabItems = new DispatcherCollection<VideoViewModel>(App.UIDispatcher);
+        /// <summary>
+        /// 動画のタブのリスト
+        /// </summary>
+        public DispatcherCollection<VideoViewModel> TabItems {
             get { return _TabItems; }
             set { 
                 if (_TabItems == value)
@@ -24,26 +21,44 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private VideoViewModel? _SelectedItem;
+        /// <summary>
+        /// 現在選択中のタブ
+        /// </summary>
+        public VideoViewModel? SelectedItem {
+            get { return _SelectedItem; }
+            set { 
+                if (_SelectedItem == value)
+                    return;
+                _SelectedItem = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public VideoTabViewModel(Action collectionClearedAction) : base("動画") {
 
             // 動画が0になった時にアクションを実行する
             TabItems.CollectionChanged += (o, e) => {
                 if (TabItems.Count == 0) {
-
                     collectionClearedAction();
                 }
             };
         }
 
-        public void Loaded() {
-
-
-        }
-
+        /// <summary>
+        /// タブのリストに動画を追加する
+        /// </summary>
+        /// <param name="vm">動画のViewModel</param>
         public void Add(VideoViewModel vm) {
 
+            TabItems.Add(vm);
+            // 動画タブがDisposeされたら自動的にリストから削除する
+            vm.CompositeDisposable.Add(() => {
 
+                TabItems.Remove(vm);
+            });
+            // タブが追加されたらそのタブを選択状態にする
+            SelectedItem = vm;
         }
 
     }

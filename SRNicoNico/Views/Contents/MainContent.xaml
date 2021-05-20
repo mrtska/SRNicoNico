@@ -71,8 +71,8 @@
         </ItemsControl>
         <ItemsControl Grid.Column="1" ItemsSource="{Binding UserItems}">
             <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type vm:StartViewModel}">
-                    <v:Start />
+                <DataTemplate DataType="{x:Type vm:VideoTabViewModel}">
+                    <v:VideoTabView />
                 </DataTemplate>
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>

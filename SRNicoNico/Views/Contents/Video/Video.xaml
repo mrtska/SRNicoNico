@@ -7,7 +7,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:v="clr-namespace:SRNicoNico.Views" xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              d:DataContext="{d:DesignInstance Type=vm:VideoViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -18,40 +18,52 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="140" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
-        <ScrollViewer>
-            <metro:TabView Focusable="False" Background="#252627" ItemsSource="{Binding OtherItems}" SelectedValue="{Binding SelectedItem}">
-                <metro:TabView.ItemTemplate>
-                    <DataTemplate DataType="{x:Type metro:ITabItem}">
-                        <TextBlock Margin="3,0,0,0" Text="{Binding Name}" ToolTip="{Binding Name}" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
-                    </DataTemplate>
-                </metro:TabView.ItemTemplate>
-            </metro:TabView>
-        </ScrollViewer>
-        <ItemsControl Grid.Column="1" ItemsSource="{Binding OtherItems}">
-            <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type vm:OverviewViewModel}">
-                    <v:Overview />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:PrivacyPolicyViewModel}">
-                    <v:PrivacyPolicy />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:OpenSourceViewModel}">
-                    <v:OpenSource />
-                </DataTemplate>
-            </ItemsControl.Resources>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
-                    <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Background="{DynamicResource BackgroundBrushKey}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock FontSize="18" Text="{Binding ApiData.Video.Title}" ToolTip="{Binding ApiData.Video.Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+                    <controls:RoundButton ToolTip="ブラウザで開く" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5 Z">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <l:LivetCallMethodAction MethodTarget="{Binding Html5Handler}" MethodName="Pause" />
+                                <i:LaunchUriOrFileAction Path="{Binding ApiData.Video.Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </controls:RoundButton>
+                    <controls:RoundButton ToolTip="更新" IconData="{StaticResource ReloadIcon}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Reload" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </controls:RoundButton>
+                    <controls:RoundButton ToolTip="閉じる" IconData="{StaticResource CloseIcon}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Close" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </controls:RoundButton>
+                </StackPanel>
+
+            </Grid>
+        </Grid>
+        
+        <Grid Grid.Column="1" Width="250">
+            
+        </Grid>
+        
     </Grid>
 </UserControl>

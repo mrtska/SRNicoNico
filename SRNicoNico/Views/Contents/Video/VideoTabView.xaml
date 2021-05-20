@@ -8,38 +8,35 @@
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:v="clr-namespace:SRNicoNico.Views"
-             d:DataContext="{d:DesignInstance Type=vm:VideoViewModel}"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
+             d:DataContext="{d:DesignInstance Type=vm:VideoTabViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Loaded" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
+             d:DesignHeight="573.2" d:DesignWidth="804">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="140" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <ScrollViewer>
-            <metro:TabView Focusable="False" Background="#252627" ItemsSource="{Binding OtherItems}" SelectedValue="{Binding SelectedItem}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+            <metro:TabView Background="#FF252627" Style="{DynamicResource VideoViewHorizontalViewStyle}" Height="38" ItemsSource="{Binding TabItems}" SelectedItem="{Binding SelectedItem,Mode=TwoWay}">
                 <metro:TabView.ItemTemplate>
                     <DataTemplate DataType="{x:Type metro:ITabItem}">
-                        <TextBlock Margin="3,0,0,0" Text="{Binding Name}" ToolTip="{Binding Name}" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+                        <Grid Height="38" Width="130" Background="Transparent">
+                            <i:Interaction.Triggers>
+                                <a:MouseMiddleClickTrigger>
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Close" />
+                                </a:MouseMiddleClickTrigger>
+                            </i:Interaction.Triggers>
+                            <TextBlock Text="{Binding Name}" FontSize="14" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" />
+                        </Grid>
                     </DataTemplate>
                 </metro:TabView.ItemTemplate>
             </metro:TabView>
         </ScrollViewer>
-        <ItemsControl Grid.Column="1" ItemsSource="{Binding OtherItems}">
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding TabItems}">
             <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type vm:OverviewViewModel}">
-                    <v:Overview />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:PrivacyPolicyViewModel}">
-                    <v:PrivacyPolicy />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:OpenSourceViewModel}">
-                    <v:OpenSource />
+                <DataTemplate DataType="{x:Type vm:VideoViewModel}">
+                    <v:Video />
                 </DataTemplate>
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
