@@ -8,11 +8,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:HtmlRenderer}">
-                    <FlowDocumentScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
-                        <FlowDocument PagePadding="{TemplateBinding Padding}">
+                    <local:DisabledScrollViewerFlowDocumentScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <FlowDocument PagePadding="{TemplateBinding Padding}" FontFamily="Segoe UI">
                             <Paragraph b:ParagraphHtmlRenderingBehavior.RawHtmlText="{TemplateBinding HtmlText}" />
                         </FlowDocument>
-                    </FlowDocumentScrollViewer>
+                    </local:DisabledScrollViewerFlowDocumentScrollViewer>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
