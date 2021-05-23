@@ -122,10 +122,10 @@ namespace SRNicoNico.Services {
 
                     phrases.Add(new EasyCommentPhrase {
                         Text = phrase.text,
-                        NicoDicTitle = phrase.nicodic.title,
-                        NicoDicViewTitle = phrase.nicodic.viewTitle,
-                        NicoDicSummary = phrase.nicodic.summary,
-                        NicoDicLink = phrase.nicodic.link
+                        NicoDicTitle = phrase.nicodic?.title,
+                        NicoDicViewTitle = phrase.nicodic?.viewTitle,
+                        NicoDicSummary = phrase.nicodic?.summary,
+                        NicoDicLink = phrase.nicodic?.link
                     });
                 }
                 ret.EasyCommentPhrases = phrases;
@@ -376,7 +376,7 @@ namespace SRNicoNico.Services {
                             OwnerId = prev.owner.id,
                             OwnerName = prev.owner.name,
                             OwnerIconUrl = prev.owner.iconUrl,
-                            RequireSensitiveMasking = prev.requiredSensitiveMasking
+                            RequireSensitiveMasking = prev.requireSensitiveMasking
                         },
                         Next = next == null ? null : new WatchApiDataSeriesVideo {
                             Id = next.id,
@@ -401,7 +401,7 @@ namespace SRNicoNico.Services {
                             OwnerId = next.owner.id,
                             OwnerName = next.owner.name,
                             OwnerIconUrl = next.owner.iconUrl,
-                            RequireSensitiveMasking = next.requiredSensitiveMasking
+                            RequireSensitiveMasking = next.requireSensitiveMasking
                         },
                         First = first == null ? null : new WatchApiDataSeriesVideo {
                             Id = first.id,
@@ -426,7 +426,7 @@ namespace SRNicoNico.Services {
                             OwnerId = first.owner.id,
                             OwnerName = first.owner.name,
                             OwnerIconUrl = first.owner.iconUrl,
-                            RequireSensitiveMasking = first.requiredSensitiveMasking
+                            RequireSensitiveMasking = first.requireSensitiveMasking
                         }
                     };
                 }
