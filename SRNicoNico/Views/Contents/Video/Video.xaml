@@ -6,9 +6,11 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:w="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
-             xmlns:v="clr-namespace:SRNicoNico.Views" xmlns:controls="clr-namespace:SRNicoNico.Views.Controls" xmlns:w="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
+             xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls" xmlns:v="clr-namespace:SRNicoNico.Views"
              d:DataContext="{d:DesignInstance Type=vm:VideoViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -26,6 +28,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="200" />
             </Grid.RowDefinitions>
@@ -63,8 +66,9 @@
             <ContentControl Grid.Row="1">
                 <w:WebView2 Source="https://google.com" />
             </ContentControl>
-            <GridSplitter Grid.Row="2" Height="5" ResizeDirection="Rows" />
-            <Grid Grid.Row="3">
+            <v:VideoController Grid.Row="2" />
+            <GridSplitter Grid.Row="3" Height="5" ResizeDirection="Rows" />
+            <Grid Grid.Row="4">
                 <ScrollViewer>
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding ApiData.Tag.Items}" Background="{DynamicResource AlternationBackgroundBrushKey}">

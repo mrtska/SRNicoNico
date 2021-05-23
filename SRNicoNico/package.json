@@ -1,0 +1,25 @@
+{
+  "author": "mrtska",
+  "name": "srniconico-html",
+  "private": true,
+  "license": "MIT",
+  "homepage": "https://mrtska.net/niconicoviewer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrtska/SRNicoNico.git"
+  },
+  "scripts": {
+    "build": "webpack -c ./Html/webpack.config.ts --mode production",
+    "dev-watch": "webpack -c ./Html/webpack.config.ts --mode development --watch"
+  },
+  "devDependencies": {
+    "typescript": "4.2.4",
+    "webpack": "5.37.1",
+    "webpack-cli": "4.7.0",
+    "ts-loader": "9.2.2",
+    "ts-node": "9.1.1",
+    "@types/node": "15.6.0",
+    "@types/webpack": "5.28.0"
+  },
+  "dependencies": {}
+}
