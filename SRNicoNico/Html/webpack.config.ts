@@ -7,6 +7,14 @@ const config: webpack.Configuration = {
         path: __dirname,
         filename: 'player.bundle.js',
     },
+    module: {
+        rules: [
+            {
+                test: /\.ts$/,
+                use: 'ts-loader'
+            }
+        ]
+    }
 };
 
 export default config;

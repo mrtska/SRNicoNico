@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using Livet;
 using SRNicoNico.Models;
@@ -10,6 +11,7 @@ namespace SRNicoNico.ViewModels {
     /// <summary>
     /// 動画再生用のViewModel
     /// </summary>
+    [ComVisible(true)]
     public class VideoViewModel : TabItemViewModel {
 
 
@@ -26,6 +28,19 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
+
+        private VideoHtml5Handler? _Html5Handler;
+
+        public VideoHtml5Handler? Html5Handler {
+            get { return _Html5Handler; }
+            set { 
+                if (_Html5Handler == value)
+                    return;
+                _Html5Handler = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private readonly IVideoService VideoService;
         private readonly string VideoId;
@@ -51,6 +66,9 @@ namespace SRNicoNico.ViewModels {
                 // タブ名を動画IDから動画タイトルに書き換える
                 Name = ApiData.Video!.Title;
 
+                Html5Handler = new VideoHtml5Handler();
+                await Html5Handler.InitializeAsync(this);
+
                 Status = string.Empty;
             } catch (StatusErrorException e) {
 
@@ -70,7 +88,7 @@ namespace SRNicoNico.ViewModels {
 
         public void Reload() {
 
-
+            
         }
 
     }
