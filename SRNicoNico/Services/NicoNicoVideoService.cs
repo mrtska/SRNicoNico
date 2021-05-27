@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DynaJson;
 using SRNicoNico.Models;
@@ -24,7 +25,6 @@ namespace SRNicoNico.Services {
             SessionService = sessionService;
         }
 
-        
         /// <inheritdoc />
         public async Task<WatchApiData> WatchAsync(string videoId, bool withoutHistory = false) {
 
@@ -47,7 +47,7 @@ namespace SRNicoNico.Services {
             }
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
             var data = json.data;
-            
+
             var ret = new WatchApiData();
 
             // コメントデータ
@@ -502,6 +502,160 @@ namespace SRNicoNico.Services {
             }
 
             return ret;
+        }
+
+
+        /// <inheritdoc />
+        public async Task<DmcSession> CreateSessionAsync(MediaSession movieSession, string? videoId = null, string? audioId = null) {
+
+            if (movieSession == null) {
+                throw new ArgumentNullException(nameof(movieSession));
+            }
+            if (movieSession.Urls.Count() == 0) {
+                throw new ArgumentException("DMCのAPI URLがありません");
+            }
+            if (movieSession.Videos.Count() == 0) {
+                throw new ArgumentException("動画データがありません");
+            }
+            if (movieSession.Audios.Count() == 0) {
+                throw new ArgumentException("音声データがありません");
+            }
+
+            string apiUrl = movieSession.Urls.First().Url!;
+
+            string video = videoId ?? movieSession.Videos.First();
+            string audio = audioId ?? movieSession.Audios.First();
+
+            var preferedProtocolHttp = movieSession.Protocols.Contains("http");
+            var preferedProtocolHls = movieSession.Protocols.Contains("hls");
+
+            // リクエストのjsonを組み立てる
+            var payload = JsonObject.Serialize(new {
+                session = new {
+                    recipe_id = movieSession.RecipeId,
+                    content_id = movieSession.ContentId,
+                    content_type = "movie",
+                    content_src_id_sets = new[] {
+                        new {
+                            content_src_ids = new[] {
+                                new {
+                                    src_id_to_mux = new {
+                                        video_src_ids = new string[] { video },
+                                        audio_src_ids = new string[] { audio }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    timing_constraint = "unlimited",
+                    keep_method = new {
+                        heartbeat = new {
+                            lifetime = movieSession.HeartbeatLifetime
+                        }
+                    },
+                    protocol = new {
+                        name = "http",
+                        parameters = new {
+                            http_parameters = new {
+                                parameters = preferedProtocolHttp ? (object)new {
+                                    http_output_download_parameters = new { }
+                                } : preferedProtocolHls ? new {
+                                    hls_parameters = (object)new {
+                                        use_well_known_port = "yes",
+                                        use_ssl = "yes",
+                                        transfer_preset = movieSession.TransferPresets.First(),
+                                        segment_duration = 6000
+                                    }
+                                } : throw new InvalidOperationException("プロトコルが不明です")
+                            }
+                        }
+                    },
+                    content_uri = "",
+                    session_operation_auth = new {
+                        session_operation_auth_by_signature = new {
+                            token = movieSession.Token,
+                            signature = movieSession.Signature
+                        }
+                    },
+                    content_auth = new {
+                        auth_type = preferedProtocolHttp ? movieSession.AuthTypesHttp : 
+                                            preferedProtocolHls ? movieSession.AuthTypesHls : throw new InvalidOperationException("authタイプが不明です"),
+                        content_key_timeout = movieSession.ContentKeyTimeout,
+                        service_id = "nicovideo",
+                        service_user_id = movieSession.ServiceUserId
+                    },
+                    client_info = new {
+                        player_id = movieSession.PlayerId
+                    },
+                    priority = movieSession.Priority
+                }
+            });
+
+            var builder = new GetRequestQueryBuilder(apiUrl)
+                .AddQuery("_format", "json");
+
+            var result = await SessionService.PostAsync(builder.Build(), payload).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+
+            return new DmcSession {
+                Id = data.session.id,
+                ContentUri = data.session.content_uri,
+                Version = data.session.version,
+                RawJson = data.ToString(),
+                ApiUrl = apiUrl
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<DmcSession> HeartbeatAsync(DmcSession dmcSession) {
+
+            if (dmcSession == null) {
+                throw new ArgumentNullException(nameof(dmcSession));
+            }
+
+            var builder = new GetRequestQueryBuilder($"{dmcSession.ApiUrl}/{dmcSession.Id}")
+                .AddQuery("_format", "json")
+                .AddQuery("_method", "PUT");
+
+            var result = await SessionService.PostAsync(builder.Build(), dmcSession.RawJson!).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+
+            return new DmcSession {
+                Id = data.session.id,
+                ContentUri = data.session.content_uri,
+                Version = data.session.version,
+                RawJson = data.ToString(),
+                ApiUrl = dmcSession.ApiUrl
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task DeleteSessionAsync(DmcSession dmcSession) {
+
+            if (dmcSession == null) {
+                throw new ArgumentNullException(nameof(dmcSession));
+            }
+
+            var builder = new GetRequestQueryBuilder($"{dmcSession.ApiUrl}/{dmcSession.Id}")
+                .AddQuery("_format", "json")
+                .AddQuery("_method", "DELETE");
+
+            var result = await SessionService.PostAsync(builder.Build(), dmcSession.RawJson!).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
         }
     }
 }

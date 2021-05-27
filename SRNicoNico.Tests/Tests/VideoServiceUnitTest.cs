@@ -69,5 +69,31 @@ namespace SRNicoNico.Tests {
             Assert.NotNull(result.Video.WatchableUserTypeForPayment);
             Assert.NotNull(result.Video.CommentableUserTypeForPayment);
         }
+
+        /// <summary>
+        /// DMCセッションを作成してハートビートを送る事ができることのテスト
+        /// </summary>
+        [Fact]
+        public async Task HeartbeatUnitTest() {
+
+            var result = await VideoService.WatchAsync("sm9", true);
+
+            // セッションを作成
+            var session = await VideoService.CreateSessionAsync(result.Media.Movie.Session);
+            Assert.NotNull(session);
+
+            // 1秒待つ
+            await Task.Delay(1000);
+
+            // ハートビート
+            session = await VideoService.HeartbeatAsync(session);
+            Assert.NotNull(session);
+
+            // 1秒待つ
+            await Task.Delay(1000);
+
+            // セッション削除
+            await VideoService.DeleteSessionAsync(session);
+        }
     }
 }
