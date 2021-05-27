@@ -52,6 +52,15 @@ namespace SRNicoNico.ViewModels {
         public void Add(VideoViewModel vm) {
 
             TabItems.Add(vm);
+
+            // ステータスプロパティが更新されたら動画タブのステータスに反映させる
+            vm.PropertyChanged += (o, e) => {
+                var tabItem = (TabItemViewModel)o;
+                if (e.PropertyName == nameof(Status)) {
+
+                    Status = tabItem.Status;
+                }
+            };
             // 動画タブがDisposeされたら自動的にリストから削除する
             vm.CompositeDisposable.Add(() => {
 

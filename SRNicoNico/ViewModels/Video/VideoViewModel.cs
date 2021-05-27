@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using Livet;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
@@ -41,6 +42,8 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private DmcSession? DmcSession;
+        private Timer? HeartbeatTimer;
 
         private readonly IVideoService VideoService;
         private readonly string VideoId;
@@ -67,7 +70,9 @@ namespace SRNicoNico.ViewModels {
                 Name = ApiData.Video!.Title;
 
                 Html5Handler = new VideoHtml5Handler();
-                await Html5Handler.InitializeAsync(this);
+
+                DmcSession = await VideoService.CreateSessionAsync(ApiData.Media!.Movie!.Session!);
+                await Html5Handler.InitializeAsync(this, DmcSession.ContentUri!);
 
                 Status = string.Empty;
             } catch (StatusErrorException e) {

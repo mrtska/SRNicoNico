@@ -1,35 +1,31 @@
-﻿declare namespace chrome {
-    export var webview: WebView;
-};
+﻿import './style.scss';
 
-interface WebView {
-    hostObjects: HostObjects;
-    addEventListener(eventName, listener: (this: WebView, event: any) => any);
-};
+function postMessage(message: any) {
 
-interface HostObjects {
-    vm: VideoViewModel;
-    sync: SyncProxy; // 同期プロキシ / sync proxy
-};
-
-interface SyncProxy {
-    vm: VideoViewModel;
-};
-
-interface VideoViewModel {
-    GetString(): string;
-};
+    if (window.chrome.webview) {
+        window.chrome.webview.postMessage(message);
+    }
+}
 
 /**
  * 動画を制御するクラス
  * */
 class VideoHandler {
 
+    private video: HTMLVideoElement;
 
+    constructor() {
 
+        this.video = document.getElementById("video") as HTMLVideoElement;
+    }
+
+    public initialize(contentUri: string) {
+
+        this.video.src = contentUri;
+        this.video.play();
+    }
 
 };
-
 
 /**
  * 動画プレイヤーを制御するクラス
@@ -40,27 +36,35 @@ class PlayerHandler {
     private video: VideoHandler;
 
     constructor() {
-        this.vm = window.chrome.webview.hostObjects.sync.vm;
+        this.vm = window.chrome.webview?.hostObjects?.sync.vm;
         this.video = new VideoHandler();
     }
 
     public playerloop(): void {
-
+        
 
     }
 
-    public messageReceived(message: string): void {
+    public messageReceived(message: any): void {
 
-        alert(message);
+        const type = message.type as string;
+        const value = message.value as string;
+        if (type === 'setContent') {
+            this.video.initialize(value);
+        }
     }
 
 };
 
 const player = new PlayerHandler();
 
-window.chrome.webview.addEventListener('message', event => {
+window.chrome.webview?.addEventListener('message', event => {
 
     player.messageReceived(event.data);
 });
 
 
+// ブラウザ側の初期化が完了したことを.NET側に通知する
+postMessage({
+    type: 'initialized'
+});
