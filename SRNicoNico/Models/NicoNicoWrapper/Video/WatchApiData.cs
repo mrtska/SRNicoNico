@@ -58,6 +58,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// 動画情報
         /// </summary>
         public WatchApiDataVideo? Video { get; set; }
+
+        /// <summary>
+        /// 視聴者情報
+        /// </summary>
+        public WatchApiDataViewer? Viewer { get; set; }
     }
 
     public class WatchApiDataComment {
@@ -80,6 +85,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// スレッドのリスト
         /// </summary>
         public IEnumerable<CommentThread>? Threads { get; set; }
+
+        /// <summary>
+        /// 動画の長さ
+        /// </summary>
+        internal int VideoDuration { get; set; }
+
+        /// <summary>
+        /// 視聴者のユーザーID
+        /// </summary>
+        internal string? UserId { get; set; }
     }
 
     public class CommentLayer {
@@ -628,5 +643,25 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public bool IsOwner { get; set; }
         public bool IsLiked { get; set; }
         public int? LikeCount { get; set; }
+    }
+
+    /// <summary>
+    /// 視聴者情報
+    /// </summary>
+    public class WatchApiDataViewer {
+        /// <summary>
+        /// ユーザーID
+        /// </summary>
+        public string? Id { get; set; }
+
+        /// <summary>
+        /// ニックネーム
+        /// </summary>
+        public string? Nickname { get; set; }
+
+        /// <summary>
+        /// プレミアム会員かどうか
+        /// </summary>
+        public bool IsPremium { get; set; }
     }
 }

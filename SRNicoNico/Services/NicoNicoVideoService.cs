@@ -499,6 +499,20 @@ namespace SRNicoNico.Services {
                     WatchableUserTypeForPayment = video.watchableUserTypeForPayment,
                     CommentableUserTypeForPayment = video.commentableUserTypeForPayment
                 };
+
+                ret.Comment.VideoDuration = ret.Video.Duration;
+            }
+
+            // 視聴者データ
+            {
+                var viewer = data.viewer;
+                ret.Viewer = new WatchApiDataViewer {
+                    Id = viewer.id.ToString(),
+                    Nickname = viewer.nickname,
+                    IsPremium = viewer.isPremium
+                };
+
+                ret.Comment.UserId = ret.Viewer.Id;
             }
 
             return ret;
@@ -578,7 +592,7 @@ namespace SRNicoNico.Services {
                         }
                     },
                     content_auth = new {
-                        auth_type = preferedProtocolHttp ? movieSession.AuthTypesHttp : 
+                        auth_type = preferedProtocolHttp ? movieSession.AuthTypesHttp :
                                             preferedProtocolHls ? movieSession.AuthTypesHls : throw new InvalidOperationException("authタイプが不明です"),
                         content_key_timeout = movieSession.ContentKeyTimeout,
                         service_id = "nicovideo",
@@ -656,6 +670,206 @@ namespace SRNicoNico.Services {
 
                 throw new StatusErrorException(result.StatusCode);
             }
+        }
+
+        /// <summary>
+        /// 動画の長さに合わせて取得するコメントの量を調整する
+        /// </summary>
+        /// <param name="duration">動画の長さ</param>
+        /// <returns></returns>
+        private int GetCommentVolume(int duration) {
+
+            if (duration < 60) {
+                return 100;
+            }
+            if (duration < 300) {
+                return 250;
+            }
+            if (duration < 600) {
+                return 500;
+            }
+            return 1000;
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<VideoCommentThread>> GetCommentAsync(WatchApiDataComment comment) {
+
+            if (comment == null) {
+                throw new ArgumentNullException(nameof(comment));
+            }
+
+            var payloadList = new List<dynamic>();
+            payloadList.Add(new { ping = new { content = "rs:0" } });
+
+            int i = 0;
+            var indexMap = new Dictionary<int, int>();
+            foreach (var thread in comment.Threads!) {
+
+                if (thread == null) {
+                    continue;
+                }
+                // アクティブでないスレッドは取得しない
+                if (!thread.IsActive) {
+                    continue;
+                }
+                payloadList.Add(new { ping = new { content = $"ps:{i}" } });
+
+                // 投稿者コメントの場合
+                if (thread.IsOwnerThread) {
+
+                    payloadList.Add(new {
+                        thread = new {
+                            fork = thread.Fork,
+                            language = 0,
+                            nicoru = 3,
+                            scores = 1,
+                            thread = thread.Id,
+                            user_id = comment.UserId,
+                            userkey = comment.UserKey,
+                            with_global = 1,
+                            version = "20061206",
+                            res_from = -1000
+                        }
+                    });
+                } else if (thread.IsDefaultPostTarget || thread.IsEasyCommentPostTarget) { // 通常コメント、かんたんコメントの場合
+
+                    payloadList.Add(new {
+                        thread = new {
+                            fork = thread.Fork,
+                            language = 0,
+                            nicoru = 3,
+                            scores = 1,
+                            thread = thread.Id,
+                            user_id = comment.UserId,
+                            userkey = comment.UserKey,
+                            with_global = 1,
+                            version = "20090904"
+                        }
+                    });
+                }
+
+                indexMap[i] = thread.Fork;
+                payloadList.Add(new { ping = new { content = $"rs:{i++}" } });
+
+                if (thread.IsLeafRequired) {
+
+                    payloadList.Add(new { ping = new { content = $"ps:{i}" } });
+
+                    var leafNum = thread.IsEasyCommentPostTarget ? 25 : 100;
+                    var resFrom = GetCommentVolume(comment.VideoDuration);
+                    if (thread.IsEasyCommentPostTarget) {
+                        resFrom = (int)Math.Floor(resFrom * 0.25);
+                    }
+
+                    payloadList.Add(new {
+                        thread_leaves = new {
+                            content = $"0-{(comment.VideoDuration / 60) + 1}:{leafNum},{resFrom},nicoru:100",
+                            fork = thread.Fork,
+                            language = 0,
+                            nicoru = 3,
+                            scores = 1,
+                            thread = thread.Id,
+                            user_id = comment.UserId,
+                            userkey = comment.UserKey
+                        }
+                    });
+                    indexMap[i] = thread.Fork;
+                    payloadList.Add(new { ping = new { content = $"rs:{i++}" } });
+                }
+            }
+
+            payloadList.Add(new { ping = new { content = "rf:0" } });
+
+            var result = await SessionService.PostAsync(comment.ServerUrl!.Replace("api/", "api.json"), JsonObject.Serialize(payloadList)).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            var ret = new List<VideoCommentThread>();
+
+            var currentFork = -1;
+            foreach (var item in json) {
+
+                if (item == null) {
+                    continue;
+                }
+                if (item.ping()) {
+
+                    if (item.ping.content.StartsWith("ps")) {
+                        currentFork = indexMap[int.Parse(item.ping.content.Split(':')[1])];
+                    }
+                    continue;
+                }
+                if (currentFork == -1) {
+                    continue;
+                }
+                // 対象のスレッドクラスを取得する 無ければ作成する
+                var target = ret.SingleOrDefault(s => s.Fork == currentFork);
+                if (target == null) {
+
+                    target = new VideoCommentThread {
+                        Fork = currentFork,
+                        Leaves = new List<VideoCommentLeaf>(),
+                        Entries = new List<VideoCommentEntry>()
+                    };
+                    ret.Add(target);
+                }
+
+                if (item.thread()) {
+
+                    var thread = item.thread;
+
+                    target.ResultCode = (ThreadResultCode)thread.resultcode;
+                    target.Id = thread.thread;
+                    target.ServerTime = (long)thread.server_time;
+                    target.LastRes = (int)thread.last_res;
+                    target.Ticket = thread.ticket;
+                    target.Revision = (int)thread.revision;
+                    target.ClickRevision = thread.click_revision() ? (int?)thread.click_revision : null;
+                    continue;
+                }
+
+                if (item.leaf()) {
+
+                    var leaf = item.leaf;
+
+                    target.Leaves!.Add(new VideoCommentLeaf {
+                        Fork = leaf.fork() ? (int)leaf.fork : 0,
+                        Count = (int)leaf.count,
+                        Leaf = leaf.leaf() ? (int)leaf.leaf : 0,
+                        ThreadId = leaf.thread
+                    });
+                    continue;
+                }
+
+                if (item.chat()) {
+
+                    var chat = item.chat;
+
+                    target.Entries!.Add(new VideoCommentEntry {
+                        ThreadId = chat.thread,
+                        Fork = chat.fork() ? (int)chat.fork : 0,
+                        Number = (int)chat.no,
+                        Vpos = (int)chat.vpos,
+                        Leaf = chat.leaf() ? (int)chat.leaf : 0,
+                        Anonymity = chat.anonymity(),
+                        Date = (long)chat.date,
+                        DateUsec = chat.date_usec() ? (int)chat.date_usec : 0,
+                        Content = chat.content() ? chat.content : null,
+                        Deleted = chat.deleted(),
+                        Mail = chat.mail() ? chat.mail : null,
+                        UserId = chat.user_id() ? chat.user_id : null,
+                        Nicoru = chat.nicoru() ? (int)chat.nicoru : 0,
+                        Premium = chat.premium(),
+                        Score = chat.score() ? (int)chat.score : 0,
+                        LastNicoruDate = chat.last_nicoru_date() ? chat.last_nicoru_date : null
+                    });
+                }
+            }
+            return ret;
         }
     }
 }

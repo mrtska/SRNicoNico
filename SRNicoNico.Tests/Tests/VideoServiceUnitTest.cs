@@ -68,10 +68,13 @@ namespace SRNicoNico.Tests {
             Assert.NotNull(result.Video.ThumbnailOgp);
             Assert.NotNull(result.Video.WatchableUserTypeForPayment);
             Assert.NotNull(result.Video.CommentableUserTypeForPayment);
+
+            Assert.NotNull(result.Viewer.Id);
+            Assert.NotNull(result.Viewer.Nickname);
         }
 
         /// <summary>
-        /// DMCセッションを作成してハートビートを送る事ができることのテスト
+        /// DMCセッションを作成してハートビートを送る事が出来ることのテスト
         /// </summary>
         [Fact]
         public async Task HeartbeatUnitTest() {
@@ -95,5 +98,20 @@ namespace SRNicoNico.Tests {
             // セッション削除
             await VideoService.DeleteSessionAsync(session);
         }
+
+        /// <summary>
+        /// コメントを取得することが出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetCommentUnitTest() {
+
+            var result = await VideoService.WatchAsync("sm9", true);
+
+            var comments = await VideoService.GetCommentAsync(result.Comment);
+
+            Assert.NotEmpty(comments);
+        }
+
+
     }
 }

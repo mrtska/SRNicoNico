@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.Services {
@@ -38,5 +39,12 @@ namespace SRNicoNico.Services {
         /// </summary>
         /// <param name="dmcSession">セッション</param>
         Task DeleteSessionAsync(DmcSession dmcSession);
+
+        /// <summary>
+        /// コメントデータを取得する
+        /// </summary>
+        /// <param name="comment">コメント情報</param>
+        /// <returns>コメント取得結果</returns>
+        Task<IEnumerable<VideoCommentThread>> GetCommentAsync(WatchApiDataComment comment);
     }
 }
