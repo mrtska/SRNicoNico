@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     /// <summary>
@@ -32,6 +33,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// コメントリスト
         /// </summary>
         public List<VideoCommentEntry>? Entries { get; set; }
+
+        public string? Label { get; set; }
     }
 
     public class VideoCommentLeaf {
@@ -72,14 +75,9 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public int Fork { get; set; }
 
         /// <summary>
-        /// コメント投稿時間 Unixタイム
+        /// コメント投稿時間
         /// </summary>
-        public long Date { get; set; }
-
-        /// <summary>
-        /// コメント投稿時間の小数点以下マイクロ秒
-        /// </summary>
-        public int DateUsec { get; set; }
+        public DateTimeOffset DateTime { get; set; }
 
         /// <summary>
         /// NGスコア 健全な人は0, NG登録されるとどんどんマイナスになっていく

@@ -813,7 +813,8 @@ namespace SRNicoNico.Services {
                     target = new VideoCommentThread {
                         Fork = currentFork,
                         Leaves = new List<VideoCommentLeaf>(),
-                        Entries = new List<VideoCommentEntry>()
+                        Entries = new List<VideoCommentEntry>(),
+                        Label = comment.Threads.Single(s => s.Fork == currentFork).Label
                     };
                     ret.Add(target);
                 }
@@ -849,6 +850,13 @@ namespace SRNicoNico.Services {
 
                     var chat = item.chat;
 
+                    var datetime = DateTimeOffset.FromUnixTimeSeconds((long)chat.date);
+                    if (chat.date_usec()) {
+
+                        // 1tickは100ナノ秒らしいのでマイクロ秒に10を掛けたtickを追加する
+                        datetime.Add(TimeSpan.FromTicks((long)(chat.date_usec * 10)));
+                    }
+
                     target.Entries!.Add(new VideoCommentEntry {
                         ThreadId = chat.thread,
                         Fork = chat.fork() ? (int)chat.fork : 0,
@@ -856,8 +864,7 @@ namespace SRNicoNico.Services {
                         Vpos = (int)chat.vpos,
                         Leaf = chat.leaf() ? (int)chat.leaf : 0,
                         Anonymity = chat.anonymity(),
-                        Date = (long)chat.date,
-                        DateUsec = chat.date_usec() ? (int)chat.date_usec : 0,
+                        DateTime = datetime,
                         Content = chat.content() ? chat.content : null,
                         Deleted = chat.deleted(),
                         Mail = chat.mail() ? chat.mail : null,

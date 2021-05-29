@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using DynaJson;
 using Microsoft.Web.WebView2.Core;
@@ -44,10 +43,7 @@ namespace SRNicoNico.ViewModels {
                     case "initialized": // ブラウザ側の初期化が終わったので動画URLをブラウザに送信する
                         WebView?.CoreWebView2.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setContent", value = contentUri }));
                         break;
-                        
                 }
-
-
             };
 
             Initialized = true;

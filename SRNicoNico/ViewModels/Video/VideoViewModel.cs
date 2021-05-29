@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using Livet;
 using SRNicoNico.Models;
@@ -26,6 +25,20 @@ namespace SRNicoNico.ViewModels {
                 if (_ApiData == value)
                     return;
                 _ApiData = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private VideoCommentViewModel? _Comment;
+        /// <summary>
+        /// コメント部分のViewModel
+        /// </summary>
+        public VideoCommentViewModel? Comment {
+            get { return _Comment; }
+            set { 
+                if (_Comment == value)
+                    return;
+                _Comment = value;
                 RaisePropertyChanged();
             }
         }
@@ -69,10 +82,34 @@ namespace SRNicoNico.ViewModels {
                 // タブ名を動画IDから動画タイトルに書き換える
                 Name = ApiData.Video!.Title;
 
+                // WebViewが既にある場合は破棄する
+                if (Html5Handler != null) {
+
+                    CompositeDisposable.Remove(Html5Handler);
+                    Html5Handler.Dispose();
+                }
                 Html5Handler = new VideoHtml5Handler();
+                CompositeDisposable.Add(Html5Handler);
 
                 DmcSession = await VideoService.CreateSessionAsync(ApiData.Media!.Movie!.Session!);
                 await Html5Handler.InitializeAsync(this, DmcSession.ContentUri!);
+
+                // タイマーが既に動いている場合は止める
+                if (HeartbeatTimer != null) {
+                    CompositeDisposable.Remove(HeartbeatTimer);
+                    HeartbeatTimer.Dispose();
+                }
+
+                HeartbeatTimer = new Timer(async (_) => {
+                    DmcSession = await VideoService.HeartbeatAsync(DmcSession);
+                }, null, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3);
+
+                CompositeDisposable.Add(HeartbeatTimer);
+
+                // コメント部分を初期化する
+                Comment = new VideoCommentViewModel(VideoService);
+                Comment.Initialize(ApiData.Comment!);
+
 
                 Status = string.Empty;
             } catch (StatusErrorException e) {
@@ -90,10 +127,12 @@ namespace SRNicoNico.ViewModels {
             Dispose();
         }
 
-
+        /// <summary>
+        /// 動画を再読み込みする
+        /// </summary>
         public void Reload() {
 
-            
+            Loaded();
         }
 
     }

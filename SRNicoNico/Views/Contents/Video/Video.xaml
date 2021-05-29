@@ -31,14 +31,14 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="200" />
             </Grid.RowDefinitions>
-            <Grid Background="{DynamicResource BackgroundBrushKey}">
+            <Grid Background="{DynamicResource BackgroundBrushKey}" Height="28">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock FontSize="18" Text="{Binding ApiData.Video.Title}" ToolTip="{Binding ApiData.Video.Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <controls:RoundButton ToolTip="ブラウザで開く" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5 Z">
+                    <controls:RoundButton ToolTip="ブラウザで開く" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5 Z" Margin="0,0,5,0">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
                                 <l:LivetCallMethodAction MethodTarget="{Binding Html5Handler}" MethodName="Pause" />
@@ -46,14 +46,14 @@
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </controls:RoundButton>
-                    <controls:RoundButton ToolTip="更新" IconData="{StaticResource ReloadIcon}">
+                    <controls:RoundButton ToolTip="更新" IconData="{StaticResource ReloadIcon}" Margin="0,0,5,0">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
                                 <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Reload" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </controls:RoundButton>
-                    <controls:RoundButton ToolTip="閉じる" IconData="{StaticResource CloseIcon}">
+                    <controls:RoundButton ToolTip="閉じる" IconData="{StaticResource CloseIcon}" Margin="0,0,5,0">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
                                 <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Close" />
@@ -135,7 +135,11 @@
         </Grid>
         
         <Grid Grid.Column="1" Width="250">
-            
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <v:VideoComment DataContext="{Binding Comment}" />
         </Grid>
         
     </Grid>
