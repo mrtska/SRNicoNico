@@ -4,10 +4,44 @@
     xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
     xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors">
     <Style TargetType="{x:Type local:SeekBar}">
-        <Setter Property="Padding" Value="5" />
+        <Setter Property="Height" Value="12" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SeekBar}">
+                    <Grid>
+                        <Rectangle Fill="{DynamicResource ActiveBackgroundBrushKey}" />
+                        <ItemsControl Panel.ZIndex="1" ItemsSource="{TemplateBinding BufferedRange}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type local:TimeRange}">
+                                    <Canvas>
+                                        <Rectangle Canvas.Left="{Binding Left}" Height="12" Width="{Binding Width}" HorizontalAlignment="Left" Fill="#FF555555" />
+                                    </Canvas>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <ItemsControl Panel.ZIndex="2" ItemsSource="{TemplateBinding PlayedRange}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type local:TimeRange}">
+                                    <Canvas>
+                                        <Rectangle Canvas.Left="{Binding Left}" Height="12" Width="{Binding Width}" HorizontalAlignment="Left" Fill="{DynamicResource AccentBrushKey}" />
+                                    </Canvas>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Canvas Panel.ZIndex="3">
+                            <Rectangle Canvas.Top="0" Name="Thumb_PART" HorizontalAlignment="Left" Width="10" Height="{TemplateBinding Height}" Fill="#FF8B8B8B" />
+                        </Canvas>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

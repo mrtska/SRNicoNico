@@ -1,6 +1,6 @@
 ﻿import './style.scss';
 
-function postMessage(message: any) {
+function postMessage(message: Message) {
 
     if (window.chrome.webview) {
         window.chrome.webview.postMessage(message);
@@ -31,9 +31,11 @@ class VideoHandler {
 
             postMessage({
                 type: 'info',
-                width: this.videoElement.videoWidth,
-                height: this.videoElement.videoHeight,
-                duration: this.videoElement.duration
+                value: {
+                    width: this.videoElement.videoWidth,
+                    height: this.videoElement.videoHeight,
+                    duration: this.videoElement.duration
+                }
             });
         });
 
@@ -83,6 +85,32 @@ class PlayerHandler {
     public playerloop(): void {
 
         this.vm.CurrentTime = this.video.getCurrentTime();
+
+        const played = this.video.getPlayedTimeRanges();
+        const buffered = this.video.getBufferedTimeRanges();
+
+        const notify = {
+            played: Array<any>(),
+            buffered: Array<any>()
+        };
+
+        for (let i = 0; i < played.length; i++) {
+            notify.played.push({
+                start: played.start(i),
+                end: played.end(i)
+            });
+        }
+        for (let i = 0; i < buffered.length; i++) {
+            notify.buffered.push({
+                start: buffered.start(i),
+                end: buffered.end(i)
+            });
+        }
+
+        postMessage({
+            type: 'loop',
+            value: notify
+        });
     }
 
     public messageReceived(message: any): void {

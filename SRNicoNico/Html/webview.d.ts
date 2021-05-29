@@ -3,10 +3,15 @@ declare namespace chrome {
     export var webview: WebView;
 }
 
+interface Message {
+    type: string;
+    value?: any;
+}
+
 interface WebView {
     hostObjects: HostObjects;
     addEventListener(eventName: string, listener: (this: WebView, event: any) => any): void;
-    postMessage(message: string): void;
+    postMessage(message: Message): void;
 }
 
 interface HostObjects {

@@ -6,6 +6,7 @@ using Livet;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Services;
+using SRNicoNico.Views.Controls;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
@@ -127,16 +128,44 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        private double? _ActualVideoDuration;
+        private double _ActualVideoDuration = 0;
         /// <summary>
         /// 実際の動画の長さ
         /// </summary>
-        public double? ActualVideoDuration {
+        public double ActualVideoDuration {
             get { return _ActualVideoDuration; }
             set { 
                 if (_ActualVideoDuration == value)
                     return;
                 _ActualVideoDuration = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private ObservableSynchronizedCollection<TimeRange> _PlayedRange = new ObservableSynchronizedCollection<TimeRange>();
+        /// <summary>
+        /// 再生済みの時間幅のリスト
+        /// </summary>
+        public ObservableSynchronizedCollection<TimeRange> PlayedRange {
+            get { return _PlayedRange; }
+            set { 
+                if (_PlayedRange == value)
+                    return;
+                _PlayedRange = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private ObservableSynchronizedCollection<TimeRange> _BufferedRange = new ObservableSynchronizedCollection<TimeRange>();
+        /// <summary>
+        /// バッファ済みの時間幅のリスト
+        /// </summary>
+        public ObservableSynchronizedCollection<TimeRange> BufferedRange {
+            get { return _BufferedRange; }
+            set { 
+                if (_BufferedRange == value)
+                    return;
+                _BufferedRange = value;
                 RaisePropertyChanged();
             }
         }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DynaJson;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
+using SRNicoNico.Views.Controls;
 
 namespace SRNicoNico.ViewModels {
     public class VideoHtml5Handler : IDisposable {
@@ -52,9 +53,28 @@ namespace SRNicoNico.ViewModels {
                         vm.TogglePlay();
                         break;
                     case "info":
-                        vm.ActualVideoWidth = (int)json.width;
-                        vm.ActualVideoHeight = (int)json.height;
-                        vm.ActualVideoDuration = json.duration;
+                        vm.ActualVideoWidth = (int)json.value.width;
+                        vm.ActualVideoHeight = (int)json.value.height;
+                        vm.ActualVideoDuration = json.value.duration;
+                        break;
+                    case "loop":
+                        // 再生済みの位置やバッファ済みの位置をWebViewから取得する
+                        vm.PlayedRange.Clear();
+                        foreach (var played in json.value.played) {
+
+                            if (played == null) {
+                                continue;
+                            }
+                            vm.PlayedRange.Add(new TimeRange((float)played.start, (float)played.end));
+                        }
+                        vm.BufferedRange.Clear();
+                        foreach (var buffered in json.value.buffered) {
+
+                            if (buffered == null) {
+                                continue;
+                            }
+                            vm.BufferedRange.Add(new TimeRange((float)buffered.start, (float)buffered.end));
+                        }
                         break;
                 }
             };
