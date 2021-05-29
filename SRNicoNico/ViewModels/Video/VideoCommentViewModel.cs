@@ -12,7 +12,6 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class VideoCommentViewModel : TabItemViewModel {
 
-
         private ObservableSynchronizedCollection<VideoCommentThread> _CommentThreads = new ObservableSynchronizedCollection<VideoCommentThread>();
         /// <summary>
         /// コメントのスレッド
@@ -80,8 +79,5 @@ namespace SRNicoNico.ViewModels {
                 IsActive = false;
             }
         }
-
-
-
     }
 }

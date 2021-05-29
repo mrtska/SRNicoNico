@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using DynaJson;
@@ -19,19 +20,23 @@ namespace SRNicoNico.ViewModels {
 
         public VideoHtml5Handler() {
 
-            WebView = new WebView2 { Source = new Uri(GetHtml5PlayerPath()) };
+            WebView = new WebView2 { DefaultBackgroundColor = Color.Black };
         }
 
         /// <summary>
         /// 指定したViewModelでWebViewを初期化する
         /// </summary>
         /// <param name="vm">JavaScript環境に露出するViewModel</param>
+        /// <param name="contentUri">動画URL</param>
         public async Task InitializeAsync(VideoViewModel vm, string contentUri) {
 
             if (WebView == null || Initialized) {
                 return;
             }
             await WebView.EnsureCoreWebView2Async();
+            WebView.CoreWebView2.Settings.IsZoomControlEnabled = false;
+            WebView.CoreWebView2.SetVirtualHostNameToFolderMapping("srniconico", GetHtml5PlayerPath(), CoreWebView2HostResourceAccessKind.Allow);
+            WebView.Source = new Uri("http://srniconico/player.html");
             WebView.CoreWebView2.AddHostObjectToScript("vm", vm);
 
             WebView.CoreWebView2.WebMessageReceived += (o, e) => {
@@ -41,7 +46,15 @@ namespace SRNicoNico.ViewModels {
 
                 switch (type) {
                     case "initialized": // ブラウザ側の初期化が終わったので動画URLをブラウザに送信する
-                        WebView?.CoreWebView2.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setContent", value = contentUri }));
+                        WebView?.CoreWebView2.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setContent", value = new { contentUri, volume = vm.Volume, autoplay = true } }));
+                        break;
+                    case "clicked":
+                        vm.TogglePlay();
+                        break;
+                    case "info":
+                        vm.ActualVideoWidth = (int)json.width;
+                        vm.ActualVideoHeight = (int)json.height;
+                        vm.ActualVideoDuration = json.duration;
                         break;
                 }
             };
@@ -49,13 +62,27 @@ namespace SRNicoNico.ViewModels {
             Initialized = true;
         }
 
+        public void Seek(int position) {
+
+            WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "seek", value = position }));
+        }
+
+        public void SetVolume(float volume) {
+
+            WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setVolume", value = volume }));
+        }
+
+
         /// <summary>
         /// 動画プレイヤーのパスを返す
         /// </summary>
         /// <returns>ファイルパス</returns>
         private string GetHtml5PlayerPath() {
-
-            return Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, "Html/player.html");
+#if DEBUG
+            return Environment.GetEnvironmentVariable("SRNICONICO_HTML_PATH") ?? Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, "Html");
+#else
+            return Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, "Html");
+#endif
         }
 
         public void Dispose() {

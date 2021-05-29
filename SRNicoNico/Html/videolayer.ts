@@ -12,19 +12,57 @@ function postMessage(message: any) {
  * */
 class VideoHandler {
 
-    private video: HTMLVideoElement;
+    private videoElement: HTMLVideoElement;
 
     constructor() {
 
-        this.video = document.getElementById("video") as HTMLVideoElement;
+        this.videoElement = document.getElementById("video") as HTMLVideoElement;
     }
 
-    public initialize(contentUri: string) {
+    public initialize(contentUri: string, volume: number, autoplay: boolean) {
 
-        this.video.src = contentUri;
-        this.video.play();
+        this.videoElement.addEventListener('click', e => {
+            // 動画部分がクリックされたら.NET側に通知する
+            postMessage({
+                type: 'clicked'
+            });
+        });
+        this.videoElement.addEventListener('loadedmetadata', e => {
+
+            postMessage({
+                type: 'info',
+                width: this.videoElement.videoWidth,
+                height: this.videoElement.videoHeight,
+                duration: this.videoElement.duration
+            });
+        });
+
+        this.videoElement.src = contentUri;
+        this.videoElement.volume = volume;
+        if (autoplay) {
+            this.videoElement.play();
+        }
     }
 
+    public getCurrentTime(): number {
+        return this.videoElement.currentTime;
+    }
+
+    public seek(position: number): void {
+        this.videoElement.currentTime = position;
+    }
+
+    public setVolume(volume: number): void {
+        this.videoElement.volume = volume;
+    }
+
+    public getPlayedTimeRanges(): TimeRanges {
+        return this.videoElement.played;
+    }
+
+    public getBufferedTimeRanges(): TimeRanges {
+        return this.videoElement.buffered;
+    }
 };
 
 /**
@@ -36,22 +74,34 @@ class PlayerHandler {
     private video: VideoHandler;
 
     constructor() {
-        this.vm = window.chrome.webview?.hostObjects?.sync.vm;
+        this.vm = window.chrome.webview?.hostObjects?.vm;
         this.video = new VideoHandler();
+
+        setInterval(() => this.playerloop(), 1000 / 60);
     }
 
     public playerloop(): void {
-        
 
+        this.vm.CurrentTime = this.video.getCurrentTime();
     }
 
     public messageReceived(message: any): void {
-
+        
         const type = message.type as string;
-        const value = message.value as string;
-        if (type === 'setContent') {
-            this.video.initialize(value);
+        const value = message.value;
+
+        switch (type) {
+            case 'setContent':
+                this.video.initialize(value.contentUri, value.volume, value.autoplay);
+                break;
+            case 'seek':
+                this.video.seek(value);
+                break;
+            case 'setVolume':
+                this.video.setVolume(value);
+                break;
         }
+
     }
 
 };
@@ -62,7 +112,6 @@ window.chrome.webview?.addEventListener('message', event => {
 
     player.messageReceived(event.data);
 });
-
 
 // ブラウザ側の初期化が完了したことを.NET側に通知する
 postMessage({

@@ -58,9 +58,11 @@
                         <Grid.ToolTip>
                             <TextBlock>
                                 <Run Text="{Binding Number, StringFormat={}{0:N0}}" />
+                                <Run Text="{Binding DateTime, StringFormat='yyyy年M月d日 HH:mm:ss'}" />
+                                <LineBreak />
                                 <Run Text="{Binding Content}" />
-                                <Run Text="{Binding DateTime, StringFormat='yyyy年m月d日 HH:MM:ss'}" />
-                                (<Run Text="{Binding Mail}" />)
+                                <LineBreak />
+                                <Run Text="{Binding Mail}" />
                             </TextBlock>
                         </Grid.ToolTip>
                         <Grid.ColumnDefinitions>

@@ -55,6 +55,92 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private double _CurrentTime;
+        /// <summary>
+        /// 現在の再生時間
+        /// </summary>
+        public double CurrentTime {
+            get { return _CurrentTime; }
+            set { 
+                if (_CurrentTime == value)
+                    return;
+                _CurrentTime = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private float _Volume = 0.3F;
+        /// <summary>
+        /// 音量
+        /// </summary>
+        public float Volume {
+            get { return _Volume; }
+            set { 
+                if (_Volume == value)
+                    return;
+                _Volume = value;
+                RaisePropertyChanged();
+                Html5Handler?.SetVolume(value);
+            }
+        }
+
+        private bool _PlayState;
+        /// <summary>
+        /// Trueの時は再生中
+        /// Falseの時は一時停止
+        /// </summary>
+        public bool PlayState {
+            get { return _PlayState; }
+            set { 
+                if (_PlayState == value)
+                    return;
+                _PlayState = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int? _ActualVideoWidth;
+        /// <summary>
+        /// 再生している動画の実際の横幅
+        /// </summary>
+        public int? ActualVideoWidth {
+            get { return _ActualVideoWidth; }
+            set { 
+                if (_ActualVideoWidth == value)
+                    return;
+                _ActualVideoWidth = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int? _ActualVideoHeight;
+        /// <summary>
+        /// 再生している動画の実際の縦幅
+        /// </summary>
+        public int? ActualVideoHeight {
+            get { return _ActualVideoHeight; }
+            set { 
+                if (_ActualVideoHeight == value)
+                    return;
+                _ActualVideoHeight = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private double? _ActualVideoDuration;
+        /// <summary>
+        /// 実際の動画の長さ
+        /// </summary>
+        public double? ActualVideoDuration {
+            get { return _ActualVideoDuration; }
+            set { 
+                if (_ActualVideoDuration == value)
+                    return;
+                _ActualVideoDuration = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private DmcSession? DmcSession;
         private Timer? HeartbeatTimer;
 
@@ -121,7 +207,33 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        /// <summary>
+        /// 再生と一時停止を切り替える
+        /// </summary>
+        public void TogglePlay() {
 
+        }
+
+        /// <summary>
+        /// 指定した位置にシークする
+        /// </summary>
+        /// <param name="position">シークしたい位置 秒</param>
+        public void Seek(int position) {
+
+            Html5Handler?.Seek(position);
+        }
+
+        /// <summary>
+        /// 動画を最初から再生する
+        /// </summary>
+        public void Restart() {
+
+            Seek(0);
+        }
+
+        /// <summary>
+        /// 動画タブを閉じる
+        /// </summary>
         public void Close() {
 
             Dispose();

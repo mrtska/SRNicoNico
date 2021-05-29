@@ -62,15 +62,15 @@
                     </controls:RoundButton>
                 </StackPanel>
             </Grid>
-            <Grid Grid.Row="1" Background="Black">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Grid Background="Black">
                     <ContentControl Content="{Binding Html5Handler.WebView}" />
-                    <v:VideoController Grid.Row="1" />
                 </Grid>
+                <v:VideoController Grid.Row="1" />
             </Grid>
             <GridSplitter Grid.Row="2" Height="5" ResizeDirection="Rows" />
             <Grid Grid.Row="3">
