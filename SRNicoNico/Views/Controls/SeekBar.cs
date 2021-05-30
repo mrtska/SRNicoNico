@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.Views.Controls {
     /// <summary>
@@ -93,15 +97,30 @@ namespace SRNicoNico.Views.Controls {
         public static readonly DependencyProperty SeekActionProperty =
             DependencyProperty.Register(nameof(SeekAction), typeof(Action<double>), typeof(SeekBar), new FrameworkPropertyMetadata(null));
 
+        /// <summary>
+        /// ストーリーボードの画像のマップ
+        /// </summary>
+        public VideoStoryBoard StoryBoard {
+            get { return (VideoStoryBoard)GetValue(StoryBoardProperty); }
+            set { SetValue(StoryBoardProperty, value); }
+        }
+        public static readonly DependencyProperty StoryBoardProperty =
+            DependencyProperty.Register(nameof(StoryBoard), typeof(VideoStoryBoard), typeof(SeekBar), new FrameworkPropertyMetadata(null));
+
         private double RequestSeekPosition = 0;
         private bool IsDragging = false;
         private Rectangle? Thumb;
+        private Image? StoryBoardImage;
+        private Popup? StoryBoardPopup;
+        private TextBlock? PopupText;
+        private Popup? ToolTipPopup;
 
         public SeekBar() {
 
             MouseLeftButtonDown += SeekBar_MouseLeftButtonDown;
             MouseLeftButtonUp += SeekBar_MouseLeftButtonUp;
             MouseMove += SeekBar_MouseMove;
+            MouseLeave += SeekBar_MouseLeave;
 
             SizeChanged += SeekBar_SizeChanged;
         }
@@ -170,7 +189,46 @@ namespace SRNicoNico.Views.Controls {
             SeekAction?.Invoke(RequestSeekPosition);
         }
 
+        [DllImport("gdi32.dll")]
+        public static extern bool DeleteObject(IntPtr hObject);
+
         private void SeekBar_MouseMove(object sender, MouseEventArgs e) {
+
+            var x = e.GetPosition(this).X;
+            var amount = x / ActualWidth * VideoDuration;
+
+            // ポップアップが場外に行かないよう制御する
+            if (amount > VideoDuration || amount < 0) {
+                return;
+            }
+
+            // マウスオーバーしている部分の秒数を表示する
+            if (ToolTipPopup != null && PopupText != null) {
+                var converter = (Converters.DurationConverter)Application.Current.Resources["DurationConverter"];
+                ToolTipPopup.PlacementRectangle = new Rect(x - 5, 0, 20, 20);
+                PopupText.Text = converter.Convert(amount, null!, null!, null!).ToString();
+            }
+
+            // ストーリーボードを表示する
+            if (StoryBoard != null && StoryBoardImage != null && StoryBoardPopup != null) {
+
+                StoryBoardPopup.PlacementRectangle = new Rect(x - StoryBoard.ThumbnailWidth / 2, 0, StoryBoard.ThumbnailWidth, StoryBoard.ThumbnailHeight);
+                StoryBoardPopup.IsOpen = true;
+
+                int iamount = (int)amount * 1000;
+                int location = iamount - (iamount % (StoryBoard.Interval));
+
+                if (StoryBoard.BitmapMap!.ContainsKey(location)) {
+
+                    var hBitmap = StoryBoard.BitmapMap[location].GetHbitmap();
+                    try {
+                        StoryBoardImage.Source = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    } catch {
+                    } finally {
+                        DeleteObject(hBitmap);
+                    }
+                }
+            }
 
             if (!IsDragging) {
                 return;
@@ -179,18 +237,25 @@ namespace SRNicoNico.Views.Controls {
                 return;
             }
 
-            var x = e.GetPosition(this).X;
-
-            var amount = (x / ActualWidth * VideoDuration);
             SetSeekPosition(amount);
         }
 
+        private void SeekBar_MouseLeave(object sender, MouseEventArgs e) {
+
+            if (StoryBoard != null && StoryBoardImage != null && StoryBoardPopup != null) {
+                StoryBoardPopup.IsOpen = false;
+            }
+        }
 
         public override void OnApplyTemplate() {
             base.OnApplyTemplate();
 
             // Generic.SeekBar.xamlに書いてあるコントロールを取得する
             Thumb = GetTemplateChild("Thumb_PART") as Rectangle;
+            StoryBoardImage = GetTemplateChild("StoryBoard_PART") as Image;
+            StoryBoardPopup = GetTemplateChild("StoryBoardPopup_PART") as Popup;
+            PopupText = GetTemplateChild("PopupText_PART") as TextBlock;
+            ToolTipPopup = GetTemplateChild("Popup_PART") as Popup;
         }
 
     }

@@ -44,6 +44,20 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private VideoStoryBoard? _StoryBoard;
+        /// <summary>
+        /// ストーリーボード情報
+        /// </summary>
+        public VideoStoryBoard? StoryBoard {
+            get { return _StoryBoard; }
+            set { 
+                if (_StoryBoard == value)
+                    return;
+                _StoryBoard = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private VideoHtml5Handler? _Html5Handler;
 
         public VideoHtml5Handler? Html5Handler {
@@ -231,21 +245,35 @@ namespace SRNicoNico.ViewModels {
                 HeartbeatTimer = new Timer(async (_) => {
                     DmcSession = await VideoService.HeartbeatAsync(DmcSession);
                 }, null, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3);
-
                 CompositeDisposable.Add(HeartbeatTimer);
-
-                // コメント部分を初期化する
-                Comment = new VideoCommentViewModel(VideoService);
-                Comment.Initialize(ApiData.Comment!);
-
 
                 Status = string.Empty;
             } catch (StatusErrorException e) {
 
                 Status = $"動画 {VideoId} の再生に失敗しました ステータスコード: {e.StatusCode}";
+                return;
             } finally {
 
                 IsActive = false;
+            }
+            try {
+
+                // コメント部分を初期化する
+                Comment = new VideoCommentViewModel(VideoService);
+                Comment.Initialize(ApiData.Comment!);
+
+            } catch (StatusErrorException e) {
+
+                Status = $"コメントの取得に失敗しました ステータスコード: {e.StatusCode}";
+            }
+            try {
+
+                // ストーリーボードを取得する
+                StoryBoard = await VideoService.GetStoryBoardAsync(ApiData.Media.StoryBoard!.Session!);
+
+            } catch (StatusErrorException e) {
+
+                Status = $"ストーリーボードの取得に失敗しました ステータスコード: {e.StatusCode}";
             }
         }
 

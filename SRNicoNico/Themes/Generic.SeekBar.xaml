@@ -1,8 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
-    xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors">
+    xmlns:local="clr-namespace:SRNicoNico.Views.Controls">
     <Style TargetType="{x:Type local:SeekBar}">
         <Setter Property="Height" Value="12" />
         <Setter Property="Background" Value="Transparent" />
@@ -42,6 +41,17 @@
                         <Canvas Panel.ZIndex="3">
                             <Rectangle Canvas.Top="0" Name="Thumb_PART" HorizontalAlignment="Left" Width="10" Height="{TemplateBinding Height}" Fill="#FF8B8B8B" />
                         </Canvas>
+
+                        <Popup Name="Popup_PART" AllowsTransparency="False" IsOpen="{TemplateBinding IsMouseOver}" PopupAnimation="Slide">
+                            <Border BorderThickness="1" Background="#FF1B1B1C" BorderBrush="#FF3F3F46" Padding="4" >
+                                <TextBlock Name="PopupText_PART" />
+                            </Border>
+                        </Popup>
+                        <Popup Name="StoryBoardPopup_PART" AllowsTransparency="True" PopupAnimation="Slide" Placement="Top">
+                            <Border BorderThickness="1" BorderBrush="#FF3F3F46">
+                                <Image x:Name="StoryBoard_PART" />
+                            </Border>
+                        </Popup>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
