@@ -5,6 +5,7 @@
     xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors">
     <Style TargetType="{x:Type local:SeekBar}">
         <Setter Property="Height" Value="12" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SeekBar}">

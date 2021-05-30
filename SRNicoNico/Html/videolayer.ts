@@ -12,58 +12,84 @@ function postMessage(message: Message) {
  * */
 class VideoHandler {
 
-    private videoElement: HTMLVideoElement;
+    private vm: VideoViewModel;
+    private video: HTMLVideoElement;
 
-    constructor() {
+    constructor(vm: VideoViewModel) {
 
-        this.videoElement = document.getElementById("video") as HTMLVideoElement;
+        this.vm = vm;
+        this.video = document.getElementById('video') as HTMLVideoElement;
     }
 
     public initialize(contentUri: string, volume: number, autoplay: boolean) {
 
-        this.videoElement.addEventListener('click', e => {
+        this.video.addEventListener('click', e => {
             // 動画部分がクリックされたら.NET側に通知する
-            postMessage({
-                type: 'clicked'
-            });
+            this.vm.TogglePlay();
         });
-        this.videoElement.addEventListener('loadedmetadata', e => {
+        this.video.addEventListener('wheel', async e => {
+
+            const volume = await this.vm.Volume;
+            if (e.deltaY >= 0) {
+                this.vm.Volume = volume - 0.02;
+            } else {
+                this.vm.Volume = volume + 0.02;
+            }
+        });
+
+        this.video.addEventListener('pause', e => {
+            this.vm.PlayState = false;
+        });
+        this.video.addEventListener('play', e => {
+            this.vm.PlayState = true;
+        });
+
+        this.video.addEventListener('loadedmetadata', e => {
 
             postMessage({
                 type: 'info',
                 value: {
-                    width: this.videoElement.videoWidth,
-                    height: this.videoElement.videoHeight,
-                    duration: this.videoElement.duration
+                    width: this.video.videoWidth,
+                    height: this.video.videoHeight,
+                    duration: this.video.duration
                 }
             });
         });
 
-        this.videoElement.src = contentUri;
-        this.videoElement.volume = volume;
+        this.video.src = contentUri;
+        this.video.volume = volume;
         if (autoplay) {
-            this.videoElement.play();
+            this.video.play();
         }
     }
 
     public getCurrentTime(): number {
-        return this.videoElement.currentTime;
+        return this.video.currentTime;
     }
 
     public seek(position: number): void {
-        this.videoElement.currentTime = position;
+        this.video.currentTime = position;
     }
 
     public setVolume(volume: number): void {
-        this.videoElement.volume = volume;
+        this.video.volume = volume;
+    }
+
+    public togglePlay(): void {
+
+        if (this.video.paused) {
+            this.video.play();
+        } else {
+            this.video.pause();
+        }
     }
 
     public getPlayedTimeRanges(): TimeRanges {
-        return this.videoElement.played;
+        return this.video.played;
     }
 
     public getBufferedTimeRanges(): TimeRanges {
-        return this.videoElement.buffered;
+        return this.video.buffered;
     }
 };
 
@@ -77,7 +103,7 @@ class PlayerHandler {
 
     constructor() {
         this.vm = window.chrome.webview?.hostObjects?.vm;
-        this.video = new VideoHandler();
+        this.video = new VideoHandler(this.vm);
 
         setInterval(() => this.playerloop(), 1000 / 60);
     }
@@ -127,6 +153,9 @@ class PlayerHandler {
                 break;
             case 'setVolume':
                 this.video.setVolume(value);
+                break;
+            case 'togglePlay':
+                this.video.togglePlay();
                 break;
         }
 

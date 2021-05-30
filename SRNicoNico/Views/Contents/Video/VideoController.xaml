@@ -15,7 +15,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <controls:SeekBar CurrentTime="{Binding CurrentTime}" VideoDuration="{Binding ActualVideoDuration}" PlayedRange="{Binding PlayedRange}" BufferedRange="{Binding BufferedRange}" />
+        <controls:SeekBar CurrentTime="{Binding CurrentTime, Mode=TwoWay}" VideoDuration="{Binding ActualVideoDuration}" PlayedRange="{Binding PlayedRange}" BufferedRange="{Binding BufferedRange}" SeekAction="{Binding SeekAction}" />
         <WrapPanel Grid.Row="1" Orientation="Horizontal">
 
             <controls:RoundButton Margin="5,0" ToolTip="最初から" Focusable="False" IconData="F1 M 57,27.7083L 57,48.2917L 43.5417,38L 57,27.7083 Z M 39.5833,27.7083L 39.5833,48.2917L 26.125,38L 39.5833,27.7083 Z M 23.75,28.5L 23.75,47.5L 19,47.5L 19,28.5L 23.75,28.5 Z">

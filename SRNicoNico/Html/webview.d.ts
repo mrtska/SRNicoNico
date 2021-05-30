@@ -24,9 +24,20 @@ interface SyncProxy {
 }
 
 interface VideoViewModel {
-    GetString(): string;
     /**
      * 現在の再生時間
      * */
     CurrentTime: number;
+    /**
+     * 音量
+     * */
+    Volume: number;
+    /**
+     * 再生状態
+     * */
+    PlayState: boolean;
+    /**
+     * 再生切り替え
+     * */
+    TogglePlay(): void;
 }

@@ -79,6 +79,11 @@ namespace SRNicoNico.ViewModels {
             set { 
                 if (_Volume == value)
                     return;
+                if (value > 1) {
+                    value = 1;
+                } else if (value < 0) {
+                    value = 0;
+                }
                 _Volume = value;
                 RaisePropertyChanged();
                 Html5Handler?.SetVolume(value);
@@ -170,6 +175,12 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        /// <summary>
+        /// シークバー操作時に呼ばれるアクション
+        /// </summary>
+        public Action<double> SeekAction { get; set; }
+
+
         private DmcSession? DmcSession;
         private Timer? HeartbeatTimer;
 
@@ -181,6 +192,8 @@ namespace SRNicoNico.ViewModels {
 
             VideoService = videoService;
             VideoId = videoId;
+
+            SeekAction = pos => Seek(pos);
         }
 
         /// <summary>
@@ -241,13 +254,14 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public void TogglePlay() {
 
+            Html5Handler?.TogglePlay();
         }
 
         /// <summary>
         /// 指定した位置にシークする
         /// </summary>
         /// <param name="position">シークしたい位置 秒</param>
-        public void Seek(int position) {
+        public void Seek(double position) {
 
             Html5Handler?.Seek(position);
         }

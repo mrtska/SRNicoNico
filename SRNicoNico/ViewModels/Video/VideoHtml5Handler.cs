@@ -82,7 +82,7 @@ namespace SRNicoNico.ViewModels {
             Initialized = true;
         }
 
-        public void Seek(int position) {
+        public void Seek(double position) {
 
             WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "seek", value = position }));
         }
@@ -92,6 +92,10 @@ namespace SRNicoNico.ViewModels {
             WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setVolume", value = volume }));
         }
 
+        public void TogglePlay() {
+
+            WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "togglePlay" }));
+        }
 
         /// <summary>
         /// 動画プレイヤーのパスを返す

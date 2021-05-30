@@ -83,6 +83,17 @@ namespace SRNicoNico.Views.Controls {
                 }
             }));
 
+        /// <summary>
+        /// 実際に動画をシークしたい時に呼ぶ
+        /// </summary>
+        public Action<double> SeekAction {
+            get { return (Action<double>)GetValue(SeekActionProperty); }
+            set { SetValue(SeekActionProperty, value); }
+        }
+        public static readonly DependencyProperty SeekActionProperty =
+            DependencyProperty.Register(nameof(SeekAction), typeof(Action<double>), typeof(SeekBar), new FrameworkPropertyMetadata(null));
+
+        private double RequestSeekPosition = 0;
         private bool IsDragging = false;
         private Rectangle? Thumb;
 
@@ -99,7 +110,9 @@ namespace SRNicoNico.Views.Controls {
 
             // つまみ部分の横幅10論理ピクセル分を値の割合に応じて減らしつまみが動画の長さを超えないように調整する
             if (Thumb != null) {
-                var computedWidth = ActualWidth / (VideoDuration / CurrentTime) - (10 * (CurrentTime / VideoDuration));
+
+                var target = IsDragging ? RequestSeekPosition : CurrentTime;
+                var computedWidth = ActualWidth / (VideoDuration / target) - (10 * (target / VideoDuration));
                 Canvas.SetLeft(Thumb, computedWidth);
             }
         }
@@ -118,6 +131,20 @@ namespace SRNicoNico.Views.Controls {
             }
         }
 
+        private void SetSeekPosition(double amount) {
+
+            if (amount < 0) {
+
+                RequestSeekPosition = 0;
+            } else if (VideoDuration < amount) {
+
+                RequestSeekPosition = VideoDuration;
+            } else {
+
+                RequestSeekPosition = amount;
+            }
+        }
+
         private void SeekBar_SizeChanged(object sender, SizeChangedEventArgs e) {
 
             CalcThumbPosition();
@@ -125,12 +152,22 @@ namespace SRNicoNico.Views.Controls {
 
         private void SeekBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             IsDragging = true;
-            ((UIElement)sender).CaptureMouse();
+            CaptureMouse();
+            Focus();
+            e.Handled = true;
         }
 
         private void SeekBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             IsDragging = false;
-            ((UIElement)sender).ReleaseMouseCapture();
+
+            e.Handled = true;
+            ReleaseMouseCapture();
+
+            var x = e.GetPosition(this).X;
+
+            var amount = (x / ActualWidth * VideoDuration);
+            SetSeekPosition(amount);
+            SeekAction?.Invoke(RequestSeekPosition);
         }
 
         private void SeekBar_MouseMove(object sender, MouseEventArgs e) {
@@ -144,18 +181,8 @@ namespace SRNicoNico.Views.Controls {
 
             var x = e.GetPosition(this).X;
 
-            var ammount = x / ActualWidth;
-
-            //if (ammount < 0) {
-
-            //    Volume = 0;
-            //} else if (ammount > 1) {
-
-            //    Volume = 1;
-            //} else {
-
-            //    Volume = (float)ammount;
-            //}
+            var amount = (x / ActualWidth * VideoDuration);
+            SetSeekPosition(amount);
         }
 
 
