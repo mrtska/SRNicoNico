@@ -112,6 +112,37 @@ namespace SRNicoNico.Tests {
             Assert.NotEmpty(comments);
         }
 
+        /// <summary>
+        /// ストーリーボードを取得することが出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetStoryBoardUnitTest() {
+
+            var result = await VideoService.WatchAsync("sm9", true);
+
+            var sb = await VideoService.GetStoryBoardAsync(result.Media.StoryBoard.Session);
+
+            Assert.NotEqual(0, sb.Columns);
+            Assert.NotEqual(0, sb.Interval);
+            Assert.NotEqual(0, sb.Quality);
+            Assert.NotEqual(0, sb.Rows);
+            Assert.NotEqual(0, sb.ThumbnailHeight);
+            Assert.NotEqual(0, sb.ThumbnailWidth);
+
+            Assert.NotEmpty(sb.BitmapMap);
+        }
+
+        /// <summary>
+        /// 動画再生位置を保存することが出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task SavePlaybackPositionUnitTest() {
+
+            var result = await VideoService.SavePlaybackPositionAsync("sm8628149", 5);
+            Assert.True(result);
+        }
+
+
 
     }
 }

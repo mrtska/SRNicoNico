@@ -302,6 +302,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public string? AuthTypesHttp { get; set; }
         public string? AuthTypesHls { get; set; }
+        public string? AuthTypesStoryBoard { get; set; }
 
         public string? ServiceUserId { get; set; }
         public string? Token { get; set; }

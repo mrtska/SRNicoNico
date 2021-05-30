@@ -25,6 +25,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.818.41" />
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.19041.1" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="Unity" Version="5.11.10" />
   </ItemGroup>
 

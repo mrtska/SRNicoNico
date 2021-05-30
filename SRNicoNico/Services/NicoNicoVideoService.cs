@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using DynaJson;
 using SRNicoNico.Models;
@@ -15,10 +17,12 @@ namespace SRNicoNico.Services {
         /// 動画視聴API
         /// </summary>
         private const string WatchApiUrl = "https://www.nicovideo.jp/api/watch/v3/";
-
+        /// <summary>
+        /// 動画再生位置保存API
+        /// </summary>
+        private const string PlaybackPositionApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/watch/history/playback-position";
 
         private readonly ISessionService SessionService;
-
 
         public NicoNicoVideoService(ISessionService sessionService) {
 
@@ -40,7 +44,7 @@ namespace SRNicoNico.Services {
                 .AddQuery("additionals", withoutHistory ? "" : "series") // withoutHistoryがfalseの時はシリーズ情報も取得する
                 .AddQuery("skips", "harmful");
 
-            var result = await SessionService.GetAsync(builder.Build()).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(builder.Build()).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);
@@ -260,22 +264,21 @@ namespace SRNicoNico.Services {
                         ContentId = media.delivery.storyboard.contentId,
                         ImageIds = storyboardImageIds,
                         Session = new MediaSession {
-                            RecipeId = media.delivery.movie.session.recipeId,
-                            PlayerId = media.delivery.movie.session.playerId,
-                            Videos = JsonObjectExtension.ToStringArray(media.delivery.movie.session.videos),
-                            Audios = JsonObjectExtension.ToStringArray(media.delivery.movie.session.audios),
-                            Movies = JsonObjectExtension.ToStringArray(media.delivery.movie.session.movies),
-                            Protocols = JsonObjectExtension.ToStringArray(media.delivery.movie.session.protocols),
-                            AuthTypesHttp = media.delivery.movie.session.authTypes.http,
-                            AuthTypesHls = media.delivery.movie.session.authTypes.hls,
-                            ServiceUserId = media.delivery.movie.session.serviceUserId,
-                            Token = media.delivery.movie.session.token,
-                            Signature = media.delivery.movie.session.signature,
-                            ContentId = media.delivery.movie.session.contentId,
-                            HeartbeatLifetime = (int)media.delivery.movie.session.heartbeatLifetime,
-                            ContentKeyTimeout = (int)media.delivery.movie.session.contentKeyTimeout,
-                            Priority = media.delivery.movie.session.priority,
-                            TransferPresets = JsonObjectExtension.ToStringArray(media.delivery.movie.session.transferPresets),
+                            RecipeId = media.delivery.storyboard.session.recipeId,
+                            PlayerId = media.delivery.storyboard.session.playerId,
+                            Videos = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.videos),
+                            Audios = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.audios),
+                            Movies = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.movies),
+                            Protocols = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.protocols),
+                            AuthTypesStoryBoard = media.delivery.storyboard.session.authTypes.storyboard,
+                            ServiceUserId = media.delivery.storyboard.session.serviceUserId,
+                            Token = media.delivery.storyboard.session.token,
+                            Signature = media.delivery.storyboard.session.signature,
+                            ContentId = media.delivery.storyboard.session.contentId,
+                            HeartbeatLifetime = (int)media.delivery.storyboard.session.heartbeatLifetime,
+                            ContentKeyTimeout = (int)media.delivery.storyboard.session.contentKeyTimeout,
+                            Priority = media.delivery.storyboard.session.priority,
+                            TransferPresets = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.transferPresets),
                             Urls = storyboardUrls
                         }
                     },
@@ -518,7 +521,6 @@ namespace SRNicoNico.Services {
             return ret;
         }
 
-
         /// <inheritdoc />
         public async Task<DmcSession> CreateSessionAsync(MediaSession movieSession, string? videoId = null, string? audioId = null) {
 
@@ -608,7 +610,7 @@ namespace SRNicoNico.Services {
             var builder = new GetRequestQueryBuilder(apiUrl)
                 .AddQuery("_format", "json");
 
-            var result = await SessionService.PostAsync(builder.Build(), payload).ConfigureAwait(false);
+            using var result = await SessionService.PostAsync(builder.Build(), payload).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);
@@ -637,7 +639,7 @@ namespace SRNicoNico.Services {
                 .AddQuery("_format", "json")
                 .AddQuery("_method", "PUT");
 
-            var result = await SessionService.PostAsync(builder.Build(), dmcSession.RawJson!).ConfigureAwait(false);
+            using var result = await SessionService.PostAsync(builder.Build(), dmcSession.RawJson!).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);
@@ -655,6 +657,119 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
+        public async Task<VideoStoryBoard> GetStoryBoardAsync(MediaSession sbSession) {
+
+            if (sbSession == null) {
+                throw new ArgumentNullException(nameof(sbSession));
+            }
+            if (sbSession.Urls.Count() == 0) {
+                throw new ArgumentException("DMCのAPI URLがありません");
+            }
+            string apiUrl = sbSession.Urls.First().Url!;
+
+            var builder = new GetRequestQueryBuilder(apiUrl)
+                .AddQuery("_format", "json");
+
+            // リクエストのjsonを組み立てる
+            var payload = JsonObject.Serialize(new {
+                session = new {
+                    recipe_id = sbSession.RecipeId,
+                    content_id = sbSession.ContentId,
+                    content_type = "video",
+                    content_src_id_sets = new[] {
+                        new {
+                            content_src_ids = sbSession.Videos
+                        }
+                    },
+                    timing_constraint = "unlimited",
+                    keep_method = new {
+                        heartbeat = new {
+                            lifetime = sbSession.HeartbeatLifetime
+                        }
+                    },
+                    protocol = new {
+                        name = "http",
+                        parameters = new {
+                            http_parameters = new {
+                                parameters = new {
+                                    storyboard_download_parameters = new {
+                                        use_well_known_port = "yes",
+                                        use_ssl = "yes"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    content_uri = "",
+                    session_operation_auth = new {
+                        session_operation_auth_by_signature = new {
+                            token = sbSession.Token,
+                            signature = sbSession.Signature
+                        }
+                    },
+                    content_auth = new {
+                        auth_type = sbSession.AuthTypesStoryBoard,
+                        content_key_timeout = sbSession.ContentKeyTimeout,
+                        service_id = "nicovideo",
+                        service_user_id = sbSession.ServiceUserId
+                    },
+                    client_info = new {
+                        player_id = sbSession.PlayerId
+                    },
+                    priority = sbSession.Priority
+                }
+            });
+
+            using var result = await SessionService.PostAsync(builder.Build(), payload).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            using var metadataResult = await SessionService.GetAsync((string)json.data.session.content_uri).ConfigureAwait(false);
+            if (!metadataResult.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(metadataResult.StatusCode);
+            }
+            json = JsonObject.Parse(await metadataResult.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var storyboard = json.data.storyboards[0];
+
+            var ret = new VideoStoryBoard {
+                Columns = (int)storyboard.columns,
+                Interval = (int)storyboard.interval,
+                Quality = (int)storyboard.quality,
+                Rows = (int)storyboard.rows,
+                ThumbnailHeight = (int)storyboard.thumbnail_height,
+                ThumbnailWidth = (int)storyboard.thumbnail_width,
+                BitmapMap = new Dictionary<int, Bitmap>()
+            };
+
+            // 画像1枚にrows * columns個分のストーリーボード画像が入っているので分解してそれぞれ一枚ずつの画像に切り出す
+            int bitmapIndex = 0;
+            foreach (var image in storyboard.images) {
+                if (image == null) {
+                    continue;
+                }
+                using var jpegResult = await SessionService.GetAsync((string)image.uri).ConfigureAwait(false);
+                if (!jpegResult.IsSuccessStatusCode) {
+
+                    throw new StatusErrorException(jpegResult.StatusCode);
+                }
+                var bitmap = new Bitmap(await jpegResult.Content.ReadAsStreamAsync().ConfigureAwait(false));
+
+                for (int i = 0; i < ret.Columns; i++) {
+                    for (int j = 0; j < ret.Rows; j++) {
+
+                        ret.BitmapMap[bitmapIndex] = bitmap.Clone(new Rectangle(ret.ThumbnailWidth * j, ret.ThumbnailHeight * i, ret.ThumbnailWidth, ret.ThumbnailHeight), bitmap.PixelFormat);
+                        bitmapIndex += ret.Interval;
+                    }
+                }
+            }
+            return ret;
+        }
+
+        /// <inheritdoc />
         public async Task DeleteSessionAsync(DmcSession dmcSession) {
 
             if (dmcSession == null) {
@@ -665,7 +780,7 @@ namespace SRNicoNico.Services {
                 .AddQuery("_format", "json")
                 .AddQuery("_method", "DELETE");
 
-            var result = await SessionService.PostAsync(builder.Build(), dmcSession.RawJson!).ConfigureAwait(false);
+            using var result = await SessionService.PostAsync(builder.Build(), dmcSession.RawJson!).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);
@@ -780,7 +895,7 @@ namespace SRNicoNico.Services {
 
             payloadList.Add(new { ping = new { content = "rf:0" } });
 
-            var result = await SessionService.PostAsync(comment.ServerUrl!.Replace("api/", "api.json"), JsonObject.Serialize(payloadList)).ConfigureAwait(false);
+            using var result = await SessionService.PostAsync(comment.ServerUrl!.Replace("api/", "api.json"), JsonObject.Serialize(payloadList)).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);
@@ -877,6 +992,28 @@ namespace SRNicoNico.Services {
                 }
             }
             return ret;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> SavePlaybackPositionAsync(string watchId, double position) {
+
+            if (watchId == null) {
+                throw new ArgumentNullException(nameof(watchId));
+            }
+
+            var formData = new Dictionary<string, string> {
+                ["watchId"] = watchId,
+                ["seconds"] = position.ToString()
+            };
+
+            using var result = await SessionService.PutAsync(PlaybackPositionApiUrl, formData, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode || result.StatusCode != HttpStatusCode.NotFound) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            return json.meta.status == 200;
         }
     }
 }

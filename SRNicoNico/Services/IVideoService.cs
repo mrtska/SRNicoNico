@@ -46,5 +46,21 @@ namespace SRNicoNico.Services {
         /// <param name="comment">コメント情報</param>
         /// <returns>コメント取得結果</returns>
         Task<IEnumerable<VideoCommentThread>> GetCommentAsync(WatchApiDataComment comment);
+
+        /// <summary>
+        /// ストーリーボードを取得する
+        /// </summary>
+        /// <param name="sbSession">パラメータ</param>
+        /// <returns>ストーリーボード情報</returns>
+        Task<VideoStoryBoard> GetStoryBoardAsync(MediaSession sbSession);
+
+        /// <summary>
+        /// 視聴した再生位置を保存する
+        /// アカウントの視聴履歴に該当の動画がないと失敗する
+        /// </summary>
+        /// <param name="watchId">動画ID</param>
+        /// <param name="position">視聴位置 秒</param>
+        /// <returns>成功したらTrue</returns>
+        Task<bool> SavePlaybackPositionAsync(string watchId, double position);
     }
 }
