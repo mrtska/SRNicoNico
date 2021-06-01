@@ -19,6 +19,9 @@ namespace SRNicoNico.ViewModels {
 
         private bool Initialized = false;
 
+        private bool BrowserInitialized = false;
+        private object? CommentObject;
+
         public VideoHtml5Handler() {
 
             WebView = new WebView2 { DefaultBackgroundColor = Color.Black };
@@ -34,6 +37,8 @@ namespace SRNicoNico.ViewModels {
             if (WebView == null || Initialized) {
                 return;
             }
+            BrowserInitialized = false;
+
             await WebView.EnsureCoreWebView2Async();
             WebView.CoreWebView2.Settings.IsZoomControlEnabled = false;
             WebView.CoreWebView2.SetVirtualHostNameToFolderMapping("srniconico", GetHtml5PlayerPath(), CoreWebView2HostResourceAccessKind.Allow);
@@ -48,6 +53,11 @@ namespace SRNicoNico.ViewModels {
                 switch (type) {
                     case "initialized": // ブラウザ側の初期化が終わったので動画URLをブラウザに送信する
                         WebView?.CoreWebView2.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setContent", value = new { contentUri, volume = vm.Volume, autoplay = true } }));
+                        BrowserInitialized = true;
+                        if (CommentObject != null) {
+                            WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "dispatchComment", value = CommentObject }));
+                            CommentObject = null;
+                        }
                         break;
                     case "clicked":
                         vm.TogglePlay();
@@ -80,6 +90,14 @@ namespace SRNicoNico.ViewModels {
             };
 
             Initialized = true;
+        }
+
+        public void DispatchComment(object obj) {
+            if (BrowserInitialized) {
+                WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "dispatchComment", value = obj }));
+            } else {
+                CommentObject = obj;
+            }
         }
 
         public void Seek(double position) {

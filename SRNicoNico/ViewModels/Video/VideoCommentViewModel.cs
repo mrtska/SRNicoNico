@@ -52,8 +52,9 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// コメントを取得する
         /// </summary>
+        /// <param name="vm">親ViewModel</param>
         /// <param name="apiData">APIから取得したコメントデータ</param>
-        public async void Initialize(WatchApiDataComment apiData) {
+        public async void Initialize(VideoViewModel vm, WatchApiDataComment apiData) {
 
             IsActive = true;
             CommentThreads.Clear();
@@ -71,9 +72,83 @@ namespace SRNicoNico.ViewModels {
                     SelectedThread = CommentThreads.SingleOrDefault(s => s.Fork == defaultThread.Fork);
                 }
 
-            } catch (StatusErrorException e) {
+                var layers = new List<object>();
 
-                Status = $"コメントの取得に失敗しました ステータスコード: {e.StatusCode}";
+                foreach (var layer in apiData.Layers!) {
+
+                    if (layer == null) {
+                        continue;
+                    }
+
+                    var entries = new List<VideoCommentEntry>();
+
+                    foreach (var threadId in layer.ThreadIds!) {
+
+                        if (threadId == null) {
+                            continue;
+                        }
+                        var thread = CommentThreads.SingleOrDefault(s => s.Fork == threadId.Fork);
+                        if (thread != null) {
+                            entries.AddRange(thread.Entries!);
+                        }
+                    }
+                    layers.Add(new {
+                        index = layer.Index,
+                        entries = entries.OrderBy(o => o.Vpos).ThenBy(o => o.Number).Select(s => {
+
+                            var mails = s.Mail.Split(' ');
+
+                            var fontSize = "middle";
+                            if (mails.Contains("small")) {
+                                fontSize = "small";
+                            } else if (mails.Contains("big")) {
+                                fontSize = "big";
+                            }
+                            var position = "naka";
+                            if (mails.Contains("ue")) {
+                                position = "ue";
+                            } else if (mails.Contains("shita")) {
+                                position = "shita";
+                            }
+
+                            var color = "#FFFFFF";
+                            if (mails.Contains("red")) {
+                                color = "#FF0000";
+                            } else if (mails.Contains("pink")) {
+                                color = "#FF8080";
+                            } else if (mails.Contains("orange")) {
+                                color = "#FFC000";
+                            } else if (mails.Contains("yellow")) {
+                                color = "#FFFF00";
+                            } else if (mails.Contains("green")) {
+                                color = "#00FF00";
+                            } else if (mails.Contains("cyan")) {
+                                color = "#00FFFF";
+                            } else if (mails.Contains("blue")) {
+                                color = "#0000FF";
+                            } else if (mails.Contains("purple")) {
+                                color = "#C000FF";
+                            } else if (mails.Contains("black")) {
+                                color = "#000000";
+                            }
+
+                            return new {
+                                no = s.Number,
+                                vpos = s.Vpos,
+                                mail = s.Mail!,
+                                content = s.Content!,
+                                fontSize,
+                                position,
+                                color
+                            };
+                        })
+                    });
+                }
+                // WebViewにコメントデータを飛ばす
+                vm.Html5Handler?.DispatchComment(new { layers });
+            } catch (StatusErrorException) {
+
+                throw;
             } finally {
 
                 IsActive = false;

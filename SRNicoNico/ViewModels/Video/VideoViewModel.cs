@@ -260,7 +260,7 @@ namespace SRNicoNico.ViewModels {
 
                 // コメント部分を初期化する
                 Comment = new VideoCommentViewModel(VideoService);
-                Comment.Initialize(ApiData.Comment!);
+                Comment.Initialize(this, ApiData.Comment!);
 
             } catch (StatusErrorException e) {
 

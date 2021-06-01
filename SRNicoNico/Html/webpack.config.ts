@@ -2,7 +2,7 @@
 
 const config: webpack.Configuration = {
     mode: 'production',
-    entry: ['./Html\\videolayer.ts', './Html\\commentlayer.ts'],
+    entry: ['./Html\\videolayer.ts'],
     output: {
         path: __dirname,
         filename: 'player.bundle.js',
@@ -29,6 +29,9 @@ const config: webpack.Configuration = {
                 ]
             }
         ]
+    },
+    resolve: {
+        extensions: [ '.ts', '.js', '.css' ]
     }
 };
 
