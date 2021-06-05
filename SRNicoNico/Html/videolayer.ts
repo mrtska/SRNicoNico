@@ -1,5 +1,7 @@
 ﻿import './style.scss';
 
+import { CommentHandler } from './commentlayer';
+
 function postMessage(message: Message) {
 
     if (window.chrome.webview) {
@@ -23,11 +25,11 @@ class VideoHandler {
 
     public initialize(contentUri: string, volume: number, autoplay: boolean) {
 
-        this.video.addEventListener('click', e => {
+        window.addEventListener('click', e => {
             // 動画部分がクリックされたら.NET側に通知する
             this.vm.TogglePlay();
         });
-        this.video.addEventListener('wheel', async e => {
+        window.addEventListener('wheel', async e => {
 
             const volume = await this.vm.Volume;
             if (e.deltaY >= 0) {
@@ -92,7 +94,6 @@ class VideoHandler {
         return this.video.buffered;
     }
 };
-
 /**
  * 動画プレイヤーを制御するクラス
  * */
@@ -100,17 +101,26 @@ class PlayerHandler {
 
     private vm: VideoViewModel;
     private video: VideoHandler;
+    private comment: CommentHandler;
 
     constructor() {
         this.vm = window.chrome.webview?.hostObjects?.vm;
         this.video = new VideoHandler(this.vm);
 
-        setInterval(() => this.playerloop(), 1000 / 60);
+        this.comment = new CommentHandler();
+
+        if (window.chrome.webview) {
+            setInterval(() => this.playerloop(), 1000 / 60);
+        }
+        setInterval(() => this.renderloop(), 1000 / 60);
     }
 
     public playerloop(): void {
 
-        this.vm.CurrentTime = this.video.getCurrentTime();
+        const currentTime = this.video.getCurrentTime();
+        if (window.chrome.webview) {
+            this.vm.CurrentTime = currentTime;
+        }
 
         const played = this.video.getPlayedTimeRanges();
         const buffered = this.video.getBufferedTimeRanges();
@@ -139,11 +149,16 @@ class PlayerHandler {
         });
     }
 
+    public renderloop(): void {
+
+        const currentTime = this.video.getCurrentTime();
+        this.comment.render(currentTime);
+    }
+
     public messageReceived(message: any): void {
         
         const type = message.type as string;
         const value = message.value;
-
         switch (type) {
             case 'setContent':
                 this.video.initialize(value.contentUri, value.volume, value.autoplay);
@@ -156,6 +171,9 @@ class PlayerHandler {
                 break;
             case 'togglePlay':
                 this.video.togglePlay();
+                break;
+            case 'dispatchComment':
+                this.comment.initialize(value);
                 break;
         }
 

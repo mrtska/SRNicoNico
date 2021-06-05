@@ -144,7 +144,7 @@ namespace SRNicoNico.Views.Controls {
                     continue;
                 }
                 var computedLeft = ActualWidth / (VideoDuration / played.Start) - (10 * (played.Start / VideoDuration));
-                var computedWidth = ActualWidth / (VideoDuration / played.End) - (5 * (played.End / VideoDuration));
+                var computedWidth = ActualWidth / (VideoDuration / played.End);
                 played.Left = computedLeft;
                 played.Width = computedWidth - computedLeft;
             }

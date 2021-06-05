@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Livet;
 using SRNicoNico.Models;
@@ -94,54 +93,7 @@ namespace SRNicoNico.ViewModels {
                     }
                     layers.Add(new {
                         index = layer.Index,
-                        entries = entries.OrderBy(o => o.Vpos).ThenBy(o => o.Number).Select(s => {
-
-                            var mails = s.Mail.Split(' ');
-
-                            var fontSize = "middle";
-                            if (mails.Contains("small")) {
-                                fontSize = "small";
-                            } else if (mails.Contains("big")) {
-                                fontSize = "big";
-                            }
-                            var position = "naka";
-                            if (mails.Contains("ue")) {
-                                position = "ue";
-                            } else if (mails.Contains("shita")) {
-                                position = "shita";
-                            }
-
-                            var color = "#FFFFFF";
-                            if (mails.Contains("red")) {
-                                color = "#FF0000";
-                            } else if (mails.Contains("pink")) {
-                                color = "#FF8080";
-                            } else if (mails.Contains("orange")) {
-                                color = "#FFC000";
-                            } else if (mails.Contains("yellow")) {
-                                color = "#FFFF00";
-                            } else if (mails.Contains("green")) {
-                                color = "#00FF00";
-                            } else if (mails.Contains("cyan")) {
-                                color = "#00FFFF";
-                            } else if (mails.Contains("blue")) {
-                                color = "#0000FF";
-                            } else if (mails.Contains("purple")) {
-                                color = "#C000FF";
-                            } else if (mails.Contains("black")) {
-                                color = "#000000";
-                            }
-
-                            return new {
-                                no = s.Number,
-                                vpos = s.Vpos,
-                                mail = s.Mail!,
-                                content = s.Content!,
-                                fontSize,
-                                position,
-                                color
-                            };
-                        })
+                        entries = entries.OrderBy(o => o.Vpos).ThenBy(o => o.Number).Select(s => CommentParser.Parse(s))
                     });
                 }
                 // WebViewにコメントデータを飛ばす

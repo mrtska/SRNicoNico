@@ -941,7 +941,7 @@ namespace SRNicoNico.Services {
                     target.ResultCode = (ThreadResultCode)thread.resultcode;
                     target.Id = thread.thread;
                     target.ServerTime = (long)thread.server_time;
-                    target.LastRes = (int)thread.last_res;
+                    target.LastRes = thread.last_res() ? (int)thread.last_res : 0;
                     target.Ticket = thread.ticket;
                     target.Revision = (int)thread.revision;
                     target.ClickRevision = thread.click_revision() ? (int?)thread.click_revision : null;
