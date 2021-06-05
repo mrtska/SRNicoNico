@@ -32,6 +32,7 @@ namespace SRNicoNico.Views.Controls {
                 if (bar.ActiveRect != null) {
                     bar.ActiveRect.Width = computedWidth;
                 }
+                bar.SetVolumeIcon();
             }));
 
         /// <summary>
@@ -42,12 +43,27 @@ namespace SRNicoNico.Views.Controls {
             set { SetValue(IsMuteProperty, value); }
         }
         public static readonly DependencyProperty IsMuteProperty =
-            DependencyProperty.Register(nameof(IsMute), typeof(bool), typeof(VolumeBar), new FrameworkPropertyMetadata(false));
+            DependencyProperty.Register(nameof(IsMute), typeof(bool), typeof(VolumeBar), new FrameworkPropertyMetadata(false, (obj, e) => {
+
+                var bar = (VolumeBar)obj;
+                bar.SetVolumeIcon();
+            }));
+
+        /// <summary>
+        /// ミュートボタンのイベント
+        /// </summary>
+        public event RoutedEventHandler Click {
+            add { AddHandler(ClickEvent, value); }
+            remove { RemoveHandler(ClickEvent, value); }
+        }
+        public static RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent(
+                                                    nameof(Click), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VolumeBar));
 
         private bool IsDragging = false;
 
         private Rectangle? Thumb;
         private Rectangle? ActiveRect;
+        private RoundButton? MuteButton;
 
         public VolumeBar() {
 
@@ -90,12 +106,50 @@ namespace SRNicoNico.Views.Controls {
                 Volume = (float)ammount;
             }
         }
+        
+        /// <summary>
+        /// ミュートボタンのアイコンを設定する
+        /// </summary>
+        private void SetVolumeIcon() {
+
+            if (MuteButton == null) {
+                return;
+            }
+
+            if (IsMute) {
+                MuteButton.Tag = "Mute";
+                return;
+            }
+
+            var volume = Volume;
+            if (volume == 0) {
+                MuteButton.Tag = "0";
+                return;
+            }
+            if (volume <= 0.33) {
+                MuteButton.Tag = "1";
+                return;
+            }
+            if (volume <= 0.66) {
+                MuteButton.Tag = "2";
+                return;
+            }
+            if (volume <= 1) {
+                MuteButton.Tag = "3";
+                return;
+            }
+        }
 
         public override void OnApplyTemplate() {
             base.OnApplyTemplate();
             // Generic.VolumeBar.xamlに書いてあるコントロールを取得する
             Thumb = GetTemplateChild("Thumb_PART") as Rectangle;
             ActiveRect = GetTemplateChild("ActiveRect_PART") as Rectangle;
+            MuteButton = GetTemplateChild("Button_PART") as RoundButton;
+
+            if (MuteButton != null) {
+                MuteButton.Click += (o, e) => RaiseEvent(new RoutedEventArgs(ClickEvent));
+            }
         }
     }
 }

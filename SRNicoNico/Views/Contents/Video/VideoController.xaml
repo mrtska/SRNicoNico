@@ -19,7 +19,28 @@
                           PlayedRange="{Binding PlayedRange}" BufferedRange="{Binding BufferedRange}" SeekAction="{Binding SeekAction}" StoryBoard="{Binding StoryBoard}" />
         <WrapPanel Grid.Row="1" Orientation="Horizontal">
 
-            <controls:RoundButton Margin="5,0" ToolTip="最初から" Focusable="False" IconData="F1 M 57,27.7083L 57,48.2917L 43.5417,38L 57,27.7083 Z M 39.5833,27.7083L 39.5833,48.2917L 26.125,38L 39.5833,27.7083 Z M 23.75,28.5L 23.75,47.5L 19,47.5L 19,28.5L 23.75,28.5 Z">
+            <controls:RoundButton Margin="5,0" Focusable="False">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="TogglePlay" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <controls:RoundButton.Resources>
+                    <Style TargetType="{x:Type controls:RoundButton}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding PlayState}" Value="False">
+                                <Setter Property="IconData" Value="F1 M33,22 M38,22 L60,38 L38,53 L38,22 Z" />
+                                <Setter Property="ToolTip" Value="再生(Space)" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PlayState}" Value="True">
+                                <Setter Property="IconData" Value="F1 M 26.9167,23.75L 33.25,23.75L 33.25,52.25L 26.9167,52.25L 26.9167,23.75 Z M 42.75,23.75L 49.0833,23.75L 49.0833,52.25L 42.75,52.25L 42.75,23.75 Z" />
+                                <Setter Property="ToolTip" Value="一時停止(Space)" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:RoundButton.Resources>
+            </controls:RoundButton>
+            <controls:RoundButton Margin="0,0,5,0" ToolTip="最初から" Focusable="False" IconData="F1 M 57,27.7083L 57,48.2917L 43.5417,38L 57,27.7083 Z M 39.5833,27.7083L 39.5833,48.2917L 26.125,38L 39.5833,27.7083 Z M 23.75,28.5L 23.75,47.5L 19,47.5L 19,28.5L 23.75,28.5 Z">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Restart" />
@@ -27,10 +48,17 @@
                 </i:Interaction.Triggers>
             </controls:RoundButton>
             <TextBlock FontSize="16" Margin="5">
-                <Run Text="{Binding CurrentTime}" d:Text="3:20" /> / <Run Text="{Binding ApiData.Video.Duration, Converter={StaticResource DurationConverter}}" d:Text="3:20" />
+                <Run Text="{Binding CurrentTime, Converter={StaticResource DurationConverter}}" d:Text="3:20" /> / <Run Text="{Binding ApiData.Video.Duration, Converter={StaticResource DurationConverter}}" d:Text="3:20" />
             </TextBlock>
 
-            <controls:VolumeBar Volume="{Binding Volume, Mode=TwoWay}" d:Volume="0.5" />
+            <controls:VolumeBar Volume="{Binding Volume, Mode=TwoWay}" IsMute="{Binding IsMuted, Mode=TwoWay}" d:Volume="0.5">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleMute" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </controls:VolumeBar>
+
         </WrapPanel>
     </Grid>
 </UserControl>

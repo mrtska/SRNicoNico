@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Input;
 using Livet;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
@@ -100,9 +101,32 @@ namespace SRNicoNico.ViewModels {
                 }
                 _Volume = value;
                 RaisePropertyChanged();
-                Html5Handler?.SetVolume(value);
+                if (!IsMuted) {
+                    Html5Handler?.SetVolume(value);
+                }
             }
         }
+
+        private bool _IsMuted = false;
+        /// <summary>
+        /// ミュート状態
+        /// </summary>
+        public bool IsMuted {
+            get { return _IsMuted; }
+            set { 
+                if (_IsMuted == value)
+                    return;
+                _IsMuted = value;
+                RaisePropertyChanged();
+
+                if (value) {
+                    Html5Handler?.SetVolume(0);
+                } else {
+                    Html5Handler?.SetVolume(Volume);
+                }
+            }
+        }
+
 
         private bool _PlayState;
         /// <summary>
@@ -286,6 +310,19 @@ namespace SRNicoNico.ViewModels {
         }
 
         /// <summary>
+        ///  ミュートを切り替える
+        /// </summary>
+        public void ToggleMute() {
+
+            IsMuted ^= true;
+        }
+
+        public void ToggleRepeat() {
+
+
+        }
+
+        /// <summary>
         /// 指定した位置にシークする
         /// </summary>
         /// <param name="position">シークしたい位置 秒</param>
@@ -316,6 +353,26 @@ namespace SRNicoNico.ViewModels {
         public void Reload() {
 
             Loaded();
+        }
+
+        public override void KeyDown(KeyEventArgs e) {
+
+
+            switch (e.Key) {
+                case Key.F5:
+                    Reload();
+                    break;
+                case Key.M:
+                    ToggleMute();
+                    break;
+                case Key.S:
+                    Restart();
+                    break;
+                case Key.Space:
+                    TogglePlay();
+                    break;
+            }
+
         }
 
     }
