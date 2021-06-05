@@ -17,7 +17,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public ObservableSynchronizedCollection<VideoCommentThread> CommentThreads {
             get { return _CommentThreads; }
-            set { 
+            set {
                 if (_CommentThreads == value)
                     return;
                 _CommentThreads = value;
@@ -32,7 +32,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public VideoCommentThread? SelectedThread {
             get { return _SelectedThread; }
-            set { 
+            set {
                 if (_SelectedThread == value)
                     return;
                 _SelectedThread = value;
@@ -46,7 +46,6 @@ namespace SRNicoNico.ViewModels {
 
             VideoService = videoService;
         }
-
 
         /// <summary>
         /// コメントを取得する

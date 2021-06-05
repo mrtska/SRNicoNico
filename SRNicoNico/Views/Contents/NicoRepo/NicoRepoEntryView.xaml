@@ -1,14 +1,21 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.NicoRepoEntryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
              d:DataContext="{d:DesignInstance Type=w:NicoRepoEntry}"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="600"
              Background="Transparent">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="MouseDoubleClick">
+            <a:NicoNicoOpenAction Url="{Binding ObjectUrl}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />

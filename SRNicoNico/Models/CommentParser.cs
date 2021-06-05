@@ -143,7 +143,7 @@ namespace SRNicoNico.Models {
                 color,
                 duration,
                 live,
-                lineCount = entry.Content.Split('\n').Length
+                lineCount = entry.Content!.Split('\n').Length
             };
         }
     }
