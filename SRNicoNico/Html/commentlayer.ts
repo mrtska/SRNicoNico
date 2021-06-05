@@ -32,8 +32,8 @@ const COMMENT_SIZE_BIG = 1.425;
 
 // ニコニコで使われるフォント
 const defont: string = 'Arial, "ＭＳ Ｐゴシック", "MS PGothic", MSPGothic, MS-PGothic';
-const gothic: string = '"游ゴシック体", "游ゴシック", "Yu Gothic", YuGothic, yugothic, YuGo-Medium';
-const mincho: string = '"游明朝体", "游明朝", "Yu Mincho", YuMincho, yumincho, YuMin-Medium';
+const gothic: string = '"游ゴシック", SimHei, Arial, "ＭＳ Ｐゴシック", sans-serif';
+const mincho: string = '"游明朝", SimSun, Arial, "ＭＳ Ｐゴシック", "游ゴシック", serif';
 
 export class CommentHandler {
 
