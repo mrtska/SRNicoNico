@@ -367,6 +367,7 @@ namespace SRNicoNico.Views.Controls {
             }
 
             SetSeekPosition(amount);
+            SeekAction?.Invoke(RequestSeekPosition);
         }
 
         private void SeekBar_MouseLeave(object sender, MouseEventArgs e) {
