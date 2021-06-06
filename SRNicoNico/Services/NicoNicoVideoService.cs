@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using DynaJson;
+using Microsoft.EntityFrameworkCore;
+using SRNicoNico.Entities;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 
@@ -23,10 +25,12 @@ namespace SRNicoNico.Services {
         private const string PlaybackPositionApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/watch/history/playback-position";
 
         private readonly ISessionService SessionService;
+        private readonly ViewerDbContext DbContext;
 
-        public NicoNicoVideoService(ISessionService sessionService) {
+        public NicoNicoVideoService(ISessionService sessionService, ViewerDbContext dbContext) {
 
             SessionService = sessionService;
+            DbContext = dbContext;
         }
 
         /// <inheritdoc />
@@ -1014,6 +1018,39 @@ namespace SRNicoNico.Services {
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
 
             return json.meta.status == 200;
+        }
+
+        /// <inheritdoc />
+        public async Task<ABRepeatPosition?> GetABRepeatPositionAsync(string videoId) {
+
+            if (videoId == null) {
+                throw new ArgumentNullException(nameof(videoId));
+            }
+
+            return await DbContext.ABRepeatPositions.SingleOrDefaultAsync(s => s.VideoId == videoId);
+        }
+
+        /// <inheritdoc />
+        public async Task SaveABRepeatPositionAsync(string videoId, double repeatA, double repeatB) {
+
+            if (videoId == null) {
+                throw new ArgumentNullException(nameof(videoId));
+            }
+            if (repeatA > repeatB - 5) {
+                throw new ArgumentException("A地点がB地点-5秒よりも高くなっています");
+            }
+
+            var pos = await DbContext.ABRepeatPositions.SingleOrDefaultAsync(s => s.VideoId == videoId).ConfigureAwait(false);
+            if (pos == null) {
+
+                pos = new ABRepeatPosition { VideoId = videoId };
+                DbContext.ABRepeatPositions.Add(pos);
+            }
+
+            pos.RepeatA = repeatA;
+            pos.RepeatB = repeatB;
+
+            await DbContext.SaveChangesAsync();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using SRNicoNico.Entities;
 using SRNicoNico.Models.NicoNicoWrapper;
 
 namespace SRNicoNico.Services {
@@ -62,5 +63,22 @@ namespace SRNicoNico.Services {
         /// <param name="position">視聴位置 秒</param>
         /// <returns>成功したらTrue</returns>
         Task<bool> SavePlaybackPositionAsync(string watchId, double position);
+
+
+        /// <summary>
+        /// 指定した動画IDのABリピートポジションをローカルデータベースからあれば取得する
+        /// 無ければnull
+        /// </summary>
+        /// <param name="videoId">動画ID</param>
+        /// <returns>リピートポジション</returns>
+        Task<ABRepeatPosition?> GetABRepeatPositionAsync(string videoId);
+
+        /// <summary>
+        /// 指定した動画IDのABリピートポジションをローカルデータベースに保存する
+        /// </summary>
+        /// <param name="videoId">動画ID</param>
+        /// <param name="repeatA">A地点</param>
+        /// <param name="repeatB">B地点</param>
+        Task SaveABRepeatPositionAsync(string videoId, double repeatA, double repeatB);
     }
 }

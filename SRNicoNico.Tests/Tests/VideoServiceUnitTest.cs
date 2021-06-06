@@ -16,7 +16,7 @@ namespace SRNicoNico.Tests {
         public VideoServiceUnitTest() {
 
             SessionService = TestingNicoNicoViewer.Instance.TestSessionService;
-            VideoService = new NicoNicoVideoService(SessionService);
+            VideoService = new NicoNicoVideoService(SessionService, null);
         }
 
 
