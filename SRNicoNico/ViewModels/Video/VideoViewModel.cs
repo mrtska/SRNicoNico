@@ -127,6 +127,49 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private RepeatBehavior _RepeatBehavior;
+        /// <summary>
+        /// リピート時の動作
+        /// </summary>
+        public RepeatBehavior RepeatBehavior {
+            get { return _RepeatBehavior; }
+            set { 
+                if (_RepeatBehavior == value)
+                    return;
+                _RepeatBehavior = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private double _RepeatA;
+        /// <summary>
+        /// ABリピートのA地点
+        /// </summary>
+        public double RepeatA {
+            get { return _RepeatA; }
+            set { 
+                if (_RepeatA == value)
+                    return;
+                _RepeatA = value;
+                RaisePropertyChanged();
+                SaveABRepeatPosition();
+            }
+        }
+
+        private double _RepeatB;
+        /// <summary>
+        /// ABリピートのB地点
+        /// </summary>
+        public double RepeatB {
+            get { return _RepeatB; }
+            set { 
+                if (_RepeatB == value)
+                    return;
+                _RepeatB = value;
+                RaisePropertyChanged();
+                SaveABRepeatPosition();
+            }
+        }
 
         private bool _PlayState;
         /// <summary>
@@ -182,6 +225,8 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _ActualVideoDuration = value;
                 RaisePropertyChanged();
+                // 実際の動画の長さが分かったらABリピートの初期値をロードする
+                LoadABRepeatPosition();
             }
         }
 
@@ -222,12 +267,14 @@ namespace SRNicoNico.ViewModels {
         private DmcSession? DmcSession;
         private Timer? HeartbeatTimer;
 
+        private readonly ISettings Settings;
         private readonly IVideoService VideoService;
         private readonly string VideoId;
 
 
-        public VideoViewModel(IVideoService videoService, string videoId) : base(videoId) {
+        public VideoViewModel(ISettings settings, IVideoService videoService, string videoId) : base(videoId) {
 
+            Settings = settings;
             VideoService = videoService;
             VideoId = videoId;
 
@@ -301,12 +348,53 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private async void LoadABRepeatPosition() {
+
+            var pos = await VideoService.GetABRepeatPositionAsync(VideoId);
+
+            // プロパティに代入するとSaveABRepeatPositionが呼ばれてしまうのでバッキングストアに代入して手動でPropertyChangedイベントを呼ぶ
+            if (pos == null) {
+                _RepeatA = 0;
+                _RepeatB = ActualVideoDuration;
+            } else {
+                _RepeatA = pos.RepeatA;
+                _RepeatB = pos.RepeatB;
+            }
+            RaisePropertyChanged(nameof(RepeatA));
+            RaisePropertyChanged(nameof(RepeatB));
+        }
+
+        private async void SaveABRepeatPosition() {
+
+            await VideoService.SaveABRepeatPositionAsync(VideoId, RepeatA, RepeatB);
+        }
+
         /// <summary>
         /// 再生と一時停止を切り替える
         /// </summary>
         public void TogglePlay() {
 
             Html5Handler?.TogglePlay();
+        }
+
+        /// <summary>
+        /// 再生していたら一時停止する
+        /// </summary>
+        public void Pause() {
+
+            if (PlayState) {
+                Html5Handler?.TogglePlay();
+            }
+        }
+
+        /// <summary>
+        /// 一時停止していたら再生する
+        /// </summary>
+        public void Resume() {
+
+            if (!PlayState) {
+                Html5Handler?.TogglePlay();
+            }
         }
 
         /// <summary>
@@ -317,9 +405,18 @@ namespace SRNicoNico.ViewModels {
             IsMuted ^= true;
         }
 
+        /// <summary>
+        /// リピートを切り替える
+        /// </summary>
         public void ToggleRepeat() {
 
-
+            if (RepeatBehavior == RepeatBehavior.None) {
+                RepeatBehavior = RepeatBehavior.Repeat;
+            } else if (RepeatBehavior == RepeatBehavior.Repeat) {
+                RepeatBehavior = RepeatBehavior.ABRepeat;
+            } else if (RepeatBehavior == RepeatBehavior.ABRepeat) {
+                RepeatBehavior = RepeatBehavior.None;
+            }
         }
 
         /// <summary>
@@ -358,6 +455,14 @@ namespace SRNicoNico.ViewModels {
         public override void KeyDown(KeyEventArgs e) {
 
 
+            if (e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control)) {
+                // Ctrl+Wで閉じる
+                if (e.Key == Key.W) {
+                    Close();
+                    return;
+                }
+            }
+
             switch (e.Key) {
                 case Key.F5:
                     Reload();
@@ -370,6 +475,9 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case Key.Space:
                     TogglePlay();
+                    break;
+                case Key.R:
+                    ToggleRepeat();
                     break;
             }
 

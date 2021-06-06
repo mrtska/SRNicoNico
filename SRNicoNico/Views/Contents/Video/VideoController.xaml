@@ -16,6 +16,7 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <controls:SeekBar CurrentTime="{Binding CurrentTime, Mode=TwoWay}" VideoDuration="{Binding ActualVideoDuration}"
+                          RepeatBehavior="{Binding RepeatBehavior}" RepeatA="{Binding RepeatA, Mode=TwoWay}" RepeatB="{Binding RepeatB, Mode=TwoWay}"
                           PlayedRange="{Binding PlayedRange}" BufferedRange="{Binding BufferedRange}" SeekAction="{Binding SeekAction}" StoryBoard="{Binding StoryBoard}" />
         <WrapPanel Grid.Row="1" Orientation="Horizontal">
 
@@ -51,6 +52,29 @@
                 <Run Text="{Binding CurrentTime, Converter={StaticResource DurationConverter}}" d:Text="3:20" /> / <Run Text="{Binding ApiData.Video.Duration, Converter={StaticResource DurationConverter}}" d:Text="3:20" />
             </TextBlock>
 
+            <controls:RoundButton Margin="5,0" Focusable="False" ToolTip="リピート切り替え(R)">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleRepeat" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <controls:RoundButton.Resources>
+                    <Style TargetType="{x:Type controls:RoundButton}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RepeatBehavior}" Value="None">
+                                <Setter Property="IconData" Value="M2,5.27L3.28,4L20,20.72L18.73,22L15.73,19H7V22L3,18L7,14V17H13.73L7,10.27V11H5V8.27L2,5.27M17,13H19V17.18L17,15.18V13M17,5V2L21,6L17,10V7H8.82L6.82,5H17Z" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RepeatBehavior}" Value="Repeat">
+                                <Setter Property="IconData" Value="M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RepeatBehavior}" Value="ABRepeat">
+                                <Setter Property="IconData" Value="M4 2A2 2 0 0 0 2 4V12H4V8H6V12H8V4A2 2 0 0 0 6 2H4M4 4H6V6H4M22 15.5V14A2 2 0 0 0 20 12H16V22H20A2 2 0 0 0 22 20V18.5A1.54 1.54 0 0 0 20.5 17A1.54 1.54 0 0 0 22 15.5M20 20H18V18H20V20M20 16H18V14H20M5.79 21.61L4.21 20.39L18.21 2.39L19.79 3.61Z" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:RoundButton.Resources>
+            </controls:RoundButton>
+            
             <controls:VolumeBar Volume="{Binding Volume, Mode=TwoWay}" IsMute="{Binding IsMuted, Mode=TwoWay}" d:Volume="0.5">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">

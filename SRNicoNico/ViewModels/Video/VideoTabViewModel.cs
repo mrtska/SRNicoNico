@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Input;
 using Livet;
 
 namespace SRNicoNico.ViewModels {
@@ -70,5 +71,14 @@ namespace SRNicoNico.ViewModels {
             SelectedItem = vm;
         }
 
+        public override void KeyDown(KeyEventArgs e) {
+
+            SelectedItem?.KeyDown(e);
+        }
+
+        public override void KeyUp(KeyEventArgs e) {
+
+            SelectedItem?.KeyUp(e);
+        }
     }
 }

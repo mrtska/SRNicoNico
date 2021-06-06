@@ -86,6 +86,11 @@ namespace SRNicoNico.ViewModels {
                             vm.BufferedRange.Add(new TimeRange((float)buffered.start, (float)buffered.end));
                         }
                         break;
+                    case "ended":
+                        if (vm.RepeatBehavior != RepeatBehavior.None) {
+                            vm.Resume();
+                        }
+                        break;
                 }
             };
 

@@ -57,6 +57,12 @@ class VideoHandler {
                 }
             });
         });
+        this.video.addEventListener('ended', e => {
+
+            postMessage({
+                type: 'ended'
+            });
+        });
 
         this.video.src = contentUri;
         this.video.volume = volume;

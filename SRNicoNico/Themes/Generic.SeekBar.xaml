@@ -42,7 +42,14 @@
                             <Rectangle Canvas.Top="0" Name="Thumb_PART" HorizontalAlignment="Left" Width="10" Height="{TemplateBinding Height}" Fill="#FF8B8B8B" />
                         </Canvas>
 
-                        <Popup Name="Popup_PART" AllowsTransparency="False" IsOpen="{TemplateBinding IsMouseOver}" PopupAnimation="Slide">
+                        <Canvas Panel.ZIndex="4">
+                            <Rectangle Canvas.Top="0" Name="RepeatA_PART" Visibility="Collapsed" Opacity="0.8" HorizontalAlignment="Left" Width="10" Height="{TemplateBinding Height}" Fill="#FF00BB00" />
+                        </Canvas>
+                        <Canvas Panel.ZIndex="5">
+                            <Rectangle Canvas.Top="0" Canvas.Left="40" Name="RepeatB_PART" Visibility="Collapsed" Opacity="0.8" HorizontalAlignment="Left" Width="10" Height="{TemplateBinding Height}" Fill="#FF00BB00" />
+                        </Canvas>
+
+                        <Popup Name="Popup_PART" AllowsTransparency="False" PopupAnimation="Slide">
                             <Border BorderThickness="1" Background="#FF1B1B1C" BorderBrush="#FF3F3F46" Padding="4" >
                                 <TextBlock Name="PopupText_PART" />
                             </Border>
@@ -50,6 +57,17 @@
                         <Popup Name="StoryBoardPopup_PART" AllowsTransparency="True" PopupAnimation="Slide" Placement="Top">
                             <Border BorderThickness="1" BorderBrush="#FF3F3F46">
                                 <Image x:Name="StoryBoard_PART" />
+                            </Border>
+                        </Popup>
+
+                        <Popup Name="RepeatAPopup_PART" AllowsTransparency="False" PopupAnimation="Slide">
+                            <Border BorderThickness="1" Background="#FF1B1B1C" BorderBrush="#FF3F3F46" Padding="4" >
+                                <TextBlock Name="RepeatAPopupText_PART" />
+                            </Border>
+                        </Popup>
+                        <Popup Name="RepeatBPopup_PART" AllowsTransparency="False" PopupAnimation="Slide">
+                            <Border BorderThickness="1" Background="#FF1B1B1C" BorderBrush="#FF3F3F46" Padding="4" >
+                                <TextBlock Name="RepeatBPopupText_PART" />
                             </Border>
                         </Popup>
                     </Grid>
