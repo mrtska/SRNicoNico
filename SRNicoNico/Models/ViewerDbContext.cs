@@ -14,7 +14,10 @@ namespace SRNicoNico.Models {
         /// ローカル視聴履歴テーブル
         /// </summary>
         public DbSet<LocalHistory> LocalHistories => Set<LocalHistory>();
-
+        /// <summary>
+        /// ABリピート管理テーブル
+        /// </summary>
+        public DbSet<ABRepeatPosition> ABRepeatPositions => Set<ABRepeatPosition>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
@@ -25,6 +28,8 @@ namespace SRNicoNico.Models {
                 .HasConversion(new DateTimeOffsetToBinaryConverter());
             history.Property(p => p.PostedAt)
                 .HasConversion(new DateTimeOffsetToBinaryConverter());
+
+            modelBuilder.Entity<ABRepeatPosition>().ToTable(nameof(ABRepeatPosition));
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
