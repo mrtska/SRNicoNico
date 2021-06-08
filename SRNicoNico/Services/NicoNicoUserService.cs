@@ -35,6 +35,10 @@ namespace SRNicoNico.Services {
         /// 自分がフォローしているコミュニティを取得するAPI
         /// </summary>
         private const string FollowingCommunitiesApiUrl = "https://public.api.nicovideo.jp/v1/user/followees/communities.json";
+        /// <summary>
+        /// ユーザー詳細を取得するAPI
+        /// </summary>
+        private const string UserDetailsApiUrl = "https://nvapi.nicovideo.jp/v1/users/";
 
         private readonly ISessionService SessionService;
 
@@ -301,6 +305,45 @@ namespace SRNicoNico.Services {
             }
             ret.Entries = list;
             return ret;
+        }
+
+        /// <inheritdoc />
+        public async Task<UserDetails> GetUserAsync(string userId) {
+
+            if (userId == null) {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            var result = await SessionService.GetAsync(UserDetailsApiUrl + userId, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var a = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var json = JsonObject.Parse(a);
+            var data = json.data;
+
+            return new UserDetails {
+                UserId = data.user.id.ToString(),
+                Description = data.user.description,
+                StrippedDescription = data.user.strippedDescription,
+                IsPremium = data.user.isPremium,
+                RegisteredVersion = data.user.registeredVersion,
+                FolloweeCount = (int)data.user.followeeCount,
+                FollowerCount = (int)data.user.followerCount,
+                CurrentLevel = (int)data.user.userLevel.currentLevel,
+                NextLevelThresholdExperience = (int)data.user.userLevel.nextLevelThresholdExperience,
+                NextLevelExperience = (int)data.user.userLevel.nextLevelExperience,
+                CurrentLevelExperience = (int)data.user.userLevel.currentLevelExperience,
+                UserChannel = data.user.userChannel,
+                IsNicorepoReadable = data.user.isNicorepoReadable,
+                Nickname = data.user.nickname,
+                ThumbnailLargeUrl = data.user.icons.large,
+                ThumbnailSmallUrl = data.user.icons.small,
+                IsFollowing = data.relationships.sessionUser.isFollowing,
+                IsMe = data.relationships.isMe
+            };
         }
     }
 }

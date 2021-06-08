@@ -148,5 +148,22 @@ namespace SRNicoNico.Tests {
                 break;
             }
         }
+
+        /// <summary>
+        /// 任意のユーザーの情報が正しく取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetUserUnitTest() {
+
+            var result = await UserService.GetUserAsync("23425727");
+
+            Assert.NotNull(result.UserId);
+            Assert.NotNull(result.Description);
+            Assert.NotNull(result.StrippedDescription);
+            Assert.NotNull(result.RegisteredVersion);
+            Assert.NotNull(result.Nickname);
+            Assert.NotNull(result.ThumbnailLargeUrl);
+            Assert.NotNull(result.ThumbnailSmallUrl);
+        }
     }
 }

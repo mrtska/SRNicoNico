@@ -46,5 +46,12 @@ namespace SRNicoNico.Services {
         /// <returns>コミュニティリスト 総数が多い場合はpageを使って取得する</returns>
         /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
         Task<CommunityList> GetFollowedCommunitiesAsync(int page = 1, int pageSize = 100);
+
+        /// <summary>
+        /// 指定したユーザーIDのユーザー情報を取得する
+        /// </summary>
+        /// <param name="userId">ユーザーいD</param>
+        /// <returns>ユーザー情報詳細</returns>
+        Task<UserDetails> GetUserAsync(string userId);
     }
 }
