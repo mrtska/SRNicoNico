@@ -315,6 +315,8 @@ namespace SRNicoNico.Views.Controls {
         private void SeekBar_SizeChanged(object sender, SizeChangedEventArgs e) {
 
             CalcThumbPosition();
+            MoveRepeatA(RepeatA);
+            MoveRepeatB(RepeatB);
         }
 
         private void SeekBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
