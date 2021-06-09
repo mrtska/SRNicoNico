@@ -97,7 +97,7 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// 動画タブ管理用ViewModelに動画のViewModelを追加する
         /// </summary>
-        /// <param name="vm"></param>
+        /// <param name="vm">動画タブ</param>
         public void AddVideoTab(VideoViewModel vm) {
 
             VideoTab.Add(vm);
@@ -108,6 +108,25 @@ namespace SRNicoNico.ViewModels {
             }
             // 表示を切り替える
             SelectedItem = VideoTab;
+        }
+
+        /// <summary>
+        /// タブを追加する
+        /// </summary>
+        /// <param name="vm">タブ</param>
+        public void AddTab(TabItemViewModel vm) {
+
+            UserItems.Add(vm);
+
+            // 表示を切り替える
+            SelectedItem = vm;
+
+            vm.CompositeDisposable.Add(() => {
+
+                // タブを閉じた時に自動的にリストから削除されるようにする
+                UserItems.Remove(vm);
+                SelectedItem = UserItems.LastOrDefault();
+            });
         }
 
         public void RegisterStatusChangeAction(Action<string> action) => StatusChangedAction = action;
