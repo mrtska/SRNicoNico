@@ -59,5 +59,18 @@ namespace SRNicoNico.Tests {
             AssertNicoRepo(await NicoRepoService.GetNicoRepoAsync(NicoRepoType.Community, NicoRepoFilter.All));
             AssertNicoRepo(await NicoRepoService.GetNicoRepoAsync(NicoRepoType.Mylist, NicoRepoFilter.All));
         }
+
+        /// <summary>
+        /// ユーザーニコレポを正しく取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetUserNicoRepoAllUnitTest() {
+
+            var userId = "23425727";
+
+            AssertNicoRepo(await NicoRepoService.GetUserNicoRepoAsync(userId, NicoRepoType.All, NicoRepoFilter.All));
+            AssertNicoRepo(await NicoRepoService.GetUserNicoRepoAsync(userId, NicoRepoType.All, NicoRepoFilter.Video));
+            AssertNicoRepo(await NicoRepoService.GetUserNicoRepoAsync(userId, NicoRepoType.All, NicoRepoFilter.VideoUpload));
+        }
     }
 }

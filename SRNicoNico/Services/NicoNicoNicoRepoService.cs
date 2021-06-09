@@ -16,7 +16,10 @@ namespace SRNicoNico.Services {
         /// ニコレポを取得するAPI
         /// </summary>
         private const string NicoRepoApiUrl = "https://public.api.nicovideo.jp/v1/timelines/nicorepo/last-1-month/my/pc/entries.json";
-
+        /// <summary>
+        /// ユーザーニコレポを取得するAPI
+        /// </summary>
+        private const string NicoRepoUserApiUrl = "https://public.api.nicovideo.jp/v1/timelines/nicorepo/last-6-months/users/{0}/pc/entries.json";
 
         private readonly ISessionService SessionService;
 
@@ -25,11 +28,9 @@ namespace SRNicoNico.Services {
             SessionService = sessionService;
         }
 
-        /// <inheritdoc />
-        public async Task<NicoRepoList> GetNicoRepoAsync(NicoRepoType type, NicoRepoFilter filter, string? untilId = null) {
+        private async Task<NicoRepoList> GetNicoRepoAsync(string? userId, NicoRepoType type, NicoRepoFilter filter, string? untilId = null) {
 
-            var query = new GetRequestQueryBuilder(NicoRepoApiUrl);
-
+            var query = new GetRequestQueryBuilder(userId == null ? NicoRepoApiUrl : string.Format(NicoRepoUserApiUrl, userId));
             if (type != NicoRepoType.All) {
 
                 query.AddQuery("list", type.GetLabel()!);
@@ -86,6 +87,16 @@ namespace SRNicoNico.Services {
             ret.Entries = entries;
 
             return ret;
+        }
+
+        /// <inheritdoc />
+        public Task<NicoRepoList> GetNicoRepoAsync(NicoRepoType type, NicoRepoFilter filter, string? untilId = null) {
+            return GetNicoRepoAsync(null, type, filter, untilId);
+        }
+
+        /// <inheritdoc />
+        public Task<NicoRepoList> GetUserNicoRepoAsync(string userId, NicoRepoType type, NicoRepoFilter filter, string? untilId = null) {
+            return GetNicoRepoAsync(userId, type, filter, untilId);
         }
     }
 }
