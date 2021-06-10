@@ -356,16 +356,6 @@ namespace SRNicoNico.Services {
             };
         }
 
-        public async Task TestAsync() {
-
-            var result = await SessionService.GetAsync("https://nvapi.nicovideo.jp/v1/users/me/hot_topic-ranking/ranking/0", NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
-
-            var a = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var json = JsonObject.Parse(a);
-            ;
-
-        }
-
         private UserFollowList ParseFollowList(dynamic data) {
 
             var summary = data.summary;

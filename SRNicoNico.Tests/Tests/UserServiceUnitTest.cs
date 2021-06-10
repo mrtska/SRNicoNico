@@ -166,12 +166,6 @@ namespace SRNicoNico.Tests {
             Assert.NotNull(result.ThumbnailSmallUrl);
         }
 
-        [Fact]
-        public async Task Test() {
-
-            await UserService.TestAsync();
-        }
-
         /// <summary>
         /// 任意のユーザーのフォロー情報が正しく取得出来ることのテスト
         /// </summary>

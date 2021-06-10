@@ -83,10 +83,7 @@ namespace SRNicoNico.Services {
         /// <param name="pageSize">1ページのアイテムの数</param>
         /// <returns>投稿動画のリスト</returns>
         Task<VideoList> GetUserVideosAsync(string userId, VideoSortKey sortKey, int page = 1, int pageSize = 100);
-
-        Task TestAsync();
     }
-
 
     /// <summary>
     /// 投稿動画のソート順のキー
