@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DynaJson;
@@ -47,6 +45,10 @@ namespace SRNicoNico.Services {
         /// ユーザーをフォローしているユーザーを取得するAPI
         /// </summary>
         private const string UserFollowerApiUrl = "https://nvapi.nicovideo.jp/v1/users/{0}/followed-by/users";
+        /// <summary>
+        /// ユーザーの投稿動画を取得するAPI
+        /// </summary>
+        private const string UserVideoApiUrl = "https://nvapi.nicovideo.jp/v2/users/{0}/videos";
 
         private readonly ISessionService SessionService;
 
@@ -301,7 +303,7 @@ namespace SRNicoNico.Services {
                 };
                 var tags = new List<string>();
                 foreach (var tag in community.tags) {
-                    
+
                     if (tag == null) {
                         continue;
                     }
@@ -416,9 +418,7 @@ namespace SRNicoNico.Services {
 
                 throw new StatusErrorException(result.StatusCode);
             }
-
-            var a = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var json = JsonObject.Parse(a);
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
 
             return ParseFollowList(json.data);
         }
@@ -442,11 +442,74 @@ namespace SRNicoNico.Services {
 
                 throw new StatusErrorException(result.StatusCode);
             }
-
-            var a = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var json = JsonObject.Parse(a);
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
 
             return ParseFollowList(json.data);
+        }
+
+        /// <inheritdoc />
+        public async Task<VideoList> GetUserVideosAsync(string userId, VideoSortKey sortKey, int page = 1, int pageSize = 100) {
+
+            if (userId == null) {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            var builder = new GetRequestQueryBuilder(string.Format(UserVideoApiUrl, userId))
+                .AddRawQuery(sortKey.GetLabel()!)
+                .AddQuery("pageSize", pageSize)
+                .AddQuery("page", page);
+
+            var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+
+            var items = new List<VideoListItem>();
+
+            foreach (var item in data.items) {
+
+                if (item == null) {
+                    continue;
+                }
+                var essential = item.essential;
+                var series = item.series;
+
+                items.Add(new VideoListItem {
+                    CommentCount = (int)essential.count.comment,
+                    LikeCount = (int)essential.count.like,
+                    MylistCount = (int)essential.count.mylist,
+                    ViewCount = (int)essential.count.view,
+                    Duration = (int)essential.duration,
+                    Id = essential.id,
+                    IsChannelVideo = essential.isChannelVideo,
+                    IsPaymentRequired = essential.isPaymentRequired,
+                    LatestCommentSummary = essential.latestCommentSummary,
+                    OwnerIconUrl = essential.owner.iconUrl,
+                    OwnerId = essential.owner.id,
+                    OwnerName = essential.owner.name,
+                    OwnerType = essential.owner.ownerType,
+                    PlaybackPosition = (int?)essential.playbackPosition,
+                    RegisteredAt = DateTimeOffset.Parse(essential.registeredAt),
+                    RequireSensitiveMasking = essential.requireSensitiveMasking,
+                    ShortDescription = essential.shortDescription,
+                    ThumbnailUrl = essential.thumbnail.listingUrl,
+                    Title = essential.title,
+
+                    SeriesId = series?.id.ToString(),
+                    SeriesOrder = (int?)series?.order,
+                    SeriesTitle = series?.title
+                });
+            }
+
+            return new VideoList {
+                Items = items,
+                TotalCount = (int)data.totalCount
+            };
         }
     }
 }
