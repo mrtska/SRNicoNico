@@ -33,7 +33,7 @@ namespace SRNicoNico.Services {
         Task<bool> DeleteWatchLaterAsync(params string[] itemIds);
 
         /// <summary>
-        /// マイリストの一覧を取得する
+        /// 自分のマイリストの一覧を取得する
         /// </summary>
         /// <param name="sampleItemCount">含めたい動画数 デフォルトは0</param>
         /// <returns>マイリストの一覧</returns>
@@ -65,6 +65,14 @@ namespace SRNicoNico.Services {
         /// <param name="itemIds">削除対象の動画のアイテムID</param>
         /// <returns>成功したらTrue</returns>
         Task<bool> DeleteMylistItemAsync(string mylistId, params string[] itemIds);
+
+        /// <summary>
+        /// 指定したユーザーIDの公開マイリストを取得する
+        /// </summary>
+        /// <param name="userId">ユーザーID</param>
+        /// <param name="sampleItemCount">含めたい動画数 デフォルトは0</param>
+        /// <returns>マイリストの一覧</returns>
+        IAsyncEnumerable<MylistListEntry> GetUserPublicMylistAsync(string userId, int sampleItemCount = 0);
 
     }
     /// <summary>

@@ -173,5 +173,32 @@ namespace SRNicoNico.Tests {
             result = await MylistService.DeleteMylistItemAsync("70670861", "1173108780");
             Assert.True(result);
         }
+
+        /// <summary>
+        /// 任意のユーザーの公開マイリストの一覧が取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetPublicMylistsUnitTest() {
+
+            await foreach (var result in MylistService.GetUserPublicMylistAsync("23425727", 1)) {
+
+                Assert.NotEqual(default, result.CreatedAt);
+                Assert.NotNull(result.DefaultSortKey);
+                Assert.NotNull(result.DefaultSortOrder);
+                Assert.NotNull(result.Description);
+                Assert.NotNull(result.Id);
+                Assert.NotNull(result.Name);
+
+                Assert.NotNull(result.OwnerType);
+                Assert.NotNull(result.OwnerIconUrl);
+                Assert.NotNull(result.OwnerId);
+                Assert.NotNull(result.OwnerName);
+
+                Assert.NotNull(result.SampleItems);
+
+                // 最初の一つだけを確認する
+                break;
+            }
+        }
     }
 }
