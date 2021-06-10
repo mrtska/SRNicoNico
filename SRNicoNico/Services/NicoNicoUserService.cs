@@ -39,6 +39,14 @@ namespace SRNicoNico.Services {
         /// ユーザー詳細を取得するAPI
         /// </summary>
         private const string UserDetailsApiUrl = "https://nvapi.nicovideo.jp/v1/users/";
+        /// <summary>
+        /// ユーザーがフォローしているユーザーを取得するAPI
+        /// </summary>
+        private const string UserFollowingApiUrl = "https://nvapi.nicovideo.jp/v1/users/{0}/following/users";
+        /// <summary>
+        /// ユーザーをフォローしているユーザーを取得するAPI
+        /// </summary>
+        private const string UserFollowerApiUrl = "https://nvapi.nicovideo.jp/v1/users/{0}/followed-by/users";
 
         private readonly ISessionService SessionService;
 
@@ -344,6 +352,101 @@ namespace SRNicoNico.Services {
                 IsFollowing = data.relationships.sessionUser.isFollowing,
                 IsMe = data.relationships.isMe
             };
+        }
+
+        public async Task TestAsync() {
+
+            var result = await SessionService.GetAsync("https://nvapi.nicovideo.jp/v1/users/me/hot_topic-ranking/ranking/0", NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+
+            var a = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var json = JsonObject.Parse(a);
+            ;
+
+        }
+
+        private UserFollowList ParseFollowList(dynamic data) {
+
+            var summary = data.summary;
+
+            var items = new List<UserFollowItem>();
+
+            foreach (var item in data.items) {
+
+                if (item == null) {
+                    continue;
+                }
+
+                items.Add(new UserFollowItem {
+                    UserId = item.id.ToString(),
+                    Description = item.description,
+                    IsFollowing = item.relationships.sessionUser.isFollowing,
+                    IsPremium = item.isPremium,
+                    Nickname = item.nickname,
+                    StrippedDescription = item.strippedDescription,
+                    ThumbnailLargeUrl = item.icons.large,
+                    ThumbnailSmallUrl = item.icons.small
+                });
+            }
+
+            return new UserFollowList {
+                Items = items,
+                Cursor = summary.cursor,
+                Followees = (int)summary.followees,
+                Followers = (int)summary.followers,
+                HasNext = summary.hasNext
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<UserFollowList> GetUserFollowingAsync(string userId, string? cursor = null, int pageSIze = 100) {
+
+            if (userId == null) {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            var query = new GetRequestQueryBuilder(string.Format(UserFollowingApiUrl, userId))
+                .AddQuery("pageSize", pageSIze);
+
+            if (!string.IsNullOrEmpty(cursor)) {
+                query.AddQuery("cursor", cursor);
+            }
+
+            var result = await SessionService.GetAsync(query.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var a = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var json = JsonObject.Parse(a);
+
+            return ParseFollowList(json.data);
+        }
+
+        /// <inheritdoc />
+        public async Task<UserFollowList> GetUserFollowerAsync(string userId, string? cursor = null, int pageSIze = 100) {
+
+            if (userId == null) {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            var query = new GetRequestQueryBuilder(string.Format(UserFollowerApiUrl, userId))
+                .AddQuery("pageSize", pageSIze);
+
+            if (!string.IsNullOrEmpty(cursor)) {
+                query.AddQuery("cursor", cursor);
+            }
+
+            var result = await SessionService.GetAsync(query.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var a = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var json = JsonObject.Parse(a);
+
+            return ParseFollowList(json.data);
         }
     }
 }

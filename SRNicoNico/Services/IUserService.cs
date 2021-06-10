@@ -50,8 +50,28 @@ namespace SRNicoNico.Services {
         /// <summary>
         /// 指定したユーザーIDのユーザー情報を取得する
         /// </summary>
-        /// <param name="userId">ユーザーいD</param>
+        /// <param name="userId">ユーザーID</param>
         /// <returns>ユーザー情報詳細</returns>
         Task<UserDetails> GetUserAsync(string userId);
+
+        /// <summary>
+        /// 指定したユーザーがフォローしているユーザーのリストを返す
+        /// </summary>
+        /// <param name="userId">ユーザーID</param>
+        /// <param name="cursor">位置</param>
+        /// <param name="pageSIze">1ページのアイテムの数</param>
+        /// <returns>ユーザーリスト</returns>
+        Task<UserFollowList> GetUserFollowingAsync(string userId, string? cursor = null, int pageSIze = 100);
+
+        /// <summary>
+        /// 指定したユーザーをフォローしているユーザーのリストを返す
+        /// </summary>
+        /// <param name="userId">ユーザーID</param>
+        /// <param name="cursor">位置</param>
+        /// <param name="pageSIze">1ページのアイテムの数</param>
+        /// <returns>ユーザーリスト</returns>
+        Task<UserFollowList> GetUserFollowerAsync(string userId, string? cursor = null, int pageSIze = 100);
+
+        Task TestAsync();
     }
 }

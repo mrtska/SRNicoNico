@@ -165,5 +165,63 @@ namespace SRNicoNico.Tests {
             Assert.NotNull(result.ThumbnailLargeUrl);
             Assert.NotNull(result.ThumbnailSmallUrl);
         }
+
+        [Fact]
+        public async Task Test() {
+
+            await UserService.TestAsync();
+        }
+
+        /// <summary>
+        /// 任意のユーザーのフォロー情報が正しく取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetUserFollowingUnitTest() {
+
+            var result = await UserService.GetUserFollowingAsync("23425727");
+
+            Assert.NotNull(result.Cursor);
+            Assert.NotEqual(0, result.Followers);
+            Assert.NotEqual(0, result.Followees);
+
+            Assert.NotEmpty(result.Items);
+            
+            foreach (var item in result.Items) {
+
+                Assert.NotNull(item.Description);
+                Assert.NotNull(item.Nickname);
+                Assert.NotNull(item.StrippedDescription);
+                Assert.NotNull(item.ThumbnailLargeUrl);
+                Assert.NotNull(item.ThumbnailSmallUrl);
+                Assert.NotNull(item.UserId);
+                break;
+            }
+        }
+
+        /// <summary>
+        /// 任意のユーザーのフォロワー情報が正しく取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetUserFollowerUnitTest() {
+
+            var result = await UserService.GetUserFollowerAsync("23425727");
+
+            Assert.NotNull(result.Cursor);
+            Assert.NotEqual(0, result.Followers);
+            Assert.NotEqual(0, result.Followees);
+
+            Assert.NotEmpty(result.Items);
+
+            foreach (var item in result.Items) {
+
+                Assert.NotNull(item.Description);
+                Assert.NotNull(item.Nickname);
+                Assert.NotNull(item.StrippedDescription);
+                Assert.NotNull(item.ThumbnailLargeUrl);
+                Assert.NotNull(item.ThumbnailSmallUrl);
+                Assert.NotNull(item.UserId);
+                break;
+            }
+        }
     }
 }
