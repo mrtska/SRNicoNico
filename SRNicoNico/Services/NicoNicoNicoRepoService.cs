@@ -95,8 +95,8 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public Task<NicoRepoList> GetUserNicoRepoAsync(string userId, NicoRepoType type, NicoRepoFilter filter, string? untilId = null) {
-            return GetNicoRepoAsync(userId, type, filter, untilId);
+        public Task<NicoRepoList> GetUserNicoRepoAsync(string userId, NicoRepoFilter filter, string? untilId = null) {
+            return GetNicoRepoAsync(userId, NicoRepoType.All, filter, untilId);
         }
     }
 }

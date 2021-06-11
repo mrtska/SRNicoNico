@@ -22,11 +22,10 @@ namespace SRNicoNico.Services {
         /// 指定したユーザーと条件のニコレポを取得する
         /// </summary>
         /// <param name="userId">ユーザーID</param>
-        /// <param name="type">ニコレポの種類</param>
         /// <param name="filter">フィルタ</param>
         /// <param name="untilId">さらに読み込む時のID</param>
         /// <returns>ニコレポのリスト</returns>
-        Task<NicoRepoList> GetUserNicoRepoAsync(string userId, NicoRepoType type, NicoRepoFilter filter, string? untilId = null);
+        Task<NicoRepoList> GetUserNicoRepoAsync(string userId, NicoRepoFilter filter, string? untilId = null);
     }
 
     /// <summary>

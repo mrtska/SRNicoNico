@@ -32,7 +32,7 @@ namespace SRNicoNico.Models {
                     mainContent.AddVideoTab(UnityContainer.Resolve<VideoViewModel>(new ParameterOverride("videoId", url[31..].Split('?')[0])));
                 } else if (url.StartsWith("https://www.nicovideo.jp/user/")) {
 
-                    mainContent.UserItems.Add(UnityContainer.Resolve<UserViewModel>(new ParameterOverride("userId", url[30..].Split('?')[0])));
+                    mainContent.AddTab(UnityContainer.Resolve<UserViewModel>(new ParameterOverride("userId", url[30..].Split('?')[0])));
                 }
             });
         }
