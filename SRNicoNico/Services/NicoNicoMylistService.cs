@@ -22,9 +22,13 @@ namespace SRNicoNico.Services {
         /// </summary>
         private const string MylistApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/mylists";
         /// <summary>
+        /// 公開マイリストの一覧取得API
+        /// </summary>
+        private const string PublicMylistsApiUrl = "https://nvapi.nicovideo.jp/v1/users/{0}/mylists";
+        /// <summary>
         /// 公開マイリスト取得API
         /// </summary>
-        private const string PublicMylistApiUrl = "https://nvapi.nicovideo.jp/v1/users/{0}/mylists";
+        private const string PublicMylistApiUrl = "https://nvapi.nicovideo.jp/v2/mylists/";
 
         private readonly ISessionService SessionService;
 
@@ -366,7 +370,7 @@ namespace SRNicoNico.Services {
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            var builder = new GetRequestQueryBuilder(string.Format(PublicMylistApiUrl, userId))
+            var builder = new GetRequestQueryBuilder(string.Format(PublicMylistsApiUrl, userId))
                 .AddQuery("sampleItemCount", sampleItemCount);
 
             var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
@@ -441,6 +445,89 @@ namespace SRNicoNico.Services {
                     SampleItems = sampleItems
                 };
             }
+        }
+
+
+        /// <inheritdoc />
+        public async Task<Mylist> GetPublicMylistAsync(string mylistId, MylistSortKey sortKey, int page, int pageSize = 100) {
+
+            if (string.IsNullOrEmpty(mylistId)) {
+                throw new ArgumentNullException(nameof(mylistId));
+            }
+
+            var builder = new GetRequestQueryBuilder(PublicMylistApiUrl + mylistId)
+                .AddRawQuery(sortKey.GetLabel()!)
+                .AddQuery("pageSize", pageSize)
+                .AddQuery("page", page);
+
+            var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var mylist = json.data.mylist;
+
+            var items = new List<MylistEntry>();
+            foreach (var item in mylist.items) {
+
+                if (item == null) {
+                    continue;
+                }
+                var video = item.video;
+                items.Add(new MylistEntry {
+                    AddedAt = DateTimeOffset.Parse(item.addedAt),
+                    ItemId = item.itemId.ToString(),
+                    Memo = item.description, // あとで見るはmemoだけどマイリストはdescription
+                    Status = item.status,
+
+                    ViewCount = (int)video.count.view,
+                    CommentCount = (int)video.count.comment,
+                    MylistCount = (int)video.count.mylist,
+                    LikeCount = (int)video.count.like,
+
+                    Duration = (int)video.duration,
+                    Id = video.id,
+                    IsChannelVideo = video.isChannelVideo,
+                    IsPaymentRequired = video.isPaymentRequired,
+                    LatestCommentSummary = video.latestCommentSummary,
+
+                    OwnerIconUrl = video.owner.iconUrl,
+                    OwnerId = video.owner.id,
+                    OwnerName = video.owner.name,
+                    OwnerType = video.owner.ownerType,
+
+                    PlaybackPosition = (int?)video.playbackPosition,
+                    RegisteredAt = DateTimeOffset.Parse(video.registeredAt),
+                    RequireSensitiveMasking = video.requireSensitiveMasking,
+                    ShortDescription = video.shortDescription,
+                    ThumbnailUrl = video.thumbnail.listingUrl,
+                    Title = video.title,
+                    Type = video.type,
+
+                    WatchId = item.watchId,
+                    VideoUrl = $"https://www.nicovideo.jp/watch/{video.id}"
+                });
+            }
+            return new Mylist {
+                DefaultSortKey = mylist.defaultSortKey,
+                DefaultSortOrder = mylist.defaultSortOrder,
+                Description = mylist.description,
+                FollowerCount = (int)mylist.followerCount,
+                HasInvisibleItems = mylist.hasInvisibleItems,
+                HasNext = mylist.hasNext,
+                Id = mylist.id.ToString(),
+                IsFollowing = mylist.isFollowing,
+                IsPublic = mylist.isPublic,
+                Name = mylist.name,
+                OwnerIconUrl = mylist.owner.iconUrl,
+                OwnerId = mylist.owner.id,
+                OwnerName = mylist.owner.name,
+                OwnerType = mylist.owner.ownerType,
+                TotalItemCount = (int)mylist.totalItemCount,
+                Entries = items
+            };
         }
     }
 }

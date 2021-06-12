@@ -2,11 +2,11 @@
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     /// <summary>
-    /// あとで見るの情報
+    /// あとで見るやマイリストの動画情報
     /// </summary>
     public class MylistEntry {
         /// <summary>
-        /// あとで見るに追加された日時
+        /// あとで見るやマイリストに追加された日時
         /// </summary>
         public DateTimeOffset AddedAt { get; set; }
         /// <summary>

@@ -74,6 +74,14 @@ namespace SRNicoNico.Services {
         /// <returns>マイリストの一覧</returns>
         IAsyncEnumerable<MylistListEntry> GetUserPublicMylistAsync(string userId, int sampleItemCount = 0);
 
+        /// <summary>
+        /// 指定したマイリストIDの公開マイリストを取得する
+        /// </summary>
+        /// <param name="mylistId">マイリストID</param>
+        /// <param name="sortKey">並び順</param>
+        /// <param name="page">ページ</param>
+        /// <returns>マイリストの詳細</returns>
+        Task<Mylist> GetPublicMylistAsync(string mylistId, MylistSortKey sortKey, int page, int pageSize = 100);
     }
     /// <summary>
     /// マイリストやあとで見るのソート順のキー
