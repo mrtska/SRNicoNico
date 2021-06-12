@@ -11,9 +11,15 @@ namespace SRNicoNico.Services {
     /// </summary>
     public class NicoNicoSeriesService : ISeriesService {
         /// <summary>
+        /// ユーザーシリーズ取得API
+        /// </summary>
+        private const string UserSeriesApiUrl = "https://nvapi.nicovideo.jp/v1/users/{0}/series";
+        /// <summary>
         /// シリーズ取得API
         /// </summary>
-        private const string SeriesApiUrl = "https://nvapi.nicovideo.jp/v1/users/{0}/series";
+        private const string SeriesApiUrl = "https://nvapi.nicovideo.jp/v1/series/";
+
+
 
         private readonly ISessionService SessionService;
 
@@ -29,7 +35,7 @@ namespace SRNicoNico.Services {
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            var builder = new GetRequestQueryBuilder(string.Format(SeriesApiUrl, userId))
+            var builder = new GetRequestQueryBuilder(string.Format(UserSeriesApiUrl, userId))
                 .AddQuery("pageSize", pageSize)
                 .AddQuery("page", page);
 
@@ -65,6 +71,71 @@ namespace SRNicoNico.Services {
             return new SeriesList {
                 Items = items,
                 TotalCount = (int)data.totalCount
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<Series> GetSeriesAsync(string seriesId) {
+
+            if (seriesId == null) {
+                throw new ArgumentNullException(nameof(seriesId));
+            }
+
+            var result = await SessionService.GetAsync(SeriesApiUrl + seriesId, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+            var detail = data.detail;
+
+            var items = new List<VideoListItem>();
+
+            foreach (var item in data.items) {
+
+                if (item == null) {
+                    continue;
+                }
+                var video = item.video;
+
+                items.Add(new VideoListItem {
+                    CommentCount = (int)video.count.comment,
+                    LikeCount = (int)video.count.like,
+                    MylistCount = (int)video.count.mylist,
+                    ViewCount = (int)video.count.view,
+                    Duration = (int)video.duration,
+                    Id = video.id,
+                    IsChannelVideo = video.isChannelVideo,
+                    IsPaymentRequired = video.isPaymentRequired,
+                    LatestCommentSummary = video.latestCommentSummary,
+                    OwnerIconUrl = video.owner.iconUrl,
+                    OwnerId = video.owner.id,
+                    OwnerName = video.owner.name,
+                    OwnerType = video.owner.ownerType,
+                    PlaybackPosition = (int?)video.playbackPosition,
+                    RegisteredAt = DateTimeOffset.Parse(video.registeredAt),
+                    RequireSensitiveMasking = video.requireSensitiveMasking,
+                    ShortDescription = video.shortDescription,
+                    ThumbnailUrl = video.thumbnail.listingUrl,
+                    Title = video.title
+                });
+            }
+
+            return new Series {
+                SeriesId = detail.id.ToString(),
+                OwnerId = detail.owner.id,
+                OwnerType = detail.owner.type,
+                OwnerName = detail.owner.user.nickname,
+                Title = detail.title,
+                Description = detail.description,
+                ThumbnailUrl = detail.thumbnailUrl,
+                IsListed = detail.isListed,
+                CreatedAt = DateTimeOffset.Parse(detail.createdAt),
+                UpdatedAt = DateTimeOffset.Parse(detail.updatedAt),
+                TotalCount = (int)data.totalCount,
+                Items = items
             };
         }
     }

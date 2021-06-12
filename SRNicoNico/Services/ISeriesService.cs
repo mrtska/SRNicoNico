@@ -18,6 +18,11 @@ namespace SRNicoNico.Services {
         /// <returns>シリーズのリスト</returns>
         Task<SeriesList> GetUserSeriesAsync(string userId, int page = 1, int pageSize = 100);
 
-
+        /// <summary>
+        /// 指定したIDのシリーズ情報を取得する
+        /// </summary>
+        /// <param name="seriesId">シリーズID</param>
+        /// <returns>シリーズ情報</returns>
+        Task<Series> GetSeriesAsync(string seriesId);
     }
 }
