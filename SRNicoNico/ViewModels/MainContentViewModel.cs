@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using Livet;
 using Unity;
@@ -62,6 +63,8 @@ namespace SRNicoNico.ViewModels {
             VideoTab = new VideoTabViewModel(() => {
                 UserItems.Remove(VideoTab!);
             });
+            // Statusを監視する
+            VideoTab.PropertyChanged += OnPropertyChanged;
         }
 
         /// <summary>
@@ -83,14 +86,7 @@ namespace SRNicoNico.ViewModels {
                 CompositeDisposable.Add(vm);
 
                 // Statusを監視する
-                vm.PropertyChanged += (o, e) => {
-
-                    var tabItem = (TabItemViewModel)o;
-                    if (e.PropertyName == nameof(TabItemViewModel.Status)) {
-
-                        StatusChangedAction?.Invoke(tabItem.Status);
-                    }
-                };
+                vm.PropertyChanged += OnPropertyChanged;
             });
         }
 
@@ -118,15 +114,27 @@ namespace SRNicoNico.ViewModels {
 
             UserItems.Add(vm);
 
-            // 表示を切り替える
-            SelectedItem = vm;
-
+            // Statusを監視する
+            vm.PropertyChanged += OnPropertyChanged;
             vm.CompositeDisposable.Add(() => {
 
                 // タブを閉じた時に自動的にリストから削除されるようにする
                 UserItems.Remove(vm);
+                vm.PropertyChanged -= OnPropertyChanged;
                 SelectedItem = UserItems.LastOrDefault();
             });
+
+            // 表示を切り替える
+            SelectedItem = vm;
+        }
+
+        private void OnPropertyChanged(object o, PropertyChangedEventArgs e) {
+
+            var tabItem = (TabItemViewModel)o;
+            if (e.PropertyName == nameof(TabItemViewModel.Status)) {
+
+                StatusChangedAction?.Invoke(tabItem.Status);
+            }
         }
 
         public void RegisterStatusChangeAction(Action<string> action) => StatusChangedAction = action;

@@ -7,7 +7,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:v="clr-namespace:SRNicoNico.Views" xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              d:DataContext="{d:DesignInstance Type=vm:UserViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -109,7 +110,6 @@
                 </ScrollViewer>
             </Grid>
         </Grid>
-
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -118,15 +118,24 @@
             <metro:TabView Style="{DynamicResource HorizontalViewStyle}" Background="{DynamicResource ActiveBackgroundBrushKey}" Height="38" ItemsSource="{Binding UserItems}" SelectedValue="{Binding SelectedItem}" />
             <ItemsControl Grid.Row="1" ItemsSource="{Binding UserItems}">
                 <ItemsControl.Resources>
-                    <!--<DataTemplate DataType="{x:Type vm:UserNicoRepoViewModel}">
+                    <DataTemplate DataType="{x:Type vm:UserNicoRepoViewModel}">
                         <v:UserNicoRepo />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type vm:UserFolloweeViewModel}">
+                        <v:UserFollowing />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type vm:UserFollowerViewModel}">
+                        <v:UserFollower />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type vm:UserMylistViewModel}">
                         <v:UserMylist />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type vm:UserVideoViewModel}">
                         <v:UserVideo />
-                    </DataTemplate>-->
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type vm:UserSeriesViewModel}">
+                        <v:UserSeries />
+                    </DataTemplate>
                 </ItemsControl.Resources>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -140,7 +149,6 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
-        
         <metro:ProgressRing Grid.RowSpan="2" IsActive="{Binding IsActive}" />
     </Grid>
 </UserControl>

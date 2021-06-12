@@ -5,6 +5,7 @@ using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Services;
 using Unity;
+using Unity.Resolution;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
@@ -102,12 +103,13 @@ namespace SRNicoNico.ViewModels {
 
             UserItems.Clear();
 
-            UserItems.Add(UnityContainer.Resolve<UserNicoRepoViewModel>());
-            UserItems.Add(UnityContainer.Resolve<UserFolloweeViewModel>());
-            UserItems.Add(UnityContainer.Resolve<UserFollowerViewModel>());
-            UserItems.Add(UnityContainer.Resolve<UserMylistViewModel>());
-            UserItems.Add(UnityContainer.Resolve<UserVideoViewModel>());
-            UserItems.Add(UnityContainer.Resolve<UserSeriesViewModel>());
+            var po = new ParameterOverride("userId", UserId);
+            UserItems.Add(UnityContainer.Resolve<UserNicoRepoViewModel>(po));
+            UserItems.Add(UnityContainer.Resolve<UserFolloweeViewModel>(po));
+            UserItems.Add(UnityContainer.Resolve<UserFollowerViewModel>(po));
+            UserItems.Add(UnityContainer.Resolve<UserMylistViewModel>(po));
+            UserItems.Add(UnityContainer.Resolve<UserVideoViewModel>(po));
+            UserItems.Add(UnityContainer.Resolve<UserSeriesViewModel>(po));
 
             // 子ViewModelのStatusを監視する
             UserItems.ToList().ForEach(vm => {

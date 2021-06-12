@@ -68,9 +68,9 @@ namespace SRNicoNico.Tests {
 
             var userId = "23425727";
 
-            AssertNicoRepo(await NicoRepoService.GetUserNicoRepoAsync(userId, NicoRepoType.All, NicoRepoFilter.All));
-            AssertNicoRepo(await NicoRepoService.GetUserNicoRepoAsync(userId, NicoRepoType.All, NicoRepoFilter.Video));
-            AssertNicoRepo(await NicoRepoService.GetUserNicoRepoAsync(userId, NicoRepoType.All, NicoRepoFilter.VideoUpload));
+            AssertNicoRepo(await NicoRepoService.GetUserNicoRepoAsync(userId, NicoRepoFilter.All));
+            AssertNicoRepo(await NicoRepoService.GetUserNicoRepoAsync(userId, NicoRepoFilter.Video));
+            AssertNicoRepo(await NicoRepoService.GetUserNicoRepoAsync(userId, NicoRepoFilter.VideoUpload));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Input;
 using Livet;
 
@@ -14,7 +15,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public DispatcherCollection<VideoViewModel> TabItems {
             get { return _TabItems; }
-            set { 
+            set {
                 if (_TabItems == value)
                     return;
                 _TabItems = value;
@@ -28,7 +29,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public VideoViewModel? SelectedItem {
             get { return _SelectedItem; }
-            set { 
+            set {
                 if (_SelectedItem == value)
                     return;
                 _SelectedItem = value;
@@ -46,6 +47,15 @@ namespace SRNicoNico.ViewModels {
             };
         }
 
+        private void OnPropertyChanged(object o, PropertyChangedEventArgs e) {
+
+            var tabItem = (TabItemViewModel)o;
+            if (e.PropertyName == nameof(Status)) {
+
+                Status = tabItem.Status;
+            }
+        }
+
         /// <summary>
         /// タブのリストに動画を追加する
         /// </summary>
@@ -55,16 +65,11 @@ namespace SRNicoNico.ViewModels {
             TabItems.Add(vm);
 
             // ステータスプロパティが更新されたら動画タブのステータスに反映させる
-            vm.PropertyChanged += (o, e) => {
-                var tabItem = (TabItemViewModel)o;
-                if (e.PropertyName == nameof(Status)) {
-
-                    Status = tabItem.Status;
-                }
-            };
+            vm.PropertyChanged += OnPropertyChanged;
             // 動画タブがDisposeされたら自動的にリストから削除する
             vm.CompositeDisposable.Add(() => {
 
+                vm.PropertyChanged -= OnPropertyChanged;
                 TabItems.Remove(vm);
             });
             // タブが追加されたらそのタブを選択状態にする
