@@ -12,7 +12,6 @@ namespace SRNicoNico.Services {
     /// ニコニコのユーザー関連の機能の実装
     /// </summary>
     public class NicoNicoUserService : IUserService {
-
         /// <summary>
         /// 自分がフォローしているユーザーを取得するAPI
         /// </summary>
@@ -49,6 +48,10 @@ namespace SRNicoNico.Services {
         /// ユーザーの投稿動画を取得するAPI
         /// </summary>
         private const string UserVideoApiUrl = "https://nvapi.nicovideo.jp/v2/users/{0}/videos";
+        /// <summary>
+        /// ユーザーをフォロー/フォロー解除するAPI
+        /// </summary>
+        private const string UserFollowApiUrl = "https://user-follow-api.nicovideo.jp/v1/user/followees/niconico-users/{0}.json";
 
         private readonly ISessionService SessionService;
 
@@ -500,6 +503,42 @@ namespace SRNicoNico.Services {
                 Items = items,
                 TotalCount = (int)data.totalCount
             };
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> FollowUserAsync(string userId) {
+
+            if (userId == null) {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            var result = await SessionService.PostAsync(string.Format(UserFollowApiUrl, userId), (IDictionary<string, string>?)null, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            return json.meta.status == 200;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> UnfollowUserAsync(string userId) {
+
+            if (userId == null) {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            var result = await SessionService.DeleteAsync(string.Format(UserFollowApiUrl, userId), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            return json.meta.status == 200;
         }
     }
 }

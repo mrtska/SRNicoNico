@@ -9,7 +9,6 @@ namespace SRNicoNico.Services {
     /// ユーザーを操作する処理を提供するサービス
     /// </summary>
     public interface IUserService {
-
         /// <summary>
         /// 自分がフォローしているユーザーを返す
         /// </summary>
@@ -83,6 +82,20 @@ namespace SRNicoNico.Services {
         /// <param name="pageSize">1ページのアイテムの数</param>
         /// <returns>投稿動画のリスト</returns>
         Task<VideoList> GetUserVideosAsync(string userId, VideoSortKey sortKey, int page = 1, int pageSize = 100);
+
+        /// <summary>
+        /// 指定したユーザーをフォローする
+        /// </summary>
+        /// <param name="userId">フォローしたいユーザー</param>
+        /// <returns>成功したらTrue</returns>
+        Task<bool> FollowUserAsync(string userId);
+
+        /// <summary>
+        /// 指定したユーザーをフォロー解除する
+        /// </summary>
+        /// <param name="userId">フォロー解除したいユーザー</param>
+        /// <returns>成功したらTrue</returns>
+        Task<bool> UnfollowUserAsync(string userId);
     }
 
     /// <summary>

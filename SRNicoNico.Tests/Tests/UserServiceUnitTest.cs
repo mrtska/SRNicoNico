@@ -257,5 +257,16 @@ namespace SRNicoNico.Tests {
                 break;
             }
         }
+
+        /// <summary>
+        /// ユーザーを正しくフォロー/フォロー解除出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task FollowUserUnitTest() {
+
+            Assert.True(await UserService.FollowUserAsync("51818561"));
+            await Task.Delay(1000);
+            Assert.True(await UserService.UnfollowUserAsync("51818561"));
+        }
     }
 }
