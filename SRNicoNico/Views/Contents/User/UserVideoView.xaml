@@ -29,7 +29,7 @@
             <TextBlock Grid.Row="1" Text="{Binding Duration, Converter={StaticResource DurationConverter}}" HorizontalAlignment="Right" />
         </Grid>
         <StackPanel Grid.Column="1" Margin="5,0,0,0">
-            <TextBlock FontSize="16" Text="{Binding Title}" />
+            <TextBlock FontSize="16" Text="{Binding Title}" TextWrapping="Wrap" />
             <TextBlock Text="{Binding ShortDescription}" TextWrapping="Wrap" Foreground="Gray" Margin="0,3" />
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Id, StringFormat=動画ID：{0}}" Margin="0,0,5,0" />

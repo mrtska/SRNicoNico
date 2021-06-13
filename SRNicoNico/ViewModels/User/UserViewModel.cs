@@ -131,9 +131,33 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// フォローするまたは解除する
         /// </summary>
-        public void ToggleFollow() {
+        public async void ToggleFollow() {
 
+            IsActive = true;
+            try {
+                if (IsFollow) {
 
+                    Status = "フォローを解除中";
+                    var result = await UserService.UnfollowUserAsync(UserId);
+                    Status = result ? "フォローを解除しました" : "フォローの解除に失敗しました";
+                    if (result) {
+                        IsFollow = false;
+                    }
+                } else {
+
+                    Status = "フォロー中";
+                    var result = await UserService.FollowUserAsync(UserId);
+                    Status = result ? "フォローしました" : "フォローに失敗しました";
+                    if (result) {
+                        IsFollow = true;
+                    }
+                }
+            } catch (StatusErrorException e) {
+
+                Status = $"フォロー状態の操作に失敗しました。 ステータスコード: {e.StatusCode}";
+            } finally {
+                IsActive = false;
+            }
         }
 
         /// <summary>
@@ -154,7 +178,14 @@ namespace SRNicoNico.ViewModels {
 
         public override void KeyDown(KeyEventArgs e) {
 
-
+            // Ctrl+F5でユーザーページ全体をリロードする
+            if (e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control)) {
+                if (e.Key == Key.F5) {
+                    Reload();
+                    e.Handled = true;
+                    return;
+                }
+            }
 
             SelectedItem?.KeyDown(e);
         }

@@ -58,7 +58,7 @@
                 </Style>
             </ContentControl.Style>
             <controls:PageSpinner>
-                <ListBox ItemsSource="{Binding SeriesList.Items}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                <ListBox ItemsSource="{Binding SeriesList.Items}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.Resources>
                         <DataTemplate DataType="{x:Type w:SeriesListItem}">
                             <v:UserSeriesView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}" />

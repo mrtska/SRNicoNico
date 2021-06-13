@@ -21,7 +21,7 @@
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
         <StackPanel>
-            <TextBlock FontSize="16" Text="{Binding Name}" />
+            <TextBlock FontSize="16" Text="{Binding Name}" TextWrapping="Wrap" />
             <TextBlock  Text="{Binding Description}" ToolTip="{Binding Description}" TextTrimming="CharacterEllipsis" Margin="3" Foreground="Gray" />
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding FollowerCount, StringFormat='フォロワー数: {0}'}" Margin="0,0,5,0" />

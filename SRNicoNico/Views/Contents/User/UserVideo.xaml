@@ -74,11 +74,10 @@
                 </Style>
             </ContentControl.Style>
             <controls:PageSpinner>
-                <ListBox ItemsSource="{Binding VideoList.Items}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                <ListBox ItemsSource="{Binding VideoList.Items}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.Resources>
                         <DataTemplate DataType="{x:Type w:VideoListItem}">
-                            <v:UserVideoView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}">
-                            </v:UserVideoView>
+                            <v:UserVideoView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}" />
                         </DataTemplate>
                     </ListBox.Resources>
                 </ListBox>

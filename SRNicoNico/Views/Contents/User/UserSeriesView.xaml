@@ -22,8 +22,8 @@
         </Grid.ColumnDefinitions>
         <Image Source="{Binding ThumbnailUrl}" Margin="5,5,0,0" MaxHeight="60" />
         <StackPanel Grid.Column="1" Margin="10,0,0,0">
-            <TextBlock Text="{Binding Title}" FontSize="18" />
-            <TextBlock Text="{Binding Description}" FontSize="16" Foreground="Gray" />
+            <TextBlock Text="{Binding Title}" FontSize="18" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding Description}" FontSize="16" Foreground="Gray" TextWrapping="Wrap" />
             <TextBlock Text="{Binding ItemsCount, StringFormat='動画数: {0}'}" FontSize="14" VerticalAlignment="Bottom" />
         </StackPanel>
     </Grid>
