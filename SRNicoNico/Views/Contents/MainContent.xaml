@@ -80,6 +80,9 @@
                 <DataTemplate DataType="{x:Type vm:PublicMylistViewModel}">
                     <v:PublicMylist />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:SeriesViewModel}">
+                    <v:Series />
+                </DataTemplate>
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

@@ -36,6 +36,9 @@ namespace SRNicoNico.Models {
                 } else if (url.StartsWith("https://www.nicovideo.jp/mylist/")) {
 
                     mainContent.AddTab(UnityContainer.Resolve<PublicMylistViewModel>(new ParameterOverride("mylistId", url[32..].Split('?')[0])));
+                } else if (url.StartsWith("https://www.nicovideo.jp/series/")) {
+
+                    mainContent.AddTab(UnityContainer.Resolve<SeriesViewModel>(new ParameterOverride("seriesId", url[32..].Split('?')[0])));
                 }
             });
         }
