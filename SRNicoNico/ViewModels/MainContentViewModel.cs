@@ -79,6 +79,7 @@ namespace SRNicoNico.ViewModels {
             SystemItems.Add(UnityContainer.Resolve<MylistViewModel>());
             SystemItems.Add(UnityContainer.Resolve<HistoryViewModel>());
             SystemItems.Add(UnityContainer.Resolve<OtherViewModel>());
+            SystemItems.Add(UnityContainer.Resolve<SettingsViewModel>());
 
             SystemItems.ToList().ForEach(vm => {
 

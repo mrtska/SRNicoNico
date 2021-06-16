@@ -2,6 +2,9 @@
 using System.Threading;
 using System.Windows.Input;
 using Livet;
+using Livet.Messaging;
+using Livet.Messaging.Windows;
+using SRNicoNico.Models;
 using Unity;
 
 namespace SRNicoNico.ViewModels {
@@ -53,10 +56,24 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private bool _CanClose;
+        /// <summary>
+        /// 閉じても問題ないかどうか
+        /// </summary>
+        public bool CanClose {
+            get { return _CanClose; }
+            set { 
+                if (_CanClose == value)
+                    return;
+                _CanClose = value;
+                RaisePropertyChanged();
+            }
+        }
         public MainContentViewModel MainContent { get; private set; }
 
         public SignInViewModel SignIn { get; private set; }
 
+        private readonly ISettings Settings;
         // 時刻更新用のタイマー
         private readonly Timer Timer;
 
@@ -71,6 +88,7 @@ namespace SRNicoNico.ViewModels {
 
             MainContent = container.Resolve<MainContentViewModel>();
             SignIn = container.Resolve<SignInViewModel>();
+            Settings = container.Resolve<ISettings>();
             CompositeDisposable.Add(MainContent);
 
             // MainContentのViewModelもDIに登録しておく
@@ -114,5 +132,26 @@ namespace SRNicoNico.ViewModels {
             MainContent.SelectedItem?.MouseDown(e);
         }
 
+        /// <summary>
+        /// ウィンドウを閉じる時に呼ばれる
+        /// </summary>
+        public void Closing() {
+
+            if (Settings.ShowExitConfirmDialog) {
+
+                var message = new TransitionMessage(typeof(Views.ExitConfirmWindow), this, TransitionMode.Modal);
+
+                // View側がメッセージを処理し終えるまでブロックされる
+                Messenger.Raise(message);
+            } else {
+                CanClose = true;
+            }
+
+            if (CanClose) {
+                App.UIDispatcher!.BeginInvoke(new Action(() => {
+                    Messenger.Raise(new WindowActionMessage(WindowAction.Close));
+                }));
+            }
+        }
     }
 }

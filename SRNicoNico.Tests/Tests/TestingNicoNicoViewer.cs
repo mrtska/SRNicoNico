@@ -31,6 +31,19 @@ namespace SRNicoNico.Tests {
         /// </summary>
         public string UserSession { get; set; } = Constants.UserSession;
 
+
+        public string AccentColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string FontFamily { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool ShowExitConfirmDialog { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public void ChangeAccent() {
+            throw new NotImplementedException();
+        }
+
+        public void ChangeFontFamily() {
+            throw new NotImplementedException();
+        }
+
         public void OpenUrl(string url) {
             throw new NotImplementedException();
         }

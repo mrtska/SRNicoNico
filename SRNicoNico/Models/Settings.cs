@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using Windows.Storage;
 
 namespace SRNicoNico.Models {
@@ -11,9 +12,7 @@ namespace SRNicoNico.Models {
 
         private readonly IDictionary<string, object?> RoamingValues;
 
-        /// <summary>
-        /// ユーザーセッション
-        /// </summary>
+        /// <inheritdoc />
         public string? UserSession {
             get {
                 return RoamingValues.TryGetValue(nameof(UserSession), out var value) ? value as string : null;
@@ -23,9 +22,7 @@ namespace SRNicoNico.Models {
             }
         }
 
-        /// <summary>
-        /// WebViewで開くデフォルトページ
-        /// </summary>
+        /// <inheritdoc />
         public string DefaultWebViewPageUrl {
             get {
                 return RoamingValues.TryGetValue(nameof(DefaultWebViewPageUrl), out var value) && value != null ? (string)value : "https://www.nicovideo.jp/";
@@ -35,9 +32,59 @@ namespace SRNicoNico.Models {
             }
         }
 
+        /// <inheritdoc />
+        public string AccentColor {
+            get {
+                return RoamingValues.TryGetValue(nameof(AccentColor), out var value) && value != null ? (string)value : "Orange";
+            }
+            set {
+                RoamingValues[nameof(AccentColor)] = value;
+            }
+        }
+
+        /// <inheritdoc />
+        public string FontFamily {
+            get {
+                return RoamingValues.TryGetValue(nameof(FontFamily), out var value) && value != null ? (string)value : "Segoe UI";
+            }
+            set {
+                RoamingValues[nameof(FontFamily)] = value;
+            }
+        }
+
+        /// <inheritdoc />
+        public bool ShowExitConfirmDialog {
+            get {
+                return RoamingValues.TryGetValue(nameof(ShowExitConfirmDialog), out var value) && value != null ? (bool)value : true;
+            }
+            set {
+                RoamingValues[nameof(ShowExitConfirmDialog)] = value;
+            }
+        }
+
         public Settings() {
 
             RoamingValues = ApplicationData.Current.RoamingSettings.Values;
+        }
+
+
+        /// <inheritdoc />
+        public void ChangeAccent() {
+
+            var resourcePath = "pack://application:,,,/Themes/Accent/Orange.xaml";
+            if (AccentColor == "Blue") {
+                resourcePath = "pack://application:,,,/Themes/Accent/Blue.xaml";
+            } else if (AccentColor == "Purple") {
+                resourcePath = "pack://application:,,,/Themes/Accent/Purple.xaml";
+            }
+
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(resourcePath, UriKind.RelativeOrAbsolute) });
+        }
+
+        /// <inheritdoc />
+        public void ChangeFontFamily() {
+
+            Application.Current.Resources["NicoNicoViewerFontFamily"] = new System.Windows.Media.FontFamily(FontFamily);
         }
     }
 }

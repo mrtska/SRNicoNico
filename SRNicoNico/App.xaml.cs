@@ -1,12 +1,9 @@
-﻿using System.IO;
-using System.Reflection;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Threading;
 using Microsoft.EntityFrameworkCore;
 using SRNicoNico.Models;
 using SRNicoNico.Services;
 using SRNicoNico.ViewModels;
-using SRNicoNico.Views;
 using Unity;
 
 namespace SRNicoNico {
@@ -35,7 +32,9 @@ namespace SRNicoNico {
 
             UnityContainer = container;
 
-            MainWindow = new MainWindow { DataContext = container.Resolve<MainWindowViewModel>() };
+            ApplySettings(container.Resolve<ISettings>());
+
+            MainWindow = new Views.MainWindow { DataContext = container.Resolve<MainWindowViewModel>() };
             MainWindow.Visibility = Visibility.Visible;
             MainWindow.Activate();
         }
@@ -70,6 +69,17 @@ namespace SRNicoNico {
             container.RegisterType<IHistoryService, NicoNicoHistoryService>(TypeLifetime.Singleton);
 
             container.RegisterType<IVideoService, NicoNicoVideoService>(TypeLifetime.Singleton);
+        }
+
+        /// <summary>
+        /// 設定をアプリケーション全体に反映させる
+        /// </summary>
+        /// <param name="settings"></param>
+        private void ApplySettings(ISettings settings) {
+
+            // アクセントを変更
+            settings.ChangeAccent();
+            settings.ChangeFontFamily();
         }
     }
 }

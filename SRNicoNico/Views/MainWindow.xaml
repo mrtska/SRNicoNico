@@ -14,13 +14,14 @@
                    WindowStyle="SingleBorderWindow"
                    RenderOptions.BitmapScalingMode="HighQuality"
                    IsRestoringWindowPlacement="True"
-                   FontFamily="Segoe UI Emoji"
+                   FontFamily="{DynamicResource NicoNicoViewerFontFamily}"
                    TextOptions.TextFormattingMode="Display"
                    TextOptions.TextHintingMode="Auto"
                    TextOptions.TextRenderingMode="ClearType"
-                   Title="MainWindow" Height="700" Width="900">
+                   Title="{Binding Title}" Height="700" Width="900">
     <i:Interaction.Behaviors>
         <b:WindowInputEventBehavior />
+        <l:WindowCloseCancelBehavior CloseCanceledCallbackMethodTarget="{Binding}" CloseCanceledCallbackMethodName="Closing" CanClose="{Binding CanClose}"/>
     </i:Interaction.Behaviors>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="ContentRendered">

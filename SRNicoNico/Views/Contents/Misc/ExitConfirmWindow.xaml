@@ -1,0 +1,66 @@
+﻿<metro:MetroWindow   x:Class="SRNicoNico.Views.ExitConfirmWindow"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                     xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+                     d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
+                    mc:Ignorable="d"
+                    WindowStartupLocation="CenterOwner"
+		            Background="{DynamicResource ThemeBrushKey}"
+		            Foreground="{DynamicResource ActiveForegroundBrushKey}"
+                    SizeToContent="Height"
+                    ResizeMode="NoResize"
+                    WindowStyle="None"
+                    Width="400" Title="終了確認">
+    <i:Interaction.Triggers>
+        <l:InteractionMessageTrigger MessageKey="Exit" Messenger="{Binding Messenger, Mode=OneWay}">
+            <l:WindowInteractionMessageAction />
+        </l:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border metro:MetroWindow.IsCaptionBar="True" Background="{DynamicResource BackgroundBrushKey}">
+                <TextBlock Text="終了確認" TextTrimming="CharacterEllipsis" FontSize="18" Margin="10,0,0,0" VerticalAlignment="Center" />
+        </Border>
+        <StackPanel Grid.Row="1" Margin="10">
+            <TextBlock FontSize="16" HorizontalAlignment="Center" TextAlignment="Center">
+                終了しますか？<LineBreak />
+                <Run Foreground="Gray" FontSize="14">
+                    設定で表示しないようにすることも出来ます。
+                </Run>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+                <Button Content="終了" Margin="10,0">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction TargetObject="{Binding}" PropertyName="CanClose" Value="True" />
+                            <l:WindowInteractionMessageAction>
+                                <l:DirectInteractionMessage>
+                                    <l:WindowActionMessage Action="Close" />
+                                </l:DirectInteractionMessage>
+                            </l:WindowInteractionMessageAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button Content="キャンセル" Margin="10,0">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:WindowInteractionMessageAction>
+                                <l:DirectInteractionMessage>
+                                    <l:WindowActionMessage Action="Close" />
+                                </l:DirectInteractionMessage>
+                            </l:WindowInteractionMessageAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</metro:MetroWindow>
