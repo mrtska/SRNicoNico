@@ -29,7 +29,7 @@
             </Button>
         </Grid>
         <ScrollViewer Grid.Row="1">
-            <TextBlock TextWrapping="Wrap" Margin="20,10,0,0">
+            <TextBlock TextWrapping="Wrap" Margin="10">
                 このソフトウェアはオープンソースです。<LineBreak />
                 MITライセンスでGitHub上で公開されています。<LineBreak /><LineBreak />
             

@@ -14,10 +14,10 @@
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding Name}" Background="#252627" ToolTip="{Binding Name}" TextTrimming="CharacterEllipsis" FontSize="20" Padding="10,0" />
+        <TextBlock Text="{Binding Name}" Background="{DynamicResource AlternationBackgroundBrushKey}" ToolTip="{Binding Name}" TextTrimming="CharacterEllipsis" FontSize="20" Padding="10,0" />
         <ScrollViewer Grid.Row="1">
-            <StackPanel>
-                <TextBlock TextWrapping="Wrap" Margin="20,10,0,0">
+            <StackPanel Margin="10">
+                <TextBlock TextWrapping="Wrap">
                     このソフトウェアのリリースノートページ(トップページの更新履歴の部分)にはGoogle Analyticsが使用されています。<LineBreak />
                     Google Analyticsでは、利用者の行動データをCookieを利用して収集します。<LineBreak />
                     Google Analyticsで収集したデータ(利用者数など)はどのくらいの数の利用者がNicoNicoViewerを利用しているか把握するために使用します。<LineBreak />
@@ -25,20 +25,18 @@
                     このソフトウェアはオープンソースです。ご自身でリリースノートページを表示しないよう改変し、ビルドしてお使いいただくことも可能です。<LineBreak />
                     MITライセンスの範囲で自由にお使いください。<LineBreak /><LineBreak />
                     
-                    プライバシーポリシーについて不明な点がある場合は
-                    <Hyperlink NavigateUri="https://twitter.com/m__gl" ToolTip="https://twitter.com/m__gl">
+                    プライバシーポリシーについて不明な点がある場合は<Hyperlink NavigateUri="https://twitter.com/m__gl" ToolTip="https://twitter.com/m__gl">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="RequestNavigate">
                                 <i:LaunchUriOrFileAction Path="https://twitter.com/m__gl" />
                             </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        開発者
+                        </i:Interaction.Triggers>開発者
                     </Hyperlink>にお尋ねください。<LineBreak />
                 </TextBlock>
-                <TextBlock Text="アンインストール方法" FontSize="20" Margin="10,0" />
-                <TextBlock TextWrapping="Wrap" Margin="20,10,0,0">
-                このソフトウェアをアンインストールするには、インストールしたフォルダを削除します。デフォルト設定から変更していない場合は「C:\Program Files (x86)\SRNicoNico」です。<LineBreak />
-                設定ファイルも削除したい場合は、Win+Rを押し出てきたダイアログに「%APPDATA%」と入力してEnterを押します。出てきたエクスプローラで「SRNicoNico」フォルダを削除します。<LineBreak />
+                <TextBlock Text="アンインストール方法" FontSize="18" />
+                <TextBlock TextWrapping="Wrap" Margin="10,0,0,0">
+                    このソフトウェアをアンインストールするには、インストールしたフォルダを削除します。デフォルト設定から変更していない場合は「C:\Program Files (x86)\SRNicoNico」です。<LineBreak />
+                    設定ファイルも削除したい場合は、Win+Rを押し出てきたダイアログに「%APPDATA%」と入力してEnterを押します。出てきたエクスプローラで「SRNicoNico」フォルダを削除します。<LineBreak />
                 </TextBlock>
             </StackPanel>
         </ScrollViewer>

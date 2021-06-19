@@ -14,7 +14,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid Background="#252627">
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
             <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" TextTrimming="CharacterEllipsis" FontSize="20" Margin="10,0" VerticalAlignment="Center" />
         </Grid>
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto">
