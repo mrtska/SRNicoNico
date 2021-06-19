@@ -64,7 +64,7 @@ namespace SRNicoNico.ViewModels {
 
         private readonly ISettings Settings;
 
-        public SettingsGeneralViewModel(ISettings settings) : base("一般") {
+        public SettingsGeneralViewModel(ISettings settings) : base("一般設定") {
 
             Settings = settings;
         }

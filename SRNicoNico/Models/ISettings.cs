@@ -30,6 +30,36 @@
         bool ShowExitConfirmDialog { get; set; }
 
         /// <summary>
+        /// 動画を自動再生するかどうか
+        /// </summary>
+        bool AutomaticPlay { get; set; }
+
+        /// <summary>
+        /// フルスクリーン時にシークバーを常に表示するかどうか
+        /// </summary>
+        bool AlwaysShowSeekBar { get; set; }
+
+        /// <summary>
+        /// 動画をクリックした時に一時停止するかどうか
+        /// </summary>
+        bool ClickOnPause { get; set; }
+
+        /// <summary>
+        /// ジャンプコマンドを無効にするかどうか
+        /// </summary>
+        bool DisableJumpCommand { get; set; }
+
+        /// <summary>
+        /// レジューム再生を有効にするかどうか
+        /// </summary>
+        bool UseResumePlay { get; set; }
+
+        /// <summary>
+        /// カーソルキーでシークした際にシークする秒数
+        /// </summary>
+        int VideoSeekAmount { get; set; }
+
+        /// <summary>
         /// 現在の設定でアクセントを変更する
         /// </summary>
         void ChangeAccent();

@@ -50,6 +50,7 @@ namespace SRNicoNico.ViewModels {
         public void Loaded() {
 
             SettingsItems.Add(UnityContainer.Resolve<SettingsGeneralViewModel>());
+            SettingsItems.Add(UnityContainer.Resolve<SettingsVideoViewModel>());
 
             // 子ViewModelのStatusを監視する
             SettingsItems.ToList().ForEach(vm => {

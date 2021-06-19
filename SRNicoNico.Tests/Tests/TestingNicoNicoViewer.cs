@@ -35,6 +35,12 @@ namespace SRNicoNico.Tests {
         public string AccentColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public string FontFamily { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool ShowExitConfirmDialog { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool AutomaticPlay { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool AlwaysShowSeekBar { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool ClickOnPause { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool DisableJumpCommand { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool UseResumePlay { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int VideoSeekAmount { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public void ChangeAccent() {
             throw new NotImplementedException();

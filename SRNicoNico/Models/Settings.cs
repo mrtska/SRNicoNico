@@ -62,6 +62,66 @@ namespace SRNicoNico.Models {
             }
         }
 
+        /// <inheritdoc />
+        public bool AutomaticPlay {
+            get {
+                return RoamingValues.TryGetValue(nameof(AutomaticPlay), out var value) && value != null ? (bool)value : true;
+            }
+            set {
+                RoamingValues[nameof(AutomaticPlay)] = value;
+            }
+        }
+
+        /// <inheritdoc />
+        public bool AlwaysShowSeekBar {
+            get {
+                return RoamingValues.TryGetValue(nameof(AlwaysShowSeekBar), out var value) && value != null ? (bool)value : false;
+            }
+            set {
+                RoamingValues[nameof(AlwaysShowSeekBar)] = value;
+            }
+        }
+
+        /// <inheritdoc />
+        public bool ClickOnPause {
+            get {
+                return RoamingValues.TryGetValue(nameof(ClickOnPause), out var value) && value != null ? (bool)value : true;
+            }
+            set {
+                RoamingValues[nameof(ClickOnPause)] = value;
+            }
+        }
+
+        /// <inheritdoc />
+        public bool DisableJumpCommand {
+            get {
+                return RoamingValues.TryGetValue(nameof(DisableJumpCommand), out var value) && value != null ? (bool)value : false;
+            }
+            set {
+                RoamingValues[nameof(DisableJumpCommand)] = value;
+            }
+        }
+
+        /// <inheritdoc />
+        public bool UseResumePlay {
+            get {
+                return RoamingValues.TryGetValue(nameof(UseResumePlay), out var value) && value != null ? (bool)value : false;
+            }
+            set {
+                RoamingValues[nameof(UseResumePlay)] = value;
+            }
+        }
+
+        /// <inheritdoc />
+        public int VideoSeekAmount {
+            get {
+                return RoamingValues.TryGetValue(nameof(VideoSeekAmount), out var value) && value != null ? (int)value : 5;
+            }
+            set {
+                RoamingValues[nameof(VideoSeekAmount)] = value;
+            }
+        }
+
         public Settings() {
 
             RoamingValues = ApplicationData.Current.RoamingSettings.Values;
