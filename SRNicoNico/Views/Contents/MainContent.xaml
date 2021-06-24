@@ -39,6 +39,9 @@
                 <DataTemplate DataType="{x:Type vm:WebViewViewModel}">
                     <v:WebView />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:RankingViewModel}">
+                    <v:Ranking />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:FollowViewModel}">
                     <v:Follow />
                 </DataTemplate>

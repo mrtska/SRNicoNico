@@ -73,12 +73,21 @@ namespace SRNicoNico.Services {
                 });
             }
 
+            var genreMap = new Dictionary<string, string>();
+            foreach (var genre in data.genres) {
+
+                if (genre == null) {
+                    continue;
+                }
+                genreMap[genre.key] = genre.label;
+            }
+
             return new RankingDetails {
                 LaneId = (int)data.laneId,
                 LaneType = data.laneType,
                 Title = data.title,
                 CustomType = data.customType,
-                Genres = JsonObjectExtension.ToStringArray(data.genres),
+                Genres = genreMap,
                 Tags = JsonObjectExtension.ToStringArray(data.tags),
                 ChannelVideoListingStatus = data.channelVideoListingStatus,
                 IsDefault = data.isDefault,

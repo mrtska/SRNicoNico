@@ -25,7 +25,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// ランキングを構成しているジャンル
         /// Typeがgenreの時のみ有効
         /// </summary>
-        public IEnumerable<string>? Genres { get; set; }
+        public IDictionary<string, string>? Genres { get; set; }
         /// <summary>
         /// ランキングを構成しているタグ
         /// Typeがtagの時のみ有効
