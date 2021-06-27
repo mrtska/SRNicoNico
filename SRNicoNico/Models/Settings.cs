@@ -63,6 +63,16 @@ namespace SRNicoNico.Models {
         }
 
         /// <inheritdoc />
+        public bool DisableABRepeat {
+            get {
+                return RoamingValues.TryGetValue(nameof(DisableABRepeat), out var value) && value != null ? (bool)value : false;
+            }
+            set {
+                RoamingValues[nameof(DisableABRepeat)] = value;
+            }
+        }
+
+        /// <inheritdoc />
         public bool AutomaticPlay {
             get {
                 return RoamingValues.TryGetValue(nameof(AutomaticPlay), out var value) && value != null ? (bool)value : true;

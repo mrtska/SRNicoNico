@@ -30,6 +30,11 @@
         bool ShowExitConfirmDialog { get; set; }
 
         /// <summary>
+        /// ABリピートを無効にするかどうか
+        /// </summary>
+        bool DisableABRepeat { get; set; }
+
+        /// <summary>
         /// 動画を自動再生するかどうか
         /// </summary>
         bool AutomaticPlay { get; set; }

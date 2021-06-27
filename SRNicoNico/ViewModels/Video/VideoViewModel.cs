@@ -413,7 +413,7 @@ namespace SRNicoNico.ViewModels {
             if (RepeatBehavior == RepeatBehavior.None) {
                 RepeatBehavior = RepeatBehavior.Repeat;
             } else if (RepeatBehavior == RepeatBehavior.Repeat) {
-                RepeatBehavior = RepeatBehavior.ABRepeat;
+                RepeatBehavior = Settings.DisableABRepeat ? RepeatBehavior.None : RepeatBehavior.ABRepeat;
             } else if (RepeatBehavior == RepeatBehavior.ABRepeat) {
                 RepeatBehavior = RepeatBehavior.None;
             }

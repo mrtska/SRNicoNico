@@ -7,6 +7,19 @@ namespace SRNicoNico.ViewModels {
     public class SettingsVideoViewModel : TabItemViewModel {
 
         /// <summary>
+        /// ABリピートを無効にするかどうか
+        /// </summary>
+        public bool DisableABRepeat {
+            get { return Settings.DisableABRepeat; }
+            set {
+                if (Settings.DisableABRepeat == value)
+                    return;
+                Settings.DisableABRepeat = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// 自動再生するかどうか
         /// </summary>
         public bool AutomaticPlay {
