@@ -52,7 +52,7 @@
                 <Run Text="{Binding CurrentTime, Converter={StaticResource DurationConverter}}" d:Text="3:20" /> / <Run Text="{Binding ApiData.Video.Duration, Converter={StaticResource DurationConverter}}" d:Text="3:20" />
             </TextBlock>
 
-            <controls:RoundButton Margin="5,0" Focusable="False" ToolTip="リピート切り替え(R)">
+            <controls:RoundButton Margin="5,0" Focusable="False">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleRepeat" />
@@ -63,12 +63,41 @@
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding RepeatBehavior}" Value="None">
                                 <Setter Property="IconData" Value="M2,5.27L3.28,4L20,20.72L18.73,22L15.73,19H7V22L3,18L7,14V17H13.73L7,10.27V11H5V8.27L2,5.27M17,13H19V17.18L17,15.18V13M17,5V2L21,6L17,10V7H8.82L6.82,5H17Z" />
+                                <Setter Property="ToolTip" Value="リピート切り替え(R)&#10;無効" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding RepeatBehavior}" Value="Repeat">
                                 <Setter Property="IconData" Value="M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z" />
+                                <Setter Property="ToolTip" Value="リピート切り替え(R)&#10;リピート" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding RepeatBehavior}" Value="ABRepeat">
                                 <Setter Property="IconData" Value="M4 2A2 2 0 0 0 2 4V12H4V8H6V12H8V4A2 2 0 0 0 6 2H4M4 4H6V6H4M22 15.5V14A2 2 0 0 0 20 12H16V22H20A2 2 0 0 0 22 20V18.5A1.54 1.54 0 0 0 20.5 17A1.54 1.54 0 0 0 22 15.5M20 20H18V18H20V20M20 16H18V14H20M5.79 21.61L4.21 20.39L18.21 2.39L19.79 3.61Z" />
+                                <Setter Property="ToolTip" Value="リピート切り替え(R)&#10;ABリピート" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:RoundButton.Resources>
+            </controls:RoundButton>
+
+            <controls:RoundButton Margin="0,0,5,0" Focusable="False">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleComment" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <controls:RoundButton.Resources>
+                    <Style TargetType="{x:Type controls:RoundButton}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CommentVisibility}" Value="Visible">
+                                <Setter Property="IconData" Value="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M6,7H18V9H6V7M6,11H15V13H6V11Z" />
+                                <Setter Property="ToolTip" Value="コメント切り替え(C)&#10;表示" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CommentVisibility}" Value="Hidden">
+                                <Setter Property="IconData" Value="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M9.41,6L12,8.59L14.59,6L16,7.41L13.41,10L16,12.59L14.59,14L12,11.41L9.41,14L8,12.59L10.59,10L8,7.41L9.41,6Z" />
+                                <Setter Property="ToolTip" Value="コメント切り替え(C)&#10;非表示" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CommentVisibility}" Value="OnlyAuthor">
+                                <Setter Property="IconData" Value="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M16,14H8V13C8,11.67 10.67,11 12,11C13.33,11 16,11.67 16,13V14M12,6A2,2 0 0,1 14,8A2,2 0 0,1 12,10A2,2 0 0,1 10,8A2,2 0 0,1 12,6Z" />
+                                <Setter Property="ToolTip" Value="コメント切り替え(C)&#10;投稿者コメントのみ" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

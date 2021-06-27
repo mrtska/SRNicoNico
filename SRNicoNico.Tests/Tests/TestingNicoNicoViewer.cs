@@ -1,6 +1,8 @@
 ﻿using System;
 using SRNicoNico.Models;
 using SRNicoNico.Services;
+using SRNicoNico.ViewModels;
+using SRNicoNico.Views.Controls;
 
 namespace SRNicoNico.Tests {
     /// <summary>
@@ -41,6 +43,11 @@ namespace SRNicoNico.Tests {
         public bool DisableJumpCommand { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool UseResumePlay { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int VideoSeekAmount { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public CommentVisibility CurrentCommentVisibility { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public RepeatBehavior CurrentRepeatBehavior { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public float CurrentVolume { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool CurrentIsMute { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool DisableABRepeat { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public void ChangeAccent() {
             throw new NotImplementedException();

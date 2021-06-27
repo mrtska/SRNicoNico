@@ -53,6 +53,7 @@ namespace SRNicoNico.ViewModels {
                 switch (type) {
                     case "initialized": // ブラウザ側の初期化が終わったので動画URLをブラウザに送信する
                         WebView?.CoreWebView2.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setContent", value = new { contentUri, volume = vm.Volume, autoplay = true } }));
+                        SetVisibility(vm.CommentVisibility);
                         BrowserInitialized = true;
                         if (CommentObject != null) {
                             WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "dispatchComment", value = CommentObject }));
@@ -118,6 +119,21 @@ namespace SRNicoNico.ViewModels {
         public void TogglePlay() {
 
             WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "togglePlay" }));
+        }
+
+        public void SetVisibility(CommentVisibility visibility) {
+
+            switch (visibility) {
+                case CommentVisibility.Visible:
+                    WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setVisibility", value = "visible" }));
+                    break;
+                case CommentVisibility.Hidden:
+                    WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setVisibility", value = "hidden" }));
+                    break;
+                case CommentVisibility.OnlyAuthor:
+                    WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setVisibility", value = "onlyAuthor" }));
+                    break;
+            }
         }
 
         /// <summary>

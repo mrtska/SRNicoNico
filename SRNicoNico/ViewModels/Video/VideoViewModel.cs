@@ -85,7 +85,7 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        private float _Volume = 0.3F;
+        private float _Volume;
         /// <summary>
         /// 音量
         /// </summary>
@@ -101,6 +101,8 @@ namespace SRNicoNico.ViewModels {
                 }
                 _Volume = value;
                 RaisePropertyChanged();
+                Settings.CurrentVolume = value;
+
                 if (!IsMuted) {
                     Html5Handler?.SetVolume(value);
                 }
@@ -118,6 +120,7 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _IsMuted = value;
                 RaisePropertyChanged();
+                Settings.CurrentIsMute = value;
 
                 if (value) {
                     Html5Handler?.SetVolume(0);
@@ -138,6 +141,23 @@ namespace SRNicoNico.ViewModels {
                     return;
                 _RepeatBehavior = value;
                 RaisePropertyChanged();
+                Settings.CurrentRepeatBehavior = value;
+            }
+        }
+
+        private CommentVisibility _CommentVisibility;
+        /// <summary>
+        /// コメントの表示状態
+        /// </summary>
+        public CommentVisibility CommentVisibility {
+            get { return _CommentVisibility; }
+            set { 
+                if (_CommentVisibility == value)
+                    return;
+                _CommentVisibility = value;
+                Html5Handler?.SetVisibility(value);
+                RaisePropertyChanged();
+                Settings.CurrentCommentVisibility = value;
             }
         }
 
@@ -263,14 +283,12 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public Action<double> SeekAction { get; set; }
 
-
         private DmcSession? DmcSession;
         private Timer? HeartbeatTimer;
 
         private readonly ISettings Settings;
         private readonly IVideoService VideoService;
         private readonly string VideoId;
-
 
         public VideoViewModel(ISettings settings, IVideoService videoService, string videoId) : base(videoId) {
 
@@ -279,6 +297,12 @@ namespace SRNicoNico.ViewModels {
             VideoId = videoId;
 
             SeekAction = pos => Seek(pos);
+
+            // 設定から初期値を設定しておく
+            _Volume = Settings.CurrentVolume;
+            _IsMuted = Settings.CurrentIsMute;
+            _RepeatBehavior = Settings.CurrentRepeatBehavior;
+            _CommentVisibility = Settings.CurrentCommentVisibility;
         }
 
         /// <summary>
@@ -420,6 +444,20 @@ namespace SRNicoNico.ViewModels {
         }
 
         /// <summary>
+        /// コメント表示の切り替え
+        /// </summary>
+        public void ToggleComment() {
+
+            if (CommentVisibility == CommentVisibility.Visible) {
+                CommentVisibility = CommentVisibility.Hidden;
+            } else if (CommentVisibility == CommentVisibility.Hidden) {
+                CommentVisibility = CommentVisibility.OnlyAuthor;
+            } else if (CommentVisibility == CommentVisibility.OnlyAuthor) {
+                CommentVisibility = CommentVisibility.Visible;
+            }
+        }
+
+        /// <summary>
         /// 指定した位置にシークする
         /// </summary>
         /// <param name="position">シークしたい位置 秒</param>
@@ -454,7 +492,6 @@ namespace SRNicoNico.ViewModels {
 
         public override void KeyDown(KeyEventArgs e) {
 
-
             if (e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control)) {
                 // Ctrl+Wで閉じる
                 if (e.Key == Key.W) {
@@ -479,9 +516,25 @@ namespace SRNicoNico.ViewModels {
                 case Key.R:
                     ToggleRepeat();
                     break;
+                case Key.C:
+                    ToggleComment();
+                    break;
             }
-
         }
+    }
 
+    public enum CommentVisibility {
+        /// <summary>
+        /// 表示
+        /// </summary>
+        Visible,
+        /// <summary>
+        /// 非表示
+        /// </summary>
+        Hidden,
+        /// <summary>
+        /// 投コメのみ表示
+        /// </summary>
+        OnlyAuthor
     }
 }

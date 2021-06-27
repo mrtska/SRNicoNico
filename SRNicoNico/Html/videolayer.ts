@@ -181,6 +181,9 @@ class PlayerHandler {
             case 'dispatchComment':
                 this.comment.initialize(value);
                 break;
+            case 'setVisibility':
+                this.comment.setVisibility(value);
+                break;
         }
 
     }

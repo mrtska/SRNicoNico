@@ -1,4 +1,7 @@
-﻿namespace SRNicoNico.Models {
+﻿using SRNicoNico.ViewModels;
+using SRNicoNico.Views.Controls;
+
+namespace SRNicoNico.Models {
     /// <summary>
     /// 設定項目
     /// </summary>
@@ -28,6 +31,26 @@
         /// 終了時に確認ダイアログを出すかどうか
         /// </summary>
         bool ShowExitConfirmDialog { get; set; }
+
+        /// <summary>
+        /// 現在のコメント表示設定
+        /// </summary>
+        CommentVisibility CurrentCommentVisibility { get; set; }
+
+        /// <summary>
+        /// 現在のリピート動作設定
+        /// </summary>
+        RepeatBehavior CurrentRepeatBehavior { get; set; }
+
+        /// <summary>
+        /// 現在の音量
+        /// </summary>
+        float CurrentVolume { get; set; }
+
+        /// <summary>
+        /// 現在のミュート設定
+        /// </summary>
+        bool CurrentIsMute { get; set; }
 
         /// <summary>
         /// ABリピートを無効にするかどうか

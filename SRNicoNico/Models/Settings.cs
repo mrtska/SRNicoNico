@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using FastEnumUtility;
+using SRNicoNico.ViewModels;
+using SRNicoNico.Views.Controls;
 using Windows.Storage;
 
 namespace SRNicoNico.Models {
@@ -59,6 +62,46 @@ namespace SRNicoNico.Models {
             }
             set {
                 RoamingValues[nameof(ShowExitConfirmDialog)] = value;
+            }
+        }
+
+        /// <inheritdoc />
+        public CommentVisibility CurrentCommentVisibility {
+            get {
+                return RoamingValues.TryGetValue(nameof(CurrentCommentVisibility), out var value) && value != null ? FastEnum.Parse<CommentVisibility>((string?)value, true) : CommentVisibility.Visible;
+            }
+            set {
+                RoamingValues[nameof(CurrentCommentVisibility)] = value.ToString();
+            }
+        }
+
+        /// <inheritdoc />
+        public RepeatBehavior CurrentRepeatBehavior {
+            get {
+                return RoamingValues.TryGetValue(nameof(CurrentRepeatBehavior), out var value) && value != null ? FastEnum.Parse<RepeatBehavior>((string?)value, true) : RepeatBehavior.None;
+            }
+            set {
+                RoamingValues[nameof(CurrentRepeatBehavior)] = value.ToString();
+            }
+        }
+
+        /// <inheritdoc />
+        public float CurrentVolume {
+            get {
+                return RoamingValues.TryGetValue(nameof(CurrentVolume), out var value) && value != null ? (float)value : 1F;
+            }
+            set {
+                RoamingValues[nameof(CurrentVolume)] = value;
+            }
+        }
+
+        /// <inheritdoc />
+        public bool CurrentIsMute {
+            get {
+                return RoamingValues.TryGetValue(nameof(CurrentIsMute), out var value) && value != null ? (bool)value : false;
+            }
+            set {
+                RoamingValues[nameof(CurrentIsMute)] = value;
             }
         }
 

@@ -41,6 +41,8 @@ export class CommentHandler {
     canvas: HTMLCanvasElement;
     renderContext: CanvasRenderingContext2D;
 
+    visibility: CommentVisibility;
+
     layers: CommentLayer[] | undefined;
 
     previousRenderedTime: number = -1;
@@ -75,11 +77,19 @@ export class CommentHandler {
         this.canvas.width = DEFAULT_WIDTH;
         this.canvas.height = DEFAULT_HEIGHT;
 
+        this.visibility = "visible";
+
         this.canvas.style.letterSpacing = '0px';
 
         this.wrapper.appendChild(this.canvas);
 
         this.renderContext = this.canvas.getContext('2d')!;
+    }
+
+    public setVisibility(value: CommentVisibility) {
+
+        this.visibility = value;
+        this.previousRenderedTime = -1;
     }
 
     public initialize(obj: any): void {
@@ -185,6 +195,12 @@ export class CommentHandler {
             return;
         }
 
+        // コメントが非表示だった場合
+        if (this.visibility === "hidden") {
+            this.renderContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            return;
+        }
+
         // 再生位置をvposと同じセンチ秒に変換する
         const centiTime = Math.floor(currentTime * 100);
 
@@ -216,6 +232,11 @@ export class CommentHandler {
      * @param currentTime 再生位置 センチ秒
      */
     renderLayer(layer: CommentLayer, currentTime: number): void {
+
+        // 投稿者コメント以外はレンダリングしない
+        if (this.visibility === "onlyAuthor" && layer.index === 1) {
+            return;
+        }
 
         for (let entry of layer.entries) {
 
