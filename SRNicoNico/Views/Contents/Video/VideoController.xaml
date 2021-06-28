@@ -18,100 +18,123 @@
         <controls:SeekBar CurrentTime="{Binding CurrentTime, Mode=TwoWay}" VideoDuration="{Binding ActualVideoDuration}"
                           RepeatBehavior="{Binding RepeatBehavior}" RepeatA="{Binding RepeatA, Mode=TwoWay}" RepeatB="{Binding RepeatB, Mode=TwoWay}"
                           PlayedRange="{Binding PlayedRange}" BufferedRange="{Binding BufferedRange}" SeekAction="{Binding SeekAction}" StoryBoard="{Binding StoryBoard}" />
-        <WrapPanel Grid.Row="1" Orientation="Horizontal">
-
-            <controls:RoundButton Margin="5,0" Focusable="False">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="TogglePlay" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <controls:RoundButton.Resources>
-                    <Style TargetType="{x:Type controls:RoundButton}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding PlayState}" Value="False">
-                                <Setter Property="IconData" Value="F1 M33,22 M38,22 L60,38 L38,53 L38,22 Z" />
-                                <Setter Property="ToolTip" Value="再生(Space)" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PlayState}" Value="True">
-                                <Setter Property="IconData" Value="F1 M 26.9167,23.75L 33.25,23.75L 33.25,52.25L 26.9167,52.25L 26.9167,23.75 Z M 42.75,23.75L 49.0833,23.75L 49.0833,52.25L 42.75,52.25L 42.75,23.75 Z" />
-                                <Setter Property="ToolTip" Value="一時停止(Space)" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </controls:RoundButton.Resources>
-            </controls:RoundButton>
-            <controls:RoundButton Margin="0,0,5,0" ToolTip="最初から" Focusable="False" IconData="F1 M 57,27.7083L 57,48.2917L 43.5417,38L 57,27.7083 Z M 39.5833,27.7083L 39.5833,48.2917L 26.125,38L 39.5833,27.7083 Z M 23.75,28.5L 23.75,47.5L 19,47.5L 19,28.5L 23.75,28.5 Z">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Restart" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </controls:RoundButton>
-            <TextBlock FontSize="16" Margin="5">
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <WrapPanel Orientation="Horizontal">
+                <controls:RoundButton Margin="5,0" Focusable="False">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="TogglePlay" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <controls:RoundButton.Resources>
+                        <Style TargetType="{x:Type controls:RoundButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PlayState}" Value="False">
+                                    <Setter Property="IconData" Value="F1 M33,22 M38,22 L60,38 L38,53 L38,22 Z" />
+                                    <Setter Property="ToolTip" Value="再生(Space)" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding PlayState}" Value="True">
+                                    <Setter Property="IconData" Value="F1 M 26.9167,23.75L 33.25,23.75L 33.25,52.25L 26.9167,52.25L 26.9167,23.75 Z M 42.75,23.75L 49.0833,23.75L 49.0833,52.25L 42.75,52.25L 42.75,23.75 Z" />
+                                    <Setter Property="ToolTip" Value="一時停止(Space)" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </controls:RoundButton.Resources>
+                </controls:RoundButton>
+                <controls:RoundButton Margin="0,0,5,0" ToolTip="最初から" Focusable="False" IconData="F1 M 57,27.7083L 57,48.2917L 43.5417,38L 57,27.7083 Z M 39.5833,27.7083L 39.5833,48.2917L 26.125,38L 39.5833,27.7083 Z M 23.75,28.5L 23.75,47.5L 19,47.5L 19,28.5L 23.75,28.5 Z">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Restart" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </controls:RoundButton>
+                <TextBlock FontSize="16" Margin="5">
                 <Run Text="{Binding CurrentTime, Converter={StaticResource DurationConverter}}" d:Text="3:20" /> / <Run Text="{Binding ApiData.Video.Duration, Converter={StaticResource DurationConverter}}" d:Text="3:20" />
-            </TextBlock>
+                </TextBlock>
+                <controls:RoundButton Margin="5,0" Focusable="False">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleRepeat" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <controls:RoundButton.Resources>
+                        <Style TargetType="{x:Type controls:RoundButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RepeatBehavior}" Value="None">
+                                    <Setter Property="IconData" Value="M2,5.27L3.28,4L20,20.72L18.73,22L15.73,19H7V22L3,18L7,14V17H13.73L7,10.27V11H5V8.27L2,5.27M17,13H19V17.18L17,15.18V13M17,5V2L21,6L17,10V7H8.82L6.82,5H17Z" />
+                                    <Setter Property="ToolTip" Value="リピート切り替え(R)&#10;無効" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding RepeatBehavior}" Value="Repeat">
+                                    <Setter Property="IconData" Value="M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z" />
+                                    <Setter Property="ToolTip" Value="リピート切り替え(R)&#10;リピート" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding RepeatBehavior}" Value="ABRepeat">
+                                    <Setter Property="IconData" Value="M4 2A2 2 0 0 0 2 4V12H4V8H6V12H8V4A2 2 0 0 0 6 2H4M4 4H6V6H4M22 15.5V14A2 2 0 0 0 20 12H16V22H20A2 2 0 0 0 22 20V18.5A1.54 1.54 0 0 0 20.5 17A1.54 1.54 0 0 0 22 15.5M20 20H18V18H20V20M20 16H18V14H20M5.79 21.61L4.21 20.39L18.21 2.39L19.79 3.61Z" />
+                                    <Setter Property="ToolTip" Value="リピート切り替え(R)&#10;ABリピート" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </controls:RoundButton.Resources>
+                </controls:RoundButton>
+                <controls:RoundButton Margin="0,0,5,0" Focusable="False">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleComment" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <controls:RoundButton.Resources>
+                        <Style TargetType="{x:Type controls:RoundButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CommentVisibility}" Value="Visible">
+                                    <Setter Property="IconData" Value="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M6,7H18V9H6V7M6,11H15V13H6V11Z" />
+                                    <Setter Property="ToolTip" Value="コメント切り替え(C)&#10;表示" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding CommentVisibility}" Value="Hidden">
+                                    <Setter Property="IconData" Value="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M9.41,6L12,8.59L14.59,6L16,7.41L13.41,10L16,12.59L14.59,14L12,11.41L9.41,14L8,12.59L10.59,10L8,7.41L9.41,6Z" />
+                                    <Setter Property="ToolTip" Value="コメント切り替え(C)&#10;非表示" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding CommentVisibility}" Value="OnlyAuthor">
+                                    <Setter Property="IconData" Value="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M16,14H8V13C8,11.67 10.67,11 12,11C13.33,11 16,11.67 16,13V14M12,6A2,2 0 0,1 14,8A2,2 0 0,1 12,10A2,2 0 0,1 10,8A2,2 0 0,1 12,6Z" />
+                                    <Setter Property="ToolTip" Value="コメント切り替え(C)&#10;投稿者コメントのみ" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </controls:RoundButton.Resources>
+                </controls:RoundButton>
+                <controls:VolumeBar Volume="{Binding Volume, Mode=TwoWay}" IsMute="{Binding IsMuted, Mode=TwoWay}" d:Volume="0.5">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleMute" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </controls:VolumeBar>
+            </WrapPanel>
 
-            <controls:RoundButton Margin="5,0" Focusable="False">
+            <controls:RoundButton Grid.Column="1" Margin="5,0" Focusable="False" HorizontalAlignment="Right">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleRepeat" />
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleFullScreen" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <controls:RoundButton.Resources>
                     <Style TargetType="{x:Type controls:RoundButton}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding RepeatBehavior}" Value="None">
-                                <Setter Property="IconData" Value="M2,5.27L3.28,4L20,20.72L18.73,22L15.73,19H7V22L3,18L7,14V17H13.73L7,10.27V11H5V8.27L2,5.27M17,13H19V17.18L17,15.18V13M17,5V2L21,6L17,10V7H8.82L6.82,5H17Z" />
-                                <Setter Property="ToolTip" Value="リピート切り替え(R)&#10;無効" />
+                            <DataTrigger Binding="{Binding IsFullScreen}" Value="False">
+                                <Setter Property="IconData" Value="F1 M 30.25,58L 18,58L 18,45.75L 22,41.75L 22,50.75L 30,42.75L 33.25,46L 25.25,54L 34.25,54L 30.25,58 Z M 58,45.75L 58,58L 45.75,58L 41.75,54L 50.75,54L 42.75,46L 46,42.75L 54,50.75L 54,41.75L 58,45.75 Z M 45.75,18L 58,18L 58,30.25L 54,34.25L 54,25.25L 46,33.25L 42.75,30L 50.75,22L 41.75,22L 45.75,18 Z M 18,30.25L 18,18L 30.25,18L 34.25,22L 25.25,22L 33.25,30L 30,33.25L 22,25.25L 22,34.25L 18,30.25 Z" />
+                                <Setter Property="ToolTip" Value="フルスクリーン(F)" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding RepeatBehavior}" Value="Repeat">
-                                <Setter Property="IconData" Value="M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z" />
-                                <Setter Property="ToolTip" Value="リピート切り替え(R)&#10;リピート" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding RepeatBehavior}" Value="ABRepeat">
-                                <Setter Property="IconData" Value="M4 2A2 2 0 0 0 2 4V12H4V8H6V12H8V4A2 2 0 0 0 6 2H4M4 4H6V6H4M22 15.5V14A2 2 0 0 0 20 12H16V22H20A2 2 0 0 0 22 20V18.5A1.54 1.54 0 0 0 20.5 17A1.54 1.54 0 0 0 22 15.5M20 20H18V18H20V20M20 16H18V14H20M5.79 21.61L4.21 20.39L18.21 2.39L19.79 3.61Z" />
-                                <Setter Property="ToolTip" Value="リピート切り替え(R)&#10;ABリピート" />
+                            <DataTrigger Binding="{Binding IsFullScreen}" Value="True">
+                                <Setter Property="IconData" Value="F1 M 54.2499,34L 42,34L 42,21.7501L 45.9999,17.7501L 45.9999,26.7501L 53.9999,18.7501L 57.2499,22.0001L 49.2499,30.0001L 58.2499,30.0001L 54.2499,34 Z M 34,21.7501L 34,34L 21.75,34L 17.75,30.0001L 26.75,30.0001L 18.75,22.0001L 22,18.7501L 30,26.7501L 30,17.7501L 34,21.7501 Z M 21.75,42L 34,42L 34,54.25L 30,58.25L 30,49.25L 22,57.25L 18.75,54L 26.75,46L 17.75,46L 21.75,42 Z M 42,54.25L 42,42L 54.2499,42L 58.2499,46L 49.2499,46.0001L 57.2499,54L 53.9999,57.25L 45.9999,49.25L 45.9999,58.25L 42,54.25 Z" />
+                                <Setter Property="ToolTip" Value="フルスクリーン解除(Esc, F)" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </controls:RoundButton.Resources>
             </controls:RoundButton>
-
-            <controls:RoundButton Margin="0,0,5,0" Focusable="False">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleComment" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <controls:RoundButton.Resources>
-                    <Style TargetType="{x:Type controls:RoundButton}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding CommentVisibility}" Value="Visible">
-                                <Setter Property="IconData" Value="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M6,7H18V9H6V7M6,11H15V13H6V11Z" />
-                                <Setter Property="ToolTip" Value="コメント切り替え(C)&#10;表示" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding CommentVisibility}" Value="Hidden">
-                                <Setter Property="IconData" Value="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M9.41,6L12,8.59L14.59,6L16,7.41L13.41,10L16,12.59L14.59,14L12,11.41L9.41,14L8,12.59L10.59,10L8,7.41L9.41,6Z" />
-                                <Setter Property="ToolTip" Value="コメント切り替え(C)&#10;非表示" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding CommentVisibility}" Value="OnlyAuthor">
-                                <Setter Property="IconData" Value="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M16,14H8V13C8,11.67 10.67,11 12,11C13.33,11 16,11.67 16,13V14M12,6A2,2 0 0,1 14,8A2,2 0 0,1 12,10A2,2 0 0,1 10,8A2,2 0 0,1 12,6Z" />
-                                <Setter Property="ToolTip" Value="コメント切り替え(C)&#10;投稿者コメントのみ" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </controls:RoundButton.Resources>
-            </controls:RoundButton>
-            
-            <controls:VolumeBar Volume="{Binding Volume, Mode=TwoWay}" IsMute="{Binding IsMuted, Mode=TwoWay}" d:Volume="0.5">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleMute" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </controls:VolumeBar>
-
-        </WrapPanel>
+        </Grid>
     </Grid>
 </UserControl>

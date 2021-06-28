@@ -32,8 +32,10 @@ namespace SRNicoNico.Views.Controls {
             DependencyProperty.Register(nameof(CurrentTime), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0D, (o, e) => {
 
                 var bar = (SeekBar)o;
-                bar.CalcThumbPosition();
-                bar.RepeatCheck();
+                if (bar.IsVisible) {
+                    bar.CalcThumbPosition();
+                    bar.RepeatCheck();
+                }
             }));
 
         /// <summary>
@@ -57,15 +59,23 @@ namespace SRNicoNico.Views.Controls {
             DependencyProperty.Register(nameof(PlayedRange), typeof(IEnumerable<TimeRange>), typeof(SeekBar), new FrameworkPropertyMetadata(null, (o, e) => {
 
                 var bar = (SeekBar)o;
-                if (bar.PlayedRange is INotifyCollectionChanged notify) {
-
-                    notify.CollectionChanged += (_, e) => {
-                        if (e.Action == NotifyCollectionChangedAction.Add) {
-                            bar.CalcTimeRangeBounds(e.NewItems.Cast<TimeRange>());
-                        }
-                    };
-                }
+                bar.SetPlayedRangeEvent();
             }));
+
+        private void SetPlayedRangeEvent() {
+
+            if (PlayedRange is INotifyCollectionChanged notify) {
+
+                notify.CollectionChanged += OnRangeChanged;
+            }
+        }
+
+        private void OnRangeChanged(object o, NotifyCollectionChangedEventArgs e) {
+
+            if (e.Action == NotifyCollectionChangedAction.Add) {
+                CalcTimeRangeBounds(e.NewItems.Cast<TimeRange>());
+            }
+        }
 
         /// <summary>
         /// バッファ済みの時間幅のリスト
@@ -78,15 +88,16 @@ namespace SRNicoNico.Views.Controls {
             DependencyProperty.Register(nameof(BufferedRange), typeof(IEnumerable<TimeRange>), typeof(SeekBar), new FrameworkPropertyMetadata(null, (o, e) => {
 
                 var bar = (SeekBar)o;
-                if (bar.BufferedRange is INotifyCollectionChanged notify) {
-
-                    notify.CollectionChanged += (_, e) => {
-                        if (e.Action == NotifyCollectionChangedAction.Add) {
-                            bar.CalcTimeRangeBounds(e.NewItems.Cast<TimeRange>());
-                        }
-                    };
-                }
+                bar.SetBufferedRangeEvent();
             }));
+
+        private void SetBufferedRangeEvent() {
+
+            if (BufferedRange is INotifyCollectionChanged notify) {
+
+                notify.CollectionChanged += OnRangeChanged;
+            }
+        }
 
         /// <summary>
         /// 実際に動画をシークしたい時に呼ぶ
@@ -140,9 +151,11 @@ namespace SRNicoNico.Views.Controls {
         }
         public static readonly DependencyProperty RepeatAProperty =
             DependencyProperty.Register(nameof(RepeatA), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0D, (obj, e) => {
-            
+
                 var bar = (SeekBar)obj;
-                bar.MoveRepeatA(bar.RepeatA);
+                if (bar.IsLoaded) {
+                    bar.MoveRepeatA(bar.RepeatA);
+                }
             }));
 
         /// <summary>
@@ -156,7 +169,9 @@ namespace SRNicoNico.Views.Controls {
             DependencyProperty.Register(nameof(RepeatB), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(5D, (obj, e) => {
 
                 var bar = (SeekBar)obj;
-                bar.MoveRepeatB(bar.RepeatB);
+                if (bar.IsLoaded) {
+                    bar.MoveRepeatB(bar.RepeatB);
+                }
             }));
 
         private readonly Converters.DurationConverter DurationConverter = (Converters.DurationConverter)Application.Current.Resources["DurationConverter"];
@@ -182,8 +197,25 @@ namespace SRNicoNico.Views.Controls {
             MouseLeftButtonUp += SeekBar_MouseLeftButtonUp;
             MouseMove += SeekBar_MouseMove;
             MouseLeave += SeekBar_MouseLeave;
-
             SizeChanged += SeekBar_SizeChanged;
+
+            Unloaded += (o, e) => {
+
+                MouseLeftButtonDown -= SeekBar_MouseLeftButtonDown;
+                MouseLeftButtonUp -= SeekBar_MouseLeftButtonUp;
+                MouseMove -= SeekBar_MouseMove;
+                MouseLeave -= SeekBar_MouseLeave;
+                SizeChanged -= SeekBar_SizeChanged;
+
+                if (PlayedRange is INotifyCollectionChanged notify1) {
+
+                    notify1.CollectionChanged -= OnRangeChanged;
+                }
+                if (BufferedRange is INotifyCollectionChanged notify2) {
+
+                    notify2.CollectionChanged -= OnRangeChanged;
+                }
+            };
         }
 
         /// <summary>
@@ -274,7 +306,7 @@ namespace SRNicoNico.Views.Controls {
             }
         }
 
-        private void MoveABRepeatTooltip(bool showA, bool showB, double? apos = null, double? bpos =null) {
+        private void MoveABRepeatTooltip(bool showA, bool showB, double? apos = null, double? bpos = null) {
 
             if (apos == null) {
                 apos = RepeatA;
@@ -314,9 +346,11 @@ namespace SRNicoNico.Views.Controls {
 
         private void SeekBar_SizeChanged(object sender, SizeChangedEventArgs e) {
 
-            CalcThumbPosition();
-            MoveRepeatA(RepeatA);
-            MoveRepeatB(RepeatB);
+            if (IsVisible) {
+                CalcThumbPosition();
+                MoveRepeatA(RepeatA);
+                MoveRepeatB(RepeatB);
+            }
         }
 
         private void SeekBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {

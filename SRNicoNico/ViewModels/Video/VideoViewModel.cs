@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Input;
 using Livet;
+using Livet.Messaging;
+using Livet.Messaging.Windows;
+using Microsoft.Web.WebView2.Wpf;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Services;
@@ -206,6 +208,22 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+
+        private bool _IsFullScreen = false;
+        /// <summary>
+        /// フルスクリーン状態かどうか
+        /// </summary>
+        public bool IsFullScreen {
+            get { return _IsFullScreen; }
+            set { 
+                if (_IsFullScreen == value)
+                    return;
+                _IsFullScreen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private int? _ActualVideoWidth;
         /// <summary>
         /// 再生している動画の実際の横幅
@@ -250,6 +268,34 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private WebView2? _WebViewControl;
+        /// <summary>
+        /// 通常時のWebView要素
+        /// </summary>
+        public WebView2? WebViewControl {
+            get { return _WebViewControl; }
+            set { 
+                if (_WebViewControl == value)
+                    return;
+                _WebViewControl = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private WebView2? _FullScreenWebViewControl;
+        /// <summary>
+        /// 通常時のWebView要素
+        /// </summary>
+        public WebView2? FullScreenWebViewControl {
+            get { return _FullScreenWebViewControl; }
+            set {
+                if (_FullScreenWebViewControl == value)
+                    return;
+                _FullScreenWebViewControl = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private ObservableSynchronizedCollection<TimeRange> _PlayedRange = new ObservableSynchronizedCollection<TimeRange>();
         /// <summary>
         /// 再生済みの時間幅のリスト
@@ -288,12 +334,14 @@ namespace SRNicoNico.ViewModels {
 
         private readonly ISettings Settings;
         private readonly IVideoService VideoService;
+        private readonly InteractionMessenger RootMessenger;
         private readonly string VideoId;
 
-        public VideoViewModel(ISettings settings, IVideoService videoService, string videoId) : base(videoId) {
+        public VideoViewModel(ISettings settings, IVideoService videoService, InteractionMessenger messenger, string videoId) : base(videoId) {
 
             Settings = settings;
             VideoService = videoService;
+            RootMessenger = messenger;
             VideoId = videoId;
 
             SeekAction = pos => Seek(pos);
@@ -327,6 +375,7 @@ namespace SRNicoNico.ViewModels {
                 }
                 Html5Handler = new VideoHtml5Handler();
                 CompositeDisposable.Add(Html5Handler);
+                WebViewControl = Html5Handler.WebView;
 
                 DmcSession = await VideoService.CreateSessionAsync(ApiData.Media!.Movie!.Session!);
                 await Html5Handler.InitializeAsync(this, DmcSession.ContentUri!);
@@ -475,6 +524,30 @@ namespace SRNicoNico.ViewModels {
         }
 
         /// <summary>
+        /// フルスクリーン状態を切り替える
+        /// </summary>
+        public void ToggleFullScreen() {
+
+            if (IsFullScreen) {
+                Messenger.Raise(new WindowActionMessage(WindowAction.Close));
+            } else {
+                IsFullScreen = true;
+                RootMessenger.Raise(new TransitionMessage(typeof(Views.VideoFullScreen), this, TransitionMode.Normal));
+
+                FullScreenWebViewControl = Html5Handler?.WebView;
+                WebViewControl = null;
+            }
+        }
+
+        public void BackFromFullScreen() {
+
+            IsFullScreen = false;
+
+            WebViewControl = Html5Handler?.WebView;
+            FullScreenWebViewControl = null;
+        }
+
+        /// <summary>
         /// 動画タブを閉じる
         /// </summary>
         public void Close() {
@@ -500,6 +573,11 @@ namespace SRNicoNico.ViewModels {
                 }
             }
 
+            if (IsFullScreen && e.Key == Key.Escape) {
+                Messenger.Raise(new WindowActionMessage(WindowAction.Close));
+                return;
+            }
+
             switch (e.Key) {
                 case Key.F5:
                     Reload();
@@ -518,6 +596,9 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case Key.C:
                     ToggleComment();
+                    break;
+                case Key.F:
+                    ToggleFullScreen();
                     break;
             }
         }
