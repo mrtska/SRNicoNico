@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Input;
@@ -500,7 +501,7 @@ namespace SRNicoNico.ViewModels {
             if (CommentVisibility == CommentVisibility.Visible) {
                 CommentVisibility = CommentVisibility.Hidden;
             } else if (CommentVisibility == CommentVisibility.Hidden) {
-                CommentVisibility = CommentVisibility.OnlyAuthor;
+                CommentVisibility = ApiData?.Comment!.Threads.Any(a => a.IsActive && a.IsOwnerThread) ?? false ? CommentVisibility.OnlyAuthor : CommentVisibility.Visible;
             } else if (CommentVisibility == CommentVisibility.OnlyAuthor) {
                 CommentVisibility = CommentVisibility.Visible;
             }
@@ -599,6 +600,12 @@ namespace SRNicoNico.ViewModels {
                     break;
                 case Key.F:
                     ToggleFullScreen();
+                    break;
+                case Key.Left:
+                    Seek(CurrentTime - Settings.VideoSeekAmount);
+                    break;
+                case Key.Right:
+                    Seek(CurrentTime + Settings.VideoSeekAmount);
                     break;
             }
         }

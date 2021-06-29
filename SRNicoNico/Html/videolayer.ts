@@ -38,6 +38,11 @@ class VideoHandler {
                 this.vm.Volume = volume + 0.02;
             }
         });
+        window.addEventListener('keydown', e => {
+            postMessage({
+                type: e.code
+            });
+        });
 
         this.video.addEventListener('pause', e => {
             this.vm.PlayState = false;

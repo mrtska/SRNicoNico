@@ -41,9 +41,13 @@ namespace SRNicoNico.ViewModels {
 
             await WebView.EnsureCoreWebView2Async();
             WebView.CoreWebView2.Settings.IsZoomControlEnabled = false;
+            WebView.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
             WebView.CoreWebView2.SetVirtualHostNameToFolderMapping("srniconico", GetHtml5PlayerPath(), CoreWebView2HostResourceAccessKind.Allow);
             WebView.Source = new Uri("http://srniconico/player.html");
             WebView.CoreWebView2.AddHostObjectToScript("vm", vm);
+            WebView.KeyDown += (o, e) => {
+                vm.KeyDown(e);
+            };
 
             WebView.CoreWebView2.WebMessageReceived += (o, e) => {
 
@@ -91,6 +95,24 @@ namespace SRNicoNico.ViewModels {
                         if (vm.RepeatBehavior != RepeatBehavior.None) {
                             vm.Resume();
                         }
+                        break;
+                    case "KeyS":
+                        vm.Restart();
+                        break;
+                    case "KeyR":
+                        vm.ToggleRepeat();
+                        break;
+                    case "KeyC":
+                        vm.ToggleComment();
+                        break;
+                    case "KeyF":
+                        vm.ToggleFullScreen();
+                        break;
+                    case "KeyM":
+                        vm.ToggleMute();
+                        break;
+                    case "Space":
+                        vm.TogglePlay();
                         break;
                 }
             };
