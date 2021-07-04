@@ -7,9 +7,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
         xmlns:v="clr-namespace:SRNicoNico.Views"
+        xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance { x:Type vm:VideoViewModel}}"
         Foreground="{DynamicResource ForegroundBrushKey}"
+        Background="{DynamicResource ThemeBrushKey}"
         Title="{Binding ApiData.Video.Title}"
         WindowStyle="None"
         ResizeMode="NoResize"
@@ -27,9 +29,43 @@
         </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        <Popup IsOpen="True" StaysOpen="True" Placement="Relative" AllowsTransparency="True" PopupAnimation="Slide">
-            <v:VideoController Background="Black" Opacity="0.6" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}},Path=ActualWidth}" />
-        </Popup>
-        <ContentControl Content="{Binding FullScreenWebViewControl}" />
+        <ScrollViewer Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=ActualHeight}" VerticalScrollBarVisibility="Hidden">
+            <StackPanel VerticalAlignment="Bottom">
+                <controls:FullScreenVideoPopup IsOpen="True" StaysOpen="True" Placement="Relative" AllowsTransparency="True"  PopupPlacement="{Binding PopupPlacement}" PopupAnimation="Slide">
+                    <v:VideoController Background="Black" Opacity="0.6" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}},Path=ActualWidth}" />
+                </controls:FullScreenVideoPopup>
+                <ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PopupPlacement}" Value="Top">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <v:VideoFullScreenDescription />
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+                <ContentControl Content="{Binding FullScreenWebViewControl}" Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=ActualHeight}" />
+                <ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PopupPlacement}" Value="Bottom">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <v:VideoFullScreenDescription />
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>

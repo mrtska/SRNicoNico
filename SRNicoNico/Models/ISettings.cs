@@ -88,6 +88,11 @@ namespace SRNicoNico.Models {
         int VideoSeekAmount { get; set; }
 
         /// <summary>
+        /// フルスクリーン時にシークバーのポップアップをどこに表示するか
+        /// </summary>
+        PopupPlacement FullScreenPopupPlacement { get; set; }
+
+        /// <summary>
         /// 現在の設定でアクセントを変更する
         /// </summary>
         void ChangeAccent();

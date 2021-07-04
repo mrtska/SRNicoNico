@@ -175,6 +175,15 @@ namespace SRNicoNico.Models {
             }
         }
 
+        /// <inheritdoc />
+        public PopupPlacement FullScreenPopupPlacement {
+            get {
+                return RoamingValues.TryGetValue(nameof(FullScreenPopupPlacement), out var value) && value != null ? FastEnum.Parse<PopupPlacement>((string?)value, true) : PopupPlacement.Bottom;
+            }
+            set {
+                RoamingValues[nameof(FullScreenPopupPlacement)] = value.ToString();
+            }
+        }
         public Settings() {
 
             RoamingValues = ApplicationData.Current.RoamingSettings.Values;

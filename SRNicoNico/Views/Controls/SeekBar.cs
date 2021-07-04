@@ -130,15 +130,16 @@ namespace SRNicoNico.Views.Controls {
             DependencyProperty.Register(nameof(RepeatBehavior), typeof(RepeatBehavior), typeof(SeekBar), new FrameworkPropertyMetadata(RepeatBehavior.None, (obj, e) => {
 
                 var bar = (SeekBar)obj;
+                if (bar.IsVisible) {
+                    if (bar.RepeatBehavior == RepeatBehavior.ABRepeat) {
 
-                if (bar.RepeatBehavior == RepeatBehavior.ABRepeat) {
+                        bar.RepeatARect!.Visibility = Visibility.Visible;
+                        bar.RepeatBRect!.Visibility = Visibility.Visible;
+                    } else {
 
-                    bar.RepeatARect!.Visibility = Visibility.Visible;
-                    bar.RepeatBRect!.Visibility = Visibility.Visible;
-                } else {
-
-                    bar.RepeatARect!.Visibility = Visibility.Collapsed;
-                    bar.RepeatBRect!.Visibility = Visibility.Collapsed;
+                        bar.RepeatARect!.Visibility = Visibility.Collapsed;
+                        bar.RepeatBRect!.Visibility = Visibility.Collapsed;
+                    }
                 }
             }));
 
@@ -153,7 +154,7 @@ namespace SRNicoNico.Views.Controls {
             DependencyProperty.Register(nameof(RepeatA), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(0D, (obj, e) => {
 
                 var bar = (SeekBar)obj;
-                if (bar.IsLoaded) {
+                if (bar.IsMeasureValid) {
                     bar.MoveRepeatA(bar.RepeatA);
                 }
             }));
@@ -169,7 +170,7 @@ namespace SRNicoNico.Views.Controls {
             DependencyProperty.Register(nameof(RepeatB), typeof(double), typeof(SeekBar), new FrameworkPropertyMetadata(5D, (obj, e) => {
 
                 var bar = (SeekBar)obj;
-                if (bar.IsLoaded) {
+                if (bar.IsMeasureValid) {
                     bar.MoveRepeatB(bar.RepeatB);
                 }
             }));

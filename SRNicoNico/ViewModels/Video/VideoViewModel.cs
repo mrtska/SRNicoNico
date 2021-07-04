@@ -297,6 +297,19 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        /// <summary>
+        /// ポップアップの位置
+        /// </summary>
+        public PopupPlacement PopupPlacement {
+            get { return Settings.FullScreenPopupPlacement; }
+            set { 
+                if (Settings.FullScreenPopupPlacement == value)
+                    return;
+                Settings.FullScreenPopupPlacement = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private ObservableSynchronizedCollection<TimeRange> _PlayedRange = new ObservableSynchronizedCollection<TimeRange>();
         /// <summary>
         /// 再生済みの時間幅のリスト
@@ -388,7 +401,11 @@ namespace SRNicoNico.ViewModels {
                 }
 
                 HeartbeatTimer = new Timer(async (_) => {
-                    DmcSession = await VideoService.HeartbeatAsync(DmcSession);
+                    try {
+                        DmcSession = await VideoService.HeartbeatAsync(DmcSession);
+                    } catch (StatusErrorException) {
+                        HeartbeatTimer?.Change(-1, -1);
+                    }
                 }, null, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3);
                 CompositeDisposable.Add(HeartbeatTimer);
 
