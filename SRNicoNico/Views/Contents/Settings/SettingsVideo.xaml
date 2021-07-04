@@ -35,6 +35,51 @@
                         <CheckBox IsChecked="{Binding DisableABRepeat, Mode=TwoWay}" Content="ABリピート機能を無効にする" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
                     </StackPanel>
                 </HeaderedContentControl>
+                <HeaderedContentControl>
+                    <HeaderedContentControl.Header>
+                        <TextBlock Text="フルスクリーン時のシークバーの位置" ToolTip="デフォルト: 下" />
+                    </HeaderedContentControl.Header>
+                    <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                <Setter Property="FontSize" Value="18" />
+                                <Setter Property="Margin" Value="5,0,0,0" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <RadioButton Content="上" GroupName="PopupPlacement">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ChangePopupPlacement" MethodParameter="Top" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <RadioButton.Style>
+                                <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                    <Style.Triggers>
+                                        <DataTrigger  Binding="{Binding PopupPlacement}" Value="Top">
+                                            <Setter Property="IsChecked" Value="True" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RadioButton.Style>
+                        </RadioButton>
+                        <RadioButton Content="下" GroupName="PopupPlacement">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ChangePopupPlacement" MethodParameter="Bottom" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <RadioButton.Style>
+                                <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                    <Style.Triggers>
+                                        <DataTrigger  Binding="{Binding PopupPlacement}" Value="Bottom">
+                                            <Setter Property="IsChecked" Value="True" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RadioButton.Style>
+                        </RadioButton>
+                    </StackPanel>
+                </HeaderedContentControl>
             </StackPanel>
         </ScrollViewer>
     </Grid>

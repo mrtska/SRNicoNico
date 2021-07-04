@@ -1,4 +1,6 @@
-﻿using SRNicoNico.Models;
+﻿using FastEnumUtility;
+using SRNicoNico.Models;
+using SRNicoNico.Views.Controls;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
@@ -97,6 +99,19 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        /// <summary>
+        /// フルスクリーン時のポップアップの位置
+        /// </summary>
+        public PopupPlacement PopupPlacement {
+            get { return Settings.FullScreenPopupPlacement; }
+            set { 
+                if (Settings.FullScreenPopupPlacement == value)
+                    return;
+                Settings.FullScreenPopupPlacement = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private readonly ISettings Settings;
 
         public SettingsVideoViewModel(ISettings settings) : base("動画設定") {
@@ -104,5 +119,9 @@ namespace SRNicoNico.ViewModels {
             Settings = settings;
         }
 
+        public void ChangePopupPlacement(string value) {
+
+            PopupPlacement = FastEnum.Parse<PopupPlacement>(value);
+        }
     }
 }
