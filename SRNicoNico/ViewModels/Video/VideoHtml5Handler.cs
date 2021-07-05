@@ -98,6 +98,9 @@ namespace SRNicoNico.ViewModels {
                             vm.Resume();
                         }
                         break;
+                    case "mousemove":
+                        vm.IsFullScreenPopupOpen = true;
+                        break;
                     case "KeyS":
                         vm.Restart();
                         break;

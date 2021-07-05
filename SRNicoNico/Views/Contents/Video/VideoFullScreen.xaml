@@ -30,8 +30,8 @@
     </i:Interaction.Triggers>
     <Grid>
         <ScrollViewer Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=ActualHeight}" VerticalScrollBarVisibility="Hidden">
-            <StackPanel VerticalAlignment="Bottom">
-                <controls:FullScreenVideoPopup IsOpen="True" StaysOpen="True" Placement="Relative" AllowsTransparency="True"  PopupPlacement="{Binding PopupPlacement}" PopupAnimation="Slide">
+            <StackPanel>
+                <controls:FullScreenVideoPopup IsOpen="{Binding IsFullScreenPopupOpen, Mode=TwoWay}" Placement="Relative" AllowsTransparency="True"  PopupPlacement="{Binding PopupPlacement}" PopupAnimation="Fade" AlwaysOpen="{Binding AlwaysPopupOpen}">
                     <v:VideoController Background="Black" Opacity="0.6" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}},Path=ActualWidth}" />
                 </controls:FullScreenVideoPopup>
                 <ContentControl>

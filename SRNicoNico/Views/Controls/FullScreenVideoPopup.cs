@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -22,17 +23,42 @@ namespace SRNicoNico.Views.Controls {
         public static readonly DependencyProperty PopupPlacementProperty =
             DependencyProperty.Register(nameof(PopupPlacement), typeof(PopupPlacement), typeof(FullScreenVideoPopup), new FrameworkPropertyMetadata(PopupPlacement.Top));
 
+        /// <summary>
+        /// 常時オープンかどうか
+        /// </summary>
+        public bool AlwaysOpen {
+            get { return (bool)GetValue(AlwaysOpenProperty); }
+            set { SetValue(AlwaysOpenProperty, value); }
+        }
+        public static readonly DependencyProperty AlwaysOpenProperty =
+            DependencyProperty.Register(nameof(AlwaysOpen), typeof(bool), typeof(FullScreenVideoPopup), new FrameworkPropertyMetadata(false));
 
         static FullScreenVideoPopup() {
 
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FullScreenVideoPopup), new FrameworkPropertyMetadata(typeof(FullScreenVideoPopup)));
         }
 
+        private Timer? CloseTimer;
+        private double CloseCount;
+        private bool IsScrolled = false;
 
         public FullScreenVideoPopup() {
 
+            StaysOpen = true;
+
             Loaded += (o, e) => {
 
+                if (!AlwaysOpen) {
+                    // 雑なタイマー実装だけど動くのでヨシ
+                    CloseTimer = new Timer((_) => {
+                        if (!IsScrolled && !IsMouseOver) {
+                            CloseCount -= 100;
+                            if (CloseCount <= 0) {
+                                Dispatcher.Invoke(() => IsOpen = false);
+                            }
+                        }
+                    }, null, 0, 100);
+                }
                 // ポップアップの親要素にいるScrollViewer要素を取得する
                 var scrollViewer = (ScrollViewer)GetDependencyObjectFromVisualTree(this, typeof(ScrollViewer));
                 // ListBoxなどのようなScrollViewerを持った要素内に設定された場合の動作
@@ -53,6 +79,8 @@ namespace SRNicoNico.Views.Controls {
 
                 var scrollViewer = (ScrollViewer)GetDependencyObjectFromVisualTree(this, typeof(ScrollViewer));
                 scrollViewer.ScrollChanged -= OnScrollChanged;
+
+                CloseTimer?.Dispose();
             };
         }
 
@@ -64,10 +92,12 @@ namespace SRNicoNico.Views.Controls {
                 var scrollViewer = (ScrollViewer)GetDependencyObjectFromVisualTree(this, typeof(ScrollViewer));
                 var child = (FrameworkElement)Child;
                 VerticalOffset = scrollViewer.ActualHeight - child.ActualHeight;
+                IsScrolled = e.VerticalOffset != 0;
 
             } else if (PopupPlacement == PopupPlacement.Top) {
 
                 VerticalOffset = e.ExtentHeight - e.ViewportHeight;
+                IsScrolled = Math.Round(e.ViewportHeight + e.VerticalOffset, 0) != Math.Round(e.ExtentHeight, 0);
             }
 
             // スクロールされたらポップアップの位置を更新する
@@ -95,6 +125,7 @@ namespace SRNicoNico.Views.Controls {
             if (GetWindowRect(hwnd, out var rect)) {
                 SetWindowPos(hwnd, -2, rect.Left, rect.Top, (int)Width, (int)Height, SWP_NOACTIVATE);
             }
+            CloseCount = 3000;
         }
 
         [StructLayout(LayoutKind.Sequential)]

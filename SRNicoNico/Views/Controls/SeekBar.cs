@@ -56,19 +56,8 @@ namespace SRNicoNico.Views.Controls {
             set { SetValue(PlayedRangeProperty, value); }
         }
         public static readonly DependencyProperty PlayedRangeProperty =
-            DependencyProperty.Register(nameof(PlayedRange), typeof(IEnumerable<TimeRange>), typeof(SeekBar), new FrameworkPropertyMetadata(null, (o, e) => {
+            DependencyProperty.Register(nameof(PlayedRange), typeof(IEnumerable<TimeRange>), typeof(SeekBar), new FrameworkPropertyMetadata(null));
 
-                var bar = (SeekBar)o;
-                bar.SetPlayedRangeEvent();
-            }));
-
-        private void SetPlayedRangeEvent() {
-
-            if (PlayedRange is INotifyCollectionChanged notify) {
-
-                notify.CollectionChanged += OnRangeChanged;
-            }
-        }
 
         private void OnRangeChanged(object o, NotifyCollectionChangedEventArgs e) {
 
@@ -85,19 +74,7 @@ namespace SRNicoNico.Views.Controls {
             set { SetValue(BufferedRangeProperty, value); }
         }
         public static readonly DependencyProperty BufferedRangeProperty =
-            DependencyProperty.Register(nameof(BufferedRange), typeof(IEnumerable<TimeRange>), typeof(SeekBar), new FrameworkPropertyMetadata(null, (o, e) => {
-
-                var bar = (SeekBar)o;
-                bar.SetBufferedRangeEvent();
-            }));
-
-        private void SetBufferedRangeEvent() {
-
-            if (BufferedRange is INotifyCollectionChanged notify) {
-
-                notify.CollectionChanged += OnRangeChanged;
-            }
-        }
+            DependencyProperty.Register(nameof(BufferedRange), typeof(IEnumerable<TimeRange>), typeof(SeekBar), new FrameworkPropertyMetadata(null));
 
         /// <summary>
         /// 実際に動画をシークしたい時に呼ぶ
@@ -194,11 +171,22 @@ namespace SRNicoNico.Views.Controls {
 
         public SeekBar() {
 
-            MouseLeftButtonDown += SeekBar_MouseLeftButtonDown;
-            MouseLeftButtonUp += SeekBar_MouseLeftButtonUp;
-            MouseMove += SeekBar_MouseMove;
-            MouseLeave += SeekBar_MouseLeave;
-            SizeChanged += SeekBar_SizeChanged;
+            Loaded += (o, e) => {
+
+                MouseLeftButtonDown += SeekBar_MouseLeftButtonDown;
+                MouseLeftButtonUp += SeekBar_MouseLeftButtonUp;
+                MouseMove += SeekBar_MouseMove;
+                MouseLeave += SeekBar_MouseLeave;
+                SizeChanged += SeekBar_SizeChanged;
+                if (PlayedRange is INotifyCollectionChanged notify1) {
+
+                    notify1.CollectionChanged += OnRangeChanged;
+                }
+                if (BufferedRange is INotifyCollectionChanged notify2) {
+
+                    notify2.CollectionChanged += OnRangeChanged;
+                }
+            };
 
             Unloaded += (o, e) => {
 

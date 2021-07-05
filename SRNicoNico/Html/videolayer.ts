@@ -48,6 +48,12 @@ class VideoHandler {
             postMessage({
                 type: e.code
             });
+            e.preventDefault();
+        });
+        document.addEventListener('mousemove', e => {
+            postMessage({
+                type: 'mousemove'
+            });
         });
 
         this.video.addEventListener('pause', e => {

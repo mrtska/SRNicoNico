@@ -302,12 +302,27 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public PopupPlacement PopupPlacement {
             get { return Settings.FullScreenPopupPlacement; }
+        }
+
+        private bool _IsFullScreenPopupOpen = true;
+        /// <summary>
+        /// フルスクリーン時のシークバーが表示されているかどうか
+        /// </summary>
+        public bool IsFullScreenPopupOpen {
+            get { return _IsFullScreenPopupOpen; }
             set { 
-                if (Settings.FullScreenPopupPlacement == value)
+                if (_IsFullScreenPopupOpen == value)
                     return;
-                Settings.FullScreenPopupPlacement = value;
+                _IsFullScreenPopupOpen = value;
                 RaisePropertyChanged();
             }
+        }
+
+        /// <summary>
+        /// 常時シークバーを表示するかどうか
+        /// </summary>
+        public bool AlwaysPopupOpen {
+            get { return Settings.AlwaysShowSeekBar; }
         }
 
         private ObservableSynchronizedCollection<TimeRange> _PlayedRange = new ObservableSynchronizedCollection<TimeRange>();
@@ -554,6 +569,8 @@ namespace SRNicoNico.ViewModels {
 
                 FullScreenWebViewControl = Html5Handler?.WebView;
                 WebViewControl = null;
+
+                IsFullScreenPopupOpen = true;
             }
         }
 
