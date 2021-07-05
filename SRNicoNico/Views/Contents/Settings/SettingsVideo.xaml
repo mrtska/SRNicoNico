@@ -30,6 +30,7 @@
                         <CheckBox IsChecked="{Binding AutomaticPlay, Mode=TwoWay}" Content="動画を自動的に再生する" ToolTip="デフォルト: 有効" HorizontalAlignment="Left" />
                         <CheckBox IsChecked="{Binding AlwaysShowSeekBar, Mode=TwoWay}" Content="フルスクリーン時にシークバーを常に表示する" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
                         <CheckBox IsChecked="{Binding ClickOnPause, Mode=TwoWay}" Content="動画をクリックしたら一時停止/再生を切り替える" ToolTip="デフォルト: 有効" HorizontalAlignment="Left" />
+                        <CheckBox IsChecked="{Binding DoubleClickToggleFullScreen, Mode=TwoWay}" Content="動画をダブルクリックしたらフルスクリーンを切り替える" ToolTip="デフォルト: 有効" HorizontalAlignment="Left" />
                         <CheckBox IsChecked="{Binding UseResumePlay, Mode=TwoWay}" Content="レジューム再生を使用する" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
                         <CheckBox IsChecked="{Binding DisableJumpCommand, Mode=TwoWay}" Content="投稿者が指定しているジャンプコマンドを無効にする" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
                         <CheckBox IsChecked="{Binding DisableABRepeat, Mode=TwoWay}" Content="ABリピート機能を無効にする" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />

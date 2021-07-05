@@ -146,6 +146,16 @@ namespace SRNicoNico.Models {
         }
 
         /// <inheritdoc />
+        public bool DoubleClickToggleFullScreen {
+            get {
+                return RoamingValues.TryGetValue(nameof(DoubleClickToggleFullScreen), out var value) && value != null ? (bool)value : true;
+            }
+            set {
+                RoamingValues[nameof(DoubleClickToggleFullScreen)] = value;
+            }
+        }
+
+        /// <inheritdoc />
         public bool DisableJumpCommand {
             get {
                 return RoamingValues.TryGetValue(nameof(DisableJumpCommand), out var value) && value != null ? (bool)value : false;

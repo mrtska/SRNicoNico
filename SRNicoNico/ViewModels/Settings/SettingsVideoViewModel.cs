@@ -61,6 +61,19 @@ namespace SRNicoNico.ViewModels {
         }
 
         /// <summary>
+        /// 動画をダブルクリックした時にフルスクリーンを切り替えるかどうか
+        /// </summary>
+        public bool DoubleClickToggleFullScreen {
+            get { return Settings.DoubleClickToggleFullScreen; }
+            set { 
+                if (Settings.DoubleClickToggleFullScreen == value)
+                    return;
+                Settings.DoubleClickToggleFullScreen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// ジャンプコマンドを無効にするかどうか
         /// </summary>
         public bool DisableJumpCommand {

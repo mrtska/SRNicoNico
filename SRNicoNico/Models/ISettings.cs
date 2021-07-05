@@ -73,6 +73,11 @@ namespace SRNicoNico.Models {
         bool ClickOnPause { get; set; }
 
         /// <summary>
+        /// 動画をダブルクリックした時にフルスクリーン切り替えするかどうか
+        /// </summary>
+        bool DoubleClickToggleFullScreen { get; set; }
+
+        /// <summary>
         /// ジャンプコマンドを無効にするかどうか
         /// </summary>
         bool DisableJumpCommand { get; set; }

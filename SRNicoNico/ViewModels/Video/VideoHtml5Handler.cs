@@ -69,6 +69,11 @@ namespace SRNicoNico.ViewModels {
                             vm.TogglePlay();
                         }
                         break;
+                    case "doubleclick":
+                        if (vm.Settings.DoubleClickToggleFullScreen) {
+                            vm.ToggleFullScreen();
+                        }
+                        break;
                     case "info":
                         vm.ActualVideoWidth = (int)json.value.width;
                         vm.ActualVideoHeight = (int)json.value.height;

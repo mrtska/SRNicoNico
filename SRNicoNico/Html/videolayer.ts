@@ -33,7 +33,9 @@ class VideoHandler {
         });
         window.addEventListener('dblclick', e => {
             // ダブルクリックでフルスクリーン切り替え
-            this.vm.ToggleFullScreen();
+            postMessage({
+                type: 'doubleclick'
+            });
         });
         window.addEventListener('wheel', async e => {
 

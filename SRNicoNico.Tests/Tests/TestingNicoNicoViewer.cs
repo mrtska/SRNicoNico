@@ -49,6 +49,7 @@ namespace SRNicoNico.Tests {
         public bool CurrentIsMute { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool DisableABRepeat { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public PopupPlacement FullScreenPopupPlacement { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool DoubleClickToggleFullScreen { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public void ChangeAccent() {
             throw new NotImplementedException();
