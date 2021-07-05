@@ -25,7 +25,7 @@
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="BackFromFullScreen" />
         </i:EventTrigger>
         <l:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}">
-            <l:WindowInteractionMessageAction />
+            <l:WindowInteractionMessageAction InvokeActionOnlyWhenWindowIsActive="False" />
         </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
     <Grid>

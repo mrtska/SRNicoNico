@@ -40,6 +40,10 @@ interface VideoViewModel {
      * 再生切り替え
      */
     TogglePlay(): void;
+    /**
+     * フルスクリーン切り替え
+     */
+    ToggleFullScreen(): void;
 }
 
 interface CommentLayer {

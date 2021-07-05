@@ -27,7 +27,13 @@ class VideoHandler {
 
         window.addEventListener('click', e => {
             // 動画部分がクリックされたら.NET側に通知する
-            this.vm.TogglePlay();
+            postMessage({
+                type: 'clicked'
+            });
+        });
+        window.addEventListener('dblclick', e => {
+            // ダブルクリックでフルスクリーン切り替え
+            this.vm.ToggleFullScreen();
         });
         window.addEventListener('wheel', async e => {
 

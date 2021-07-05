@@ -46,6 +46,7 @@ namespace SRNicoNico.Views.Controls {
             DependencyProperty.Register(nameof(IsMute), typeof(bool), typeof(VolumeBar), new FrameworkPropertyMetadata(false, (obj, e) => {
 
                 var bar = (VolumeBar)obj;
+                bar.SetVolumeWidth();
                 bar.SetVolumeIcon();
             }));
 
@@ -106,7 +107,22 @@ namespace SRNicoNico.Views.Controls {
                 Volume = (float)ammount;
             }
         }
-        
+
+        /// <summary>
+        /// ボリュームバーを描画する
+        /// </summary>
+        private void SetVolumeWidth() {
+
+            // つまみ部分の横幅10論理ピクセル分を値の割合に応じて減らしつまみが100論理ピクセルを超えないように調整する
+            var computedWidth = (Volume * 100) - (10 * Volume);
+            if (Thumb != null) {
+                Canvas.SetLeft(Thumb, computedWidth);
+            }
+            if (ActiveRect != null) {
+                ActiveRect.Width = computedWidth;
+            }
+        }
+
         /// <summary>
         /// ミュートボタンのアイコンを設定する
         /// </summary>
@@ -150,6 +166,10 @@ namespace SRNicoNico.Views.Controls {
             if (MuteButton != null) {
                 MuteButton.Click += (o, e) => RaiseEvent(new RoutedEventArgs(ClickEvent));
             }
+
+            // 初期値を設定する
+            SetVolumeWidth();
+            SetVolumeIcon();
         }
     }
 }

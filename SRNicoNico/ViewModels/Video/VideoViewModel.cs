@@ -346,7 +346,7 @@ namespace SRNicoNico.ViewModels {
         private DmcSession? DmcSession;
         private Timer? HeartbeatTimer;
 
-        private readonly ISettings Settings;
+        internal readonly ISettings Settings;
         private readonly IVideoService VideoService;
         private readonly InteractionMessenger RootMessenger;
         private readonly string VideoId;

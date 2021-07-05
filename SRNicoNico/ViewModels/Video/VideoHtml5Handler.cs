@@ -56,7 +56,7 @@ namespace SRNicoNico.ViewModels {
 
                 switch (type) {
                     case "initialized": // ブラウザ側の初期化が終わったので動画URLをブラウザに送信する
-                        WebView?.CoreWebView2.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setContent", value = new { contentUri, volume = vm.Volume, autoplay = true } }));
+                        WebView?.CoreWebView2.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setContent", value = new { contentUri, volume = vm.IsMuted ? 0 : vm.Volume, autoplay = true } }));
                         SetVisibility(vm.CommentVisibility);
                         BrowserInitialized = true;
                         if (CommentObject != null) {
@@ -65,7 +65,9 @@ namespace SRNicoNico.ViewModels {
                         }
                         break;
                     case "clicked":
-                        vm.TogglePlay();
+                        if (vm.Settings.ClickOnPause) {
+                            vm.TogglePlay();
+                        }
                         break;
                     case "info":
                         vm.ActualVideoWidth = (int)json.value.width;
