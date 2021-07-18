@@ -9,17 +9,17 @@
              d:DataContext="{d:DesignInstance { x:Type vm:VideoViewModel}}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid MaxWidth="1920">
+    <Grid MaxWidth="1920" HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
-        <Grid>
+        <Grid Margin="20,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <TextBlock FontSize="26" Text="{Binding ApiData.Video.Title}" ToolTip="{Binding ApiData.Video.Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="10" />
+            <TextBlock FontSize="26" Text="{Binding ApiData.Video.Title}" ToolTip="{Binding ApiData.Video.Title}" TextTrimming="CharacterEllipsis" FontWeight="Bold" VerticalAlignment="Center" Margin="10" />
             <StackPanel Grid.Row="1">
                 <ItemsControl ItemsSource="{Binding ApiData.Tag.Items}">
                     <ItemsControl.ItemTemplate>
@@ -61,6 +61,60 @@
                 </ItemsControl>
                 <TextBlock Text="{Binding ApiData.Video.RegisteredAt, StringFormat=yyyy年MM月dd日 HH:mm:ss 投稿}" Margin="5" FontSize="18" />
                 <controls:HtmlRenderer HtmlText="{Binding ApiData.Video.Description}" Margin="5" FontSize="18" />
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="1" Margin="20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Image Source="{Binding ApiData.Video.ThumbnailUrl}" Width="180" Margin="10" VerticalAlignment="Top" />
+                <StackPanel Grid.Column="1" Margin="10">
+                    <TextBlock FontSize="16" Text="{Binding ApiData.Video.ViewCount, StringFormat='再生数: {0:N0}'}" />
+                    <TextBlock FontSize="16" Text="{Binding ApiData.Video.CommentCount, StringFormat='コメント数: {0:N0}'}" />
+                    <TextBlock FontSize="16" Text="{Binding ApiData.Video.MylistCount, StringFormat='マイリスト数: {0:N0}'}" />
+                    <TextBlock FontSize="16" Text="{Binding ApiData.Video.LikeCount, StringFormat='いいね数: {0:N0}'}" />
+                    <TextBlock FontSize="16" Text="{Binding ApiData.Ranking.Genre, StringFormat='ジャンル: {0}'}" />
+                    <TextBlock FontSize="16" Text="{Binding ApiData.Ranking.Rank, StringFormat='ランキング最高順位: {0:N0}位'}" />
+                    <TextBlock FontSize="16">
+                        解像度:<Run Text="{Binding ActualVideoWidth}" /> x <Run Text="{Binding ActualVideoHeight}" />
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+            <StackPanel Grid.Row="1">
+                <TextBlock FontSize="18" Text="シリーズ情報:" />
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="{Binding ApiData.Series.ThumbnailUrl}" Width="100" Margin="0,10" />
+                    <TextBlock FontSize="18" VerticalAlignment="Center" Margin="10,0">
+                        <TextBlock.ToolTip>
+                            <ToolTip>
+                                <TextBlock Text="{Binding ApiData.Series.Id, StringFormat='https://www.nicovideo.jp/series/{0}'}" />
+                            </ToolTip>
+                        </TextBlock.ToolTip>
+                        <Hyperlink NavigateUri="{Binding ApiData.Series.Id, StringFormat='https://www.nicovideo.jp/series/{0}'}">
+                            <Run Text="{Binding ApiData.Series.Title}" />
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+                <TextBlock FontSize="18" Text="投稿者:" />
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="{Binding ApiData.Owner.IconUrl}" Width="50" Margin="0,10" />
+                    <TextBlock FontSize="18" VerticalAlignment="Center" Margin="10,0">
+                        <TextBlock.ToolTip>
+                            <ToolTip>
+                                <TextBlock Text="{Binding ApiData.Owner.Id, StringFormat='https://www.nicovideo.jp/user/{0}'}" />
+                            </ToolTip>
+                        </TextBlock.ToolTip>
+                        <Hyperlink NavigateUri="{Binding ApiData.Owner.Id, StringFormat='https://www.nicovideo.jp/user/{0}'}">
+                            <Run Text="{Binding ApiData.Owner.Nickname}" />
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
             </StackPanel>
         </Grid>
     </Grid>

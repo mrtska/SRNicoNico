@@ -130,17 +130,15 @@
                     </StackPanel>
                 </ScrollViewer>
                 <metro:ProgressRing IsActive="{Binding IsActive}" Panel.ZIndex="1" />
-
             </Grid>
         </Grid>
-        
-        <Grid Grid.Column="1" Width="250">
+        <Grid Grid.Column="1" Width="280">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <v:VideoComment DataContext="{Binding Comment}" />
+            <v:VideoInformation Grid.Row="1" />
         </Grid>
-        
     </Grid>
 </UserControl>
