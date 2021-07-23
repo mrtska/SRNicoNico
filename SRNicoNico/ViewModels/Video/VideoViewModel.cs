@@ -27,7 +27,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public WatchApiData? ApiData {
             get { return _ApiData; }
-            set { 
+            set {
                 if (_ApiData == value)
                     return;
                 _ApiData = value;
@@ -41,7 +41,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public VideoCommentViewModel? Comment {
             get { return _Comment; }
-            set { 
+            set {
                 if (_Comment == value)
                     return;
                 _Comment = value;
@@ -55,7 +55,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public VideoStoryBoard? StoryBoard {
             get { return _StoryBoard; }
-            set { 
+            set {
                 if (_StoryBoard == value)
                     return;
                 _StoryBoard = value;
@@ -67,7 +67,7 @@ namespace SRNicoNico.ViewModels {
 
         public VideoHtml5Handler? Html5Handler {
             get { return _Html5Handler; }
-            set { 
+            set {
                 if (_Html5Handler == value)
                     return;
                 _Html5Handler = value;
@@ -81,7 +81,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public double CurrentTime {
             get { return _CurrentTime; }
-            set { 
+            set {
                 if (_CurrentTime == value)
                     return;
                 _CurrentTime = value;
@@ -95,7 +95,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public float Volume {
             get { return _Volume; }
-            set { 
+            set {
                 if (_Volume == value)
                     return;
                 if (value > 1) {
@@ -119,7 +119,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public bool IsMuted {
             get { return _IsMuted; }
-            set { 
+            set {
                 if (_IsMuted == value)
                     return;
                 _IsMuted = value;
@@ -140,7 +140,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public RepeatBehavior RepeatBehavior {
             get { return _RepeatBehavior; }
-            set { 
+            set {
                 if (_RepeatBehavior == value)
                     return;
                 _RepeatBehavior = value;
@@ -155,7 +155,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public CommentVisibility CommentVisibility {
             get { return _CommentVisibility; }
-            set { 
+            set {
                 if (_CommentVisibility == value)
                     return;
                 _CommentVisibility = value;
@@ -171,7 +171,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public double RepeatA {
             get { return _RepeatA; }
-            set { 
+            set {
                 if (_RepeatA == value)
                     return;
                 _RepeatA = value;
@@ -186,7 +186,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public double RepeatB {
             get { return _RepeatB; }
-            set { 
+            set {
                 if (_RepeatB == value)
                     return;
                 _RepeatB = value;
@@ -202,7 +202,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public bool PlayState {
             get { return _PlayState; }
-            set { 
+            set {
                 if (_PlayState == value)
                     return;
                 _PlayState = value;
@@ -217,7 +217,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public bool IsFullScreen {
             get { return _IsFullScreen; }
-            set { 
+            set {
                 if (_IsFullScreen == value)
                     return;
                 _IsFullScreen = value;
@@ -232,7 +232,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public int? ActualVideoWidth {
             get { return _ActualVideoWidth; }
-            set { 
+            set {
                 if (_ActualVideoWidth == value)
                     return;
                 _ActualVideoWidth = value;
@@ -246,7 +246,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public int? ActualVideoHeight {
             get { return _ActualVideoHeight; }
-            set { 
+            set {
                 if (_ActualVideoHeight == value)
                     return;
                 _ActualVideoHeight = value;
@@ -260,7 +260,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public double ActualVideoDuration {
             get { return _ActualVideoDuration; }
-            set { 
+            set {
                 if (_ActualVideoDuration == value)
                     return;
                 _ActualVideoDuration = value;
@@ -276,7 +276,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public WebView2? WebViewControl {
             get { return _WebViewControl; }
-            set { 
+            set {
                 if (_WebViewControl == value)
                     return;
                 _WebViewControl = value;
@@ -311,10 +311,24 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public bool IsFullScreenPopupOpen {
             get { return _IsFullScreenPopupOpen; }
-            set { 
+            set {
                 if (_IsFullScreenPopupOpen == value)
                     return;
                 _IsFullScreenPopupOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _IsLiked;
+        /// <summary>
+        /// いいね状態
+        /// </summary>
+        public bool IsLiked {
+            get { return _IsLiked; }
+            set {
+                if (_IsLiked == value)
+                    return;
+                _IsLiked = value;
                 RaisePropertyChanged();
             }
         }
@@ -325,7 +339,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public bool IsTweetViewOpen {
             get { return _IsTweetViewOpen; }
-            set { 
+            set {
                 if (_IsTweetViewOpen == value)
                     return;
                 _IsTweetViewOpen = value;
@@ -339,7 +353,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public WebView2? TweetWebView {
             get { return _TweetWebView; }
-            set { 
+            set {
                 if (_TweetWebView == value)
                     return;
                 _TweetWebView = value;
@@ -360,7 +374,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public ObservableSynchronizedCollection<TimeRange> PlayedRange {
             get { return _PlayedRange; }
-            set { 
+            set {
                 if (_PlayedRange == value)
                     return;
                 _PlayedRange = value;
@@ -374,7 +388,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public ObservableSynchronizedCollection<TimeRange> BufferedRange {
             get { return _BufferedRange; }
-            set { 
+            set {
                 if (_BufferedRange == value)
                     return;
                 _BufferedRange = value;
@@ -424,6 +438,8 @@ namespace SRNicoNico.ViewModels {
 
                 // タブ名を動画IDから動画タイトルに書き換える
                 Name = ApiData.Video!.Title;
+
+                IsLiked = ApiData.Video.Viewer!.IsLiked;
 
                 // WebViewが既にある場合は破棄する
                 if (Html5Handler != null) {
@@ -583,6 +599,49 @@ namespace SRNicoNico.ViewModels {
         public void Restart() {
 
             Seek(0);
+        }
+
+        /// <summary>
+        /// いいねを切り替える
+        /// </summary>
+        public async void ToggleLike() {
+
+            if (IsLiked) {
+
+                try {
+                    IsActive = true;
+                    Status = "いいね！解除中";
+                    var result = await VideoService.UnlikeAsync(VideoId);
+                    if (result) {
+
+                        Status = "いいね！を解除しました";
+                        IsLiked = false;
+                    } else {
+
+                        Status = "いいね！解除に失敗しました";
+                    }
+                } catch (StatusErrorException e) {
+                    Status = $"いいね！解除に失敗しました ステータスコード: {e.StatusCode}";
+                } finally {
+                    IsActive = false;
+                }
+            } else {
+
+                try {
+                    IsActive = true;
+                    Status = "いいね！中";
+                    var result = await VideoService.LikeAsync(VideoId);
+                    Status = "いいね！しました";
+                    if (!string.IsNullOrEmpty(result)) {
+                        Status += $" メッセージ: {result}";
+                    }
+                    IsLiked = true;
+                } catch (StatusErrorException e) {
+                    Status = $"いいね！に失敗しました ステータスコード: {e.StatusCode}";
+                } finally {
+                    IsActive = false;
+                }
+            }
         }
 
         /// <summary>
