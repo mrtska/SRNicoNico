@@ -6,7 +6,8 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls" xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              d:DataContext="{d:DesignInstance Type=vm:VideoViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -104,5 +105,8 @@
                 </i:Interaction.Triggers>
             </controls:RoundButton>
         </UniformGrid>
+        <controls:ManagedPopup IsOpen="{Binding IsTweetViewOpen}" StaysOpen="True" Placement="Bottom">
+            <ContentControl Content="{Binding TweetWebView}" Width="400" Height="300"  />
+        </controls:ManagedPopup>
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -318,6 +319,34 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private bool _IsTweetViewOpen;
+        /// <summary>
+        /// ツイートビューが表示されているかどうか
+        /// </summary>
+        public bool IsTweetViewOpen {
+            get { return _IsTweetViewOpen; }
+            set { 
+                if (_IsTweetViewOpen == value)
+                    return;
+                _IsTweetViewOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private WebView2? _TweetWebView;
+        /// <summary>
+        /// ツイートする時に使うWebView
+        /// </summary>
+        public WebView2? TweetWebView {
+            get { return _TweetWebView; }
+            set { 
+                if (_TweetWebView == value)
+                    return;
+                _TweetWebView = value;
+                RaisePropertyChanged();
+            }
+        }
+
         /// <summary>
         /// 常時シークバーを表示するかどうか
         /// </summary>
@@ -580,6 +609,38 @@ namespace SRNicoNico.ViewModels {
 
             WebViewControl = Html5Handler?.WebView;
             FullScreenWebViewControl = null;
+        }
+
+        public void OpenTweetView() {
+
+            // 既に開いていたら閉じる
+            if (IsTweetViewOpen) {
+                IsTweetViewOpen = false;
+                TweetWebView?.Dispose();
+                return;
+            }
+            var videoUrl = "http://www.nicovideo.jp/watch/" + ApiData!.Video!.Id;
+
+            var query = new GetRequestQueryBuilder("https://twitter.com/intent/tweet")
+                .AddQuery("url", videoUrl)
+                .AddQuery("hashtags", ApiData!.Video!.Id!)
+                .AddQuery("original_referer", videoUrl)
+                .AddQuery("text", $"{ApiData.Video.Title}({new Views.Converters.DurationConverter().Convert(ApiData.Video.Duration, typeof(int), null!, CultureInfo.CurrentCulture)})");
+
+            TweetWebView = new WebView2 {
+                Source = new Uri(query.Build())
+            };
+            TweetWebView.SourceChanged += (o, e) => {
+
+                var source = TweetWebView.Source;
+
+                if (source.OriginalString.StartsWith("https://twitter.com/home")) {
+                    IsTweetViewOpen = false;
+                    TweetWebView?.Dispose();
+                }
+            };
+
+            IsTweetViewOpen = true;
         }
 
         /// <summary>
