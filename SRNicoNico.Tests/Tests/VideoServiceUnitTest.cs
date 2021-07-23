@@ -142,7 +142,19 @@ namespace SRNicoNico.Tests {
             Assert.True(result);
         }
 
+        /// <summary>
+        /// 動画をいいね！することが出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task LikeUnitTest() {
 
+            _ = await VideoService.LikeAsync("sm9");
+
+            await Task.Delay(500);
+
+            var result = await VideoService.UnlikeAsync("sm9");
+            Assert.True(result);
+        }
 
     }
 }

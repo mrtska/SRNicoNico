@@ -23,6 +23,10 @@ namespace SRNicoNico.Services {
         /// 動画再生位置保存API
         /// </summary>
         private const string PlaybackPositionApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/watch/history/playback-position";
+        /// <summary>
+        /// いいねAPI
+        /// </summary>
+        private const string LikeApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/likes/items";
 
         private readonly ISessionService SessionService;
         private readonly ViewerDbContext DbContext;
@@ -1012,6 +1016,46 @@ namespace SRNicoNico.Services {
 
             using var result = await SessionService.PutAsync(PlaybackPositionApiUrl, formData, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode || result.StatusCode != HttpStatusCode.NotFound) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            return json.meta.status == 200;
+        }
+
+        /// <inheritdoc />
+        public async Task<string?> LikeAsync(string videoId) {
+
+            if (string.IsNullOrEmpty(videoId)) {
+                throw new ArgumentNullException(nameof(videoId));
+            }
+
+            var builder = new GetRequestQueryBuilder(LikeApiUrl)
+                .AddQuery("videoId", videoId);
+
+            using var result = await SessionService.PostAsync(builder.Build(), (IDictionary<string, string>?)null, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            return json.data.thanksMessage;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> UnlikeAsync(string videoId) {
+
+            if (string.IsNullOrEmpty(videoId)) {
+                throw new ArgumentNullException(nameof(videoId));
+            }
+
+            var builder = new GetRequestQueryBuilder(LikeApiUrl)
+                .AddQuery("videoId", videoId);
+
+            using var result = await SessionService.DeleteAsync(builder.Build(), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);
             }

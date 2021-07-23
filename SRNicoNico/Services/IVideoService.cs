@@ -64,6 +64,19 @@ namespace SRNicoNico.Services {
         /// <returns>成功したらTrue</returns>
         Task<bool> SavePlaybackPositionAsync(string watchId, double position);
 
+        /// <summary>
+        /// 指定した動画をいいね！する
+        /// </summary>
+        /// <param name="videoId">動画ID</param>
+        /// <returns>投稿者メッセージ 失敗した場合はnull</returns>
+        Task<string?> LikeAsync(string videoId);
+
+        /// <summary>
+        /// 指定した動画のいいね！を解除する
+        /// </summary>
+        /// <param name="videoId">動画ID</param>
+        /// <returns>成功したらTrue</returns>
+        Task<bool> UnlikeAsync(string videoId);
 
         /// <summary>
         /// 指定した動画IDのABリピートポジションをローカルデータベースからあれば取得する
