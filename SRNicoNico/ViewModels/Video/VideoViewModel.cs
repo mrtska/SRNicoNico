@@ -333,6 +333,20 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private bool _IsFollowing;
+        /// <summary>
+        /// フォロー状態
+        /// </summary>
+        public bool IsFollowing {
+            get { return _IsFollowing; }
+            set {
+                if (_IsFollowing == value)
+                    return;
+                _IsFollowing = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private bool _IsTweetViewOpen;
         /// <summary>
         /// ツイートビューが表示されているかどうか
@@ -406,13 +420,15 @@ namespace SRNicoNico.ViewModels {
 
         internal readonly ISettings Settings;
         private readonly IVideoService VideoService;
+        private readonly IUserService UserService;
         private readonly InteractionMessenger RootMessenger;
         private readonly string VideoId;
 
-        public VideoViewModel(ISettings settings, IVideoService videoService, InteractionMessenger messenger, string videoId) : base(videoId) {
+        public VideoViewModel(ISettings settings, IVideoService videoService, IUserService userService, InteractionMessenger messenger, string videoId) : base(videoId) {
 
             Settings = settings;
             VideoService = videoService;
+            UserService = userService;
             RootMessenger = messenger;
             VideoId = videoId;
 
@@ -440,6 +456,7 @@ namespace SRNicoNico.ViewModels {
                 Name = ApiData.Video!.Title;
 
                 IsLiked = ApiData.Video.Viewer!.IsLiked;
+                IsFollowing = await UserService.IsFollowUserAsync(ApiData.Owner!.Id!);
 
                 // WebViewが既にある場合は破棄する
                 if (Html5Handler != null) {
@@ -638,6 +655,46 @@ namespace SRNicoNico.ViewModels {
                     IsLiked = true;
                 } catch (StatusErrorException e) {
                     Status = $"いいね！に失敗しました ステータスコード: {e.StatusCode}";
+                } finally {
+                    IsActive = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// フォローを切り替える
+        /// </summary>
+        public async void ToggleFollow() {
+
+            if (IsFollowing) {
+
+                try {
+                    IsActive = true;
+                    Status = "フォロー解除中";
+                    var result = await UserService.UnfollowUserAsync(ApiData!.Owner!.Id!);
+                    if (result) {
+
+                        Status = "フォローを解除しました";
+                        IsFollowing = false;
+                    } else {
+
+                        Status = "フォロー解除に失敗しました";
+                    }
+                } catch (StatusErrorException e) {
+                    Status = $"フォロー解除に失敗しました ステータスコード: {e.StatusCode}";
+                } finally {
+                    IsActive = false;
+                }
+            } else {
+
+                try {
+                    IsActive = true;
+                    Status = "フォロー中";
+                    var result = await UserService.FollowUserAsync(ApiData!.Owner!.Id!);
+                    Status = "フォローしました";
+                    IsFollowing = true;
+                } catch (StatusErrorException e) {
+                    Status = $"フォローに失敗しました ステータスコード: {e.StatusCode}";
                 } finally {
                     IsActive = false;
                 }
