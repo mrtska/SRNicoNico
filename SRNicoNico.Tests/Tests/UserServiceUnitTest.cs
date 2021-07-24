@@ -266,6 +266,8 @@ namespace SRNicoNico.Tests {
 
             Assert.True(await UserService.FollowUserAsync("51818561"));
             await Task.Delay(1000);
+            Assert.True(await UserService.IsFollowUserAsync("51818561"));
+            await Task.Delay(1000);
             Assert.True(await UserService.UnfollowUserAsync("51818561"));
         }
     }

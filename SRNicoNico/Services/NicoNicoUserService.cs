@@ -540,5 +540,23 @@ namespace SRNicoNico.Services {
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
             return json.meta.status == 200;
         }
+
+        /// <inheritdoc />
+        public async Task<bool> IsFollowUserAsync(string userId) {
+
+            if (userId == null) {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            var result = await SessionService.GetAsync(string.Format(UserFollowApiUrl, userId)).ConfigureAwait(false);
+
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            return json.data.following;
+        }
     }
 }

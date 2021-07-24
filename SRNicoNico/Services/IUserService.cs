@@ -84,6 +84,13 @@ namespace SRNicoNico.Services {
         Task<VideoList> GetUserVideosAsync(string userId, VideoSortKey sortKey, int page = 1, int pageSize = 100);
 
         /// <summary>
+        /// 指定したユーザーをフォローしているかを返す
+        /// </summary>
+        /// <param name="userId">確認したいユーザーID</param>
+        /// <returns>フォローしてたらTrue</returns>
+        Task<bool> IsFollowUserAsync(string userId);
+
+        /// <summary>
         /// 指定したユーザーをフォローする
         /// </summary>
         /// <param name="userId">フォローしたいユーザー</param>
