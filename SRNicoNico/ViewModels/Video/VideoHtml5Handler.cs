@@ -168,6 +168,10 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        public void SetRate(double value) {
+            WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setRate", value }));
+        }
+
         /// <summary>
         /// 動画プレイヤーのパスを返す
         /// </summary>

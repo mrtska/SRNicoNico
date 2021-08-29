@@ -112,6 +112,14 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </controls:VolumeBar>
+                <Slider Width="100" Margin="2,0,0,0" VerticalAlignment="Center" Value="{Binding PlayRate}" Maximum="3" Minimum="0.25" TickFrequency="0.25" IsSnapToTickEnabled="True"
+                        LargeChange="0.25" SmallChange="0.25" TickPlacement="Both" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" ToolTip="再生速度">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseRightButtonDown">
+                            <i:ChangePropertyAction PropertyName="PlayRate" TargetObject="{Binding}" Value="1.0" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Slider>
             </WrapPanel>
 
             <controls:RoundButton Grid.Column="1" Margin="5,0" Focusable="False" HorizontalAlignment="Right">

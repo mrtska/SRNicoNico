@@ -102,6 +102,10 @@ class VideoHandler {
         this.video.volume = volume;
     }
 
+    public setRate(value: number): void {
+        this.video.playbackRate = value;
+    }
+
     public togglePlay(): void {
 
         if (this.video.paused) {
@@ -193,6 +197,9 @@ class PlayerHandler {
                 break;
             case 'setVolume':
                 this.video.setVolume(value);
+                break;
+            case 'setRate':
+                this.video.setRate(value);
                 break;
             case 'togglePlay':
                 this.video.togglePlay();

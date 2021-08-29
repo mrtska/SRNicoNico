@@ -210,6 +210,20 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private double _PlayRate = 1.0D;
+        /// <summary>
+        /// 再生速度倍率
+        /// </summary>
+        public double PlayRate {
+            get { return _PlayRate; }
+            set {
+                if (_PlayRate == value)
+                    return;
+                _PlayRate = value;
+                Html5Handler?.SetRate(value);
+                RaisePropertyChanged();
+            }
+        }
 
         private bool _IsFullScreen = false;
         /// <summary>
@@ -421,14 +435,16 @@ namespace SRNicoNico.ViewModels {
         internal readonly ISettings Settings;
         private readonly IVideoService VideoService;
         private readonly IUserService UserService;
+        private readonly IMylistService MylistService;
         private readonly InteractionMessenger RootMessenger;
         private readonly string VideoId;
 
-        public VideoViewModel(ISettings settings, IVideoService videoService, IUserService userService, InteractionMessenger messenger, string videoId) : base(videoId) {
+        public VideoViewModel(ISettings settings, IVideoService videoService, IUserService userService, IMylistService mylistService, InteractionMessenger messenger, string videoId) : base(videoId) {
 
             Settings = settings;
             VideoService = videoService;
             UserService = userService;
+            MylistService = mylistService;
             RootMessenger = messenger;
             VideoId = videoId;
 
@@ -757,6 +773,24 @@ namespace SRNicoNico.ViewModels {
             };
 
             IsTweetViewOpen = true;
+        }
+
+        /// <summary>
+        /// 後で見るに追加
+        /// </summary>
+        public async void AddWatchLater() {
+
+            try {
+                Status = "後で見るに登録中";
+                var result = await MylistService.AddWatchLaterAsync(VideoId, null);
+                if (result) {
+                    Status = "後で見るに登録しました";
+                } else {
+                    Status = "既に登録済みです";
+                }
+            } catch (StatusErrorException e) {
+                Status = $"後で見るに登録出来ませんでした ステータスコード: {e.StatusCode}";
+            }
         }
 
         /// <summary>

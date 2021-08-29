@@ -548,7 +548,7 @@ namespace SRNicoNico.Services {
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            var result = await SessionService.GetAsync(string.Format(UserFollowApiUrl, userId)).ConfigureAwait(false);
+            var result = await SessionService.GetAsync(string.Format(UserFollowApiUrl, userId), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 

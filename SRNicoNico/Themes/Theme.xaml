@@ -15,6 +15,7 @@
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.MenuItem.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ProgressRing.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ScrollViewer.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.Slider.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.TabView.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.TextBox.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ToolTip.xaml" />
