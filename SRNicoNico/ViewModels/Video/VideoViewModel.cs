@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Livet;
 using Livet.Messaging;
@@ -225,6 +226,53 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        private ObservableSynchronizedCollection<MediaMovieVideo>? _ResolutionList;
+        public ObservableSynchronizedCollection<MediaMovieVideo>? ResolutionList {
+            get { return _ResolutionList; }
+            set {
+                if (_ResolutionList == value) {
+                    return;
+                }
+                _ResolutionList = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private MediaMovieVideo? _SelectedVideoResolution;
+        /// <summary>
+        /// 画質
+        /// </summary>
+        public MediaMovieVideo? SelectedVideoResolution {
+            get { return _SelectedVideoResolution; }
+            set { 
+                if (_SelectedVideoResolution == value || value == null)
+                    return;
+                _SelectedVideoResolution = value;
+                RaisePropertyChanged();
+
+                // 別スレッドでセッションを作成する
+                _ = Task.Run(async () => {
+
+                    // 前のセッションが生きていたら削除する
+                    if (DmcSession != null) {
+                        await VideoService.DeleteSessionAsync(DmcSession);
+                    }
+
+                    if (DateTimeOffset.UtcNow >= DmcSession!.ExpireTime) {
+                        // 期限が切れていたら動画情報を取得し直す
+                        ApiData = await VideoService.WatchContinueAsync(VideoId);
+                    }
+
+                    // 新しい画質のセッションを作成する
+                    DmcSession = await VideoService.CreateSessionAsync(ApiData!.Media!.Movie!.Session!, value.Id);
+                    // UIスレッドで新しい画質のURLを設定する
+                    await App.UIDispatcher!.InvokeAsync(() => Html5Handler?.SetContent(DmcSession.ContentUri!));
+
+                    HeartbeatTimer?.Change(ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3);
+                });
+            }
+        }
+
         private bool _IsFullScreen = false;
         /// <summary>
         /// フルスクリーン状態かどうか
@@ -238,7 +286,6 @@ namespace SRNicoNico.ViewModels {
                 RaisePropertyChanged();
             }
         }
-
 
         private int? _ActualVideoWidth;
         /// <summary>
@@ -485,6 +532,12 @@ namespace SRNicoNico.ViewModels {
                 WebViewControl = Html5Handler.WebView;
 
                 DmcSession = await VideoService.CreateSessionAsync(ApiData.Media!.Movie!.Session!);
+
+                // 現在の画質をUIに反映する
+                ResolutionList = new ObservableSynchronizedCollection<MediaMovieVideo>(ApiData.Media.Movie.Videos);
+                _SelectedVideoResolution = ApiData.Media.Movie.Videos.Single(s => s.Id == DmcSession.VideoId);
+                RaisePropertyChanged(nameof(SelectedVideoResolution));
+
                 await Html5Handler.InitializeAsync(this, DmcSession.ContentUri!);
 
                 // タイマーが既に動いている場合は止める

@@ -112,7 +112,7 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </controls:VolumeBar>
-                <Slider Width="100" Margin="2,0,0,0" VerticalAlignment="Center" Value="{Binding PlayRate}" Maximum="3" Minimum="0.25" TickFrequency="0.25" IsSnapToTickEnabled="True"
+                <Slider Width="100" Margin="2,0,0,0" VerticalAlignment="Center" Value="{Binding PlayRate}" Maximum="3" Minimum="0.25" TickFrequency="0.25" IsSnapToTickEnabled="True" d:Value="1"
                         LargeChange="0.25" SmallChange="0.25" TickPlacement="Both" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" ToolTip="再生速度">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseRightButtonDown">
@@ -122,27 +122,44 @@
                 </Slider>
             </WrapPanel>
 
-            <controls:RoundButton Grid.Column="1" Margin="5,0" Focusable="False" HorizontalAlignment="Right">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleFullScreen" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <controls:RoundButton.Resources>
-                    <Style TargetType="{x:Type controls:RoundButton}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsFullScreen}" Value="False">
-                                <Setter Property="IconData" Value="F1 M 30.25,58L 18,58L 18,45.75L 22,41.75L 22,50.75L 30,42.75L 33.25,46L 25.25,54L 34.25,54L 30.25,58 Z M 58,45.75L 58,58L 45.75,58L 41.75,54L 50.75,54L 42.75,46L 46,42.75L 54,50.75L 54,41.75L 58,45.75 Z M 45.75,18L 58,18L 58,30.25L 54,34.25L 54,25.25L 46,33.25L 42.75,30L 50.75,22L 41.75,22L 45.75,18 Z M 18,30.25L 18,18L 30.25,18L 34.25,22L 25.25,22L 33.25,30L 30,33.25L 22,25.25L 22,34.25L 18,30.25 Z" />
-                                <Setter Property="ToolTip" Value="フルスクリーン(F)" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsFullScreen}" Value="True">
-                                <Setter Property="IconData" Value="F1 M 54.2499,34L 42,34L 42,21.7501L 45.9999,17.7501L 45.9999,26.7501L 53.9999,18.7501L 57.2499,22.0001L 49.2499,30.0001L 58.2499,30.0001L 54.2499,34 Z M 34,21.7501L 34,34L 21.75,34L 17.75,30.0001L 26.75,30.0001L 18.75,22.0001L 22,18.7501L 30,26.7501L 30,17.7501L 34,21.7501 Z M 21.75,42L 34,42L 34,54.25L 30,58.25L 30,49.25L 22,57.25L 18.75,54L 26.75,46L 17.75,46L 21.75,42 Z M 42,54.25L 42,42L 54.2499,42L 58.2499,46L 49.2499,46.0001L 57.2499,54L 53.9999,57.25L 45.9999,49.25L 45.9999,58.25L 42,54.25 Z" />
-                                <Setter Property="ToolTip" Value="フルスクリーン解除(Esc, F)" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </controls:RoundButton.Resources>
-            </controls:RoundButton>
+            <WrapPanel Grid.Column="1" Orientation="Horizontal">
+                <ComboBox ItemsSource="{Binding ResolutionList}" Height="31" Width="70" VerticalContentAlignment="Center" SelectedItem="{Binding SelectedVideoResolution}" Focusable="False">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Run Text="{Binding Label}" />
+                                <TextBlock.ToolTip>
+                                    <TextBlock>
+                                        解像度:<Run Text="{Binding Width}" /> x <Run Text="{Binding Height}" /><LineBreak />
+                                        ビットレート:<Run Text="{Binding Bitrate}" />Kbps
+                                    </TextBlock>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <controls:RoundButton Margin="5,0" Focusable="False" HorizontalAlignment="Right">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleFullScreen" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <controls:RoundButton.Resources>
+                        <Style TargetType="{x:Type controls:RoundButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsFullScreen}" Value="False">
+                                    <Setter Property="IconData" Value="F1 M 30.25,58L 18,58L 18,45.75L 22,41.75L 22,50.75L 30,42.75L 33.25,46L 25.25,54L 34.25,54L 30.25,58 Z M 58,45.75L 58,58L 45.75,58L 41.75,54L 50.75,54L 42.75,46L 46,42.75L 54,50.75L 54,41.75L 58,45.75 Z M 45.75,18L 58,18L 58,30.25L 54,34.25L 54,25.25L 46,33.25L 42.75,30L 50.75,22L 41.75,22L 45.75,18 Z M 18,30.25L 18,18L 30.25,18L 34.25,22L 25.25,22L 33.25,30L 30,33.25L 22,25.25L 22,34.25L 18,30.25 Z" />
+                                    <Setter Property="ToolTip" Value="フルスクリーン(F)" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsFullScreen}" Value="True">
+                                    <Setter Property="IconData" Value="F1 M 54.2499,34L 42,34L 42,21.7501L 45.9999,17.7501L 45.9999,26.7501L 53.9999,18.7501L 57.2499,22.0001L 49.2499,30.0001L 58.2499,30.0001L 54.2499,34 Z M 34,21.7501L 34,34L 21.75,34L 17.75,30.0001L 26.75,30.0001L 18.75,22.0001L 22,18.7501L 30,26.7501L 30,17.7501L 34,21.7501 Z M 21.75,42L 34,42L 34,54.25L 30,58.25L 30,49.25L 22,57.25L 18.75,54L 26.75,46L 17.75,46L 21.75,42 Z M 42,54.25L 42,42L 54.2499,42L 58.2499,46L 49.2499,46.0001L 57.2499,54L 53.9999,57.25L 45.9999,49.25L 45.9999,58.25L 42,54.25 Z" />
+                                    <Setter Property="ToolTip" Value="フルスクリーン解除(Esc, F)" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </controls:RoundButton.Resources>
+                </controls:RoundButton>
+            </WrapPanel>
         </Grid>
     </Grid>
 </UserControl>

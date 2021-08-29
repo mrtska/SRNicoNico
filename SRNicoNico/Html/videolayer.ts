@@ -90,6 +90,16 @@ class VideoHandler {
         }
     }
 
+    public setSrc(src: string): void {
+        const currentTime = this.video.currentTime;
+        const paused = this.video.paused;
+        this.video.src = src;
+        this.video.currentTime = currentTime;
+        if (!paused) {
+            this.video.play();
+        }
+    }
+
     public getCurrentTime(): number {
         return this.video.currentTime;
     }
@@ -191,6 +201,9 @@ class PlayerHandler {
         switch (type) {
             case 'setContent':
                 this.video.initialize(value.contentUri, value.volume, value.autoplay);
+                break;
+            case 'setSrc':
+                this.video.setSrc(value);
                 break;
             case 'seek':
                 this.video.seek(value);

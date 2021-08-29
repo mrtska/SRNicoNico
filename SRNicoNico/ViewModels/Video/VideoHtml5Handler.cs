@@ -130,6 +130,10 @@ namespace SRNicoNico.ViewModels {
             Initialized = true;
         }
 
+        public void SetContent(string contentUri) {
+            WebView?.CoreWebView2.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setSrc", value = contentUri }));
+        }
+
         public void DispatchComment(object obj) {
             if (BrowserInitialized) {
                 WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "dispatchComment", value = obj }));

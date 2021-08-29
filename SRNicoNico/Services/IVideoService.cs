@@ -18,6 +18,13 @@ namespace SRNicoNico.Services {
         Task<WatchApiData> WatchAsync(string videoId, bool withoutHistory = false);
 
         /// <summary>
+        /// 動画再生中に再度動画情報を取得する
+        /// </summary>
+        /// <param name="videoId">動画ID</param>
+        /// <returns>動画情報</returns>
+        Task<WatchApiData> WatchContinueAsync(string videoId);
+
+        /// <summary>
         /// 指定したメディア情報からDMCのセッションを作成する
         /// 作成したセッションは一定時間ハートビートを送らないと自動的に破棄される
         /// 明示的に破棄する必要は無い

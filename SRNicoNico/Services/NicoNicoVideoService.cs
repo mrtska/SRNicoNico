@@ -37,8 +37,15 @@ namespace SRNicoNico.Services {
             DbContext = dbContext;
         }
 
+        public Task<WatchApiData> WatchAsync(string videoId, bool withoutHistory = false) {
+            return WatchAsyncInternal(videoId, withoutHistory);
+        }
+        public Task<WatchApiData> WatchContinueAsync(string videoId) {
+            return WatchAsyncInternal(videoId, false, true);
+        }
+
         /// <inheritdoc />
-        public async Task<WatchApiData> WatchAsync(string videoId, bool withoutHistory = false) {
+        private async Task<WatchApiData> WatchAsyncInternal(string videoId, bool withoutHistory = false, bool isContinueWatching = false) {
 
             if (string.IsNullOrEmpty(videoId)) {
                 throw new ArgumentNullException(nameof(videoId));
@@ -49,6 +56,7 @@ namespace SRNicoNico.Services {
                 .AddQuery("_frontendVersion", 0)
                 .AddQuery("actionTrackId", "1_1")
                 .AddQuery("withoutHistory", withoutHistory)
+                .AddQuery("isContinueWatching", isContinueWatching)
                 .AddQuery("additionals", withoutHistory ? "" : "series") // withoutHistoryがfalseの時はシリーズ情報も取得する
                 .AddQuery("skips", "harmful");
 
@@ -178,7 +186,7 @@ namespace SRNicoNico.Services {
                     audios.Add(new MediaMovieAudio {
                         Id = audio.id,
                         IsAvailable = audio.isAvailable,
-                        Bitrate = (int)audio.metadata.bitrate,
+                        Bitrate = (int)audio.metadata.bitrate / 1000,
                         SamplingRate = (int)audio.metadata.samplingRate,
                         IntegratedLoudness = (int)audio.metadata.loudness.integratedLoudness,
                         TruePeak = (int)audio.metadata.loudness.truePeak,
@@ -198,7 +206,7 @@ namespace SRNicoNico.Services {
                         Id = video.id,
                         IsAvailable = video.isAvailable,
                         Label = video.metadata.label,
-                        Bitrate = (int)video.metadata.bitrate,
+                        Bitrate = (int)video.metadata.bitrate / 1000,
                         Width = (int)video.metadata.resolution.width,
                         Height = (int)video.metadata.resolution.height,
                         LevelIndex = (int)video.metadata.levelIndex,
@@ -529,6 +537,7 @@ namespace SRNicoNico.Services {
             return ret;
         }
 
+
         /// <inheritdoc />
         public async Task<DmcSession> CreateSessionAsync(MediaSession movieSession, string? videoId = null, string? audioId = null) {
 
@@ -629,10 +638,14 @@ namespace SRNicoNico.Services {
 
             return new DmcSession {
                 Id = data.session.id,
+                VideoId = video,
+                AudioId = audio,
                 ContentUri = data.session.content_uri,
                 Version = data.session.version,
                 RawJson = data.ToString(),
-                ApiUrl = apiUrl
+                ApiUrl = apiUrl,
+                CreatedTime = DateTimeOffset.FromUnixTimeMilliseconds((long)data.session.session_operation_auth.session_operation_auth_by_signature.created_time),
+                ExpireTime = DateTimeOffset.FromUnixTimeMilliseconds((long)data.session.session_operation_auth.session_operation_auth_by_signature.expire_time)
             };
         }
 
