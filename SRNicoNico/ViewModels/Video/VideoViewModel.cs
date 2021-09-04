@@ -244,7 +244,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public MediaMovieVideo? SelectedVideoResolution {
             get { return _SelectedVideoResolution; }
-            set { 
+            set {
                 if (_SelectedVideoResolution == value || value == null)
                     return;
                 _SelectedVideoResolution = value;

@@ -27,7 +27,7 @@
                                     <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Close" />
                                 </a:MouseMiddleClickTrigger>
                             </i:Interaction.Triggers>
-                            <TextBlock Text="{Binding Name}" FontSize="14" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" FontSize="13.9" VerticalAlignment="Center" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"  />
                         </Grid>
                     </DataTemplate>
                 </metro:TabView.ItemTemplate>

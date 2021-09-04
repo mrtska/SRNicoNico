@@ -31,6 +31,13 @@
             </Grid.ColumnDefinitions>
             <TextBlock FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis" Margin="5,0,0,0" Text="{Binding Name}" ToolTip="{Binding Settings.Title}" />
             <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <controls:RoundButton Grid.Column="2" ToolTip="編集" Focusable="False" VerticalAlignment="Center" Margin="0,0,5,0" IconData="{StaticResource EditIcon}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodName="Reload" MethodTarget="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </controls:RoundButton>
                 <controls:RoundButton ToolTip="更新" Focusable="False" VerticalAlignment="Center" Margin="0,0,5,0" IconData="{StaticResource ReloadIcon}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">

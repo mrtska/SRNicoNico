@@ -63,8 +63,8 @@
                     <TextBlock Text="{Binding ApiData.Video.CommentCount, StringFormat='コメント数: {0:N0}'}" />
                     <TextBlock Text="{Binding ApiData.Video.MylistCount, StringFormat='マイリスト数: {0:N0}'}" />
                     <TextBlock Text="{Binding ApiData.Video.LikeCount, StringFormat='いいね数: {0:N0}'}" />
-                    <TextBlock Text="{Binding ApiData.Ranking.Genre, StringFormat='ジャンル: {0}'}" />
-                    <TextBlock Text="{Binding ApiData.Ranking.Rank, StringFormat='最高順位: {0:N0}位'}" />
+                    <TextBlock Text="{Binding ApiData.Genre.Label, StringFormat='ジャンル: {0}', TargetNullValue='ジャンル: 未設定'}" />
+                    <TextBlock Text="{Binding ApiData.Ranking.Rank, StringFormat='最高順位: {0:N0}位', TargetNullValue='最高順位: 圏外'}" />
                     <TextBlock>
                         解像度:<Run Text="{Binding ActualVideoWidth}" /> x <Run Text="{Binding ActualVideoHeight}" />
                     </TextBlock>
