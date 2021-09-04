@@ -12,13 +12,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToolTip">
-                    <Border Name="Border"
-							BorderThickness=".99"
-							BorderBrush="{DynamicResource BorderBrushKey}"
-							Background="{DynamicResource BackgroundBrushKey}"
-							Padding="6,4"
-							SnapsToDevicePixels="True"
-							LayoutTransform="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:MetroWindow}}, Path=DpiScaleTransform}">
+                    <Border Name="Border" BorderThickness=".99" BorderBrush="{DynamicResource BorderBrushKey}" Background="{DynamicResource BackgroundBrushKey}"
+							Padding="6,4" SnapsToDevicePixels="True" LayoutTransform="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:MetroWindow}}, Path=DpiScaleTransform}">
                         <ContentPresenter />
                     </Border>
                 </ControlTemplate>

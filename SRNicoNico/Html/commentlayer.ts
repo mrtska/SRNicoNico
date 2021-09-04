@@ -92,6 +92,11 @@ export class CommentHandler {
         this.previousRenderedTime = -1;
     }
 
+    public clearComment(): void {
+
+        this.layers = undefined;
+    }
+
     public initialize(obj: any): void {
 
         // レイヤー順にソートする

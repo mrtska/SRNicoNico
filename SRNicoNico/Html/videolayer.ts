@@ -90,11 +90,16 @@ class VideoHandler {
         }
     }
 
-    public setSrc(src: string): void {
+    public setSrc(src: string, resume: boolean): void {
+
         const currentTime = this.video.currentTime;
         const paused = this.video.paused;
+
         this.video.src = src;
-        this.video.currentTime = currentTime;
+
+        if (resume) {
+            this.video.currentTime = currentTime;
+        }
         if (!paused) {
             this.video.play();
         }
@@ -203,7 +208,10 @@ class PlayerHandler {
                 this.video.initialize(value.contentUri, value.volume, value.autoplay);
                 break;
             case 'setSrc':
-                this.video.setSrc(value);
+                this.video.setSrc(value.contentUri, !value.clearComment);
+                if (value.clearComment) {
+                    this.comment.clearComment();
+                }
                 break;
             case 'seek':
                 this.video.seek(value);

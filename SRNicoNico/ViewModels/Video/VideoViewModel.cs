@@ -481,7 +481,7 @@ namespace SRNicoNico.ViewModels {
 
         internal readonly ISettings Settings;
         internal readonly INicoNicoViewer NicoNicoViewer;
-        private readonly IVideoService VideoService;
+        internal readonly IVideoService VideoService;
         private readonly IUserService UserService;
         private readonly IMylistService MylistService;
         private readonly InteractionMessenger RootMessenger;

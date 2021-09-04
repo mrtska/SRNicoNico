@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using DynaJson;
 using Microsoft.EntityFrameworkCore;
 using SRNicoNico.Entities;
@@ -493,6 +494,7 @@ namespace SRNicoNico.Services {
                     Id = video.id,
                     Title = video.title,
                     Description = video.description,
+                    ShortDescription = HttpUtility.HtmlDecode(((string)video.description).Replace("<br>", " ")).Substring(0, 50),
                     ViewCount = (int)video.count.view,
                     CommentCount = (int)video.count.comment,
                     MylistCount = (int)video.count.mylist,

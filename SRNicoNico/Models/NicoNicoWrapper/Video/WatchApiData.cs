@@ -581,6 +581,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// </summary>
         public string? Title { get; set; }
         /// <summary>
+        /// 短い動画説明文
+        /// </summary>
+        public string? ShortDescription { get; set; }
+        /// <summary>
         /// 動画説明文
         /// </summary>
         public string? Description { get; set; }

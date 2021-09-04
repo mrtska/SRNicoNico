@@ -1,8 +1,8 @@
 ﻿using System.Windows.Controls;
 
 namespace SRNicoNico.Views {
-    public partial class Video : UserControl {
-        public Video() {
+    public partial class VideoToolTip : UserControl {
+        public VideoToolTip() {
             InitializeComponent();
         }
     }

@@ -6,6 +6,7 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              d:DataContext="{d:DesignInstance Type=vm:VideoViewModel}"
@@ -22,8 +23,22 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
-            <controls:RoundButton Margin="10,5" IconData="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
-                                  EllipseDiameter="34" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="15" IconHeight="15">
+            <controls:RoundButton Margin="10,5" IconData="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" Focusable="False"
+                                  EllipseDiameter="34" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="15" IconHeight="15" ToolTipService.ShowDuration="0x7FFFFFFF">
+                <controls:RoundButton.Resources>
+                    <Style TargetType="{x:Type controls:RoundButton}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ApiData.Series.Prev}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:RoundButton.Resources>
+                <controls:RoundButton.ToolTip>
+                    <ToolTip Placement="Top">
+                        <v:VideoToolTip DataContext="{Binding ApiData.Series.Prev}" />
+                    </ToolTip>
+                </controls:RoundButton.ToolTip>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="PrevSeries" />
@@ -43,8 +58,22 @@
                     </Hyperlink>
                 </TextBlock>
             </StackPanel>
-            <controls:RoundButton Grid.Column="2" Margin="10,5" IconData="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"
-                                  EllipseDiameter="34" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="15" IconHeight="15">
+            <controls:RoundButton Grid.Column="2" Margin="10,5" IconData="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" Focusable="False"
+                                  EllipseDiameter="34" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="15" IconHeight="15" ToolTipService.ShowDuration="0x7FFFFFFF">
+                <controls:RoundButton.Resources>
+                    <Style TargetType="{x:Type controls:RoundButton}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ApiData.Series.Next}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:RoundButton.Resources>
+                <controls:RoundButton.ToolTip>
+                    <ToolTip Placement="Top">
+                        <v:VideoToolTip DataContext="{Binding ApiData.Series.Next}" />
+                    </ToolTip>
+                </controls:RoundButton.ToolTip>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="NextSeries" />
