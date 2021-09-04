@@ -266,7 +266,7 @@ namespace SRNicoNico.ViewModels {
                     // 新しい画質のセッションを作成する
                     DmcSession = await VideoService.CreateSessionAsync(ApiData!.Media!.Movie!.Session!, value.Id);
                     // UIスレッドで新しい画質のURLを設定する
-                    await App.UIDispatcher!.InvokeAsync(() => Html5Handler?.SetContent(DmcSession.ContentUri!));
+                    await App.UIDispatcher!.InvokeAsync(() => Html5Handler?.SetContent(DmcSession.ContentUri!, false));
 
                     HeartbeatTimer?.Change(ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3);
                 });
@@ -480,15 +480,18 @@ namespace SRNicoNico.ViewModels {
         private Timer? HeartbeatTimer;
 
         internal readonly ISettings Settings;
+        internal readonly INicoNicoViewer NicoNicoViewer;
         private readonly IVideoService VideoService;
         private readonly IUserService UserService;
         private readonly IMylistService MylistService;
         private readonly InteractionMessenger RootMessenger;
-        private readonly string VideoId;
+        private string VideoId;
 
-        public VideoViewModel(ISettings settings, IVideoService videoService, IUserService userService, IMylistService mylistService, InteractionMessenger messenger, string videoId) : base(videoId) {
+        public VideoViewModel(ISettings settings, INicoNicoViewer nicoNicoViewer, IVideoService videoService,
+            IUserService userService, IMylistService mylistService, InteractionMessenger messenger, string videoId) : base(videoId) {
 
             Settings = settings;
+            NicoNicoViewer = nicoNicoViewer;
             VideoService = videoService;
             UserService = userService;
             MylistService = mylistService;
@@ -502,6 +505,61 @@ namespace SRNicoNico.ViewModels {
             _IsMuted = Settings.CurrentIsMute;
             _RepeatBehavior = Settings.CurrentRepeatBehavior;
             _CommentVisibility = Settings.CurrentCommentVisibility;
+        }
+
+        /// <summary>
+        /// 別の動画に遷移する
+        /// WebView等は全て再利用する
+        /// </summary>
+        /// <param name="videoId">再生したい動画のID</param>
+        public async void NavigateTo(string videoId) {
+
+            VideoId = videoId;
+            IsActive = true;
+            Status = "動画を読込中";
+            try {
+
+                ApiData = await VideoService.WatchAsync(VideoId);
+
+                // タブ名を動画IDから動画タイトルに書き換える
+                Name = ApiData.Video!.Title;
+
+                IsLiked = ApiData.Video.Viewer!.IsLiked;
+                IsFollowing = await UserService.IsFollowUserAsync(ApiData.Owner!.Id!);
+                DmcSession = await VideoService.CreateSessionAsync(ApiData.Media!.Movie!.Session!);
+
+                // 現在の画質をUIに反映する
+                ResolutionList = new ObservableSynchronizedCollection<MediaMovieVideo>(ApiData.Media.Movie.Videos);
+                _SelectedVideoResolution = ApiData.Media.Movie.Videos.Single(s => s.Id == DmcSession.VideoId);
+                RaisePropertyChanged(nameof(SelectedVideoResolution));
+
+                Html5Handler!.SetContent(DmcSession.ContentUri!, true);
+
+                Status = string.Empty;
+            } catch (StatusErrorException e) {
+
+                Status = $"動画 {VideoId} の再生に失敗しました ステータスコード: {e.StatusCode}";
+                return;
+            } finally {
+
+                IsActive = false;
+            }
+            try {
+
+                // コメント部分を初期化する
+                Comment!.Initialize(this, ApiData.Comment!);
+            } catch (StatusErrorException e) {
+
+                Status = $"コメントの取得に失敗しました ステータスコード: {e.StatusCode}";
+            }
+            try {
+
+                // ストーリーボードを取得する
+                StoryBoard = await VideoService.GetStoryBoardAsync(ApiData.Media.StoryBoard!.Session!);
+            } catch (StatusErrorException e) {
+
+                Status = $"ストーリーボードの取得に失敗しました ステータスコード: {e.StatusCode}";
+            }
         }
 
         /// <summary>
@@ -843,6 +901,28 @@ namespace SRNicoNico.ViewModels {
                 }
             } catch (StatusErrorException e) {
                 Status = $"後で見るに登録出来ませんでした ステータスコード: {e.StatusCode}";
+            }
+        }
+
+        /// <summary>
+        /// シリーズの前の動画に遷移する
+        /// </summary>
+        public void PrevSeries() {
+
+            if (ApiData?.Series?.Prev != null) {
+
+                NavigateTo(ApiData.Series.Prev.Id!);
+            }
+        }
+
+        /// <summary>
+        /// シリーズの次の動画に遷移する
+        /// </summary>
+        public void NextSeries() {
+
+            if (ApiData?.Series?.Next != null) {
+
+                NavigateTo(ApiData.Series.Next.Id!);
             }
         }
 

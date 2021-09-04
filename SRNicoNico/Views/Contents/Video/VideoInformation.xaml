@@ -12,125 +12,167 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Background="{DynamicResource BackgroundBrushKey}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="auto" />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Image Source="{Binding ApiData.Video.ThumbnailUrl}" Margin="5" />
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <TextBlock Text="投稿者" FontSize="18" VerticalAlignment="Center" Margin="5,0" />
-                        <controls:RoundButton Grid.Column="1" Focusable="False" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleFollow" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <controls:RoundButton.Resources>
-                                <Style TargetType="{x:Type controls:RoundButton}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsFollowing}" Value="False">
-                                            <Setter Property="IconData" Value="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
-                                            <Setter Property="ToolTip" Value="フォロー" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsFollowing}" Value="True">
-                                            <Setter Property="IconData" Value="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
-                                            <Setter Property="ToolTip" Value="フォロー解除" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </controls:RoundButton.Resources>
-                        </controls:RoundButton>
-                    </StackPanel>
-                </Grid>
-                <StackPanel Grid.Column="1" Margin="0,10">
-                    <TextBlock Text="{Binding ApiData.Video.Id, StringFormat='動画ID: {0}'}" />
-                    <TextBlock Text="{Binding ApiData.Video.ViewCount, StringFormat='再生数: {0:N0}'}" />
-                    <TextBlock Text="{Binding ApiData.Video.CommentCount, StringFormat='コメント数: {0:N0}'}" />
-                    <TextBlock Text="{Binding ApiData.Video.MylistCount, StringFormat='マイリスト数: {0:N0}'}" />
-                    <TextBlock Text="{Binding ApiData.Video.LikeCount, StringFormat='いいね数: {0:N0}'}" />
-                    <TextBlock Text="{Binding ApiData.Genre.Label, StringFormat='ジャンル: {0}', TargetNullValue='ジャンル: 未設定'}" />
-                    <TextBlock Text="{Binding ApiData.Ranking.Rank, StringFormat='最高順位: {0:N0}位', TargetNullValue='最高順位: 圏外'}" />
-                    <TextBlock>
-                        解像度:<Run Text="{Binding ActualVideoWidth}" /> x <Run Text="{Binding ActualVideoHeight}" />
-                    </TextBlock>
-                </StackPanel>
-            </Grid>
-            <StackPanel Grid.Row="1" Orientation="Horizontal">
-                <Image Source="{Binding ApiData.Owner.IconUrl}" Width="50" Margin="5" />
-                <TextBlock VerticalAlignment="Center" FontSize="16" Margin="5" ToolTip="{Binding ApiData.Owner.Nickname}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <controls:RoundButton Margin="10,5" IconData="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
+                                  EllipseDiameter="34" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="15" IconHeight="15">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="PrevSeries" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </controls:RoundButton>
+            <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center">
+                <Image Source="{Binding ApiData.Series.ThumbnailUrl}" Height="30" Margin="5,0" VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding ApiData.Series.Title}">
                     <Hyperlink>
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
-                                <a:NicoNicoOpenAction Url="{Binding ApiData.Owner.Id, StringFormat='https://www.nicovideo.jp/user/{0}'}" />
+                                <a:NicoNicoOpenAction Url="{Binding ApiData.Series.Id, StringFormat='https://www.nicovideo.jp/series/{0}'}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                        <Run Text="{Binding ApiData.Owner.Nickname}" />
+                        <Run Text="{Binding ApiData.Series.Title}" />
                     </Hyperlink>
                 </TextBlock>
             </StackPanel>
+            <controls:RoundButton Grid.Column="2" Margin="10,5" IconData="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"
+                                  EllipseDiameter="34" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="15" IconHeight="15">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="NextSeries" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </controls:RoundButton>
         </Grid>
-        <UniformGrid Grid.Column="1" IsEnabled="{Binding IsActive,Converter={StaticResource InvertBoolConverter}}" Width="45" Columns="1" Margin="0,0,5,0">
-            <controls:RoundButton Focusable="False" EllipseDiameter="36" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="20" IconHeight="20"
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Image Source="{Binding ApiData.Video.ThumbnailUrl}" Margin="5" />
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <TextBlock Text="投稿者" FontSize="18" VerticalAlignment="Center" Margin="5,0" />
+                            <controls:RoundButton Grid.Column="1" Focusable="False" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0" IconWidth="15" IconHeight="15" EllipseDiameter="30">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleFollow" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <controls:RoundButton.Resources>
+                                    <Style TargetType="{x:Type controls:RoundButton}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsFollowing}" Value="False">
+                                                <Setter Property="IconData" Value="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+                                                <Setter Property="ToolTip" Value="フォロー" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsFollowing}" Value="True">
+                                                <Setter Property="IconData" Value="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
+                                                <Setter Property="ToolTip" Value="フォロー解除" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </controls:RoundButton.Resources>
+                            </controls:RoundButton>
+                        </StackPanel>
+                    </Grid>
+                    <StackPanel Grid.Column="1" Margin="0,10">
+                        <TextBlock Text="{Binding ApiData.Video.Id, StringFormat='動画ID: {0}'}" />
+                        <TextBlock Text="{Binding ApiData.Video.ViewCount, StringFormat='再生数: {0:N0}'}" />
+                        <TextBlock Text="{Binding ApiData.Video.CommentCount, StringFormat='コメント数: {0:N0}'}" />
+                        <TextBlock Text="{Binding ApiData.Video.MylistCount, StringFormat='マイリスト数: {0:N0}'}" />
+                        <TextBlock Text="{Binding ApiData.Video.LikeCount, StringFormat='いいね数: {0:N0}'}" />
+                        <TextBlock Text="{Binding ApiData.Genre.Label, StringFormat='ジャンル: {0}', TargetNullValue='ジャンル: 未設定'}" />
+                        <TextBlock Text="{Binding ApiData.Ranking.Rank, StringFormat='最高順位: {0:N0}位', TargetNullValue='最高順位: 圏外'}" />
+                        <TextBlock>
+                        解像度:<Run Text="{Binding ActualVideoWidth}" /> x <Run Text="{Binding ActualVideoHeight}" />
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Image Source="{Binding ApiData.Owner.IconUrl}" Width="50" Margin="5" />
+                    <TextBlock VerticalAlignment="Center" FontSize="16" Margin="5" ToolTip="{Binding ApiData.Owner.Nickname}">
+                        <Hyperlink>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <a:NicoNicoOpenAction Url="{Binding ApiData.Owner.Id, StringFormat='https://www.nicovideo.jp/user/{0}'}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <Run Text="{Binding ApiData.Owner.Nickname}" />
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+            <UniformGrid Grid.Column="1" IsEnabled="{Binding IsActive,Converter={StaticResource InvertBoolConverter}}" Width="45" Columns="1" Margin="0,0,5,0">
+                <controls:RoundButton Focusable="False" EllipseDiameter="36" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="20" IconHeight="20"
                                   IconData="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" >
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleLike" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <controls:RoundButton.Resources>
-                    <Style TargetType="{x:Type controls:RoundButton}">
-                        <Setter Property="ToolTip" Value="いいね！する" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsLiked}" Value="True">
-                                <Setter Property="Foreground" Value="#E26775" />
-                                <Setter Property="ToolTip" Value="いいね！を解除する" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </controls:RoundButton.Resources>
-            </controls:RoundButton>
-            <controls:RoundButton Focusable="False" EllipseDiameter="36" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="20" IconHeight="20" ToolTip="あとで見るに登録"
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ToggleLike" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <controls:RoundButton.Resources>
+                        <Style TargetType="{x:Type controls:RoundButton}">
+                            <Setter Property="ToolTip" Value="いいね！する" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLiked}" Value="True">
+                                    <Setter Property="Foreground" Value="#E26775" />
+                                    <Setter Property="ToolTip" Value="いいね！を解除する" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </controls:RoundButton.Resources>
+                </controls:RoundButton>
+                <controls:RoundButton Focusable="False" EllipseDiameter="36" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="20" IconHeight="20" ToolTip="あとで見るに登録"
                                   IconData="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z" >
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="AddWatchLater" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </controls:RoundButton>
-            <controls:RoundButton Focusable="False" EllipseDiameter="36" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="20" IconHeight="20" ToolTip="マイリストに登録" 
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="AddWatchLater" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </controls:RoundButton>
+                <controls:RoundButton Focusable="False" EllipseDiameter="36" HorizontalAlignment="Center" VerticalAlignment="Center" IconWidth="20" IconHeight="20" ToolTip="マイリストに登録" 
                                   IconData="M22 0h22c.397 0 .781.058 1.144.166a8.003 8.003 0 0 1 5.77 4.779l2.927 7.083H92a8 8 0 0 1 8 8v56a8 8 0 0 1-8 8H8a8 8 0 0 1-8-8V8a8 8 0 0 1 8-8h14zm48.16 53.36V42.48a1.28 1.28 0 0 1 1.28-1.28h5.12a1.28 1.28 0 0 1 1.28 1.28v10.88h10.88A1.28 1.28 0 0 1 90 54.64v5.12a1.28 1.28 0 0 1-1.28 1.28H77.84v10.88a1.28 1.28 0 0 1-1.28 1.28h-5.12a1.28 1.28 0 0 1-1.28-1.28V61.04H59.28A1.28 1.28 0 0 1 58 59.76v-5.12a1.28 1.28 0 0 1 1.28-1.28h10.88zM24 61.2v-8H12v8h12zm28 0v-8H28v8h24zm-28-14v-8H12v8h12zm40 0v-8H28v8h36zm-40-14v-8H12v8h12zm40 0v-8H28v8h36z">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenMylistView" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </controls:RoundButton>
-            <controls:RoundButton Focusable="False" HorizontalAlignment="Center" VerticalAlignment="Center" EllipseDiameter="36" IconWidth="20" IconHeight="20" ToolTip="ツイート" Foreground="#FF1DA1F2" 
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenMylistView" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </controls:RoundButton>
+                <controls:RoundButton Focusable="False" HorizontalAlignment="Center" VerticalAlignment="Center" EllipseDiameter="36" IconWidth="20" IconHeight="20" ToolTip="ツイート" Foreground="#FF1DA1F2" 
                                   IconData="M153.62 301.59c94.34 0 145.94-78.16 145.94-145.94 0-2.22 0-4.43-.15-6.63A104.36 104.36 0 0 0 325 122.47a102.38 102.38 0 0 1-29.46 8.07 51.47 51.47 0 0 0 22.55-28.37 102.79 102.79 0 0 1-32.57 12.45 51.34 51.34 0 0 0-87.41 46.78A145.62 145.62 0 0 1 92.4 107.81a51.33 51.33 0 0 0 15.88 68.47A50.91 50.91 0 0 1 85 169.86c0 .21 0 .43 0 .65a51.31 51.31 0 0 0 41.15 50.28 51.21 51.21 0 0 1-23.16.88 51.35 51.35 0 0 0 47.92 35.62 102.92 102.92 0 0 1-63.7 22A104.41 104.41 0 0 1 75 278.55a145.21 145.21 0 0 0 78.62 23">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenTweetView" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </controls:RoundButton>
-        </UniformGrid>
-        <controls:ManagedPopup IsOpen="{Binding IsTweetViewOpen}" StaysOpen="True" Placement="Bottom">
-            <ContentControl Content="{Binding TweetWebView}" Width="400" Height="300"  />
-        </controls:ManagedPopup>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenTweetView" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </controls:RoundButton>
+            </UniformGrid>
+            <controls:ManagedPopup IsOpen="{Binding IsTweetViewOpen}" StaysOpen="True" Placement="Bottom">
+                <ContentControl Content="{Binding TweetWebView}" Width="400" Height="300"  />
+            </controls:ManagedPopup>
+        </Grid>
     </Grid>
 </UserControl>

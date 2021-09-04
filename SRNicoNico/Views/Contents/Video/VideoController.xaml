@@ -123,7 +123,7 @@
             </WrapPanel>
 
             <WrapPanel Grid.Column="1" Orientation="Horizontal">
-                <ComboBox ItemsSource="{Binding ResolutionList}" Height="31" Width="70" VerticalContentAlignment="Center" SelectedItem="{Binding SelectedVideoResolution}" Focusable="False">
+                <ComboBox ItemsSource="{Binding ResolutionList}" Height="31" Width="100" VerticalContentAlignment="Center" SelectedItem="{Binding SelectedVideoResolution}" Focusable="False">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>

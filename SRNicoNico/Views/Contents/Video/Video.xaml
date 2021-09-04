@@ -13,7 +13,7 @@
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              d:DataContext="{d:DesignInstance Type=vm:VideoViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="1000">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Loaded" />
@@ -126,7 +126,13 @@
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                         <TextBlock Text="{Binding ApiData.Video.RegisteredAt, StringFormat=yyyy年MM月dd日 HH:mm:ss 投稿}" Margin="5" FontSize="14" />
-                        <controls:HtmlRenderer HtmlText="{Binding ApiData.Video.Description}" Margin="5" FontSize="14" />
+                        <controls:HtmlRenderer HtmlText="{Binding ApiData.Video.Description}" Margin="5" FontSize="14">
+                            <controls:HtmlRenderer.Resources>
+                                <Style TargetType="{x:Type Hyperlink}">
+                                    <EventSetter Event="Click" Handler="OpenHyperlink" />
+                                </Style>
+                            </controls:HtmlRenderer.Resources>
+                        </controls:HtmlRenderer>
                     </StackPanel>
                 </ScrollViewer>
                 <metro:ProgressRing IsActive="{Binding IsActive}" Panel.ZIndex="1" />

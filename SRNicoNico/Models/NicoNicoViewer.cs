@@ -22,7 +22,7 @@ namespace SRNicoNico.Models {
 
         /// <inheritdoc />
         public NicoNicoUrlType DetectUrlType(string url) {
-            
+
             if (url.StartsWith("https://www.nicovideo.jp/watch/")) {
 
                 return NicoNicoUrlType.Video;
@@ -59,6 +59,13 @@ namespace SRNicoNico.Models {
                         break;
                     case NicoNicoUrlType.Series:
                         mainContent.AddTab(UnityContainer.Resolve<SeriesViewModel>(new ParameterOverride("seriesId", url[32..].Split('?')[0])));
+                        break;
+                    default:
+                        App.UIDispatcher!.Invoke(() => {
+                            mainContent.WebView!.AddTab(url);
+                            // WebViewをActiveにする
+                            mainContent.SelectedItem = mainContent.WebView;
+                        });
                         break;
                 }
             });
