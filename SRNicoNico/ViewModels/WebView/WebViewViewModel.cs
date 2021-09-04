@@ -10,8 +10,6 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class WebViewViewModel : TabItemViewModel {
 
-        private readonly ISettings Settings;
-
         /// <summary>
         /// WebViewのリスト
         /// </summary>
@@ -31,9 +29,14 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        public WebViewViewModel(ISettings settings) : base("WebView") {
+        private readonly ISettings Settings;
+        private readonly INicoNicoViewer NicoNicoViewer;
+
+
+        public WebViewViewModel(ISettings settings, INicoNicoViewer nicoNicoViewer) : base("WebView") {
 
             Settings = settings;
+            NicoNicoViewer = nicoNicoViewer;
             WebViewItems = new ObservableSynchronizedCollection<WebViewContentViewModel>();
         }
 
@@ -56,7 +59,7 @@ namespace SRNicoNico.ViewModels {
         /// <param name="useViewer">リンクをNicoNicoViewerで開くか</param>
         public void AddTab(string url, bool useViewer = false) {
 
-            var tab = new WebViewContentViewModel(this, url, useViewer);
+            var tab = new WebViewContentViewModel(this, NicoNicoViewer, url, useViewer);
 
             // リストに追加し、選択状態にする
             WebViewItems.Add(tab);

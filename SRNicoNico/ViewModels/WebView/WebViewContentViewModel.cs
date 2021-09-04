@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Livet;
 using Microsoft.Web.WebView2.Wpf;
+using SRNicoNico.Models;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
@@ -71,10 +71,12 @@ namespace SRNicoNico.ViewModels {
         public WebView2 WebView { get; private set; }
 
         private readonly WebViewViewModel Owner;
+        private readonly INicoNicoViewer NicoNicoViewer;
 
-        public WebViewContentViewModel(WebViewViewModel vm, string initialUrl, bool useViewer) : base(initialUrl) {
+        public WebViewContentViewModel(WebViewViewModel vm, INicoNicoViewer nicoNicoViewer, string initialUrl, bool useViewer) : base(initialUrl) {
             
             Owner = vm;
+            NicoNicoViewer = nicoNicoViewer;
             CurrentUrl = initialUrl;
             OpenWithViewer = useViewer;
 
@@ -92,11 +94,12 @@ namespace SRNicoNico.ViewModels {
             // ページ遷移が始まった時に呼ばれる
             WebView.NavigationStarting += (o, e) => {
 
-                if (OpenWithViewer) {
+                // NicoNicoViewerで開く設定がONの時且つ開こうとしているURLが対応しているものだったら遷移を中断してNicoNicoViewerで開く
+                if (OpenWithViewer && NicoNicoViewer.CanOpenUrl(e.Uri)) {
 
-                    // TODO: ここにNicoNicoViewerで開く処理
-                    //e.Cancel = true;
-                    //return;
+                    NicoNicoViewer.OpenUrl(e.Uri);
+                    e.Cancel = true;
+                    return;
                 }
 
                 CurrentUrl = e.Uri;
@@ -115,6 +118,7 @@ namespace SRNicoNico.ViewModels {
             // target=_blankなどのリンクやShift+Clickした時に呼ばれる
             WebView.CoreWebView2.NewWindowRequested += (o, e) => {
 
+                e.Handled = true;
                 Owner.AddTab(e.Uri, OpenWithViewer);
             };
         }

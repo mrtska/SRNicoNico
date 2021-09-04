@@ -51,11 +51,19 @@ namespace SRNicoNico.Tests {
         public PopupPlacement FullScreenPopupPlacement { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool DoubleClickToggleFullScreen { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        public bool CanOpenUrl(string url) {
+            throw new NotImplementedException();
+        }
+
         public void ChangeAccent() {
             throw new NotImplementedException();
         }
 
         public void ChangeFontFamily() {
+            throw new NotImplementedException();
+        }
+
+        public NicoNicoUrlType DetectUrlType(string url) {
             throw new NotImplementedException();
         }
 

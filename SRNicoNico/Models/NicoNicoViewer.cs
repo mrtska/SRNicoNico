@@ -21,26 +21,51 @@ namespace SRNicoNico.Models {
         }
 
         /// <inheritdoc />
+        public NicoNicoUrlType DetectUrlType(string url) {
+            
+            if (url.StartsWith("https://www.nicovideo.jp/watch/")) {
+
+                return NicoNicoUrlType.Video;
+            } else if (url.StartsWith("https://www.nicovideo.jp/user/")) {
+
+                return NicoNicoUrlType.User;
+            } else if (url.StartsWith("https://www.nicovideo.jp/mylist/")) {
+
+                return NicoNicoUrlType.Mylist;
+            } else if (url.StartsWith("https://www.nicovideo.jp/series/")) {
+
+                return NicoNicoUrlType.Series;
+            }
+
+            return NicoNicoUrlType.Other;
+        }
+
+        /// <inheritdoc />
         public async void OpenUrl(string url) {
 
             var mainContent = UnityContainer.Resolve<MainContentViewModel>();
 
             await Task.Run(() => {
 
-                if (url.StartsWith("https://www.nicovideo.jp/watch/")) {
-
-                    mainContent.AddVideoTab(UnityContainer.Resolve<VideoViewModel>(new ParameterOverride("videoId", url[31..].Split('?')[0])));
-                } else if (url.StartsWith("https://www.nicovideo.jp/user/")) {
-
-                    mainContent.AddTab(UnityContainer.Resolve<UserViewModel>(new ParameterOverride("userId", url[30..].Split('?')[0])));
-                } else if (url.StartsWith("https://www.nicovideo.jp/mylist/")) {
-
-                    mainContent.AddTab(UnityContainer.Resolve<PublicMylistViewModel>(new ParameterOverride("mylistId", url[32..].Split('?')[0])));
-                } else if (url.StartsWith("https://www.nicovideo.jp/series/")) {
-
-                    mainContent.AddTab(UnityContainer.Resolve<SeriesViewModel>(new ParameterOverride("seriesId", url[32..].Split('?')[0])));
+                switch (DetectUrlType(url)) {
+                    case NicoNicoUrlType.Video:
+                        mainContent.AddVideoTab(UnityContainer.Resolve<VideoViewModel>(new ParameterOverride("videoId", url[31..].Split('?')[0])));
+                        break;
+                    case NicoNicoUrlType.User:
+                        mainContent.AddTab(UnityContainer.Resolve<UserViewModel>(new ParameterOverride("userId", url[30..].Split('?')[0])));
+                        break;
+                    case NicoNicoUrlType.Mylist:
+                        mainContent.AddTab(UnityContainer.Resolve<PublicMylistViewModel>(new ParameterOverride("mylistId", url[32..].Split('?')[0])));
+                        break;
+                    case NicoNicoUrlType.Series:
+                        mainContent.AddTab(UnityContainer.Resolve<SeriesViewModel>(new ParameterOverride("seriesId", url[32..].Split('?')[0])));
+                        break;
                 }
             });
         }
+
+        /// <inheritdoc />
+        public bool CanOpenUrl(string url) => DetectUrlType(url) != NicoNicoUrlType.Other;
+
     }
 }
