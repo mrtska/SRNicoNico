@@ -7,8 +7,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
-             d:DataContext="{d:DesignInstance Type=vm:VideoCommentViewModel}"
+             d:DataContext="{d:DesignInstance Type=vm:VideoViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="250">
     <Grid>
@@ -21,7 +22,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
-            <ComboBox SelectedItem="{Binding SelectedThread, Mode=TwoWay}" ItemsSource="{Binding CommentThreads}" VerticalContentAlignment="Center">
+            <ComboBox SelectedItem="{Binding Comment.SelectedThread, Mode=TwoWay}" ItemsSource="{Binding Comment.CommentThreads}" VerticalContentAlignment="Center">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Label, Converter={StaticResource CommentLabelConverter}}" FontSize="16" />
@@ -29,29 +30,73 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <controls:RoundButton ToolTip="オートスクロール" IconData="{StaticResource ReloadIcon}" Margin="5,0">
+                <controls:RoundButton ToolTip="オートスクロール" IconData="M12,17L7,12H10V8H14V12H17L12,17 Z" Margin="5,0" Focusable="False">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Reload" />
+                            <l:LivetCallMethodAction MethodTarget="{Binding Comment}" MethodName="ToggleAutoScroll" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+                    <controls:RoundButton.Style>
+                        <Style TargetType="{x:Type controls:RoundButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Comment.AutoScrollEnabled}" Value="True">
+                                    <Setter Property="IconData" Value="M12,17L7,12H10V8H14V12H17L12,17Z" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Comment.AutoScrollEnabled}" Value="False">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type controls:RoundButton}">
+                                                <Grid Background="Transparent" Width="{TemplateBinding EllipseDiameter}" Height="{TemplateBinding EllipseDiameter}" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <Ellipse x:Name="ellipse" VerticalAlignment="Stretch" Stroke="{DynamicResource SemiActiveForegroundBrushKey}" StrokeThickness="{TemplateBinding EllipseStrokeThickness}" />
+                                                    <Path Width="{TemplateBinding IconWidth}" Height="{TemplateBinding IconHeight}" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M12,17L7,12H10V8H14V12H17L12,17 Z"
+                                                        Fill="{TemplateBinding Foreground}" Stretch="Uniform" />
+                                                    <Path Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" Fill="{DynamicResource ValidationErrorBrushKey}" Stretch="Uniform" />
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsFocused" Value="True">
+                                                        <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource AccentBrushKey}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Foreground" Value="{DynamicResource AccentHighlightBrushKey}" />
+                                                        <Setter TargetName="ellipse" Property="Stroke" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter TargetName="ellipse" Property="Fill" Value="{DynamicResource AccentHighlightBrushKey}" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </controls:RoundButton.Style>
                 </controls:RoundButton>
                 <controls:RoundButton ToolTip="コメントを更新" IconData="{StaticResource ReloadIcon}" Margin="0,0,5,0">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Close" />
+                            <l:LivetCallMethodAction MethodTarget="{Binding Comment}" MethodName="Reload" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </controls:RoundButton>
             </StackPanel>
         </Grid>
-        <ListBox Grid.Row="1" ItemsSource="{Binding SelectedThread.Entries}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListBox Grid.Row="1" ItemsSource="{Binding Comment.SelectedThread.Entries}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <i:Interaction.Behaviors>
+                <b:CommentAutoScrollBehavior AutoScrollEnabled="{Binding Comment.AutoScrollEnabled}" CurrentTime="{Binding CurrentTime}" />
+            </i:Interaction.Behaviors>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Background="Transparent">
                         <Grid.ContextMenu>
                             <ContextMenu>
-                                <MenuItem />
+                                <MenuItem Header="このコメントの時間に飛ぶ">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </MenuItem>
                                 <MenuItem />
                             </ContextMenu>
                         </Grid.ContextMenu>

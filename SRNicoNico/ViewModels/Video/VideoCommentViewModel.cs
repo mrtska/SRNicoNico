@@ -11,6 +11,21 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class VideoCommentViewModel : TabItemViewModel {
 
+
+        private bool _AutoScrollEnabled = true;
+        /// <summary>
+        /// オートスクロール設定
+        /// </summary>
+        public bool AutoScrollEnabled {
+            get { return _AutoScrollEnabled; }
+            set { 
+                if (_AutoScrollEnabled == value)
+                    return;
+                _AutoScrollEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private ObservableSynchronizedCollection<VideoCommentThread> _CommentThreads = new ObservableSynchronizedCollection<VideoCommentThread>();
         /// <summary>
         /// コメントのスレッド
@@ -41,18 +56,24 @@ namespace SRNicoNico.ViewModels {
         }
 
         private readonly IVideoService VideoService;
+        private readonly VideoViewModel Owner;
 
-        public VideoCommentViewModel(IVideoService videoService) {
+        public VideoCommentViewModel(IVideoService videoService, VideoViewModel vm) {
 
             VideoService = videoService;
+            Owner = vm;
+        }
+
+        public void ToggleAutoScroll() {
+
+            AutoScrollEnabled ^= true;
         }
 
         /// <summary>
         /// コメントを取得する
         /// </summary>
-        /// <param name="vm">親ViewModel</param>
         /// <param name="apiData">APIから取得したコメントデータ</param>
-        public async void Initialize(VideoViewModel vm, WatchApiDataComment apiData) {
+        public async void Initialize(WatchApiDataComment apiData) {
 
             IsActive = true;
             CommentThreads.Clear();
@@ -96,13 +117,20 @@ namespace SRNicoNico.ViewModels {
                     });
                 }
                 // WebViewにコメントデータを飛ばす
-                vm.Html5Handler?.DispatchComment(new { layers });
+                Owner.Html5Handler?.DispatchComment(new { layers });
             } catch (StatusErrorException) {
 
                 throw;
             } finally {
 
                 IsActive = false;
+            }
+        }
+
+        public void Reload() {
+
+            if (Owner.ApiData != null) {
+                Initialize(Owner.ApiData.Comment!);
             }
         }
     }

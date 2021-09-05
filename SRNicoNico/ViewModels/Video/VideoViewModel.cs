@@ -547,7 +547,7 @@ namespace SRNicoNico.ViewModels {
             try {
 
                 // コメント部分を初期化する
-                Comment!.Initialize(this, ApiData.Comment!);
+                Comment!.Initialize(ApiData.Comment!);
             } catch (StatusErrorException e) {
 
                 Status = $"コメントの取得に失敗しました ステータスコード: {e.StatusCode}";
@@ -625,8 +625,8 @@ namespace SRNicoNico.ViewModels {
             try {
 
                 // コメント部分を初期化する
-                Comment = new VideoCommentViewModel(VideoService);
-                Comment.Initialize(this, ApiData.Comment!);
+                Comment = new VideoCommentViewModel(VideoService, this);
+                Comment.Initialize(ApiData.Comment!);
 
             } catch (StatusErrorException e) {
 

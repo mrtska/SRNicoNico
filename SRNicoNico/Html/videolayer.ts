@@ -25,6 +25,8 @@ class VideoHandler {
 
     public initialize(contentUri: string, volume: number, autoplay: boolean) {
 
+        this.video.autoplay = autoplay;
+
         window.addEventListener('click', e => {
             // 動画部分がクリックされたら.NET側に通知する
             postMessage({
@@ -85,9 +87,6 @@ class VideoHandler {
 
         this.video.src = contentUri;
         this.video.volume = volume;
-        if (autoplay) {
-            this.video.play();
-        }
     }
 
     public setSrc(src: string, resume: boolean): void {
@@ -99,9 +98,11 @@ class VideoHandler {
 
         if (resume) {
             this.video.currentTime = currentTime;
-        }
-        if (!paused) {
-            this.video.play();
+            if (paused) {
+                this.video.pause();
+            } else {
+                this.video.play();
+            }
         }
     }
 

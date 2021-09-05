@@ -85,7 +85,7 @@
                 <RowDefinition />
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            <v:VideoComment DataContext="{Binding Comment}" />
+            <v:VideoComment />
             <v:VideoInformation Grid.Row="1" />
         </Grid>
     </Grid>

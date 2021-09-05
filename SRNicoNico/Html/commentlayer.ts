@@ -159,6 +159,7 @@ export class CommentHandler {
             });
         });
         this.calcBounds();
+        this.previousRenderedTime = -1;
     }
 
     /**

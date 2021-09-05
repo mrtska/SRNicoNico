@@ -17,7 +17,16 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <Grid>
+        <Grid d:Visibility="Visible">
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ApiData.Series}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
