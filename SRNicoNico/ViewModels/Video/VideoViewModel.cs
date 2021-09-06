@@ -258,13 +258,23 @@ namespace SRNicoNico.ViewModels {
                         await VideoService.DeleteSessionAsync(DmcSession);
                     }
 
-                    if (DateTimeOffset.UtcNow >= DmcSession!.ExpireTime) {
-                        // 期限が切れていたら動画情報を取得し直す
+                    var isEncrypted = ApiData!.Media!.Encryption != null;
+                    if (DateTimeOffset.UtcNow >= DmcSession!.ExpireTime || isEncrypted) {
+                        // 期限が切れていたら動画情報を取得し直す 暗号化された動画では毎回取得し直す
                         ApiData = await VideoService.WatchContinueAsync(VideoId);
+                    }
+                    if (isEncrypted) {
+
+                        var result = await VideoService.SendTrackingAsync(ApiData.Media!.TrackingId);
+                        if (!result) {
+
+                            Status = $"動画 {VideoId} の画質変更に失敗しました (トラッキングID送信失敗)";
+                            return;
+                        }
                     }
 
                     // 新しい画質のセッションを作成する
-                    DmcSession = await VideoService.CreateSessionAsync(ApiData!.Media!.Movie!.Session!, value.Id);
+                    DmcSession = await VideoService.CreateSessionAsync(ApiData!.Media!.Movie!.Session!, ApiData.Media.Encryption, value.Id);
                     // UIスレッドで新しい画質のURLを設定する
                     await App.UIDispatcher!.InvokeAsync(() => Html5Handler?.SetContent(DmcSession.ContentUri!, false));
 
@@ -577,7 +587,13 @@ namespace SRNicoNico.ViewModels {
                 Name = ApiData.Video!.Title;
 
                 IsLiked = ApiData.Video.Viewer!.IsLiked;
-                IsFollowing = await UserService.IsFollowUserAsync(ApiData.Owner!.Id!);
+                if (ApiData.Owner != null) {
+
+                    IsFollowing = await UserService.IsFollowUserAsync(ApiData.Owner.Id!);
+                } else if (ApiData.Channel != null) {
+
+                    ;
+                }
 
                 // WebViewが既にある場合は破棄する
                 if (Html5Handler != null) {
@@ -589,7 +605,16 @@ namespace SRNicoNico.ViewModels {
                 CompositeDisposable.Add(Html5Handler);
                 WebViewControl = Html5Handler.WebView;
 
-                DmcSession = await VideoService.CreateSessionAsync(ApiData.Media!.Movie!.Session!);
+                if (ApiData.Media!.Encryption != null) {
+
+                    var result = await VideoService.SendTrackingAsync(ApiData.Media.TrackingId);
+                    if (!result) {
+
+                        Status = $"動画 {VideoId} の再生に失敗しました (トラッキングID送信失敗)";
+                        return;
+                    }
+                }
+                DmcSession = await VideoService.CreateSessionAsync(ApiData.Media!.Movie!.Session!, ApiData.Media.Encryption);
 
                 // 現在の画質をUIに反映する
                 ResolutionList = new ObservableSynchronizedCollection<MediaMovieVideo>(ApiData.Media.Movie.Videos);

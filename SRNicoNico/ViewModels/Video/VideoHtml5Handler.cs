@@ -42,8 +42,8 @@ namespace SRNicoNico.ViewModels {
             await WebView.EnsureCoreWebView2Async();
             WebView.CoreWebView2.Settings.IsZoomControlEnabled = false;
             WebView.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
-            WebView.CoreWebView2.SetVirtualHostNameToFolderMapping("srniconico", GetHtml5PlayerPath(), CoreWebView2HostResourceAccessKind.Allow);
-            WebView.Source = new Uri("http://srniconico/player.html");
+            WebView.CoreWebView2.SetVirtualHostNameToFolderMapping("www.nicovideo.jp", GetHtml5PlayerPath(), CoreWebView2HostResourceAccessKind.Allow);
+            WebView.Source = new Uri("https://www.nicovideo.jp/player.html");
             WebView.CoreWebView2.AddHostObjectToScript("vm", vm);
             WebView.KeyDown += (o, e) => {
                 vm.KeyDown(e);

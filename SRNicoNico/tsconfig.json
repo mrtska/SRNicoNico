@@ -4,7 +4,8 @@
     "removeComments": true,
     "sourceMap": true,
     "module": "CommonJS",
-    "target": "es6",
+    "target": "ES6",
+    "lib": [ "dom", "es2015" ],
     "moduleResolution": "Node"
   },
   "exclude": [

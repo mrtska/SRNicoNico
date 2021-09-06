@@ -25,15 +25,23 @@ namespace SRNicoNico.Services {
         Task<WatchApiData> WatchContinueAsync(string videoId);
 
         /// <summary>
+        /// トラッキングIDを送信する
+        /// </summary>
+        /// <param name="trackingId">トラッキングID</param>
+        /// <returns>Trueなら成功</returns>
+        Task<bool> SendTrackingAsync(string trackingId);
+
+        /// <summary>
         /// 指定したメディア情報からDMCのセッションを作成する
         /// 作成したセッションは一定時間ハートビートを送らないと自動的に破棄される
         /// 明示的に破棄する必要は無い
         /// </summary>
         /// <param name="movieSession">パラメータ</param>
+        /// <param name="encryption">暗号化情報</param>
         /// <param name="videoId">動画の画質ID 指定しない場合は一番良い画質のものが選ばれる</param>
         /// <param name="audioId">動画の音質ID 指定しない場合は一番良い音質のものが選ばれる</param>
         /// <returns>DMCセッション</returns>
-        Task<DmcSession> CreateSessionAsync(MediaSession movieSession, string? videoId = null, string? audioId = null);
+        Task<DmcSession> CreateSessionAsync(MediaSession movieSession, MediaEncryption? encryption = null, string? videoId = null, string? audioId = null);
 
         /// <summary>
         /// 指定したセッションを延命する

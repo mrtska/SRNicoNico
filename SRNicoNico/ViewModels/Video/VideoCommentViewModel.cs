@@ -18,7 +18,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public bool AutoScrollEnabled {
             get { return _AutoScrollEnabled; }
-            set { 
+            set {
                 if (_AutoScrollEnabled == value)
                     return;
                 _AutoScrollEnabled = value;
@@ -88,7 +88,7 @@ namespace SRNicoNico.ViewModels {
                 var defaultThread = apiData.Threads.SingleOrDefault(s => s.IsDefaultPostTarget);
                 if (defaultThread != null) {
 
-                    SelectedThread = CommentThreads.SingleOrDefault(s => s.Fork == defaultThread.Fork);
+                    SelectedThread = CommentThreads.SingleOrDefault(s => s.Label == defaultThread.Label);
                 }
 
                 var layers = new List<object>();
@@ -106,9 +106,11 @@ namespace SRNicoNico.ViewModels {
                         if (threadId == null) {
                             continue;
                         }
-                        var thread = CommentThreads.SingleOrDefault(s => s.Fork == threadId.Fork);
-                        if (thread != null) {
-                            entries.AddRange(thread.Entries!);
+                        foreach (var thread in CommentThreads.Where(s => s.Fork == threadId.Fork && s.Id == threadId.Id)) {
+
+                            if (thread != null) {
+                                entries.AddRange(thread.Entries!);
+                            }
                         }
                     }
                     layers.Add(new {

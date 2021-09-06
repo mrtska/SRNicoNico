@@ -32,6 +32,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// 投稿者の情報
         /// </summary>
         public WatchApiDataOwner? Owner { get; set; }
+        /// <summary>
+        /// チャンネル情報
+        /// </summary>
+        public WatchApiDataChannel? Channel { get; set; }
 
         /// <summary>
         /// 動画プレイヤーの情報
@@ -57,7 +61,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// 動画情報
         /// </summary>
-        public WatchApiDataVideo? Video { get; set; }
+        public WatchApiDataVideo Video { get; set; } = default!;
 
         /// <summary>
         /// 視聴者情報
@@ -175,7 +179,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// ラベル
         /// default, easy, ownerなど
         /// </summary>
-        public string? Label { get; set; }
+        public string Label { get; set; } = default!;
         /// <summary>
         /// ポストキーステータス
         /// </summary>
@@ -240,7 +244,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// 暗号化関連
         /// </summary>
-        public object? Encryption { get; set; }
+        public MediaEncryption? Encryption { get; set; }
         /// <summary>
         /// 動画関連
         /// </summary>
@@ -251,7 +255,18 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// </summary>
         public MediaStoryBoard? StoryBoard { get; set; }
 
-        public string? TrackingId { get; set; }
+        public string TrackingId { get; set; } = default!;
+    }
+
+    public class MediaEncryption {
+        /// <summary>
+        /// 暗号化キー
+        /// </summary>
+        public string EncryptedKey { get; set; } = default!;
+        /// <summary>
+        /// 鍵のURI
+        /// </summary>
+        public string KeyUri { get; set; } = default!;
     }
 
     public class MediaMovie {
@@ -353,6 +368,34 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// フォローしているかどうか
         /// </summary>
         public bool IsFollowing { get; set; }
+    }
+
+    public class WatchApiDataChannel {
+        /// <summary>
+        /// チャンネルID
+        /// </summary>
+        public string Id { get; set; } = default!;
+
+        public bool IsDisplayAdBanner { get; set; }
+        public bool IsOfficialAnime { get; set; }
+
+        /// <summary>
+        /// チャンネル名
+        /// </summary>
+        public string Name { get; set; } = default!;
+
+        public string ThumbnailUrl { get; set; } = default!;
+        /// <summary>
+        /// フォローしているかどうか
+        /// </summary>
+        public bool IsBookmarked { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsFollowed { get; set; }
+
+        public string Token { get; set; } = default!;
+        public double TokenTimestamp { get; set; }
     }
 
     public class WatchApiDataPlayer {

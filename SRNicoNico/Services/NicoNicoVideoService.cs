@@ -28,6 +28,10 @@ namespace SRNicoNico.Services {
         /// いいねAPI
         /// </summary>
         private const string LikeApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/likes/items";
+        /// <summary>
+        /// 2ab0cbaaとは
+        /// </summary>
+        private const string TrackingApiUrl = "https://nvapi.nicovideo.jp/v1/2ab0cbaa/watch";
 
         private readonly ISessionService SessionService;
         private readonly ViewerDbContext DbContext;
@@ -252,7 +256,10 @@ namespace SRNicoNico.Services {
 
                 ret.Media = new WatchApiDataMedia {
                     RecipeId = media.delivery.recipeId,
-                    Encryption = media.delivery.encryption,
+                    Encryption = media.delivery.encryption != null ? new MediaEncryption {
+                        EncryptedKey = media.delivery.encryption.encryptedKey,
+                        KeyUri = media.delivery.encryption.keyUri
+                    } : null,
                     Movie = new MediaMovie {
                         ContentId = media.delivery.movie.contentId,
                         Audios = audios,
@@ -264,7 +271,7 @@ namespace SRNicoNico.Services {
                             Audios = JsonObjectExtension.ToStringArray(media.delivery.movie.session.audios),
                             Movies = JsonObjectExtension.ToStringArray(media.delivery.movie.session.movies),
                             Protocols = JsonObjectExtension.ToStringArray(media.delivery.movie.session.protocols),
-                            AuthTypesHttp = media.delivery.movie.session.authTypes.http,
+                            AuthTypesHttp = media.delivery.movie.session.authTypes.http() ? media.delivery.movie.session.authTypes.http : null,
                             AuthTypesHls = media.delivery.movie.session.authTypes.hls,
                             ServiceUserId = media.delivery.movie.session.serviceUserId,
                             Token = media.delivery.movie.session.token,
@@ -320,6 +327,26 @@ namespace SRNicoNico.Services {
                         IsMylistsPublic = owner.isMylistsPublic,
                         VideoLiveNotice = owner.videoLiveNotice,
                         IsFollowing = owner.viewer.isFollowing
+                    };
+                }
+            }
+
+            // チャンネルデータ
+            {
+                var channel = data.channel;
+                if (channel != null) {
+
+                    var follow = channel.viewer.follow;
+                    ret.Channel = new WatchApiDataChannel {
+                        Id = channel.id.ToString(),
+                        Name = channel.name,
+                        ThumbnailUrl = channel.thumbnail.url,
+                        IsDisplayAdBanner = channel.isDisplayAdBanner,
+                        IsOfficialAnime = channel.isOfficialAnime,
+                        IsBookmarked = follow.isBookmarked,
+                        IsFollowed = follow.isFollowed,
+                        Token = follow.token,
+                        TokenTimestamp = follow.tokenTimestamp
                     };
                 }
             }
@@ -541,7 +568,28 @@ namespace SRNicoNico.Services {
 
 
         /// <inheritdoc />
-        public async Task<DmcSession> CreateSessionAsync(MediaSession movieSession, string? videoId = null, string? audioId = null) {
+        public async Task<bool> SendTrackingAsync(string trackingId) {
+
+            if (string.IsNullOrEmpty(trackingId)) {
+                throw new ArgumentNullException(nameof(trackingId));
+            }
+
+            var builder = new GetRequestQueryBuilder(TrackingApiUrl)
+                .AddQuery("t", trackingId);
+
+            using var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            return json.meta.status == 200;
+        }
+
+        /// <inheritdoc />
+        public async Task<DmcSession> CreateSessionAsync(MediaSession movieSession, MediaEncryption? encryption = null, string? videoId = null, string? audioId = null) {
 
             if (movieSession == null) {
                 throw new ArgumentNullException(nameof(movieSession));
@@ -556,10 +604,10 @@ namespace SRNicoNico.Services {
                 throw new ArgumentException("音声データがありません");
             }
 
-            string apiUrl = movieSession.Urls.First().Url!;
+            var apiUrl = movieSession.Urls.First().Url!;
 
-            string video = videoId ?? movieSession.Videos.First();
-            string audio = audioId ?? movieSession.Audios.First();
+            var video = videoId ?? movieSession.Videos.First();
+            var audio = audioId ?? movieSession.Audios.First();
 
             var preferedProtocolHttp = movieSession.Protocols.Contains("http");
             var preferedProtocolHls = movieSession.Protocols.Contains("hls");
@@ -599,7 +647,13 @@ namespace SRNicoNico.Services {
                                         use_well_known_port = "yes",
                                         use_ssl = "yes",
                                         transfer_preset = movieSession.TransferPresets.First(),
-                                        segment_duration = 6000
+                                        segment_duration = 6000,
+                                        encryption = encryption != null ? new {
+                                            hls_encryption_v1 = new {
+                                                encrypted_key = encryption.EncryptedKey,
+                                                key_uri = encryption.KeyUri
+                                            }
+                                        } : null,
                                     }
                                 } : throw new InvalidOperationException("プロトコルが不明です")
                             }
@@ -840,7 +894,7 @@ namespace SRNicoNico.Services {
             payloadList.Add(new { ping = new { content = "rs:0" } });
 
             int i = 0;
-            var indexMap = new Dictionary<int, int>();
+            var indexMap = new Dictionary<int, string>();
             foreach (var thread in comment.Threads!) {
 
                 if (thread == null) {
@@ -879,14 +933,16 @@ namespace SRNicoNico.Services {
                             scores = 1,
                             thread = thread.Id,
                             user_id = comment.UserId,
-                            userkey = comment.UserKey,
                             with_global = 1,
-                            version = "20090904"
+                            version = "20090904",
+                            force_184 = thread.Is184Forced ? "1" : null,
+                            userkey = thread.IsThreadKeyRequired ? null : comment.UserKey,
+                            threadkey = thread.IsThreadKeyRequired ? thread.ThreadKey : null
                         }
                     });
                 }
 
-                indexMap[i] = thread.Fork;
+                indexMap[i] = thread.Label;
                 payloadList.Add(new { ping = new { content = $"rs:{i++}" } });
 
                 if (thread.IsLeafRequired) {
@@ -908,10 +964,12 @@ namespace SRNicoNico.Services {
                             scores = 1,
                             thread = thread.Id,
                             user_id = comment.UserId,
-                            userkey = comment.UserKey
+                            force_184 = thread.Is184Forced ? "1" : null,
+                            userkey = thread.IsThreadKeyRequired ? null : comment.UserKey,
+                            threadkey = thread.IsThreadKeyRequired ? thread.ThreadKey : null
                         }
                     });
-                    indexMap[i] = thread.Fork;
+                    indexMap[i] = thread.Label!;
                     payloadList.Add(new { ping = new { content = $"rs:{i++}" } });
                 }
             }
@@ -928,7 +986,7 @@ namespace SRNicoNico.Services {
 
             var ret = new List<VideoCommentThread>();
 
-            var currentFork = -1;
+            string? currentLabel = null;
             foreach (var item in json) {
 
                 if (item == null) {
@@ -937,22 +995,23 @@ namespace SRNicoNico.Services {
                 if (item.ping()) {
 
                     if (item.ping.content.StartsWith("ps")) {
-                        currentFork = indexMap[int.Parse(item.ping.content.Split(':')[1])];
+                        currentLabel = indexMap[int.Parse(item.ping.content.Split(':')[1])];
                     }
                     continue;
                 }
-                if (currentFork == -1) {
+                if (currentLabel == null) {
                     continue;
                 }
                 // 対象のスレッドクラスを取得する 無ければ作成する
-                var target = ret.SingleOrDefault(s => s.Fork == currentFork);
+                var target = ret.SingleOrDefault(s => s.Label == currentLabel);
                 if (target == null) {
 
+                    var thread = comment.Threads.Single(s => s.Label == currentLabel);
                     target = new VideoCommentThread {
-                        Fork = currentFork,
+                        Fork = thread.Fork,
                         Leaves = new List<VideoCommentLeaf>(),
                         Entries = new List<VideoCommentEntry>(),
-                        Label = comment.Threads.Single(s => s.Fork == currentFork).Label
+                        Label = thread.Label
                     };
                     ret.Add(target);
                 }

@@ -1,6 +1,7 @@
 ﻿import './style.scss';
 
 import { CommentHandler } from './commentlayer';
+import * as Hls from 'hls.js';
 
 function postMessage(message: Message) {
 
@@ -16,11 +17,13 @@ class VideoHandler {
 
     private vm: VideoViewModel;
     private video: HTMLVideoElement;
+    private hls: Hls | null;
 
     constructor(vm: VideoViewModel) {
 
         this.vm = vm;
         this.video = document.getElementById('video') as HTMLVideoElement;
+        this.hls = null;
     }
 
     public initialize(contentUri: string, volume: number, autoplay: boolean) {
@@ -85,16 +88,60 @@ class VideoHandler {
             });
         });
 
-        this.video.src = contentUri;
+        // HLSの場合
+        if (contentUri.includes("master.m3u8")) {
+
+            this.createHls(contentUri);
+        } else {
+
+            this.video.src = contentUri;
+        }
         this.video.volume = volume;
     }
 
-    public setSrc(src: string, resume: boolean): void {
+    private createHls(contentUri: string): void {
+
+        if (!Hls.isSupported()) {
+            alert("HLSをサポートしていません");
+            return;
+        }
+
+        this.hls = new Hls();
+        this.hls.config.enableSoftwareAES = false;
+        this.hls.config.enableWorker = true;
+
+        this.hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+
+            this.hls!.loadSource(contentUri);
+        });
+
+        this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+
+        });
+        this.hls.on(Hls.Events.KEY_LOADED, () => {
+        });
+        this.hls.on(Hls.Events.ERROR, (data, error) => {
+
+            console.error(JSON.stringify(data));
+            console.error(JSON.stringify(error));
+        });
+        this.hls.attachMedia(this.video);
+    }
+
+    public setSrc(contentUri: string, resume: boolean): void {
 
         const currentTime = this.video.currentTime;
         const paused = this.video.paused;
 
-        this.video.src = src;
+        if (this.hls != null) {
+
+            this.hls.destroy();
+            this.hls.detachMedia();
+            this.createHls(contentUri);
+        } else {
+
+            this.video.src = contentUri;
+        }
 
         if (resume) {
             this.video.currentTime = currentTime;

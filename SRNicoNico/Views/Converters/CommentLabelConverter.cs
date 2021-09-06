@@ -13,7 +13,8 @@ namespace SRNicoNico.Views.Converters {
         private readonly static Dictionary<string, string> ConversionMap = new Dictionary<string, string>() {
             ["default"] = "通常コメント",
             ["easy"] = "かんたんコメント",
-            ["owner"] = "投稿者コメント"
+            ["owner"] = "投稿者コメント",
+            ["community"] = "チャンネルコメント"
         };
         
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
