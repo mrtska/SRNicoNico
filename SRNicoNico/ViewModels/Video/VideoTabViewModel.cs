@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using Livet;
 
@@ -71,6 +72,9 @@ namespace SRNicoNico.ViewModels {
 
                 vm.PropertyChanged -= OnPropertyChanged;
                 TabItems.Remove(vm);
+
+                // タブの一番後ろを選択状態にする
+                SelectedItem = TabItems.LastOrDefault();
             });
             // タブが追加されたらそのタブを選択状態にする
             SelectedItem = vm;
