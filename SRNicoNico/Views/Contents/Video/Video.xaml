@@ -36,7 +36,19 @@
                     <ColumnDefinition />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock FontSize="18" Text="{Binding ApiData.Video.Title}" ToolTip="{Binding ApiData.Video.Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                <TextBlock FontSize="18" Text="{Binding ApiData.Video.Title}" ToolTip="{Binding ApiData.Video.Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
+                    <TextBlock.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="URLをクリップボードにコピー">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <a:CopyToClipBoardAction Text="{Binding ApiData.Video.Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </MenuItem>
+                        </ContextMenu>
+                    </TextBlock.ContextMenu>
+                </TextBlock>
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <controls:RoundButton ToolTip="ブラウザで開く" IconData="M9,5V7H15.59L4,18.59L5.41,20L17,8.41V15H19V5 Z" Margin="0,0,5,0">
                         <i:Interaction.Triggers>

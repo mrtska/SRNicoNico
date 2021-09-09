@@ -93,7 +93,7 @@
                                 <MenuItem Header="このコメントの時間に飛ぶ">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Click">
-                                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="" />
+                                            <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.Comment}" MethodName="JumpTo" MethodParameter="{Binding}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </MenuItem>

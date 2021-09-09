@@ -6,12 +6,14 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls" xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              d:DataContext="{d:DesignInstance Type=vm:VideoViewModel}"
              mc:Ignorable="d"
              d:DesignWidth="600">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
@@ -160,6 +162,56 @@
                     </controls:RoundButton.Resources>
                 </controls:RoundButton>
             </WrapPanel>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CommentVisibility}" Value="Visible">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MaxWidth="180" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="135" />
+            </Grid.ColumnDefinitions>
+            <metro:PromptTextBox Prompt="クリックしてコメント装飾ツールを表示" />
+            <metro:PromptTextBox Grid.Column="1" Prompt="コメントを入力"  />
+            <Button Grid.Column="2" Content="コメント">
+                
+            </Button>
+        </Grid>
+        <Grid Grid.Row="3" Background="{DynamicResource AlternationBackgroundBrushKey}">
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CommentVisibility}" Value="Visible">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <ItemsControl ItemsSource="{Binding ApiData.EasyCommentPhrases}" Margin="0,5">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding Text}" Margin="5" ToolTip="かんたんコメント" Style="{StaticResource RoundButton}">
+                            <i:Interaction.Triggers>
+                                
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
         </Grid>
     </Grid>
 </UserControl>

@@ -135,5 +135,10 @@ namespace SRNicoNico.ViewModels {
                 Initialize(Owner.ApiData.Comment!);
             }
         }
+
+        public void JumpTo(VideoCommentEntry entry) {
+
+            Owner.Seek(entry.Vpos / 100);
+        }
     }
 }

@@ -517,11 +517,13 @@ namespace SRNicoNico.Services {
             // 動画データ
             {
                 var video = data.video;
+                var description = (string)video.description;
+                var replaced = HttpUtility.HtmlDecode(((string)video.description).Replace("<br>", " "));
                 ret.Video = new WatchApiDataVideo {
                     Id = video.id,
                     Title = video.title,
-                    Description = video.description,
-                    ShortDescription = HttpUtility.HtmlDecode(((string)video.description).Replace("<br>", " ")).Substring(0, 50),
+                    Description = description,
+                    ShortDescription = replaced.Substring(0, Math.Min(replaced.Length, 50)),
                     ViewCount = (int)video.count.view,
                     CommentCount = (int)video.count.comment,
                     MylistCount = (int)video.count.mylist,
@@ -1024,8 +1026,8 @@ namespace SRNicoNico.Services {
                     target.Id = thread.thread;
                     target.ServerTime = (long)thread.server_time;
                     target.LastRes = thread.last_res() ? (int)thread.last_res : 0;
-                    target.Ticket = thread.ticket;
-                    target.Revision = (int)thread.revision;
+                    target.Ticket = thread.ticket() ? thread.ticket : null;
+                    target.Revision = thread.revision() ? (int)thread.revision : 0;
                     target.ClickRevision = thread.click_revision() ? (int?)thread.click_revision : null;
                     continue;
                 }
