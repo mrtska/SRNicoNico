@@ -194,7 +194,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// かんたんコメントのテキスト
         /// </summary>
-        public string? Text { get; set; }
+        public string Text { get; set; } = default!;
         /// <summary>
         /// 大百科のタイトル
         /// </summary>

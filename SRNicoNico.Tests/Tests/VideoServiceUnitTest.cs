@@ -156,5 +156,22 @@ namespace SRNicoNico.Tests {
             Assert.True(result);
         }
 
+        /// <summary>
+        /// コメント関連のキーに関するテスト
+        /// </summary>
+        [Fact]
+        public async Task CommentKeyUnitTest() {
+
+            var result = await VideoService.GetUserKeyAsync();
+            Assert.NotEmpty(result);
+
+            result = await VideoService.GetThreadKeyAsync("1284613159");
+            Assert.NotEmpty(result);
+
+            result = await VideoService.GetPostKeyAsync("1173108780", 51988);
+            Assert.NotEmpty(result);
+        }
+
+
     }
 }

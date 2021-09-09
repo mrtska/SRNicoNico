@@ -32,6 +32,22 @@ namespace SRNicoNico.Services {
         /// 2ab0cbaaとは
         /// </summary>
         private const string TrackingApiUrl = "https://nvapi.nicovideo.jp/v1/2ab0cbaa/watch";
+        /// <summary>
+        /// ユーザーキーAPI
+        /// </summary>
+        private const string GetUserKeyApiUrl = "https://flapi.nicovideo.jp/api/getuserkey";
+        /// <summary>
+        /// スレッドキーAPI
+        /// </summary>
+        private const string GetThreadKeyApiUrl = "https://flapi.nicovideo.jp/api/getthreadkey";
+        /// <summary>
+        /// ポストキーAPI
+        /// </summary>
+        private const string GetPostKeyApiUrl = "https://flapi.nicovideo.jp/api/getpostkey";
+        /// <summary>
+        /// かんたんコメントAPI
+        /// </summary>
+        private const string EasyCommentApiUrl = "https://nvapi.nicovideo.jp/v1/comment/easy";
 
         private readonly ISessionService SessionService;
         private readonly ViewerDbContext DbContext;
@@ -1076,6 +1092,84 @@ namespace SRNicoNico.Services {
                 }
             }
             return ret;
+        }
+
+        /// <inheritdoc />
+        public async Task<int?> PostEasyCommentAsync(EasyCommentPhrase phrase, string threadId, int vpos) {
+
+            var builder = new GetRequestQueryBuilder(EasyCommentApiUrl)
+                .AddQuery("_language", "ja-jp")
+                .AddQuery("threadId", threadId)
+                .AddQuery("playerDevice", 1)
+                .AddQuery("playerVersion", 0)
+                .AddQuery("phrase", phrase.Text)
+                .AddQuery("vpos", vpos);
+
+            using var result = await SessionService.PostAsync(builder.Build(), (IDictionary<string, string>?)null, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            return json.data.code == 0 ? json.data.commentNo : null;
+        }
+
+        /// <inheritdoc />
+        public Task PostCommentAsync(string comment, string threadId, string ticket, int vpos) {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public async Task<string> GetPostKeyAsync(string threadId, int blockNo) {
+
+            var builder = new GetRequestQueryBuilder(GetPostKeyApiUrl)
+                .AddQuery("thread", threadId)
+                .AddQuery("block_no", blockNo)
+                .AddQuery("device", 1)
+                .AddQuery("version", 1)
+                .AddQuery("version_sub", 6);
+
+            using var result = await SessionService.GetAsync(builder.Build()).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var key = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            return key[8..];
+        }
+
+        /// <inheritdoc />
+        public async Task<string> GetUserKeyAsync() {
+
+            using var result = await SessionService.GetAsync(GetUserKeyApiUrl).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var key = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            return key[8..];
+        }
+
+        /// <inheritdoc />
+        public async Task<string?> GetThreadKeyAsync(string threadId) {
+
+            var builder = new GetRequestQueryBuilder(GetThreadKeyApiUrl)
+                .AddQuery("thread", threadId);
+
+            using var result = await SessionService.GetAsync(builder.Build()).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var key = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (string.IsNullOrEmpty(key.Trim())) {
+                return null;
+            }
+            return key[10..];
         }
 
         /// <inheritdoc />

@@ -64,6 +64,46 @@ namespace SRNicoNico.Services {
         Task<IEnumerable<VideoCommentThread>> GetCommentAsync(WatchApiDataComment comment);
 
         /// <summary>
+        /// かんたんコメントを投稿する
+        /// </summary>
+        /// <param name="phrase">コメントフレーズ</param>
+        /// <param name="threadId">スレッドID</param>
+        /// <param name="vpos">コメント位置</param>
+        /// <returns>コメント番号 失敗時はnull</returns>
+        Task<int?> PostEasyCommentAsync(EasyCommentPhrase phrase, string threadId, int vpos);
+
+        /// <summary>
+        /// コメントを投稿する
+        /// </summary>
+        /// <param name="comment">コメント本文</param>
+        /// <param name="threadId">スレッドID</param>
+        /// <param name="ticket">チケット</param>
+        /// <param name="vpos">コメント位置</param>
+        /// <returns></returns>
+        Task PostCommentAsync(string comment, string threadId, string ticket, int vpos);
+
+        /// <summary>
+        /// コメントを投稿するためのポストキーを取得する
+        /// </summary>
+        /// <param name="threadId">対象のスレッドID</param>
+        /// <param name="blockNo">ブロック番号</param>
+        /// <returns>ポストキー</returns>
+        Task<string> GetPostKeyAsync(string threadId, int blockNo);
+
+        /// <summary>
+        /// コメントを取得するためのユーザーキーを取得する
+        /// </summary>
+        /// <returns>ユーザーキー</returns>
+        Task<string> GetUserKeyAsync();
+
+        /// <summary>
+        /// スレッドキーを取得する
+        /// </summary>
+        /// <param name="threadId">対象のスレッドID</param>
+        /// <returns>スレッドキー</returns>
+        Task<string?> GetThreadKeyAsync(string threadId);
+
+        /// <summary>
         /// ストーリーボードを取得する
         /// </summary>
         /// <param name="sbSession">パラメータ</param>
