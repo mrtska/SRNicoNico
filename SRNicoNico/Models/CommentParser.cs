@@ -95,6 +95,8 @@ namespace SRNicoNico.Models {
                 color = "#000000";
             } else if (mails.Contains("white2") || mails.Contains("niconicowhite")) {
                 color = "#CCCC99";
+            } else if (mails.Contains("pink2")) {
+                color = "#FF33CC";
             } else if (mails.Contains("red2") || mails.Contains("truered")) {
                 color = "#CC0033";
             } else if (mails.Contains("orange2") || mails.Contains("passionorange")) {

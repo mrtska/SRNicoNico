@@ -23,6 +23,7 @@
 const DEFAULT_WIDTH = 1366;
 const DEFAULT_WIDTH_43 = 1024;
 const DEFAULT_WIDTH_169 = 1366;
+const DEFAULT_ENDLINE = (DEFAULT_WIDTH - DEFAULT_WIDTH_43) / 2;
 const DEFAULT_HEIGHT = 768;
 
 // font-size: 54を1とした場合
@@ -44,6 +45,7 @@ export class CommentHandler {
     visibility: CommentVisibility;
 
     layers: CommentLayer[] | undefined;
+    justPostComments: number[];
 
     previousRenderedTime: number = -1;
     /**
@@ -77,13 +79,15 @@ export class CommentHandler {
         this.canvas.width = DEFAULT_WIDTH;
         this.canvas.height = DEFAULT_HEIGHT;
 
-        this.visibility = "visible";
+        this.visibility = 'visible';
 
         this.canvas.style.letterSpacing = '0px';
 
         this.wrapper.appendChild(this.canvas);
 
         this.renderContext = this.canvas.getContext('2d')!;
+
+        this.justPostComments = [];
     }
 
     public setVisibility(value: CommentVisibility) {
@@ -114,7 +118,7 @@ export class CommentHandler {
             // ベースフォントサイズを先に計算しておく
             layer.entries.forEach(entry => {
 
-                entry.content = entry.content.replace(/\t/g, "  ");
+                entry.content = entry.content.replace(/\t/g, '  ');
 
                 const scaleY = this.scaleY(entry);
 
@@ -136,7 +140,7 @@ export class CommentHandler {
                 entry.virtualWidth = Math.max.apply(null, entry.content.split('\n').map(m => Math.ceil(this.renderContext.measureText(m).width)));
                 entry.virtualHeight = entry.baseLineHeight * entry.lineCount;
 
-                if (entry.position !== "naka") {
+                if (entry.position !== 'naka') {
 
                     let scaleX = 1;
                     if (entry.full) {
@@ -156,8 +160,14 @@ export class CommentHandler {
                         entry.baseFontProperty = this.getFont(entry, scaleX * scaleY);
                     }
                 }
+                // Y座標を先に計算する
+                layer.activeComments = layer.entries.filter(f => entry.vpos - 400 < f.vpos && f.vpos <= entry.vpos && f.currentY !== undefined);
+                entry.currentY = this.getVirtualY(entry, layer, entry.vpos);
+
             });
+            layer.activeComments = [];
         });
+
         this.calcBounds();
         this.previousRenderedTime = -1;
     }
@@ -202,7 +212,7 @@ export class CommentHandler {
         }
 
         // コメントが非表示だった場合
-        if (this.visibility === "hidden") {
+        if (this.visibility === 'hidden') {
             this.renderContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
             return;
         }
@@ -240,43 +250,47 @@ export class CommentHandler {
     renderLayer(layer: CommentLayer, currentTime: number): void {
 
         // 投稿者コメント以外はレンダリングしない
-        if (this.visibility === "onlyAuthor" && layer.index === 1) {
+        if (this.visibility === 'onlyAuthor' && layer.index === 1) {
             return;
         }
 
         for (let entry of layer.entries) {
 
-            if (entry.position !== "naka") {
+            if (currentTime < entry.vpos + entry.duration * 100) {
 
-                if (currentTime < entry.vpos || currentTime > entry.vpos + (entry.duration * 100)) {
+                if (entry.position === 'naka' && currentTime >= entry.vpos - 200) {
 
-                    if (layer.activeComments.includes(entry)) {
-                        layer.activeComments = layer.activeComments.filter(f => f !== entry);
+                    if (!layer.activeComments.includes(entry)) {
+                        layer.activeComments.push(entry);
                     }
-                    continue;
-                }
-            } else {
-                if (currentTime < entry.vpos) {
+                } else if (currentTime >= entry.vpos) {
 
-                    if (layer.activeComments.includes(entry)) {
-                        layer.activeComments = layer.activeComments.filter(f => f !== entry);
+                    if (!layer.activeComments.includes(entry)) {
+                        layer.activeComments.push(entry);
                     }
                 }
-                if (currentTime > entry.vpos + 400) {
-
-                    if (layer.activeComments.includes(entry)) {
-                        layer.activeComments = layer.activeComments.filter(f => f !== entry);
-                    }
-                    continue;
-                }
-            }
-
-            if (!layer.activeComments.includes(entry)) {
-
-                layer.activeComments.push(entry);
             }
         }
-        layer.activeComments.forEach(f => this.renderComment(layer, currentTime, f));
+
+        // 上下コメを先に描画する
+        layer.activeComments.filter(f => f.position !== 'naka').forEach(f => {
+
+            this.renderComment(layer, currentTime, f);
+
+            // 上下コメは時間ピッタリで非表示にする
+            if (f.vpos + f.duration * 100) {
+                layer.activeComments = layer.activeComments.filter(ff => ff !== f);
+            }
+        });
+        layer.activeComments.filter(f => f.position === 'naka').forEach(f => {
+
+            this.renderComment(layer, currentTime, f);
+
+            // 中コメは流れきってから非表示にする
+            if (f.currentX <= 0 - f.actualWidth) {
+                layer.activeComments = layer.activeComments.filter(ff => ff !== f);
+            }
+        });
     }
     /**
      * コメントを描画する
@@ -297,10 +311,9 @@ export class CommentHandler {
         entry.actualHeight = entry.virtualHeight * this.scalingFactor;
 
         switch (entry.position) {
-            case "naka": {
+            case 'naka': {
 
                 entry.currentX = this.getX(entry, currentTime);
-                entry.currentY = this.getY(entry, layer, currentTime);
 
                 // 1行ずつ描画する
                 entry.content.split('\n').forEach((content, i) => {
@@ -308,15 +321,11 @@ export class CommentHandler {
                     this.renderText(content, entry.currentX, factor);
                 });
 
-                this.renderContext.strokeStyle = 'yellow';
-                this.renderContext.lineWidth = 2.5;
-                //this.renderContext.strokeRect(entry.currentX, entry.currentY * this.scalingFactor, entry.actualWidth, entry.actualHeight);
                 break;
             }
-            case "ue": {
+            case 'ue': {
 
                 entry.currentX = this.getX(entry, currentTime);
-                entry.currentY = this.getY(entry, layer, currentTime);
 
                 // 1行ずつ描画する
                 entry.content.split('\n').forEach((content, i) => {
@@ -324,16 +333,11 @@ export class CommentHandler {
                     const factor = ((entry.currentY) + ((entry.baseLineHeight) * (i + 1)) - entry.baseFontSize / 2) * this.scalingFactor;
                     this.renderText(content, entry.currentX, factor);
                 });
-
-                this.renderContext.strokeStyle = 'yellow';
-                this.renderContext.lineWidth = 1;
-                //this.renderContext.strokeRect(entry.currentX, entry.currentY * this.scalingFactor, entry.actualWidth, entry.actualHeight);
                 break;
             }
-            case "shita": {
+            case 'shita': {
 
                 entry.currentX = this.getX(entry, currentTime);
-                entry.currentY = this.getY(entry, layer, currentTime);
 
                 // 1行ずつ描画する
                 entry.content.split('\n').forEach((content, i) => {
@@ -341,12 +345,14 @@ export class CommentHandler {
                     const factor = ((entry.currentY) + ((entry.baseLineHeight) * (i + 1)) - entry.baseFontSize / 2) * this.scalingFactor;
                     this.renderText(content, entry.currentX, factor);
                 });
-
-                this.renderContext.strokeStyle = 'yellow';
-                this.renderContext.lineWidth = 2.5;
-                //this.renderContext.strokeRect(entry.currentX, entry.currentY * this.scalingFactor, entry.actualWidth, entry.actualHeight);
                 break;
             }
+        }
+        if (this.justPostComments.includes(entry.no)) {
+
+            this.renderContext.strokeStyle = 'yellow';
+            this.renderContext.lineWidth = 2.5;
+            this.renderContext.strokeRect(entry.currentX, entry.currentY * this.scalingFactor, entry.actualWidth, entry.actualHeight);
         }
     }
 
@@ -359,19 +365,19 @@ export class CommentHandler {
     getFont(entry: CommentEntry, scaleFactor: number): string {
 
         let fontSize = COMMENT_SIZE_NORMAL;
-        if (entry.fontSize == "small") {
+        if (entry.fontSize == 'small') {
             fontSize = COMMENT_SIZE_SMALL;
-        } else if (entry.fontSize == "big") {
+        } else if (entry.fontSize == 'big') {
             fontSize = COMMENT_SIZE_BIG;
         }
 
-        if (entry.fontFamily === "defont") {
+        if (entry.fontFamily === 'defont') {
 
             return `600 ${fontSize * scaleFactor}em ${defont}`;
-        } else if (entry.fontFamily === "gothic") {
+        } else if (entry.fontFamily === 'gothic') {
 
             return `400 ${fontSize * scaleFactor}em ${gothic}`;
-        } else if (entry.fontFamily === "mincho") {
+        } else if (entry.fontFamily === 'mincho') {
 
             return `400 ${fontSize * scaleFactor}em ${mincho}`;
         } else {
@@ -387,13 +393,13 @@ export class CommentHandler {
 
         if (!entry.ender) {
 
-            if (entry.fontSize === "small" && entry.lineCount >= 7) {
+            if (entry.fontSize === 'small' && entry.lineCount >= 7) {
                 return 0.5526315789473684;
             }
-            if (entry.fontSize === "medium" && entry.lineCount >= 5) {
+            if (entry.fontSize === 'medium' && entry.lineCount >= 5) {
                 return 0.515748031496063;
             }
-            if (entry.fontSize === "big" && entry.lineCount >= 3) {
+            if (entry.fontSize === 'big' && entry.lineCount >= 3) {
                 return 0.525;
             }
         }
@@ -407,17 +413,45 @@ export class CommentHandler {
         // センチ秒に直す
         return pixelPerSeconds / 100;
     }
+    getVirtualPixelPerCentiSeconds(entry: CommentEntry): number {
+
+        // このコメントが1秒間に何ピクセル移動するべきか
+        const pixelPerSeconds = (entry.virtualWidth / 4) + (DEFAULT_WIDTH_43 / 4);
+        // センチ秒に直す
+        return pixelPerSeconds / 100;
+    }
 
     getBaseFontSize(entry: CommentEntry): number {
 
-        if (entry.fontSize === "small") {
-            return 39;
+        if (entry.fontSize === 'small') {
+
+            if (entry.lineCount < 7 || entry.ender) {
+
+                return 39;
+            } else {
+
+                return 39 * (21 / 38);
+            }
         }
-        if (entry.fontSize === "medium") {
-            return 54;
+        if (entry.fontSize === 'medium') {
+
+            if (entry.lineCount < 5 || entry.ender) {
+
+                return 54;
+            } else {
+
+                return 54 * (13.1 / 25.4);
+            }
         }
-        if (entry.fontSize === "big") {
-            return 70;
+        if (entry.fontSize === 'big') {
+
+            if (entry.lineCount < 3 || entry.ender) {
+
+                return 70;
+            } else {
+
+                return 70 * (8.4 / 16);
+            }
         }
         return 0;
     }
@@ -425,39 +459,40 @@ export class CommentHandler {
 
         if (entry.lineCount === 1) {
 
-            if (entry.fontSize === "small") {
+            if (entry.fontSize === 'small') {
                 return DEFAULT_HEIGHT / 16.6;
             }
-            if (entry.fontSize === "medium") {
+            if (entry.fontSize === 'medium') {
+
                 return DEFAULT_HEIGHT / 11.3;
             }
-            if (entry.fontSize === "big") {
+            if (entry.fontSize === 'big') {
                 return DEFAULT_HEIGHT / 7.8;
             }
         }
 
         if (entry.ender) {
 
-            if (entry.fontSize === "small") {
+            if (entry.fontSize === 'small') {
                 return DEFAULT_HEIGHT / 21;
             }
-            if (entry.fontSize === "medium") {
+            if (entry.fontSize === 'medium') {
                 return DEFAULT_HEIGHT / 13.1;
             }
-            if (entry.fontSize === "big") {
+            if (entry.fontSize === 'big') {
                 return DEFAULT_HEIGHT / 8.4;
             }
         } else {
 
-            if (entry.fontSize === "small" && entry.lineCount >= 7) {
+            if (entry.fontSize === 'small' && entry.lineCount >= 7) {
                 //return (DEFAULT_HEIGHT - (16.6 * (21 / 38))) / 38;
                 return DEFAULT_HEIGHT / 38;
             }
-            if (entry.fontSize === "medium" && entry.lineCount >= 5) {
+            if (entry.fontSize === 'medium' && entry.lineCount >= 5) {
                 //return (DEFAULT_HEIGHT - (11.3 * (13.1 / 25.4))) / 25.4;
                 return DEFAULT_HEIGHT / 25.4;
             }
-            if (entry.fontSize === "big" && entry.lineCount >= 3) {
+            if (entry.fontSize === 'big' && entry.lineCount >= 3) {
                 //return (DEFAULT_HEIGHT - (7.8 * (8.4 / 16))) / 16;
                 return DEFAULT_HEIGHT / 16;
             }
@@ -475,7 +510,7 @@ export class CommentHandler {
     getX(entry: CommentEntry, currentTime: number): number {
 
         switch (entry.position) {
-            case "naka": {
+            case 'naka': {
 
                 // 再生時間とコメント表示時間のずれ
                 const diffCenti = currentTime - entry.vpos;
@@ -487,8 +522,8 @@ export class CommentHandler {
 
                 return this.firstLine - diff - (entry.actualWidth / 4);
             }
-            case "ue":
-            case "shita": {
+            case 'ue':
+            case 'shita': {
 
                 if (entry.full) {
                     if (this.width169 <= entry.actualWidth) {
@@ -504,7 +539,44 @@ export class CommentHandler {
             }
         }
     }
+    /**
+     * 対象のコメントが指定した再生時間時に画面上に居るべきX座標を返す
+     * @param entry コメント
+     * @param currentTime 現在時間
+     */
+    getVirtualX(entry: CommentEntry, currentTime: number): number {
 
+        switch (entry.position) {
+            case 'naka': {
+
+                // 再生時間とコメント表示時間のずれ
+                const diffCenti = currentTime - entry.vpos;
+
+                // このコメントが1秒間に何ピクセル移動するべきか
+                const pPcs = this.getVirtualPixelPerCentiSeconds(entry);
+                // nセンチ秒 * 1センチ秒に移動するピクセル数 + オフセット
+                const diff = (diffCenti * pPcs);
+
+                //const firstLine = DEFAULT_WIDTH_43 / 4 * 3 + DEFAULT_ENDLINE;
+                return DEFAULT_WIDTH_43 - diff;
+            }
+            case 'ue':
+            case 'shita': {
+
+                if (entry.full) {
+                    if (DEFAULT_WIDTH <= entry.virtualWidth) {
+                        return 0;
+                    }
+                } else {
+                    if (DEFAULT_WIDTH_43 <= entry.virtualWidth) {
+                        return DEFAULT_ENDLINE;
+                    }
+                }
+                // ウィンドウからはみ出していないのでウィンドウの横幅からコメントの横幅を引いて2で割った値を返す
+                return (DEFAULT_WIDTH - entry.virtualWidth) / 2;
+            }
+        }
+    }
 
     /**
      * 対象のコメントが表示するべきY座標を返す
@@ -512,11 +584,11 @@ export class CommentHandler {
      * @param entry 対象のコメント
      * @param activeComments 現在画面上に表示されているコメントのリスト
      */
-    getY(entry: CommentEntry, layer: CommentLayer, currentTime: number): number {
+    getVirtualY(entry: CommentEntry, layer: CommentLayer, currentTime: number): number {
 
         // Y座標が既に決まっているコメントはその値を使う
         if (entry.currentY !== undefined) {
-            return entry.currentY;
+            //return entry.currentY;
         }
 
         // 自分以外の描画したいコメントと同じ位置に既に描画されているコメントのリスト
@@ -530,21 +602,21 @@ export class CommentHandler {
         });
 
         switch (entry.position) {
-            case "naka": {
+            case 'naka': {
                 // 高さ固定コメントの時は中央揃えになるようにする
                 if (entry.ender) {
 
-                    if ((entry.fontSize === "big" && entry.lineCount >= 8) ||
-                        (entry.fontSize === "medium" && entry.lineCount >= 13) ||
-                        (entry.fontSize === "small" && entry.lineCount >= 21)) {
+                    if ((entry.fontSize === 'big' && entry.lineCount >= 8) ||
+                        (entry.fontSize === 'medium' && entry.lineCount >= 13) ||
+                        (entry.fontSize === 'small' && entry.lineCount >= 21)) {
                         entry.isFreedomYcoord = true;
                         return (DEFAULT_HEIGHT - entry.virtualHeight) / 2;
                     }
                 } else {
 
-                    if ((entry.fontSize === "big" && entry.lineCount >= 16) ||
-                        (entry.fontSize === "medium" && entry.lineCount >= 25) ||
-                        (entry.fontSize === "small" && entry.lineCount >= 38)) {
+                    if ((entry.fontSize === 'big' && entry.lineCount >= 16) ||
+                        (entry.fontSize === 'medium' && entry.lineCount >= 25) ||
+                        (entry.fontSize === 'small' && entry.lineCount >= 38)) {
                         entry.isFreedomYcoord = true;
                         return (DEFAULT_HEIGHT - entry.virtualHeight) / 2;
                     }
@@ -557,9 +629,9 @@ export class CommentHandler {
                 }
 
                 // ピクセル per センチ秒
-                const pPcs = this.getPixelPerCentiSeconds(entry);
+                const pPcs = this.getVirtualPixelPerCentiSeconds(entry);
                 // 対象のコメントの先頭部分がendLineまで到達するまでにかかるセンチ秒
-                const offset = (this.getX(entry, entry.vpos) - this.endLine) / pPcs;
+                const offset = (this.getVirtualX(entry, entry.vpos) - DEFAULT_ENDLINE) / pPcs;
 
                 let yCandidate = 0;
                 let flag = false;
@@ -575,16 +647,15 @@ export class CommentHandler {
                             if (yCandidate + entry.virtualHeight > f.currentY) {
 
                                 // 既に描画されているコメントの初回描画位置(x座標)
-                                const startX = this.getX(f, f.vpos) + f.actualWidth;
+                                const startX = this.getVirtualX(f, currentTime) + f.virtualWidth;
                                 // 既に描画されているコメントの時間の時に描画したいコメントがどの位置に来るかを調べる
-                                const targetStartX = this.getX(entry, f.vpos);
-
+                                const targetStartX = this.getVirtualX(entry, currentTime);
                                 // endLine到達直後のx座標を調べて対象のコメントが重なるかどうかを判定する
-                                const x = this.getX(f, entry.vpos + offset) + f.actualWidth;
+                                const x = this.getVirtualX(f, currentTime + offset) + f.virtualWidth;
 
                                 // 描画対象のコメントがendLineに到達した時間に同じ行にいる既存のコメントがendLineを超えていればその行にはコメント可能
                                 // かつ、描画開始時に既存のコメントよりも描画対象のコメントが少しでも前に出ていたら重なってしまうのでその行にはコメント不可
-                                if (!(x < this.endLine && startX < targetStartX)) {
+                                if (!(x < DEFAULT_ENDLINE && startX < targetStartX)) {
                                     yCandidate = f.currentY + f.virtualHeight;
                                     if (yCandidate + entry.virtualHeight > DEFAULT_HEIGHT) {
 
@@ -607,21 +678,21 @@ export class CommentHandler {
 
                 return yCandidate;
             }
-            case "ue": {
+            case 'ue': {
 
                 if (entry.ender) {
 
-                    if ((entry.fontSize === "big" && entry.lineCount >= 8) ||
-                        (entry.fontSize === "medium" && entry.lineCount >= 13) ||
-                        (entry.fontSize === "small" && entry.lineCount >= 21)) {
+                    if ((entry.fontSize === 'big' && entry.lineCount >= 8) ||
+                        (entry.fontSize === 'medium' && entry.lineCount >= 13) ||
+                        (entry.fontSize === 'small' && entry.lineCount >= 21)) {
                         entry.isFreedomYcoord = true;
                         return 0;
                     }
                 } else {
 
-                    if ((entry.fontSize === "big" && entry.lineCount >= 16) ||
-                        (entry.fontSize === "medium" && entry.lineCount >= 25) ||
-                        (entry.fontSize === "small" && entry.lineCount >= 38)) {
+                    if ((entry.fontSize === 'big' && entry.lineCount >= 16) ||
+                        (entry.fontSize === 'medium' && entry.lineCount >= 25) ||
+                        (entry.fontSize === 'small' && entry.lineCount >= 38)) {
                         entry.isFreedomYcoord = true;
                         return 0;
                     }
@@ -667,28 +738,24 @@ export class CommentHandler {
                         }
                         return requestStart;
                     }
-
-
                 }
-
                 return 0;
-                break;
             }
-            case "shita": {
+            case 'shita': {
 
                 if (entry.ender) {
 
-                    if ((entry.fontSize === "big" && entry.lineCount >= 8) ||
-                        (entry.fontSize === "medium" && entry.lineCount >= 13) ||
-                        (entry.fontSize === "small" && entry.lineCount >= 21)) {
+                    if ((entry.fontSize === 'big' && entry.lineCount >= 8) ||
+                        (entry.fontSize === 'medium' && entry.lineCount >= 13) ||
+                        (entry.fontSize === 'small' && entry.lineCount >= 21)) {
                         entry.isFreedomYcoord = true;
                         return DEFAULT_HEIGHT - entry.virtualHeight;
                     }
                 } else {
 
-                    if ((entry.fontSize === "big" && entry.lineCount >= 16) ||
-                        (entry.fontSize === "medium" && entry.lineCount >= 25) ||
-                        (entry.fontSize === "small" && entry.lineCount >= 38)) {
+                    if ((entry.fontSize === 'big' && entry.lineCount >= 16) ||
+                        (entry.fontSize === 'medium' && entry.lineCount >= 25) ||
+                        (entry.fontSize === 'small' && entry.lineCount >= 38)) {
                         entry.isFreedomYcoord = true;
                         return DEFAULT_HEIGHT - entry.virtualHeight;
                     }
