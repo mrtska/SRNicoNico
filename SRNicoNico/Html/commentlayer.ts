@@ -76,18 +76,22 @@ export class CommentHandler {
 
         this.wrapper = document.getElementById('comment') as HTMLDivElement;
         this.canvas = document.createElement('canvas');
-        this.canvas.width = DEFAULT_WIDTH;
-        this.canvas.height = DEFAULT_HEIGHT;
 
         this.visibility = 'visible';
 
-        this.canvas.style.letterSpacing = '0px';
 
         this.wrapper.appendChild(this.canvas);
 
         this.renderContext = this.canvas.getContext('2d')!;
 
         this.justPostComments = [];
+
+        // ウィンドウのサイズに合わせてスケールする
+        window.addEventListener('resize', e => {
+
+            this.calcBounds();
+            this.render(this.previousRenderedTime, true);
+        });
     }
 
     public setVisibility(value: CommentVisibility) {
@@ -106,12 +110,10 @@ export class CommentHandler {
         // レイヤー順にソートする
         this.layers = obj.layers.sort((a: any, b: any) => a.index < b.index ? 1 : -1);
 
-        // ウィンドウのサイズに合わせてスケールする
-        window.addEventListener('resize', e => {
-
-            this.calcBounds();
-            this.render(this.previousRenderedTime, true);
-        });
+        this.wrapper.style.fontSize = '54px';
+        this.canvas.width = DEFAULT_WIDTH;
+        this.canvas.height = DEFAULT_HEIGHT;
+        this.canvas.style.letterSpacing = '0px';
 
         this.layers?.forEach(layer => {
             layer.activeComments = [];
@@ -153,15 +155,18 @@ export class CommentHandler {
                         }
                     }
                     if (scaleX !== 1) {
-                        entry.virtualWidth *= scaleX;
+
+                        entry.baseFontProperty = this.getFont(entry, scaleX * scaleY);
+                        this.renderContext.font = entry.baseFontProperty;
+                        entry.virtualWidth = Math.max.apply(null, entry.content.split('\n').map(m => Math.ceil(this.renderContext.measureText(m).width)));
+
                         entry.virtualHeight *= scaleX;
                         entry.baseFontSize *= scaleX;
                         entry.baseLineHeight *= scaleX;
-                        entry.baseFontProperty = this.getFont(entry, scaleX * scaleY);
                     }
                 }
                 // Y座標を先に計算する
-                layer.activeComments = layer.entries.filter(f => entry.vpos - 400 < f.vpos && f.vpos <= entry.vpos && f.currentY !== undefined);
+                layer.activeComments = layer.entries.filter(f => entry.vpos - entry.duration * 100 < f.vpos && f.vpos <= entry.vpos && f.currentY !== undefined);
                 entry.currentY = this.getVirtualY(entry, layer, entry.vpos);
 
             });
@@ -310,22 +315,19 @@ export class CommentHandler {
         entry.actualWidth = entry.virtualWidth * this.scalingFactor;
         entry.actualHeight = entry.virtualHeight * this.scalingFactor;
 
+        entry.currentX = this.getX(entry, currentTime);
+
         switch (entry.position) {
             case 'naka': {
-
-                entry.currentX = this.getX(entry, currentTime);
 
                 // 1行ずつ描画する
                 entry.content.split('\n').forEach((content, i) => {
                     const factor = ((entry.currentY) + ((entry.baseLineHeight) * (i + 1)) - entry.baseFontSize / 2) * this.scalingFactor;
                     this.renderText(content, entry.currentX, factor);
                 });
-
                 break;
             }
             case 'ue': {
-
-                entry.currentX = this.getX(entry, currentTime);
 
                 // 1行ずつ描画する
                 entry.content.split('\n').forEach((content, i) => {
@@ -336,8 +338,6 @@ export class CommentHandler {
                 break;
             }
             case 'shita': {
-
-                entry.currentX = this.getX(entry, currentTime);
 
                 // 1行ずつ描画する
                 entry.content.split('\n').forEach((content, i) => {
@@ -558,7 +558,7 @@ export class CommentHandler {
                 const diff = (diffCenti * pPcs);
 
                 //const firstLine = DEFAULT_WIDTH_43 / 4 * 3 + DEFAULT_ENDLINE;
-                return DEFAULT_WIDTH_43 - diff;
+                return DEFAULT_WIDTH - diff;
             }
             case 'ue':
             case 'shita': {
@@ -588,7 +588,7 @@ export class CommentHandler {
 
         // Y座標が既に決まっているコメントはその値を使う
         if (entry.currentY !== undefined) {
-            //return entry.currentY;
+            return entry.currentY;
         }
 
         // 自分以外の描画したいコメントと同じ位置に既に描画されているコメントのリスト
