@@ -1112,7 +1112,7 @@ namespace SRNicoNico.Services {
             }
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
 
-            return json.data.code == 0 ? json.data.commentNo : null;
+            return json.data.code == 0 ? (int?)json.data.commentNo : null;
         }
 
         /// <inheritdoc />

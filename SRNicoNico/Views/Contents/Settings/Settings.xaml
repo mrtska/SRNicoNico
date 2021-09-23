@@ -47,6 +47,9 @@
                 <DataTemplate DataType="{x:Type vm:SettingsVideoViewModel}">
                     <v:SettingsVideo />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:SettingsCommentViewModel}">
+                    <v:SettingsComment />
+                </DataTemplate>
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

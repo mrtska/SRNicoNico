@@ -179,10 +179,14 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="135" />
             </Grid.ColumnDefinitions>
-            <metro:PromptTextBox Prompt="クリックしてコメント装飾ツールを表示" />
-            <metro:PromptTextBox Grid.Column="1" Prompt="コメントを入力"  />
+            <metro:PromptTextBox Prompt="クリックしてコメント装飾ツールを表示" Text="{Binding Comment.CommentDecoration,Mode=TwoWay}" />
+            <metro:PromptTextBox Grid.Column="1" Prompt="コメントを入力" Text="{Binding Comment.CommentText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
             <Button Grid.Column="2" Content="コメント">
-                
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding Comment}" MethodName="PostComment" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </Button>
         </Grid>
         <Grid Grid.Row="3" Background="{DynamicResource AlternationBackgroundBrushKey}">
@@ -201,7 +205,14 @@
                     <DataTemplate>
                         <Button Content="{Binding Text}" Margin="5" ToolTip="かんたんコメント" Style="{StaticResource RoundButton}">
                             <i:Interaction.Triggers>
-                                
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.Comment}"
+                                                             MethodName="PostEasyComment" MethodParameter="{Binding}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeave">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.Comment}"
+                                                             MethodName="LeaveEasyComment" />
+                                </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Button>
                     </DataTemplate>

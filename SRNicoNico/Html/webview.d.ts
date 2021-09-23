@@ -55,7 +55,6 @@ interface CommentLayer {
      * コメントリスト
      */
     entries: CommentEntry[];
-
     /**
      * 表示中のコメントのリスト
      */
@@ -68,7 +67,21 @@ type FontFamily = 'defont' | 'mincho' | 'gothic';
 type FontSize = 'medium' | 'small' | 'big';
 type Position = 'ue' | 'naka' | 'shita';
 
+interface PostComment {
+    threadId: string;
+    fork: number;
+    no: number;
+}
+
 interface CommentEntry {
+    /**
+     * スレッドID 
+     */
+    threadId: string;
+    /**
+     * フォーク
+     */
+    fork: number;
     /**
      * コメント本文
      */

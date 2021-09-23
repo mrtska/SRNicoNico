@@ -21,6 +21,8 @@ namespace SRNicoNico.Models {
             // Mailが無い時は全てデフォルトの値を使う
             if (entry.Mail == null) {
                 return new {
+                    threadId = entry.ThreadId,
+                    fork = entry.Fork,
                     no = entry.Number,
                     vpos = entry.Vpos,
                     mail = entry.Mail!,
@@ -133,6 +135,8 @@ namespace SRNicoNico.Models {
             }
 
             return new {
+                threadId = entry.ThreadId,
+                fork = entry.Fork,
                 no = entry.Number,
                 vpos = entry.Vpos,
                 mail = entry.Mail!,

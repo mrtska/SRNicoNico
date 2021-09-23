@@ -98,6 +98,11 @@ namespace SRNicoNico.Models {
         PopupPlacement FullScreenPopupPlacement { get; set; }
 
         /// <summary>
+        /// かんたんコメントを無効にするかどうか
+        /// </summary>
+        bool DisableEasyComment { get; set; }
+
+        /// <summary>
         /// 現在の設定でアクセントを変更する
         /// </summary>
         void ChangeAccent();

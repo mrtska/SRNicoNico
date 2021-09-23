@@ -142,6 +142,11 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        public void PostComment(string threadId, int fork, int commentNumber) {
+
+            WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "postComment", value = new { threadId, fork, number = commentNumber }}));
+        }
+
         public void Seek(double position) {
 
             WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "seek", value = position }));

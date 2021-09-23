@@ -276,6 +276,9 @@ class PlayerHandler {
             case 'dispatchComment':
                 this.comment.initialize(value);
                 break;
+            case 'postComment':
+                this.comment.addPostComment(value.threadId, value.fork, value.number);
+                break;
             case 'setVisibility':
                 this.comment.setVisibility(value);
                 break;

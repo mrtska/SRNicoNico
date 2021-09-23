@@ -55,6 +55,35 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+
+        private string _CommentText = string.Empty;
+        /// <summary>
+        /// コメント本文
+        /// </summary>
+        public string CommentText {
+            get { return _CommentText; }
+            set {
+                if (_CommentText == value)
+                    return;
+                _CommentText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _CommentDecoration = string.Empty;
+        /// <summary>
+        /// コメント装飾
+        /// </summary>
+        public string CommentDecoration {
+            get { return _CommentDecoration; }
+            set {
+                if (_CommentDecoration == value)
+                    return;
+                _CommentDecoration = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private readonly IVideoService VideoService;
         private readonly VideoViewModel Owner;
 
@@ -139,6 +168,56 @@ namespace SRNicoNico.ViewModels {
         public void JumpTo(VideoCommentEntry entry) {
 
             Owner.Seek(entry.Vpos / 100);
+        }
+
+        public void PostComment() {
+
+        }
+
+        private EasyCommentPhrase? PendingEasyComment;
+
+        /// <summary>
+        /// かんたんコメントを投稿する
+        /// </summary>
+        /// <param name="phrase">かんたんコメント情報</param>
+        public async void PostEasyComment(EasyCommentPhrase phrase) {
+
+            if (PendingEasyComment == null) {
+
+                Owner.Status = $"コメントするにはもう一度クリックします ({phrase.Text})";
+                PendingEasyComment = phrase;
+                return;
+            }
+
+            try {
+                IsActive = true;
+                Owner.Status = "かんたんコメント投稿中";
+
+                var thread = CommentThreads.Single(s => s.Label == "easy");
+
+                var result = await VideoService.PostEasyCommentAsync(phrase, thread.Id, (int)(Owner.CurrentTime * 100));
+                if (result.HasValue) {
+
+                    // 投稿したコメントの番号をWebViewに登録してコメントをリロードする
+                    Owner.Html5Handler?.PostComment(thread.Id, thread.Fork, result.Value);
+                    Reload();
+                    Owner.Status = "かんたんコメントを投稿しました";
+                } else {
+
+                    Owner.Status = "かんたんコメントの投稿に失敗しました";
+                }
+            } catch (StatusErrorException e) {
+
+                Owner.Status = $"かんたんコメントの投稿に失敗しました ステータスコード: {e.StatusCode}";
+            } finally {
+                
+                IsActive = false;
+            }
+        }
+        public void LeaveEasyComment() {
+
+            Owner.Status = string.Empty;
+            PendingEasyComment = null;
         }
     }
 }

@@ -194,6 +194,17 @@ namespace SRNicoNico.Models {
                 RoamingValues[nameof(FullScreenPopupPlacement)] = value.ToString();
             }
         }
+
+        /// <inheritdoc />
+        public bool DisableEasyComment {
+            get {
+                return RoamingValues.TryGetValue(nameof(DisableEasyComment), out var value) && value != null ? (bool)value : false;
+            }
+            set {
+                RoamingValues[nameof(DisableEasyComment)] = value;
+            }
+        }
+
         public Settings() {
 
             RoamingValues = ApplicationData.Current.RoamingSettings.Values;

@@ -9,7 +9,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// スレッドID
         /// </summary>
-        public string? Id { get; set; }
+        public string Id { get; set; } = default!;
 
         public ThreadResultCode ResultCode { get; set; }
 

@@ -45,7 +45,7 @@ export class CommentHandler {
     visibility: CommentVisibility;
 
     layers: CommentLayer[] | undefined;
-    justPostComments: number[];
+    justPostComments: PostComment[];
 
     previousRenderedTime: number = -1;
     /**
@@ -78,13 +78,11 @@ export class CommentHandler {
         this.canvas = document.createElement('canvas');
 
         this.visibility = 'visible';
-
+        this.justPostComments = [];
 
         this.wrapper.appendChild(this.canvas);
 
         this.renderContext = this.canvas.getContext('2d')!;
-
-        this.justPostComments = [];
 
         // ウィンドウのサイズに合わせてスケールする
         window.addEventListener('resize', e => {
@@ -103,6 +101,15 @@ export class CommentHandler {
     public clearComment(): void {
 
         this.layers = undefined;
+    }
+
+    public addPostComment(threadId: string, fork: number, number: number) {
+
+        this.justPostComments.push({
+            threadId: threadId,
+            fork: fork,
+            no: number
+        });
     }
 
     public initialize(obj: any): void {
@@ -348,7 +355,7 @@ export class CommentHandler {
                 break;
             }
         }
-        if (this.justPostComments.includes(entry.no)) {
+        if (this.justPostComments.some(s => s.threadId === entry.threadId && s.fork === entry.fork && s.no === entry.no)) {
 
             this.renderContext.strokeStyle = 'yellow';
             this.renderContext.lineWidth = 2.5;
@@ -592,7 +599,7 @@ export class CommentHandler {
         }
 
         // 自分以外の描画したいコメントと同じ位置に既に描画されているコメントのリスト
-        const activeSamePositionComments = layer.activeComments.filter(f => f.no !== entry.no && f.position === entry.position && !f.isFreedomYcoord).sort((a, b) => {
+        const activeSamePositionComments = layer.activeComments.filter(f => (f.no !== entry.no || f.fork !== entry.fork) && f.position === entry.position && !f.isFreedomYcoord).sort((a, b) => {
 
             if (a.currentY < b.currentY) return -1;
             if (a.currentY > b.currentY) return 1;

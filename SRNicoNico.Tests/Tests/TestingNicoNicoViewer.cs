@@ -50,6 +50,7 @@ namespace SRNicoNico.Tests {
         public bool DisableABRepeat { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public PopupPlacement FullScreenPopupPlacement { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool DoubleClickToggleFullScreen { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool DisableEasyComment { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public bool CanOpenUrl(string url) {
             throw new NotImplementedException();
