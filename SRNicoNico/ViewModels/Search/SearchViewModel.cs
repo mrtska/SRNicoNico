@@ -13,11 +13,11 @@ namespace SRNicoNico.ViewModels {
         public NicoNicoSearch Model { get; set; }
 
         //ソート方法
-        private readonly string[] sortBy = { "f:d", "f:a",
-                                     "v:d", "v:a",
-                                     "n:d", "n:a",
-                                     "m:d", "m:a",
-                                     "l:d", "l:a"
+        private readonly string[] sortBy = { "sortKey=registeredAt&sortOrder=desc", "sortKey=registeredAt&sortOrder=asc",
+                                     "sortKey=viewCount&sortOrder=desc", "sortKey=viewCount&sortOrder=asc",
+                                     "sortKey=commentCount&sortOrder=desc", "sortKey=commentCount&sortOrder=asc",
+                                     "sortKey=mylistCount&sortOrder=desc", "sortKey=mylistCount&sortOrder=asc",
+                                     "sortKey=duration&sortOrder=desc", "sortKey=duration&sortOrder=asc"
                                     };
 
         #region SearchText変更通知プロパティ

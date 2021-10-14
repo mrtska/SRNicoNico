@@ -50,7 +50,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <StackPanel HorizontalAlignment="Center">
-            <Image MaxHeight="50" HorizontalAlignment="Center" Width="65" VerticalAlignment="Top" Margin="5,5,0,0" Source="{Binding ThumbnailUrl}" />
+            <Image Height="50" HorizontalAlignment="Center" Width="65" VerticalAlignment="Center" Margin="5,5,0,0" Source="{Binding ThumbnailUrl}" />
             <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Length}" VerticalAlignment="Top" Margin="0,0,2,0" />
         </StackPanel>
         <Grid Grid.Column="1">
