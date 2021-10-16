@@ -177,6 +177,9 @@ namespace SRNicoNico.Services {
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             }, additionalHeaders)).ConfigureAwait(false);
             if (result.StatusCode == HttpStatusCode.Forbidden || result.StatusCode == HttpStatusCode.Unauthorized) {
+#if DEBUG
+                var content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+#endif
                 // サインインダイアログを表示して再ログインさせる
                 await SignInDialogHandler().ConfigureAwait(false);
                 result = await HttpClient.SendAsync(WithHttpHeaders(new HttpRequestMessage(HttpMethod.Post, url) {
