@@ -7,8 +7,8 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="9e7daa48-0ac5-4217-b882-bf556dafc37f"
-    Publisher="CN=mrtska.net"
+    Name="27669mrtska.NicoNicoViewer"
+    Publisher="CN=98A95DB9-E8D9-4842-BABF-601B35C694DC"
     Version="1.0.5.0" />
 
   <Properties>
@@ -31,8 +31,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Packaging"
-        Description="Packaging"
+        DisplayName="NicoNicoViewer"
+        Description="NicoNicoViewer"
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
         Square44x44Logo="Images\Square44x44Logo.png">
