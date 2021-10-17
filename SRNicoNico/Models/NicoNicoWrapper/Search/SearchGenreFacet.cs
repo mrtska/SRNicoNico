@@ -15,5 +15,9 @@
         /// 動画数
         /// </summary>
         public int Count { get; set; }
+        /// <summary>
+        /// 取得した時間
+        /// </summary>
+        public long Time { get; set; }
     }
 }

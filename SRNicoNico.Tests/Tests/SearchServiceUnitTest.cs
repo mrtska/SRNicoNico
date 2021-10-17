@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Services;
 using Xunit;
 
@@ -25,7 +24,10 @@ namespace SRNicoNico.Tests {
         [Fact]
         public async Task SearchUnitTest() {
 
-            await SearchService.SearchAsync(SearchSortKey.ViewCountDesc, SearchType.Tag, "Factorio");
+            var result = await SearchService.SearchAsync(SearchSortKey.ViewCountDesc, SearchType.Tag, "Factorio");
+
+            Assert.NotNull(result.Value);
+            Assert.NotEmpty(result.Items);
         }
 
         /// <summary>

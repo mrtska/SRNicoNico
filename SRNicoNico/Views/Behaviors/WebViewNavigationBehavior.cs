@@ -15,7 +15,7 @@ namespace SRNicoNico.Views.Behaviors {
         }
         protected override void OnDetaching() {
 
-            AssociatedObject.NavigationStarting += AssociatedObject_NavigationStarting;
+            AssociatedObject.NavigationStarting -= AssociatedObject_NavigationStarting;
         }
 
         private void AssociatedObject_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e) {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using DynaJson;
 using FastEnumUtility;
@@ -53,6 +52,7 @@ namespace SRNicoNico.Services {
 
             var ret = new List<SearchGenreFacet>();
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
             foreach (var item in json.data.items) {
 
@@ -62,7 +62,8 @@ namespace SRNicoNico.Services {
                 ret.Add(new SearchGenreFacet {
                     Count = (int)item.count,
                     Key = item.genre.key,
-                    Label = item.genre.label
+                    Label = item.genre.label,
+                    Time = time
                 });
             }
             return ret;
@@ -100,10 +101,43 @@ namespace SRNicoNico.Services {
             }
 
             var ret = new SearchResult();
-            var json = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
-            
-            ;
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
 
+            ret.SearchType = type;
+            ret.TotalCount = (int)json.data.totalCount;
+            ret.HasNext = json.data.hasNext;
+            ret.Value = value;
+            ret.Time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+            var items = new List<VideoListItem>();
+            foreach (var video in json.data.items) {
+
+                if (video == null) {
+                    continue;
+                }
+                items.Add(new VideoListItem {
+                    CommentCount = (int)video.count.comment,
+                    LikeCount = (int)video.count.like,
+                    MylistCount = (int)video.count.mylist,
+                    ViewCount = (int)video.count.view,
+                    Duration = (int)video.duration,
+                    Id = video.id,
+                    IsChannelVideo = video.isChannelVideo,
+                    IsPaymentRequired = video.isPaymentRequired,
+                    LatestCommentSummary = video.latestCommentSummary,
+                    OwnerIconUrl = video.owner.iconUrl,
+                    OwnerId = video.owner.id,
+                    OwnerName = video.owner.name,
+                    OwnerType = video.owner.ownerType,
+                    PlaybackPosition = (int?)video.playbackPosition,
+                    RegisteredAt = DateTimeOffset.Parse(video.registeredAt),
+                    RequireSensitiveMasking = video.requireSensitiveMasking,
+                    ShortDescription = video.shortDescription,
+                    ThumbnailUrl = video.thumbnail.listingUrl,
+                    Title = video.title
+                });
+            }
+            ret.Items = items;
             return ret;
         }
     }

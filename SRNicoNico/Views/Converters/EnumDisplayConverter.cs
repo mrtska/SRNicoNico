@@ -12,7 +12,10 @@ namespace SRNicoNico.Views.Converters {
     public class EnumDisplayConverter : IValueConverter {
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-
+            // xamlのホットリロードが起きる時にnullが来ることがある
+            if (value == null) {
+                return null!;
+            }
             var field = value.GetType().GetField(value.ToString()!);
             var display = field?.GetCustomAttribute<DisplayAttribute>();
 

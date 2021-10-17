@@ -42,6 +42,9 @@
                 <DataTemplate DataType="{x:Type vm:RankingViewModel}">
                     <v:Ranking />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:SearchViewModel}">
+                    <v:Search />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:FollowViewModel}">
                     <v:Follow />
                 </DataTemplate>
