@@ -8,8 +8,12 @@
     <Platforms>x86;x64</Platforms>
     <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Icons\production.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Icons\production.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="DynaJson" Version="2.2.0" />

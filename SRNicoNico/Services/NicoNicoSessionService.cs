@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using SRNicoNico.Models;
 
 namespace SRNicoNico.Services {
@@ -83,10 +84,16 @@ namespace SRNicoNico.Services {
 
             var flags = result.Headers.GetValues("x-niconico-authflag");
 
+
             foreach (var flag in flags) {
 
                 // 値が0ではなかったらログイン成功判定
                 if (flag != "0") {
+
+                    if (flag != "3") {
+                        MessageBox.Show("ベータ版のため、プレミアム会員のみ使用可能です。");
+                        Environment.Exit(0);
+                    }
 
                     return true;
                 }

@@ -16,7 +16,7 @@ namespace SRNicoNico.ViewModels {
 #if DEBUG
         private string _Title = "NicoNicoViewer Debug Build ";
 #else
-        private string _Title = "NicoNicoViewer";
+        private string _Title = "NicoNicoViewer Beta";
 #endif
         public string Title {
             get { return _Title; }
