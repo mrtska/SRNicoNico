@@ -110,10 +110,10 @@ namespace SRNicoNico.Services {
 
                 // サインインダイアログを表示させる
                 await SignInDialogHandler().ConfigureAwait(false);
-            }
+            } else {
 
-            // Cookieを保存する
-            HttpClientHandler.CookieContainer.Add(new Cookie("user_session", session, "/", ".nicovideo.jp"));
+                HttpClientHandler.CookieContainer.Add(new Cookie("user_session", session, "/", ".nicovideo.jp"));
+            }
 
             var result = await VerifyAuthAsync().ConfigureAwait(false);
             if (result) {
