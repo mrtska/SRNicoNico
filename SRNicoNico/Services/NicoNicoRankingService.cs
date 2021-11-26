@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using DynaJson;
 using SRNicoNico.Models;
@@ -13,11 +14,28 @@ namespace SRNicoNico.Services {
         /// <summary>
         /// カスタムランキング設定取得API
         /// </summary>
-        private const string RankingSettingsApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/custom-ranking/settings";
+        private const string CustomRankingSettingsApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/custom-ranking/settings";
         /// <summary>
         /// カスタムランキング取得API
         /// </summary>
-        private const string RankingApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/custom-ranking/ranking/";
+        private const string CustomRankingApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/custom-ranking/ranking/";
+        /// <summary>
+        /// ランキング取得API
+        /// </summary>
+        private const string RankingApiUrl = "https://nvapi.nicovideo.jp/v1/ranking";
+        /// <summary>
+        /// ジャンル取得API
+        /// </summary>
+        private const string GenreApiUrl = "https://nvapi.nicovideo.jp/v1/genres";
+        /// <summary>
+        /// 人気のタグ取得API
+        /// </summary>
+        private const string PopularTagApiUrl = "https://nvapi.nicovideo.jp/v1/genres/{0}/popular-tags";
+        /// <summary>
+        /// 話題のジャンルとタグ取得API
+        /// </summary>
+        private const string HotTopicsApiUrl = "https://nvapi.nicovideo.jp/v1/hot-topics";
+
 
         private readonly ISessionService SessionService;
 
@@ -28,16 +46,16 @@ namespace SRNicoNico.Services {
 
         /// <inheritdoc />
         public async Task<RankingDetails> GetCustomRankingAsync(int laneId) {
-
+            
             if (laneId <= 0 || laneId > 5) {
-                throw new ArgumentException("laneIdは1 から5の間のみ有効");
+                throw new ArgumentException("laneIdは1から5の間のみ有効");
             }
 
-            var result = await SessionService.GetAsync(RankingApiUrl + laneId, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            var result = await SessionService.GetAsync(CustomRankingApiUrl + laneId, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
-                throw new StatusErrorException(result.StatusCode);
+              throw new StatusErrorException(result.StatusCode);
             }
 
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
@@ -100,7 +118,7 @@ namespace SRNicoNico.Services {
         /// <inheritdoc />
         public async Task<RankingSettings> GetCustomRankingSettingsAsync() {
 
-            var result = await SessionService.GetAsync(RankingSettingsApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(CustomRankingSettingsApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
@@ -141,6 +159,92 @@ namespace SRNicoNico.Services {
                 GenreMap = genreMap,
                 Settings = settings
             };
+        }
+
+        /// <inheritdoc />
+        public async Task<HotTopics> GetHotTopicsAsync() {
+
+            using var result = await SessionService.GetAsync(HotTopicsApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+
+            var items = new List<HotTopicsItem>();
+
+            foreach (var item in data.hotTopics) {
+
+                if (item == null) {
+                    continue;
+                }
+                items.Add(new HotTopicsItem {
+                    Key = item.key,
+                    Label = item.label,
+                    Tag = item.conditions[0].tag,
+                    GenreKey = item.conditions[0].genre.key,
+                    GenreLabel = item.conditions[0].genre.label,
+                });
+            }
+
+            return new HotTopics {
+                StartAt = DateTimeOffset.Parse(data.startAt),
+                Items = items
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<PopularTags?> GetPopularTagsAsync(string genreKey) {
+
+            if (string.IsNullOrEmpty(genreKey)) {
+
+                throw new ArgumentNullException(nameof(genreKey));
+            }
+
+            using var result = await SessionService.GetAsync(string.Format(PopularTagApiUrl, genreKey), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            // 404だった場合はnullを返す
+            if (result.StatusCode == HttpStatusCode.NotFound) {
+
+                return null;
+            }
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+            
+            return new PopularTags {
+                StartAt = DateTimeOffset.Parse(data.startAt),
+                Tags = JsonObjectExtension.ToStringArray(data.tags)
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<Dictionary<string, string>> GetGenresAsync() {
+
+            using var result = await SessionService.GetAsync(GenreApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+
+            var map = new Dictionary<string, string>();
+
+            foreach (var genre in data.genres) {
+
+                if (genre == null) {
+                    continue;
+                }
+                map[genre.key] = genre.label;
+            }
+            return map;
         }
     }
 }
