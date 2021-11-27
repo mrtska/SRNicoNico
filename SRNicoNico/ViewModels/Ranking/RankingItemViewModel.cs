@@ -10,11 +10,11 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class RankingItemViewModel : TabItemViewModel {
 
-        private ObservableSynchronizedCollection<VideoListItem> _Ranking = new ObservableSynchronizedCollection<VideoListItem>();
+        private ObservableSynchronizedCollection<VideoItem> _Ranking = new ObservableSynchronizedCollection<VideoItem>();
         /// <summary>
         /// ランキング
         /// </summary>
-        public ObservableSynchronizedCollection<VideoListItem> Ranking {
+        public ObservableSynchronizedCollection<VideoItem> Ranking {
             get { return _Ranking; }
             set {
                 if (_Ranking == value)

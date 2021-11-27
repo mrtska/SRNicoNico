@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using DynaJson;
+using FastEnumUtility;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 
@@ -22,7 +23,11 @@ namespace SRNicoNico.Services {
         /// <summary>
         /// ランキング取得API
         /// </summary>
-        private const string RankingApiUrl = "https://nvapi.nicovideo.jp/v1/ranking";
+        private const string RankingApiUrl = "https://nvapi.nicovideo.jp/v1/ranking/genre/";
+        /// <summary>
+        /// 話題ランキング取得API
+        /// </summary>
+        private const string HotTopicRankingApiUrl = "https://nvapi.nicovideo.jp/v1/ranking/hot-topic";
         /// <summary>
         /// ジャンル取得API
         /// </summary>
@@ -45,14 +50,84 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async Task<RankingDetails> GetCustomRankingAsync(int laneId) {
+        public async Task<RankingDetails?> GetRankingAsync(RankingTerm term, string genre, string? popularTag = null, int page = 1) {
+
+            if (string.IsNullOrEmpty(genre)) {
+
+                throw new ArgumentNullException(nameof(genre));
+            }
+
+            var query = new GetRequestQueryBuilder(HotTopicRankingApiUrl)
+                .AddQuery("term", term.GetLabel()!)
+                .AddQuery("page", page);
+            if (!string.IsNullOrEmpty(popularTag)) {
+                query.AddQuery("tag", popularTag);
+            }
+
+            using var result = await SessionService.GetAsync(query.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            // genreかpupularTagが見つからなかった場合
+            if (result.StatusCode == HttpStatusCode.NotFound) {
+                return null;
+            }
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+
+            var items = new List<RankingVideoItem>();
+            var rank = 1 + ((page - 1) * 100);
+            foreach (var video in data.items) {
+
+                if (video == null) {
+                    continue;
+                }
+                items.Add(new RankingVideoItem { Rank = rank++ }.Fill(video));
+            }
+
+            return new RankingDetails {
+                HasNext = data.hasNext,
+                VideoList = items
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<PopularTags?> GetPopularTagsAsync(string genreKey) {
+
+            if (string.IsNullOrEmpty(genreKey)) {
+
+                throw new ArgumentNullException(nameof(genreKey));
+            }
+
+            using var result = await SessionService.GetAsync(string.Format(PopularTagApiUrl, genreKey), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            // 404だった場合はnullを返す
+            if (result.StatusCode == HttpStatusCode.NotFound) {
+                return null;
+            }
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+
+            return new PopularTags {
+                StartAt = DateTimeOffset.Parse(data.startAt),
+                Tags = JsonObjectExtension.ToStringArray(data.tags)
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<CustomRankingDetails> GetCustomRankingAsync(int laneId) {
             
-            if (laneId <= 0 || laneId > 5) {
+            if (laneId <= 0 || laneId >= 6) {
                 throw new ArgumentException("laneIdは1から5の間のみ有効");
             }
 
-            var result = await SessionService.GetAsync(CustomRankingApiUrl + laneId, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
-
+            using var result = await SessionService.GetAsync(CustomRankingApiUrl + laneId, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
 
               throw new StatusErrorException(result.StatusCode);
@@ -61,34 +136,14 @@ namespace SRNicoNico.Services {
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
             var data = json.data;
 
-            var videoList = new List<VideoListItem>();
+            var videoList = new List<RankingVideoItem>();
+            var rank = 1;
             foreach (var video in data.videoList) {
 
                 if (video == null) {
                     continue;
                 }
-
-                videoList.Add(new VideoListItem {
-                    CommentCount = (int)video.count.comment,
-                    LikeCount = (int)video.count.like,
-                    MylistCount = (int)video.count.mylist,
-                    ViewCount = (int)video.count.view,
-                    Duration = (int)video.duration,
-                    Id = video.id,
-                    IsChannelVideo = video.isChannelVideo,
-                    IsPaymentRequired = video.isPaymentRequired,
-                    LatestCommentSummary = video.latestCommentSummary,
-                    OwnerIconUrl = video.owner.iconUrl,
-                    OwnerId = video.owner.id,
-                    OwnerName = video.owner.name,
-                    OwnerType = video.owner.ownerType,
-                    PlaybackPosition = (int?)video.playbackPosition,
-                    RegisteredAt = DateTimeOffset.Parse(video.registeredAt),
-                    RequireSensitiveMasking = video.requireSensitiveMasking,
-                    ShortDescription = video.shortDescription,
-                    ThumbnailUrl = video.thumbnail.listingUrl,
-                    Title = video.title
-                });
+                videoList.Add(new RankingVideoItem { Rank = rank++ }.Fill(video));
             }
 
             var genreMap = new Dictionary<string, string>();
@@ -100,7 +155,7 @@ namespace SRNicoNico.Services {
                 genreMap[genre.key] = genre.label;
             }
 
-            return new RankingDetails {
+            return new CustomRankingDetails {
                 LaneId = (int)data.laneId,
                 LaneType = data.laneType,
                 Title = data.title,
@@ -119,7 +174,6 @@ namespace SRNicoNico.Services {
         public async Task<RankingSettings> GetCustomRankingSettingsAsync() {
 
             using var result = await SessionService.GetAsync(CustomRankingSettingsApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
-
             if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);
@@ -162,6 +216,49 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
+        public async Task<RankingDetails?> GetHotTopicRankingAsync(RankingTerm term, string key, int page = 1) {
+
+            if (string.IsNullOrEmpty(key)) {
+
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            var query = new GetRequestQueryBuilder(HotTopicRankingApiUrl)
+                .AddQuery("term", term.GetLabel()!)
+                .AddQuery("key", key)
+                .AddQuery("page", page);
+
+            using var result = await SessionService.GetAsync(query.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            // キーが存在しなかった場合
+            if (result.StatusCode == HttpStatusCode.NotFound) {
+                return null;
+            }
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+
+            var items = new List<RankingVideoItem>();
+            var rank = 1 + ((page - 1) * 100);
+            foreach (var video in data.items) {
+
+                if (video == null) {
+                    continue;
+                }
+                items.Add(new RankingVideoItem { Rank = rank++ }.Fill(video));
+            }
+
+            return new RankingDetails {
+
+                HasNext = data.hasNext,
+                VideoList = items
+            };
+        }
+
+        /// <inheritdoc />
         public async Task<HotTopics> GetHotTopicsAsync() {
 
             using var result = await SessionService.GetAsync(HotTopicsApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
@@ -196,34 +293,6 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async Task<PopularTags?> GetPopularTagsAsync(string genreKey) {
-
-            if (string.IsNullOrEmpty(genreKey)) {
-
-                throw new ArgumentNullException(nameof(genreKey));
-            }
-
-            using var result = await SessionService.GetAsync(string.Format(PopularTagApiUrl, genreKey), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
-            // 404だった場合はnullを返す
-            if (result.StatusCode == HttpStatusCode.NotFound) {
-
-                return null;
-            }
-            if (!result.IsSuccessStatusCode) {
-
-                throw new StatusErrorException(result.StatusCode);
-            }
-
-            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
-            var data = json.data;
-            
-            return new PopularTags {
-                StartAt = DateTimeOffset.Parse(data.startAt),
-                Tags = JsonObjectExtension.ToStringArray(data.tags)
-            };
-        }
-
-        /// <inheritdoc />
         public async Task<Dictionary<string, string>> GetGenresAsync() {
 
             using var result = await SessionService.GetAsync(GenreApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
@@ -246,5 +315,6 @@ namespace SRNicoNico.Services {
             }
             return map;
         }
+
     }
 }

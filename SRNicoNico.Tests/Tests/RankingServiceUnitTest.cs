@@ -20,6 +20,29 @@ namespace SRNicoNico.Tests {
         }
 
         /// <summary>
+        /// ランキングを取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetRankingUnitTest() {
+
+            var result = await RankingService.GetRankingAsync(RankingTerm.Hour, "all");
+
+            Assert.NotEmpty(result.VideoList);
+        }
+
+        /// <summary>
+        /// 人気のタグを取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetPopularTagsUnitTest() {
+
+            var result = await RankingService.GetPopularTagsAsync("anime");
+
+            Assert.NotEqual(default, result.StartAt);
+            Assert.NotEmpty(result.Tags);
+        }
+
+        /// <summary>
         /// カスタムランキングの設定を取得出来ることのテスト
         /// </summary>
         [Fact]
@@ -55,6 +78,17 @@ namespace SRNicoNico.Tests {
         }
 
         /// <summary>
+        /// 話題ランキングを取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetHotTopicRankingUnitTest() {
+
+            var result = await RankingService.GetHotTopicRankingAsync(RankingTerm.Hour, "all");
+
+            Assert.NotEmpty(result.VideoList);
+        }
+
+        /// <summary>
         /// 話題のジャンルを取得出来ることのテスト
         /// </summary>
         [Fact]
@@ -73,18 +107,6 @@ namespace SRNicoNico.Tests {
                 Assert.NotNull(item.GenreKey);
                 Assert.NotNull(item.GenreLabel);
             }
-        }
-
-        /// <summary>
-        /// 人気のタグを取得出来ることのテスト
-        /// </summary>
-        [Fact]
-        public async Task GetPopularTagsUnitTest() {
-
-            var result = await RankingService.GetPopularTagsAsync("anime");
-
-            Assert.NotEqual(default, result.StartAt);
-            Assert.NotEmpty(result.Tags);
         }
 
         /// <summary>
