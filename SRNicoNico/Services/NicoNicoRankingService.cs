@@ -4,6 +4,8 @@ using System.Net;
 using System.Threading.Tasks;
 using DynaJson;
 using FastEnumUtility;
+using Microsoft.EntityFrameworkCore;
+using SRNicoNico.Entities;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 
@@ -43,10 +45,12 @@ namespace SRNicoNico.Services {
 
 
         private readonly ISessionService SessionService;
+        private readonly ViewerDbContext DbContext;
 
-        public NicoNicoRankingService(ISessionService sessionService) {
+        public NicoNicoRankingService(ISessionService sessionService, ViewerDbContext dbContext) {
 
             SessionService = sessionService;
+            DbContext = dbContext;
         }
 
         /// <inheritdoc />
@@ -316,5 +320,26 @@ namespace SRNicoNico.Services {
             return map;
         }
 
+        /// <inheritdoc />
+        public Task<Dictionary<string, bool>> GetRankingVisibilityAsync() {
+
+            return DbContext.RankingVisibilities.AsNoTracking().ToDictionaryAsync(d => d.GenreKey, d => d.IsVisible);
+        }
+
+        /// <inheritdoc />
+        public async Task SaveRankingVisibilityAsync(string genreKey, bool isVisible) {
+
+            var setting = await DbContext.RankingVisibilities.SingleOrDefaultAsync(s => s.GenreKey == genreKey);
+            if (setting == null) {
+
+                setting = new RankingVisibility {
+                    GenreKey = genreKey
+                };
+                DbContext.RankingVisibilities.Add(setting);
+            }
+            setting.IsVisible = isVisible;
+
+            await DbContext.SaveChangesAsync();
+        }
     }
 }

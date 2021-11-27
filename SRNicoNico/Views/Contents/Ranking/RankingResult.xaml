@@ -49,7 +49,7 @@
         </Grid>
         <ListBox Grid.Row="1" ItemsSource="{Binding Ranking}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <ListBox.Resources>
-                <DataTemplate DataType="{x:Type w:VideoListItem}">
+                <DataTemplate DataType="{x:Type w:RankingVideoItem}">
                     <v:UserVideoView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}">
                         <v:UserVideoView.ContextMenu>
                             <ContextMenu>

@@ -44,6 +44,9 @@
                 <DataTemplate DataType="{x:Type vm:SettingsGeneralViewModel}">
                     <v:SettingsGeneral />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:SettingsRankingViewModel}">
+                    <v:SettingsRanking />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:SettingsVideoViewModel}">
                     <v:SettingsVideo />
                 </DataTemplate>

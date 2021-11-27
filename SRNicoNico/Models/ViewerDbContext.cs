@@ -19,6 +19,12 @@ namespace SRNicoNico.Models {
         /// </summary>
         public DbSet<ABRepeatPosition> ABRepeatPositions => Set<ABRepeatPosition>();
 
+        /// <summary>
+        /// ABリピート管理テーブル
+        /// </summary>
+        public DbSet<RankingVisibility> RankingVisibilities => Set<RankingVisibility>();
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
             // 最終視聴日にインデックスを付ける
@@ -30,6 +36,7 @@ namespace SRNicoNico.Models {
                 .HasConversion(new DateTimeOffsetToBinaryConverter());
 
             modelBuilder.Entity<ABRepeatPosition>().ToTable(nameof(ABRepeatPosition));
+            modelBuilder.Entity<RankingVisibility>().ToTable(nameof(RankingVisibility));
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {

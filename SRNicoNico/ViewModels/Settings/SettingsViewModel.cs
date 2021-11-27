@@ -50,6 +50,7 @@ namespace SRNicoNico.ViewModels {
         public void Loaded() {
 
             SettingsItems.Add(UnityContainer.Resolve<SettingsGeneralViewModel>());
+            SettingsItems.Add(UnityContainer.Resolve<SettingsRankingViewModel>());
             SettingsItems.Add(UnityContainer.Resolve<SettingsVideoViewModel>());
             SettingsItems.Add(UnityContainer.Resolve<SettingsCommentViewModel>());
 

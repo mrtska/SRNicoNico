@@ -60,6 +60,20 @@ namespace SRNicoNico.Services {
         /// </summary>
         /// <returns>ジャンルのキーとラベルのリスト</returns>
         Task<Dictionary<string, string>> GetGenresAsync();
+
+        /// <summary>
+        /// ランキングのジャンルごとの表示設定を返す
+        /// Trueで表示
+        /// </summary>
+        /// <returns>ジャンルのキーと設定のリスト</returns>
+        Task<Dictionary<string, bool>> GetRankingVisibilityAsync();
+
+        /// <summary>
+        /// ランキングのジャンル表示設定を保存する
+        /// </summary>
+        /// <param name="genreKey">ジャンルのキー</param>
+        /// <param name="isVisible">表示設定</param>
+        Task SaveRankingVisibilityAsync(string genreKey, bool isVisible);
     }
 
     /// <summary>
