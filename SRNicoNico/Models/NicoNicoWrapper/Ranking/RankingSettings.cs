@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     /// <summary>
@@ -10,12 +9,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// 設定のリスト
         /// </summary>
-        public IEnumerable<RankingSettingsEntry>? Settings { get; set; }
+        public IEnumerable<RankingSettingsEntry> Settings { get; set; } = default!;
 
         /// <summary>
         /// ジャンル情報
         /// </summary>
-        public IDictionary<string, string>? GenreMap { get; set; }
+        public IDictionary<string, string> GenreMap { get; set; } = default!;
     }
 
     public class RankingSettingsEntry {
@@ -26,11 +25,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// レーンタイトル
         /// </summary>
-        public string? Title { get; set; }
+        public string Title { get; set; } = default!;
         /// <summary>
         /// ランキングタイプ tagかgenre
         /// </summary>
-        public string? Type { get; set; }
+        public string Type { get; set; } = default!;
         /// <summary>
         /// ランキングを構成しているジャンル
         /// Typeがgenreの時のみ有効

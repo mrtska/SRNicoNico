@@ -47,6 +47,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// </summary>
         public string? OwnerIconUrl { get; set; }
         /// <summary>
+        /// 投稿者のURL
+        /// </summary>
+        public string? OwnerUrl { get; set; }
+        /// <summary>
         /// 動画投稿者のID
         /// </summary>
         public string? OwnerId { get; set; }
@@ -105,6 +109,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             OwnerId = video.owner.id;
             OwnerName = video.owner.name;
             OwnerType = video.owner.ownerType;
+            if (OwnerType == "user") {
+                OwnerUrl = "https://www.nicovideo.jp/user/" + OwnerId;
+            } else if (OwnerType == "channel") {
+                OwnerUrl = "https://ch.nicovideo.jp/" + OwnerId;
+            }
+
             PlaybackPosition = (int?)video.playbackPosition;
             RegisteredAt = DateTimeOffset.Parse(video.registeredAt);
             RequireSensitiveMasking = video.requireSensitiveMasking;

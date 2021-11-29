@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
-using FastEnumUtility;
 using Livet;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
@@ -8,9 +8,9 @@ using SRNicoNico.Services;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
-    /// ジャンルランキングページのViewModel
+    /// 話題ランキングページのViewModel
     /// </summary>
-    public class RankingItemViewModel : TabItemViewModel {
+    public class HotTopicRankingItemViewModel : TabItemViewModel {
 
         private ObservableSynchronizedCollection<VideoItem> _Ranking = new ObservableSynchronizedCollection<VideoItem>();
         /// <summary>
@@ -26,22 +26,10 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        private IEnumerable<RankingTerm> _Terms = AllTerms;
         /// <summary>
         /// 集計期間のリスト
         /// </summary>
-        public IEnumerable<RankingTerm> Terms {
-            get { return _Terms; }
-            set { 
-                if (_Terms == value)
-                    return;
-                _Terms = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private static readonly IEnumerable<RankingTerm> AllTerms = FastEnum.GetValues<RankingTerm>();
-        private static readonly IEnumerable<RankingTerm> TagUsedTerms = new List<RankingTerm> { RankingTerm.Hour, RankingTerm.Day }.AsReadOnly();
+        public IEnumerable<RankingTerm> Terms { get; } = new List<RankingTerm> { RankingTerm.Hour, RankingTerm.Day }.AsReadOnly();
 
         private RankingTerm _SelectedTerm = RankingTerm.Day;
         /// <summary>
@@ -50,7 +38,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public RankingTerm SelectedTerm {
             get { return _SelectedTerm; }
-            set { 
+            set {
                 if (_SelectedTerm == value)
                     return;
                 _SelectedTerm = value;
@@ -60,59 +48,43 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        private PopularTags? _PopularTags;
+        private string _Key = "all";
         /// <summary>
-        /// 人気のタグ情報
+        /// 話題のジャンルのキー
         /// </summary>
-        public PopularTags? PopularTags {
-            get { return _PopularTags; }
+        public string Key {
+            get { return _Key; }
             set { 
-                if (_PopularTags == value)
+                if (_Key == value)
                     return;
-                _PopularTags = value;
+                _Key = value;
                 RaisePropertyChanged();
-            }
-        }
 
-
-        private string? _Tag;
-        /// <summary>
-        /// 人気のタグで絞る場合
-        /// </summary>
-        public string? Tag {
-            get { return _Tag; }
-            set { 
-                if (_Tag == value)
-                    return;
-                // すべての場合はnullにする
-                if (value == "すべて") {
-                    value = null;
-                    Terms = AllTerms;
-                } else {
-                    // タグで絞った場合は毎時と24時間ランキングしか使えないのでコンボボックスを絞る
-                    Terms = TagUsedTerms;
-                }
-                // 集計期間をリセットしてリロードする
-                _SelectedTerm = RankingTerm.Day;
-                RaisePropertyChanged(nameof(SelectedTerm));
-                _Tag = value;
-                RaisePropertyChanged();
                 Reload();
             }
         }
 
+        private HotTopics? _HotTopics;
         /// <summary>
-        /// ジャンルキー
+        /// 話題のジャンル情報
         /// </summary>
-        public string GenreKey { get; private set; }
+        public HotTopics? HotTopics {
+            get { return _HotTopics; }
+            set { 
+                if (_HotTopics == value)
+                    return;
+                _HotTopics = value;
+                RaisePropertyChanged();
+            }
+        }
 
-        private string _Label = string.Empty;
+        private string _Label = "話題 ランキング";
         /// <summary>
         /// ラベル
         /// </summary>
         public string Label {
             get { return _Label; }
-            private set { 
+            private set {
                 if (_Label == value)
                     return;
                 _Label = value;
@@ -120,14 +92,13 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-
         private readonly IRankingService RankingService;
+        private int CurrentPage = 1;
+        private bool HasNext = false;
 
-        public RankingItemViewModel(IRankingService rankingService, string genreKey, string label) : base(label) {
+        public HotTopicRankingItemViewModel(IRankingService rankingService) : base("話題") {
 
             RankingService = rankingService;
-            GenreKey = genreKey;
-            Label = $"{Name} ランキング";
         }
 
         /// <summary>
@@ -136,15 +107,18 @@ namespace SRNicoNico.ViewModels {
         public async void Loaded() {
 
             IsActive = true;
-            Status = "ランキングを取得中";
+            Status = "話題ランキングを取得中";
+
             Ranking.Clear();
             try {
-                var details = await RankingService.GetRankingAsync(SelectedTerm, GenreKey, Tag);
+                CurrentPage = 1;
+                var details = await RankingService.GetHotTopicRankingAsync(SelectedTerm, Key);
                 if (details == null) {
 
-                    Status = "ランキングの取得に失敗しました";
+                    Status = "話題ランキングの取得に失敗しました";
                     return;
                 }
+                HasNext = details.HasNext;
 
                 foreach (var video in details.VideoList) {
 
@@ -152,33 +126,65 @@ namespace SRNicoNico.ViewModels {
                 }
 
             } catch (StatusErrorException e) {
-                Status = $"ランキングを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+                Status = $"話題ランキングを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
                 return;
             } finally {
                 IsActive = false;
             }
 
-            if (Tag == null) {
-                Label = $"{Name} ランキング";
-            } else {
-                Label = $"{Name} ランキング：{Tag}";
-            }
-
-            // 全ジャンルに人気のタグは無いのでスキップする
-            if (GenreKey == "all") {
-                return;
-            }
-
+            IsActive = true;
+            Status = "話題のジャンルを取得中";
             try {
-                PopularTags = await RankingService.GetPopularTagsAsync(GenreKey);
+                HotTopics = await RankingService.GetHotTopicsAsync();
+                if (Key == "all") {
+                    Label = "話題 ランキング";
+                } else {
+                    Label = $"話題 ランキング：{HotTopics.Items.Single(s => s.Key == Key).Label}";
+                }
+
                 Status = string.Empty;
 
             } catch (StatusErrorException e) {
-                Status = $"人気のタグを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+                Status = $"話題のジャンルを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
                 return;
             } finally {
                 IsActive = false;
             }
+        }
+
+        /// <summary>
+        /// 次のページがあればロードする
+        /// </summary>
+        public async void LoadMore() {
+
+            if (!HasNext) {
+                return;
+            }
+
+            IsActive = true;
+            Status = "話題ランキングを取得中";
+            try {
+                var details = await RankingService.GetHotTopicRankingAsync(SelectedTerm, Key, ++CurrentPage);
+                if (details == null) {
+
+                    Status = "話題ランキングの取得に失敗しました";
+                    return;
+                }
+                HasNext = details.HasNext;
+
+                foreach (var video in details.VideoList) {
+
+                    Ranking.Add(video);
+                }
+                Status = string.Empty;
+
+            } catch (StatusErrorException e) {
+                Status = $"話題ランキングを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+                return;
+            } finally {
+                IsActive = false;
+            }
+
         }
 
         /// <summary>
@@ -191,7 +197,7 @@ namespace SRNicoNico.ViewModels {
 
         public override void KeyDown(KeyEventArgs e) {
 
-            if (e.Key == Key.F5) {
+            if (e.Key == System.Windows.Input.Key.F5) {
 
                 Reload();
             }

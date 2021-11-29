@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SRNicoNico.Views.RankingResult"
+﻿<UserControl x:Class="SRNicoNico.Views.HotTopicRankingResult"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,7 +11,7 @@
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
-             d:DataContext="{d:DesignInstance Type=vm:RankingItemViewModel}"
+             d:DataContext="{d:DesignInstance Type=vm:HotTopicRankingItemViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <i:Interaction.Triggers>
@@ -49,13 +49,13 @@
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1" Background="{DynamicResource AlternationBackgroundBrushKey}">
-            <ItemsControl ItemsSource="{Binding PopularTags.Tags}" Margin="0,0,0,5">
+            <ItemsControl ItemsSource="{Binding HotTopics.Items}" Margin="0,0,0,5">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding}" Margin="5,5,0,0" ToolTip="人気のタグで絞る" Style="{StaticResource RoundButton}">
+                        <Button Content="{Binding Label}" Margin="5,5,0,0" ToolTip="話題のタグで絞る" Style="{StaticResource RoundButton}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
-                                    <i:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext}" PropertyName="Tag" Value="{Binding}" />
+                                    <i:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext}" PropertyName="Key" Value="{Binding Key}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Button>

@@ -96,7 +96,7 @@ namespace SRNicoNico.Services {
         /// 週間ランキング
         /// 話題ランキングでは使用不可
         /// </summary>
-        [Display(Name = "毎時")]
+        [Display(Name = "週間")]
         [Label("week")]
         Week,
         /// <summary>

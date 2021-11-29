@@ -61,7 +61,7 @@ namespace SRNicoNico.Services {
                 throw new ArgumentNullException(nameof(genre));
             }
 
-            var query = new GetRequestQueryBuilder(HotTopicRankingApiUrl)
+            var query = new GetRequestQueryBuilder(RankingApiUrl + genre)
                 .AddQuery("term", term.GetLabel()!)
                 .AddQuery("page", page);
             if (!string.IsNullOrEmpty(popularTag)) {
@@ -120,7 +120,7 @@ namespace SRNicoNico.Services {
 
             return new PopularTags {
                 StartAt = DateTimeOffset.Parse(data.startAt),
-                Tags = JsonObjectExtension.ToStringArray(data.tags)
+                Tags = JsonObjectExtension.ToStringArray(data.tags, "すべて")
             };
         }
 
@@ -187,6 +187,9 @@ namespace SRNicoNico.Services {
             var data = json.data;
 
             var genreMap = new Dictionary<string, string>();
+
+            // 特別扱いジャンルを追加する
+            genreMap["all"] = "全ジャンル";
             foreach (var genre in data.genres) {
 
                 if (genre == null) {
@@ -194,7 +197,8 @@ namespace SRNicoNico.Services {
                 }
                 genreMap[genre.key] = genre.label;
             }
-            
+            genreMap["r18"] = "R-18";
+
             var settings = new List<RankingSettingsEntry>();
             foreach (var entry in data.settings) {
 
@@ -275,6 +279,15 @@ namespace SRNicoNico.Services {
             var data = json.data;
 
             var items = new List<HotTopicsItem>();
+
+            // allを先に入れておく
+            items.Add(new HotTopicsItem {
+                Key = "all",
+                Label = "すべて",
+                GenreKey = string.Empty,
+                GenreLabel = string.Empty,
+                Tag = string.Empty
+            });
 
             foreach (var item in data.hotTopics) {
 

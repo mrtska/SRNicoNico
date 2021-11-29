@@ -13,6 +13,20 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class RankingViewModel : TabItemViewModel {
 
+        private ObservableSynchronizedCollection<TabItemViewModel> _CustomRankingItems = new ObservableSynchronizedCollection<TabItemViewModel>();
+        /// <summary>
+        /// カスタムランキングのタブのリスト
+        /// </summary>
+        public ObservableSynchronizedCollection<TabItemViewModel> CustomRankingItems {
+            get { return _CustomRankingItems; }
+            set {
+                if (_CustomRankingItems == value)
+                    return;
+                _CustomRankingItems = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private ObservableSynchronizedCollection<TabItemViewModel> _RankingItems = new ObservableSynchronizedCollection<TabItemViewModel>();
         /// <summary>
         /// ランキングのタブのリスト
@@ -59,19 +73,40 @@ namespace SRNicoNico.ViewModels {
 
             IsActive = true;
             Status = "ランキング設定を取得中";
+            CustomRankingItems.Clear();
             RankingItems.Clear();
             try {
                 Settings = await RankingService.GetCustomRankingSettingsAsync();
 
-                foreach (var lane in Settings.Settings!) {
+                foreach (var lane in Settings.Settings) {
 
                     if (lane == null) {
                         continue;
                     }
-
-                    RankingItems.Add(UnityContainer.Resolve<RankingItemViewModel>(new ParameterOverride("entry", lane)));
+                    CustomRankingItems.Add(UnityContainer.Resolve<CustomRankingItemViewModel>(new ParameterOverride("entry", lane)));
                 }
 
+                RankingItems.Add(UnityContainer.Resolve<HotTopicRankingItemViewModel>());
+
+                var visibility = await RankingService.GetRankingVisibilityAsync();
+
+                foreach (var genre in Settings.GenreMap) {
+
+                    if (visibility.ContainsKey(genre.Key)) {
+
+                        if (visibility[genre.Key]) {
+
+                            RankingItems.Add(UnityContainer.Resolve<RankingItemViewModel>(new ParameterOverride("genreKey", genre.Key), new ParameterOverride("label", genre.Value)));
+                        }
+                    } else {
+                        // DBに設定が無い場合はその他とR18を除いたランキングを表示する
+                        if (genre.Key != "other" && genre.Key != "r18") {
+
+                            RankingItems.Add(UnityContainer.Resolve<RankingItemViewModel>(new ParameterOverride("genreKey", genre.Key), new ParameterOverride("label", genre.Value)));
+                        }
+                    }
+                }
+                Status = string.Empty;
             } catch (StatusErrorException e) {
                 Status = $"ランキング設定を取得出来ませんでした。 ステータスコード: {e.StatusCode}";
                 return;
@@ -80,20 +115,30 @@ namespace SRNicoNico.ViewModels {
             }
 
             // 子ViewModelのStatusを監視する
-            RankingItems.ToList().ForEach(vm => {
-
+            CustomRankingItems.ToList().ForEach(vm => {
                 vm.PropertyChanged += (o, e) => {
-
                     var tabItem = (TabItemViewModel)o;
                     if (e.PropertyName == nameof(Status)) {
-
+                        Status = tabItem.Status;
+                    }
+                };
+            });
+            RankingItems.ToList().ForEach(vm => {
+                vm.PropertyChanged += (o, e) => {
+                    var tabItem = (TabItemViewModel)o;
+                    if (e.PropertyName == nameof(Status)) {
                         Status = tabItem.Status;
                     }
                 };
             });
 
             // 1レーン目のランキングをデフォルト値とする
-            SelectedItem = RankingItems.First();
+            SelectedItem = CustomRankingItems.First();
+        }
+
+        public void Reload() {
+
+            Loaded();
         }
 
         public override void KeyDown(KeyEventArgs e) {
