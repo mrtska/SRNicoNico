@@ -1,5 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:a="clr-namespace:SRNicoNico.Views.Actions">
     <Style x:Key="{x:Type ContextMenu}" TargetType="{x:Type ContextMenu}">
         <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
         <Setter Property="Background" Value="{DynamicResource BackgroundBrushKey}" />
@@ -34,4 +34,53 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <ContextMenu x:Key="VideoContextMenu">
+        <MenuItem Header="WebViewで開く">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <a:WebViewOpenAction Url="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </MenuItem>
+        <MenuItem Header="ブラウザで開く">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <i:LaunchUriOrFileAction Path="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </MenuItem>
+        <MenuItem Header="URLをクリップボードにコピー">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <a:CopyToClipBoardAction Text="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </MenuItem>
+        <Separator />
+        <MenuItem>
+            <MenuItem.Resources>
+                <Style TargetType="{x:Type MenuItem}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding OwnerType}" Value="hidden">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </MenuItem.Resources>
+            <MenuItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding OwnerName, StringFormat='{}{0} を開く'}" />
+                </StackPanel>
+            </MenuItem.Header>
+            <MenuItem.Icon>
+                <Image Source="{Binding OwnerIconUrl}" Height="15" RenderOptions.BitmapScalingMode="HighQuality" />
+            </MenuItem.Icon>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <a:NicoNicoOpenAction Url="{Binding OwnerUrl}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </MenuItem>
+    </ContextMenu>
 </ResourceDictionary>

@@ -9,62 +9,13 @@
              d:DataContext="{d:DesignInstance Type=w:VideoItem}"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="600"
-             Background="Transparent">
+             Background="Transparent"
+             ContextMenu="{StaticResource VideoContextMenu}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
             <a:NicoNicoOpenAction Url="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <UserControl.ContextMenu>
-        <ContextMenu>
-            <MenuItem Header="WebViewで開く">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <a:WebViewOpenAction Url="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </MenuItem>
-            <MenuItem Header="ブラウザで開く">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <i:LaunchUriOrFileAction Path="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </MenuItem>
-            <MenuItem Header="URLをクリップボードにコピー">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <a:CopyToClipBoardAction Text="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </MenuItem>
-            <Separator />
-            <MenuItem>
-                <MenuItem.Resources>
-                    <Style TargetType="{x:Type MenuItem}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding OwnerType}" Value="hidden">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </MenuItem.Resources>
-                <MenuItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding OwnerName, StringFormat='{}{0} を開く'}" />
-                    </StackPanel>
-                </MenuItem.Header>
-                <MenuItem.Icon>
-                    <Image Source="{Binding OwnerIconUrl}" Height="15" RenderOptions.BitmapScalingMode="HighQuality" />
-                </MenuItem.Icon>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <a:NicoNicoOpenAction Url="{Binding OwnerUrl}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </MenuItem>
-        </ContextMenu>
-    </UserControl.ContextMenu>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />

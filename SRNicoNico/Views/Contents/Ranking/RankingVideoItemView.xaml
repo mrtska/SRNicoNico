@@ -5,73 +5,23 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
-             xmlns:a="clr-namespace:SRNicoNico.Views.Actions" xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
              d:DataContext="{d:DesignInstance Type=w:RankingVideoItem}"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="600"
-             Background="Transparent">
-    <UserControl.ContextMenu>
-        <ContextMenu>
-            <MenuItem Header="WebViewで開く">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <a:WebViewOpenAction Url="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </MenuItem>
-            <MenuItem Header="ブラウザで開く">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <i:LaunchUriOrFileAction Path="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </MenuItem>
-            <MenuItem Header="URLをクリップボードにコピー">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <a:CopyToClipBoardAction Text="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </MenuItem>
-            <Separator />
-            <MenuItem>
-                <MenuItem.Resources>
-                    <Style TargetType="{x:Type MenuItem}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding OwnerType}" Value="hidden">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </MenuItem.Resources>
-                <MenuItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding OwnerName, StringFormat='{}{0} を開く'}" />
-                    </StackPanel>
-                </MenuItem.Header>
-                <MenuItem.Icon>
-                    <Image Source="{Binding OwnerIconUrl}" Height="15" RenderOptions.BitmapScalingMode="HighQuality" />
-                </MenuItem.Icon>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <a:NicoNicoOpenAction Url="{Binding OwnerUrl}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </MenuItem>
-        </ContextMenu>
-    </UserControl.ContextMenu>
+             Background="Transparent"
+             ContextMenu="{StaticResource VideoContextMenu}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="MouseDoubleClick">
+            <a:NicoNicoOpenAction Url="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <UserControl Background="Transparent">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    <a:NicoNicoOpenAction Url="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <TextBlock Text="{Binding Rank}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40" FontStyle="Italic">
+        <TextBlock Text="{Binding Rank}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40" FontStyle="Italic">
                 <TextBlock.Resources>
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
@@ -91,7 +41,33 @@
                     </Style>
                 </TextBlock.Resources>
             </TextBlock>
-        </UserControl>
-        <v:VideoItemView Grid.Column="1" ContextMenu="{x:Null}" />
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid Width="100">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Image Source="{Binding ThumbnailUrl}" Margin="5,5,0,0" MaxHeight="60" />
+                <TextBlock Grid.Row="1" Text="{Binding Duration, Converter={StaticResource DurationConverter}}" HorizontalAlignment="Right" />
+            </Grid>
+            <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                <TextBlock FontSize="16" Text="{Binding Title}" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding ShortDescription}" TextWrapping="Wrap" Foreground="Gray" Margin="0,3" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Id, StringFormat=動画ID：{0}}" Margin="0,0,5,0" />
+                    <TextBlock Text="{Binding ViewCount, StringFormat=再生数：{0:N0}}" Margin="0,0,5,0" />
+                    <TextBlock Text="{Binding CommentCount, StringFormat=コメント数：{0:N0}}" Margin="0,0,5,0" />
+                    <TextBlock Text="{Binding MylistCount, StringFormat=マイリスト数：{0:N0}}" Margin="0,0,5,0" />
+                    <TextBlock Text="{Binding LikeCount, StringFormat=いいね数：{0:N0}}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding RegisteredAt, StringFormat='投稿日時：yyyy年 M月 d日 H時mm分'}" Margin="0,0,5,0" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
