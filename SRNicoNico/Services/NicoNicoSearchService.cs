@@ -19,6 +19,14 @@ namespace SRNicoNico.Services {
         /// ジャンル情報取得API
         /// </summary>
         private const string GetGenreFacetApiUrl = "https://nvapi.nicovideo.jp/v1/search/facet";
+        /// <summary>
+        /// お気に入り登録したタグ取得API
+        /// </summary>
+        private const string GetFavTagApiUrl = "https://www.nicovideo.jp/api/favtag/list";
+        /// <summary>
+        /// サジェスト取得API
+        /// </summary>
+        private const string GetTagSuggestionApiUrl = "https://sug.search.nicovideo.jp/suggestion/expand/";
 
         private readonly ISessionService SessionService;
 
@@ -139,6 +147,47 @@ namespace SRNicoNico.Services {
             }
             ret.Items = items;
             return ret;
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<string>> GetFavoriteTagsAsync() {
+
+            var result = await SessionService.GetAsync(GetFavTagApiUrl).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            var ret = new List<string>();
+
+            foreach (var item in json.favtag_items) {
+
+                if (item == null) {
+                    continue;
+                }
+                ret.Add(item.tag);
+            }
+
+            return ret;
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<string>> GetTagSuggestionAsync(string tag) {
+
+            if (string.IsNullOrEmpty(tag)) {
+
+                throw new ArgumentNullException(nameof(tag));
+            }
+
+            var result = await SessionService.GetAsync(GetTagSuggestionApiUrl + tag).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            return JsonObjectExtension.ToStringArray(json.candidates);
         }
     }
 }

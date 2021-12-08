@@ -48,5 +48,25 @@ namespace SRNicoNico.Tests {
                 break;
             }
         }
+
+        /// <summary>
+        /// お気に入り登録したタグが正しく取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetFavTagUnitTest() {
+
+            var result = await SearchService.GetFavoriteTagsAsync();
+            Assert.NotEmpty(result);
+        }
+
+        /// <summary>
+        /// サジェストがが正しく取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task GetTagSuggestionUnitTest() {
+
+            var result = await SearchService.GetTagSuggestionAsync("a");
+            Assert.NotEmpty(result);
+        }
     }
 }

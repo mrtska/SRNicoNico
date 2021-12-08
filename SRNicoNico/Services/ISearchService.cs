@@ -27,12 +27,29 @@ namespace SRNicoNico.Services {
         /// <param name="value">値</param>
         /// <returns>ジャンル情報</returns>
         Task<IEnumerable<SearchGenreFacet>> GetGenreFacetAsync(SearchType searchType, string value);
+
+        /// <summary>
+        /// お気に入り登録したタグを返す
+        /// </summary>
+        /// <returns>お気に入り登録したタグのリスト</returns>
+        Task<IEnumerable<string>> GetFavoriteTagsAsync();
+
+        /// <summary>
+        /// 検索ワードからタグをサジェストする
+        /// </summary>
+        /// <param name="tag">タグ</param>
+        /// <returns>サジェストされたタグ</returns>
+        Task<IEnumerable<string>> GetTagSuggestionAsync(string tag);
     }
 
     public enum SearchType {
-
+        /// <summary>
+        /// キーワード
+        /// </summary>
         Keyword,
-
+        /// <summary>
+        /// タグ
+        /// </summary>
         Tag
     }
 
