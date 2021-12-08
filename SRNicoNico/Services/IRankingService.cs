@@ -41,6 +41,27 @@ namespace SRNicoNico.Services {
         Task<RankingSettings> GetCustomRankingSettingsAsync();
 
         /// <summary>
+        /// 指定したレーンのカスタムランキングの設定を取得する
+        /// </summary>
+        /// <param name="laneId">レーンID</param>
+        /// <returns>ランキング設定</returns>
+        Task<RankingSetting> GetCustomRankingSettingAsync(int laneId);
+
+        /// <summary>
+        /// 指定したレーンのカスタムランキングの設定をリセットする
+        /// </summary>
+        /// <param name="laneId">レーンID</param>
+        /// <returns>リセット後のランキング設定</returns>
+        Task<RankingSetting> ResetCustomRankingSettingAsync(int laneId);
+
+        /// <summary>
+        /// 指定したレーンのカスタムランキングの設定を保存する
+        /// </summary>
+        /// <param name="laneId">レーンID</param>
+        /// <returns>保存後のランキング設定</returns>
+        Task<RankingSetting> SaveCustomRankingSettingAsync(RankingSettingsEntry setting);
+
+        /// <summary>
         /// 話題ランキングを取得する
         /// </summary>
         /// <param name="term">集計期間</param>

@@ -1,8 +1,11 @@
 ﻿using System.Windows.Input;
 using Livet;
+using Livet.Messaging;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Services;
+using Unity;
+using Unity.Resolution;
 
 namespace SRNicoNico.ViewModels {
     /// <summary>
@@ -26,12 +29,16 @@ namespace SRNicoNico.ViewModels {
 
         public RankingSettingsEntry Settings { get; private set; }
 
+        private readonly IUnityContainer UnityContainer;
         private readonly IRankingService RankingService;
+        private readonly InteractionMessenger MainWindowMessanger;
 
-        public CustomRankingItemViewModel(IRankingService rankingService, RankingSettingsEntry entry) : base(entry.Title) {
+        public CustomRankingItemViewModel(IUnityContainer container, IRankingService rankingService, RankingSettingsEntry entry, InteractionMessenger messenger) : base(entry.Title) {
 
+            UnityContainer = container;
             RankingService = rankingService;
             Settings = entry;
+            MainWindowMessanger = messenger;
         }
 
         /// <summary>
@@ -44,6 +51,7 @@ namespace SRNicoNico.ViewModels {
             Ranking.Clear();
             try {
                 var details = await RankingService.GetCustomRankingAsync(Settings.LaneId);
+                Name = details.Title;
 
                 foreach (var video in details.VideoList) {
 
@@ -56,6 +64,26 @@ namespace SRNicoNico.ViewModels {
                 return;
             } finally {
                 IsActive = false;
+            }
+        }
+
+        /// <summary>
+        /// 編集UIを表示する
+        /// </summary>
+        public void OpenEditor() {
+
+            using var vm = UnityContainer.Resolve<CustomRankingEditorViewModel>(new ParameterOverride("laneId", Settings.LaneId));
+            vm.PropertyChanged += (o, e) => {
+
+                if (e.PropertyName == nameof(Status)) {
+                    Status = ((TabItemViewModel)o).Status;
+                }
+            };
+            MainWindowMessanger.Raise(new TransitionMessage(typeof(Views.CustomRankingEditor), vm, TransitionMode.Modal));
+            // 設定が保存されている場合は画面をリロードする
+            if (vm.Saved) {
+
+                Reload();
             }
         }
 

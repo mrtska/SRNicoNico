@@ -30,21 +30,27 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// ランキングタイプ tagかgenre
         /// </summary>
         public string Type { get; set; } = default!;
+
+        /// <summary>
+        /// 全ジャンル選択かどうか
+        /// </summary>
+        public bool IsAllGenre { get; set; }
         /// <summary>
         /// ランキングを構成しているジャンル
         /// Typeがgenreの時のみ有効
         /// </summary>
-        public IEnumerable<string>? GenreKeys { get; set; }
+        public IEnumerable<string> GenreKeys { get; set; } = default!;
         /// <summary>
         /// ランキングを構成しているタグ
         /// Typeがtagの時のみ有効
         /// </summary>
-        public IEnumerable<string>? Tags { get; set; }
+        public IEnumerable<string> Tags { get; set; } = default!;
 
         /// <summary>
         /// チャンネル動画をランキングに含むかどうか
+        /// only, excluded, includedのどれか
         /// </summary>
-        public string? ChannelVideoListingStatus { get; set; }
+        public string ChannelVideoListingStatus { get; set; } = default!;
         /// <summary>
         /// デフォルトで用意されているランキングかどうか
         /// </summary>

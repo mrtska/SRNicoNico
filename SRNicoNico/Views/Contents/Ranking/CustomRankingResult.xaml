@@ -33,7 +33,7 @@
                 <controls:RoundButton Grid.Column="2" ToolTip="編集" Focusable="False" VerticalAlignment="Center" Margin="0,0,5,0" IconData="{StaticResource EditIcon}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodName="Reload" MethodTarget="{Binding}" />
+                            <l:LivetCallMethodAction MethodName="OpenEditor" MethodTarget="{Binding}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </controls:RoundButton>
@@ -46,13 +46,36 @@
                 </controls:RoundButton>
             </StackPanel>
         </Grid>
-        <ListBox Grid.Row="1" ItemsSource="{Binding Ranking}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ListBox.Resources>
-                <DataTemplate DataType="{x:Type w:RankingVideoItem}">
-                    <v:RankingVideoItemView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}" />
-                </DataTemplate>
-            </ListBox.Resources>
-        </ListBox>
+        <ContentControl Grid.Row="1">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Ranking.Count}" Value="0" />
+                                <Condition Binding="{Binding IsActive}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Text="ランキングに動画がありません" />
+                                </Setter.Value>
+                            </Setter>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                    <Setter Property="Content">
+                        <Setter.Value>
+                            <ListBox ItemsSource="{Binding Ranking}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type w:RankingVideoItem}">
+                                        <v:RankingVideoItemView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
         <metro:ProgressRing Grid.Row="1" IsActive="{Binding IsActive}" />
     </Grid>
 </UserControl>

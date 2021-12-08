@@ -61,6 +61,25 @@ namespace SRNicoNico.Tests {
         }
 
         /// <summary>
+        /// カスタムランキング設定のテスト
+        /// </summary>
+        [Fact]
+        public async Task CustomRankingSettingUnitTest() {
+
+            var result = await RankingService.GetCustomRankingSettingAsync(1);
+            Assert.NotNull(result.Setting);
+            Assert.NotEmpty(result.GenreMap);
+
+            var resetResult = await RankingService.ResetCustomRankingSettingAsync(1);
+            Assert.NotNull(resetResult.Setting);
+            Assert.NotEmpty(resetResult.GenreMap);
+
+            result = await RankingService.SaveCustomRankingSettingAsync(result.Setting);
+            Assert.NotNull(result.Setting);
+            Assert.NotEmpty(result.GenreMap);
+        }
+
+        /// <summary>
         /// カスタムランキングを取得出来ることのテスト
         /// </summary>
         [Fact]

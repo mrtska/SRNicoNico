@@ -19,6 +19,10 @@ namespace SRNicoNico.Services {
         /// </summary>
         private const string CustomRankingSettingsApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/custom-ranking/settings";
         /// <summary>
+        /// カスタムランキング設定取得API
+        /// </summary>
+        private const string CustomRankingSettingApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/custom-ranking/setting/";
+        /// <summary>
         /// カスタムランキング取得API
         /// </summary>
         private const string CustomRankingApiUrl = "https://nvapi.nicovideo.jp/v1/users/me/custom-ranking/ranking/";
@@ -220,6 +224,139 @@ namespace SRNicoNico.Services {
             return new RankingSettings {
                 GenreMap = genreMap,
                 Settings = settings
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<RankingSetting> GetCustomRankingSettingAsync(int laneId) {
+
+            if (laneId <= 0 || laneId >= 6) {
+                throw new ArgumentException("laneIdは1から5の間のみ有効");
+            }
+
+            using var result = await SessionService.GetAsync(CustomRankingSettingApiUrl + laneId, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+            var entry = data.setting;
+
+            var genreMap = new Dictionary<string, string>();
+            foreach (var genre in data.genres) {
+
+                if (genre == null) {
+                    continue;
+                }
+                genreMap[genre.key] = genre.label;
+            }
+
+            return new RankingSetting {
+                GenreMap = genreMap,
+                Setting = new RankingSettingsEntry {
+                    LaneId = (int)entry.laneId,
+                    Title = entry.title,
+                    Type = entry.type,
+                    IsAllGenre = entry.isAllGenre,
+                    IsDefault = entry.isDefault,
+                    ChannelVideoListingStatus = entry.channelVideoListingStatus,
+                    GenreKeys = JsonObjectExtension.ToStringArray(entry.genreKeys),
+                    Tags = JsonObjectExtension.ToStringArray(entry.tags)
+                }
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<RankingSetting> ResetCustomRankingSettingAsync(int laneId) {
+
+            if (laneId <= 0 || laneId >= 6) {
+                throw new ArgumentException("laneIdは1から5の間のみ有効");
+            }
+
+            using var result = await SessionService.DeleteAsync(CustomRankingSettingApiUrl + laneId, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+            var entry = data.setting;
+
+            var genreMap = new Dictionary<string, string>();
+            foreach (var genre in data.genres) {
+
+                if (genre == null) {
+                    continue;
+                }
+                genreMap[genre.key] = genre.label;
+            }
+
+            return new RankingSetting {
+                GenreMap = genreMap,
+                Setting = new RankingSettingsEntry {
+                    LaneId = (int)entry.laneId,
+                    Title = entry.title,
+                    Type = entry.type,
+                    IsAllGenre = entry.isAllGenre,
+                    IsDefault = entry.isDefault,
+                    ChannelVideoListingStatus = entry.channelVideoListingStatus,
+                    GenreKeys = JsonObjectExtension.ToStringArray(entry.genreKeys),
+                    Tags = JsonObjectExtension.ToStringArray(entry.tags)
+                }
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<RankingSetting> SaveCustomRankingSettingAsync(RankingSettingsEntry setting) {
+
+            if (setting == null) {
+                throw new ArgumentNullException(nameof(setting));
+            }
+
+            if (setting.LaneId <= 0 || setting.LaneId >= 6) {
+                throw new ArgumentException("laneIdは1から5の間のみ有効");
+            }
+
+            var formData = new Dictionary<string, string> {
+                ["title"] = setting.Title,
+                ["type"] = setting.Type,
+                ["isAllGenre"] = setting.IsAllGenre.ToString().ToLower(),
+                ["genreKeys"] = setting.IsAllGenre ? string.Empty : string.Join(',', setting.GenreKeys),
+                ["tags"] = string.Join(',', setting.Tags),
+                ["channelVideoListingStatus"] = setting.ChannelVideoListingStatus,
+            };
+
+            using var result = await SessionService.PutAsync(CustomRankingSettingApiUrl + setting.LaneId, formData, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var data = json.data;
+            var entry = data.setting;
+
+            var genreMap = new Dictionary<string, string>();
+            foreach (var genre in data.genres) {
+
+                if (genre == null) {
+                    continue;
+                }
+                genreMap[genre.key] = genre.label;
+            }
+
+            return new RankingSetting {
+                GenreMap = genreMap,
+                Setting = new RankingSettingsEntry {
+                    LaneId = (int)entry.laneId,
+                    Title = entry.title,
+                    Type = entry.type,
+                    IsDefault = entry.isDefault,
+                    ChannelVideoListingStatus = entry.channelVideoListingStatus,
+                    GenreKeys = JsonObjectExtension.ToStringArray(entry.genreKeys),
+                    Tags = JsonObjectExtension.ToStringArray(entry.tags)
+                }
             };
         }
 

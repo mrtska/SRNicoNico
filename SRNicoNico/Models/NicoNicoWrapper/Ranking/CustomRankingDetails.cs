@@ -16,25 +16,25 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// カスタムランキング名
         /// </summary>
-        public string? Title { get; set; }
+        public string Title { get; set; } = default!;
         /// <summary>
         /// ランキングタイプ tagかgenre
         /// </summary>
-        public string? CustomType { get; set; }
+        public string CustomType { get; set; } = default!;
         /// <summary>
         /// ランキングを構成しているジャンル
         /// Typeがgenreの時のみ有効
         /// </summary>
-        public IDictionary<string, string>? Genres { get; set; }
+        public IDictionary<string, string> Genres { get; set; } = default!;
         /// <summary>
         /// ランキングを構成しているタグ
         /// Typeがtagの時のみ有効
         /// </summary>
-        public IEnumerable<string>? Tags { get; set; }
+        public IEnumerable<string> Tags { get; set; } = default!;
         /// <summary>
         /// チャンネル動画をランキングに含むかどうか
         /// </summary>
-        public string? ChannelVideoListingStatus { get; set; }
+        public string ChannelVideoListingStatus { get; set; } = default!;
         /// <summary>
         /// デフォルトで用意されているランキングかどうか
         /// </summary>
@@ -42,6 +42,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// デフォルトのランキング名
         /// </summary>
-        public string? DefaultTitle { get; set; }
+        public string DefaultTitle { get; set; } = default!;
     }
 }
