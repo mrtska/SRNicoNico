@@ -10,7 +10,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="600"
              Background="Transparent"
-             ContextMenu="{StaticResource VideoContextMenu}">
+             ContextMenu="{StaticResource VideoContextMenuWithWatchLater}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
             <a:NicoNicoOpenAction Url="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />

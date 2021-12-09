@@ -55,6 +55,8 @@ namespace SRNicoNico {
         /// <param name="container">DIコンテナ</param>
         private void RegisterServices(IUnityContainer container) {
 
+            container.RegisterType<MainWindowViewModel>(TypeLifetime.Singleton);
+
             container.RegisterType<ViewerDbContext>(TypeLifetime.Singleton);
 
             container.RegisterType<ISettings, Settings>(TypeLifetime.Singleton);
