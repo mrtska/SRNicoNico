@@ -49,11 +49,13 @@ namespace SRNicoNico.Services {
 
 
         private readonly ISessionService SessionService;
+        private readonly IAccountService AccountService;
         private readonly ViewerDbContext DbContext;
 
-        public NicoNicoRankingService(ISessionService sessionService, ViewerDbContext dbContext) {
+        public NicoNicoRankingService(ISessionService sessionService, IAccountService accountService, ViewerDbContext dbContext) {
 
             SessionService = sessionService;
+            AccountService = accountService;
             DbContext = dbContext;
         }
 
@@ -92,7 +94,12 @@ namespace SRNicoNico.Services {
                 if (video == null) {
                     continue;
                 }
-                items.Add(new RankingVideoItem { Rank = rank++ }.Fill(video));
+                var item = new RankingVideoItem { 
+                    Rank = rank++
+                };
+                item.Fill(video);
+                item.IsMuted = AccountService.IsMuted(item);
+                items.Add(item);
             }
 
             return new RankingDetails {
@@ -151,7 +158,12 @@ namespace SRNicoNico.Services {
                 if (video == null) {
                     continue;
                 }
-                videoList.Add(new RankingVideoItem { Rank = rank++ }.Fill(video));
+                var item = new RankingVideoItem {
+                    Rank = rank++
+                };
+                item.Fill(video);
+                item.IsMuted = AccountService.IsMuted(item);
+                videoList.Add(item);
             }
 
             var genreMap = new Dictionary<string, string>();
@@ -393,7 +405,12 @@ namespace SRNicoNico.Services {
                 if (video == null) {
                     continue;
                 }
-                items.Add(new RankingVideoItem { Rank = rank++ }.Fill(video));
+                var item = new RankingVideoItem {
+                    Rank = rank++
+                };
+                item.Fill(video);
+                item.IsMuted = AccountService.IsMuted(item);
+                items.Add(item);
             }
 
             return new RankingDetails {

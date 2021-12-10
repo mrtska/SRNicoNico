@@ -103,6 +103,11 @@ namespace SRNicoNico.Models {
         bool DisableEasyComment { get; set; }
 
         /// <summary>
+        /// ミュートされた投稿者の動画を一覧に表示しない
+        /// </summary>
+        bool HideMutedVideo { get; set; }
+
+        /// <summary>
         /// 現在の設定でアクセントを変更する
         /// </summary>
         void ChangeAccent();

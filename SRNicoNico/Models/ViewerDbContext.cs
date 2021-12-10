@@ -24,6 +24,11 @@ namespace SRNicoNico.Models {
         /// </summary>
         public DbSet<RankingVisibility> RankingVisibilities => Set<RankingVisibility>();
 
+        /// <summary>
+        /// ミュート設定テーブル
+        /// </summary>
+        public DbSet<MutedAccount> MutedAccounts => Set<MutedAccount>();
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
@@ -37,6 +42,7 @@ namespace SRNicoNico.Models {
 
             modelBuilder.Entity<ABRepeatPosition>().ToTable(nameof(ABRepeatPosition));
             modelBuilder.Entity<RankingVisibility>().ToTable(nameof(RankingVisibility));
+            modelBuilder.Entity<MutedAccount>().ToTable(nameof(MutedAccount));
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {

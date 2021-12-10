@@ -205,6 +205,16 @@ namespace SRNicoNico.Models {
             }
         }
 
+        /// <inheritdoc />
+        public bool HideMutedVideo {
+            get {
+                return RoamingValues.TryGetValue(nameof(HideMutedVideo), out var value) && value != null ? (bool)value : false;
+            }
+            set {
+                RoamingValues[nameof(HideMutedVideo)] = value;
+            }
+        }
+
         public Settings() {
 
             RoamingValues = ApplicationData.Current.RoamingSettings.Values;

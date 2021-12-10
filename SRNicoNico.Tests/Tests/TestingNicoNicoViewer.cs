@@ -51,6 +51,7 @@ namespace SRNicoNico.Tests {
         public PopupPlacement FullScreenPopupPlacement { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool DoubleClickToggleFullScreen { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool DisableEasyComment { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool HideMutedVideo { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public bool CanOpenUrl(string url) {
             throw new NotImplementedException();

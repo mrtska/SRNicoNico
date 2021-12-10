@@ -1,10 +1,11 @@
 ﻿using System;
+using Livet;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     /// <summary>
     /// 各APIで取得出来る動画情報の共通部分
     /// </summary>
-    public class VideoItem {
+    public class VideoItem : NotificationObject {
         /// <summary>
         /// 動画の再生数
         /// </summary>
@@ -88,6 +89,21 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// 動画タイトル
         /// </summary>
         public string Title { get; set; } = default!;
+
+
+        private bool _IsMuted;
+        /// <summary>
+        /// ミュート対象動画かどうか
+        /// </summary>
+        public bool IsMuted {
+            get { return _IsMuted; }
+            set { 
+                if (_IsMuted == value)
+                    return;
+                _IsMuted = value;
+                RaisePropertyChanged();
+            }
+        }
 
         /// <summary>
         /// jsonから値を取り出す
