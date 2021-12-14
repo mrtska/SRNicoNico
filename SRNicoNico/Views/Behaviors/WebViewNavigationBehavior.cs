@@ -12,11 +12,21 @@ namespace SRNicoNico.Views.Behaviors {
 
             await AssociatedObject.EnsureCoreWebView2Async();
             AssociatedObject.CoreWebView2.NavigationStarting += AssociatedObject_NavigationStarting;
+            AssociatedObject.CoreWebView2.ProcessFailed += CoreWebView2_ProcessFailed;
         }
+
+
         protected override void OnDetaching() {
 
-            AssociatedObject.NavigationStarting -= AssociatedObject_NavigationStarting;
+            AssociatedObject.CoreWebView2.NavigationStarting -= AssociatedObject_NavigationStarting;
+            AssociatedObject.CoreWebView2.ProcessFailed -= CoreWebView2_ProcessFailed;
         }
+
+        private void CoreWebView2_ProcessFailed(object? sender, CoreWebView2ProcessFailedEventArgs e) {
+
+            // クラッシュしないようにイベントを登録だけしておく
+        }
+
 
         private void AssociatedObject_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e) {
 
