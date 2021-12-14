@@ -88,16 +88,20 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Background="Transparent">
+                        <Grid.Resources>
+                            <Style TargetType="{x:Type MenuItem}">
+                                <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.Comment}" />
+                            </Style>
+                        </Grid.Resources>
                         <Grid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="このコメントの時間に飛ぶ">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Click">
-                                            <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.Comment}" MethodName="JumpTo" MethodParameter="{Binding}" />
+                                            <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type MenuItem}}, Path=Tag}" MethodName="JumpTo" MethodParameter="{Binding}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </MenuItem>
-                                <MenuItem />
                             </ContextMenu>
                         </Grid.ContextMenu>
                         <Grid.ToolTip>
