@@ -53,7 +53,8 @@ namespace SRNicoNico.Services {
         /// </summary>
         /// <param name="type">アカウントタイプ</param>
         /// <param name="accountId">ID</param>
-        Task AddMutedAccountAsync(AccountType type, string accountId);
+        /// <returns>既に登録済みならfalseを返す</returns>
+        Task<bool> AddMutedAccountAsync(AccountType type, string accountId);
 
         /// <summary>
         /// 指定した条件のミュート設定を削除する

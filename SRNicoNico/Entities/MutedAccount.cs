@@ -27,11 +27,11 @@ namespace SRNicoNico.Entities {
     }
 
     public enum AccountType {
-
+        [Display(Name = "ユーザー")]
         User,
-
+        [Display(Name = "チャンネル")]
         Channel,
-
+        [Display(Name = "コミュニティ")]
         Community
     }
 }

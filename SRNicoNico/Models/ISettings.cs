@@ -116,5 +116,10 @@ namespace SRNicoNico.Models {
         /// 現在の設定でフォントを変更する
         /// </summary>
         void ChangeFontFamily();
+
+        /// <summary>
+        /// ミュート設定を変更する
+        /// </summary>
+        void ChangeMutedAccount();
     }
 }

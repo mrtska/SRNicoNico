@@ -65,6 +65,10 @@ namespace SRNicoNico.Tests {
             throw new NotImplementedException();
         }
 
+        public void ChangeMutedAccount() {
+            throw new NotImplementedException();
+        }
+
         public NicoNicoUrlType DetectUrlType(string url) {
             throw new NotImplementedException();
         }

@@ -97,7 +97,7 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async Task AddMutedAccountAsync(AccountType type, string accountId) {
+        public async Task<bool> AddMutedAccountAsync(AccountType type, string accountId) {
 
             var result = await DbContext.MutedAccounts.AsNoTracking().AnyAsync(s => s.AccountType == type && s.AccountId == accountId).ConfigureAwait(false);
             if (!result) {
@@ -108,7 +108,9 @@ namespace SRNicoNico.Services {
                 });
                 await DbContext.SaveChangesAsync();
                 FlushCache();
+                return true;
             }
+            return false;
         }
 
         /// <inheritdoc />

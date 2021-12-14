@@ -10,7 +10,21 @@
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="600"
              Background="Transparent"
+             Tag="{DynamicResource HideMutedVideo}"
              ContextMenu="{StaticResource VideoContextMenuWithWatchLater}">
+    <UserControl.Style>
+        <Style TargetType="{x:Type UserControl}">
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition  Binding="{Binding IsMuted}" Value="True" />
+                        <Condition  Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Tag}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
             <a:NicoNicoOpenAction Url="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />

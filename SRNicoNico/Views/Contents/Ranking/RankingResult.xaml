@@ -74,7 +74,7 @@
             </i:Interaction.Behaviors>
             <ListBox.Resources>
                 <DataTemplate DataType="{x:Type w:RankingVideoItem}">
-                    <v:RankingVideoItemView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}" />
+                    <v:RankingVideoItemView />
                 </DataTemplate>
             </ListBox.Resources>
         </ListBox>

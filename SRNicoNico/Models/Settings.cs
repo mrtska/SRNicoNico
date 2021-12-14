@@ -239,5 +239,11 @@ namespace SRNicoNico.Models {
 
             Application.Current.Resources["NicoNicoViewerFontFamily"] = new System.Windows.Media.FontFamily(FontFamily);
         }
+
+        /// <inheritdoc />
+        public void ChangeMutedAccount() {
+
+            Application.Current.Resources["HideMutedVideo"] = HideMutedVideo;
+        }
     }
 }

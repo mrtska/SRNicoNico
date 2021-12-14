@@ -84,6 +84,7 @@ namespace SRNicoNico {
             // アクセントを変更
             settings.ChangeAccent();
             settings.ChangeFontFamily();
+            settings.ChangeMutedAccount();
         }
     }
 }

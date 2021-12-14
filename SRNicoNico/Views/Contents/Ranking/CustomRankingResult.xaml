@@ -67,7 +67,7 @@
                             <ListBox ItemsSource="{Binding Ranking}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="{x:Type w:RankingVideoItem}">
-                                        <v:RankingVideoItemView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}" />
+                                        <v:RankingVideoItemView />
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
