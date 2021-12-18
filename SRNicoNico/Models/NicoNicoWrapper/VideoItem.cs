@@ -105,6 +105,20 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
             }
         }
 
+        private bool _HasWatched;
+        /// <summary>
+        /// 視聴済みかどうか
+        /// </summary>
+        public bool HasWatched {
+            get { return _HasWatched; }
+            set { 
+                if (_HasWatched == value)
+                    return;
+                _HasWatched = value;
+                RaisePropertyChanged();
+            }
+        }
+
         /// <summary>
         /// jsonから値を取り出す
         /// </summary>

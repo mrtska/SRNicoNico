@@ -49,12 +49,14 @@ namespace SRNicoNico.Services {
 
 
         private readonly ISessionService SessionService;
+        private readonly IHistoryService HistoryService;
         private readonly IAccountService AccountService;
         private readonly ViewerDbContext DbContext;
 
-        public NicoNicoRankingService(ISessionService sessionService, IAccountService accountService, ViewerDbContext dbContext) {
+        public NicoNicoRankingService(ISessionService sessionService, IHistoryService historyService, IAccountService accountService, ViewerDbContext dbContext) {
 
             SessionService = sessionService;
+            HistoryService = historyService;
             AccountService = accountService;
             DbContext = dbContext;
         }
@@ -101,6 +103,7 @@ namespace SRNicoNico.Services {
                 item.IsMuted = AccountService.IsMuted(item);
                 items.Add(item);
             }
+            Parallel.ForEach(items, async item => item.HasWatched = await HistoryService.HasWatchedAsync(item.Id));
 
             return new RankingDetails {
                 HasNext = data.hasNext,
@@ -151,7 +154,7 @@ namespace SRNicoNico.Services {
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
             var data = json.data;
 
-            var videoList = new List<RankingVideoItem>();
+            var items = new List<RankingVideoItem>();
             var rank = 1;
             foreach (var video in data.videoList) {
 
@@ -163,8 +166,9 @@ namespace SRNicoNico.Services {
                 };
                 item.Fill(video);
                 item.IsMuted = AccountService.IsMuted(item);
-                videoList.Add(item);
+                items.Add(item);
             }
+            Parallel.ForEach(items, async item => item.HasWatched = await HistoryService.HasWatchedAsync(item.Id));
 
             var genreMap = new Dictionary<string, string>();
             foreach (var genre in data.genres) {
@@ -186,7 +190,7 @@ namespace SRNicoNico.Services {
                 IsDefault = data.isDefault,
                 DefaultTitle = data.defaultTitle,
                 HasNext = data.hasNext,
-                VideoList = videoList
+                VideoList = items
             };
         }
 
@@ -412,6 +416,8 @@ namespace SRNicoNico.Services {
                 item.IsMuted = AccountService.IsMuted(item);
                 items.Add(item);
             }
+
+            Parallel.ForEach(items, async item => item.HasWatched = await HistoryService.HasWatchedAsync(item.Id));
 
             return new RankingDetails {
 

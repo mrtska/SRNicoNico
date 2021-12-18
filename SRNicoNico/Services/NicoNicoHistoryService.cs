@@ -151,9 +151,11 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public Task<bool> HasWatchedAsync(string videoId) {
+        public async Task<bool> HasWatchedAsync(string videoId) {
 
-            return ReadOnlyDbContext.LocalHistories.AsNoTracking().AnyAsync(a => a.VideoId == videoId);
+            using var dbContext = new ViewerDbContext();
+
+            return await dbContext.LocalHistories.AsNoTracking().AnyAsync(a => a.VideoId == videoId);
         }
     }
 }

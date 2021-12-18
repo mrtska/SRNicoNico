@@ -157,7 +157,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public async void LoadMore() {
 
-            if (!HasNext) {
+            if (!HasNext || IsActive) {
                 return;
             }
 
@@ -184,7 +184,6 @@ namespace SRNicoNico.ViewModels {
             } finally {
                 IsActive = false;
             }
-
         }
 
         /// <summary>

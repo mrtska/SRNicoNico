@@ -15,7 +15,7 @@ namespace SRNicoNico.Tests {
         public SearchServiceUnitTest() {
 
             SessionService = TestingNicoNicoViewer.Instance.TestSessionService;
-            SearchService = new NicoNicoSearchService(SessionService, null, null);
+            SearchService = new NicoNicoSearchService(SessionService, new NicoNicoHistoryService(SessionService, null), null, null);
         }
 
         /// <summary>

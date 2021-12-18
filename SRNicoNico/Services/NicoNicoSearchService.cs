@@ -32,12 +32,14 @@ namespace SRNicoNico.Services {
         private const string GetTagSuggestionApiUrl = "https://sug.search.nicovideo.jp/suggestion/expand/";
 
         private readonly ISessionService SessionService;
+        private readonly IHistoryService HistoryService;
         private readonly IAccountService AccountService;
         private readonly ViewerDbContext DbContext;
 
-        public NicoNicoSearchService(ISessionService sessionService, IAccountService accountService, ViewerDbContext dbContext) {
+        public NicoNicoSearchService(ISessionService sessionService, IHistoryService historyService, IAccountService accountService, ViewerDbContext dbContext) {
 
             SessionService = sessionService;
+            HistoryService = historyService;
             AccountService = accountService;
             DbContext = dbContext;
         }
@@ -59,7 +61,7 @@ namespace SRNicoNico.Services {
                 builder.AddQuery("tag", value);
             }
 
-            var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);
@@ -109,20 +111,21 @@ namespace SRNicoNico.Services {
                 builder.AddQuery("tag", value);
             }
 
-            var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);
             }
 
-            var ret = new SearchResult();
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
-
-            ret.SearchType = type;
-            ret.TotalCount = (int)json.data.totalCount;
-            ret.HasNext = json.data.hasNext;
-            ret.Value = value;
-            ret.Time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            
+            var ret = new SearchResult {
+                SearchType = type,
+                TotalCount = (int)json.data.totalCount,
+                HasNext = json.data.hasNext,
+                Value = value,
+                Time = DateTimeOffset.Now.ToUnixTimeMilliseconds()
+            };
 
             var items = new List<VideoItem>();
             foreach (var video in json.data.items) {
@@ -135,13 +138,14 @@ namespace SRNicoNico.Services {
                 items.Add(item);
             }
             ret.Items = items;
+            Parallel.ForEach(ret.Items, async item => item.HasWatched = await HistoryService.HasWatchedAsync(item.Id));
             return ret;
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<string>> GetFavoriteTagsAsync() {
 
-            var result = await SessionService.GetAsync(GetFavTagApiUrl).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(GetFavTagApiUrl).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);
@@ -169,7 +173,7 @@ namespace SRNicoNico.Services {
                 throw new ArgumentNullException(nameof(tag));
             }
 
-            var result = await SessionService.GetAsync(GetTagSuggestionApiUrl + tag).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(GetTagSuggestionApiUrl + tag).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);

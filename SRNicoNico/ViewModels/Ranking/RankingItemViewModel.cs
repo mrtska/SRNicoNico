@@ -122,6 +122,8 @@ namespace SRNicoNico.ViewModels {
 
 
         private readonly IRankingService RankingService;
+        private int CurrentPage = 1;
+        private bool HasNext = false;
 
         public RankingItemViewModel(IRankingService rankingService, string genreKey, string label) : base(label) {
 
@@ -145,6 +147,7 @@ namespace SRNicoNico.ViewModels {
                     Status = "ランキングの取得に失敗しました";
                     return;
                 }
+                HasNext = details.HasNext;
 
                 foreach (var video in details.VideoList) {
 
@@ -175,6 +178,40 @@ namespace SRNicoNico.ViewModels {
 
             } catch (StatusErrorException e) {
                 Status = $"人気のタグを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+                return;
+            } finally {
+                IsActive = false;
+            }
+        }
+
+        /// <summary>
+        /// 次のページがあればロードする
+        /// </summary>
+        public async void LoadMore() {
+
+            if (!HasNext || IsActive) {
+                return;
+            }
+
+            IsActive = true;
+            Status = "ランキングを取得中";
+            try {
+                var details = await RankingService.GetRankingAsync(SelectedTerm, GenreKey, Tag, ++CurrentPage);
+                if (details == null) {
+
+                    Status = "ランキングの取得に失敗しました";
+                    return;
+                }
+                HasNext = details.HasNext;
+
+                foreach (var video in details.VideoList) {
+
+                    Ranking.Add(video);
+                }
+                Status = string.Empty;
+
+            } catch (StatusErrorException e) {
+                Status = $"ランキングを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
                 return;
             } finally {
                 IsActive = false;

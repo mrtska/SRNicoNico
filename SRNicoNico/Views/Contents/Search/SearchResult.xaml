@@ -170,7 +170,7 @@
                 </Style>
             </ContentControl.Style>
             <controls:PageSpinner Background="{DynamicResource AlternationBackgroundBrushKey}">
-                <ListBox ItemsSource="{Binding SearchResult}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                <ListBox ItemsSource="{Binding SearchResult}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.Resources>
                         <DataTemplate DataType="{x:Type w:VideoItem}">
                             <v:VideoItemView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}" />
