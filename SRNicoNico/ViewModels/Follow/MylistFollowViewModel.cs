@@ -48,6 +48,12 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        public void Unfollow() {
+
+
+        }
+        
+
         /// <summary>
         /// 更新ボタンが押された時に実行される
         /// </summary>

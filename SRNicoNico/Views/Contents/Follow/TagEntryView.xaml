@@ -15,6 +15,11 @@
             <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext}" />
         </Style>
     </UserControl.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="MouseDoubleClick">
+            <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext}" MethodName="Search" MethodParameter="{Binding}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <UserControl.ContextMenu>
         <ContextMenu>
             <MenuItem Header="フォローを解除する">

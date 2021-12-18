@@ -16,10 +16,12 @@ namespace SRNicoNico.ViewModels {
         public ObservableSynchronizedCollection<TagEntry> TagItems { get; private set; }
 
         private readonly IUserService UserService;
+        private readonly MainContentViewModel MainContent;
 
-        public TagFollowViewModel(IUserService userService) : base("タグ") {
+        public TagFollowViewModel(IUserService userService, MainContentViewModel mainContent) : base("タグ") {
 
             UserService = userService;
+            MainContent = mainContent;
             TagItems = new ObservableSynchronizedCollection<TagEntry>();
         }
 
@@ -74,6 +76,14 @@ namespace SRNicoNico.ViewModels {
 
                 IsActive = false;
             }
+        }
+
+        public void Search(TagEntry tag) {
+
+            MainContent.SelectedItem = MainContent.Search;
+            MainContent.Search!.SelectedSearchType = SearchType.Tag;
+            MainContent.Search!.SearchQuery = tag.Name;
+            MainContent.Search!.Search();
         }
 
         /// <summary>

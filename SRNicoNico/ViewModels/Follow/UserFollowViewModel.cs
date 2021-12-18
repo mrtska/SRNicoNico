@@ -31,6 +31,31 @@ namespace SRNicoNico.ViewModels {
             SpinPage(1);
         }
 
+        public async void Unfollow(UserEntry user) {
+
+            IsActive = true;
+            Status = "フォロー解除中";
+            try {
+
+                var result = await UserService.UnfollowUserAsync(user.Id);
+                if (result) {
+
+                    Reload();
+                } else {
+
+                    Status = "フォロー解除に失敗しました";
+                }
+
+                Status = string.Empty;
+            } catch (StatusErrorException e) {
+
+                Status = $"フォローを解除出来ませんでした。 ステータスコード: {e.StatusCode}";
+            } finally {
+
+                IsActive = false;
+            }
+        }
+
         /// <summary>
         /// 更新ボタンが押された時に実行される
         /// </summary>

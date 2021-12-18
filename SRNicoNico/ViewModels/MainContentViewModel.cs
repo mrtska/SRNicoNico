@@ -27,6 +27,11 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public WebViewViewModel? WebView { get; private set; }
 
+        /// <summary>
+        /// 検索のViewModel
+        /// </summary>
+        public SearchViewModel? Search { get; private set; }
+
         private TabItemViewModel? _SelectedItem;
         /// <summary>
         /// 現在選択されているタブ
@@ -74,7 +79,7 @@ namespace SRNicoNico.ViewModels {
 
             SystemItems.Add(WebView = UnityContainer.Resolve<WebViewViewModel>());
             SystemItems.Add(UnityContainer.Resolve<RankingViewModel>());
-            SystemItems.Add(UnityContainer.Resolve<SearchViewModel>());
+            SystemItems.Add(Search = UnityContainer.Resolve<SearchViewModel>());
             SystemItems.Add(UnityContainer.Resolve<FollowViewModel>());
             SystemItems.Add(UnityContainer.Resolve<NicoRepoViewModel>());
             SystemItems.Add(UnityContainer.Resolve<WatchLaterViewModel>());
