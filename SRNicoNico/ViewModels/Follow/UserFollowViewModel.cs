@@ -61,12 +61,12 @@ namespace SRNicoNico.ViewModels {
                 var result = await UserService.GetFollowedUsersAsync(page);
                 Total = result.Total;
 
-                foreach (var entry in result.Entries!) {
+                foreach (var entry in result.Entries) {
 
                     UserItems.Add(entry);
                 }
 
-                Status = "";
+                Status = string.Empty;
             } catch (StatusErrorException e) {
 
                 Status = $"フォローしているユーザーを取得出来ませんでした。 ステータスコード: {e.StatusCode}";

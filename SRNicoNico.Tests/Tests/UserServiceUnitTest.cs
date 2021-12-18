@@ -56,6 +56,20 @@ namespace SRNicoNico.Tests {
                 break;
             }
         }
+
+        /// <summary>
+        /// 自分がフォローしているタグを正しく取得出来ることのテスト
+        /// </summary>
+        [Fact]
+        public async Task FollowTagUnitTest() {
+
+            var result = await UserService.FollowTagAsync("sm9");
+            Assert.True(result);
+
+            result = await UserService.UnfollowTagAsync("sm9");
+            Assert.True(result);
+        }
+
         /// <summary>
         /// 自分がフォローしているマイリストを正しく取得出来ることのテスト
         /// </summary>

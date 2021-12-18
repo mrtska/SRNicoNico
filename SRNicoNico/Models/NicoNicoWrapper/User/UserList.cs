@@ -19,6 +19,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// ユーザーリスト
         /// </summary>
-        public IEnumerable<UserEntry>? Entries { get; set; }
+        public IEnumerable<UserEntry> Entries { get; set; } = default!;
     }
 }

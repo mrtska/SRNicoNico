@@ -16,7 +16,7 @@ namespace SRNicoNico.Tests {
         public RankingServiceUnitTest() {
 
             SessionService = TestingNicoNicoViewer.Instance.TestSessionService;
-            RankingService = new NicoNicoRankingService(SessionService, null, null);
+            RankingService = new NicoNicoRankingService(SessionService, null, null, null);
         }
 
         /// <summary>

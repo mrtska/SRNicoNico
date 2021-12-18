@@ -26,6 +26,20 @@ namespace SRNicoNico.Services {
         IAsyncEnumerable<TagEntry> GetFollowedTagsAsync();
 
         /// <summary>
+        /// タグをフォローする
+        /// </summary>
+        /// <param name="tag">フォローしたいタグ</param>
+        /// <returns>Trueなら成功</returns>
+        Task<bool> FollowTagAsync(string tag);
+
+        /// <summary>
+        /// タグをフォロー解除する
+        /// </summary>
+        /// <param name="tag">フォロー解除したいタグ</param>
+        /// <returns>Trueなら成功</returns>
+        Task<bool> UnfollowTagAsync(string tag);
+
+        /// <summary>
         /// 自分がフォローしているマイリストを返す
         /// </summary>
         /// <returns>マイリストのリスト</returns>

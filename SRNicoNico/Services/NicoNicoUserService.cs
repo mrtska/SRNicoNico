@@ -67,22 +67,18 @@ namespace SRNicoNico.Services {
 
                 throw new ArgumentException("pageに0以下を指定しないで");
             }
-            var ret = new UserList();
 
             var query = new GetRequestQueryBuilder(FollowingUsersApiUrl)
                 .AddQuery("pageSize", pageSize)
                 .AddQuery("page", page);
 
-            var result = await SessionService.GetAsync(query.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(query.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);
             }
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
-
-            ret.Page = page;
-            ret.Total = (int)json.data.summary.followees;
 
             var list = new List<UserEntry>();
             foreach (var user in json.data.items) {
@@ -99,14 +95,18 @@ namespace SRNicoNico.Services {
                     IsPremium = user.isPremium
                 });
             }
-            ret.Entries = list;
-            return ret;
+
+            return new UserList {
+                Page = page,
+                Total = (int)json.data.summary.followees,
+                Entries = list
+            };
         }
 
         /// <inheritdoc />
         public async IAsyncEnumerable<TagEntry> GetFollowedTagsAsync() {
 
-            var result = await SessionService.GetAsync(FollowingTagsApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(FollowingTagsApiUrl, NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
@@ -126,6 +126,47 @@ namespace SRNicoNico.Services {
                 };
             }
         }
+
+        /// <inheritdoc />
+        public async Task<bool> FollowTagAsync(string tag) {
+
+            if (string.IsNullOrEmpty(tag)) {
+                throw new ArgumentNullException(nameof(tag));
+            }
+
+            var query = new GetRequestQueryBuilder(FollowingTagsApiUrl)
+                .AddQuery("tag", tag);
+
+            using var result = await SessionService.PostAsync(query.Build(), (IDictionary<string, string>?)null, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            return json.meta.status == 201;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> UnfollowTagAsync(string tag) {
+
+            if (string.IsNullOrEmpty(tag)) {
+                throw new ArgumentNullException(nameof(tag));
+            }
+
+            var query = new GetRequestQueryBuilder(FollowingTagsApiUrl)
+                .AddQuery("tag", tag);
+
+            using var result = await SessionService.DeleteAsync(query.Build(), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            return json.meta.status == 200;
+        }
+
 
         /// <inheritdoc />
         public async IAsyncEnumerable<UserMylistEntry> GetFollowedMylistsAsync() {
@@ -558,5 +599,6 @@ namespace SRNicoNico.Services {
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
             return json.data.following;
         }
+
     }
 }

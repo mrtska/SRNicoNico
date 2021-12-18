@@ -49,6 +49,34 @@ namespace SRNicoNico.ViewModels {
         }
 
         /// <summary>
+        /// フォロー解除
+        /// </summary>
+        public async void Unfollow(TagEntry tag) {
+
+            IsActive = true;
+            Status = "フォロー解除中";
+            try {
+
+                var result = await UserService.UnfollowTagAsync(tag.Name);
+                if (result) {
+
+                    Reload();
+                } else {
+
+                    Status = "フォロー解除に失敗しました";
+                }
+
+                Status = string.Empty;
+            } catch (StatusErrorException e) {
+
+                Status = $"フォローを解除出来ませんでした。 ステータスコード: {e.StatusCode}";
+            } finally {
+
+                IsActive = false;
+            }
+        }
+
+        /// <summary>
         /// 更新ボタンが押された時に実行される
         /// </summary>
         public void Reload() {

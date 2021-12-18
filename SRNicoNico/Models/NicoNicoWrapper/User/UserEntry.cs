@@ -7,27 +7,27 @@
         /// <summary>
         /// ニコニコのユーザーID
         /// </summary>
-        public string? Id { get; set; }
+        public string Id { get; set; } = default!;
 
         /// <summary>
         /// ニコニコのユーザー名
         /// </summary>
-        public string? NickName { get; set; }
+        public string NickName { get; set; } = default!;
 
         /// <summary>
         /// ユーザーのサムネイルのURL
         /// </summary>
-        public string? ThumbnailUrl { get; set; }
+        public string ThumbnailUrl { get; set; } = default!;
 
         /// <summary>
         /// ユーザーの説明文 htmlタグ付き
         /// </summary>
-        public string? Description { get; set; }
+        public string Description { get; set; } = default!;
 
         /// <summary>
         /// ユーザーの説明文 htmlタグ無し
         /// </summary>
-        public string? StrippedDescription { get; set; }
+        public string StrippedDescription { get; set; } = default!;
 
         /// <summary>
         /// プレミアム会員かどうか

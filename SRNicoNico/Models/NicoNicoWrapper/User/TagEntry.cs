@@ -7,14 +7,14 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     public class TagEntry {
 
         /// <summary>
-        /// ニコニコのユーザーID
+        /// タグ名
         /// </summary>
-        public string? Name { get; set; }
+        public string Name { get; set; } = default!;
 
         /// <summary>
         /// タグの概要文
         /// </summary>
-        public string? Summary { get; set; }
+        public string Summary { get; set; } = default!;
 
         /// <summary>
         /// タグをフォローした時間
