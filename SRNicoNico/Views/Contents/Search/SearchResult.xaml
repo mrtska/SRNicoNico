@@ -72,7 +72,7 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </RadioButton>
-                <ComboBox Grid.Column="1" Width="160" Height="22" VerticalContentAlignment="Center" SelectedIndex="0" SelectedItem="{Binding SelectedSortKey,Mode=OneWayToSource}" ItemsSource="{Binding SortKeyAll}">
+                <ComboBox Grid.Column="1" Width="160" Height="22" VerticalContentAlignment="Center" SelectedItem="{Binding SelectedSortKey,Mode=TwoWay}" ItemsSource="{Binding SortKeyAll}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
@@ -127,7 +127,7 @@
                                             <ControlTemplate>
                                                 <RadioButton GroupName="{Binding Time, StringFormat='GenreFilter-{0}'}" VerticalAlignment="Center">
                                                     <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="Checked">
+                                                        <i:EventTrigger EventName="Click">
                                                             <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}},Path=DataContext}"
                                                                     MethodName="FilterGenre" MethodParameter="{Binding}" />
                                                         </i:EventTrigger>

@@ -1,4 +1,5 @@
-﻿using SRNicoNico.ViewModels;
+﻿using SRNicoNico.Services;
+using SRNicoNico.ViewModels;
 using SRNicoNico.Views.Controls;
 
 namespace SRNicoNico.Models {
@@ -31,6 +32,11 @@ namespace SRNicoNico.Models {
         /// 終了時に確認ダイアログを出すかどうか
         /// </summary>
         bool ShowExitConfirmDialog { get; set; }
+
+        /// <summary>
+        /// 現在の検索設定
+        /// </summary>
+        SearchSortKey SelectedSortKey { get; set; }
 
         /// <summary>
         /// 現在のコメント表示設定

@@ -31,7 +31,7 @@
             </Grid.RowDefinitions>
             <StackPanel>
                 <TextBlock Text="検索" FontSize="18" Margin="5,0" />
-                <ComboBox VerticalContentAlignment="Center" Margin="5" SelectedIndex="0" SelectedItem="{Binding SelectedSortKey,Mode=OneWayToSource}" ItemsSource="{Binding SortKeyAll}">
+                <ComboBox VerticalContentAlignment="Center" Margin="5" SelectedItem="{Binding SelectedSortKey,Mode=TwoWay}" ItemsSource="{Binding SortKeyAll}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />

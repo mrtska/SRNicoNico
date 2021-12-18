@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using FastEnumUtility;
+using SRNicoNico.Services;
 using SRNicoNico.ViewModels;
 using SRNicoNico.Views.Controls;
 using Windows.Storage;
@@ -62,6 +63,16 @@ namespace SRNicoNico.Models {
             }
             set {
                 RoamingValues[nameof(ShowExitConfirmDialog)] = value;
+            }
+        }
+
+        /// <inheritdoc />
+        public SearchSortKey SelectedSortKey {
+            get {
+                return RoamingValues.TryGetValue(nameof(SelectedSortKey), out var value) && value != null ? FastEnum.Parse<SearchSortKey>((string?)value, true) : SearchSortKey.RegisteredAtDesc;
+            }
+            set {
+                RoamingValues[nameof(SelectedSortKey)] = value.ToString();
             }
         }
 

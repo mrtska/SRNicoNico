@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Input;
 using FastEnumUtility;
 using Livet;
+using SRNicoNico.Models;
 using SRNicoNico.Services;
 using Unity;
 
@@ -46,16 +47,15 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        private SearchSortKey _SelectedSortKey;
         /// <summary>
         /// 選択しているソート順
         /// </summary>
         public SearchSortKey SelectedSortKey {
-            get { return _SelectedSortKey; }
+            get { return Settings.SelectedSortKey; }
             set { 
-                if (_SelectedSortKey == value)
+                if (Settings.SelectedSortKey == value)
                     return;
-                _SelectedSortKey = value;
+                Settings.SelectedSortKey = value;
                 RaisePropertyChanged();
             }
         }
@@ -104,11 +104,13 @@ namespace SRNicoNico.ViewModels {
 
         private readonly IUnityContainer UnityContainer;
         private readonly ISearchService SearchService;
+        private readonly ISettings Settings;
 
-        public SearchViewModel(IUnityContainer unityContainer, ISearchService searchService) : base("検索") {
+        public SearchViewModel(IUnityContainer unityContainer, ISearchService searchService, ISettings settings) : base("検索") {
 
             UnityContainer = unityContainer;
             SearchService = searchService;
+            Settings = settings;
         }
 
         public async void Loaded() {
@@ -132,9 +134,9 @@ namespace SRNicoNico.ViewModels {
 
             var vm = UnityContainer.Resolve<SearchResultViewModel>();
             // 値をコピーする
-            vm.SearchQuery = SearchQuery;
             vm.SelectedSearchType = SelectedSearchType;
             vm.SelectedSortKey = SelectedSortKey;
+            vm.SearchQuery = SearchQuery;
 
             // ステータスプロパティが更新されたら動画タブのステータスに反映させる
             vm.PropertyChanged += OnPropertyChanged;
