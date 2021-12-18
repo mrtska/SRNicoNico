@@ -40,6 +40,18 @@ namespace SRNicoNico.Services {
         /// <param name="tag">タグ</param>
         /// <returns>サジェストされたタグ</returns>
         Task<IEnumerable<string>> GetTagSuggestionAsync(string tag);
+
+        /// <summary>
+        /// 保存されている検索履歴を取得する
+        /// </summary>
+        /// <returns>検索履歴</returns>
+        Task<IEnumerable<string>> GetSearchHistoriesAsync();
+
+        /// <summary>
+        /// 検索履歴を保存する
+        /// </summary>
+        /// <param name="searchHistories">検索履歴</param>
+        Task SaveSearchHistoriesAsync(IEnumerable<string> searchHistories);
     }
 
     public enum SearchType {

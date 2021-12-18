@@ -19,7 +19,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" MinHeight="27" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid Background="{DynamicResource BackgroundBrushKey}">
@@ -27,7 +27,8 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="box" x:FieldModifier="private" FontSize="16" VerticalAlignment="Center"  Text="{Binding SearchQuery}" Margin="0,5">
+            <TextBox x:Name="box" x:FieldModifier="private" FontSize="16" VerticalAlignment="Center" FocusVisualStyle="{x:Null}"
+                     Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" Margin="0,5">
                 <i:Interaction.Behaviors>
                     <b:TextBoxEnterKeyBehavior Binding="{Binding}" MethodName="Reload"  />
                 </i:Interaction.Behaviors>

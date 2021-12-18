@@ -88,17 +88,43 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
-        private readonly IUnityContainer UnityContainer;
+        private ObservableSynchronizedCollection<string> _SearchHistories = new ObservableSynchronizedCollection<string>();
+        /// <summary>
+        /// 検索履歴
+        /// </summary>
+        public ObservableSynchronizedCollection<string> SearchHistories {
+            get { return _SearchHistories; }
+            set { 
+                if (_SearchHistories == value)
+                    return;
+                _SearchHistories = value;
+                RaisePropertyChanged();
+            }
+        }
 
-        public SearchViewModel(IUnityContainer unityContainer) : base("検索") {
+        private readonly IUnityContainer UnityContainer;
+        private readonly ISearchService SearchService;
+
+        public SearchViewModel(IUnityContainer unityContainer, ISearchService searchService) : base("検索") {
 
             UnityContainer = unityContainer;
+            SearchService = searchService;
+        }
+
+        public async void Loaded() {
+
+            var result = await SearchService.GetSearchHistoriesAsync();
+
+            foreach (var query in result) {
+
+                SearchHistories.Add(query);
+            }
         }
 
         /// <summary>
         /// 検索する
         /// </summary>
-        public void Search() {
+        public async void Search() {
 
             if (string.IsNullOrWhiteSpace(SearchQuery)) {
                 return;
@@ -126,6 +152,42 @@ namespace SRNicoNico.ViewModels {
             SelectedItem = vm;
 
             vm.Reload();
+
+            ReorderHistory(SearchQuery);
+
+            await SearchService.SaveSearchHistoriesAsync(SearchHistories.AsEnumerable());
+        }
+
+        public void SearchWithHistory(string query) {
+
+            SearchQuery = query;
+            Search();
+        }
+
+        /// <summary>
+        /// 履歴を削除する
+        /// </summary>
+        /// <param name="query">削除する履歴</param>
+        public async void DeleteHistory(string query) {
+
+            SearchHistories.Remove(query);
+            await SearchService.SaveSearchHistoriesAsync(SearchHistories.AsEnumerable());
+        }
+
+        private void ReorderHistory(string newValue) {
+
+            var orderedHistory = new ObservableSynchronizedCollection<string> {
+                newValue
+            };
+            foreach (var current in SearchHistories) {
+
+                if (!orderedHistory.Contains(current)) {
+
+                    orderedHistory.Add(current);
+                }
+            }
+
+            SearchHistories = orderedHistory;
         }
 
         public override void KeyDown(KeyEventArgs e) {

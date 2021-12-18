@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DynaJson;
 using FastEnumUtility;
+using Microsoft.EntityFrameworkCore;
+using SRNicoNico.Entities;
 using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 
@@ -29,10 +32,12 @@ namespace SRNicoNico.Services {
         private const string GetTagSuggestionApiUrl = "https://sug.search.nicovideo.jp/suggestion/expand/";
 
         private readonly ISessionService SessionService;
+        private readonly ViewerDbContext DbContext;
 
-        public NicoNicoSearchService(ISessionService sessionService) {
+        public NicoNicoSearchService(ISessionService sessionService, ViewerDbContext dbContext) {
 
             SessionService = sessionService;
+            DbContext = dbContext;
         }
 
         /// <inheritdoc />
@@ -188,6 +193,29 @@ namespace SRNicoNico.Services {
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
 
             return JsonObjectExtension.ToStringArray(json.candidates);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<string>> GetSearchHistoriesAsync() {
+            
+            return await DbContext.SearchHistories.AsNoTracking().OrderBy(o => o.Order).Select(s => s.Query).ToListAsync();
+        }
+
+        /// <inheritdoc />
+        public async Task SaveSearchHistoriesAsync(IEnumerable<string> searchHistories) {
+
+            // 全て削除してから追加する
+            DbContext.SearchHistories.RemoveRange(DbContext.SearchHistories);
+
+            for (int i = 0; i < searchHistories.Count(); i++) {
+
+                DbContext.SearchHistories.Add(new SearchHistory {
+                    Query = searchHistories.ElementAt(i),
+                    Order = i
+                });
+            }
+
+            await DbContext.SaveChangesAsync();
         }
     }
 }

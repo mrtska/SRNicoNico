@@ -29,6 +29,11 @@ namespace SRNicoNico.Models {
         /// </summary>
         public DbSet<MutedAccount> MutedAccounts => Set<MutedAccount>();
 
+        /// <summary>
+        /// 検索履歴テーブル
+        /// </summary>
+        public DbSet<SearchHistory> SearchHistories => Set<SearchHistory>();
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
@@ -43,6 +48,7 @@ namespace SRNicoNico.Models {
             modelBuilder.Entity<ABRepeatPosition>().ToTable(nameof(ABRepeatPosition));
             modelBuilder.Entity<RankingVisibility>().ToTable(nameof(RankingVisibility));
             modelBuilder.Entity<MutedAccount>().ToTable(nameof(MutedAccount));
+            modelBuilder.Entity<SearchHistory>().ToTable(nameof(SearchHistory));
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {

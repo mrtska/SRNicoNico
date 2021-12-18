@@ -10,9 +10,15 @@
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
              xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
+             xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              d:DataContext="{d:DesignInstance Type=vm:SearchViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Loaded" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="160" />
@@ -32,7 +38,8 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <metro:PromptTextBox VerticalContentAlignment="Center" Margin="5" Prompt="検索キーワードを入力" Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <metro:PromptTextBox VerticalContentAlignment="Center" Margin="5" Prompt="検索キーワードを入力" MaxLength="40"
+                                     Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <i:Interaction.Behaviors>
                         <b:TextBoxEnterKeyBehavior Binding="{Binding}" MethodName="Search" />
                     </i:Interaction.Behaviors>
@@ -58,6 +65,15 @@
                     </RadioButton>
                 </Grid>
                 <Button Content="検索" Margin="5" HorizontalAlignment="Right" Width="80">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SearchQuery.Length}" Value="0">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Search" />
@@ -71,8 +87,44 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="履歴" FontSize="18" Margin="5,0" />
-                <ListBox Grid.Row="1">
-
+                <ListBox Grid.Row="1" ItemsSource="{Binding SearchHistories}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <ContentControl>
+                                <ContentControl.Template>
+                                    <ControlTemplate TargetType="{x:Type ContentControl}">
+                                        <Grid Background="Transparent">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                    <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext}"
+                                                                             MethodName="SearchWithHistory" MethodParameter="{Binding}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding}" ToolTip="{Binding}" FontSize="16" TextTrimming="CharacterEllipsis" />
+                                            <controls:RoundButton x:Name="deleteButton" Grid.Column="1" ToolTip="削除" Focusable="False" VerticalAlignment="Center" HorizontalAlignment="Right" Visibility="Collapsed"
+                                                              IconData="{StaticResource CloseIcon}" IconWidth="10" IconHeight="10" EllipseDiameter="20">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext}"
+                                                                                 MethodName="DeleteHistory" MethodParameter="{Binding}" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </controls:RoundButton>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="deleteButton" Property="Visibility" Value="Visible" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ContentControl.Template>
+                            </ContentControl>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
         </Grid>
