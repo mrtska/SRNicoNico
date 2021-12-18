@@ -17,11 +17,11 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public static IEnumerable<SearchSortKey> SortKeyAll { get; } = FastEnum.GetValues<SearchSortKey>();
 
-        private ObservableSynchronizedCollection<VideoListItem> _SearchResult = new ObservableSynchronizedCollection<VideoListItem>();
+        private ObservableSynchronizedCollection<VideoItem> _SearchResult = new ObservableSynchronizedCollection<VideoItem>();
         /// <summary>
         /// 検索結果
         /// </summary>
-        public ObservableSynchronizedCollection<VideoListItem> SearchResult {
+        public ObservableSynchronizedCollection<VideoItem> SearchResult {
             get { return _SearchResult; }
             set {
                 if (_SearchResult == value)
@@ -147,7 +147,6 @@ namespace SRNicoNico.ViewModels {
 
                 Name = $"{SearchQuery} の{(SelectedSearchType == SearchType.Keyword ? "キーワード" : "タグ")}検索結果";
 
-                SearchResult.Clear();
 
                 IsActive = true;
 
@@ -156,6 +155,7 @@ namespace SRNicoNico.ViewModels {
                 Total = result.TotalCount;
                 SearchTime = result.Time;
 
+                SearchResult.Clear();
                 foreach (var item in result.Items) {
 
                     SearchResult.Add(item);
@@ -183,7 +183,6 @@ namespace SRNicoNico.ViewModels {
 
                 IsActive = false;
             }
-
         }
 
         /// <summary>
@@ -214,12 +213,28 @@ namespace SRNicoNico.ViewModels {
             Research(true);
         }
 
+        public void PlayContinuously() {
+
+            Status = "連続再生は開発中です";
+        }
+
         public void Close() {
 
             Dispose();
         }
 
         public override void KeyDown(KeyEventArgs e) {
+
+            // F5
+            if (e.Key == Key.F5) {
+                Reload();
+                return;
+            }
+            // Ctrl+W
+            if (e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control) && e.Key == Key.W) {
+                Close();
+                return;
+            }
         }
     }
 }

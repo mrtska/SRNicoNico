@@ -9,7 +9,6 @@
              xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:v="clr-namespace:SRNicoNico.Views"
-             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
              xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              d:DataContext="{d:DesignInstance Type=vm:SearchResultViewModel}"
@@ -81,7 +80,11 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Button Content="連続再生" Margin="5">
-
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="PlayContinuously" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </Button>
                 <controls:RoundButton ToolTip="閉じる" IconData="{StaticResource CloseIcon}" Margin="0,0,5,0">
                     <i:Interaction.Triggers>
@@ -169,34 +172,8 @@
             <controls:PageSpinner Background="{DynamicResource AlternationBackgroundBrushKey}">
                 <ListBox ItemsSource="{Binding SearchResult}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
                     <ListBox.Resources>
-                        <DataTemplate DataType="{x:Type w:VideoListItem}">
-                            <v:UserVideoView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}">
-                                <v:UserVideoView.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="WebViewで開く">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="Click">
-                                                    <a:WebViewOpenAction Url="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}"/>
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </MenuItem>
-                                        <MenuItem Header="ブラウザで開く">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="Click">
-                                                    <i:LaunchUriOrFileAction Path="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </MenuItem>
-                                        <MenuItem Header="URLをクリップボードにコピー">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="Click">
-                                                    <a:CopyToClipBoardAction Text="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </MenuItem>
-                                    </ContextMenu>
-                                </v:UserVideoView.ContextMenu>
-                            </v:UserVideoView>
+                        <DataTemplate DataType="{x:Type w:VideoItem}">
+                            <v:VideoItemView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}" />
                         </DataTemplate>
                     </ListBox.Resources>
                 </ListBox>

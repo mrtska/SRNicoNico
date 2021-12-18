@@ -32,11 +32,13 @@ namespace SRNicoNico.Services {
         private const string GetTagSuggestionApiUrl = "https://sug.search.nicovideo.jp/suggestion/expand/";
 
         private readonly ISessionService SessionService;
+        private readonly IAccountService AccountService;
         private readonly ViewerDbContext DbContext;
 
-        public NicoNicoSearchService(ISessionService sessionService, ViewerDbContext dbContext) {
+        public NicoNicoSearchService(ISessionService sessionService, IAccountService accountService, ViewerDbContext dbContext) {
 
             SessionService = sessionService;
+            AccountService = accountService;
             DbContext = dbContext;
         }
 
@@ -122,33 +124,15 @@ namespace SRNicoNico.Services {
             ret.Value = value;
             ret.Time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-            var items = new List<VideoListItem>();
+            var items = new List<VideoItem>();
             foreach (var video in json.data.items) {
 
                 if (video == null) {
                     continue;
                 }
-                items.Add(new VideoListItem {
-                    CommentCount = (int)video.count.comment,
-                    LikeCount = (int)video.count.like,
-                    MylistCount = (int)video.count.mylist,
-                    ViewCount = (int)video.count.view,
-                    Duration = (int)video.duration,
-                    Id = video.id,
-                    IsChannelVideo = video.isChannelVideo,
-                    IsPaymentRequired = video.isPaymentRequired,
-                    LatestCommentSummary = video.latestCommentSummary,
-                    OwnerIconUrl = video.owner.iconUrl,
-                    OwnerId = video.owner.id,
-                    OwnerName = video.owner.name,
-                    OwnerType = video.owner.ownerType,
-                    PlaybackPosition = (int?)video.playbackPosition,
-                    RegisteredAt = DateTimeOffset.Parse(video.registeredAt),
-                    RequireSensitiveMasking = video.requireSensitiveMasking,
-                    ShortDescription = video.shortDescription,
-                    ThumbnailUrl = video.thumbnail.listingUrl,
-                    Title = video.title
-                });
+                var item = new VideoItem().Fill(video);
+                item.IsMuted = AccountService.IsMuted(item);
+                items.Add(item);
             }
             ret.Items = items;
             return ret;

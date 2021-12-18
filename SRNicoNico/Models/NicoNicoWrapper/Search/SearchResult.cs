@@ -23,7 +23,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// 検索結果
         /// </summary>
-        public IEnumerable<VideoListItem> Items { get; set; } = default!;
+        public IEnumerable<VideoItem> Items { get; set; } = default!;
 
         /// <summary>
         /// 取得した時間

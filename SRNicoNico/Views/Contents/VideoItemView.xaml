@@ -10,38 +10,73 @@
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="600"
              Background="Transparent"
-             ContextMenu="{StaticResource VideoContextMenu}">
+             Tag="{DynamicResource HideMutedVideo}"
+             ContextMenu="{StaticResource VideoContextMenuWithWatchLater}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
             <a:NicoNicoOpenAction Url="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid Width="100">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
-            <Image Source="{Binding ThumbnailUrl}" Margin="5,5,0,0" MaxHeight="60" />
-            <TextBlock Grid.Row="1" Text="{Binding Duration, Converter={StaticResource DurationConverter}}" HorizontalAlignment="Right" />
-        </Grid>
-        <StackPanel Grid.Column="1" Margin="5,0,0,0">
-            <TextBlock FontSize="16" Text="{Binding Title}" TextWrapping="Wrap" />
-            <TextBlock Text="{Binding ShortDescription}" TextWrapping="Wrap" Foreground="Gray" Margin="0,3" />
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Id, StringFormat=動画ID：{0}}" Margin="0,0,5,0" />
-                <TextBlock Text="{Binding ViewCount, StringFormat=再生数：{0:N0}}" Margin="0,0,5,0" />
-                <TextBlock Text="{Binding CommentCount, StringFormat=コメント数：{0:N0}}" Margin="0,0,5,0" />
-                <TextBlock Text="{Binding MylistCount, StringFormat=マイリスト数：{0:N0}}" Margin="0,0,5,0" />
-                <TextBlock Text="{Binding LikeCount, StringFormat=いいね数：{0:N0}}" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding RegisteredAt, StringFormat='投稿日時：yyyy年 M月 d日 H時mm分'}" Margin="0,0,5,0" />
-            </StackPanel>
-        </StackPanel>
-    </Grid>
+    <UserControl.Style>
+        <Style TargetType="{x:Type UserControl}">
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition  Binding="{Binding IsMuted}" Value="True" />
+                        <Condition  Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Tag}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
+    <ContentControl>
+        <ContentControl.Style>
+            <Style TargetType="{x:Type ContentControl}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMuted}" Value="True">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <Grid>
+                                    <TextBlock Text="ミュートされているため表示されません" FontSize="16" HorizontalAlignment="Center" Padding="10" />
+                                </Grid>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+                <Setter Property="Content">
+                    <Setter.Value>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid Width="100">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+                                <Image Source="{Binding ThumbnailUrl}" Margin="5,5,0,0" MaxHeight="60" />
+                                <TextBlock Grid.Row="1" Text="{Binding Duration, Converter={StaticResource DurationConverter}}" HorizontalAlignment="Right" />
+                            </Grid>
+                            <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                <TextBlock FontSize="16" Text="{Binding Title}" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding ShortDescription}" TextWrapping="Wrap" Foreground="Gray" Margin="0,3" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Id, StringFormat=動画ID：{0}}" Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding ViewCount, StringFormat=再生数：{0:N0}}" Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding CommentCount, StringFormat=コメント数：{0:N0}}" Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding MylistCount, StringFormat=マイリスト数：{0:N0}}" Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding LikeCount, StringFormat=いいね数：{0:N0}}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding RegisteredAt, StringFormat='投稿日時：yyyy年 M月 d日 H時mm分'}" Margin="0,0,5,0" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ContentControl.Style>
+    </ContentControl>
 </UserControl>
