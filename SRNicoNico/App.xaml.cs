@@ -67,6 +67,7 @@ namespace SRNicoNico {
             container.RegisterType<IUserService, NicoNicoUserService>(TypeLifetime.Singleton);
             container.RegisterType<INicoRepoService, NicoNicoNicoRepoService>(TypeLifetime.Singleton);
             container.RegisterType<IMylistService, NicoNicoMylistService>(TypeLifetime.Singleton);
+            container.RegisterType<ILiveService, NicoNicoLiveService>(TypeLifetime.Singleton);
             container.RegisterType<ISeriesService, NicoNicoSeriesService>(TypeLifetime.Singleton);
             container.RegisterType<IRankingService, NicoNicoRankingService>(TypeLifetime.Singleton);
             container.RegisterType<IHistoryService, NicoNicoHistoryService>(TypeLifetime.Singleton);
