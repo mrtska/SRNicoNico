@@ -44,7 +44,7 @@ namespace SRNicoNico.Services {
                 }
                 ret.Add(new OngoingLive {
                     CommunityName = item.community_name,
-                    ElapsedTime = (int)item.elapsed_time,
+                    ElapsedTime = (int)(item.elapsed_time / 60),
                     Id = item.id,
                     ProviderType = item.provider_type,
                     ThumbnailLinkUrl = item.thumbnail_link_url,

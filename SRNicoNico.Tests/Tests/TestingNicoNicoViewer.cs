@@ -53,6 +53,7 @@ namespace SRNicoNico.Tests {
         public bool DisableEasyComment { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool HideMutedVideo { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public SearchSortKey SelectedSortKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int LiveNotifyRefreshInterval { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public bool CanOpenUrl(string url) {
             throw new NotImplementedException();

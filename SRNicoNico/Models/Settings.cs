@@ -226,6 +226,15 @@ namespace SRNicoNico.Models {
             }
         }
 
+        /// <inheritdoc />
+        public int LiveNotifyRefreshInterval {
+            get {
+                return RoamingValues.TryGetValue(nameof(LiveNotifyRefreshInterval), out var value) && value != null ? (int)value : 5;
+            }
+            set {
+                RoamingValues[nameof(LiveNotifyRefreshInterval)] = value;
+            }
+        }
         public Settings() {
 
             RoamingValues = ApplicationData.Current.RoamingSettings.Values;

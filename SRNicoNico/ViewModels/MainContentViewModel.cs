@@ -32,6 +32,11 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public SearchViewModel? Search { get; private set; }
 
+        /// <summary>
+        /// 生放送更新通知のViewModel
+        /// </summary>
+        public LiveNotifyViewModel? LiveNotify { get; private set; }
+
         private TabItemViewModel? _SelectedItem;
         /// <summary>
         /// 現在選択されているタブ
@@ -84,6 +89,7 @@ namespace SRNicoNico.ViewModels {
             SystemItems.Add(UnityContainer.Resolve<NicoRepoViewModel>());
             SystemItems.Add(UnityContainer.Resolve<WatchLaterViewModel>());
             SystemItems.Add(UnityContainer.Resolve<MylistViewModel>());
+            SystemItems.Add(LiveNotify = UnityContainer.Resolve<LiveNotifyViewModel>());
             SystemItems.Add(UnityContainer.Resolve<HistoryViewModel>());
             SystemItems.Add(UnityContainer.Resolve<OtherViewModel>());
             SystemItems.Add(UnityContainer.Resolve<SettingsViewModel>());

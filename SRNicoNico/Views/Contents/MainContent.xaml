@@ -57,6 +57,9 @@
                 <DataTemplate DataType="{x:Type vm:MylistViewModel}">
                     <v:Mylist />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:LiveNotifyViewModel}">
+                    <v:LiveNotify />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
                     <v:History />
                 </DataTemplate>

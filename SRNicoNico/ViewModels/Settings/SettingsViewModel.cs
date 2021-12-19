@@ -54,6 +54,7 @@ namespace SRNicoNico.ViewModels {
             SettingsItems.Add(UnityContainer.Resolve<SettingsMutedAccountViewModel>());
             SettingsItems.Add(UnityContainer.Resolve<SettingsVideoViewModel>());
             SettingsItems.Add(UnityContainer.Resolve<SettingsCommentViewModel>());
+            SettingsItems.Add(UnityContainer.Resolve<SettingsLiveViewModel>());
 
             // 子ViewModelのStatusを監視する
             SettingsItems.ToList().ForEach(vm => {

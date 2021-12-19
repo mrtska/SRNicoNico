@@ -114,6 +114,11 @@ namespace SRNicoNico.Models {
         bool HideMutedVideo { get; set; }
 
         /// <summary>
+        /// 生放送更新通知更新間隔
+        /// </summary>
+        int LiveNotifyRefreshInterval { get; set; }
+
+        /// <summary>
         /// 現在の設定でアクセントを変更する
         /// </summary>
         void ChangeAccent();
