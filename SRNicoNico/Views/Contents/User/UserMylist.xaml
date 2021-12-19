@@ -59,7 +59,7 @@
             </ContentControl.Style>
             <ListBox Grid.Row="1" ItemsSource="{Binding MylistItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.Resources>
-                    <DataTemplate DataType="{x:Type w:MylistListEntry}">
+                    <DataTemplate DataType="{x:Type w:MylistItem}">
                         <v:UserMylistView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}">
                         </v:UserMylistView>
                     </DataTemplate>

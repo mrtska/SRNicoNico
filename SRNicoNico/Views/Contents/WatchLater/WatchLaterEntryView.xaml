@@ -6,13 +6,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
-             d:DataContext="{d:DesignInstance Type=w:MylistEntry}"
+             d:DataContext="{d:DesignInstance Type=w:MylistVideoItem}"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="600"
              Background="Transparent">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDoubleClick">
-            <a:NicoNicoOpenAction Url="{Binding VideoUrl}" />
+            <a:NicoNicoOpenAction Url="{Binding Id, StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>

@@ -45,7 +45,7 @@ namespace SRNicoNico.Services {
                 .AddQuery("pageSize", 100)
                 .AddQuery("page", page);
 
-            var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
@@ -59,47 +59,14 @@ namespace SRNicoNico.Services {
                 HasNext = watchLater.hasNext,
                 TotalCount = (int)watchLater.totalCount
             };
-            var entries = new List<MylistEntry>();
+            var entries = new List<MylistVideoItem>();
 
             foreach (var entry in watchLater.items) {
 
                 if (entry == null) {
                     continue;
                 }
-                var video = entry.video;
-                entries.Add(new MylistEntry {
-                    AddedAt = DateTimeOffset.Parse(entry.addedAt),
-                    ItemId = entry.itemId.ToString(),
-                    Memo = entry.memo,
-                    Status = entry.status,
-
-                    ViewCount = (int)video.count.view,
-                    CommentCount = (int)video.count.comment,
-                    MylistCount = (int)video.count.mylist,
-                    LikeCount = (int)video.count.like,
-
-                    Duration = (int)video.duration,
-                    Id = video.id,
-                    IsChannelVideo = video.isChannelVideo,
-                    IsPaymentRequired = video.isPaymentRequired,
-                    LatestCommentSummary = video.latestCommentSummary,
-                    
-                    OwnerIconUrl = video.owner.iconUrl,
-                    OwnerId = video.owner.id,
-                    OwnerName = video.owner.name,
-                    OwnerType = video.owner.ownerType,
-
-                    PlaybackPosition = (int?)video.playbackPosition,
-                    RegisteredAt = DateTimeOffset.Parse(video.registeredAt),
-                    RequireSensitiveMasking = video.requireSensitiveMasking,
-                    ShortDescription = video.shortDescription,
-                    ThumbnailUrl = video.thumbnail.listingUrl,
-                    Title = video.title,
-                    Type =video.type,
-
-                    WatchId = entry.watchId,
-                    VideoUrl = $"https://www.nicovideo.jp/watch/{video.id}"
-                });
+                entries.Add(new MylistVideoItem().Fill(entry));
             }
             ret.Entries = entries;
 
@@ -149,7 +116,7 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<MylistListEntry> GetMylistsAsync(int sampleItemCount = 0) {
+        public async IAsyncEnumerable<MylistItem> GetMylistsAsync(int sampleItemCount = 0) {
 
             var builder = new GetRequestQueryBuilder(MylistApiUrl)
                 .AddQuery("sampleItemCount", sampleItemCount);
@@ -167,14 +134,14 @@ namespace SRNicoNico.Services {
                 if (mylist == null) {
                     continue;
                 }
-                var sampleItems = new List<MylistEntry>();
+                var sampleItems = new List<MylistVideoItem>();
                 foreach (var sampleItem in mylist.sampleItems) {
 
                     if (sampleItem == null) {
                         continue;
                     }
                     var video = sampleItem.video;
-                    sampleItems.Add(new MylistEntry {
+                    sampleItems.Add(new MylistVideoItem {
                         AddedAt = DateTimeOffset.Parse(sampleItem.addedAt),
                         ItemId = sampleItem.itemId.ToString(),
                         Memo = sampleItem.description, // あとで見るはmemoだけどマイリストはdescription
@@ -202,13 +169,11 @@ namespace SRNicoNico.Services {
                         ShortDescription = video.shortDescription,
                         ThumbnailUrl = video.thumbnail.listingUrl,
                         Title = video.title,
-                        Type = video.type,
 
                         WatchId = sampleItem.watchId,
-                        VideoUrl = $"https://www.nicovideo.jp/watch/{video.id}"
                     });
                 }
-                yield return new MylistListEntry {
+                yield return new MylistItem {
                     CreatedAt = DateTimeOffset.Parse(mylist.createdAt),
                     DefaultSortKey = mylist.defaultSortKey,
                     DefaultSortOrder = mylist.defaultSortOrder,
@@ -250,14 +215,14 @@ namespace SRNicoNico.Services {
             var mylist = json.data.mylist;
 
 
-            var items = new List<MylistEntry>();
+            var items = new List<MylistVideoItem>();
             foreach (var item in mylist.items) {
 
                 if (item == null) {
                     continue;
                 }
                 var video = item.video;
-                items.Add(new MylistEntry {
+                items.Add(new MylistVideoItem {
                     AddedAt = DateTimeOffset.Parse(item.addedAt),
                     ItemId = item.itemId.ToString(),
                     Memo = item.description, // あとで見るはmemoだけどマイリストはdescription
@@ -285,10 +250,8 @@ namespace SRNicoNico.Services {
                     ShortDescription = video.shortDescription,
                     ThumbnailUrl = video.thumbnail.listingUrl,
                     Title = video.title,
-                    Type = video.type,
 
                     WatchId = item.watchId,
-                    VideoUrl = $"https://www.nicovideo.jp/watch/{video.id}"
                 });
             }
             return new Mylist {
@@ -363,7 +326,7 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<MylistListEntry> GetUserPublicMylistAsync(string userId, int sampleItemCount = 0) {
+        public async IAsyncEnumerable<MylistItem> GetUserPublicMylistAsync(string userId, int sampleItemCount = 0) {
 
             if (string.IsNullOrEmpty(userId)) {
 
@@ -386,14 +349,14 @@ namespace SRNicoNico.Services {
                 if (mylist == null) {
                     continue;
                 }
-                var sampleItems = new List<MylistEntry>();
+                var sampleItems = new List<MylistVideoItem>();
                 foreach (var sampleItem in mylist.sampleItems) {
 
                     if (sampleItem == null) {
                         continue;
                     }
                     var video = sampleItem.video;
-                    sampleItems.Add(new MylistEntry {
+                    sampleItems.Add(new MylistVideoItem {
                         AddedAt = DateTimeOffset.Parse(sampleItem.addedAt),
                         ItemId = sampleItem.itemId.ToString(),
                         Memo = sampleItem.description, // あとで見るはmemoだけどマイリストはdescription
@@ -421,13 +384,11 @@ namespace SRNicoNico.Services {
                         ShortDescription = video.shortDescription,
                         ThumbnailUrl = video.thumbnail.listingUrl,
                         Title = video.title,
-                        Type = video.type,
 
                         WatchId = sampleItem.watchId,
-                        VideoUrl = $"https://www.nicovideo.jp/watch/{video.id}"
                     });
                 }
-                yield return new MylistListEntry {
+                yield return new MylistItem {
                     CreatedAt = DateTimeOffset.Parse(mylist.createdAt),
                     DefaultSortKey = mylist.defaultSortKey,
                     DefaultSortOrder = mylist.defaultSortOrder,
@@ -469,14 +430,14 @@ namespace SRNicoNico.Services {
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
             var mylist = json.data.mylist;
 
-            var items = new List<MylistEntry>();
+            var items = new List<MylistVideoItem>();
             foreach (var item in mylist.items) {
 
                 if (item == null) {
                     continue;
                 }
                 var video = item.video;
-                items.Add(new MylistEntry {
+                items.Add(new MylistVideoItem {
                     AddedAt = DateTimeOffset.Parse(item.addedAt),
                     ItemId = item.itemId.ToString(),
                     Memo = item.description, // あとで見るはmemoだけどマイリストはdescription
@@ -504,10 +465,8 @@ namespace SRNicoNico.Services {
                     ShortDescription = video.shortDescription,
                     ThumbnailUrl = video.thumbnail.listingUrl,
                     Title = video.title,
-                    Type = video.type,
 
                     WatchId = item.watchId,
-                    VideoUrl = $"https://www.nicovideo.jp/watch/{video.id}"
                 });
             }
             return new Mylist {

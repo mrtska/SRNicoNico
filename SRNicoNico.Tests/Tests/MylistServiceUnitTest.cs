@@ -57,7 +57,6 @@ namespace SRNicoNico.Tests {
                 Assert.NotNull(entry.ShortDescription);
                 Assert.NotNull(entry.ThumbnailUrl);
                 Assert.NotNull(entry.Title);
-                Assert.NotNull(entry.Type);
                 Assert.NotNull(entry.WatchId);
             }
         }
@@ -154,7 +153,6 @@ namespace SRNicoNico.Tests {
                 Assert.NotNull(entry.ShortDescription);
                 Assert.NotNull(entry.ThumbnailUrl);
                 Assert.NotNull(entry.Title);
-                Assert.NotNull(entry.Type);
                 Assert.NotNull(entry.WatchId);
             }
         }
@@ -253,7 +251,6 @@ namespace SRNicoNico.Tests {
                 Assert.NotNull(entry.ShortDescription);
                 Assert.NotNull(entry.ThumbnailUrl);
                 Assert.NotNull(entry.Title);
-                Assert.NotNull(entry.Type);
                 Assert.NotNull(entry.WatchId);
             }
         }

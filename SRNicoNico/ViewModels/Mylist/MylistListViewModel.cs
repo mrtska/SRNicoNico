@@ -71,7 +71,7 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// マイリストのリスト
         /// </summary>
-        public ObservableSynchronizedCollection<MylistEntry> MylistItems { get; private set; }
+        public ObservableSynchronizedCollection<MylistVideoItem> MylistItems { get; private set; }
 
         /// <summary>
         /// マイリストのソート順のリスト
@@ -90,7 +90,7 @@ namespace SRNicoNico.ViewModels {
         public MylistListViewModel(IMylistService mylistService, string mylistId, MylistSortKey defaultSortKey) {
 
             MylistService = mylistService;
-            MylistItems = new ObservableSynchronizedCollection<MylistEntry>();
+            MylistItems = new ObservableSynchronizedCollection<MylistVideoItem>();
             MylistId = mylistId;
             _SelectedMylistSortKey = defaultSortKey;
         }
@@ -163,7 +163,7 @@ namespace SRNicoNico.ViewModels {
         /// マイリストを削除する
         /// </summary>
         /// <param name="entry">削除したいマイリスト</param>
-        public async void DeleteMylist(MylistEntry entry) {
+        public async void DeleteMylist(MylistVideoItem entry) {
 
             IsActive = true;
             Status = "マイリストを削除中";

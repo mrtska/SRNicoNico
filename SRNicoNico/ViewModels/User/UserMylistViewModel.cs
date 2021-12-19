@@ -10,11 +10,11 @@ namespace SRNicoNico.ViewModels {
     /// </summary>
     public class UserMylistViewModel : TabItemViewModel {
 
-        private ObservableSynchronizedCollection<MylistListEntry> _MylistItems = new ObservableSynchronizedCollection<MylistListEntry>();
+        private ObservableSynchronizedCollection<MylistItem> _MylistItems = new ObservableSynchronizedCollection<MylistItem>();
         /// <summary>
         /// マイリスト一覧
         /// </summary>
-        public ObservableSynchronizedCollection<MylistListEntry> MylistItems {
+        public ObservableSynchronizedCollection<MylistItem> MylistItems {
             get { return _MylistItems; }
             set { 
                 if (_MylistItems == value)

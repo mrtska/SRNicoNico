@@ -37,7 +37,7 @@ namespace SRNicoNico.Services {
         /// </summary>
         /// <param name="sampleItemCount">含めたい動画数 デフォルトは0</param>
         /// <returns>マイリストの一覧</returns>
-        IAsyncEnumerable<MylistListEntry> GetMylistsAsync(int sampleItemCount = 0);
+        IAsyncEnumerable<MylistItem> GetMylistsAsync(int sampleItemCount = 0);
 
         /// <summary>
         /// 指定したマイリストIDのマイリストを取得する
@@ -72,7 +72,7 @@ namespace SRNicoNico.Services {
         /// <param name="userId">ユーザーID</param>
         /// <param name="sampleItemCount">含めたい動画数 デフォルトは0</param>
         /// <returns>マイリストの一覧</returns>
-        IAsyncEnumerable<MylistListEntry> GetUserPublicMylistAsync(string userId, int sampleItemCount = 0);
+        IAsyncEnumerable<MylistItem> GetUserPublicMylistAsync(string userId, int sampleItemCount = 0);
 
         /// <summary>
         /// 指定したマイリストIDの公開マイリストを取得する

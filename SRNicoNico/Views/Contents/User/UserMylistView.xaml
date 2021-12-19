@@ -6,7 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
-             d:DataContext="{d:DesignInstance Type=w:MylistListEntry}"
+             d:DataContext="{d:DesignInstance Type=w:MylistItem}"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="600"
              Background="Transparent">

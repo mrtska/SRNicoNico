@@ -5,7 +5,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     /// <summary>
     /// マイリストの情報
     /// </summary>
-    public class MylistListEntry {
+    public class MylistItem {
         /// <summary>
         /// マイリストを作成した日付
         /// </summary>
@@ -13,12 +13,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// デフォルトの並び順のキー
         /// </summary>
-        public string? DefaultSortKey { get; set; }
+        public string DefaultSortKey { get; set; } = default!;
         /// <summary>
         /// デフォルトの並び順
         /// ascかdesc
         /// </summary>
-        public string? DefaultSortOrder { get; set; }
+        public string DefaultSortOrder { get; set; } = default!;
         /// <summary>
         /// マイリストの説明文
         /// </summary>
@@ -30,7 +30,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// マイリストのID
         /// </summary>
-        public string? Id { get; set; }
+        public string Id { get; set; } = default!;
         /// <summary>
         /// マイリストをフォローしているかどうか
         /// </summary>
@@ -46,7 +46,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// マイリスト名
         /// </summary>
-        public string? Name { get; set; }
+        public string Name { get; set; } = default!;
 
         /// <summary>
         /// 動画投稿者のサムネイルURL
@@ -64,11 +64,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// 動画投稿者の種類
         /// userかchannelかhidden
         /// </summary>
-        public string? OwnerType { get; set; }
-        
+        public string OwnerType { get; set; } = default!;
+
         /// <summary>
         /// マイリストに含まれている動画のサンプル
         /// </summary>
-        public IEnumerable<MylistEntry>? SampleItems { get; set; }
+        public IEnumerable<MylistVideoItem> SampleItems { get; set; } = default!;
     }
 }

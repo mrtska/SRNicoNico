@@ -74,7 +74,7 @@
                     <b:ListBoxInfiniteScrollBehavior Binding="{Binding}" MethodName="LoadMore" />
                 </i:Interaction.Behaviors>
                 <ListBox.Resources>
-                    <DataTemplate DataType="{x:Type w:MylistEntry}">
+                    <DataTemplate DataType="{x:Type w:MylistVideoItem}">
                         <v:WatchLaterEntryView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}">
                             <v:WatchLaterEntryView.ContextMenu>
                                 <ContextMenu>

@@ -54,7 +54,7 @@
                 <metro:TabView Focusable="False" ItemsSource="{Binding MylistListItems}" SelectedValue="{Binding SelectedItem}">
                     <metro:TabView.ItemTemplate>
                         <DataTemplate DataType="{x:Type metro:ITabItem}">
-                            <TextBlock Margin="3,0,0,0" Text="{Binding Name}" ToolTip="{Binding Name}" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+                            <TextBlock Margin="3,0,0,0" Text="{Binding Name}" ToolTip="{Binding Name}" FontSize="13.9" HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
                         </DataTemplate>
                     </metro:TabView.ItemTemplate>
                 </metro:TabView>
