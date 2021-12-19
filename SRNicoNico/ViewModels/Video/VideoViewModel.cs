@@ -818,6 +818,11 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public async void ToggleFollow() {
 
+            if (ApiData == null) {
+
+                return;
+            }
+
             if (IsFollowing) {
 
                 try {

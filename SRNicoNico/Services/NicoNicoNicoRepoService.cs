@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using DynaJson;
 using FastEnumUtility;
@@ -22,10 +21,12 @@ namespace SRNicoNico.Services {
         private const string NicoRepoUserApiUrl = "https://public.api.nicovideo.jp/v1/timelines/nicorepo/last-6-months/users/{0}/pc/entries.json";
 
         private readonly ISessionService SessionService;
+        private readonly IHistoryService HistoryService;
 
-        public NicoNicoNicoRepoService(ISessionService sessionService) {
+        public NicoNicoNicoRepoService(ISessionService sessionService, IHistoryService historyService) {
 
             SessionService = sessionService;
+            HistoryService = historyService;
         }
 
         private async Task<NicoRepoList> GetNicoRepoAsync(string? userId, NicoRepoType type, NicoRepoFilter filter, string? untilId = null) {
@@ -44,7 +45,7 @@ namespace SRNicoNico.Services {
                 query.AddQuery("untilId", untilId);
             }
 
-            var result = await SessionService.GetAsync(query.Build()).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(query.Build()).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
@@ -86,6 +87,14 @@ namespace SRNicoNico.Services {
             }
             ret.Entries = entries;
 
+            // 非同期で並列に視聴済みかどうかを判定する
+            Parallel.ForEach(ret.Entries, async item => {
+                if (item.ObjectType != null && item.ObjectUrl != null) {
+                    if (item.ObjectType == "video" && await HistoryService.HasWatchedAsync(item.ObjectUrl.Replace("https://www.nicovideo.jp/watch/", ""))) {
+                        item.HasWatched = true;
+                    }
+                }
+            });
             return ret;
         }
 

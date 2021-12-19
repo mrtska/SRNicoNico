@@ -23,7 +23,14 @@
         </Grid.ColumnDefinitions>
         <Image Source="{Binding ActorIconUrl}" ToolTip="{Binding ActorName}" Margin="5" Height="50" Width="50" />
         <StackPanel Grid.Column="1" Margin="5,0,0,0">
-            <TextBlock FontSize="14" b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Title}" TextWrapping="Wrap" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock FontSize="14" b:TextBlockHtmlRenderingBehavior.HtmlText="{Binding Title}" TextWrapping="Wrap" />
+                <TextBlock Grid.Column="1" FontSize="13" Margin="0,0,5,0" Text="視聴済み" VerticalAlignment="Center" Visibility="{Binding HasWatched, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />

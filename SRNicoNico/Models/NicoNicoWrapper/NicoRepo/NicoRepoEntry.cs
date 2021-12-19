@@ -1,18 +1,19 @@
 ﻿using System;
+using Livet;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     /// <summary>
     /// ニコレポ情報
     /// </summary>
-    public class NicoRepoEntry {
+    public class NicoRepoEntry : NotificationObject {
         /// <summary>
         /// ニコレポのID
         /// </summary>
-        public string? Id { get; set; }
+        public string Id { get; set; } = default!;
         /// <summary>
         /// ニコレポのタイトル
         /// </summary>
-        public string? Title { get; set; }
+        public string Title { get; set; } = default!;
         /// <summary>
         /// ニコレポが作られた日時
         /// </summary>
@@ -20,15 +21,15 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// ニコレポが作成された人、チャンネルなどのURL
         /// </summary>
-        public string? ActorUrl { get; set; }
+        public string ActorUrl { get; set; } = default!;
         /// <summary>
         /// ニコレポが作成された人、チャンネルなどの名前
         /// </summary>
-        public string? ActorName { get; set; }
+        public string ActorName { get; set; } = default!;
         /// <summary>
         /// ニコレポが作成された人、チャンネルなどのサムネイルURL
         /// </summary>
-        public string? ActorIconUrl { get; set; }
+        public string ActorIconUrl { get; set; } = default!;
         /// <summary>
         /// ニコレポの内容の種類
         /// videoやprogramなど
@@ -52,6 +53,22 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// ミュート
         /// </summary>
         public NicoRepoMuteContext? MuteContext { get; set; }
+
+
+        private bool _HasWatched;
+        /// <summary>
+        /// 視聴済みかどうか
+        /// </summary>
+        public bool HasWatched {
+            get { return _HasWatched; }
+            set { 
+                if (_HasWatched == value)
+                    return;
+                _HasWatched = value;
+                RaisePropertyChanged();
+            }
+        }
+
     }
     /// <summary>
     /// ニコレポのミュートに使用する何か
@@ -60,23 +77,23 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// nicorepo固定かな？
         /// </summary>
-        public string? Task { get; set; }
+        public string Task { get; set; } = default!;
         /// <summary>
         /// Idのタイプ userやchannelなど
         /// </summary>
-        public string? IdType { get; set; }
+        public string IdType { get; set; } = default!;
         /// <summary>
         /// Id IdTypeがuserの場合はuserのID
         /// </summary>
-        public string? Id { get; set; }
+        public string Id { get; set; } = default!;
         /// <summary>
         /// IdTypeと同じ？
         /// </summary>
-        public string? Type { get; set; }
+        public string Type { get; set; } = default!;
         /// <summary>
         /// ニコレポのトリガー名
         /// </summary>
-        public string? Trigger { get; set; }
+        public string Trigger { get; set; } = default!;
     }
 
 }

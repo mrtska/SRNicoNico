@@ -70,6 +70,7 @@
             <ListBox ItemsSource="{Binding NicoRepoItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <i:Interaction.Behaviors>
                     <b:ListBoxInfiniteScrollBehavior Binding="{Binding}" MethodName="LoadMore" />
+                    <b:TextBlockHyperlinkBehavior />
                 </i:Interaction.Behaviors>
                 <ListBox.Resources>
                     <DataTemplate DataType="{x:Type w:NicoRepoEntry}">
