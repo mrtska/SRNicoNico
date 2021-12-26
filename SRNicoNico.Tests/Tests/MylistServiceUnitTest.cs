@@ -14,7 +14,7 @@ namespace SRNicoNico.Tests {
         public MylistServiceUnitTest() {
 
             SessionService = TestingNicoNicoViewer.Instance.TestSessionService;
-            MylistService = new NicoNicoMylistService(SessionService);
+            MylistService = new NicoNicoMylistService(SessionService, null);
         }
 
         /// <summary>

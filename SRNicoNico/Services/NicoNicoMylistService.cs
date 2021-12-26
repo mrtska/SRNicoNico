@@ -31,10 +31,12 @@ namespace SRNicoNico.Services {
         private const string PublicMylistApiUrl = "https://nvapi.nicovideo.jp/v2/mylists/";
 
         private readonly ISessionService SessionService;
+        private readonly IHistoryService HistoryService;
 
-        public NicoNicoMylistService(ISessionService sessionService) {
+        public NicoNicoMylistService(ISessionService sessionService, IHistoryService historyService) {
 
             SessionService = sessionService;
+            HistoryService = historyService;
         }
 
         /// <inheritdoc />
@@ -69,6 +71,7 @@ namespace SRNicoNico.Services {
                 entries.Add(new MylistVideoItem().Fill(entry));
             }
             ret.Entries = entries;
+            Parallel.ForEach(ret.Entries, async item => item.HasWatched = await HistoryService.HasWatchedAsync(item.Id));
 
             return ret;
         }
@@ -85,7 +88,7 @@ namespace SRNicoNico.Services {
                 ["watchId"] = watchId,
                 ["memo"] = memo ?? string.Empty
             };
-            var result = await SessionService.PostAsync(WatchLaterApiUrl, formData, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.PostAsync(WatchLaterApiUrl, formData, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
 
             // 200番台か409以外だったらエラーとする
             if (!result.IsSuccessStatusCode && result.StatusCode != HttpStatusCode.Conflict) {
@@ -103,7 +106,7 @@ namespace SRNicoNico.Services {
             var builder = new GetRequestQueryBuilder(WatchLaterApiUrl)
                 .AddQuery("itemIds", string.Join(',', itemIds.Distinct()));
 
-            var result = await SessionService.DeleteAsync(builder.Build(), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.DeleteAsync(builder.Build(), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
 
             // 200番台か404以外だったらエラーとする
             if (!result.IsSuccessStatusCode && result.StatusCode != HttpStatusCode.NotFound) {
@@ -121,7 +124,7 @@ namespace SRNicoNico.Services {
             var builder = new GetRequestQueryBuilder(MylistApiUrl)
                 .AddQuery("sampleItemCount", sampleItemCount);
 
-            var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
@@ -205,7 +208,7 @@ namespace SRNicoNico.Services {
                 .AddQuery("pageSize", 100)
                 .AddQuery("page", page);
 
-            var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
@@ -290,7 +293,7 @@ namespace SRNicoNico.Services {
                 .AddQuery("itemId", itemId)
                 .AddQuery("description", memo ?? string.Empty);
             // (IDictionary<string, string>?)null はちょっとダサいのでどうにかしたい
-            var result = await SessionService.PostAsync(builder.Build(), (IDictionary<string, string>?)null, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.PostAsync(builder.Build(), (IDictionary<string, string>?)null, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
 
             // 200番台か409以外だったらエラーとする
             if (!result.IsSuccessStatusCode && result.StatusCode != HttpStatusCode.Conflict) {
@@ -313,7 +316,7 @@ namespace SRNicoNico.Services {
             var builder = new GetRequestQueryBuilder($"{MylistApiUrl}/{mylistId}/items")
                 .AddQuery("itemIds", string.Join(',', itemIds.Distinct()));
 
-            var result = await SessionService.DeleteAsync(builder.Build(), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.DeleteAsync(builder.Build(), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
 
             // 200番台か404以外だったらエラーとする
             if (!result.IsSuccessStatusCode && result.StatusCode != HttpStatusCode.NotFound) {
@@ -336,7 +339,7 @@ namespace SRNicoNico.Services {
             var builder = new GetRequestQueryBuilder(string.Format(PublicMylistsApiUrl, userId))
                 .AddQuery("sampleItemCount", sampleItemCount);
 
-            var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
@@ -421,7 +424,7 @@ namespace SRNicoNico.Services {
                 .AddQuery("pageSize", pageSize)
                 .AddQuery("page", page);
 
-            var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 

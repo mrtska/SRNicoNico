@@ -80,11 +80,11 @@ namespace SRNicoNico.ViewModels {
                 HasNext = result.HasNext;
                 TotalCount = result.TotalCount;
 
-                foreach (var entry in result.Entries!) {
+                foreach (var entry in result.Entries) {
 
                     WatchLaterItems.Add(entry);
                 }
-                Status = "";
+                Status = string.Empty;
             } catch (StatusErrorException e) {
 
                 Status = $"あとで見るを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
@@ -111,11 +111,11 @@ namespace SRNicoNico.ViewModels {
                 var result = await MylistService.GetWatchLaterAsync(SelectedMylistSortKey, ++CurrentPage);
                 HasNext = result.HasNext;
 
-                foreach (var entry in result.Entries!) {
+                foreach (var entry in result.Entries) {
 
                     WatchLaterItems.Add(entry);
                 }
-                Status = "";
+                Status = string.Empty;
             } catch (StatusErrorException e) {
 
                 Status = $"あとで見るを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
@@ -135,10 +135,11 @@ namespace SRNicoNico.ViewModels {
             Status = "あとで見るから動画を削除中";
             try {
 
-                var result = await MylistService.DeleteWatchLaterAsync(entry.ItemId!);
+                var result = await MylistService.DeleteWatchLaterAsync(entry.ItemId);
                 if (result) {
 
                     WatchLaterItems.Remove(entry);
+                    TotalCount--;
                     Status = "動画を削除しました。";
                 } else {
 
