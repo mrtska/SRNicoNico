@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using FastEnumUtility;
 using Livet;
+using Livet.Messaging;
 using SRNicoNico.Models;
 using SRNicoNico.Services;
 using Unity;
@@ -106,11 +107,22 @@ namespace SRNicoNico.ViewModels {
             Loaded();
         }
 
+        /// <summary>
+        /// マイリスト作成ダイアログを表示する
+        /// </summary>
         public void CreateMylist() {
 
-            ;
+            var messanger = UnityContainer.Resolve<InteractionMessenger>();
+
+            var vm = UnityContainer.Resolve<CreateMylistViewModel>();
+            messanger.Raise(new TransitionMessage(typeof(Views.CreateMylistWindow), vm, TransitionMode.Modal));
+
+            // 新しいマイリストが作成されたらリロードする
+            if (vm.IsCreated) {
+                Reload();
+            }
         }
-        
+
 
         public override void KeyDown(KeyEventArgs e) {
         

@@ -75,6 +75,16 @@ namespace SRNicoNico.Services {
         IAsyncEnumerable<MylistItem> GetUserPublicMylistAsync(string userId, int sampleItemCount = 0);
 
         /// <summary>
+        /// マイリストを作成する
+        /// </summary>
+        /// <param name="name">マイリスト名</param>
+        /// <param name="description">マイリスト説明文</param>
+        /// <param name="isPublic">公開するかどうか</param>
+        /// <param name="sortKey">ソートキー</param>
+        /// <returns>成功したらTrue</returns>
+        Task<bool> CreateMylistAsync(string name, string description = "", bool isPublic = false, MylistSortKey sortKey = MylistSortKey.AddedAtDesc);
+
+        /// <summary>
         /// 指定したマイリストIDの公開マイリストを取得する
         /// </summary>
         /// <param name="mylistId">マイリストID</param>

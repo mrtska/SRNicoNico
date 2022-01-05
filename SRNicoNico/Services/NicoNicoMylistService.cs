@@ -411,6 +411,35 @@ namespace SRNicoNico.Services {
             }
         }
 
+        /// <inheritdoc />
+        public async Task<bool> CreateMylistAsync(string name, string description = "", bool isPublic = false, MylistSortKey sortKey = MylistSortKey.AddedAtDesc) {
+
+            if (string.IsNullOrEmpty(name)) {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            var label = sortKey.GetLabel() ?? throw new InvalidOperationException("MylistSortKeyにLabel属性がついていません");
+            var tmp = label.Split("&");
+            var defaultSortKey = tmp[0].Split("=")[1];
+            var defaultSortOrder = tmp[1].Split("=")[1];
+
+            var formData = new Dictionary<string, string> {
+                ["name"] = name,
+                ["description"] = description,
+                ["isPublic"] = isPublic.ToString().ToLower(),
+                ["defaultSortKey"] = defaultSortKey,
+                ["defaultSortOrder"] = defaultSortOrder
+            };
+
+            using var result = await SessionService.PostAsync(MylistApiUrl, formData, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            if (!result.IsSuccessStatusCode) {
+
+                throw new StatusErrorException(result.StatusCode);
+            }
+            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            return json.meta.status == 200;
+        }
 
         /// <inheritdoc />
         public async Task<Mylist> GetPublicMylistAsync(string mylistId, MylistSortKey sortKey, int page, int pageSize = 100) {
