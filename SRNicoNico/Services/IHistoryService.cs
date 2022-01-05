@@ -16,7 +16,7 @@ namespace SRNicoNico.Services {
         /// </summary>
         /// <returns>アカウントの視聴履歴 取得に失敗した場合はnull</returns>
         /// <exception cref="Models.StatusErrorException">取得に失敗した場合</exception>
-        IAsyncEnumerable<HistoryEntry> GetAccountHistoryAsync();
+        IAsyncEnumerable<HistoryVideoItem> GetAccountHistoryAsync();
 
         /// <summary>
         /// ローカルの視聴履歴を取得できる分だけ返す
@@ -44,7 +44,7 @@ namespace SRNicoNico.Services {
         /// </summary>
         /// <param name="histories">アカウントの視聴履歴</param>
         /// <returns>成功したらTrue</returns>
-        Task<bool> SyncLocalHistoryAsync(IEnumerable<HistoryEntry> histories);
+        Task<bool> SyncLocalHistoryAsync(IEnumerable<HistoryVideoItem> histories);
 
         /// <summary>
         /// 指定した動画が視聴済みかどうかを返す

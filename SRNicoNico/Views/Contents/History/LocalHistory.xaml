@@ -6,11 +6,9 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-             xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:e="clr-namespace:SRNicoNico.Entities"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:v="clr-namespace:SRNicoNico.Views"
-             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              d:DataContext="{d:DesignInstance Type=vm:LocalHistoryViewModel}"
              mc:Ignorable="d" 
@@ -31,7 +29,7 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <TextBlock FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" Text="ローカル視聴履歴" ToolTip="NicoNicoViewerに保存されている視聴履歴です" />
-            <controls:RoundButton Grid.Column="1" ToolTip="更新" Focusable="False" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" IconData="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z">
+            <controls:RoundButton Grid.Column="1" ToolTip="更新" Focusable="False" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" IconData="{StaticResource ReloadIcon}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <l:LivetCallMethodAction MethodName="Reload" MethodTarget="{Binding}" />
@@ -40,44 +38,11 @@
             </controls:RoundButton>
         </Grid>
         <ListBox Grid.Row="1" ItemsSource="{Binding HistoryItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ListBox.Resources>
+            <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type e:LocalHistory}">
-                    <v:LocalHistoryEntryView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}">
-                        <v:LocalHistoryEntryView.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="視聴履歴を削除する">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Click">
-                                            <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},Path=PlacementTarget.Tag}" MethodName="DeleteLocalHistory" MethodParameter="{Binding}" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </MenuItem>
-                                <MenuItem Header="WebViewで開く">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Click">
-                                            <a:WebViewOpenAction Url="{Binding VideoId,StringFormat='https://www.nicovideo.jp/watch/{0}'}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </MenuItem>
-                                <MenuItem Header="ブラウザで開く">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Click">
-                                            <i:LaunchUriOrFileAction Path="{Binding VideoId,StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </MenuItem>
-                                <MenuItem Header="URLをクリップボードにコピー">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Click">
-                                            <a:CopyToClipBoardAction Text="{Binding VideoId,StringFormat='https://www.nicovideo.jp/watch/{0}'}" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </MenuItem>
-                            </ContextMenu>
-                        </v:LocalHistoryEntryView.ContextMenu>
-                    </v:LocalHistoryEntryView>
+                    <v:LocalHistoryEntryView />
                 </DataTemplate>
-            </ListBox.Resources>
+            </ListBox.ItemTemplate>
         </ListBox>
         <metro:ProgressRing Grid.Row="1" IsActive="{Binding IsActive}" />
     </Grid>

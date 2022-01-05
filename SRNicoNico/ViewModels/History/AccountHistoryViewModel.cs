@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using Livet;
+using SRNicoNico.Models;
 using SRNicoNico.Models.NicoNicoWrapper;
 using SRNicoNico.Services;
 
@@ -12,7 +13,7 @@ namespace SRNicoNico.ViewModels {
         /// <summary>
         /// アカウントの視聴履歴のリスト
         /// </summary>
-        public ObservableSynchronizedCollection<HistoryEntry> HistoryItems { get; private set; }
+        public ObservableSynchronizedCollection<HistoryVideoItem> HistoryItems { get; private set; }
 
         private readonly IHistoryService HistoryService;
         //private readonly IMylistService MylistService;
@@ -20,7 +21,7 @@ namespace SRNicoNico.ViewModels {
         public AccountHistoryViewModel(IHistoryService historyService) : base("アカウント") {
 
             HistoryService = historyService;
-            HistoryItems = new ObservableSynchronizedCollection<HistoryEntry>();
+            HistoryItems = new ObservableSynchronizedCollection<HistoryVideoItem>();
         }
 
         /// <summary>
@@ -32,33 +33,45 @@ namespace SRNicoNico.ViewModels {
             Status = "アカウントの視聴履歴を取得中";
             HistoryItems.Clear();
 
-            // 視聴履歴を取得する
-            await foreach (var entry in HistoryService.GetAccountHistoryAsync()) {
+            try {
 
-                HistoryItems.Add(entry);
+                // 視聴履歴を取得する
+                await foreach (var entry in HistoryService.GetAccountHistoryAsync()) {
+
+                    HistoryItems.Add(entry);
+                }
+                // ローカル視聴履歴に非同期で反映させる
+                await HistoryService.SyncLocalHistoryAsync(HistoryItems);
+                Status = string.Empty;
+
+            } catch (StatusErrorException e) {
+
+                Status = $"視聴履歴の取得に失敗しました。 ステータスコード: {e.StatusCode}";
+            } finally {
+                IsActive = false;
             }
-            // ローカル視聴履歴に非同期で反映させる
-            await HistoryService.SyncLocalHistoryAsync(HistoryItems);
-
-            Status = "";
-            IsActive = false;
         }
 
         /// <summary>
         /// アカウントの視聴履歴を削除する
         /// </summary>
-        /// <param name="videoId">削除したい動画</param>
-        public async void DeleteAccountHistory(HistoryEntry entry) {
+        /// <param name="item">削除したい動画</param>
+        public async void DeleteAccountHistory(HistoryVideoItem item) {
 
-            Status = $"{entry.VideoId}の視聴履歴を削除中";
+            Status = $"{item.Id}の視聴履歴を削除中";
 
-            if (await HistoryService.DeleteAccountHistoryAsync(entry.VideoId!)) {
+            try {
+                if (await HistoryService.DeleteAccountHistoryAsync(item.Id)) {
 
-                HistoryItems.Remove(entry);
-                Status = $"{entry.VideoId}の視聴履歴を削除しました";
-            } else {
+                    HistoryItems.Remove(item);
+                    Status = $"{item.Id}の視聴履歴を削除しました";
+                } else {
 
-                Status = $"{entry.VideoId}の視聴履歴の削除に失敗しました";
+                    Status = $"{item.Id}の視聴履歴の削除に失敗しました";
+                }
+            } catch (StatusErrorException e) {
+
+                Status = $"視聴履歴の削除に失敗しました。 ステータスコード: {e.StatusCode}";
             }
         }
 

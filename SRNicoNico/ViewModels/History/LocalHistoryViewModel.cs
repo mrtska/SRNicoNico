@@ -37,7 +37,7 @@ namespace SRNicoNico.ViewModels {
                 HistoryItems.Add(entry);
             }
 
-            Status = "";
+            Status = string.Empty;
             IsActive = false;
         }
 

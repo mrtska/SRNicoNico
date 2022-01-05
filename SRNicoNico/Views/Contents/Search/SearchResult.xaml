@@ -173,7 +173,7 @@
                 <ListBox ItemsSource="{Binding SearchResult}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.Resources>
                         <DataTemplate DataType="{x:Type w:VideoItem}">
-                            <v:VideoItemView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}" />
+                            <v:VideoItemView />
                         </DataTemplate>
                     </ListBox.Resources>
                 </ListBox>

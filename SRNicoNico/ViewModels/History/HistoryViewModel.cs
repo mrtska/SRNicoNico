@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Livet;
-using SRNicoNico.Services;
 using Unity;
 
 namespace SRNicoNico.ViewModels {

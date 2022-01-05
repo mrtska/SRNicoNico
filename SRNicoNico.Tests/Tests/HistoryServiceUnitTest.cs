@@ -27,11 +27,11 @@ namespace SRNicoNico.Tests {
             await foreach (var history in HistoryService.GetAccountHistoryAsync()) {
 
                 // 値が取れているかの確認
-                Assert.False(string.IsNullOrEmpty(history.VideoId));
+                Assert.False(string.IsNullOrEmpty(history.Id));
                 Assert.False(string.IsNullOrEmpty(history.Title));
                 Assert.NotNull(history.ShortDescription);
                 Assert.False(string.IsNullOrEmpty(history.ThumbnailUrl));
-                Assert.True(history.PostedAt != default);
+                Assert.True(history.RegisteredAt != default);
                 Assert.True(history.WatchedAt != default);
                 Assert.True(history.WatchCount > 0);
                 Assert.True(history.ViewCount > 0);

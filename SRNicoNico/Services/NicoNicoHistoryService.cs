@@ -30,13 +30,13 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<HistoryEntry> GetAccountHistoryAsync() {
+        public async IAsyncEnumerable<HistoryVideoItem> GetAccountHistoryAsync() {
 
             var query = new GetRequestQueryBuilder(HistoryApiUrl)
                 .AddQuery("pageSize", 200)
                 .AddQuery("page", 1);
 
-            var result = await SessionService.GetAsync(query.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.GetAsync(query.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
 
             if (!result.IsSuccessStatusCode) {
 
@@ -49,23 +49,7 @@ namespace SRNicoNico.Services {
                 if (entry == null) {
                     continue;
                 }
-                var video = entry.video;
-                var count = video.count;
-                yield return new HistoryEntry {
-
-                    VideoId = video.id,
-                    ShortDescription = video.shortDescription,
-                    ThumbnailUrl = video.thumbnail.listingUrl,
-                    Title = video.title,
-                    PostedAt = DateTimeOffset.Parse(video.registeredAt),
-                    WatchedAt = DateTimeOffset.Parse(entry.lastViewedAt),
-                    ViewCount = (int)count.view,
-                    CommentCount = (int)count.comment,
-                    MylistCount = (int)count.mylist,
-                    WatchCount = (int)entry.views,
-                    Duration = (int)video.duration,
-                    PlaybackPosition = (int)entry.playbackPosition
-                };
+                yield return new HistoryVideoItem(entry);
             }
         }
 
@@ -75,7 +59,7 @@ namespace SRNicoNico.Services {
             var query = new GetRequestQueryBuilder(HistoryApiUrl)
                 .AddQuery("target", videoId);
 
-            var result = await SessionService.DeleteAsync(query.Build(), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            using var result = await SessionService.DeleteAsync(query.Build(), NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
 
             if (result.IsSuccessStatusCode) {
 
@@ -110,37 +94,35 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async Task<bool> SyncLocalHistoryAsync(IEnumerable<HistoryEntry> histories) {
+        public async Task<bool> SyncLocalHistoryAsync(IEnumerable<HistoryVideoItem> histories) {
 
             using var dbContext = new ViewerDbContext();
             var dic = await dbContext.LocalHistories.AsNoTracking().ToDictionaryAsync(t => t.VideoId).ConfigureAwait(false);
 
             foreach (var history in histories) {
 
-                if (dic.ContainsKey(history.VideoId!)) {
+                if (dic.ContainsKey(history.Id)) {
 
                     dbContext.LocalHistories.Update(new LocalHistory {
-
-                        VideoId = history.VideoId!,
-                        Title = history.Title!,
-                        ShortDescription = history.ShortDescription!,
-                        ThumbnailUrl = history.ThumbnailUrl!,
+                        VideoId = history.Id,
+                        Title = history.Title,
+                        ShortDescription = history.ShortDescription,
+                        ThumbnailUrl = history.ThumbnailUrl,
                         Duration = history.Duration,
                         WatchCount = history.WatchCount,
-                        PostedAt = history.PostedAt,
+                        PostedAt = history.RegisteredAt,
                         LastWatchedAt = history.WatchedAt
                     });
                 } else {
 
                     dbContext.LocalHistories.Add(new LocalHistory {
-
-                        VideoId = history.VideoId!,
+                        VideoId = history.Id,
                         Title = history.Title!,
-                        ShortDescription = history.ShortDescription!,
-                        ThumbnailUrl = history.ThumbnailUrl!,
+                        ShortDescription = history.ShortDescription,
+                        ThumbnailUrl = history.ThumbnailUrl,
                         Duration = history.Duration,
                         WatchCount = history.WatchCount,
-                        PostedAt = history.PostedAt,
+                        PostedAt = history.RegisteredAt,
                         LastWatchedAt = history.WatchedAt
                     });
                 }
