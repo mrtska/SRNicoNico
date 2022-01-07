@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Livet;
@@ -47,7 +45,7 @@ namespace SRNicoNico.ViewModels {
         /// サインイン状態にする
         /// </summary>
         /// <returns></returns>
-        public ValueTask<bool> EnsureSignedInAsync() {
+        public ValueTask<AuthenticationResult> EnsureSignedInAsync() {
 
             // SessionServiceがサインインを必要とした時に呼ばれる
             SessionService.SignInDialogHandler = () => {

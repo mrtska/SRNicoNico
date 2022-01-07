@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using SRNicoNico.Models;
 
 namespace SRNicoNico.Services {
@@ -77,32 +78,29 @@ namespace SRNicoNico.Services {
         /// ニコニコのTOPページにHEADリクエストを送信してCookieが生きているか確認する
         /// </summary>
         /// <returns>trueならログイン成功</returns>
-        private async ValueTask<bool> VerifyAuthAsync() {
+        private async ValueTask<AuthenticationResult> VerifyAuthAsync() {
 
             var verifyRequest = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
             var result = await HttpClient.SendAsync(verifyRequest).ConfigureAwait(false);
 
             var flags = result.Headers.GetValues("x-niconico-authflag");
 
-
             foreach (var flag in flags) {
-
-                // 値が0ではなかったらログイン成功判定
-                if (flag != "0") {
-
-                    if (flag != "3") {
-                        MessageBox.Show("ベータ版のため、プレミアム会員のみ使用可能です。");
-                        Environment.Exit(0);
-                    }
-
-                    return true;
+    
+                // 一般会員
+                if (flag == "1") {
+                    return AuthenticationResult.Normal;
+                }
+                // プレミアム
+                if (flag == "3") {
+                    return AuthenticationResult.Premium;
                 }
             }
-            return false;
+            return AuthenticationResult.Unauthorized;
         }
 
         /// <inheritdoc />
-        public async ValueTask<bool> VerifyAsync() {
+        public async ValueTask<AuthenticationResult> VerifyAsync() {
 
             var session = Settings.UserSession;
 
@@ -116,9 +114,9 @@ namespace SRNicoNico.Services {
             }
 
             var result = await VerifyAuthAsync().ConfigureAwait(false);
-            if (result) {
+            if (result != AuthenticationResult.Unauthorized) {
 
-                return true;
+                return result;
             }
 
             // トークンが使えなかったのでサインインダイアログを表示させる

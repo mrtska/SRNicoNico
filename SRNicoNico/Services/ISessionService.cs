@@ -19,7 +19,7 @@ namespace SRNicoNico.Services {
         /// このメソッドを呼ぶ前にSignInDialogHandlerに値を設定すること
         /// </summary>
         /// <returns>サインインしている場合はTrue</returns>
-        ValueTask<bool> VerifyAsync();
+        ValueTask<AuthenticationResult> VerifyAsync();
 
         /// <summary>
         /// セッションを保存する
@@ -113,5 +113,20 @@ namespace SRNicoNico.Services {
         /// <param name="additionalHeaders">HTTPヘッダのリスト</param>
         /// <returns>HTTPレスポンス</returns>
         Task<HttpResponseMessage> DeleteAsync(string url, IDictionary<string, string>? additionalHeaders);
+    }
+
+    public enum AuthenticationResult {
+        /// <summary>
+        /// 認証失敗
+        /// </summary>
+        Unauthorized,
+        /// <summary>
+        /// 一般会員
+        /// </summary>
+        Normal,
+        /// <summary>
+        /// プレミアム会員
+        /// </summary>
+        Premium
     }
 }

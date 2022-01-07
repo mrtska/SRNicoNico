@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading;
+using System.Windows;
 using System.Windows.Input;
 using Livet;
 using Livet.Messaging;
 using Livet.Messaging.Windows;
 using SRNicoNico.Models;
+using SRNicoNico.Services;
 using Unity;
 
 namespace SRNicoNico.ViewModels {
@@ -107,7 +109,15 @@ namespace SRNicoNico.ViewModels {
 
             Status = "サインイン中";
 
-            if (await SignIn.EnsureSignedInAsync()) {
+            var result = await SignIn.EnsureSignedInAsync();
+
+            if (result == AuthenticationResult.Normal) {
+
+                    MessageBox.Show("ベータ版のため、プレミアム会員のみ使用可能です。");
+                    Environment.Exit(0);
+            }
+
+            if (result != AuthenticationResult.Unauthorized) {
 
                 // 正常にサインイン出来たらサインイン後に使用できるタブを追加する
                 MainContent.PostInitialize();
