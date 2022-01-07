@@ -87,7 +87,7 @@ namespace SRNicoNico.ViewModels {
                             if (played == null) {
                                 continue;
                             }
-                            vm.PlayedRange.Add(new TimeRange((float)played.start, (float)played.end));
+                            vm.PlayedRange.Add(new TimeRange((float)(played.start / vm.ActualVideoDuration), (float)(played.end / vm.ActualVideoDuration)));
                         }
                         vm.BufferedRange.Clear();
                         foreach (var buffered in json.value.buffered) {
@@ -95,7 +95,7 @@ namespace SRNicoNico.ViewModels {
                             if (buffered == null) {
                                 continue;
                             }
-                            vm.BufferedRange.Add(new TimeRange((float)buffered.start, (float)buffered.end));
+                            vm.BufferedRange.Add(new TimeRange((float)(buffered.start / vm.ActualVideoDuration), (float)(buffered.end / vm.ActualVideoDuration)));
                         }
                         break;
                     case "ended":
@@ -199,5 +199,20 @@ namespace SRNicoNico.ViewModels {
             WebView = null;
         }
 
+    }
+
+    /// <summary>
+    /// 時間のレンジを管理する構造体
+    /// </summary>
+    public class TimeRange {
+
+        public float Start { get; }
+        public float End { get; }
+
+        public TimeRange(float start, float end) {
+
+            Start = start;
+            End = end;
+        }
     }
 }

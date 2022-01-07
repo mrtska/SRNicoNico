@@ -357,7 +357,7 @@ namespace SRNicoNico.ViewModels {
 
         private WebView2? _FullScreenWebViewControl;
         /// <summary>
-        /// 通常時のWebView要素
+        /// フルスクリーン時のWebView要素
         /// </summary>
         public WebView2? FullScreenWebViewControl {
             get { return _FullScreenWebViewControl; }

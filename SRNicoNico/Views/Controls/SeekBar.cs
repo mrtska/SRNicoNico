@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.ViewModels;
 
 namespace SRNicoNico.Views.Controls {
     /// <summary>
@@ -57,14 +58,6 @@ namespace SRNicoNico.Views.Controls {
         }
         public static readonly DependencyProperty PlayedRangeProperty =
             DependencyProperty.Register(nameof(PlayedRange), typeof(IEnumerable<TimeRange>), typeof(SeekBar), new FrameworkPropertyMetadata(null));
-
-
-        private void OnRangeChanged(object o, NotifyCollectionChangedEventArgs e) {
-
-            if (e.Action == NotifyCollectionChangedAction.Add) {
-                CalcTimeRangeBounds(e.NewItems.Cast<TimeRange>());
-            }
-        }
 
         /// <summary>
         /// バッファ済みの時間幅のリスト
@@ -178,14 +171,6 @@ namespace SRNicoNico.Views.Controls {
                 MouseMove += SeekBar_MouseMove;
                 MouseLeave += SeekBar_MouseLeave;
                 SizeChanged += SeekBar_SizeChanged;
-                if (PlayedRange is INotifyCollectionChanged notify1) {
-
-                    notify1.CollectionChanged += OnRangeChanged;
-                }
-                if (BufferedRange is INotifyCollectionChanged notify2) {
-
-                    notify2.CollectionChanged += OnRangeChanged;
-                }
             };
 
             Unloaded += (o, e) => {
@@ -195,15 +180,6 @@ namespace SRNicoNico.Views.Controls {
                 MouseMove -= SeekBar_MouseMove;
                 MouseLeave -= SeekBar_MouseLeave;
                 SizeChanged -= SeekBar_SizeChanged;
-
-                if (PlayedRange is INotifyCollectionChanged notify1) {
-
-                    notify1.CollectionChanged -= OnRangeChanged;
-                }
-                if (BufferedRange is INotifyCollectionChanged notify2) {
-
-                    notify2.CollectionChanged -= OnRangeChanged;
-                }
             };
         }
 
@@ -237,20 +213,6 @@ namespace SRNicoNico.Views.Controls {
             var target = IsDragging ? RequestSeekPosition : CurrentTime;
             var computedWidth = ActualWidth / (VideoDuration / target) - (10 * (target / VideoDuration));
             Canvas.SetLeft(Thumb, computedWidth);
-        }
-
-        private void CalcTimeRangeBounds(IEnumerable<TimeRange> range) {
-
-            foreach (var played in range) {
-
-                if (played == null) {
-                    continue;
-                }
-                var computedLeft = ActualWidth / (VideoDuration / played.Start) - (10 * (played.Start / VideoDuration));
-                var computedWidth = ActualWidth / (VideoDuration / played.End);
-                played.Left = computedLeft;
-                played.Width = computedWidth - computedLeft;
-            }
         }
 
         private void SetSeekPosition(double amount) {
@@ -541,23 +503,56 @@ namespace SRNicoNico.Views.Controls {
             };
         }
     }
+
     /// <summary>
-    /// 時間のレンジを管理する構造体
+    /// シークバーのバッファ済み領域や再生済み領域を描画するコントロール
     /// </summary>
-    public class TimeRange {
+    public class SeekBarBackground : Control {
+        static SeekBarBackground() {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(SeekBarBackground), new FrameworkPropertyMetadata(typeof(SeekBarBackground)));
+        }
 
-        public float Start { get; }
-        public float End { get; }
+        /// <summary>
+        /// 再生済みの時間幅のリスト
+        /// </summary>
+        public IEnumerable<TimeRange> Range {
+            get { return (IEnumerable<TimeRange>)GetValue(PlayedProperty); }
+            set { SetValue(PlayedProperty, value); }
+        }
+        public static readonly DependencyProperty PlayedProperty =
+            DependencyProperty.Register(nameof(Range), typeof(IEnumerable<TimeRange>), typeof(SeekBarBackground), new FrameworkPropertyMetadata(null));
 
-        public double Left { get; set; }
-        public double Width { get; set; }
+        public SeekBarBackground() {
 
-        public TimeRange(float start, float end) {
+            Loaded += (o, e) => {
+                if (Range is INotifyCollectionChanged collection) {
+                    collection.CollectionChanged += Collection_CollectionChanged;
+                }
+            };
+            Unloaded += (o, e) => {
+                if (Range is INotifyCollectionChanged collection) {
+                    collection.CollectionChanged -= Collection_CollectionChanged;
+                }
+            };
+        }
 
-            Start = start;
-            End = end;
-            Left = 0;
-            Width = 0;
+        private void Collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+
+            InvalidateVisual();
+        }
+
+        protected override void OnRender(DrawingContext drawingContext) {
+            base.OnRender(drawingContext);
+
+            if (Range == null) {
+                return;
+            }
+
+            foreach (var range in Range) {
+
+                var x = range.Start * ActualWidth;
+                drawingContext.DrawRectangle(Background, null, new Rect(x, 0, range.End * ActualWidth - x, ActualHeight));
+            }
         }
     }
     /// <summary>
