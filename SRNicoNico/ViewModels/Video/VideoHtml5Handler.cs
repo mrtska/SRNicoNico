@@ -101,6 +101,10 @@ namespace SRNicoNico.ViewModels {
                     case "ended":
                         if (vm.RepeatBehavior != RepeatBehavior.None) {
                             vm.Resume();
+                        } else {
+                            if (vm.IsFullScreen) {
+                                vm.ToggleFullScreen();
+                            }
                         }
                         break;
                     case "mousemove":
