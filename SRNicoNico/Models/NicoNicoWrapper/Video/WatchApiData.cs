@@ -300,11 +300,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
     }
 
     public class MediaStoryBoard {
-        public string? ContentId { get; set; }
+        public string ContentId { get; set; } = default!;
 
         public IEnumerable<string>? ImageIds { get; set; }
 
-        public MediaSession? Session { get; set; }
+        public MediaSession Session { get; set; } = default!;
     }
 
     public class MediaSession {

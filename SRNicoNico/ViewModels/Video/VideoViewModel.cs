@@ -657,14 +657,15 @@ namespace SRNicoNico.ViewModels {
 
                 Status = $"コメントの取得に失敗しました ステータスコード: {e.StatusCode}";
             }
-            try {
 
-                // ストーリーボードを取得する
-                StoryBoard = await VideoService.GetStoryBoardAsync(ApiData.Media.StoryBoard!.Session!);
+            if (ApiData.Media.StoryBoard != null) {
+                try {
+                    // ストーリーボードを取得する
+                    StoryBoard = await VideoService.GetStoryBoardAsync(ApiData.Media.StoryBoard.Session);
+                } catch (StatusErrorException e) {
 
-            } catch (StatusErrorException e) {
-
-                Status = $"ストーリーボードの取得に失敗しました ステータスコード: {e.StatusCode}";
+                    Status = $"ストーリーボードの取得に失敗しました ステータスコード: {e.StatusCode}";
+                }
             }
         }
 

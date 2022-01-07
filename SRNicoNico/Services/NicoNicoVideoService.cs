@@ -249,7 +249,7 @@ namespace SRNicoNico.Services {
                 }
                 var storyboardUrls = new List<MediaSessionUrl>();
                 var storyboardImageIds = new List<string>();
-                if (media.delivery.storyboard()) {
+                if (media.delivery.storyboard != null) {
                     foreach (var url in media.delivery.storyboard.session.urls) {
 
                         if (url == null) {
@@ -300,7 +300,7 @@ namespace SRNicoNico.Services {
                             Urls = movieUrls
                         }
                     },
-                    StoryBoard = !media.delivery.storyboard() ? null : new MediaStoryBoard {
+                    StoryBoard = media.delivery.storyboard == null ? null : new MediaStoryBoard {
                         ContentId = media.delivery.storyboard.contentId,
                         ImageIds = storyboardImageIds,
                         Session = new MediaSession {
@@ -1185,7 +1185,7 @@ namespace SRNicoNico.Services {
             };
 
             using var result = await SessionService.PutAsync(PlaybackPositionApiUrl, formData, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
-            if (!result.IsSuccessStatusCode || result.StatusCode != HttpStatusCode.NotFound) {
+            if (!result.IsSuccessStatusCode && result.StatusCode != HttpStatusCode.NotFound) {
 
                 throw new StatusErrorException(result.StatusCode);
             }
