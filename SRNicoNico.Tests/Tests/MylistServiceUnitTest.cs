@@ -40,7 +40,7 @@ namespace SRNicoNico.Tests {
                 //Assert.NotEqual(0, entry.MylistCount);
                 //Assert.NotEqual(0, entry.LikeCount);
 
-                Assert.NotEqual(0, entry.Duration);
+                //Assert.NotEqual(0, entry.Duration);
                 Assert.NotNull(entry.Id);
 
                 //Assert.NotNull(entry.LatestCommentSummary);

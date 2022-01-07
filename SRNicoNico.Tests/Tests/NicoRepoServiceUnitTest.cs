@@ -16,7 +16,7 @@ namespace SRNicoNico.Tests {
         public NicoRepoServiceUnitTest() {
 
             SessionService = TestingNicoNicoViewer.Instance.TestSessionService;
-            NicoRepoService = new NicoNicoNicoRepoService(SessionService, null);
+            NicoRepoService = new NicoNicoNicoRepoService(SessionService, new TestingHistoryService());
         }
 
         private void AssertNicoRepo(NicoRepoList result) {
