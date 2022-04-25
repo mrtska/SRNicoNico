@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Web.WebView2.Core;
 using SRNicoNico.Models;
 using SRNicoNico.Services;
 using SRNicoNico.ViewModels;
@@ -33,6 +34,18 @@ namespace SRNicoNico {
             UnityContainer = container;
 
             ApplySettings(container.Resolve<ISettings>());
+
+            try {
+                // WebViewがインストールされているかを確認する
+                CoreWebView2Environment.GetAvailableBrowserVersionString();
+            } catch (WebView2RuntimeNotFoundException) {
+
+                MainWindow = new Views.WebViewInstallWindow {
+                    Visibility = Visibility.Visible
+                };
+                MainWindow.Activate();
+                return;
+            }
 
             MainWindow = new Views.MainWindow { DataContext = container.Resolve<MainWindowViewModel>() };
             MainWindow.Visibility = Visibility.Visible;
