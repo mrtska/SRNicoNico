@@ -632,8 +632,9 @@ namespace SRNicoNico.ViewModels {
                 HeartbeatTimer = new Timer(async (_) => {
                     try {
                         DmcSession = await VideoService.HeartbeatAsync(DmcSession);
-                    } catch (StatusErrorException) {
+                    } catch (Exception e) {
                         HeartbeatTimer?.Change(-1, -1);
+                        Status = $"ハートビートに失敗しました。 {e.Message}";
                     }
                 }, null, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3);
                 CompositeDisposable.Add(HeartbeatTimer);
