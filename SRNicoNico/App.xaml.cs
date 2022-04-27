@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Web.WebView2.Core;
@@ -33,6 +34,32 @@ namespace SRNicoNico {
 
             UnityContainer = container;
 
+            AppDomain.CurrentDomain.UnhandledException += (o, e) => {
+                
+                if (e.ExceptionObject is Exception ex) {
+
+                    // クラッシュレポート画面が表示されている時にさらにクラッシュした時は無視
+                    if (MainWindow is Views.CrashReportWindow) {
+                        return;
+                    }
+
+                    // メインのウィンドウは閉じる
+                    MainWindow.Visibility = Visibility.Collapsed;
+                    MainWindow.Close();
+
+                    // クラッシュレポート画面を表示する
+                    var a = new Views.CrashReportWindow {
+                        Visibility = Visibility.Visible,
+                        DataContext = new CrashReportViewModel(ex)
+                    };
+
+                    // スレッドが死なないように
+                    a.ShowDialog();
+
+                    Environment.Exit(0);
+                }
+            };
+            
             ApplySettings(container.Resolve<ISettings>());
 
             try {

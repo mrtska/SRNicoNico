@@ -1,0 +1,56 @@
+﻿<metro:MetroWindow x:Class="SRNicoNico.Views.CrashReportWindow"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                   xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+                   d:DataContext="{d:DesignInstance {x:Type vm:CrashReportViewModel}}"
+                   mc:Ignorable="d"
+                    WindowStartupLocation="CenterScreen"
+		            Background="{DynamicResource ThemeBrushKey}"
+		            Foreground="{DynamicResource ActiveForegroundBrushKey}"
+                    SizeToContent="Height"
+                    ResizeMode="NoResize"
+                    Topmost="True"
+                    WindowStyle="None"
+                    Width="700" Title="NicoNicoViewerはクラッシュしました。">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border metro:MetroWindow.IsCaptionBar="True" Background="{DynamicResource BackgroundBrushKey}">
+            <TextBlock Text="クラッシュしました。" TextTrimming="CharacterEllipsis" FontSize="18" Margin="10,0,0,0" VerticalAlignment="Center" />
+        </Border>
+        <StackPanel Grid.Row="1" Margin="10">
+            <TextBlock FontSize="16" TextWrapping="Wrap">
+                NicoNicoViewerはクラッシュしました。<LineBreak />
+                差し支えなければ、クラッシュレポートの送信にご協力ください。<LineBreak />
+                「レポートを送信」ボタンを押すと、下記のテキストボックスに表示されている内容が作者に送信されます。(それ以外の情報は送信されません)
+            </TextBlock>
+            <TextBlock Text="スタックトレース:" Margin="0,5,0,0" />
+            <TextBox Text="{Binding WillSendText, Mode=TwoWay}" IsReadOnly="True" Height="150" />
+            <TextBlock Text="特筆事項:" Margin="0,5,0,0" />
+            <metro:PromptTextBox Prompt="特定の動作をしたらクラッシュするなど、特筆すべきことがあれば記入ください。" Text="{Binding AdditionalMessage, Mode=TwoWay}" Margin="0,5,0,0" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+                <Button Content="{Binding Status}" Margin="10,0" IsEnabled="{Binding IsSending, Converter={StaticResource InvertBoolConverter}}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="SendReport" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button Content="閉じる" Margin="10,0">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type metro:MetroWindow}}}" MethodName="Close" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</metro:MetroWindow>
