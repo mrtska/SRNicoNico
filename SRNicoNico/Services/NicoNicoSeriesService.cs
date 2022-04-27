@@ -123,11 +123,21 @@ namespace SRNicoNico.Services {
                 });
             }
 
+            var ownerName = string.Empty;
+
+            if (detail.owner.type == "user") {
+
+                ownerName = detail.owner.user.nickname;
+            } else if (detail.owner.type == "channel") {
+
+                ownerName = detail.owner.channel.name;
+            }
+
             return new Series {
                 SeriesId = detail.id.ToString(),
                 OwnerId = detail.owner.id,
                 OwnerType = detail.owner.type,
-                OwnerName = detail.owner.user.nickname,
+                OwnerName = ownerName,
                 Title = detail.title,
                 Description = detail.description,
                 ThumbnailUrl = detail.thumbnailUrl,
