@@ -358,4 +358,4 @@ MigrationBackup/
 
 # Ignore private credential file
 /SRNicoNico.Tests/Tests/Constants.cs
-/SRNicoNico/Html/player.bundle.js
+/SRNicoNico/Html/player.bundle.js*
