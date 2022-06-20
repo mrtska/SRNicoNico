@@ -122,8 +122,8 @@ class VideoHandler {
         });
         this.hls.on(Hls.Events.ERROR, (data, error) => {
 
-            console.error(JSON.stringify(data));
-            console.error(JSON.stringify(error));
+            console.error(data);
+            console.error(error);
         });
         this.hls.attachMedia(this.video);
     }
@@ -133,10 +133,13 @@ class VideoHandler {
         const currentTime = this.video.currentTime;
         const paused = this.video.paused;
 
-        if (this.hls != null) {
+        if (contentUri.includes("master.m3u8")) {
 
-            this.hls.destroy();
-            this.hls.detachMedia();
+            if (this.hls !== null) {
+                this.hls.destroy();
+                this.hls.detachMedia();
+            }
+
             this.createHls(contentUri);
         } else {
 

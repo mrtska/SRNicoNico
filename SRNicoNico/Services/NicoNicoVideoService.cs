@@ -50,11 +50,13 @@ namespace SRNicoNico.Services {
         private const string EasyCommentApiUrl = "https://nvapi.nicovideo.jp/v1/comment/easy";
 
         private readonly ISessionService SessionService;
+        private readonly ISettings Settings;
         private readonly ViewerDbContext DbContext;
 
-        public NicoNicoVideoService(ISessionService sessionService, ViewerDbContext dbContext) {
+        public NicoNicoVideoService(ISessionService sessionService, ISettings settings, ViewerDbContext dbContext) {
 
             SessionService = sessionService;
+            Settings = settings;
             DbContext = dbContext;
         }
 
@@ -630,6 +632,34 @@ namespace SRNicoNico.Services {
             var preferedProtocolHttp = movieSession.Protocols.Contains("http");
             var preferedProtocolHls = movieSession.Protocols.Contains("hls");
 
+            object hlsParameter;
+            if (encryption != null) {
+                hlsParameter = new {
+                    use_well_known_port = "yes",
+                    use_ssl = "yes",
+                    transfer_preset = movieSession.TransferPresets.First(),
+                    segment_duration = 6000,
+                    encryption = new {
+                        hls_encryption_v1 = new {
+                            encrypted_key = encryption.EncryptedKey,
+                            key_uri = encryption.KeyUri
+                        }
+                    },
+                };
+            } else {
+                hlsParameter = new {
+                    use_well_known_port = "yes",
+                    use_ssl = "yes",
+                    transfer_preset = movieSession.TransferPresets.First(),
+                    segment_duration = 6000
+                };
+            }
+
+            // HLSが無効でない場合はHTTPを無効にする
+            if (!Settings.DisableHls) {
+                preferedProtocolHttp = false;
+            }
+
             // リクエストのjsonを組み立てる
             var payload = JsonObject.Serialize(new {
                 session = new {
@@ -659,20 +689,13 @@ namespace SRNicoNico.Services {
                         parameters = new {
                             http_parameters = new {
                                 parameters = preferedProtocolHttp ? (object)new {
-                                    http_output_download_parameters = new { }
-                                } : preferedProtocolHls ? new {
-                                    hls_parameters = (object)new {
+                                    http_output_download_parameters = new {
                                         use_well_known_port = "yes",
                                         use_ssl = "yes",
-                                        transfer_preset = movieSession.TransferPresets.First(),
-                                        segment_duration = 6000,
-                                        encryption = encryption != null ? new {
-                                            hls_encryption_v1 = new {
-                                                encrypted_key = encryption.EncryptedKey,
-                                                key_uri = encryption.KeyUri
-                                            }
-                                        } : null,
+                                        transfer_preset = movieSession.TransferPresets.First()
                                     }
+                                } : preferedProtocolHls ? new {
+                                    hls_parameters = hlsParameter
                                 } : throw new InvalidOperationException("プロトコルが不明です")
                             }
                         }
