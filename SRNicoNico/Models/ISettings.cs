@@ -104,6 +104,11 @@ namespace SRNicoNico.Models {
         PopupPlacement FullScreenPopupPlacement { get; set; }
 
         /// <summary>
+        /// 動画をロードする際にHLSを使うかどうか
+        /// </summary>
+        bool DisableHls { get; set; }
+
+        /// <summary>
         /// かんたんコメントを無効にするかどうか
         /// </summary>
         bool DisableEasyComment { get; set; }

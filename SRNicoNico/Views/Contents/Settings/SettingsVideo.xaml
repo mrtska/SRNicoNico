@@ -39,6 +39,7 @@
                         <CheckBox IsChecked="{Binding UseResumePlay, Mode=TwoWay}" Content="レジューム再生を使用する" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
                         <CheckBox IsChecked="{Binding DisableJumpCommand, Mode=TwoWay}" Content="投稿者が指定しているジャンプコマンドを無効にする" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
                         <CheckBox IsChecked="{Binding DisableABRepeat, Mode=TwoWay}" Content="ABリピート機能を無効にする" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
+                        <CheckBox IsChecked="{Binding DisableHls, Mode=TwoWay}" Content="動画をHLSでロードしない (一部の動画では強制的にHLSが使用されます)" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
                     </StackPanel>
                 </HeaderedContentControl>
                 <HeaderedContentControl>

@@ -207,6 +207,16 @@ namespace SRNicoNico.Models {
         }
 
         /// <inheritdoc />
+        public bool DisableHls {
+            get {
+                return RoamingValues.TryGetValue(nameof(DisableHls), out var value) && value != null ? (bool)value : false;
+            }
+            set {
+                RoamingValues[nameof(DisableHls)] = value;
+            }
+        }
+
+        /// <inheritdoc />
         public bool DisableEasyComment {
             get {
                 return RoamingValues.TryGetValue(nameof(DisableEasyComment), out var value) && value != null ? (bool)value : false;
@@ -235,6 +245,7 @@ namespace SRNicoNico.Models {
                 RoamingValues[nameof(LiveNotifyRefreshInterval)] = value;
             }
         }
+
         public Settings() {
 
             RoamingValues = ApplicationData.Current.RoamingSettings.Values;

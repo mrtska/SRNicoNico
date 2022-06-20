@@ -125,6 +125,19 @@ namespace SRNicoNico.ViewModels {
             }
         }
 
+        /// <summary>
+        /// 動画をロードする際にHLSを使うかどうか
+        /// </summary>
+        public bool DisableHls {
+            get { return Settings.DisableHls; }
+            set {
+                if (Settings.DisableHls == value)
+                    return;
+                Settings.DisableHls = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private readonly ISettings Settings;
 
         public SettingsVideoViewModel(ISettings settings) : base("動画設定") {
