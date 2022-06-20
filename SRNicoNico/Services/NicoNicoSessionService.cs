@@ -83,6 +83,12 @@ namespace SRNicoNico.Services {
             var verifyRequest = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
             var result = await HttpClient.SendAsync(verifyRequest).ConfigureAwait(false);
 
+            // 障害かメンテの時
+            if (result.StatusCode == HttpStatusCode.ServiceUnavailable) {
+
+                return AuthenticationResult.Unauthorized;
+            }
+
             var flags = result.Headers.GetValues("x-niconico-authflag");
 
             foreach (var flag in flags) {
