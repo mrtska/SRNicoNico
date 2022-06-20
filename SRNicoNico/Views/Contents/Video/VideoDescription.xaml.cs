@@ -37,14 +37,14 @@ namespace SRNicoNico.Views {
 
             var hyperlink = (Hyperlink)sender;
 
-            hyperlink.ToolTip = new TextBlock { Text = hyperlink.NavigateUri.OriginalString };
+            hyperlink.ToolTip = new TextBlock { Text = hyperlink.NavigateUri?.OriginalString };
             hyperlink.ToolTipOpening += OnToolTipOpening;
         }
 
         private async void OnToolTipOpening(object sender, ToolTipEventArgs e) {
 
             var hyperlink = (Hyperlink)sender;
-            var url = hyperlink.NavigateUri.OriginalString;
+            var url = hyperlink.NavigateUri?.OriginalString ?? "";
 
             if (ViewModel.NicoNicoViewer.DetectUrlType(url) == NicoNicoUrlType.Video) {
 
