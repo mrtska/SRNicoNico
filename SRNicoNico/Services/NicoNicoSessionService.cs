@@ -80,29 +80,33 @@ namespace SRNicoNico.Services {
         /// <returns>trueならログイン成功</returns>
         private async ValueTask<AuthenticationResult> VerifyAuthAsync() {
 
-            var verifyRequest = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
-            var result = await HttpClient.SendAsync(verifyRequest).ConfigureAwait(false);
+            try {
+                var verifyRequest = new HttpRequestMessage(HttpMethod.Head, NicoNicoTop);
+                var result = await HttpClient.SendAsync(verifyRequest).ConfigureAwait(false);
 
-            // 障害かメンテの時
-            if (result.StatusCode == HttpStatusCode.ServiceUnavailable) {
+                // 障害かメンテの時
+                if (result.StatusCode == HttpStatusCode.ServiceUnavailable) {
 
+                    return AuthenticationResult.Unauthorized;
+                }
+                var flags = result.Headers.GetValues("x-niconico-authflag");
+
+                foreach (var flag in flags) {
+
+                    // 一般会員
+                    if (flag == "1") {
+                        return AuthenticationResult.Normal;
+                    }
+                    // プレミアム
+                    if (flag == "3") {
+                        return AuthenticationResult.Premium;
+                    }
+                }
+                return AuthenticationResult.Unauthorized;
+            } catch (HttpRequestException) {
+                // なんらかの理由で繋がらなかった場合も認証失敗扱いにする
                 return AuthenticationResult.Unauthorized;
             }
-
-            var flags = result.Headers.GetValues("x-niconico-authflag");
-
-            foreach (var flag in flags) {
-    
-                // 一般会員
-                if (flag == "1") {
-                    return AuthenticationResult.Normal;
-                }
-                // プレミアム
-                if (flag == "3") {
-                    return AuthenticationResult.Premium;
-                }
-            }
-            return AuthenticationResult.Unauthorized;
         }
 
         /// <inheritdoc />
