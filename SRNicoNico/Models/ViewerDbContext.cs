@@ -54,8 +54,11 @@ namespace SRNicoNico.Models {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
 
             var env = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var appData = Path.Combine(env, "SRNicoNico");
+            // %APPDATA%\SRNicoNicoを作成
+            var a = Directory.CreateDirectory(appData);
 
-            optionsBuilder.UseSqlite($"Filename={Path.Combine(env, "SRNicoNico", "viewer.db")}");
+            optionsBuilder.UseSqlite($"Filename={Path.Combine(appData, "viewer.db")}");
         }
     }
 }
