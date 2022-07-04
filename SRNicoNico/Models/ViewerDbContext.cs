@@ -56,7 +56,7 @@ namespace SRNicoNico.Models {
             var env = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var appData = Path.Combine(env, "SRNicoNico");
             // %APPDATA%\SRNicoNicoを作成
-            var a = Directory.CreateDirectory(appData);
+            Directory.CreateDirectory(appData);
 
             optionsBuilder.UseSqlite($"Filename={Path.Combine(appData, "viewer.db")}");
         }
