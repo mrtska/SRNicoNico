@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,6 +10,19 @@ namespace SRNicoNico.Models {
     /// コメントパーサー
     /// </summary>
     public static class CommentParser {
+
+        private static Dictionary<string, string> WideIntegerMap = new Dictionary<string, string> {
+            ["０"] = "0",
+            ["１"] = "1",
+            ["２"] = "2",
+            ["３"] = "3",
+            ["４"] = "4",
+            ["５"] = "5",
+            ["６"] = "6",
+            ["７"] = "7",
+            ["８"] = "8",
+            ["９"] = "9",
+        };
 
         public static readonly Regex TripletColor = new Regex(@"#[\d|A-F|a-f]{6}");
         /// <summary>
@@ -64,7 +78,7 @@ namespace SRNicoNico.Models {
             var match = Regex.Match(entry.Mail, @"@([+-]?\d*\.?\d+\.?(?!\d))");
             var duration = 3F;
             if (match.Success) {
-                duration = float.Parse(match.Groups[1].Value);
+                duration = float.Parse(WideIntegerMap.GetValueOrDefault(match.Groups[1].Value, match.Groups[1].Value));
             }
 
             //#xxxxxxで指定された色を取得する
