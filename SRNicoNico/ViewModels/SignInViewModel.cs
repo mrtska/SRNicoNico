@@ -25,7 +25,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         public WebView2? WebView {
             get { return _WebView; }
-            set { 
+            set {
                 if (_WebView == value)
                     return;
                 _WebView = value;
@@ -58,32 +58,32 @@ namespace SRNicoNico.ViewModels {
 
         public async Task ActivateSignInDialogAsync() {
 
-            await App.UIDispatcher!.InvokeAsync(new Action(() => {
+            await App.UIDispatcher!.InvokeAsync(new Action(async () => {
 
                 WebView = new WebView2 {
                     Source = new Uri(SignInUrl)
                 };
-                WebView.CoreWebView2InitializationCompleted += (o, e) => {
-                    WebView.CoreWebView2.WebResourceResponseReceived += async (o, e) => {
+                await WebView.EnsureCoreWebView2Async();
 
-                        // トップページに遷移した時にCookieの値を確認する
-                        if (e.Request.Uri.EndsWith("nicovideo.jp/")) {
+                WebView.CoreWebView2.WebResourceResponseReceived += async (o, e) => {
 
-                            var cookies = await WebView.CoreWebView2.CookieManager.GetCookiesAsync("https://nicovideo.jp/");
-                            var session = cookies.SingleOrDefault(s => s.Name == "user_session");
-                            if (session != null) {
+                    // トップページに遷移した時にCookieの値を確認する
+                    if (e.Request.Uri.EndsWith("nicovideo.jp/")) {
 
-                                // セッションCookieを保存してサインインウィンドウを閉じる
-                                SessionService.StoreSession(session.Value);
-                                await Messenger.RaiseAsync(new WindowActionMessage(WindowAction.Close, "SignIn"));
+                        var cookies = await WebView.CoreWebView2.CookieManager.GetCookiesAsync("https://nicovideo.jp/");
+                        var session = cookies.SingleOrDefault(s => s.Name == "user_session");
+                        if (session != null) {
 
-                                WebView.Dispose();
-                            } else {
-                                // トップページに遷移したのにCookieが無かった場合は再度サインインページに遷移する
-                                WebView.Source = new Uri(SignInUrl);
-                            }
+                            // セッションCookieを保存してサインインウィンドウを閉じる
+                            SessionService.StoreSession(session.Value);
+                            await Messenger.RaiseAsync(new WindowActionMessage(WindowAction.Close, "SignIn"));
+
+                            WebView.Dispose();
+                        } else {
+                            // トップページに遷移したのにCookieが無かった場合は再度サインインページに遷移する
+                            WebView.Source = new Uri(SignInUrl);
                         }
-                    };
+                    }
                 };
             }));
             await MainWindowMessenger.RaiseAsync(new TransitionMessage(typeof(SignInView), this, TransitionMode.Modal));

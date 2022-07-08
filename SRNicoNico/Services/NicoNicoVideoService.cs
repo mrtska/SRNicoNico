@@ -637,7 +637,7 @@ namespace SRNicoNico.Services {
                 hlsParameter = new {
                     use_well_known_port = "yes",
                     use_ssl = "yes",
-                    transfer_preset = movieSession.TransferPresets.First(),
+                    transfer_preset = movieSession.TransferPresets.FirstOrDefault(""),
                     segment_duration = 6000,
                     encryption = new {
                         hls_encryption_v1 = new {
@@ -650,7 +650,7 @@ namespace SRNicoNico.Services {
                 hlsParameter = new {
                     use_well_known_port = "yes",
                     use_ssl = "yes",
-                    transfer_preset = movieSession.TransferPresets.First(),
+                    transfer_preset = movieSession.TransferPresets.FirstOrDefault(""),
                     segment_duration = 6000
                 };
             }
@@ -692,7 +692,7 @@ namespace SRNicoNico.Services {
                                     http_output_download_parameters = new {
                                         use_well_known_port = "yes",
                                         use_ssl = "yes",
-                                        transfer_preset = movieSession.TransferPresets.First()
+                                        transfer_preset = movieSession.TransferPresets.FirstOrDefault("")
                                     }
                                 } : preferedProtocolHls ? new {
                                     hls_parameters = hlsParameter
