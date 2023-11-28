@@ -22,32 +22,16 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
         public int Fork { get; set; }
 
-        public int LastRes { get; set; }
+        public string ForkLabel { get; set; } = default!;
 
-        /// <summary>
-        /// 葉のリスト
-        /// </summary>
-        public List<VideoCommentLeaf>? Leaves { get; set; }
+        public int LastRes { get; set; }
 
         /// <summary>
         /// コメントリスト
         /// </summary>
-        public List<VideoCommentEntry>? Entries { get; set; }
+        public List<VideoCommentEntry> Entries { get; set; } = default!;
 
         public string? Label { get; set; }
-    }
-
-    public class VideoCommentLeaf {
-
-        /// <summary>
-        /// スレッドID
-        /// </summary>
-        public string? ThreadId { get; set; }
-
-        public int Fork { get; set; }
-
-        public int Leaf { get; set; }
-        public int Count { get; set; }
     }
 
     public class VideoCommentEntry {
@@ -56,6 +40,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// スレッドID
         /// </summary>
         public string? ThreadId { get; set; }
+
+        /// <summary>
+        /// コメントID
+        /// </summary>
+        public string Id { get; set; } = default!;
 
         /// <summary>
         /// コメント番号
@@ -72,7 +61,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// </summary>
         public int Leaf { get; set; }
 
-        public int Fork { get; set; }
+        public string Fork { get; set; } = default!;
 
         /// <summary>
         /// コメント投稿時間

@@ -76,6 +76,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public string? ServerUrl { get; set; }
 
         /// <summary>
+        /// スレッドキー
+        /// </summary>
+        public string ThreadKey { get; set; } = default!;
+
+        /// <summary>
         /// ユーザーキー
         /// </summary>
         public string? UserKey { get; set; }
@@ -83,12 +88,12 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// コメントレイヤーのリスト
         /// </summary>
-        public IEnumerable<CommentLayer>? Layers { get; set; }
+        public IEnumerable<CommentLayer> Layers { get; set; } = default!;
 
         /// <summary>
         /// スレッドのリスト
         /// </summary>
-        public IEnumerable<CommentThread>? Threads { get; set; }
+        public IEnumerable<CommentThread> Threads { get; set; } = default!;
 
         /// <summary>
         /// 動画の長さ
@@ -114,7 +119,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// <summary>
         /// スレッドIDのリスト
         /// </summary>
-        public IEnumerable<CommentLayerThreadId>? ThreadIds { get; set; }
+        public IEnumerable<CommentLayerThreadId> ThreadIds { get; set; } = default!;
     }
     public class CommentLayerThreadId {
         /// <summary>
@@ -128,6 +133,8 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// 2: 簡単コメント
         /// </summary>
         public int Fork { get; set; }
+
+        public string ForkLabel { get; set; } = default!;
     }
     public class CommentThread {
         /// <summary>
@@ -138,6 +145,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// スレッドの種類
         /// </summary>
         public int Fork { get; set; }
+        /// <summary>
+        /// スレッドの種類のラベル
+        /// </summary>
+        public string ForkLabel { get; set; } = default!;
         /// <summary>
         /// スレッドが有効かどうか
         /// </summary>

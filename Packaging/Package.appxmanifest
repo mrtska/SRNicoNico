@@ -9,7 +9,7 @@
   <Identity
     Name="27669mrtska.NicoNicoViewer"
     Publisher="CN=98A95DB9-E8D9-4842-BABF-601B35C694DC"
-    Version="1.0.15.0" />
+    Version="1.0.16.0" />
 
   <Properties>
     <DisplayName>NicoNicoViewer</DisplayName>

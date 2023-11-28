@@ -66,11 +66,12 @@ namespace SRNicoNico.Services {
         /// <summary>
         /// かんたんコメントを投稿する
         /// </summary>
+        /// <param name="videoId">動画ID</param>
         /// <param name="phrase">コメントフレーズ</param>
         /// <param name="threadId">スレッドID</param>
         /// <param name="vpos">コメント位置</param>
         /// <returns>コメント番号 失敗時はnull</returns>
-        Task<int?> PostEasyCommentAsync(EasyCommentPhrase phrase, string threadId, int vpos);
+        Task<int?> PostEasyCommentAsync(string videoId, EasyCommentPhrase phrase, string threadId, int vpos);
 
         /// <summary>
         /// コメントを投稿する
