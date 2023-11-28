@@ -37,7 +37,7 @@ namespace SRNicoNico.Views {
 
             var hyperlink = (Hyperlink)sender;
 
-            hyperlink.ToolTip = new TextBlock { Text = hyperlink.NavigateUri?.OriginalString };
+            hyperlink.ToolTip = new TextBlock { Text = hyperlink.NavigateUri?.OriginalString ?? "" };
             hyperlink.ToolTipOpening += OnToolTipOpening;
         }
 

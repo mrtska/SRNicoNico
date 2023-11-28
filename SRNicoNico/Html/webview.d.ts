@@ -81,7 +81,7 @@ interface CommentEntry {
     /**
      * フォーク
      */
-    fork: number;
+    fork: string;
     /**
      * コメント本文
      */

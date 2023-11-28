@@ -44,10 +44,14 @@ namespace SRNicoNico.Services {
         /// ポストキーAPI
         /// </summary>
         private const string GetPostKeyApiUrl = "https://flapi.nicovideo.jp/api/getpostkey";
+
+        private const string NvCommentEastPostKeyApiUrl = "https://nvapi.nicovideo.jp/v1/comment/keys/post-easy";
+        private const string NvCommentPostKeyApiUrl = "https://nvapi.nicovideo.jp/v1/comment/keys/post";
+
         /// <summary>
-        /// かんたんコメントAPI
+        /// コメントAPIベース
         /// </summary>
-        private const string EasyCommentApiUrl = "https://nvapi.nicovideo.jp/v1/comment/easy";
+        private const string CommentApiUrl = "https://nv-comment.nicovideo.jp/v1/threads/";
 
         private readonly ISessionService SessionService;
         private readonly ISettings Settings;
@@ -110,7 +114,8 @@ namespace SRNicoNico.Services {
                         }
                         threadIds.Add(new CommentLayerThreadId {
                             Id = threadId.id.ToString(),
-                            Fork = (int)threadId.fork
+                            Fork = (int)threadId.fork,
+                            ForkLabel = threadId.forkLabel,
                         });
                     }
                     layers.Add(new CommentLayer {
@@ -129,6 +134,7 @@ namespace SRNicoNico.Services {
                     threads.Add(new CommentThread {
                         Id = thread.id.ToString(),
                         Fork = (int)thread.fork,
+                        ForkLabel = thread.forkLabel,
                         IsActive = thread.isActive,
                         IsDefaultPostTarget = thread.isDefaultPostTarget,
                         IsEasyCommentPostTarget = thread.isEasyCommentPostTarget,
@@ -145,7 +151,8 @@ namespace SRNicoNico.Services {
                 }
 
                 ret.Comment = new WatchApiDataComment {
-                    ServerUrl = comment.server.url,
+                    ServerUrl = comment.nvComment.server + "/v1/threads",
+                    ThreadKey = comment.nvComment.threadKey,
                     UserKey = comment.keys.userKey,
                     Layers = layers,
                     Threads = threads
@@ -905,25 +912,6 @@ namespace SRNicoNico.Services {
             }
         }
 
-        /// <summary>
-        /// 動画の長さに合わせて取得するコメントの量を調整する
-        /// </summary>
-        /// <param name="duration">動画の長さ</param>
-        /// <returns></returns>
-        private int GetCommentVolume(int duration) {
-
-            if (duration < 60) {
-                return 100;
-            }
-            if (duration < 300) {
-                return 250;
-            }
-            if (duration < 600) {
-                return 500;
-            }
-            return 1000;
-        }
-
         /// <inheritdoc />
         public async Task<IEnumerable<VideoCommentThread>> GetCommentAsync(WatchApiDataComment comment) {
 
@@ -931,95 +919,18 @@ namespace SRNicoNico.Services {
                 throw new ArgumentNullException(nameof(comment));
             }
 
-            var payloadList = new List<dynamic>();
-            payloadList.Add(new { ping = new { content = "rs:0" } });
+            var payload = new {
+                @params = new {
+                    language = "ja-jp",
+                    targets = comment.Threads?.Select(s => new { id = s.Id, fork = s.ForkLabel }),
+                },
+                threadKey = comment.ThreadKey,
+                additionals = new { }
+            };
 
-            int i = 0;
-            var indexMap = new Dictionary<int, string>();
-            foreach (var thread in comment.Threads!) {
-
-                if (thread == null) {
-                    continue;
-                }
-                // アクティブでないスレッドは取得しない
-                if (!thread.IsActive) {
-                    continue;
-                }
-                payloadList.Add(new { ping = new { content = $"ps:{i}" } });
-
-                // 投稿者コメントの場合
-                if (thread.IsOwnerThread) {
-
-                    payloadList.Add(new {
-                        thread = new {
-                            fork = thread.Fork,
-                            language = 0,
-                            nicoru = 3,
-                            scores = 1,
-                            thread = thread.Id,
-                            user_id = comment.UserId,
-                            userkey = comment.UserKey,
-                            with_global = 1,
-                            version = "20061206",
-                            res_from = -1000
-                        }
-                    });
-                } else if (thread.IsDefaultPostTarget || thread.IsEasyCommentPostTarget) { // 通常コメント、かんたんコメントの場合
-
-                    payloadList.Add(new {
-                        thread = new {
-                            fork = thread.Fork,
-                            language = 0,
-                            nicoru = 3,
-                            scores = 1,
-                            thread = thread.Id,
-                            user_id = comment.UserId,
-                            with_global = 1,
-                            version = "20090904",
-                            force_184 = thread.Is184Forced ? "1" : null,
-                            userkey = thread.IsThreadKeyRequired ? null : comment.UserKey,
-                            threadkey = thread.IsThreadKeyRequired ? thread.ThreadKey : null
-                        }
-                    });
-                }
-
-                indexMap[i] = thread.Label;
-                payloadList.Add(new { ping = new { content = $"rs:{i++}" } });
-
-                if (thread.IsLeafRequired) {
-
-                    payloadList.Add(new { ping = new { content = $"ps:{i}" } });
-
-                    var leafNum = thread.IsEasyCommentPostTarget ? 25 : 100;
-                    var resFrom = GetCommentVolume(comment.VideoDuration);
-                    if (thread.IsEasyCommentPostTarget) {
-                        resFrom = (int)Math.Floor(resFrom * 0.25);
-                    }
-
-                    payloadList.Add(new {
-                        thread_leaves = new {
-                            content = $"0-{(comment.VideoDuration / 60) + 1}:{leafNum},{resFrom},nicoru:100",
-                            fork = thread.Fork,
-                            language = 0,
-                            nicoru = 3,
-                            scores = 1,
-                            thread = thread.Id,
-                            user_id = comment.UserId,
-                            force_184 = thread.Is184Forced ? "1" : null,
-                            userkey = thread.IsThreadKeyRequired ? null : comment.UserKey,
-                            threadkey = thread.IsThreadKeyRequired ? thread.ThreadKey : null
-                        }
-                    });
-                    indexMap[i] = thread.Label!;
-                    payloadList.Add(new { ping = new { content = $"rs:{i++}" } });
-                }
-            }
-
-            payloadList.Add(new { ping = new { content = "rf:0" } });
-
-            using var result = await SessionService.PostAsync(comment.ServerUrl!.Replace("api/", "api.json"), JsonObject.Serialize(payloadList)).ConfigureAwait(false);
+            using var result = await SessionService.PostAsync(comment.ServerUrl!, JsonObject.Serialize(payload), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
-
+                var content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
                 throw new StatusErrorException(result.StatusCode);
             }
 
@@ -1027,115 +938,65 @@ namespace SRNicoNico.Services {
 
             var ret = new List<VideoCommentThread>();
 
-            string? currentLabel = null;
-            foreach (var item in json) {
+            foreach (var thread in json.data.threads) {
+                var comments = new List<VideoCommentEntry>();
 
-                if (item == null) {
-                    continue;
-                }
-                if (item.ping()) {
-
-                    if (item.ping.content.StartsWith("ps")) {
-                        currentLabel = indexMap[int.Parse(item.ping.content.Split(':')[1])];
-                    }
-                    continue;
-                }
-                if (currentLabel == null) {
-                    continue;
-                }
-                // 対象のスレッドクラスを取得する 無ければ作成する
-                var target = ret.SingleOrDefault(s => s.Label == currentLabel);
-                if (target == null) {
-
-                    var thread = comment.Threads.Single(s => s.Label == currentLabel);
-                    target = new VideoCommentThread {
-                        Fork = thread.Fork,
-                        Leaves = new List<VideoCommentLeaf>(),
-                        Entries = new List<VideoCommentEntry>(),
-                        Label = thread.Label
-                    };
-                    ret.Add(target);
-                }
-
-                if (item.thread()) {
-
-                    var thread = item.thread;
-
-                    target.ResultCode = (ThreadResultCode)thread.resultcode;
-                    target.Id = thread.thread;
-                    target.ServerTime = (long)thread.server_time;
-                    target.LastRes = thread.last_res() ? (int)thread.last_res : 0;
-                    target.Ticket = thread.ticket() ? thread.ticket : null;
-                    target.Revision = thread.revision() ? (int)thread.revision : 0;
-                    target.ClickRevision = thread.click_revision() ? (int?)thread.click_revision : null;
-                    continue;
-                }
-
-                if (item.leaf()) {
-
-                    var leaf = item.leaf;
-
-                    target.Leaves!.Add(new VideoCommentLeaf {
-                        Fork = leaf.fork() ? (int)leaf.fork : 0,
-                        Count = (int)leaf.count,
-                        Leaf = leaf.leaf() ? (int)leaf.leaf : 0,
-                        ThreadId = leaf.thread
-                    });
-                    continue;
-                }
-
-                if (item.chat()) {
-
-                    var chat = item.chat;
-
-                    var datetime = DateTimeOffset.FromUnixTimeSeconds((long)chat.date);
-                    if (chat.date_usec()) {
-
-                        // 1tickは100ナノ秒らしいのでマイクロ秒に10を掛けたtickを追加する
-                        datetime.Add(TimeSpan.FromTicks((long)(chat.date_usec * 10)));
-                    }
-
-                    target.Entries!.Add(new VideoCommentEntry {
-                        ThreadId = chat.thread,
-                        Fork = chat.fork() ? (int)chat.fork : 0,
-                        Number = (int)chat.no,
-                        Vpos = (int)chat.vpos,
-                        Leaf = chat.leaf() ? (int)chat.leaf : 0,
-                        Anonymity = chat.anonymity(),
-                        DateTime = datetime,
-                        Content = chat.content() ? chat.content : null,
-                        Deleted = chat.deleted(),
-                        Mail = chat.mail() ? chat.mail : null,
-                        UserId = chat.user_id() ? chat.user_id : null,
-                        Nicoru = chat.nicoru() ? (int)chat.nicoru : 0,
-                        Premium = chat.premium(),
-                        Score = chat.score() ? (int)chat.score : 0,
-                        LastNicoruDate = chat.last_nicoru_date() ? chat.last_nicoru_date : null
+                foreach (var item in thread.comments) {
+                    var commands = (string[]) item.commands;
+                    comments.Add(new VideoCommentEntry {
+                        Id = item.id,
+                        Number = (int)item.no,
+                        Vpos = ((int)item.vposMs) / 10,
+                        Content = item.body,
+                        Mail = string.Join(" ", commands),
+                        UserId = item.userId,
+                        Premium = item.isPremium,
+                        Score = (int)item.score,
+                        Nicoru = (int)item.nicoruCount,
+                        DateTime = DateTimeOffset.Parse(item.postedAt),
+                        Fork = thread.fork,
                     });
                 }
+
+                var data = new VideoCommentThread {
+                    Id = thread.id.ToString(),
+                    Entries = comments,
+                    Label = thread.fork,
+                    ForkLabel = thread.fork,
+                };
+                ret.Add(data);
             }
+
             return ret;
         }
 
         /// <inheritdoc />
-        public async Task<int?> PostEasyCommentAsync(EasyCommentPhrase phrase, string threadId, int vpos) {
+        public async Task<int?> PostEasyCommentAsync(string videoId, EasyCommentPhrase phrase, string threadId, int vpos) {
 
-            var builder = new GetRequestQueryBuilder(EasyCommentApiUrl)
-                .AddQuery("_language", "ja-jp")
-                .AddQuery("threadId", threadId)
-                .AddQuery("playerDevice", 1)
-                .AddQuery("playerVersion", 0)
-                .AddQuery("phrase", phrase.Text)
-                .AddQuery("vpos", vpos);
+            var builder = new GetRequestQueryBuilder(NvCommentEastPostKeyApiUrl)
+                .AddQuery("threadId", threadId);
 
-            using var result = await SessionService.PostAsync(builder.Build(), (IDictionary<string, string>?)null, NicoNicoSessionService.AjaxApiHeaders).ConfigureAwait(false);
+            using var postKeyResult = await SessionService.GetAsync(builder.Build(), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
+            var json = JsonObject.Parse(await postKeyResult.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var postKey = json.data.postEasyKey;
+
+            var payload = new {
+                body = phrase.Text,
+                postEasyKey = postKey,
+                videoId = videoId,
+                vposMs = vpos * 10,
+            };
+
+            var api = CommentApiUrl + threadId + "/easy-comments";
+
+            using var result = await SessionService.PostAsync(api, JsonObject.Serialize(payload), NicoNicoSessionService.ApiHeaders).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
 
                 throw new StatusErrorException(result.StatusCode);
             }
-            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
 
-            return json.data.code == 0 ? (int?)json.data.commentNo : null;
+            return (int) json.data.no;
         }
 
         /// <inheritdoc />

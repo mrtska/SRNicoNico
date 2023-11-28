@@ -117,7 +117,7 @@ namespace SRNicoNico.ViewModels {
                 var defaultThread = apiData.Threads.SingleOrDefault(s => s.IsDefaultPostTarget);
                 if (defaultThread != null) {
 
-                    SelectedThread = CommentThreads.SingleOrDefault(s => s.Label == defaultThread.Label);
+                    SelectedThread = CommentThreads.SingleOrDefault(s => s.ForkLabel == defaultThread.ForkLabel && s.Id == defaultThread.Id);
                 }
 
                 var layers = new List<object>();
@@ -135,7 +135,7 @@ namespace SRNicoNico.ViewModels {
                         if (threadId == null) {
                             continue;
                         }
-                        foreach (var thread in CommentThreads.Where(s => s.Fork == threadId.Fork && s.Id == threadId.Id)) {
+                        foreach (var thread in CommentThreads.Where(s => s.ForkLabel == threadId.ForkLabel && s.Id == threadId.Id)) {
 
                             if (thread != null) {
                                 entries.AddRange(thread.Entries!);
@@ -144,7 +144,7 @@ namespace SRNicoNico.ViewModels {
                     }
                     layers.Add(new {
                         index = layer.Index,
-                        entries = entries.OrderBy(o => o.Vpos).ThenBy(o => o.Number).Select(s => CommentParser.Parse(s))
+                        entries = entries.Where(w => !(w.Fork == "owner" && (w.Content?.StartsWith("/") ?? false))).OrderBy(o => o.Vpos).ThenBy(o => o.Number).Select(s => CommentParser.Parse(s))
                     });
                 }
                 // WebViewにコメントデータを飛ばす
@@ -195,7 +195,7 @@ namespace SRNicoNico.ViewModels {
 
                 var thread = CommentThreads.Single(s => s.Label == "easy");
 
-                var result = await VideoService.PostEasyCommentAsync(phrase, thread.Id, (int)(Owner.CurrentTime * 100));
+                var result = await VideoService.PostEasyCommentAsync(Owner.ApiData!.Video.Id!, phrase, thread.Id, (int)(Owner.CurrentTime * 100));
                 if (result.HasValue) {
 
                     // 投稿したコメントの番号をWebViewに登録してコメントをリロードする
