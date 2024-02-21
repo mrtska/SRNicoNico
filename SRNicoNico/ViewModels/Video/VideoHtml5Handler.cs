@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using DynaJson;
 using Microsoft.Web.WebView2.Core;
@@ -32,7 +32,7 @@ namespace SRNicoNico.ViewModels {
         /// </summary>
         /// <param name="vm">JavaScript環境に露出するViewModel</param>
         /// <param name="contentUri">動画URL</param>
-        public async Task InitializeAsync(VideoViewModel vm, string contentUri) {
+        public async Task InitializeAsync(VideoViewModel vm, string contentUri, Cookie? dmsCookie) {
 
             if (WebView == null || Initialized) {
                 return;
@@ -45,6 +45,16 @@ namespace SRNicoNico.ViewModels {
             WebView.CoreWebView2.SetVirtualHostNameToFolderMapping("www.nicovideo.jp", GetHtml5PlayerPath(), CoreWebView2HostResourceAccessKind.Allow);
             WebView.Source = new Uri("https://www.nicovideo.jp/player.html");
             WebView.CoreWebView2.AddHostObjectToScript("vm", vm);
+
+            if (dmsCookie != null) {
+                var cookie = WebView.CoreWebView2.CookieManager
+                    .CreateCookie(dmsCookie.Name, dmsCookie.Value, dmsCookie.Domain, dmsCookie.Path);
+                cookie.Expires = dmsCookie.Expires;
+                cookie.IsSecure = dmsCookie.Secure;
+                cookie.IsHttpOnly = dmsCookie.HttpOnly;
+                WebView.CoreWebView2.CookieManager.AddOrUpdateCookie(cookie);
+            }
+
             WebView.KeyDown += (o, e) => {
                 vm.KeyDown(e);
             };

@@ -274,7 +274,7 @@ namespace SRNicoNico.ViewModels {
                     }
 
                     // 新しい画質のセッションを作成する
-                    DmcSession = await VideoService.CreateSessionAsync(ApiData!.Media!.Movie!.Session!, ApiData.Media.Encryption, value.Id);
+                    DmcSession = await VideoService.CreateSessionAsync(ApiData!.Media!.Movie!, ApiData.Media.Encryption, value.Id);
                     // UIスレッドで新しい画質のURLを設定する
                     await App.UIDispatcher!.InvokeAsync(() => Html5Handler?.SetContent(DmcSession.ContentUri!, false));
 
@@ -536,7 +536,7 @@ namespace SRNicoNico.ViewModels {
 
                 IsLiked = ApiData.Video.Viewer!.IsLiked;
                 IsFollowing = await UserService.IsFollowUserAsync(ApiData.Owner!.Id!);
-                DmcSession = await VideoService.CreateSessionAsync(ApiData.Media!.Movie!.Session!);
+                DmcSession = await VideoService.CreateSessionAsync(ApiData.Media!.Movie!);
 
                 // 現在の画質をUIに反映する
                 ResolutionList = new ObservableSynchronizedCollection<MediaMovieVideo>(ApiData.Media.Movie.Videos);
@@ -565,7 +565,7 @@ namespace SRNicoNico.ViewModels {
             try {
 
                 // ストーリーボードを取得する
-                StoryBoard = await VideoService.GetStoryBoardAsync(ApiData.Media.StoryBoard!.Session!);
+                StoryBoard = await VideoService.GetStoryBoardAsync(ApiData.Media.StoryBoard!);
             } catch (StatusErrorException e) {
 
                 Status = $"ストーリーボードの取得に失敗しました ステータスコード: {e.StatusCode}";
@@ -614,30 +614,31 @@ namespace SRNicoNico.ViewModels {
                         return;
                     }
                 }
-                DmcSession = await VideoService.CreateSessionAsync(ApiData.Media!.Movie!.Session!, ApiData.Media.Encryption);
+                DmcSession = await VideoService.CreateSessionAsync(ApiData.Media!.Movie!, ApiData.Media.Encryption);
 
                 // 現在の画質をUIに反映する
                 ResolutionList = new ObservableSynchronizedCollection<MediaMovieVideo>(ApiData.Media.Movie.Videos);
                 _SelectedVideoResolution = ApiData.Media.Movie.Videos.Single(s => s.Id == DmcSession.VideoId);
                 RaisePropertyChanged(nameof(SelectedVideoResolution));
 
-                await Html5Handler.InitializeAsync(this, DmcSession.ContentUri!);
+                await Html5Handler.InitializeAsync(this, DmcSession.ContentUri!, DmcSession.DmsCookie);
 
                 // タイマーが既に動いている場合は止める
                 if (HeartbeatTimer != null) {
                     CompositeDisposable.Remove(HeartbeatTimer);
                     HeartbeatTimer.Dispose();
                 }
-
-                HeartbeatTimer = new Timer(async (_) => {
-                    try {
-                        DmcSession = await VideoService.HeartbeatAsync(DmcSession);
-                    } catch (Exception e) {
-                        HeartbeatTimer?.Change(-1, -1);
-                        Status = $"ハートビートに失敗しました。 {e.Message}";
-                    }
-                }, null, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3);
-                CompositeDisposable.Add(HeartbeatTimer);
+                if (ApiData.Media.Movie.AccessRightKey == null) {
+                    HeartbeatTimer = new Timer(async (_) => {
+                        try {
+                            DmcSession = await VideoService.HeartbeatAsync(DmcSession);
+                        } catch (Exception e) {
+                            HeartbeatTimer?.Change(-1, -1);
+                            Status = $"ハートビートに失敗しました。 {e.Message}";
+                        }
+                    }, null, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3, ApiData.Media.Movie!.Session!.HeartbeatLifetime / 3);
+                    CompositeDisposable.Add(HeartbeatTimer);
+                }
 
                 Status = string.Empty;
             } catch (StatusErrorException e) {
@@ -645,7 +646,6 @@ namespace SRNicoNico.ViewModels {
                 Status = $"動画 {VideoId} の再生に失敗しました ステータスコード: {e.StatusCode}";
                 return;
             } finally {
-
                 IsActive = false;
             }
             try {
@@ -662,7 +662,7 @@ namespace SRNicoNico.ViewModels {
             if (ApiData.Media.StoryBoard != null) {
                 try {
                     // ストーリーボードを取得する
-                    StoryBoard = await VideoService.GetStoryBoardAsync(ApiData.Media.StoryBoard.Session);
+                    StoryBoard = await VideoService.GetStoryBoardAsync(ApiData.Media.StoryBoard);
                 } catch (StatusErrorException e) {
 
                     Status = $"ストーリーボードの取得に失敗しました ステータスコード: {e.StatusCode}";

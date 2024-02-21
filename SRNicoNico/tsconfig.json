@@ -2,10 +2,10 @@
   "compilerOptions": {
     "strict": true,
     "removeComments": true,
+    "esModuleInterop": true,
     "sourceMap": true,
-    "module": "CommonJS",
-    "target": "ES6",
-    "lib": [ "dom", "es2015" ],
+    "target": "ES2022",
+    "lib": [ "dom", "ES2022" ],
     "moduleResolution": "Node"
   },
   "exclude": [

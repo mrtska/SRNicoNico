@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace SRNicoNico.Models.NicoNicoWrapper {
     /// <summary>
@@ -48,6 +49,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         /// セッション有効期限
         /// </summary>
         public DateTimeOffset ExpireTime { get;  set; }
+
+        /// <summary>
+        /// DMS用Cookie
+        /// </summary>
+        public Cookie? DmsCookie { get; set; }
     }
 
 }

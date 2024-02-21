@@ -36,12 +36,12 @@ namespace SRNicoNico.Services {
         /// 作成したセッションは一定時間ハートビートを送らないと自動的に破棄される
         /// 明示的に破棄する必要は無い
         /// </summary>
-        /// <param name="movieSession">パラメータ</param>
+        /// <param name="movie">パラメータ</param>
         /// <param name="encryption">暗号化情報</param>
         /// <param name="videoId">動画の画質ID 指定しない場合は一番良い画質のものが選ばれる</param>
         /// <param name="audioId">動画の音質ID 指定しない場合は一番良い音質のものが選ばれる</param>
         /// <returns>DMCセッション</returns>
-        Task<DmcSession> CreateSessionAsync(MediaSession movieSession, MediaEncryption? encryption = null, string? videoId = null, string? audioId = null);
+        Task<DmcSession> CreateSessionAsync(MediaMovie movie, MediaEncryption? encryption = null, string? videoId = null, string? audioId = null);
 
         /// <summary>
         /// 指定したセッションを延命する
@@ -107,9 +107,9 @@ namespace SRNicoNico.Services {
         /// <summary>
         /// ストーリーボードを取得する
         /// </summary>
-        /// <param name="sbSession">パラメータ</param>
+        /// <param name="storyBoard">パラメータ</param>
         /// <returns>ストーリーボード情報</returns>
-        Task<VideoStoryBoard> GetStoryBoardAsync(MediaSession sbSession);
+        Task<VideoStoryBoard> GetStoryBoardAsync(MediaStoryBoard storyBoard);
 
         /// <summary>
         /// 視聴した再生位置を保存する

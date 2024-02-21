@@ -1,4 +1,4 @@
-﻿import * as webpack from 'webpack';
+﻿import webpack from 'webpack';
 
 const config: webpack.Configuration = {
     mode: 'production',

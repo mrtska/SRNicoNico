@@ -48,9 +48,9 @@ namespace SRNicoNico.ViewModels {
             };
         }
 
-        private void OnPropertyChanged(object o, PropertyChangedEventArgs e) {
+        private void OnPropertyChanged(object? o, PropertyChangedEventArgs e) {
 
-            var tabItem = (TabItemViewModel)o;
+            var tabItem = (TabItemViewModel)o!;
             if (e.PropertyName == nameof(Status)) {
 
                 Status = tabItem.Status;

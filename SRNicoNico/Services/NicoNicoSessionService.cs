@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -28,20 +29,20 @@ namespace SRNicoNico.Services {
         /// <summary>
         /// 一部のAPIで必要になるHTTPヘッダ
         /// </summary>
-        public static readonly Dictionary<string, string> ApiHeaders = new Dictionary<string, string> {
+        public static readonly ReadOnlyDictionary<string, string> ApiHeaders = new(new Dictionary<string, string> {
             ["X-Frontend-Id"] = "6",
             ["X-Frontend-Version"] = "0",
             ["X-Niconico-Language"] = "ja-jp"
-        };
+        });
         /// <summary>
         /// 一部のAPIで必要になるHTTPヘッダ ajax版
         /// </summary>
-        public static readonly Dictionary<string, string> AjaxApiHeaders = new Dictionary<string, string> {
+        public static readonly ReadOnlyDictionary<string, string> AjaxApiHeaders = new(new Dictionary<string, string>() {
             ["X-Frontend-Id"] = "6",
             ["X-Frontend-Version"] = "0",
             ["X-Niconico-Language"] = "ja-jp",
             ["X-Request-With"] = "https://www.nicovideo.jp"
-        };
+        });
 
         private readonly ISettings Settings;
 

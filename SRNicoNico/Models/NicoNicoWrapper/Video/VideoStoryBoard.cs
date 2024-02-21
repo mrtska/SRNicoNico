@@ -34,11 +34,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public int Interval { get; set; }
 
         /// <summary>
-        /// JPEG画像のクオリティ
-        /// </summary>
-        public int Quality { get; set; }
-
-        /// <summary>
         /// ストーリーボードの画像のマップ
         /// </summary>
         public IDictionary<int, Bitmap>? BitmapMap { get; set; }

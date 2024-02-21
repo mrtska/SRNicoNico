@@ -355,7 +355,7 @@ export class CommentHandler {
                 break;
             }
         }
-        if (this.justPostComments.some(s => s.threadId === entry.threadId && s.fork === entry.fork && s.no === entry.no)) {
+        if (this.justPostComments.some(s => s.threadId === entry.threadId && s.fork.toString() === entry.fork && s.no === entry.no)) {
 
             this.renderContext.strokeStyle = 'yellow';
             this.renderContext.lineWidth = 2.5;

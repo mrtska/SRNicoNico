@@ -53,6 +53,11 @@ namespace SRNicoNico.Services {
         /// </summary>
         private const string CommentApiUrl = "https://nv-comment.nicovideo.jp/v1/threads/";
 
+        /// <summary>
+        /// Dowango Media Service API
+        /// </summary>
+        private const string AccessRightsUrl = "https://nvapi.nicovideo.jp/v1/watch/{videoId}/access-rights/";
+
         private readonly ISessionService SessionService;
         private readonly ISettings Settings;
         private readonly ViewerDbContext DbContext;
@@ -89,7 +94,6 @@ namespace SRNicoNico.Services {
 
             using var result = await SessionService.GetAsync(builder.Build()).ConfigureAwait(false);
             if (!result.IsSuccessStatusCode) {
-
                 throw new StatusErrorException(result.StatusCode);
             }
             var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
@@ -196,143 +200,203 @@ namespace SRNicoNico.Services {
             // DMCデータ
             {
                 var media = data.media;
+                if (media.domand != null) {
+                    var accessRightsBaseUrl = AccessRightsUrl.Replace("{videoId}", videoId);
 
-                var audios = new List<MediaMovieAudio>();
-                foreach (var audio in media.delivery.movie.audios) {
+                    var audios = new List<MediaMovieAudio>();
+                    foreach (var audio in media.domand.audios) {
 
-                    if (audio == null) {
-                        continue;
-                    }
-
-                    var collections = new Dictionary<string, double>();
-                    foreach (var lc in audio.metadata.loudnessCollection) {
-
-                        if (lc == null) {
+                        if (audio == null) {
                             continue;
                         }
-                        collections[lc.type] = lc.value;
+
+                        var collections = new Dictionary<string, double>();
+                        foreach (var lc in audio.loudnessCollection) {
+
+                            if (lc == null) {
+                                continue;
+                            }
+                            collections[lc.type] = lc.value;
+                        }
+
+                        audios.Add(new MediaMovieAudio {
+                            Id = audio.id,
+                            IsAvailable = audio.isAvailable,
+                            Bitrate = (int)audio.bitRate / 1000,
+                            SamplingRate = (int)audio.samplingRate,
+                            IntegratedLoudness = (int)audio.integratedLoudness,
+                            TruePeak = (int)audio.truePeak,
+                            LoudnessCollection = collections
+                        });
                     }
 
-                    audios.Add(new MediaMovieAudio {
-                        Id = audio.id,
-                        IsAvailable = audio.isAvailable,
-                        Bitrate = (int)audio.metadata.bitrate / 1000,
-                        SamplingRate = (int)audio.metadata.samplingRate,
-                        IntegratedLoudness = (int)audio.metadata.loudness.integratedLoudness,
-                        TruePeak = (int)audio.metadata.loudness.truePeak,
-                        LevelIndex = (int)audio.metadata.levelIndex,
-                        LoudnessCollection = collections
-                    });
-                }
+                    var videos = new List<MediaMovieVideo>();
+                    foreach (var video in media.domand.videos) {
 
-                var videos = new List<MediaMovieVideo>();
-                foreach (var video in media.delivery.movie.videos) {
+                        if (video == null) {
+                            continue;
+                        }
 
-                    if (video == null) {
-                        continue;
+                        videos.Add(new MediaMovieVideo {
+                            Id = video.id,
+                            IsAvailable = video.isAvailable,
+                            Label = video.label,
+                            Bitrate = (int)video.bitRate / 1000,
+                            Width = (int)video.width,
+                            Height = (int)video.height,
+                            RecommendedHighestAudioQualityLevel = (int)video.recommendedHighestAudioQualityLevel
+                        });
                     }
 
-                    videos.Add(new MediaMovieVideo {
-                        Id = video.id,
-                        IsAvailable = video.isAvailable,
-                        Label = video.metadata.label,
-                        Bitrate = (int)video.metadata.bitrate / 1000,
-                        Width = (int)video.metadata.resolution.width,
-                        Height = (int)video.metadata.resolution.height,
-                        LevelIndex = (int)video.metadata.levelIndex,
-                        RecommendedHighestAudioLevelIndex = (int)video.metadata.recommendedHighestAudioLevelIndex
-                    });
-                }
+                    ret.Media = new WatchApiDataMedia {
+                        Movie = new MediaMovie {
+                            ApiUrl = accessRightsBaseUrl + "hls?actionTrackId=1_1",
+                            Audios = audios,
+                            Videos = videos,
+                            AccessRightKey = media.domand.accessRightKey,
+                        },
+                        StoryBoard = media.domand.isStoryboardAvailable ? new MediaStoryBoard {
+                            ApiUrl = accessRightsBaseUrl + "storyboard?actionTrackId=1_1",
+                            AccessRightKey = media.domand.accessRightKey,
+                        } : null,
+                    };
+                } else if (media.delivery != null) {
 
-                var movieUrls = new List<MediaSessionUrl>();
-                foreach (var url in media.delivery.movie.session.urls) {
+                    var audios = new List<MediaMovieAudio>();
+                    foreach (var audio in media.delivery.movie.audios) {
 
-                    if (url == null) {
-                        continue;
+                        if (audio == null) {
+                            continue;
+                        }
+
+                        var collections = new Dictionary<string, double>();
+                        foreach (var lc in audio.metadata.loudnessCollection) {
+
+                            if (lc == null) {
+                                continue;
+                            }
+                            collections[lc.type] = lc.value;
+                        }
+
+                        audios.Add(new MediaMovieAudio {
+                            Id = audio.id,
+                            IsAvailable = audio.isAvailable,
+                            Bitrate = (int)audio.metadata.bitrate / 1000,
+                            SamplingRate = (int)audio.metadata.samplingRate,
+                            IntegratedLoudness = (int)audio.metadata.loudness.integratedLoudness,
+                            TruePeak = (int)audio.metadata.loudness.truePeak,
+                            LoudnessCollection = collections
+                        });
                     }
-                    movieUrls.Add(new MediaSessionUrl {
-                        Url = url.url,
-                        IsWellKnownPort = url.isWellKnownPort,
-                        IsSsl = url.isSsl
-                    });
-                }
-                var storyboardUrls = new List<MediaSessionUrl>();
-                var storyboardImageIds = new List<string>();
-                if (media.delivery.storyboard != null) {
-                    foreach (var url in media.delivery.storyboard.session.urls) {
+
+                    var videos = new List<MediaMovieVideo>();
+                    foreach (var video in media.delivery.movie.videos) {
+
+                        if (video == null) {
+                            continue;
+                        }
+
+                        videos.Add(new MediaMovieVideo {
+                            Id = video.id,
+                            IsAvailable = video.isAvailable,
+                            Label = video.metadata.label,
+                            Bitrate = (int)video.metadata.bitrate / 1000,
+                            Width = (int)video.metadata.resolution.width,
+                            Height = (int)video.metadata.resolution.height,
+                            RecommendedHighestAudioQualityLevel = (int)video.metadata.recommendedHighestAudioLevelIndex
+                        });
+                    }
+
+                    var movieUrls = new List<MediaSessionUrl>();
+                    foreach (var url in media.delivery.movie.session.urls) {
 
                         if (url == null) {
                             continue;
                         }
-                        storyboardUrls.Add(new MediaSessionUrl {
+                        movieUrls.Add(new MediaSessionUrl {
                             Url = url.url,
                             IsWellKnownPort = url.isWellKnownPort,
                             IsSsl = url.isSsl
                         });
                     }
-                    foreach (var image in media.delivery.storyboard.images) {
+                    var storyboardUrls = new List<MediaSessionUrl>();
+                    var storyboardImageIds = new List<string>();
+                    if (media.delivery.storyboard != null) {
+                        foreach (var url in media.delivery.storyboard.session.urls) {
 
-                        if (image == null) {
-                            continue;
+                            if (url == null) {
+                                continue;
+                            }
+                            storyboardUrls.Add(new MediaSessionUrl {
+                                Url = url.url,
+                                IsWellKnownPort = url.isWellKnownPort,
+                                IsSsl = url.isSsl
+                            });
                         }
-                        storyboardImageIds.Add(image.id);
+                        foreach (var image in media.delivery.storyboard.images) {
+
+                            if (image == null) {
+                                continue;
+                            }
+                            storyboardImageIds.Add(image.id);
+                        }
                     }
-                }
 
-                ret.Media = new WatchApiDataMedia {
-                    RecipeId = media.delivery.recipeId,
-                    Encryption = media.delivery.encryption != null ? new MediaEncryption {
-                        EncryptedKey = media.delivery.encryption.encryptedKey,
-                        KeyUri = media.delivery.encryption.keyUri
-                    } : null,
-                    Movie = new MediaMovie {
-                        ContentId = media.delivery.movie.contentId,
-                        Audios = audios,
-                        Videos = videos,
-                        Session = new MediaSession {
-                            RecipeId = media.delivery.movie.session.recipeId,
-                            PlayerId = media.delivery.movie.session.playerId,
-                            Videos = JsonObjectExtension.ToStringArray(media.delivery.movie.session.videos),
-                            Audios = JsonObjectExtension.ToStringArray(media.delivery.movie.session.audios),
-                            Movies = JsonObjectExtension.ToStringArray(media.delivery.movie.session.movies),
-                            Protocols = JsonObjectExtension.ToStringArray(media.delivery.movie.session.protocols),
-                            AuthTypesHttp = media.delivery.movie.session.authTypes.http() ? media.delivery.movie.session.authTypes.http : null,
-                            AuthTypesHls = media.delivery.movie.session.authTypes.hls,
-                            ServiceUserId = media.delivery.movie.session.serviceUserId,
-                            Token = media.delivery.movie.session.token,
-                            Signature = media.delivery.movie.session.signature,
-                            ContentId = media.delivery.movie.session.contentId,
-                            HeartbeatLifetime = (int)media.delivery.movie.session.heartbeatLifetime,
-                            ContentKeyTimeout = (int)media.delivery.movie.session.contentKeyTimeout,
-                            Priority = media.delivery.movie.session.priority,
-                            TransferPresets = JsonObjectExtension.ToStringArray(media.delivery.movie.session.transferPresets),
-                            Urls = movieUrls
-                        }
-                    },
-                    StoryBoard = media.delivery.storyboard == null ? null : new MediaStoryBoard {
-                        ContentId = media.delivery.storyboard.contentId,
-                        ImageIds = storyboardImageIds,
-                        Session = new MediaSession {
-                            RecipeId = media.delivery.storyboard.session.recipeId,
-                            PlayerId = media.delivery.storyboard.session.playerId,
-                            Videos = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.videos),
-                            Audios = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.audios),
-                            Movies = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.movies),
-                            Protocols = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.protocols),
-                            AuthTypesStoryBoard = media.delivery.storyboard.session.authTypes.storyboard,
-                            ServiceUserId = media.delivery.storyboard.session.serviceUserId,
-                            Token = media.delivery.storyboard.session.token,
-                            Signature = media.delivery.storyboard.session.signature,
-                            ContentId = media.delivery.storyboard.session.contentId,
-                            HeartbeatLifetime = (int)media.delivery.storyboard.session.heartbeatLifetime,
-                            ContentKeyTimeout = (int)media.delivery.storyboard.session.contentKeyTimeout,
-                            Priority = media.delivery.storyboard.session.priority,
-                            TransferPresets = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.transferPresets),
-                            Urls = storyboardUrls
-                        }
-                    },
-                    TrackingId = media.delivery.trackingId
-                };
+                    ret.Media = new WatchApiDataMedia {
+                        RecipeId = media.delivery.recipeId,
+                        Encryption = media.delivery.encryption != null ? new MediaEncryption {
+                            EncryptedKey = media.delivery.encryption.encryptedKey,
+                            KeyUri = media.delivery.encryption.keyUri
+                        } : null,
+                        Movie = new MediaMovie {
+                            ContentId = media.delivery.movie.contentId,
+                            Audios = audios,
+                            Videos = videos,
+                            Session = new MediaSession {
+                                RecipeId = media.delivery.movie.session.recipeId,
+                                PlayerId = media.delivery.movie.session.playerId,
+                                Videos = JsonObjectExtension.ToStringArray(media.delivery.movie.session.videos),
+                                Audios = JsonObjectExtension.ToStringArray(media.delivery.movie.session.audios),
+                                Movies = JsonObjectExtension.ToStringArray(media.delivery.movie.session.movies),
+                                Protocols = JsonObjectExtension.ToStringArray(media.delivery.movie.session.protocols),
+                                AuthTypesHttp = media.delivery.movie.session.authTypes.http() ? media.delivery.movie.session.authTypes.http : null,
+                                AuthTypesHls = media.delivery.movie.session.authTypes.hls,
+                                ServiceUserId = media.delivery.movie.session.serviceUserId,
+                                Token = media.delivery.movie.session.token,
+                                Signature = media.delivery.movie.session.signature,
+                                ContentId = media.delivery.movie.session.contentId,
+                                HeartbeatLifetime = (int)media.delivery.movie.session.heartbeatLifetime,
+                                ContentKeyTimeout = (int)media.delivery.movie.session.contentKeyTimeout,
+                                Priority = media.delivery.movie.session.priority,
+                                TransferPresets = JsonObjectExtension.ToStringArray(media.delivery.movie.session.transferPresets),
+                                Urls = movieUrls
+                            }
+                        },
+                        StoryBoard = media.delivery.storyboard == null ? null : new MediaStoryBoard {
+                            ContentId = media.delivery.storyboard.contentId,
+                            ImageIds = storyboardImageIds,
+                            Session = new MediaSession {
+                                RecipeId = media.delivery.storyboard.session.recipeId,
+                                PlayerId = media.delivery.storyboard.session.playerId,
+                                Videos = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.videos),
+                                Audios = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.audios),
+                                Movies = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.movies),
+                                Protocols = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.protocols),
+                                AuthTypesStoryBoard = media.delivery.storyboard.session.authTypes.storyboard,
+                                ServiceUserId = media.delivery.storyboard.session.serviceUserId,
+                                Token = media.delivery.storyboard.session.token,
+                                Signature = media.delivery.storyboard.session.signature,
+                                ContentId = media.delivery.storyboard.session.contentId,
+                                HeartbeatLifetime = (int)media.delivery.storyboard.session.heartbeatLifetime,
+                                ContentKeyTimeout = (int)media.delivery.storyboard.session.contentKeyTimeout,
+                                Priority = media.delivery.storyboard.session.priority,
+                                TransferPresets = JsonObjectExtension.ToStringArray(media.delivery.storyboard.session.transferPresets),
+                                Urls = storyboardUrls
+                            }
+                        },
+                        TrackingId = media.delivery.trackingId
+                    };
+                }
             }
 
             ret.OkReason = data.okReason;
@@ -616,64 +680,111 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async Task<DmcSession> CreateSessionAsync(MediaSession movieSession, MediaEncryption? encryption = null, string? videoId = null, string? audioId = null) {
+        public async Task<DmcSession> CreateSessionAsync(MediaMovie movie, MediaEncryption? encryption = null, string? videoId = null, string? audioId = null) {
 
-            if (movieSession == null) {
-                throw new ArgumentNullException(nameof(movieSession));
+            if (movie == null) {
+                throw new ArgumentNullException(nameof(movie));
             }
-            if (movieSession.Urls.Count() == 0) {
-                throw new ArgumentException("DMCのAPI URLがありません");
-            }
-            if (movieSession.Videos.Count() == 0) {
+            if (!movie.Videos.Any()) {
                 throw new ArgumentException("動画データがありません");
             }
-            if (movieSession.Audios.Count() == 0) {
+            if (!movie.Audios.Any()) {
                 throw new ArgumentException("音声データがありません");
             }
 
-            var apiUrl = movieSession.Urls.First().Url!;
+            if (movie.AccessRightKey != null) {
+                var domandHeaders = new Dictionary<string, string>(NicoNicoSessionService.AjaxApiHeaders) {
+                    ["X-Access-Right-Key"] = movie.AccessRightKey,
+                };
 
-            var video = videoId ?? movieSession.Videos.First();
-            var audio = audioId ?? movieSession.Audios.First();
+                var actualVideoId = videoId ?? movie.Videos.First().Id;
+                var actualAudioId = audioId ?? movie.Audios.First().Id;
 
-            var preferedProtocolHttp = movieSession.Protocols.Contains("http");
-            var preferedProtocolHls = movieSession.Protocols.Contains("hls");
+                // リクエストのjsonを組み立てる
+                var payload = JsonObject.Serialize(new {
+                    outputs = new[] { new[] { actualVideoId, actualAudioId } }
+                });
 
-            object hlsParameter;
-            if (encryption != null) {
-                hlsParameter = new {
-                    use_well_known_port = "yes",
-                    use_ssl = "yes",
-                    transfer_preset = movieSession.TransferPresets.FirstOrDefault(""),
-                    segment_duration = 6000,
-                    encryption = new {
-                        hls_encryption_v1 = new {
-                            encrypted_key = encryption.EncryptedKey,
-                            key_uri = encryption.KeyUri
-                        }
-                    },
+                using var result = await SessionService.PostAsync(movie.ApiUrl, payload, domandHeaders).ConfigureAwait(false);
+                if (!result.IsSuccessStatusCode) {
+                    throw new StatusErrorException(result.StatusCode);
+                }
+
+                var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+                var data = json.data;
+
+                var setCookie = result.Headers.GetValues("set-cookie").FirstOrDefault();
+                Cookie? cookie = null;
+
+                if (setCookie != null) {
+                    cookie = new Cookie();
+                    var parts = setCookie.Split(';').Select(s => {
+                        var pair = s.Split('=');
+                        return new KeyValuePair<string, string?>(pair[0].Trim(), pair.Length == 1 ? null : pair[1]);
+                    });
+                    cookie.Name = parts.First().Key;
+                    cookie.Value = parts.First().Value;
+                    cookie.Expires = DateTime.Parse(parts.First(p => p.Key == "expires").Value!);
+                    cookie.Path = parts.First(p => p.Key == "path").Value;
+                    cookie.Domain = ".nicovideo.jp";
+                    cookie.Secure = true;
+                    cookie.HttpOnly = true;
+                }
+
+                return new DmcSession {
+                    VideoId = actualVideoId,
+                    AudioId = actualAudioId,
+                    ContentUri = data.contentUrl,
+                    RawJson = data.ToString(),
+                    CreatedTime = DateTimeOffset.Parse(data.createTime),
+                    ExpireTime = DateTimeOffset.Parse(data.expireTime),
+                    DmsCookie = cookie,
                 };
             } else {
-                hlsParameter = new {
-                    use_well_known_port = "yes",
-                    use_ssl = "yes",
-                    transfer_preset = movieSession.TransferPresets.FirstOrDefault(""),
-                    segment_duration = 6000
-                };
-            }
+                var movieSession = movie.Session!;
+                var apiUrl = movieSession.Urls.First().Url!;
 
-            // HLSが無効でない場合はHTTPを無効にする
-            if (!Settings.DisableHls) {
-                preferedProtocolHttp = false;
-            }
+                var video = videoId ?? movieSession.Videos.First();
+                var audio = audioId ?? movieSession.Audios.First();
 
-            // リクエストのjsonを組み立てる
-            var payload = JsonObject.Serialize(new {
-                session = new {
-                    recipe_id = movieSession.RecipeId,
-                    content_id = movieSession.ContentId,
-                    content_type = "movie",
-                    content_src_id_sets = new[] {
+                var preferedProtocolHttp = movieSession.Protocols.Contains("http");
+                var preferedProtocolHls = movieSession.Protocols.Contains("hls");
+
+                object hlsParameter;
+                if (encryption != null) {
+                    hlsParameter = new {
+                        use_well_known_port = "yes",
+                        use_ssl = "yes",
+                        transfer_preset = movieSession.TransferPresets.FirstOrDefault(""),
+                        segment_duration = 6000,
+                        encryption = new {
+                            hls_encryption_v1 = new {
+                                encrypted_key = encryption.EncryptedKey,
+                                key_uri = encryption.KeyUri
+                            }
+                        },
+                    };
+                } else {
+                    hlsParameter = new {
+                        use_well_known_port = "yes",
+                        use_ssl = "yes",
+                        transfer_preset = movieSession.TransferPresets.FirstOrDefault(""),
+                        segment_duration = 6000
+                    };
+                }
+
+                // HLSが無効でない場合はHTTPを無効にする
+                if (!Settings.DisableHls) {
+                    preferedProtocolHttp = false;
+                }
+
+                // リクエストのjsonを組み立てる
+                var payload = JsonObject.Serialize(new {
+                    session = new {
+                        recipe_id = movieSession.RecipeId,
+                        content_id = movieSession.ContentId,
+                        content_type = "movie",
+                        content_src_id_sets = new[] {
                         new {
                             content_src_ids = new[] {
                                 new {
@@ -685,72 +796,73 @@ namespace SRNicoNico.Services {
                             }
                         }
                     },
-                    timing_constraint = "unlimited",
-                    keep_method = new {
-                        heartbeat = new {
-                            lifetime = movieSession.HeartbeatLifetime
-                        }
-                    },
-                    protocol = new {
-                        name = "http",
-                        parameters = new {
-                            http_parameters = new {
-                                parameters = preferedProtocolHttp ? (object)new {
-                                    http_output_download_parameters = new {
-                                        use_well_known_port = "yes",
-                                        use_ssl = "yes",
-                                        transfer_preset = movieSession.TransferPresets.FirstOrDefault("")
-                                    }
-                                } : preferedProtocolHls ? new {
-                                    hls_parameters = hlsParameter
-                                } : throw new InvalidOperationException("プロトコルが不明です")
+                        timing_constraint = "unlimited",
+                        keep_method = new {
+                            heartbeat = new {
+                                lifetime = movieSession.HeartbeatLifetime
                             }
-                        }
-                    },
-                    content_uri = "",
-                    session_operation_auth = new {
-                        session_operation_auth_by_signature = new {
-                            token = movieSession.Token,
-                            signature = movieSession.Signature
-                        }
-                    },
-                    content_auth = new {
-                        auth_type = preferedProtocolHttp ? movieSession.AuthTypesHttp :
-                                            preferedProtocolHls ? movieSession.AuthTypesHls : throw new InvalidOperationException("authタイプが不明です"),
-                        content_key_timeout = movieSession.ContentKeyTimeout,
-                        service_id = "nicovideo",
-                        service_user_id = movieSession.ServiceUserId
-                    },
-                    client_info = new {
-                        player_id = movieSession.PlayerId
-                    },
-                    priority = movieSession.Priority
+                        },
+                        protocol = new {
+                            name = "http",
+                            parameters = new {
+                                http_parameters = new {
+                                    parameters = preferedProtocolHttp ? (object)new {
+                                        http_output_download_parameters = new {
+                                            use_well_known_port = "yes",
+                                            use_ssl = "yes",
+                                            transfer_preset = movieSession.TransferPresets.FirstOrDefault("")
+                                        }
+                                    } : preferedProtocolHls ? new {
+                                        hls_parameters = hlsParameter
+                                    } : throw new InvalidOperationException("プロトコルが不明です")
+                                }
+                            }
+                        },
+                        content_uri = "",
+                        session_operation_auth = new {
+                            session_operation_auth_by_signature = new {
+                                token = movieSession.Token,
+                                signature = movieSession.Signature
+                            }
+                        },
+                        content_auth = new {
+                            auth_type = preferedProtocolHttp ? movieSession.AuthTypesHttp :
+                                                preferedProtocolHls ? movieSession.AuthTypesHls : throw new InvalidOperationException("authタイプが不明です"),
+                            content_key_timeout = movieSession.ContentKeyTimeout,
+                            service_id = "nicovideo",
+                            service_user_id = movieSession.ServiceUserId
+                        },
+                        client_info = new {
+                            player_id = movieSession.PlayerId
+                        },
+                        priority = movieSession.Priority
+                    }
+                });
+
+                var builder = new GetRequestQueryBuilder(apiUrl)
+                    .AddQuery("_format", "json");
+
+                using var result = await SessionService.PostAsync(builder.Build(), payload).ConfigureAwait(false);
+                if (!result.IsSuccessStatusCode) {
+
+                    throw new StatusErrorException(result.StatusCode);
                 }
-            });
 
-            var builder = new GetRequestQueryBuilder(apiUrl)
-                .AddQuery("_format", "json");
+                var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+                var data = json.data;
 
-            using var result = await SessionService.PostAsync(builder.Build(), payload).ConfigureAwait(false);
-            if (!result.IsSuccessStatusCode) {
-
-                throw new StatusErrorException(result.StatusCode);
+                return new DmcSession {
+                    Id = data.session.id,
+                    VideoId = video,
+                    AudioId = audio,
+                    ContentUri = data.session.content_uri,
+                    Version = data.session.version,
+                    RawJson = data.ToString(),
+                    ApiUrl = apiUrl,
+                    CreatedTime = DateTimeOffset.FromUnixTimeMilliseconds((long)data.session.session_operation_auth.session_operation_auth_by_signature.created_time),
+                    ExpireTime = DateTimeOffset.FromUnixTimeMilliseconds((long)data.session.session_operation_auth.session_operation_auth_by_signature.expire_time)
+                };
             }
-
-            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
-            var data = json.data;
-
-            return new DmcSession {
-                Id = data.session.id,
-                VideoId = video,
-                AudioId = audio,
-                ContentUri = data.session.content_uri,
-                Version = data.session.version,
-                RawJson = data.ToString(),
-                ApiUrl = apiUrl,
-                CreatedTime = DateTimeOffset.FromUnixTimeMilliseconds((long)data.session.session_operation_auth.session_operation_auth_by_signature.created_time),
-                ExpireTime = DateTimeOffset.FromUnixTimeMilliseconds((long)data.session.session_operation_auth.session_operation_auth_by_signature.expire_time)
-            };
         }
 
         /// <inheritdoc />
@@ -782,116 +894,166 @@ namespace SRNicoNico.Services {
         }
 
         /// <inheritdoc />
-        public async Task<VideoStoryBoard> GetStoryBoardAsync(MediaSession sbSession) {
+        public async Task<VideoStoryBoard> GetStoryBoardAsync(MediaStoryBoard storyBoard) {
 
-            if (sbSession == null) {
-                throw new ArgumentNullException(nameof(sbSession));
+            if (storyBoard == null) {
+                throw new ArgumentNullException(nameof(storyBoard));
             }
-            if (sbSession.Urls.Count() == 0) {
-                throw new ArgumentException("DMCのAPI URLがありません");
-            }
-            string apiUrl = sbSession.Urls.First().Url!;
 
-            var builder = new GetRequestQueryBuilder(apiUrl)
-                .AddQuery("_format", "json");
+            if (storyBoard.AccessRightKey != null) {
+                var domandHeaders = new Dictionary<string, string>(NicoNicoSessionService.AjaxApiHeaders) {
+                    ["X-Access-Right-Key"] = storyBoard.AccessRightKey,
+                };
+                using var result = await SessionService.PostAsync(storyBoard.ApiUrl, (IDictionary<string, string>?)null, domandHeaders).ConfigureAwait(false);
+                if (!result.IsSuccessStatusCode) {
+                    throw new StatusErrorException(result.StatusCode);
+                }
+                var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
 
-            // リクエストのjsonを組み立てる
-            var payload = JsonObject.Serialize(new {
-                session = new {
-                    recipe_id = sbSession.RecipeId,
-                    content_id = sbSession.ContentId,
-                    content_type = "video",
-                    content_src_id_sets = new[] {
+                var assetsUrl = (string)json.data.contentUrl;
+                using var assetsResult = await SessionService.GetAsync(assetsUrl).ConfigureAwait(false);
+                if (!assetsResult.IsSuccessStatusCode) {
+                    throw new StatusErrorException(assetsResult.StatusCode);
+                }
+
+                var assetsJson = JsonObject.Parse(await assetsResult.Content.ReadAsStringAsync().ConfigureAwait(false));
+                var data = assetsJson;
+
+                var ret = new VideoStoryBoard {
+                    Columns = (int)data.columns,
+                    Interval = (int)data.interval,
+                    Rows = (int)data.rows,
+                    ThumbnailHeight = (int)data.thumbnailHeight,
+                    ThumbnailWidth = (int)data.thumbnailWidth,
+                    BitmapMap = new Dictionary<int, Bitmap>()
+                };
+
+                // 画像1枚にrows * columns個分のストーリーボード画像が入っているので分解してそれぞれ一枚ずつの画像に切り出す
+                int bitmapIndex = 0;
+                foreach (var image in data.images) {
+                    if (image == null) {
+                        continue;
+                    }
+
+                    var url = assetsUrl.Replace("storyboard.json", image.url);
+                    using var jpegResult = await SessionService.GetAsync(url).ConfigureAwait(false);
+                    if (!jpegResult.IsSuccessStatusCode) {
+                        throw new StatusErrorException(jpegResult.StatusCode);
+                    }
+                    var bitmap = new Bitmap(await jpegResult.Content.ReadAsStreamAsync().ConfigureAwait(false));
+
+                    for (int i = 0; i < ret.Columns; i++) {
+                        for (int j = 0; j < ret.Rows; j++) {
+                            ret.BitmapMap[bitmapIndex] = bitmap.Clone(new Rectangle(ret.ThumbnailWidth * j, ret.ThumbnailHeight * i, ret.ThumbnailWidth, ret.ThumbnailHeight), bitmap.PixelFormat);
+                            bitmapIndex += ret.Interval;
+                        }
+                    }
+                }
+                return ret;
+            } else {
+                var sbSession = storyBoard.Session!;
+                string apiUrl = sbSession.Urls.First().Url!;
+
+                var builder = new GetRequestQueryBuilder(apiUrl)
+                    .AddQuery("_format", "json");
+
+                // リクエストのjsonを組み立てる
+                var payload = JsonObject.Serialize(new {
+                    session = new {
+                        recipe_id = sbSession.RecipeId,
+                        content_id = sbSession.ContentId,
+                        content_type = "video",
+                        content_src_id_sets = new[] {
                         new {
                             content_src_ids = sbSession.Videos
                         }
                     },
-                    timing_constraint = "unlimited",
-                    keep_method = new {
-                        heartbeat = new {
-                            lifetime = sbSession.HeartbeatLifetime
-                        }
-                    },
-                    protocol = new {
-                        name = "http",
-                        parameters = new {
-                            http_parameters = new {
-                                parameters = new {
-                                    storyboard_download_parameters = new {
-                                        use_well_known_port = "yes",
-                                        use_ssl = "yes"
+                        timing_constraint = "unlimited",
+                        keep_method = new {
+                            heartbeat = new {
+                                lifetime = sbSession.HeartbeatLifetime
+                            }
+                        },
+                        protocol = new {
+                            name = "http",
+                            parameters = new {
+                                http_parameters = new {
+                                    parameters = new {
+                                        storyboard_download_parameters = new {
+                                            use_well_known_port = "yes",
+                                            use_ssl = "yes"
+                                        }
                                     }
                                 }
                             }
+                        },
+                        content_uri = "",
+                        session_operation_auth = new {
+                            session_operation_auth_by_signature = new {
+                                token = sbSession.Token,
+                                signature = sbSession.Signature
+                            }
+                        },
+                        content_auth = new {
+                            auth_type = sbSession.AuthTypesStoryBoard,
+                            content_key_timeout = sbSession.ContentKeyTimeout,
+                            service_id = "nicovideo",
+                            service_user_id = sbSession.ServiceUserId
+                        },
+                        client_info = new {
+                            player_id = sbSession.PlayerId
+                        },
+                        priority = sbSession.Priority
+                    }
+                });
+
+                using var result = await SessionService.PostAsync(builder.Build(), payload).ConfigureAwait(false);
+                if (!result.IsSuccessStatusCode) {
+
+                    throw new StatusErrorException(result.StatusCode);
+                }
+
+                var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+                using var metadataResult = await SessionService.GetAsync((string)json.data.session.content_uri).ConfigureAwait(false);
+                if (!metadataResult.IsSuccessStatusCode) {
+
+                    throw new StatusErrorException(metadataResult.StatusCode);
+                }
+                json = JsonObject.Parse(await metadataResult.Content.ReadAsStringAsync().ConfigureAwait(false));
+                var storyboard = json.data.storyboards[0];
+
+                var ret = new VideoStoryBoard {
+                    Columns = (int)storyboard.columns,
+                    Interval = (int)storyboard.interval,
+                    Rows = (int)storyboard.rows,
+                    ThumbnailHeight = (int)storyboard.thumbnail_height,
+                    ThumbnailWidth = (int)storyboard.thumbnail_width,
+                    BitmapMap = new Dictionary<int, Bitmap>()
+                };
+
+                // 画像1枚にrows * columns個分のストーリーボード画像が入っているので分解してそれぞれ一枚ずつの画像に切り出す
+                int bitmapIndex = 0;
+                foreach (var image in storyboard.images) {
+                    if (image == null) {
+                        continue;
+                    }
+                    using var jpegResult = await SessionService.GetAsync((string)image.uri).ConfigureAwait(false);
+                    if (!jpegResult.IsSuccessStatusCode) {
+
+                        throw new StatusErrorException(jpegResult.StatusCode);
+                    }
+                    var bitmap = new Bitmap(await jpegResult.Content.ReadAsStreamAsync().ConfigureAwait(false));
+
+                    for (int i = 0; i < ret.Columns; i++) {
+                        for (int j = 0; j < ret.Rows; j++) {
+
+                            ret.BitmapMap[bitmapIndex] = bitmap.Clone(new Rectangle(ret.ThumbnailWidth * j, ret.ThumbnailHeight * i, ret.ThumbnailWidth, ret.ThumbnailHeight), bitmap.PixelFormat);
+                            bitmapIndex += ret.Interval;
                         }
-                    },
-                    content_uri = "",
-                    session_operation_auth = new {
-                        session_operation_auth_by_signature = new {
-                            token = sbSession.Token,
-                            signature = sbSession.Signature
-                        }
-                    },
-                    content_auth = new {
-                        auth_type = sbSession.AuthTypesStoryBoard,
-                        content_key_timeout = sbSession.ContentKeyTimeout,
-                        service_id = "nicovideo",
-                        service_user_id = sbSession.ServiceUserId
-                    },
-                    client_info = new {
-                        player_id = sbSession.PlayerId
-                    },
-                    priority = sbSession.Priority
-                }
-            });
-
-            using var result = await SessionService.PostAsync(builder.Build(), payload).ConfigureAwait(false);
-            if (!result.IsSuccessStatusCode) {
-
-                throw new StatusErrorException(result.StatusCode);
-            }
-
-            var json = JsonObject.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
-            using var metadataResult = await SessionService.GetAsync((string)json.data.session.content_uri).ConfigureAwait(false);
-            if (!metadataResult.IsSuccessStatusCode) {
-
-                throw new StatusErrorException(metadataResult.StatusCode);
-            }
-            json = JsonObject.Parse(await metadataResult.Content.ReadAsStringAsync().ConfigureAwait(false));
-            var storyboard = json.data.storyboards[0];
-
-            var ret = new VideoStoryBoard {
-                Columns = (int)storyboard.columns,
-                Interval = (int)storyboard.interval,
-                Quality = (int)storyboard.quality,
-                Rows = (int)storyboard.rows,
-                ThumbnailHeight = (int)storyboard.thumbnail_height,
-                ThumbnailWidth = (int)storyboard.thumbnail_width,
-                BitmapMap = new Dictionary<int, Bitmap>()
-            };
-
-            // 画像1枚にrows * columns個分のストーリーボード画像が入っているので分解してそれぞれ一枚ずつの画像に切り出す
-            int bitmapIndex = 0;
-            foreach (var image in storyboard.images) {
-                if (image == null) {
-                    continue;
-                }
-                using var jpegResult = await SessionService.GetAsync((string)image.uri).ConfigureAwait(false);
-                if (!jpegResult.IsSuccessStatusCode) {
-
-                    throw new StatusErrorException(jpegResult.StatusCode);
-                }
-                var bitmap = new Bitmap(await jpegResult.Content.ReadAsStreamAsync().ConfigureAwait(false));
-
-                for (int i = 0; i < ret.Columns; i++) {
-                    for (int j = 0; j < ret.Rows; j++) {
-
-                        ret.BitmapMap[bitmapIndex] = bitmap.Clone(new Rectangle(ret.ThumbnailWidth * j, ret.ThumbnailHeight * i, ret.ThumbnailWidth, ret.ThumbnailHeight), bitmap.PixelFormat);
-                        bitmapIndex += ret.Interval;
                     }
                 }
+                return ret;
             }
-            return ret;
         }
 
         /// <inheritdoc />
@@ -899,6 +1061,10 @@ namespace SRNicoNico.Services {
 
             if (dmcSession == null) {
                 throw new ArgumentNullException(nameof(dmcSession));
+            }
+            // 新サーバでは特に何もしない
+            if (dmcSession.DmsCookie != null) {
+                return;
             }
 
             var builder = new GetRequestQueryBuilder($"{dmcSession.ApiUrl}/{dmcSession.Id}")

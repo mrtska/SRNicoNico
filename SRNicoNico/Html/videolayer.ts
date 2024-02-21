@@ -1,7 +1,7 @@
 ﻿import './style.scss';
 
 import { CommentHandler } from './commentlayer';
-import * as Hls from 'hls.js';
+import Hls from 'hls.js';
 
 function postMessage(message: Message) {
 
@@ -82,20 +82,12 @@ class VideoHandler {
             });
         });
         this.video.addEventListener('ended', e => {
-
             postMessage({
                 type: 'ended'
             });
         });
 
-        // HLSの場合
-        if (contentUri.includes("master.m3u8")) {
-
-            this.createHls(contentUri);
-        } else {
-
-            this.video.src = contentUri;
-        }
+        this.createHls(contentUri);
         this.video.volume = volume;
     }
 
@@ -106,8 +98,11 @@ class VideoHandler {
             return;
         }
 
-        this.hls = new Hls();
-        this.hls.config.enableSoftwareAES = false;
+        this.hls = new Hls({
+            xhrSetup: (xhr, url) => {
+                xhr.withCredentials = true;
+            }
+        });
         this.hls.config.enableWorker = true;
 
         this.hls.on(Hls.Events.MEDIA_ATTACHED, () => {
@@ -133,7 +128,7 @@ class VideoHandler {
         const currentTime = this.video.currentTime;
         const paused = this.video.paused;
 
-        if (contentUri.includes("master.m3u8")) {
+        if (contentUri.includes(".m3u8")) {
 
             if (this.hls !== null) {
                 this.hls.destroy();
