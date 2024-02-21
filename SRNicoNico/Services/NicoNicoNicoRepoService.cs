@@ -14,11 +14,11 @@ namespace SRNicoNico.Services {
         /// <summary>
         /// ニコレポを取得するAPI
         /// </summary>
-        private const string NicoRepoApiUrl = "https://public.api.nicovideo.jp/v1/timelines/nicorepo/last-1-month/my/pc/entries.json";
+        private const string NicoRepoApiUrl = "https://api.repoline.nicovideo.jp/v1/timelines/nicorepo/last-1-month/my/pc/entries.json";
         /// <summary>
         /// ユーザーニコレポを取得するAPI
         /// </summary>
-        private const string NicoRepoUserApiUrl = "https://public.api.nicovideo.jp/v1/timelines/nicorepo/last-6-months/users/{0}/pc/entries.json";
+        private const string NicoRepoUserApiUrl = "https://api.repoline.nicovideo.jp/v1/timelines/nicorepo/last-6-months/users/{0}/pc/entries.json";
 
         private readonly ISessionService SessionService;
         private readonly IHistoryService HistoryService;
