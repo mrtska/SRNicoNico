@@ -53,7 +53,6 @@ namespace SRNicoNico.Tests {
 
             Assert.NotEmpty(result.Media.Movie.Audios);
             Assert.NotEmpty(result.Media.Movie.Videos);
-            Assert.NotNull(result.Media.Movie.Session);
 
             Assert.NotNull(result.Owner.Id);
             Assert.NotNull(result.Owner.Nickname);
@@ -82,7 +81,7 @@ namespace SRNicoNico.Tests {
             var result = await VideoService.WatchAsync("sm9", true);
 
             // セッションを作成
-            var session = await VideoService.CreateSessionAsync(result.Media.Movie.Session);
+            var session = await VideoService.CreateSessionAsync(result.Media.Movie);
             Assert.NotNull(session);
 
             // 1秒待つ
@@ -120,11 +119,10 @@ namespace SRNicoNico.Tests {
 
             var result = await VideoService.WatchAsync("sm9", true);
 
-            var sb = await VideoService.GetStoryBoardAsync(result.Media.StoryBoard.Session);
+            var sb = await VideoService.GetStoryBoardAsync(result.Media.StoryBoard);
 
             Assert.NotEqual(0, sb.Columns);
             Assert.NotEqual(0, sb.Interval);
-            Assert.NotEqual(0, sb.Quality);
             Assert.NotEqual(0, sb.Rows);
             Assert.NotEqual(0, sb.ThumbnailHeight);
             Assert.NotEqual(0, sb.ThumbnailWidth);

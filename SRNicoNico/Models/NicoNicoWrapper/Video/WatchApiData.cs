@@ -282,10 +282,11 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
 
     public class MediaMovie {
         public string? ContentId { get; set; }
+        public string ApiUrl { get; set; } = default!;
 
-        public IEnumerable<MediaMovieAudio>? Audios { get; set; }
-        public IEnumerable<MediaMovieVideo>? Videos { get; set; }
-
+        public IEnumerable<MediaMovieAudio> Audios { get; set; } = default!;
+        public IEnumerable<MediaMovieVideo> Videos { get; set; } = default!;
+        public string AccessRightKey { get; set; } = default!;
         public MediaSession? Session { get; set; }
     }
     public class MediaMovieAudio {
@@ -295,8 +296,6 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public int SamplingRate { get; set; }
         public double IntegratedLoudness { get; set; }
         public double TruePeak { get; set; }
-        public int LevelIndex { get; set; }
-
         public IDictionary<string, double>? LoudnessCollection { get; set; }
     }
     public class MediaMovieVideo {
@@ -306,8 +305,7 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public int Bitrate { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
-        public int LevelIndex { get; set; }
-        public int RecommendedHighestAudioLevelIndex { get; set; }
+        public int RecommendedHighestAudioQualityLevel { get; set; }
     }
 
     public class MediaStoryBoard {
@@ -316,6 +314,10 @@ namespace SRNicoNico.Models.NicoNicoWrapper {
         public IEnumerable<string>? ImageIds { get; set; }
 
         public MediaSession Session { get; set; } = default!;
+
+        public string ApiUrl { get; set; } = default!;
+
+        public string AccessRightKey { get; set; } = default!;
     }
 
     public class MediaSession {
