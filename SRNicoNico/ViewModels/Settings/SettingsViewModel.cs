@@ -1,72 +1,80 @@
-﻿using Livet;
-using Livet.Messaging;
-using Livet.Messaging.Windows;
-using SRNicoNico.Models.NicoNicoViewer;
-using System.Diagnostics;
+﻿using System.Linq;
+using System.Windows.Input;
+using Livet;
+using Unity;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// 設定ページのViewModel
+    /// </summary>
     public class SettingsViewModel : TabItemViewModel {
 
-        #region SettingsList変更通知プロパティ
-        private DispatcherCollection<TabItemViewModel> _SettingsList = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
-
-        public DispatcherCollection<TabItemViewModel> SettingsList {
-            get { return _SettingsList; }
-            set { 
-                if(_SettingsList == value)
+        private ObservableSynchronizedCollection<TabItemViewModel> _SettingsItems = new ObservableSynchronizedCollection<TabItemViewModel>();
+        /// <summary>
+        /// 設定のタブのリスト
+        /// </summary>
+        public ObservableSynchronizedCollection<TabItemViewModel> SettingsItems {
+            get { return _SettingsItems; }
+            set {
+                if (_SettingsItems == value)
                     return;
-                _SettingsList = value;
+                _SettingsItems = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        public readonly SettingsCommentViewModel Comment;
-        public readonly SettingsNGFilterViewModel NGFilter;
-
-        public SettingsViewModel() : base("設定") {
-
-            SettingsList.Add(new SettingsGeneralViewModel());
-            SettingsList.Add(new SettingsVideoViewModel());
-            SettingsList.Add(new SettingsRankingViewModel());
-            SettingsList.Add(Comment = new SettingsCommentViewModel());
-            SettingsList.Add(NGFilter = new SettingsNGFilterViewModel());
-            SettingsList.Add(new SettingsLiveViewModel());
-        }
-
-
-        public async void Logout() {
-
-            try {
-
-                var a = await App.ViewModelRoot.CurrentUser.Session.GetAsync("https://secure.nicovideo.jp/secure/logout");
-
-                App.ViewModelRoot.CurrentUser = await App.ViewModelRoot.SignIn.SignInAsync();
-            } catch(RequestFailed) {
-
-                return;
+        private TabItemViewModel? _SelectedItem;
+        /// <summary>
+        /// 現在選択されているタブ デフォルトは一般ページ
+        /// </summary>
+        public TabItemViewModel? SelectedItem {
+            get { return _SelectedItem; }
+            set {
+                if (_SelectedItem == value)
+                    return;
+                _SelectedItem = value;
+                RaisePropertyChanged();
             }
-
         }
 
-        public void OpenSettingsFolder() {
+        private readonly IUnityContainer UnityContainer;
 
-            Process.Start(Settings.Instance.Dir);
+        public SettingsViewModel(IUnityContainer unityContainer) : base("設定") {
+
+            UnityContainer = unityContainer;
         }
 
-        public void OpenResetConfigView() {
+        /// <summary>
+        /// 設定タブの一覧をインスタンス化する
+        /// </summary>
+        public void Loaded() {
 
-            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.ResetSettingsView), this, TransitionMode.Modal));
+            SettingsItems.Add(UnityContainer.Resolve<SettingsGeneralViewModel>());
+            SettingsItems.Add(UnityContainer.Resolve<SettingsRankingViewModel>());
+            SettingsItems.Add(UnityContainer.Resolve<SettingsMutedAccountViewModel>());
+            SettingsItems.Add(UnityContainer.Resolve<SettingsVideoViewModel>());
+            SettingsItems.Add(UnityContainer.Resolve<SettingsCommentViewModel>());
+            SettingsItems.Add(UnityContainer.Resolve<SettingsLiveViewModel>());
+
+            // 子ViewModelのStatusを監視する
+            SettingsItems.ToList().ForEach(vm => {
+
+                vm.PropertyChanged += (o, e) => {
+
+                    var tabItem = (TabItemViewModel)o;
+                    if (e.PropertyName == nameof(Status)) {
+
+                        Status = tabItem.Status;
+                    }
+                };
+            });
+
+            // 一般設定をデフォルト値とする
+            SelectedItem = SettingsItems.First();
         }
 
-        public void CloseView() {
-
-            Messenger.Raise(new WindowActionMessage(WindowAction.Close));
-        }
-
-        public void Reset() {
-
-            Settings.Instance.Reset();
+        public override void KeyDown(KeyEventArgs e) {
+            SelectedItem?.KeyDown(e);
         }
     }
 }

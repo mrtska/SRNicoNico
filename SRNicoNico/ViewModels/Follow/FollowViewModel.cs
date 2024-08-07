@@ -1,48 +1,81 @@
-﻿using Livet;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using Livet;
+using Unity;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// フォローページのViewModel
+    /// </summary>
     public class FollowViewModel : TabItemViewModel {
 
-        #region FavoriteList変更通知プロパティ
-        private DispatcherCollection<TabItemViewModel> _FavoriteList = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
-
-        public DispatcherCollection<TabItemViewModel> FavoriteList {
-            get { return _FavoriteList; }
-            set {
-                if(_FavoriteList == value)
+        private DispatcherCollection<TabItemViewModel> _FollowItems = new DispatcherCollection<TabItemViewModel>(App.UIDispatcher);
+        /// <summary>
+        /// フォローのタブのリスト
+        /// </summary>
+        public DispatcherCollection<TabItemViewModel> FollowItems {
+            get { return _FollowItems; }
+            set { 
+                if (_FollowItems == value)
                     return;
-                _FavoriteList = value;
+                _FollowItems = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        #region SelectedList変更通知プロパティ
-        private TabItemViewModel _SelectedList;
-
-        public TabItemViewModel SelectedList {
-            get { return _SelectedList; }
-            set {
-                if(_SelectedList == value)
+        private TabItemViewModel? _SelectedItem;
+        /// <summary>
+        /// 現在選択されているタブ デフォルトはフォローしているユーザー
+        /// </summary>
+        public TabItemViewModel? SelectedItem {
+            get { return _SelectedItem; }
+            set { 
+                if (_SelectedItem == value)
                     return;
-                _SelectedList = value;
+                _SelectedItem = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        public FollowViewModel() : base("フォロー") {
+        private readonly IUnityContainer UnityContainer;
 
-            FavoriteList.Add(new FollowUserViewModel(this));
-            FavoriteList.Add(new FollowMylistViewModel(this));
-            FavoriteList.Add(new FollowChannelViewModel(this));
-            FavoriteList.Add(new FollowCommunityViewModel(this));
+        public FollowViewModel(IUnityContainer unityContainer) : base("フォロー") {
+
+            UnityContainer = unityContainer;
+        }
+
+        public void Loaded() {
+
+            // 別のスレッドで各要素を初期化する
+            Task.Run(() => {
+
+                FollowItems.Add(UnityContainer.Resolve<UserFollowViewModel>());
+                FollowItems.Add(UnityContainer.Resolve<TagFollowViewModel>());
+                FollowItems.Add(UnityContainer.Resolve<MylistFollowViewModel>());
+                FollowItems.Add(UnityContainer.Resolve<ChannelFollowViewModel>());
+                FollowItems.Add(UnityContainer.Resolve<CommunityFollowViewModel>());
+
+                // 子ViewModelのStatusを監視する
+                FollowItems.ToList().ForEach(vm => {
+
+                    vm.PropertyChanged += (o, e) => {
+
+                        var tabItem = (TabItemViewModel)o;
+                        if (e.PropertyName == nameof(Status)) {
+
+                            Status = tabItem.Status;
+                        }
+                    };
+                });
+
+                // ユーザーフォローをデフォルト値とする
+                SelectedItem = FollowItems.First();
+            });
         }
 
         public override void KeyDown(KeyEventArgs e) {
-
-            SelectedList?.KeyDown(e);
+            SelectedItem?.KeyDown(e);
         }
     }
 }

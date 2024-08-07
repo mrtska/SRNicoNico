@@ -1,48 +1,71 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.UserMylist"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
              xmlns:v="clr-namespace:SRNicoNico.Views"
              xmlns:controls="clr-namespace:SRNicoNico.Views.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance {x:Type vm:UserMylistViewModel}}">
+             d:DataContext="{d:DesignInstance {x:Type vm:UserMylistViewModel}}"
+             d:DesignHeight="450" d:DesignWidth="800">
     <i:Interaction.Triggers>
-        <i:EventTrigger>
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />
+        <i:EventTrigger EventName="Loaded">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Loaded" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        <ContentControl Content="{Binding Model.Closed}">
-            <ContentControl.ContentTemplateSelector>
-                <controls:BooleanDataTemplateSelector>
-                    <controls:BooleanDataTemplateSelector.TrueTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="非公開です。" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                        </DataTemplate>
-                    </controls:BooleanDataTemplateSelector.TrueTemplate>
-                    <controls:BooleanDataTemplateSelector.FalseTemplate>
-                        <DataTemplate>
-                            <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext}">
-                                <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding Model.MylistList}">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type m:NicoNicoUserMylistEntry}">
-                                            <v:UserMylistEntry />
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                                <metro:ProgressRing IsActive="{Binding IsActive}" />
-                            </Grid>
-                        </DataTemplate>
-                    </controls:BooleanDataTemplateSelector.FalseTemplate>
-                </controls:BooleanDataTemplateSelector>
-            </ContentControl.ContentTemplateSelector>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" Text="{Binding MylistItems.Count, StringFormat={}{0}件, TargetNullValue=''}" />
+            <controls:RoundButton Grid.Column="1" ToolTip="更新(F5)" Focusable="False" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" IconData="{StaticResource ReloadIcon}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodName="Reload" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </controls:RoundButton>
+        </Grid>
+        <ContentControl Grid.Row="1">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding MylistItems.Count}" Value="0" />
+                                <Condition Binding="{Binding IsActive}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ContentControl}">
+                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Text="マイリストがありません" />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+            <ListBox Grid.Row="1" ItemsSource="{Binding MylistItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.Resources>
+                    <DataTemplate DataType="{x:Type w:MylistItem}">
+                        <v:UserMylistView Tag="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext}">
+                        </v:UserMylistView>
+                    </DataTemplate>
+                </ListBox.Resources>
+            </ListBox>
         </ContentControl>
+        <metro:ProgressRing Grid.Row="1" IsActive="{Binding IsActive}" />
     </Grid>
 </UserControl>

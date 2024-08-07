@@ -1,22 +1,16 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
-    <Style x:Key="{x:Static SystemParameters.FocusVisualStyleKey}" />
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 
     <ResourceDictionary.MergedDictionaries>
 
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme/Dark.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Accent/Orange.xaml" />
-        
+
         <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.xaml" />
 
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.Button.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ComboBox.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ContextMenu.xaml" />
-        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.DataGrid.xaml" />
-        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.FlowDocument.xaml" />
-        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.GridSplliter.xaml" />
-        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.Hyperlink.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.GridSplitter.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ListBox.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.MenuItem.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ProgressRing.xaml" />
@@ -24,6 +18,6 @@
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.Slider.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.TabView.xaml" />
         <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.TextBox.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Themes/Theme.ToolTip.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
 </ResourceDictionary>

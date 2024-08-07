@@ -1,231 +1,208 @@
-﻿using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using SRNicoNico.Models.NicoNicoViewer;
-using SRNicoNico.Models.NicoNicoWrapper;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using FastEnumUtility;
+using Livet;
+using SRNicoNico.Models;
+using SRNicoNico.Services;
+using Unity;
 
 namespace SRNicoNico.ViewModels {
-    public class SearchViewModel : PageSpinnerViewModel {
+    /// <summary>
+    /// 検索ページのViewModel
+    /// </summary>
+    public class SearchViewModel : TabItemViewModel {
 
-        public NicoNicoSearch Model { get; set; }
+        /// <summary>
+        /// ソートキーのリスト
+        /// </summary>
+        public IEnumerable<SearchSortKey> SortKeyAll { get; } = FastEnum.GetValues<SearchSortKey>();
 
-        //ソート方法
-        private readonly string[] sortBy = { "sortKey=registeredAt&sortOrder=desc", "sortKey=registeredAt&sortOrder=asc",
-                                     "sortKey=viewCount&sortOrder=desc", "sortKey=viewCount&sortOrder=asc",
-                                     "sortKey=commentCount&sortOrder=desc", "sortKey=commentCount&sortOrder=asc",
-                                     "sortKey=mylistCount&sortOrder=desc", "sortKey=mylistCount&sortOrder=asc",
-                                     "sortKey=duration&sortOrder=desc", "sortKey=duration&sortOrder=asc"
-                                    };
-
-        #region SearchText変更通知プロパティ
-        private string _SearchText;
-
-        public string SearchText {
-            get { return _SearchText; }
+        private ObservableSynchronizedCollection<SearchResultViewModel> _SearchItems = new ObservableSynchronizedCollection<SearchResultViewModel>();
+        /// <summary>
+        /// 検索のタブのリスト
+        /// </summary>
+        public ObservableSynchronizedCollection<SearchResultViewModel> SearchItems {
+            get { return _SearchItems; }
             set {
-                if(_SearchText == value)
+                if (_SearchItems == value)
                     return;
-                _SearchText = value;
+                _SearchItems = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        private string PreviousSearchText;
-
-        #region SearchType変更通知プロパティ
-        private SearchType _SearchType;
-
-        public SearchType SearchType {
-            get { return _SearchType; }
+        private TabItemViewModel? _SelectedItem;
+        /// <summary>
+        /// 現在選択されている検索タブ
+        /// </summary>
+        public TabItemViewModel? SelectedItem {
+            get { return _SelectedItem; }
             set {
-                if(_SearchType == value)
+                if (_SelectedItem == value)
                     return;
-                _SearchType = value;
+                _SelectedItem = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        #region SearchHistory変更通知プロパティ
-        private ObservableSynchronizedCollection<string> _SearchHistory = new ObservableSynchronizedCollection<string>();
-
-        public ObservableSynchronizedCollection<string> SearchHistory {
-            get { return _SearchHistory; }
-            set {
-                if(_SearchHistory == value)
+        /// <summary>
+        /// 選択しているソート順
+        /// </summary>
+        public SearchSortKey SelectedSortKey {
+            get { return Settings.SelectedSortKey; }
+            set { 
+                if (Settings.SelectedSortKey == value)
                     return;
-                _SearchHistory = value;
+                Settings.SelectedSortKey = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        public bool TextBoxFocused { get; set; }
-
-
-        public SearchViewModel() : base("検索") {
-
-            //検索
-            Model = new NicoNicoSearch();
-
-            foreach(var entry in Settings.Instance.SearchHistory) {
-
-                SearchHistory.Add(entry);
+        private SearchType _SelectedSearchType;
+        /// <summary>
+        /// 検索タイプ
+        /// </summary>
+        public SearchType SelectedSearchType {
+            get { return _SelectedSearchType; }
+            set { 
+                if (_SelectedSearchType == value)
+                    return;
+                _SelectedSearchType = value;
+                RaisePropertyChanged();
             }
         }
 
-        public void Search() {
+        private string _SearchQuery = string.Empty;
+        /// <summary>
+        /// 検索ワード
+        /// </summary>
+        public string SearchQuery {
+            get { return _SearchQuery; }
+            set { 
+                if (_SearchQuery == value)
+                    return;
+                _SearchQuery = value;
+                RaisePropertyChanged();
+            }
+        }
 
-            if(SearchText == null || SearchText.Length == 0) {
+        private ObservableSynchronizedCollection<string> _SearchHistories = new ObservableSynchronizedCollection<string>();
+        /// <summary>
+        /// 検索履歴
+        /// </summary>
+        public ObservableSynchronizedCollection<string> SearchHistories {
+            get { return _SearchHistories; }
+            set { 
+                if (_SearchHistories == value)
+                    return;
+                _SearchHistories = value;
+                RaisePropertyChanged();
+            }
+        }
 
+        private readonly IUnityContainer UnityContainer;
+        private readonly ISearchService SearchService;
+        private readonly ISettings Settings;
+
+        public SearchViewModel(IUnityContainer unityContainer, ISearchService searchService, ISettings settings) : base("検索") {
+
+            UnityContainer = unityContainer;
+            SearchService = searchService;
+            Settings = settings;
+        }
+
+        public async void Loaded() {
+
+            var result = await SearchService.GetSearchHistoriesAsync();
+
+            foreach (var query in result) {
+
+                SearchHistories.Add(query);
+            }
+        }
+
+        /// <summary>
+        /// 検索する
+        /// </summary>
+        public async void Search() {
+
+            if (string.IsNullOrWhiteSpace(SearchQuery)) {
                 return;
             }
 
-            Status = "検索中:" + SearchText;
+            var vm = UnityContainer.Resolve<SearchResultViewModel>();
+            // 値をコピーする
+            vm.SelectedSearchType = SelectedSearchType;
+            vm.SelectedSortKey = SelectedSortKey;
+            vm.SearchQuery = SearchQuery;
 
-            PreviousSearchText = SearchText;
-            CurrentPage = 1;
-            Search(SearchText);
+            // ステータスプロパティが更新されたら動画タブのステータスに反映させる
+            vm.PropertyChanged += OnPropertyChanged;
+            // 検索タブがDisposeされたら自動的にリストから削除する
+            vm.CompositeDisposable.Add(() => {
+
+                vm.PropertyChanged -= OnPropertyChanged;
+                SearchItems.Remove(vm);
+
+                // タブの一番後ろを選択状態にする
+                SelectedItem = SearchItems.LastOrDefault();
+            });
+
+            SearchItems.Add(vm);
+            SelectedItem = vm;
+
+            vm.Reload();
+
+            ReorderHistory(SearchQuery);
+
+            await SearchService.SaveSearchHistoriesAsync(SearchHistories.AsEnumerable());
         }
 
-        //TextBoxBehaviorで使うのでアレ
-        public void Search(string tex) {
+        public void SearchWithHistory(string query) {
 
-            Search(tex, 1);
-        }
-
-        //検索ボタン押下
-        public async void Search(string text, int page = 1) {
-
-            //ページ数がおかしい場合は一番ギリギリセーフな値になるようバリデートする
-            if(page != 1 && MaxPages < page) {
-
-                page = MaxPages;
-                CurrentPage = page;
-            }
-
-            //どうしてそれで検索出来ると思ったんだ
-            if(text == null || text.Length == 0) {
-
-                return;
-            }
-            IsActive = true;
-
-            //履歴に存在しなかったら履歴に追加する
-            if(!Settings.Instance.SearchHistory.Contains(text)) {
-
-                //一番上に追加する
-                SearchHistory.Insert(0, text);
-            } else {
-
-                //存在したら一番上に持ってくる
-                SearchHistory.Move(SearchHistory.IndexOf(SearchHistory.Where(e => e == text).First()), 0);
-            }
-            ApplyHistory();
-
-            Status  = await Model.Search(text, SearchType, sortBy[Settings.Instance.SearchIndex], page);
-
-            //検索結果をUIに
-            Total = Model.Total;
-            MaxPages = Total / 30;
-
-            if(Total == 0) {
-
-                Status = "0件です";
-            }
-
-            IsActive = false;
-        }
-
-        public void SearchPage(string page) {
-
-            SearchPage(int.Parse(page));
-        }
-
-        public void SearchPage(int page) {
-
-            Search(PreviousSearchText, page);
-        }
-
-        public void SearchWithHistory(string tex) {
-
-            SearchText = tex;
+            SearchQuery = query;
             Search();
         }
 
-        #region DeleteHistoryCommand
-        private ListenerCommand<string> _DeleteHistoryCommand;
+        /// <summary>
+        /// 履歴を削除する
+        /// </summary>
+        /// <param name="query">削除する履歴</param>
+        public async void DeleteHistory(string query) {
 
-        public ListenerCommand<string> DeleteHistoryCommand {
-            get {
-                if(_DeleteHistoryCommand == null) {
-                    _DeleteHistoryCommand = new ListenerCommand<string>(DeleteHistory);
+            SearchHistories.Remove(query);
+            await SearchService.SaveSearchHistoriesAsync(SearchHistories.AsEnumerable());
+        }
+
+        private void ReorderHistory(string newValue) {
+
+            var orderedHistory = new ObservableSynchronizedCollection<string> {
+                newValue
+            };
+            foreach (var current in SearchHistories) {
+
+                if (!orderedHistory.Contains(current)) {
+
+                    orderedHistory.Add(current);
                 }
-                return _DeleteHistoryCommand;
-            }
-        }
-        public void DeleteHistory(string vm) {
-
-            SearchHistory.Remove(vm);
-            ApplyHistory();
-        }
-        #endregion
-
-        private void ApplyHistory() {
-
-            var ret = new List<string>();
-            foreach(var s in SearchHistory) {
-
-                ret.Add(s);
-            }
-            Settings.Instance.SearchHistory = ret;
-        }
-
-        public void MakePlayList() {
-
-            var filteredList = Model.SearchResult;
-
-            if(filteredList.Count() == 0) {
-
-                Status = "連続再生できる動画がありません";
-                return;
             }
 
-            var vm = new PlayListViewModel(SearchText, filteredList);
-            App.ViewModelRoot.MainContent.AddUserTab(vm);
+            SearchHistories = orderedHistory;
         }
 
         public override void KeyDown(KeyEventArgs e) {
-
-            //TextBoxにフォーカスが合ったら無視する
-            if(TextBoxFocused) {
-                return;
-            }
-            if(e.Key == Key.Right) {
-
-                RightButtonClick();
-            }
-            if(e.Key == Key.Left) {
-
-                LeftButtonClick();
-            }
+            SelectedItem?.KeyDown(e);
         }
 
-        public override void SpinPage() {
+        private void OnPropertyChanged(object o, PropertyChangedEventArgs e) {
 
-            SearchPage(CurrentPage);
-        }
-        public override bool CanShowHelp() {
-            return true;
-        }
+            var tabItem = (TabItemViewModel)o;
+            if (e.PropertyName == nameof(Status)) {
 
-        public override void ShowHelpView(InteractionMessenger Messenger) {
-
-            Messenger.Raise(new TransitionMessage(typeof(Views.SearchHelpView), this, TransitionMode.NewOrActive));
+                Status = tabItem.Status;
+            }
         }
     }
 }

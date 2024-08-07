@@ -1,566 +1,819 @@
-import { GetVideo } from "./videoplayer";
-import "./external";
+﻿/**
+ * コメントレンダラ
+ * デフォルトウィンドウサイズは1366 x 768
+ * 
+ * コメントの仕様 (mrtska調べ)
+ * コメントサイズごとにウィンドウに入る文字数が異なる
+ * 
+ * big: 1画面に7.8コメント
+ * medium: 11.3コメント
+ * small: 16.6コメント
+ * 
+ * 改行入りの場合
+ * big: 3行以上の場合16コメント
+ * medium: 5行以上の場合25.4コメント
+ * small: 7行以上の場合38コメント
+ * 
+ * 改行入りで上記の行数未満またはenderコマンド使用時
+ * big: 8.4コメント
+ * medium: 13.1コメント
+ * small: 21コメント
+ */
 
-declare class VideoViewModel {
+const DEFAULT_WIDTH = 1366;
+const DEFAULT_WIDTH_43 = 1024;
+const DEFAULT_WIDTH_169 = 1366;
+const DEFAULT_ENDLINE = (DEFAULT_WIDTH - DEFAULT_WIDTH_43) / 2;
+const DEFAULT_HEIGHT = 768;
 
-    public Video: HTMLVideoElement;
+// font-size: 54を1とした場合
+const COMMENT_SIZE_NORMAL = 1;
+const COMMENT_SIZE_SMALL = 0.69;
+const COMMENT_SIZE_BIG = 1.425;
 
-    public getVpos(): number;
-    public getVideoWidth(): number;
-}
+// ニコニコで使われるフォント
+const defont: string = 'Arial, "ＭＳ Ｐゴシック", "MS PGothic", MSPGothic, MS-PGothic';
+const gothic: string = '"游ゴシック", SimHei, Arial, "ＭＳ Ｐゴシック", sans-serif';
+const mincho: string = '"游明朝", SimSun, Arial, "ＭＳ Ｐゴシック", "游ゴシック", serif';
 
+export class CommentHandler {
 
+    wrapper: HTMLDivElement;
+    canvas: HTMLCanvasElement;
+    renderContext: CanvasRenderingContext2D;
 
+    visibility: CommentVisibility;
 
+    layers: CommentLayer[] | undefined;
+    justPostComments: PostComment[];
 
-namespace SRNicoNico.Comment {
+    previousRenderedTime: number = -1;
+    /**
+     * 流れるコメントの最終位置
+     */
+    endLine: number = 0;
+    centerLine: number = 0;
+    /**
+     * 流れるコメントの開始位置
+     */
+    firstLine: number = 0;
+    /**
+     * 画面を4:3にした時の実際の横幅
+     */
+    width43: number = 0;
+    /**
+     * 画面を16:9にした時の実際の横幅
+     */
+    width169: number = 0;
 
-    class CommentEntry {
+    /**
+     * デフォルトウィンドウサイズにこの値を掛けると実際のウィンドウサイズ相当になる係数
+     * 実際のウィンドウサイズがデフォルトウィンドウサイズと同じだったらこの値は1
+     */
+    scalingFactor: number = 0;
 
-        //コメント番号
-        public Number: number;
+    constructor() {
 
-        //投稿者コメントか
-        public IsUploader: boolean;
+        this.wrapper = document.getElementById('comment') as HTMLDivElement;
+        this.canvas = document.createElement('canvas');
 
-        //コメント再生位置
-        public Vpos: number;
-        public Vend: number;
+        this.visibility = 'visible';
+        this.justPostComments = [];
 
-        //コメントの描画位置
-        public Position: string;
+        this.wrapper.appendChild(this.canvas);
 
-        //コメントの色
-        public CommentColor: string;
+        this.renderContext = this.canvas.getContext('2d')!;
 
-        //コメントの大きさ
-        public CommentSize: string;
+        // ウィンドウのサイズに合わせてスケールする
+        window.addEventListener('resize', e => {
 
-        //描画時間
-        public Duration: number;
+            this.calcBounds();
+            this.render(this.previousRenderedTime, true);
+        });
+    }
 
-        //拡大率
-        public Scale: number;
+    public setVisibility(value: CommentVisibility) {
 
-        //コメント
-        public Content: string;
+        this.visibility = value;
+        this.previousRenderedTime = -1;
+    }
 
-        //透明度
-        public Opacity: number;
+    public clearComment(): void {
 
-        public Reverse: boolean;
+        this.layers = undefined;
+    }
 
-        //投稿直後か
-        public JustPosted: boolean;
+    public addPostComment(threadId: string, fork: number, number: number) {
 
-        //要素
-        public Element: HTMLSpanElement;
+        this.justPostComments.push({
+            threadId: threadId,
+            fork: fork,
+            no: number
+        });
+    }
 
+    public initialize(obj: any): void {
 
-        constructor(json: any) {
+        // レイヤー順にソートする
+        this.layers = obj.layers.sort((a: any, b: any) => a.index < b.index ? 1 : -1);
 
-            this.Number = json.Number;
-            this.Vpos = json.Vpos;
-            this.Vend = json.Vend;
-            this.Position = json.Position;
-            this.CommentColor = json.CommentColor;
-            this.CommentSize = json.CommentSize;
-            this.Duration = json.Duration;
-            this.Scale = json.Scale;
-            this.Opacity = json.Opacity;
-            this.Reverse = json.Reverse;
-            this.IsUploader = json.IsUploader;
-            this.JustPosted = json.JustPosted;
+        this.wrapper.style.fontSize = '54px';
+        this.canvas.width = DEFAULT_WIDTH;
+        this.canvas.height = DEFAULT_HEIGHT;
+        this.canvas.style.letterSpacing = '0px';
 
-            this.Content = json.Content;
+        this.layers?.forEach(layer => {
+            layer.activeComments = [];
+            // ベースフォントサイズを先に計算しておく
+            layer.entries.forEach(entry => {
 
-            this.Element = document.createElement("span");
-            this.Element.innerText = this.Content;
+                entry.content = entry.content.replace(/\t/g, '  ');
 
-            if (this.JustPosted) {
+                const scaleY = this.scaleY(entry);
 
-                $(this.Element).css("border", "solid 1px #FFFF00");
-            }
+                entry.baseFontSize = this.getBaseFontSize(entry);
+                entry.baseFontProperty = this.getFont(entry, scaleY);
+                entry.baseLineHeight = this.getBaseLineHeight(entry);
 
-            if (json.Font === "mincho") {
+                if (entry.fontFamily === 'defont') {
+                    entry.adjustYcoord = 0.01;
+                } else if (entry.fontFamily === 'gothic') {
+                    entry.adjustYcoord = -0.04;
+                } else if (entry.fontFamily === 'mincho') {
+                    entry.adjustYcoord = -0.01;
+                }
 
-                $(this.Element).css("font-family", '"游明朝体", "游明朝", "Yu Mincho", YuMincho, yumincho, YuMin-Medium');
-            } else {
+                this.renderContext.font = entry.baseFontProperty;
 
-                $(this.Element).css("font-family", '"游ゴシック体", "游ゴシック", "Yu Gothic", YuGothic, yugothic, YuGo-Medium');
+                // 改行も込みでデフォルトウィンドウサイズにおける実際の横幅を取得する
+                entry.virtualWidth = Math.max.apply(null, entry.content.split('\n').map(m => Math.ceil(this.renderContext.measureText(m).width)));
+                entry.virtualHeight = entry.baseLineHeight * entry.lineCount;
+
+                if (entry.position !== 'naka') {
+
+                    let scaleX = 1;
+                    if (entry.full) {
+                        if (entry.virtualWidth > DEFAULT_WIDTH_169) {
+                            scaleX = DEFAULT_WIDTH_169 / entry.virtualWidth;
+                        }
+                    } else {
+                        if (entry.virtualWidth > DEFAULT_WIDTH_43) {
+                            scaleX = DEFAULT_WIDTH_43 / entry.virtualWidth;
+                        }
+                    }
+                    if (scaleX !== 1) {
+
+                        entry.baseFontProperty = this.getFont(entry, scaleX * scaleY);
+                        this.renderContext.font = entry.baseFontProperty;
+                        entry.virtualWidth = Math.max.apply(null, entry.content.split('\n').map(m => Math.ceil(this.renderContext.measureText(m).width)));
+
+                        entry.virtualHeight *= scaleX;
+                        entry.baseFontSize *= scaleX;
+                        entry.baseLineHeight *= scaleX;
+                    }
+                }
+                // Y座標を先に計算する
+                layer.activeComments = layer.entries.filter(f => entry.vpos - entry.duration * 100 < f.vpos && f.vpos <= entry.vpos && f.currentY !== undefined);
+                entry.currentY = this.getVirtualY(entry, layer, entry.vpos);
+
+            });
+            layer.activeComments = [];
+        });
+
+        this.calcBounds();
+        this.previousRenderedTime = -1;
+    }
+
+    /**
+     * サイズ類を計算する
+     */
+    calcBounds(): void {
+
+        this.canvas.width = this.canvas.clientWidth;
+        this.canvas.height = this.canvas.clientHeight;
+
+        // 4:3 時の横幅を求めてコメントが流れ始めるべき座標を計算する
+        if (this.canvas.width > this.canvas.height) {
+
+            this.width43 = this.canvas.height / 3 * 4;
+            this.width169 = this.canvas.height / 9 * 16;
+        } else {
+            this.width43 = this.canvas.width / 4 * 3;
+            this.width169 = this.canvas.width;
+        }
+        this.endLine = (this.canvas.width - this.width43) / 2;
+
+        // 中央の位置
+        this.centerLine = this.canvas.width / 2;
+        this.firstLine = this.width43 / 4 * 3 + this.endLine;
+
+        this.scalingFactor = this.canvas.height / DEFAULT_HEIGHT;
+
+        this.wrapper.style.fontSize = `${54 * this.scalingFactor}px`;
+    }
+
+    /**
+     * コメントを描画する
+     * @param currentTime 再生位置 秒
+     * @param forceRender 強制的に再描画させるかどうか
+     */
+    public render(currentTime: number, forceRender: boolean = false): void {
+
+        if (this.layers === null) {
+            return;
+        }
+
+        // コメントが非表示だった場合
+        if (this.visibility === 'hidden') {
+            this.renderContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            return;
+        }
+
+        // 再生位置をvposと同じセンチ秒に変換する
+        const centiTime = Math.floor(currentTime * 100);
+
+        // 前回描画時と同じ時間だったらCPUリソースの無駄なので再描画しない
+        if (this.previousRenderedTime === centiTime && !forceRender) {
+            return;
+        }
+
+        this.renderContext.lineJoin = 'round';
+        this.renderContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        /*this.renderContext.strokeStyle = 'red';
+        this.renderContext.lineWidth = 2.5;
+        this.renderContext.strokeRect((this.canvas.width - this.width43) / 2, 0, this.width43, this.canvas.height);
+        this.renderContext.strokeStyle = 'red';
+        this.renderContext.lineWidth = 2.5;
+        this.renderContext.strokeRect((this.canvas.width - this.width43) / 2, 0, this.width43, this.canvas.height);
+        this.renderContext.strokeStyle = 'purple';
+        this.renderContext.lineWidth = 2.5;
+        this.renderContext.strokeRect((this.canvas.width - this.width169) / 2, 0, this.width169, this.canvas.height);*/
+
+        this.layers?.forEach(layer => this.renderLayer(layer, centiTime));
+        this.previousRenderedTime = centiTime;
+    }
+
+    /**
+     * レイヤーごとに描画する
+     * @param layer コメントレイヤー
+     * @param currentTime 再生位置 センチ秒
+     */
+    renderLayer(layer: CommentLayer, currentTime: number): void {
+
+        // 投稿者コメント以外はレンダリングしない
+        if (this.visibility === 'onlyAuthor' && layer.index === 1) {
+            return;
+        }
+
+        for (let entry of layer.entries) {
+
+            if (currentTime < entry.vpos + entry.duration * 100) {
+
+                if (entry.position === 'naka' && currentTime >= entry.vpos - 200) {
+
+                    if (!layer.activeComments.includes(entry)) {
+                        layer.activeComments.push(entry);
+                    }
+                } else if (currentTime >= entry.vpos) {
+
+                    if (!layer.activeComments.includes(entry)) {
+                        layer.activeComments.push(entry);
+                    }
+                }
             }
         }
 
-        public getTop(): number {
+        // 上下コメを先に描画する
+        layer.activeComments.filter(f => f.position !== 'naka').forEach(f => {
 
-            return parseInt($(this.Element).css("top"));
+            this.renderComment(layer, currentTime, f);
+
+            // 上下コメは時間ピッタリで非表示にする
+            if (f.vpos + f.duration * 100) {
+                layer.activeComments = layer.activeComments.filter(ff => ff !== f);
+            }
+        });
+        layer.activeComments.filter(f => f.position === 'naka').forEach(f => {
+
+            this.renderComment(layer, currentTime, f);
+
+            // 中コメは流れきってから非表示にする
+            if (f.currentX <= 0 - f.actualWidth) {
+                layer.activeComments = layer.activeComments.filter(ff => ff !== f);
+            }
+        });
+    }
+    /**
+     * コメントを描画する
+     * @param currentTime 再生位置 センチ秒
+     * @param entry コメント情報
+     */
+    renderComment(layer: CommentLayer, currentTime: number, entry: CommentEntry): void {
+
+        this.renderContext.fillStyle = entry.color;
+        this.renderContext.textAlign = 'start';
+        this.renderContext.textBaseline = 'middle';
+        this.renderContext.strokeStyle = 'rgba(0,0,0,0.4)';
+        this.renderContext.lineWidth = 5;
+        this.renderContext.font = entry.baseFontProperty;
+
+        // 改行も込みで正しい実際の横幅を取得する
+        entry.actualWidth = entry.virtualWidth * this.scalingFactor;
+        entry.actualHeight = entry.virtualHeight * this.scalingFactor;
+
+        entry.currentX = this.getX(entry, currentTime);
+
+        switch (entry.position) {
+            case 'naka': {
+
+                // 1行ずつ描画する
+                entry.content.split('\n').forEach((content, i) => {
+                    const factor = ((entry.currentY) + ((entry.baseLineHeight) * (i + 1)) - entry.baseFontSize / 2) * this.scalingFactor;
+                    this.renderText(content, entry.currentX, factor);
+                });
+                break;
+            }
+            case 'ue': {
+
+                // 1行ずつ描画する
+                entry.content.split('\n').forEach((content, i) => {
+                    // 描画位置(currentY) + フォントサイズ * 固定コメント拡大率 * 行番号 * 画面スケール
+                    const factor = ((entry.currentY) + ((entry.baseLineHeight) * (i + 1)) - entry.baseFontSize / 2) * this.scalingFactor;
+                    this.renderText(content, entry.currentX, factor);
+                });
+                break;
+            }
+            case 'shita': {
+
+                // 1行ずつ描画する
+                entry.content.split('\n').forEach((content, i) => {
+                    // 描画位置(currentY) + フォントサイズ * 固定コメント拡大率 * 行番号 * 画面スケール
+                    const factor = ((entry.currentY) + ((entry.baseLineHeight) * (i + 1)) - entry.baseFontSize / 2) * this.scalingFactor;
+                    this.renderText(content, entry.currentX, factor);
+                });
+                break;
+            }
+        }
+        if (this.justPostComments.some(s => s.threadId === entry.threadId && s.fork.toString() === entry.fork && s.no === entry.no)) {
+
+            this.renderContext.strokeStyle = 'yellow';
+            this.renderContext.lineWidth = 2.5;
+            this.renderContext.strokeRect(entry.currentX, entry.currentY * this.scalingFactor, entry.actualWidth, entry.actualHeight);
         }
     }
-    export class CommentViewModel {
 
-        WIDTH: number = 640;
-        HEIGHT: number = 360;
+    renderText(text: string, x: number, y: number): void {
 
-        SmallCommentSize: number = 15;
-        RegularCommentSize: number = 24;
-        BigCommentSize: number = 39;
+        this.renderContext.strokeText(text, x, y);
+        this.renderContext.fillText(text, x, y);
+    }
 
-        Layer: HTMLDivElement;
+    getFont(entry: CommentEntry, scaleFactor: number): string {
 
-        RenderingCommentList: Array<CommentEntry> = new Array<CommentEntry>();
-
-
-        constructor() {
-
-            //レイヤーを取得
-            this.Layer = document.getElementById("commentlayer") as HTMLDivElement;
-
-            let isRollOver = true;
-
-            //カーソルを非表示にする処理 ここはFlashのほうが簡単だったかもね
-            var hideFunc = function () {
-
-                if (isRollOver) {
-
-                    document.body.style["cursor"] = "none";
-                    InvokeHost("hidecontroller");
-                }
-            }
-
-            //
-            let id = -1;
-
-            $(document).mouseleave(function () {
-
-                isRollOver = false;
-                clearInterval(id);
-                setTimeout(() => {
-                    InvokeHost("hidecontroller");
-                }, 3000);
-            });
-
-            var x = 0;
-            var y = 0;
-
-            $(document).mousemove(function (e) {
-
-                //マウスカーソルの位置が変わっていなかったら
-                if (x == e.pageX && y == e.pageY) {
-
-                    return;
-                }
-
-                x = e.pageX;
-                y = e.pageY;
-                document.body.style["cursor"] = "default";
-
-                clearInterval(id);
-                id = setInterval(hideFunc, 1600);
-
-                isRollOver = true;
-                InvokeHost("showcontroller");
-            });
+        let fontSize = COMMENT_SIZE_NORMAL;
+        if (entry.fontSize == 'small') {
+            fontSize = COMMENT_SIZE_SMALL;
+        } else if (entry.fontSize == 'big') {
+            fontSize = COMMENT_SIZE_BIG;
         }
 
-        public dispatchComment(jsonStr: string): void {
+        if (entry.fontFamily === 'defont') {
 
-            let entry: CommentEntry = new CommentEntry(JSON.parse(jsonStr));
+            return `600 ${fontSize * scaleFactor}em ${defont}`;
+        } else if (entry.fontFamily === 'gothic') {
 
-            //上コメント 流れるコメント以外は基本３秒表示
-            if (entry.Position == "ue") {
+            return `400 ${fontSize * scaleFactor}em ${gothic}`;
+        } else if (entry.fontFamily === 'mincho') {
 
-                //left50%にtransformするとpostionがfixedでも中央に描画される
-                $(entry.Element).css("left", "50%");
-                $(entry.Element).css("transform", "translate(-50%, 0%)");
+            return `400 ${fontSize * scaleFactor}em ${mincho}`;
+        } else {
+            return '';
+        }
+    }
 
-            } else if (entry.Position == "shita") {    //下コメント
+    /**
+ * 固定コメントの高さがオーバーフローしている時は縮小するように縮小率を返す
+ * @param entry 対象コメント
+ */
+    scaleY(entry: CommentEntry): number {
 
-                //上と同じ
-                $(entry.Element).css("bottom", "0");
-                $(entry.Element).css("left", "50%");
-                $(entry.Element).css("transform", "translate(-50%, 0%)");
-            } else {    //流れるコメント
+        if (!entry.ender) {
 
-                //流れるコメントの初期値は一番右
-                $(entry.Element).css("left", "100%");
-                $(entry.Element).css("transform", "scale(" + entry.Scale + ", " + entry.Scale + ")");
+            if (entry.fontSize === 'small' && entry.lineCount >= 7) {
+                return 0.5526315789473684;
             }
+            if (entry.fontSize === 'medium' && entry.lineCount >= 5) {
+                return 0.515748031496063;
+            }
+            if (entry.fontSize === 'big' && entry.lineCount >= 3) {
+                return 0.525;
+            }
+        }
+        return 1;
+    }
 
-            //デフォルトカラーは白
-            $(entry.Element).css("color", entry.CommentColor);
+    getPixelPerCentiSeconds(entry: CommentEntry): number {
 
-            //現在の高さを基準の高さで割って係数をだす
-            var mul = window.innerHeight / this.HEIGHT;
+        // このコメントが1秒間に何ピクセル移動するべきか
+        const pixelPerSeconds = (entry.actualWidth / 4) + (this.width43 / 4);
+        // センチ秒に直す
+        return pixelPerSeconds / 100;
+    }
+    getVirtualPixelPerCentiSeconds(entry: CommentEntry): number {
 
-            //ここでコメントサイズの初期値をcssで指定する
-            //ウィンドウのheightが変わるとfont-sizeもそれに応じて乗算される
-            if (entry.CommentSize == "big") {
+        // このコメントが1秒間に何ピクセル移動するべきか
+        const pixelPerSeconds = (entry.virtualWidth / 4) + (DEFAULT_WIDTH_43 / 4);
+        // センチ秒に直す
+        return pixelPerSeconds / 100;
+    }
 
-                $(entry.Element).css("font-size", mul * this.BigCommentSize + "px");
-            } else if (entry.CommentSize == "small") {
+    getBaseFontSize(entry: CommentEntry): number {
 
-                $(entry.Element).css("font-size", mul * this.SmallCommentSize + "px");
+        if (entry.fontSize === 'small') {
+
+            if (entry.lineCount < 7 || entry.ender) {
+
+                return 39;
             } else {
 
-                $(entry.Element).css("font-size", mul * this.RegularCommentSize + "px");
+                return 39 * (21 / 38);
             }
-            $(entry.Element).css("opacity", entry.Opacity);
+        }
+        if (entry.fontSize === 'medium') {
 
+            if (entry.lineCount < 5 || entry.ender) {
 
-            //コメントレイヤーに追加
-            //先に追加しないとclientWidthなどが正しく取得できない そりゃそうだ
-            entry.Element = this.Layer.appendChild(entry.Element) as HTMLSpanElement;
+                return 54;
+            } else {
 
-            //描画中リストに追加
-            this.RenderingCommentList.push(entry);
+                return 54 * (13.1 / 25.4);
+            }
+        }
+        if (entry.fontSize === 'big') {
 
-            //はみ出る位置固定コメントは縮小させる
-            if (entry.Position != "naka") {
+            if (entry.lineCount < 3 || entry.ender) {
 
-                var width = GetVideo().getVideoWidth();
-                if (entry.Element.clientWidth > width) {
+                return 70;
+            } else {
 
-                    var scale = width / entry.Element.clientWidth;
-                    //拡大率を設定
-                    $(entry.Element).css("transform", "translateX(-50%) scale(" + scale + ", " + scale + ")");
+                return 70 * (8.4 / 16);
+            }
+        }
+        return 0;
+    }
+    getBaseLineHeight(entry: CommentEntry): number {
+
+        if (entry.lineCount === 1) {
+
+            if (entry.fontSize === 'small') {
+                return DEFAULT_HEIGHT / 16.6;
+            }
+            if (entry.fontSize === 'medium') {
+
+                return DEFAULT_HEIGHT / 11.3;
+            }
+            if (entry.fontSize === 'big') {
+                return DEFAULT_HEIGHT / 7.8;
+            }
+        }
+
+        if (entry.ender) {
+
+            if (entry.fontSize === 'small') {
+                return DEFAULT_HEIGHT / 21;
+            }
+            if (entry.fontSize === 'medium') {
+                return DEFAULT_HEIGHT / 13.1;
+            }
+            if (entry.fontSize === 'big') {
+                return DEFAULT_HEIGHT / 8.4;
+            }
+        } else {
+
+            if (entry.fontSize === 'small' && entry.lineCount >= 7) {
+                //return (DEFAULT_HEIGHT - (16.6 * (21 / 38))) / 38;
+                return DEFAULT_HEIGHT / 38;
+            }
+            if (entry.fontSize === 'medium' && entry.lineCount >= 5) {
+                //return (DEFAULT_HEIGHT - (11.3 * (13.1 / 25.4))) / 25.4;
+                return DEFAULT_HEIGHT / 25.4;
+            }
+            if (entry.fontSize === 'big' && entry.lineCount >= 3) {
+                //return (DEFAULT_HEIGHT - (7.8 * (8.4 / 16))) / 16;
+                return DEFAULT_HEIGHT / 16;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * 対象のコメントが指定した再生時間時に画面上に居るべきX座標を返す
+     * この値は実際のサイズの値を返す getYとは違う
+     * @param entry コメント
+     * @param currentTime 現在時間など
+     */
+    getX(entry: CommentEntry, currentTime: number): number {
+
+        switch (entry.position) {
+            case 'naka': {
+
+                // 再生時間とコメント表示時間のずれ
+                const diffCenti = currentTime - entry.vpos;
+
+                // このコメントが1秒間に何ピクセル移動するべきか
+                const pPcs = this.getPixelPerCentiSeconds(entry);
+                // nセンチ秒 * 1センチ秒に移動するピクセル数 + オフセット
+                const diff = (diffCenti * pPcs);
+
+                return this.firstLine - diff - (entry.actualWidth / 4);
+            }
+            case 'ue':
+            case 'shita': {
+
+                if (entry.full) {
+                    if (this.width169 <= entry.actualWidth) {
+                        return (this.canvas.width - this.width169) / 2;
+                    }
+                } else {
+                    if (this.width43 <= entry.actualWidth) {
+                        return this.endLine;
+                    }
                 }
+                // ウィンドウからはみ出していないのでウィンドウの横幅からコメントの横幅を引いて2で割った値を返す
+                return (this.canvas.width - entry.actualWidth) / 2;
             }
+        }
+    }
+    /**
+     * 対象のコメントが指定した再生時間時に画面上に居るべきX座標を返す
+     * @param entry コメント
+     * @param currentTime 現在時間
+     */
+    getVirtualX(entry: CommentEntry, currentTime: number): number {
 
-            //流れるコメントはアニメーションを追加
-            if (entry.Position == "naka") {
+        switch (entry.position) {
+            case 'naka': {
 
-                if (entry.Reverse) {
-                    $(entry.Element).keyframes({
-                        "0%": {
+                // 再生時間とコメント表示時間のずれ
+                const diffCenti = currentTime - entry.vpos;
 
-                            //初期値をgetXで取得する しないとシークした時に全てのコメントが右から始まってしまって気持ち悪い
-                            left: (this.getX(entry, GetVideo().getVpos())) + "px"
-                        },
-                        "100%": {
+                // このコメントが1秒間に何ピクセル移動するべきか
+                const pPcs = this.getVirtualPixelPerCentiSeconds(entry);
+                // nセンチ秒 * 1センチ秒に移動するピクセル数 + オフセット
+                const diff = (diffCenti * pPcs);
 
-                            //終わりはコメントの横幅を-にしたもの つまりコメントが見えなくなるまで
-                            left: (window.innerWidth) + "px"
-                        },
-                    }, {
+                //const firstLine = DEFAULT_WIDTH_43 / 4 * 3 + DEFAULT_ENDLINE;
+                return DEFAULT_WIDTH - diff;
+            }
+            case 'ue':
+            case 'shita': {
 
-                            duration: this.getDuration(entry, GetVideo().getVpos()),  //コメント表示時間 普通は4秒
-                            easing: "linear",
-                            count: 1    //ループされても困る
-                        }, () => {
+                if (entry.full) {
+                    if (DEFAULT_WIDTH <= entry.virtualWidth) {
+                        return 0;
+                    }
+                } else {
+                    if (DEFAULT_WIDTH_43 <= entry.virtualWidth) {
+                        return DEFAULT_ENDLINE;
+                    }
+                }
+                // ウィンドウからはみ出していないのでウィンドウの横幅からコメントの横幅を引いて2で割った値を返す
+                return (DEFAULT_WIDTH - entry.virtualWidth) / 2;
+            }
+        }
+    }
 
-                            this.RenderingCommentList.splice(this.RenderingCommentList.indexOf(entry), 1);
-                            this.Layer.removeChild(entry.Element);
-                        });
+    /**
+     * 対象のコメントが表示するべきY座標を返す
+     * ここでは1366 * 768サイズ前提で値が返るので実際に使う際は拡大率を掛けて使う
+     * @param entry 対象のコメント
+     * @param activeComments 現在画面上に表示されているコメントのリスト
+     */
+    getVirtualY(entry: CommentEntry, layer: CommentLayer, currentTime: number): number {
+
+        // Y座標が既に決まっているコメントはその値を使う
+        if (entry.currentY !== undefined) {
+            return entry.currentY;
+        }
+
+        // 自分以外の描画したいコメントと同じ位置に既に描画されているコメントのリスト
+        const activeSamePositionComments = layer.activeComments.filter(f => (f.no !== entry.no || f.fork !== entry.fork) && f.position === entry.position && !f.isFreedomYcoord).sort((a, b) => {
+
+            if (a.currentY < b.currentY) return -1;
+            if (a.currentY > b.currentY) return 1;
+            if (a.vpos < b.vpos) return -1;
+            if (a.vpos > b.vpos) return 1;
+            return 0;
+        });
+
+        switch (entry.position) {
+            case 'naka': {
+                // 高さ固定コメントの時は中央揃えになるようにする
+                if (entry.ender) {
+
+                    if ((entry.fontSize === 'big' && entry.lineCount >= 8) ||
+                        (entry.fontSize === 'medium' && entry.lineCount >= 13) ||
+                        (entry.fontSize === 'small' && entry.lineCount >= 21)) {
+                        entry.isFreedomYcoord = true;
+                        return (DEFAULT_HEIGHT - entry.virtualHeight) / 2;
+                    }
                 } else {
 
-                    $(entry.Element).keyframes({
-                        "0%": {
-
-                            //初期値をgetXで取得する しないとシークした時に全てのコメントが右から始まってしまって気持ち悪い
-                            left: this.getX(entry, GetVideo().getVpos()) + "px"
-                        },
-                        "100%": {
-
-                            //終わりはコメントの横幅を-にしたもの つまりコメントが見えなくなるまで
-                            left: (-entry.Element.clientWidth) + "px"
-                        },
-                    }, {
-
-                            duration: this.getDuration(entry, GetVideo().getVpos()),  //コメント表示時間 普通は4秒
-                            easing: "linear",
-                            count: 1    //ループされても困る
-                        }, () => {
-
-                            this.RenderingCommentList.splice(this.RenderingCommentList.indexOf(entry), 1);
-                            this.Layer.removeChild(entry.Element);
-                        });
-                }
-            } else {
-
-                $(entry.Element).keyframes({
-                    "0%": {
-
-                        opacity: GetVideo().Video.paused ? entry.Opacity : 0
-                    },
-                    "2%, 98%": {
-
-                        opacity: entry.Opacity
-                    },
-                    "100%": {
-
-                        opacity: 0
-                    },
-                }, {
-
-                        duration: this.getDuration(entry, GetVideo().getVpos()) - 300,  //コメント表示時間
-                        easing: "linear",
-                        count: 1    //ループされても困る
-                    }, () => {
-
-                        this.RenderingCommentList.splice(this.RenderingCommentList.indexOf(entry), 1);
-                        this.Layer.removeChild(entry.Element);
-                    });
-            }
-
-            //一時停止したタイミングでコメント描画が始まるとコメントが動いてしまうので一時停止させる
-            if (GetVideo().Video.paused || GetVideo().Video.seeking || GetVideo().Video.ended) {
-
-                $(entry.Element).css("animation-play-state", "paused");
-            }
-
-            //Y座標を設定する
-            $(entry.Element).css("top", this.getY(entry));
-        }
-
-        //現在のvposでtarget(p要素)がどのX座標(left)に居るべきかを取得する
-        public getX(target: CommentEntry, vpos: number): number {
-
-            //流れないコメントだったらX座標は一定
-            if (target.Position != "naka") {
-
-                return (window.innerWidth - target.Element.clientWidth) / 2;
-            }
-
-            //現在のvposとコメント表示開始時のvposのオフセットを取得する
-            var offset = vpos - target.Vpos;
-
-            //@逆 あたり
-            if (target.Reverse) {
-
-                //
-                return -target.Element.clientWidth - offset * ((window.innerWidth - target.Element.clientWidth) / (target.Vend - target.Vpos));
-            } else {
-
-                //vpos当たりの横幅を計算してoffsetを掛けて出てきた値を現在のウィンドウの横幅から引く
-                return window.innerWidth - offset * ((window.innerWidth + target.Element.clientWidth) / (target.Vend - target.Vpos));
-            }
-        }
-
-        //現在描画中のコメントを考慮してtarget(p要素)がどのY座標で描画すれば良いか計算する
-        public getY(target: CommentEntry): number {
-
-            let offsetY: number = 0;
-
-            //下コメだったらオフセットは下から上に行く
-            if (target.Position == "shita") {
-
-                offsetY = window.innerHeight - target.Element.clientHeight;
-            }
-
-            var flag = false;
-            do {
-                flag = false;
-
-                //描画中のコメントの位置を考慮して返す座標を決める
-                for (var entry of this.RenderingCommentList) {
-
-
-                    //同じコメントナンバーだったらやり直し
-                    if (target.Number == entry.Number && target.IsUploader == entry.IsUploader) {
-
-                        continue;
+                    if ((entry.fontSize === 'big' && entry.lineCount >= 16) ||
+                        (entry.fontSize === 'medium' && entry.lineCount >= 25) ||
+                        (entry.fontSize === 'small' && entry.lineCount >= 38)) {
+                        entry.isFreedomYcoord = true;
+                        return (DEFAULT_HEIGHT - entry.virtualHeight) / 2;
                     }
+                }
 
-                    //同じ描画位置同士でしか計算はしない
-                    if (target.Position == entry.Position) {
+                // 何も描画されていない時
+                if (activeSamePositionComments.length === 0) {
 
-                        //描画中のコメントの位置よりサジェストされたY座標が小さかったら
-                        if (entry.getTop() + entry.Element.clientHeight > offsetY) {
+                    return 0;
+                }
 
-                            //描画中のコメントの位置よりもサジェストされたY座標＋位置を決めたいコメントの高さが大きかったら
-                            //入れる場所がないので流れるコメントは描画中のコメントのX座標も考慮して計算する
-                            //上下コメントはどう頑張っても入らないのでMath.randomでテキトーな位置に描画する
-                            if (offsetY + target.Element.clientHeight > entry.getTop()) {
+                // ピクセル per センチ秒
+                const pPcs = this.getVirtualPixelPerCentiSeconds(entry);
+                // 対象のコメントの先頭部分がendLineまで到達するまでにかかるセンチ秒
+                const offset = (this.getVirtualX(entry, entry.vpos) - DEFAULT_ENDLINE) / pPcs;
 
-                                if (target.Position == "shita") {
+                let yCandidate = 0;
+                let flag = false;
+                do {
+                    flag = false;
 
-                                    offsetY = entry.getTop() - target.Element.clientHeight - 1;
-                                    if (offsetY < 0) {
+                    let i: any;
+                    for (i in activeSamePositionComments) {
+                        const f = activeSamePositionComments[i];
 
-                                        offsetY = Math.random() * (window.innerHeight - target.Element.clientHeight);
-                                        break;
-                                    }
-                                    flag = true;
-                                    break;
-                                }
+                        // 候補のY座標が現在描画されているコメントのY座標＋コメントの高さより小さかったら
+                        if (f.currentY + f.virtualHeight > yCandidate) {
+                            if (yCandidate + entry.virtualHeight > f.currentY) {
 
-                                if (target.Position == "ue") {
+                                // 既に描画されているコメントの初回描画位置(x座標)
+                                const startX = this.getVirtualX(f, currentTime) + f.virtualWidth;
+                                // 既に描画されているコメントの時間の時に描画したいコメントがどの位置に来るかを調べる
+                                const targetStartX = this.getVirtualX(entry, currentTime);
+                                // endLine到達直後のx座標を調べて対象のコメントが重なるかどうかを判定する
+                                const x = this.getVirtualX(f, currentTime + offset) + f.virtualWidth;
 
-                                    offsetY = entry.getTop() + entry.Element.clientHeight + 1;
+                                // 描画対象のコメントがendLineに到達した時間に同じ行にいる既存のコメントがendLineを超えていればその行にはコメント可能
+                                // かつ、描画開始時に既存のコメントよりも描画対象のコメントが少しでも前に出ていたら重なってしまうのでその行にはコメント不可
+                                if (!(x < DEFAULT_ENDLINE && startX < targetStartX)) {
+                                    yCandidate = f.currentY + f.virtualHeight;
+                                    if (yCandidate + entry.virtualHeight > DEFAULT_HEIGHT) {
 
-                                    if (offsetY + target.Element.clientHeight > window.innerHeight) {
-
-                                        offsetY = Math.random() * (window.innerHeight - target.Element.clientHeight);
-                                        break;
-                                    }
-                                    flag = true;
-                                    break;
-                                }
-
-                                var max = Math.max(target.Vpos, entry.Vpos);
-                                var min = Math.min(target.Vend, entry.Vend);
-                                var x1 = this.getX(target, max);
-                                var x2 = this.getX(target, min);
-                                var x3 = this.getX(entry, max);
-                                var x4 = this.getX(entry, min);
-
-                                if (x1 <= x3 + entry.Element.clientWidth && x3 <= x1 + target.Element.clientWidth || x2 <= x4 + entry.Element.clientWidth && x4 <= x2 + target.Element.clientWidth) {
-
-                                    offsetY = entry.getTop() + entry.Element.clientHeight + 1;
-
-                                    if (offsetY + target.Element.clientHeight > window.innerHeight) {
-
-                                        offsetY = Math.random() * window.innerHeight - target.Element.clientHeight;
-                                        break;
+                                        entry.isFreedomYcoord = true;
+                                        let rand = Math.random() * DEFAULT_HEIGHT;
+                                        if (rand > entry.virtualHeight) {
+                                            rand -= entry.virtualHeight;
+                                        }
+                                        return rand;
                                     }
                                     flag = true;
                                     break;
                                 }
                             }
                         }
+
+                    }
+
+                } while (flag);
+
+                return yCandidate;
+            }
+            case 'ue': {
+
+                if (entry.ender) {
+
+                    if ((entry.fontSize === 'big' && entry.lineCount >= 8) ||
+                        (entry.fontSize === 'medium' && entry.lineCount >= 13) ||
+                        (entry.fontSize === 'small' && entry.lineCount >= 21)) {
+                        entry.isFreedomYcoord = true;
+                        return 0;
+                    }
+                } else {
+
+                    if ((entry.fontSize === 'big' && entry.lineCount >= 16) ||
+                        (entry.fontSize === 'medium' && entry.lineCount >= 25) ||
+                        (entry.fontSize === 'small' && entry.lineCount >= 38)) {
+                        entry.isFreedomYcoord = true;
+                        return 0;
                     }
                 }
-            } while (flag);
 
-            //ピクセルで出力する
-            return offsetY;
-        }
+                // 何も描画されていない時
+                if (activeSamePositionComments.length === 0) {
+                    // 1番上に描画する
+                    return 0;
+                }
 
-        public getDuration(target: CommentEntry, vpos: number): number {
+                for (let i in activeSamePositionComments) {
+                    const f = activeSamePositionComments[i];
 
-            var offset = 1 - (vpos - target.Vpos) / (target.Vend - target.Vpos);
-            return target.Duration * offset;
-        }
+                    // 一番上のコメント(i === 0)でそのコメントが一番上に張り付いていない場合に入る余地があるか確認する
+                    if (Number(i) === 0 && f.currentY > entry.virtualHeight) {
+                        // 1番上に描画する
+                        return 0;
+                    }
 
-        //コメント描画を一時停止
-        public pauseComment(): void {
+                    // 現在描画されているコメントの位置から描画したいコメントの高さを足した場所に描画したい
+                    const requestStart = f.currentY + f.virtualHeight;
+                    const requestEnd = requestStart + entry.virtualHeight;
 
-            for (let entry of this.RenderingCommentList) {
+                    // 次のコメントがあれば現在描画されているコメントと位置を比較して隙間に入る余地があるか確認する
+                    if (activeSamePositionComments.length > Number(i) + 1) {
 
-                $(entry.Element).css("animation-play-state", "paused");
+                        const nextEntry = activeSamePositionComments[Number(i) + 1];
+                        const nextEnd = nextEntry.currentY + nextEntry.virtualHeight;
+                        if (requestEnd !== nextEnd) {
+                            return requestStart;
+                        }
+                    } else {
+                        // 上コメがオーバーフローしていたら位置をランダムな場所にする
+                        if (requestEnd > DEFAULT_HEIGHT) {
+
+                            entry.isFreedomYcoord = true;
+                            let rand = Math.random() * DEFAULT_HEIGHT;
+                            if (rand > entry.virtualHeight) {
+                                rand -= entry.virtualHeight;
+                            }
+                            return rand;
+                        }
+                        return requestStart;
+                    }
+                }
+                return 0;
             }
-        }
+            case 'shita': {
 
-        //コメント描画を再開
-        public resumeComment(): void {
+                if (entry.ender) {
 
-            for (let entry of this.RenderingCommentList) {
+                    if ((entry.fontSize === 'big' && entry.lineCount >= 8) ||
+                        (entry.fontSize === 'medium' && entry.lineCount >= 13) ||
+                        (entry.fontSize === 'small' && entry.lineCount >= 21)) {
+                        entry.isFreedomYcoord = true;
+                        return DEFAULT_HEIGHT - entry.virtualHeight;
+                    }
+                } else {
 
-                $(entry.Element).css("animation-play-state", "running");
+                    if ((entry.fontSize === 'big' && entry.lineCount >= 16) ||
+                        (entry.fontSize === 'medium' && entry.lineCount >= 25) ||
+                        (entry.fontSize === 'small' && entry.lineCount >= 38)) {
+                        entry.isFreedomYcoord = true;
+                        return DEFAULT_HEIGHT - entry.virtualHeight;
+                    }
+                }
+
+                if (activeSamePositionComments.length === 0) {
+                    // 1番下に描画する
+                    return DEFAULT_HEIGHT - entry.virtualHeight;
+                }
+                // shitaなので逆から参照する
+                const reversed = activeSamePositionComments.reverse();
+                for (let i in reversed) {
+                    const f = reversed[i];
+
+                    // 一番下のコメント(i === 0)でそのコメントが一番下に張り付いていない場合に入る余地があるか確認する
+                    if (Number(i) === 0 && DEFAULT_HEIGHT - (f.currentY + f.virtualHeight) >= entry.virtualHeight) {
+
+                        // 1番下に描画する
+                        return DEFAULT_HEIGHT - entry.virtualHeight;
+                    }
+
+                    // 現在描画されているコメントの位置から描画したいコメントの高さを引いた場所に描画したい
+                    const requestStart = f.currentY - entry.virtualHeight;
+                    const requestEnd = f.currentY;
+
+                    // 次のコメントがあれば現在描画されているコメントと位置を比較して隙間に入る余地があるか確認する
+                    if (reversed.length > Number(i) + 1) {
+
+                        const nextEntry = reversed[Number(i) + 1];
+                        const nextEnd = nextEntry.currentY + nextEntry.virtualHeight;
+                        if (requestEnd !== nextEnd) {
+                            return requestStart;
+                        }
+                    } else {
+                        // 下コメがオーバーフローしていたら位置をランダムな場所にする
+                        if (requestStart < 0) {
+
+                            entry.isFreedomYcoord = true;
+                            let rand = Math.random() * DEFAULT_HEIGHT;
+                            if (rand > entry.virtualHeight) {
+                                rand -= entry.virtualHeight;
+                            }
+                            return rand;
+                        }
+                        return requestStart;
+                    }
+                }
+                return DEFAULT_HEIGHT - entry.virtualHeight;
             }
-        }
-
-        //描画されているコメントを全て消す
-        public purgeComment(): void {
-
-            this.RenderingCommentList.length = 0;
-            $(this.Layer).empty();
-        }
-
-        //コメントレイヤーを表示
-        public showComment(): void {
-
-            $(this.Layer).css("visibility", "visible");
-        }
-
-        //コメントレイヤーを非表示
-        public hideComment(): void {
-
-            $(this.Layer).css("visibility", "hidden");
-        }
-
-        public calcCommentSize(width: number, height: number): void {
-
-            var source: Array<CommentEntry> = this.RenderingCommentList.concat();
-
-            $(this.Layer).empty();
-            this.RenderingCommentList.length = 0;
-
-            source.forEach((entry) => {
-
-                this.dispatchComment(JSON.stringify(entry));
-            });
-
-        }
-
-        //透明度を設定
-        public setOpacity(opacity: number): void {
-
-            for (let entry of this.RenderingCommentList) {
-
-                entry.Opacity = opacity;
-                $(entry.Element).css("opacity", opacity);
-            }
-        }
-
-        //コメントのデフォルトサイズを設定
-        public setBaseSize(str: string): void {
-
-            switch (str) {
-                case "極小":
-                    this.RegularCommentSize = 14;
-                    break;
-                case "小":
-                    this.RegularCommentSize = 18;
-                    break;
-                case "標準":
-                    this.RegularCommentSize = 24;
-                    break;
-                case "大":
-                    this.RegularCommentSize = 30;
-                    break;
-            }
-            this.BigCommentSize = this.RegularCommentSize + 15;
-            this.SmallCommentSize = this.RegularCommentSize - 9;
-
-            this.calcCommentSize(window.innerWidth, window.innerHeight);
-
         }
     }
+};
 
-    export var ViewModel: CommentViewModel
-}
-
-function Comment$Initialize() {
-
-    SRNicoNico.Comment.ViewModel = new SRNicoNico.Comment.CommentViewModel();
-}
-eval("window.Comment$Initialize = Comment$Initialize;");
-
-
-function Comment$Hide() {
-
-    SRNicoNico.Comment.ViewModel.hideComment();
-}
-eval("window.Comment$Hide = Comment$Hide;");
-
-function Comment$Show() {
-
-    SRNicoNico.Comment.ViewModel.showComment();
-}
-eval("window.Comment$Show = Comment$Show;");
-
-function Comment$Dispatch(json: any) {
-
-    SRNicoNico.Comment.ViewModel.dispatchComment(json);
-}
-eval("window.Comment$Dispatch = Comment$Dispatch;");
-
-function Comment$SetOpacity(op: number) {
-
-    SRNicoNico.Comment.ViewModel.setOpacity(op);
-}
-eval("window.Comment$SetOpacity = Comment$SetOpacity;");
-
-function Comment$SetBaseSize(str: string) {
-
-    SRNicoNico.Comment.ViewModel.setBaseSize(str);
-}
-eval("window.Comment$SetBaseSize = Comment$SetBaseSize;");
-
-export function GetComment(): SRNicoNico.Comment.CommentViewModel {
-
-    return SRNicoNico.Comment.ViewModel;
-}
-eval("window.GetComment = GetComment;");
 

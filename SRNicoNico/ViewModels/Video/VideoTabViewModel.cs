@@ -1,121 +1,93 @@
-﻿using Livet;
-using Livet.Messaging;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using Livet;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// 動画のタブ管理用のViewModel
+    /// </summary>
     public class VideoTabViewModel : TabItemViewModel {
 
-        #region VideoList変更通知プロパティ
-        private ObservableSynchronizedCollection<VideoViewModel> _VideoList;
-
-        public ObservableSynchronizedCollection<VideoViewModel> VideoList {
-            get { return _VideoList; }
-            set { 
-                if (_VideoList == value)
+        private DispatcherCollection<VideoViewModel> _TabItems = new DispatcherCollection<VideoViewModel>(App.UIDispatcher);
+        /// <summary>
+        /// 動画のタブのリスト
+        /// </summary>
+        public DispatcherCollection<VideoViewModel> TabItems {
+            get { return _TabItems; }
+            set {
+                if (_TabItems == value)
                     return;
-                _VideoList = value;
+                _TabItems = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        #region SelectedList変更通知プロパティ
-        private VideoViewModel _SelectedList;
-
-        public VideoViewModel SelectedList {
-            get { return _SelectedList; }
-            set { 
-                if (_SelectedList == value)
+        private VideoViewModel? _SelectedItem;
+        /// <summary>
+        /// 現在選択中のタブ
+        /// </summary>
+        public VideoViewModel? SelectedItem {
+            get { return _SelectedItem; }
+            set {
+                if (_SelectedItem == value)
                     return;
-                _SelectedList = value;
+                _SelectedItem = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        public VideoTabViewModel() : base("動画") {
+        public VideoTabViewModel(Action collectionClearedAction) : base("動画") {
 
-            VideoList = new ObservableSynchronizedCollection<VideoViewModel>();
+            // 動画が0になった時にアクションを実行する
+            TabItems.CollectionChanged += (o, e) => {
+                if (TabItems.Count == 0) {
+                    collectionClearedAction();
+                }
+            };
         }
 
+        private void OnPropertyChanged(object? o, PropertyChangedEventArgs e) {
 
+            var tabItem = (TabItemViewModel)o!;
+            if (e.PropertyName == nameof(Status)) {
+
+                Status = tabItem.Status;
+            }
+        }
+
+        /// <summary>
+        /// タブのリストに動画を追加する
+        /// </summary>
+        /// <param name="vm">動画のViewModel</param>
         public void Add(VideoViewModel vm) {
 
-            VideoList.Add(vm);
-            SelectedList = vm;
-        }
+            TabItems.Add(vm);
 
-        // VideoViewから
-        public void Remove(VideoViewModel vm) {
+            // ステータスプロパティが更新されたら動画タブのステータスに反映させる
+            vm.PropertyChanged += OnPropertyChanged;
+            // 動画タブがDisposeされたら自動的にリストから削除する
+            vm.CompositeDisposable.Add(() => {
 
-            if (VideoList.Contains(vm)) {
+                vm.PropertyChanged -= OnPropertyChanged;
+                TabItems.Remove(vm);
 
-                VideoList.Remove(vm);
-            }
+                // タブの一番後ろを選択状態にする
+                SelectedItem = TabItems.LastOrDefault();
+            });
+            // タブが追加されたらそのタブを選択状態にする
+            SelectedItem = vm;
         }
 
         public override void KeyDown(KeyEventArgs e) {
-            base.KeyDown(e);
 
-            if (e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control)) {
-
-                if (e.Key == Key.Tab) {
-
-                    if (e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Shift)) {
-
-                        Prev();
-                    } else {
-
-                        Next();
-                    }
-                    return;
-                }
-            }
-            SelectedList?.KeyDown(e);
+            SelectedItem?.KeyDown(e);
         }
 
-        //次の動画へ
-        private void Next() {
+        public override void KeyUp(KeyEventArgs e) {
 
-            if (VideoList.Count == 1) {
-
-                return;
-            }
-            var index = VideoList.IndexOf(SelectedList);
-
-            if (index + 1 >= VideoList.Count) {
-
-                SelectedList = VideoList.First();
-            } else {
-
-                SelectedList = VideoList[index + 1];
-            }
-        }
-        //前の動画へ
-        private void Prev() {
-
-            if (VideoList.Count == 1) {
-
-                return;
-            }
-
-            var index = VideoList.IndexOf(SelectedList);
-            if (index <= 0) {
-
-                SelectedList = VideoList.Last();
-            } else {
-
-                SelectedList = VideoList[index - 1];
-            }
-        }
-
-        public override bool CanShowHelp() {
-            return true;
-        }
-        public override void ShowHelpView(InteractionMessenger Messenger) {
-
-            Messenger.Raise(new TransitionMessage(typeof(Views.VideoHelpView), this, TransitionMode.NewOrActive));
+            SelectedItem?.KeyUp(e);
         }
     }
 }

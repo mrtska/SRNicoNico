@@ -1,53 +1,78 @@
-﻿using Livet.Messaging;
-
-using SRNicoNico.Models.NicoNicoWrapper;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using Livet;
+using Unity;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// 視聴履歴ページのViewModel
+    /// </summary>
     public class HistoryViewModel : TabItemViewModel {
 
-        public NicoNicoHistory Model { get; set; }
-
-        public HistoryViewModel() : base("視聴履歴") {
-
-            Model = new NicoNicoHistory();
-            Initialize();
-        }
-
-        public async void Initialize() {
-
-            IsActive = true;
-            Status = "視聴履歴取得中";
-
-            Status = await Model.GetAccountHistoryAsync();
-
-            Status = await Model.GetLocalHistoryAsync();
-
-            await Model.MergeHistoriesAsync();
-
-            IsActive = false;
-        }
-
-        public void Refresh() {
-
-            Initialize();
-        }
-
-        public override void KeyDown(KeyEventArgs e) {
-
-            if(e.Key == Key.F5) {
-
-                Refresh();
-                e.Handled = true;
+        private DispatcherCollection<TabItemViewModel> _HistoryItems = new DispatcherCollection<TabItemViewModel>(App.UIDispatcher);
+        /// <summary>
+        /// 履歴のタブのリスト
+        /// </summary>
+        public DispatcherCollection<TabItemViewModel> HistoryItems {
+            get { return _HistoryItems; }
+            set { 
+                if (_HistoryItems == value)
+                    return;
+                _HistoryItems = value;
+                RaisePropertyChanged();
             }
         }
 
-        public override bool CanShowHelp() {
-            return true;
+        private TabItemViewModel? _SelectedItem;
+        /// <summary>
+        /// 現在選択されているタブ デフォルトはアカウントの視聴履歴
+        /// </summary>
+        public TabItemViewModel? SelectedItem {
+            get { return _SelectedItem; }
+            set { 
+                if (_SelectedItem == value)
+                    return;
+                _SelectedItem = value;
+                RaisePropertyChanged();
+            }
         }
-        public override void ShowHelpView(InteractionMessenger Messenger) {
 
-            Messenger.Raise(new TransitionMessage(typeof(Views.HistoryHelpView), this, TransitionMode.NewOrActive));
+        private readonly IUnityContainer UnityContainer;
+
+        public HistoryViewModel(IUnityContainer unityContainer) : base("履歴") {
+
+            UnityContainer = unityContainer;
+        }
+
+        public void Loaded() {
+
+            // 別のスレッドで各要素を初期化する
+            Task.Run(() => {
+
+                HistoryItems.Add(UnityContainer.Resolve<AccountHistoryViewModel>());
+                HistoryItems.Add(UnityContainer.Resolve<LocalHistoryViewModel>());
+
+                // 子ViewModelのStatusを監視する
+                HistoryItems.ToList().ForEach(vm => {
+
+                    vm.PropertyChanged += (o, e) => {
+
+                        var tabItem = (TabItemViewModel)o;
+                        if (e.PropertyName == nameof(Status)) {
+
+                            Status = tabItem.Status;
+                        }
+                    };
+                });
+
+                // アカウントの視聴履歴をデフォルト値とする
+                SelectedItem = HistoryItems.First();
+            });
+        }
+
+        public override void KeyDown(KeyEventArgs e) {
+            SelectedItem?.KeyDown(e);
         }
     }
 }

@@ -1,38 +1,39 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.VideoTabView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:v="clr-namespace:SRNicoNico.Views"             
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:v="clr-namespace:SRNicoNico.Views"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
+             d:DataContext="{d:DesignInstance Type=vm:VideoTabViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance {x:Type vm:VideoTabViewModel}}">
+             d:DesignHeight="573.2" d:DesignWidth="804">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-            <metro:TabView SelectedIndex="0" Style="{DynamicResource VideoViewHorizontalViewStyle}" Height="38" ItemsSource="{Binding VideoList}" SelectedItem="{Binding SelectedList,Mode=TwoWay}">
+            <metro:TabView Background="#FF252627" Style="{DynamicResource VideoViewHorizontalViewStyle}" Height="38" ItemsSource="{Binding TabItems}" SelectedItem="{Binding SelectedItem,Mode=TwoWay}">
                 <metro:TabView.ItemTemplate>
                     <DataTemplate DataType="{x:Type metro:ITabItem}">
                         <Grid Height="38" Width="130" Background="Transparent">
-                            <i:Interaction.Behaviors>
-                                <b:MouseMiddleClickHandleBehavior />
-                            </i:Interaction.Behaviors>
-                            <TextBlock Text="{Binding Name}" FontSize="14" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" />
+                            <i:Interaction.Triggers>
+                                <a:MouseMiddleClickTrigger>
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Close" />
+                                </a:MouseMiddleClickTrigger>
+                            </i:Interaction.Triggers>
+                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" FontSize="13.9" VerticalAlignment="Center" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"  />
                         </Grid>
                     </DataTemplate>
                 </metro:TabView.ItemTemplate>
             </metro:TabView>
         </ScrollViewer>
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding VideoList}">
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding TabItems}">
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type vm:VideoViewModel}">
                     <v:Video />

@@ -1,86 +1,132 @@
-﻿using SRNicoNico.Models.NicoNicoWrapper;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
+using FastEnumUtility;
+using Livet;
+using SRNicoNico.Models;
+using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.Services;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// ユーザーページのニコレポのViewModel
+    /// </summary>
     public class UserNicoRepoViewModel : TabItemViewModel {
 
-        #region Filter変更通知プロパティ
-        private string _Filter;
-
-        public string Filter {
-            get { return _Filter; }
+        private NicoRepoFilter _SelectedFilter = NicoRepoFilter.All;
+        /// <summary>
+        /// 現在選択されているフィルター
+        /// </summary>
+        public NicoRepoFilter SelectedFilter {
+            get { return _SelectedFilter; }
             set {
-                if (_Filter == value)
+                if (_SelectedFilter == value)
                     return;
-                _Filter = value;
-                Model.SetFilter(value);
-            }
-        }
-        #endregion
-
-        #region Closed変更通知プロパティ
-        private bool _Closed;
-
-        public bool Closed {
-            get { return _Closed; }
-            set {
-                if(_Closed == value)
-                    return;
-                _Closed = value;
+                _SelectedFilter = value;
+                Reload();
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        public NicoNicoNicoRepo Model { get; set; }
+        /// <summary>
+        /// ニコレポのリスト
+        /// </summary>
+        public ObservableSynchronizedCollection<NicoRepoEntry> NicoRepoItems { get; private set; }
 
-        private readonly UserViewModel Owner;
-        public UserNicoRepoViewModel(UserViewModel user) : base("ニコレポ") {
+        /// <summary>
+        /// フィルターのリスト
+        /// </summary>
+        public IEnumerable<NicoRepoFilter> FilterItems { get; private set; }
 
-            Owner = user;
-            Model = new NicoNicoNicoRepo(user.Model.UserInfo.UserId);
+        /// <summary>
+        /// 次のページがあるかどうか
+        /// </summary>
+        private bool HasNext;
+
+        private readonly INicoRepoService NicoRepoService;
+        private readonly string UserId;
+
+        public UserNicoRepoViewModel(INicoRepoService nicoRepoService, string userId) : base("ニコレポ") {
+
+            NicoRepoService = nicoRepoService;
+            UserId = userId;
+
+            NicoRepoItems = new ObservableSynchronizedCollection<NicoRepoEntry>();
+            FilterItems = FastEnum.GetValues<NicoRepoFilter>();
         }
 
-        public void Initialize() {
+        public async void Loaded() {
 
-            Closed = false;
-            GetMore();
+            IsActive = true;
+            Status = "ニコレポを取得中";
+            NicoRepoItems.Clear();
+            try {
+
+                var result = await NicoRepoService.GetUserNicoRepoAsync(UserId, SelectedFilter);
+                HasNext = result.HasNext;
+
+                foreach (var entry in result.Entries!) {
+
+                    NicoRepoItems.Add(entry);
+                }
+
+                Status = string.Empty;
+            } catch (StatusErrorException e) {
+
+                Status = $"ニコレポを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+            } finally {
+
+                IsActive = false;
+            }
         }
 
-        public async void GetMore() {
+        /// <summary>
+        /// ニコレポを更に読み込む
+        /// </summary>
+        public async void LoadMore() {
 
-            if (IsActive) {
-
+            // 次のページが無いか、ロード中の場合は無視
+            if (!HasNext || IsActive) {
                 return;
             }
             IsActive = true;
+            Status = "ニコレポを取得中";
+            try {
 
-            Owner.Status = "ニコレポ取得中：" + Name;
-            Owner.Status = await Model.GetNicoRepoAsync();
+                // 最後のニコレポのIDから後ろを取得する
+                var result = await NicoRepoService.GetUserNicoRepoAsync(UserId, SelectedFilter, NicoRepoItems.Last().Id);
+                HasNext = result.HasNext;
 
-            if(Model.NicoRepoList.Count == 0) {
+                foreach (var entry in result.Entries!) {
 
-                Closed = true;
+                    NicoRepoItems.Add(entry);
+                }
+
+                Status = string.Empty;
+            } catch (StatusErrorException e) {
+
+                Status = $"ニコレポを取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+            } finally {
+
+                IsActive = false;
             }
-
-            IsActive = false;
         }
 
-        public void Refresh() {
+        /// <summary>
+        /// 再読み込み
+        /// </summary>
+        public void Reload() {
 
-            Model.Reset();
-            Initialize();
+            Loaded();
         }
 
         public override void KeyDown(KeyEventArgs e) {
 
-            if(e.Key == Key.F5) {
+            // F5で更新
+            if (e.Key == Key.F5) {
 
-                Refresh();
-            }
-            if(e.Key == Key.Space) {
-
-                GetMore();
+                Reload();
+                e.Handled = true;
             }
         }
     }

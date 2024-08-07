@@ -1,189 +1,170 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.ComponentModel;
-
 using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-using MetroRadiance.UI.Controls;
-using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// ページネーションを使う画面で使用するViewModel
+    /// </summary>
     public abstract class PageSpinnerViewModel : TabItemViewModel {
 
-        //検索結果の総数
-        #region Total変更通知プロパティ
-        private int _Total = -1;
-
-        public int Total {
-            get { return _Total; }
-            set {
-                if(_Total == value)
-                    return;
-                _Total = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region MaxPages変更通知プロパティ
-        private int _MaxPages = 0;
-
-        public int MaxPages {
-            get { return _MaxPages; }
-            set {
-                if(_MaxPages == value)
-                    return;
-                if(value > MaximumPages) {
-
-                    value = MaximumPages;
-                }
-                _MaxPages = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region CurrentPage変更通知プロパティ
-        private int _CurrentPage = 1;
-
-        public int CurrentPage {
-            get { return _CurrentPage; }
-            set {
-                if(_CurrentPage == value)
-                    return;
-                if(value > MaxPages) {
-
-                    value = MaxPages;
-                }
-                if(value <= 1) {
-
-                    LeftButtonEnabled = false;
-                } else {
-
-                    LeftButtonEnabled = true;
-                }
-                if(value >= MaxPages) {
-
-                    RightButtonEnabled = false;
-                } else {
-
-                    RightButtonEnabled = true;
-                }
-
-                _CurrentPage = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region LeftButtonEnabled変更通知プロパティ
-        private bool _LeftButtonEnabled = false;
-
+        private bool _LeftButtonEnabled;
+        /// <summary>
+        /// スピナーの左のボタンが押せるかどうか
+        /// </summary>
         public bool LeftButtonEnabled {
             get { return _LeftButtonEnabled; }
-            set {
-                if(_LeftButtonEnabled == value)
+            set { 
+                if (_LeftButtonEnabled == value)
                     return;
                 _LeftButtonEnabled = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-
-        #region RightButtonEnabled変更通知プロパティ
-        private bool _RightButtonEnabled = true;
-
+        private bool _RightButtonEnabled;
+        /// <summary>
+        /// スピナーの右のボタンが押せるかどうか
+        /// </summary>
         public bool RightButtonEnabled {
             get { return _RightButtonEnabled; }
-            set {
-                if(_RightButtonEnabled == value)
+            set { 
+                if (_RightButtonEnabled == value)
                     return;
                 _RightButtonEnabled = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
+        private int? _Total;
+        /// <summary>
+        /// 表示出来ていない部分も含むアイテムの総数
+        /// デフォルトはnull 新たにnullを設定することは許可しない
+        /// </summary>
+        public int? Total {
+            get { return _Total; }
+            set { 
+                if (value == null || _Total == value)
+                    return;
+                _Total = value;
+                MaxPages = (int)value / ItemPeriod + 1;
+                RefreshArrowButtons();
+                RaisePropertyChanged();
+            }
+        }
 
-        #region IsActive変更通知プロパティ
-        private bool _IsActive;
+        private int _MaxPages;
+        /// <summary>
+        /// 最大ページ数
+        /// </summary>
+        public int MaxPages {
+            get { return _MaxPages; }
+            set { 
+                if (_MaxPages == value)
+                    return;
+                _MaxPages = value;
+                RaisePropertyChanged();
+            }
+        }
 
-        private bool tmpLeftButton;
-        private bool tmpRightButton;
+        private int _ItemPeriod;
+        /// <summary>
+        /// アイテムがいくつごと表示されるか
+        /// </summary>
+        public int ItemPeriod {
+            get { return _ItemPeriod; }
+            set { 
+                if (_ItemPeriod == value)
+                    return;
+                _ItemPeriod = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _CurrentPage;
+        /// <summary>
+        /// 現在のページ
+        /// </summary>
+        public int CurrentPage {
+            get { return _CurrentPage; }
+            set { 
+                if (_CurrentPage == value)
+                    return;
+                if (value > MaxPages) {
+                    value = MaxPages;
+                }
+                if (value < 1) {
+                    value = 1;
+                }
+                _CurrentPage = value;
+
+                RefreshArrowButtons();
+                RaisePropertyChanged();
+            }
+        }
 
         public override bool IsActive {
-            get { return _IsActive; }
-            set {
-                if(_IsActive == value)
+            get { return base.IsActive; }
+            set { 
+                if (base.IsActive == value)
                     return;
-                _IsActive = value;
-                if(value) {
-
-                    tmpLeftButton = LeftButtonEnabled;
-                    tmpRightButton = RightButtonEnabled;
+                base.IsActive = value;
+                if (value) {
 
                     LeftButtonEnabled = false;
                     RightButtonEnabled = false;
                 } else {
 
-                    LeftButtonEnabled = tmpLeftButton;
-                    RightButtonEnabled = tmpRightButton;
+                    RefreshArrowButtons();
                 }
-                RaisePropertyChanged();
             }
         }
-        #endregion
 
-        private int MaximumPages;
 
-        public PageSpinnerViewModel(string name, int maximum = 50) : base(name) {
+        public PageSpinnerViewModel(string name, int itemPeriod) : base(name) {
 
-            MaximumPages = maximum;
+            ItemPeriod = itemPeriod;
         }
 
-        //ページ切り替え時に呼ばれるのでここでいろいろ
-        //ページ取得はCurrentPageを
-        public abstract void SpinPage();
+        /// <summary>
+        /// 矢印ボタンの有効状態を現在のページ状態に合わせて更新する
+        /// </summary>
+        private void RefreshArrowButtons() {
+
+            LeftButtonEnabled = MaxPages != 1 && CurrentPage > 1;
+            RightButtonEnabled = MaxPages != 1 && CurrentPage < MaxPages;
+        }
+
+        /// <summary>
+        /// ページが切り替えられた時に呼ばれる
+        /// </summary>
+        /// <param name="page">新しいページ</param>
+        public virtual void SpinPage(int page) {
+
+            CurrentPage = page;
+        }
 
 
+        /// <summary>
+        /// スピナーの左のボタンが押された時に呼ばれる処理
+        /// </summary>
         public void LeftButtonClick() {
 
-            if(LeftButtonEnabled) {
+            if (LeftButtonEnabled) {
 
-                CurrentPage--;
-                SpinPage();
+                SpinPage(--CurrentPage);
             }
         }
+
+        /// <summary>
+        /// スピナーの右のボタンが押された時に呼ばれる処理
+        /// </summary>
         public void RightButtonClick() {
 
-            if(RightButtonEnabled) {
+            if (RightButtonEnabled) {
 
-                CurrentPage++;
-                SpinPage();
-            }
-        }
-
-        public override void KeyDown(KeyEventArgs e) {
-
-            switch(e.Key) {
-                case Key.Left:
-                    LeftButtonClick();
-                    e.Handled = true;
-                    break;
-                case Key.Right:
-                    RightButtonClick();
-                    e.Handled = true;
-                    break;
+                SpinPage(++CurrentPage);
             }
         }
     }

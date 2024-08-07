@@ -7,17 +7,16 @@
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
              xmlns:v="clr-namespace:SRNicoNico.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="600"
-             d:DesignWidth="600"
+             d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance {x:Type vm:MainContentViewModel}}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="130"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="130" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <ScrollViewer>
             <StackPanel Background="{DynamicResource ActiveBackgroundBrushKey}">
-                <metro:TabView Focusable="False" ItemsSource="{Binding SystemItems}" SelectedValue="{Binding SelectedTab}" />
+                <metro:TabView Focusable="False" ItemsSource="{Binding SystemItems}" SelectedValue="{Binding SelectedItem}" />
                 <Rectangle Height=".99" Margin="20,10" Fill="{DynamicResource InactiveForegroundBrushKey}" Opacity="0.5">
                     <Rectangle.Style>
                         <Style TargetType="Rectangle">
@@ -29,7 +28,7 @@
                         </Style>
                     </Rectangle.Style>
                 </Rectangle>
-                <metro:TabView Focusable="False" ItemsSource="{Binding UserItems}" SelectedValue="{Binding SelectedTab}" />
+                <metro:TabView Focusable="False" ItemsSource="{Binding UserItems}" SelectedValue="{Binding SelectedItem}" />
             </StackPanel>
         </ScrollViewer>
         <ItemsControl Grid.Column="1" ItemsSource="{Binding SystemItems}">
@@ -52,6 +51,9 @@
                 <DataTemplate DataType="{x:Type vm:NicoRepoViewModel}">
                     <v:NicoRepo />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:WatchLaterViewModel}">
+                    <v:WatchLater />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:MylistViewModel}">
                     <v:Mylist />
                 </DataTemplate>
@@ -66,9 +68,6 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
                     <v:Settings />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:DeployViewModel}">
-                    <v:Deploy />
                 </DataTemplate>
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
@@ -90,17 +89,11 @@
                 <DataTemplate DataType="{x:Type vm:UserViewModel}">
                     <v:User />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:CommunityViewModel}">
-                    <v:Community />
-                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:PublicMylistViewModel}">
                     <v:PublicMylist />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:PlayListViewModel}">
-                    <v:PlayList />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:LiveViewModel}">
-                    <v:Live />
+                <DataTemplate DataType="{x:Type vm:SeriesViewModel}">
+                    <v:Series />
                 </DataTemplate>
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>

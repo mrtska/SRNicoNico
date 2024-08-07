@@ -1,219 +1,139 @@
-﻿using GongSolutions.Wpf.DragDrop;
+﻿using System.Linq;
+using System.Windows.Input;
+using FastEnumUtility;
 using Livet;
 using Livet.Messaging;
-using SRNicoNico.Models.NicoNicoWrapper;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Input;
+using SRNicoNico.Models;
+using SRNicoNico.Services;
+using Unity;
+using Unity.Resolution;
 
 namespace SRNicoNico.ViewModels {
-    public class MylistViewModel : TabItemViewModel, IDropTarget {
+    /// <summary>
+    /// マイリストページのViewModel
+    /// </summary>
+    public class MylistViewModel : TabItemViewModel {
 
-        #region MylistList変更通知プロパティ
-        private DispatcherCollection<TabItemViewModel> _MylistList = new DispatcherCollection<TabItemViewModel>(DispatcherHelper.UIDispatcher);
-
-        public DispatcherCollection<TabItemViewModel> MylistList {
-            get { return _MylistList; }
+        private ObservableSynchronizedCollection<TabItemViewModel> _MylistListItems = new ObservableSynchronizedCollection<TabItemViewModel>();
+        /// <summary>
+        /// マイリストのタブのリスト
+        /// </summary>
+        public ObservableSynchronizedCollection<TabItemViewModel> MylistListItems {
+            get { return _MylistListItems; }
             set {
-                if(_MylistList == value)
+                if (_MylistListItems == value)
                     return;
-                _MylistList = value;
+                _MylistListItems = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        #region SelectedList変更通知プロパティ
-        private TabItemViewModel _SelectedList;
-
-        public TabItemViewModel SelectedList {
-            get { return _SelectedList; }
+        private TabItemViewModel? _SelectedItem;
+        /// <summary>
+        /// 現在選択されているタブ デフォルトは一番上のマイリスト
+        /// </summary>
+        public TabItemViewModel? SelectedItem {
+            get { return _SelectedItem; }
             set {
-                if(_SelectedList == value)
+                if (_SelectedItem == value)
                     return;
-                _SelectedList = value;
+                _SelectedItem = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        private NicoNicoMylist MylistInstance;
+        private readonly IUnityContainer UnityContainer;
+        private readonly IMylistService MylistService;
 
-        public MylistViewModel() : base("マイリスト") {
+        public MylistViewModel(IUnityContainer unityContainer, IMylistService mylistService) : base("マイリスト") {
 
-            MylistInstance = new NicoNicoMylist(this);
+            UnityContainer = unityContainer;
+            MylistService = mylistService;
         }
 
-        public async void Initialize() {
+        /// <summary>
+        /// マイリストの一覧を非同期で取得する
+        /// </summary>
+        public async void Loaded() {
 
             IsActive = true;
-            Status = "マイリストグループを取得中";
+            Status = "マイリストの一覧を取得中";
+            MylistListItems.Clear();
+            try {
 
-            MylistList.Clear();
+                await foreach (var result in MylistService.GetMylistsAsync()) {
 
-            //MylistList.Add(new MylistResultViewModel(this, MylistInstance));
+                    var vm = UnityContainer.Resolve<MylistListViewModel>(new ParameterOverride("mylistId", result.Id),
+                        new ParameterOverride("defaultSortKey", FastEnum.Parse<MylistSortKey>(result.DefaultSortKey + result.DefaultSortOrder, true)));
 
-            var groups = await MylistInstance.Group.GetMylistGroupAsync();
+                    vm.Name = result.Name;
+                    vm.FollowerCount = result.FollowerCount;
+                    vm.TotalCount = result.ItemsCount;
+                    vm.Description = result.Description;
 
-            if(groups == null) {
-
-                return;
-            }
-
-            foreach(var group in groups) {
-
-                MylistList.Add(new MylistResultViewModel(this, group, MylistInstance));
-            }
-            Status = "";
-            IsActive = false;
-        }
-
-        public void Refresh() {
-
-            Initialize();
-        }
-
-        //新しいマイリストを作る
-        public async void AddMylist() {
-
-            var vm = new NewMylistViewModel(this, MylistInstance);
-
-            //Modalはウィンドウが閉じるまで処理がブロックされる
-            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.NewMylistView), vm, TransitionMode.Modal));
-
-            if(!vm.IsCanceled) {
-
-                Status = "マイリスト (" + vm.NewMylistName + ") を作成しています";
-
-                var token = await MylistInstance.GetMylistTokenAsync();
-                if(token == null || token.Length == 0) {
-
-                    return;
+                    MylistListItems.Add(vm);
                 }
-                if(await MylistInstance.Group.CreateMylistAsync(vm.NewMylistName, vm.NewMylistDescription, token)) {
 
-                    Status = "マイリスト (" + vm.NewMylistName + ") を作成しました";
-                    Refresh();
-                }
+            } catch (StatusErrorException e) {
+
+                Status = $"マイリストの一覧を取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+            } finally {
+
+                IsActive = false;
+            }
+
+            // 子ViewModelのStatusを監視する
+            MylistListItems.ToList().ForEach(vm => {
+
+                vm.PropertyChanged += (o, e) => {
+
+                    var tabItem = (TabItemViewModel)o;
+                    if (e.PropertyName == nameof(Status)) {
+
+                        Status = tabItem.Status;
+                    }
+                };
+            });
+
+            // 一番上をデフォルト値とする
+            SelectedItem = MylistListItems.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 再読み込み
+        /// </summary>
+        public void Reload() {
+
+            Loaded();
+        }
+
+        /// <summary>
+        /// マイリスト作成ダイアログを表示する
+        /// </summary>
+        public void CreateMylist() {
+
+            var messanger = UnityContainer.Resolve<InteractionMessenger>();
+
+            var vm = UnityContainer.Resolve<CreateMylistViewModel>();
+            messanger.Raise(new TransitionMessage(typeof(Views.CreateMylistWindow), vm, TransitionMode.Modal));
+
+            // 新しいマイリストが作成されたらリロードする
+            if (vm.IsCreated) {
+                Reload();
             }
         }
+
 
         public override void KeyDown(KeyEventArgs e) {
+        
+            // Ctrl + F5でマイリストの一覧をリロードする
+            if (e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control) && e.Key == Key.F5) {
 
-            if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
-
-                if(e.Key == Key.F5) {
-
-                    Refresh();
-                    return;
-                }
+                Reload();
+                return;
             }
-            SelectedList?.KeyDown(e);
-        }
-
-        public void DragOver(IDropInfo dropInfo) {
-
-            if (dropInfo.TargetItem is MylistResultViewModel vm) {
-
-                //とりあえずマイリストにコピー/移動はさせない
-                if (vm.IsDefList) {
-
-                    Status = "とりあえずマイリストに移動/コピーは出来ません";
-                    return;
-                }
-
-                var count = 0;
-                if (dropInfo.Data is ICollection data) {
-                    count = data.Count;
-                } else {
-
-                    count = 1;
-                }
-
-                Status = count + " アイテムを " + vm.Name + " に移動/コピー";
-                dropInfo.Effects = DragDropEffects.Copy;
-            }
-        }
-
-        public async void Drop(IDropInfo dropInfo) {
-
-            Status = "";
-
-            if (dropInfo.TargetItem is MylistResultViewModel vm) {
-                var selectedList = new List<MylistResultEntryViewModel>();
-
-                if (dropInfo.Data is ICollection data) {
-                    foreach (var list in data) {
-
-                        selectedList.Add((MylistResultEntryViewModel)list);
-                    }
-                } else {
-
-                    selectedList.Add((MylistResultEntryViewModel)dropInfo.Data);
-                }
-
-                var operation = new MylistOperationViewModel(this, vm, selectedList);
-
-                App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.MylistCopyOrMoveView), operation, TransitionMode.Modal));
-
-                if (operation.IsCanceled) {
-
-                    return;
-                }
-
-                var token = await MylistInstance.GetMylistTokenAsync();
-
-                //マイリストコピー処理
-                if (operation.Operation == MylistOperation.Copy) {
-
-                    if (await MylistInstance.Item.CopyMylistAsync(selectedList, vm.Group, token)) {
-
-                        foreach (var entry in selectedList) {
-
-                            //同じIDのマイリストがあったらコピーしない
-                            if (vm.MylistList.Where(e => e.Item.ItemId == entry.Item.ItemId).Count() == 0) {
-
-                                //ターゲット側マイリストに追加
-                                vm.MylistList.Add(entry);
-                            }
-                        }
-                        vm.Sort(vm.SortIndex);
-                    }
-                    return;
-                }
-
-                //マイリスト移動処理
-                if (operation.Operation == MylistOperation.Move) {
-
-                    if (await MylistInstance.Item.MoveMylistAsync(selectedList, vm.Group, token)) {
-
-                        foreach (var entry in selectedList) {
-
-                            //同じIDのマイリストがあったら移動しない
-                            if (vm.MylistList.Where(e => e.Item.ItemId == entry.Item.ItemId).Count() == 0) {
-
-                                //ターゲット側マイリストに追加
-                                vm.MylistList.Add(entry);
-                            }
-                            //元のリストから削除
-                            entry.Owner.MylistList.Remove(entry);
-                        }
-                        vm.Sort(vm.SortIndex);
-                    }
-                    return;
-                }
-            }
-        }
-
-        public override bool CanShowHelp() {
-            return true;
-        }
-
-        public override void ShowHelpView(InteractionMessenger Messenger) {
-
-            Messenger.Raise(new TransitionMessage(typeof(Views.MylistHelpView), this, TransitionMode.NewOrActive));
+            // Ctrl + F5以外は下位のViewModelに渡す            
+            SelectedItem?.KeyDown(e);
         }
     }
 }

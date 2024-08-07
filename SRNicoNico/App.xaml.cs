@@ -1,71 +1,131 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Windows;
-
-using Livet;
-using Microsoft.Win32;
-using SRNicoNico.Models.NicoNicoViewer;
+using System.Windows.Threading;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Web.WebView2.Core;
+using SRNicoNico.Models;
+using SRNicoNico.Services;
 using SRNicoNico.ViewModels;
-using SRNicoNico.Views;
-using System.Text;
+using Unity;
 
 namespace SRNicoNico {
     /// <summary>
-    /// App.xaml の相互作用ロジック
+    /// NicoNicoViewerのエントリポイント
     /// </summary>
     public partial class App : Application {
 
-        //メインウィンドウのViewModel
-        public static MainWindowViewModel ViewModelRoot { get; private set; }
+        public static Dispatcher? UIDispatcher;
 
-#if !DEBUG
-        private MultipleLaunchMonitor Monitor;
+        public static IUnityContainer? UnityContainer { get; private set; }
+
+        protected override void OnStartup(StartupEventArgs e) {
+
+            UIDispatcher = Dispatcher;
+
+            var container = new UnityContainer();
+#if DEBUG
+            container.AddExtension(new Diagnostic()); // デバッグ起動時は診断拡張を追加しておく
 #endif
+            RegisterServices(container);
 
-        private void Application_Startup(object sender, StartupEventArgs e) {
+            ConfigureDbContext(container);
 
-            //UIスレッドのディスパッチャを登録しておく
-            DispatcherHelper.UIDispatcher = Dispatcher;
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            base.OnStartup(e);
 
-#if !DEBUG
-            Monitor = new MultipleLaunchMonitor();
+            UnityContainer = container;
 
+            AppDomain.CurrentDomain.UnhandledException += (o, e) => {
+                
+                if (e.ExceptionObject is Exception ex) {
 
-            //多重起動をしようとしていたら最初に起動したプロセスにコマンドラインなどを送って終了
-            if(Monitor.IsMultipleLaunching()) {
+                    // クラッシュレポート画面が表示されている時にさらにクラッシュした時は無視
+                    if (MainWindow is Views.CrashReportWindow) {
+                        return;
+                    }
+
+                    // メインのウィンドウは閉じる
+                    MainWindow.Visibility = Visibility.Collapsed;
+                    MainWindow.Close();
+
+                    // クラッシュレポート画面を表示する
+                    var a = new Views.CrashReportWindow {
+                        Visibility = Visibility.Visible,
+                        DataContext = new CrashReportViewModel(ex)
+                    };
+
+                    // スレッドが死なないように
+                    a.ShowDialog();
+
+                    Environment.Exit(0);
+                }
+            };
             
-                Monitor.SendCommandLine();
-                Environment.Exit(0);
+            ApplySettings(container.Resolve<ISettings>());
+
+            try {
+                // WebViewがインストールされているかを確認する
+                CoreWebView2Environment.GetAvailableBrowserVersionString();
+            } catch (WebView2RuntimeNotFoundException) {
+
+                MainWindow = new Views.WebViewInstallWindow {
+                    Visibility = Visibility.Visible
+                };
+                MainWindow.Activate();
                 return;
-            } else {
+            }
 
-                Monitor.StartMonitoring();
-        }
-#endif
-
-            //WebBrowserコントロールのIEバージョンを最新にする 古いとUI崩れるからね インストーラーでもこの処理はされてるけど一応
-            //レジストリを弄るのはここだけ
-            Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", "SRNicoNico.exe", 0x00002AFA, RegistryValueKind.DWord);
-            Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_GPU_RENDERING", "SRNicoNico.exe", 0x00000001, RegistryValueKind.DWord);
-
-
-            ViewModelRoot = new MainWindowViewModel();
-            MainWindow = new MainWindow() { DataContext = ViewModelRoot };
-
-            MainWindow.Show();
+            MainWindow = new Views.MainWindow { DataContext = container.Resolve<MainWindowViewModel>() };
+            MainWindow.Visibility = Visibility.Visible;
+            MainWindow.Activate();
         }
 
-        //集約エラーハンドラ
-        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
-            //ハンドルされない例外の処理 このメソッドが終わると
-            MessageBox.Show(
-                "Version: " + ViewModelRoot.CurrentVersion + "\n不明なエラーが発生しました。可能であれば、この文章をコピーして作者に報告していただれば幸いです。Ctrl+Cでコピーできます。\n動画再生時に起きた場合は動画IDを添えてください。\n ExceptionObject:" + e.ExceptionObject,
-                "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
-            
+        /// <summary>
+        /// DbContextを初期化する
+        /// </summary>
+        /// <param name="container">DIコンテナ</param>
+        private void ConfigureDbContext(IUnityContainer container) {
+
+            var dbContext = container.Resolve<ViewerDbContext>();
+            dbContext.Database.Migrate();
+        }
+
+        /// <summary>
+        /// 各サービスをDIコンテナに登録する
+        /// </summary>
+        /// <param name="container">DIコンテナ</param>
+        private void RegisterServices(IUnityContainer container) {
+
+            container.RegisterType<MainWindowViewModel>(TypeLifetime.Singleton);
+
+            container.RegisterType<ViewerDbContext>(TypeLifetime.Singleton);
+
+            container.RegisterType<ISettings, Settings>(TypeLifetime.Singleton);
+            container.RegisterType<INicoNicoViewer, NicoNicoViewer>(TypeLifetime.Singleton);
+            container.RegisterType<IAccountService, NicoNicoViewerAccountService>(TypeLifetime.Singleton);
+
+            container.RegisterType<ISessionService, NicoNicoSessionService>(TypeLifetime.Singleton);
+            container.RegisterType<IUserService, NicoNicoUserService>(TypeLifetime.Singleton);
+            container.RegisterType<INicoRepoService, NicoNicoNicoRepoService>(TypeLifetime.Singleton);
+            container.RegisterType<IMylistService, NicoNicoMylistService>(TypeLifetime.Singleton);
+            container.RegisterType<ILiveService, NicoNicoLiveService>(TypeLifetime.Singleton);
+            container.RegisterType<ISeriesService, NicoNicoSeriesService>(TypeLifetime.Singleton);
+            container.RegisterType<IRankingService, NicoNicoRankingService>(TypeLifetime.Singleton);
+            container.RegisterType<IHistoryService, NicoNicoHistoryService>(TypeLifetime.Singleton);
+
+            container.RegisterType<ISearchService, NicoNicoSearchService>(TypeLifetime.Singleton);
+            container.RegisterType<IVideoService, NicoNicoVideoService>(TypeLifetime.Singleton);
+        }
+
+        /// <summary>
+        /// 設定をアプリケーション全体に反映させる
+        /// </summary>
+        /// <param name="settings"></param>
+        private void ApplySettings(ISettings settings) {
+
+            // アクセントを変更
+            settings.ChangeAccent();
+            settings.ChangeFontFamily();
+            settings.ChangeMutedAccount();
         }
     }
 }

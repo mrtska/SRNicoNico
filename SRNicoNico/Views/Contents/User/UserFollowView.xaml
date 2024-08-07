@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="SRNicoNico.Views.UserFollowView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
+             d:DataContext="{d:DesignInstance Type=w:UserFollowItem}"
+             mc:Ignorable="d" 
+             d:DesignHeight="80" d:DesignWidth="600"
+             Background="Transparent">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="MouseDoubleClick">
+            <a:NicoNicoOpenAction Url="{Binding UserId, StringFormat='https://www.nicovideo.jp/user/{0}'}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="WebViewで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <a:WebViewOpenAction Url="{Binding UserId, StringFormat='https://www.nicovideo.jp/user/{0}'}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="ブラウザで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:LaunchUriOrFileAction Path="{Binding UserId, StringFormat='https://www.nicovideo.jp/user/{0}'}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="URLをクリップボードにコピー">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <a:CopyToClipBoardAction Text="{Binding UserId, StringFormat='https://www.nicovideo.jp/user/{0}'}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Image Source="{Binding ThumbnailLargeUrl}" Margin="5" Height="50" Width="50" />
+        <StackPanel Grid.Column="1" Margin="5,0,0,0">
+            <TextBlock FontSize="16" Text="{Binding Nickname}" />
+            <TextBlock Text="{Binding StrippedDescription}" ToolTip="{Binding StrippedDescription}" Height="32" TextTrimming="WordEllipsis" TextWrapping="Wrap" Foreground="Gray" />
+        </StackPanel>
+    </Grid>
+</UserControl>

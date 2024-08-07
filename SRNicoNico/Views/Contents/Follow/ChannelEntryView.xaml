@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="SRNicoNico.Views.ChannelEntryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
+             d:DataContext="{d:DesignInstance Type=w:ChannelEntry}"
+             mc:Ignorable="d" 
+             d:DesignHeight="80" d:DesignWidth="600"
+             Background="Transparent">
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="WebViewで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <a:WebViewOpenAction Url="{Binding Url}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="ブラウザで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:LaunchUriOrFileAction Path="{Binding Url}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="URLをクリップボードにコピー">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <a:CopyToClipBoardAction Text="{Binding Url}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="MouseDoubleClick">
+            <a:WebViewOpenAction Url="{Binding Url}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Image Source="{Binding ThumbnailUrl}" Margin="5" Height="50" Width="50" />
+        <StackPanel Grid.Column="1" Margin="5,0,0,0">
+            <TextBlock FontSize="16" Text="{Binding Name}" />
+            <TextBlock Text="{Binding Description}" ToolTip="{Binding Description}" MaxHeight="32" TextTrimming="WordEllipsis" TextWrapping="Wrap" Foreground="Gray" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding OwnerName, StringFormat='提供: {0}'}" />
+                <TextBlock Text="{Binding Price, StringFormat='入会済み 月額{0:N0}円'}" FontWeight="Bold" Margin="5,0,0,0">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsJoining}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

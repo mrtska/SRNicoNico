@@ -1,34 +1,35 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.SettingsLive"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
              mc:Ignorable="d" 
-             d:DesignHeight="600"
-             d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance {x:Type vm:SettingsGeneralViewModel}}">
-    <ScrollViewer HorizontalScrollBarVisibility="Auto">
-        <Grid Margin="10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <StackPanel>
-                <TextBlock FontSize="20" Text="生放送設定" />
-                <StackPanel Margin="5,0,0,0">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="生放送通知の更新間隔" VerticalAlignment="Center" />
-                        <TextBox Margin="15,0,0,0" Width="30" Text="{Binding RefreshInterval,Mode=TwoWay}">
-                            <i:Interaction.Behaviors>
-                                <b:TextBoxNumericOnlyBehavior />
-                            </i:Interaction.Behaviors>
-                        </TextBox>
-                        <TextBlock Text="分" VerticalAlignment="Center" />
-                    </StackPanel>
-                </StackPanel>
-            </StackPanel>
+             d:DataContext="{d:DesignInstance {x:Type vm:SettingsLiveViewModel}}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
+            <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" TextTrimming="CharacterEllipsis" FontSize="20" Margin="10,0" VerticalAlignment="Center" />
         </Grid>
-    </ScrollViewer>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto">
+            <StackPanel>
+                <HeaderedContentControl>
+                    <HeaderedContentControl.Header>
+                        <TextBlock Text="生放送通知の更新間隔 (分)" ToolTip="生放送通知を更新する間隔 (デフォルト: 5分)" />
+                    </HeaderedContentControl.Header>
+                    <TextBox Text="{Binding RefreshInterval, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Margin="15,0,0,0" Width="60" HorizontalAlignment="Left" MaxLength="3">
+                        <i:Interaction.Behaviors>
+                            <b:TextBoxNumericOnlyBehavior />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                </HeaderedContentControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

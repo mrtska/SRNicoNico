@@ -1,63 +1,54 @@
-<ResourceDictionary
+﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
-    xmlns:c="clr-namespace:SRNicoNico.Views.Converter">
-    <BooleanToVisibilityConverter x:Key="booltov" />
-    <c:SecondsToMSSConverter x:Key="stomss" />
+    xmlns:local="clr-namespace:SRNicoNico.Views.Controls">
+
+    <Style TargetType="{x:Type local:SeekBarBackground}">
+        <Setter Property="Width" Value="auto" />
+        <Setter Property="Background" Value="{DynamicResource AccentBrushKey}" />
+    </Style>
     <Style TargetType="{x:Type local:SeekBar}">
         <Setter Property="Height" Value="12" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SeekBar}">
                     <Grid>
                         <Rectangle Fill="{DynamicResource ActiveBackgroundBrushKey}" />
-                        <ItemsControl Panel.ZIndex="1" ItemsSource="{TemplateBinding BufferedRange}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <Grid />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Canvas>
-                                        <Rectangle  Canvas.Left="{Binding Start}" Height="12" Width="{Binding Width}" HorizontalAlignment="Left" Fill="#FF555555" />
-                                    </Canvas>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
 
-                        <ItemsControl Panel.ZIndex="2" ItemsSource="{TemplateBinding PlayedRange}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <Grid />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type local:TimeRange}">
-                                    <Canvas>
-                                        <Rectangle Canvas.Left="{Binding Start}"  Height="12" Width="{Binding Width}" HorizontalAlignment="Left" Fill="{DynamicResource AccentBrushKey}" />
-                                    </Canvas>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                        <Canvas Panel.ZIndex="2">
-                            <Thumb Canvas.Left="0" Canvas.Top="0" Name="Thumb_PART" HorizontalAlignment="Left" Width="10" Height="12">
-                                <Thumb.Template>
-                                    <ControlTemplate TargetType="{x:Type Thumb}">
-                                        <Rectangle HorizontalAlignment="Left" Width="10" Fill="#FF8B8B8B" />
-                                    </ControlTemplate>
-                                </Thumb.Template>
-                            </Thumb>
+                        <local:SeekBarBackground Panel.ZIndex="1" Range="{TemplateBinding BufferedRange}" Background="#FF555555" />
+                        <local:SeekBarBackground Panel.ZIndex="2" Range="{TemplateBinding PlayedRange}" />
+                        
+                        <Canvas Panel.ZIndex="3">
+                            <Rectangle Canvas.Top="0" Name="Thumb_PART" HorizontalAlignment="Left" Width="10" Height="{TemplateBinding Height}" Fill="#FF8B8B8B" />
                         </Canvas>
-                        <Popup AllowsTransparency="False" IsOpen="{TemplateBinding IsPopupOpen}" PlacementRectangle="{TemplateBinding PopupTextRect}" PopupAnimation="Slide">
+
+                        <Canvas Panel.ZIndex="4">
+                            <Rectangle Canvas.Top="0" Name="RepeatA_PART" Visibility="Collapsed" Opacity="0.8" HorizontalAlignment="Left" Width="10" Height="{TemplateBinding Height}" Fill="#FF00BB00" />
+                        </Canvas>
+                        <Canvas Panel.ZIndex="5">
+                            <Rectangle Canvas.Top="0" Canvas.Left="40" Name="RepeatB_PART" Visibility="Collapsed" Opacity="0.8" HorizontalAlignment="Left" Width="10" Height="{TemplateBinding Height}" Fill="#FF00BB00" />
+                        </Canvas>
+
+                        <Popup Name="Popup_PART" AllowsTransparency="False" PopupAnimation="Slide">
                             <Border BorderThickness="1" Background="#FF1B1B1C" BorderBrush="#FF3F3F46" Padding="4" >
-                                <TextBlock Text="{TemplateBinding PopupTime,Converter={StaticResource stomss}}"/>
+                                <TextBlock Name="PopupText_PART" />
                             </Border>
                         </Popup>
-                        <Popup AllowsTransparency="True" IsOpen="{TemplateBinding IsStoryBoardOpen}" PlacementRectangle="{TemplateBinding StoryBoardBitmapRect}" PopupAnimation="Slide" Placement="Top" >
+                        <Popup Name="StoryBoardPopup_PART" AllowsTransparency="True" PopupAnimation="Slide" Placement="Top">
                             <Border BorderThickness="1" BorderBrush="#FF3F3F46">
-                                <Image Source="{TemplateBinding StoryBoardImage}" />
+                                <Image x:Name="StoryBoard_PART" />
+                            </Border>
+                        </Popup>
+
+                        <Popup Name="RepeatAPopup_PART" AllowsTransparency="False" PopupAnimation="Slide">
+                            <Border BorderThickness="1" Background="#FF1B1B1C" BorderBrush="#FF3F3F46" Padding="4" >
+                                <TextBlock Name="RepeatAPopupText_PART" />
+                            </Border>
+                        </Popup>
+                        <Popup Name="RepeatBPopup_PART" AllowsTransparency="False" PopupAnimation="Slide">
+                            <Border BorderThickness="1" Background="#FF1B1B1C" BorderBrush="#FF3F3F46" Padding="4" >
+                                <TextBlock Name="RepeatBPopupText_PART" />
                             </Border>
                         </Popup>
                     </Grid>

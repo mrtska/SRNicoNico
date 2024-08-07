@@ -1,18 +1,18 @@
-<ResourceDictionary
+﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:SRNicoNico.Views.Controls"
-    xmlns:b="clr-namespace:SRNicoNico.Views.Behavior">
+    xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors">
     <Style TargetType="{x:Type local:HtmlRenderer}">
         <Setter Property="Padding" Value="5" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:HtmlRenderer}">
-                        <local:DisabledScrollViewerFlowDocumentScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
-                            <FlowDocument PagePadding="{TemplateBinding Padding}">
-                                <Paragraph b:ParagraphHtmlRenderingBehavior.RawHtmlText="{TemplateBinding HtmlText}" />
-                            </FlowDocument>
-                        </local:DisabledScrollViewerFlowDocumentScrollViewer>
+                    <local:DisabledScrollViewerFlowDocumentScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <FlowDocument PagePadding="{TemplateBinding Padding}" FontFamily="Segoe UI" FontSize="{TemplateBinding FontSize}">
+                            <Paragraph b:ParagraphHtmlRenderingBehavior.RawHtmlText="{TemplateBinding HtmlText}" />
+                        </FlowDocument>
+                    </local:DisabledScrollViewerFlowDocumentScrollViewer>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

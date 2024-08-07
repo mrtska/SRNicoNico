@@ -1,83 +1,80 @@
-﻿using Livet;
-using Livet.Messaging;
-using SRNicoNico.Models.NicoNicoWrapper;
+﻿using System.Linq;
 using System.Windows.Input;
+using Livet;
+using Unity;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// ニコレポページのViewModel
+    /// </summary>
     public class NicoRepoViewModel : TabItemViewModel {
 
-        #region NicoRepoList変更通知プロパティ
-        private ObservableSynchronizedCollection<TabItemViewModel> _NicoRepoList;
-
-        public ObservableSynchronizedCollection<TabItemViewModel> NicoRepoList {
-            get { return _NicoRepoList; }
+        private ObservableSynchronizedCollection<TabItemViewModel> _NicoRepoListItems = new ObservableSynchronizedCollection<TabItemViewModel>();
+        /// <summary>
+        /// ニコレポのタブのリスト
+        /// </summary>
+        public ObservableSynchronizedCollection<TabItemViewModel> NicoRepoItems {
+            get { return _NicoRepoListItems; }
             set {
-                if(_NicoRepoList == value)
+                if (_NicoRepoListItems == value)
                     return;
-                _NicoRepoList = value;
+                _NicoRepoListItems = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        #region SelectedList変更通知プロパティ
-        private TabItemViewModel _SelectedList;
-
-        public TabItemViewModel SelectedList {
-            get { return _SelectedList; }
+        private TabItemViewModel? _SelectedItem;
+        /// <summary>
+        /// 現在選択されているタブ デフォルトはすべて
+        /// </summary>
+        public TabItemViewModel? SelectedItem {
+            get { return _SelectedItem; }
             set {
-                if(_SelectedList == value)
+                if (_SelectedItem == value)
                     return;
-                _SelectedList = value;
+                _SelectedItem = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
+        private readonly IUnityContainer UnityContainer;
 
-        public NicoRepoViewModel() : base("ニコレポ") {
+        public NicoRepoViewModel(IUnityContainer unityContainer) : base("ニコレポ") {
 
-            NicoRepoList = new ObservableSynchronizedCollection<TabItemViewModel>();
+            UnityContainer = unityContainer;
         }
 
-        public void Initialize() {
+        /// <summary>
+        /// ニコレポの一覧をインスタンス化する
+        /// </summary>
+        public void Loaded() {
 
-            IsActive = true;
-            NicoRepoList.Clear();
-            NicoRepoList.Add(new NicoRepoResultViewModel(this, "すべて", NicoRepoType.All));
-            NicoRepoList.Add(new NicoRepoResultViewModel(this, "自分", NicoRepoType.Self));
-            NicoRepoList.Add(new NicoRepoResultViewModel(this, "ユーザー", NicoRepoType.User));
-            NicoRepoList.Add(new NicoRepoResultViewModel(this, "チャンネル", NicoRepoType.Channel));
-            NicoRepoList.Add(new NicoRepoResultViewModel(this, "コミュニティ", NicoRepoType.Community));
-            NicoRepoList.Add(new NicoRepoResultViewModel(this, "マイリスト", NicoRepoType.Mylist));
+            NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListAllViewModel>());
+            NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListSelfViewModel>());
+            NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListUserViewModel>());
+            NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListChannelViewModel>());
+            NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListCommunityViewModel>());
+            NicoRepoItems.Add(UnityContainer.Resolve<NicoRepoListMylistViewModel>());
 
-            IsActive = false;
-        }
+            // 子ViewModelのStatusを監視する
+            NicoRepoItems.ToList().ForEach(vm => {
 
-        public void Refresh() {
+                vm.PropertyChanged += (o, e) => {
 
-            Initialize();
+                    var tabItem = (TabItemViewModel)o;
+                    if (e.PropertyName == nameof(Status)) {
+
+                        Status = tabItem.Status;
+                    }
+                };
+            });
+
+            // 「すべて」をデフォルト値とする
+            SelectedItem = NicoRepoItems.First();
         }
 
         public override void KeyDown(KeyEventArgs e) {
-
-            if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
-
-                if(e.Key == Key.F5) {
-
-                    Refresh();
-                    return;
-                }
-            }
-            SelectedList?.KeyDown(e);
-        }
-
-        public override bool CanShowHelp() {
-            return true;
-        }
-        public override void ShowHelpView(InteractionMessenger Messenger) {
-
-            Messenger.Raise(new TransitionMessage(typeof(Views.NicoRepoHelpView), this, TransitionMode.NewOrActive));
+            SelectedItem?.KeyDown(e);
         }
     }
 }

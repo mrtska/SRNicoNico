@@ -1,140 +1,193 @@
-﻿using Livet;
-using Livet.Messaging;
-using SRNicoNico.Models.NicoNicoWrapper;
-using System.Text.RegularExpressions;
+﻿using System.Linq;
 using System.Windows.Input;
+using Livet;
+using SRNicoNico.Models;
+using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.Services;
+using Unity;
+using Unity.Resolution;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// ユーザーページのViewModel
+    /// </summary>
     public class UserViewModel : TabItemViewModel {
 
-        private static readonly Regex UserUrlPattern = new Regex(@"https://www.nicovideo.jp/user/\d+");
-
-        #region UserPageUrl変更通知プロパティ
-        private string _UserPageUrl;
-
-        public string UserPageUrl {
-            get { return _UserPageUrl; }
-            set { 
-                if(_UserPageUrl == value)
-                    return;
-                _UserPageUrl = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region SelectedList変更通知プロパティ
-        private TabItemViewModel _SelectedList;
-
-        public TabItemViewModel SelectedList {
-            get { return _SelectedList; }
+        private ObservableSynchronizedCollection<TabItemViewModel> _UserItems = new ObservableSynchronizedCollection<TabItemViewModel>();
+        /// <summary>
+        /// ユーザーのタブのリスト
+        /// </summary>
+        public ObservableSynchronizedCollection<TabItemViewModel> UserItems {
+            get { return _UserItems; }
             set {
-                if(_SelectedList == value)
+                if (_UserItems == value)
                     return;
-                _SelectedList = value;
+                _UserItems = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        #region UserContentList変更通知プロパティ
-        private ObservableSynchronizedCollection<TabItemViewModel> _UserContentList;
-
-        public ObservableSynchronizedCollection<TabItemViewModel> UserContentList {
-            get { return _UserContentList; }
+        private TabItemViewModel? _SelectedItem;
+        /// <summary>
+        /// 現在選択されているタブ デフォルトはユーザーニコレポ
+        /// </summary>
+        public TabItemViewModel? SelectedItem {
+            get { return _SelectedItem; }
             set {
-                if(_UserContentList == value)
+                if (_SelectedItem == value)
                     return;
-                _UserContentList = value;
+                _SelectedItem = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        #region LoadFailed変更通知プロパティ
-        private  bool _LoadFailed = false;
-
-        public  bool LoadFailed {
-            get { return _LoadFailed; }
+        private UserDetails? _UserDetails;
+        /// <summary>
+        /// ユーザー詳細
+        /// </summary>
+        public UserDetails? UserDetails {
+            get { return _UserDetails; }
             set { 
-                if(_LoadFailed == value)
+                if (_UserDetails == value)
                     return;
-                _LoadFailed = value;
+                _UserDetails = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        public NicoNicoUser Model { get; set; }
-
-        public UserViewModel(string url) : base("ユーザー") {
-
-            UserPageUrl = UserUrlPattern.Match(url).Value;
-
-            UserContentList = new ObservableSynchronizedCollection<TabItemViewModel>();
-            Model = new NicoNicoUser(UserPageUrl);
+        private bool _IsFollow;
+        /// <summary>
+        /// フォローしているかどうか
+        /// </summary>
+        public bool IsFollow {
+            get { return _IsFollow; }
+            set { 
+                if (_IsFollow == value)
+                    return;
+                _IsFollow = value;
+                RaisePropertyChanged();
+            }
         }
 
-        public async void Initialize() {
+        private readonly IUnityContainer UnityContainer;
+        private readonly IUserService UserService;
+
+        private readonly string UserId;
+
+        public UserViewModel(IUnityContainer unityContainer, IUserService userService, string userId) : base("ユーザー") {
+
+            UnityContainer = unityContainer;
+            UserService = userService;
+
+            UserId = userId;
+        }
+
+        /// <summary>
+        /// その他タブの一覧をインスタンス化する
+        /// </summary>
+        public async void Loaded() {
 
             IsActive = true;
-            Status = "ユーザー情報取得中";
-            Status = await Model.GetUserInfoAsync();
+            Status = "ユーザー情報を取得中";
+            try {
+                UserDetails = await UserService.GetUserAsync(UserId);
+                IsFollow = UserDetails.IsFollowing;
+                Status = string.Empty;
+            } catch (StatusErrorException e) {
 
-            if(Model.UserInfo == null) {
-
-                LoadFailed = true;
-            } else {
-
-                UserContentList.Clear();
-                UserContentList.Add(new UserNicoRepoViewModel(this));
-                UserContentList.Add(new UserMylistViewModel(this));
-                UserContentList.Add(new UserVideoViewModel(this));
-                Name += "\n" + Model.UserInfo.UserName;
+                Status = $"ユーザー詳細を取得出来ませんでした。 ステータスコード: {e.StatusCode}";
+                return;
+            } finally {
+                IsActive = false;
             }
-            IsActive = false;
+
+            UserItems.Clear();
+
+            var po = new ParameterOverride("userId", UserId);
+            UserItems.Add(UnityContainer.Resolve<UserNicoRepoViewModel>(po));
+            UserItems.Add(UnityContainer.Resolve<UserFolloweeViewModel>(po));
+            UserItems.Add(UnityContainer.Resolve<UserFollowerViewModel>(po));
+            UserItems.Add(UnityContainer.Resolve<UserMylistViewModel>(po));
+            UserItems.Add(UnityContainer.Resolve<UserVideoViewModel>(po));
+            UserItems.Add(UnityContainer.Resolve<UserSeriesViewModel>(po));
+
+            // 子ViewModelのStatusを監視する
+            UserItems.ToList().ForEach(vm => {
+
+                vm.PropertyChanged += (o, e) => {
+
+                    var tabItem = (TabItemViewModel)o;
+                    if (e.PropertyName == nameof(Status)) {
+
+                        Status = tabItem.Status;
+                    }
+                };
+            });
+
+            // ニコレポをデフォルト値とする
+            SelectedItem = UserItems.First();
         }
 
+        /// <summary>
+        /// フォローするまたは解除する
+        /// </summary>
         public async void ToggleFollow() {
 
-            Status = await Model.ToggleFollowOwnerAsync();
+            IsActive = true;
+            try {
+                if (IsFollow) {
+
+                    Status = "フォローを解除中";
+                    var result = await UserService.UnfollowUserAsync(UserId);
+                    Status = result ? "フォローを解除しました" : "フォローの解除に失敗しました";
+                    if (result) {
+                        IsFollow = false;
+                    }
+                } else {
+
+                    Status = "フォロー中";
+                    var result = await UserService.FollowUserAsync(UserId);
+                    Status = result ? "フォローしました" : "フォローに失敗しました";
+                    if (result) {
+                        IsFollow = true;
+                    }
+                }
+            } catch (StatusErrorException e) {
+
+                Status = $"フォロー状態の操作に失敗しました。 ステータスコード: {e.StatusCode}";
+            } finally {
+                IsActive = false;
+            }
         }
 
-        public void Refresh() {
+        /// <summary>
+        /// ユーザー詳細を再読込する
+        /// </summary>
+        public void Reload() {
 
-            Initialize();
+            Loaded();
         }
 
+        /// <summary>
+        /// タブを閉じる
+        /// </summary>
         public void Close() {
 
-            App.ViewModelRoot.MainContent.RemoveUserTab(this);
+            Dispose();
         }
 
         public override void KeyDown(KeyEventArgs e) {
 
-            if(e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
-
-                if(e.Key == Key.W) {
-
-                    Close();
-                    return;
-                }
-                if(e.Key == Key.F5) {
-
-                    Refresh();
+            // Ctrl+F5でユーザーページ全体をリロードする
+            if (e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control)) {
+                if (e.Key == Key.F5) {
+                    Reload();
+                    e.Handled = true;
                     return;
                 }
             }
-            SelectedList?.KeyDown(e);
-        }
 
-        public override bool CanShowHelp() {
-            return false;
-        }
-
-        public override void ShowHelpView(InteractionMessenger Messenger) {
-
-            Messenger.Raise(new TransitionMessage(typeof(Views.StartHelpView), this, TransitionMode.NewOrActive));
+            SelectedItem?.KeyDown(e);
         }
     }
 }

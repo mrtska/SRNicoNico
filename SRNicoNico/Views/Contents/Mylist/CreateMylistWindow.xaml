@@ -1,0 +1,99 @@
+﻿<metro:MetroWindow   x:Class="SRNicoNico.Views.CreateMylistWindow"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                     xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
+                     d:DataContext="{d:DesignInstance Type=vm:CreateMylistViewModel}"
+                    mc:Ignorable="d"
+                    WindowStartupLocation="CenterOwner"
+		            Background="{DynamicResource ThemeBrushKey}"
+		            Foreground="{DynamicResource ActiveForegroundBrushKey}"
+                    SizeToContent="Height"
+                    ResizeMode="NoResize"
+                    WindowStyle="None"
+                    Width="450" Title="マイリスト作成"
+                    IsEnabled="{Binding IsActive, Converter={StaticResource InvertBoolConverter}}">
+    <i:Interaction.Triggers>
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}">
+            <l:WindowInteractionMessageAction />
+        </l:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border metro:MetroWindow.IsCaptionBar="True" Background="{DynamicResource BackgroundBrushKey}">
+                <TextBlock Text="マイリスト作成" TextTrimming="CharacterEllipsis" FontSize="18" Margin="10,0,0,0" VerticalAlignment="Center" />
+        </Border>
+        <StackPanel Grid.Row="1" Margin="10">
+            <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="マイリスト名:" VerticalAlignment="Center" />
+                <TextBox Grid.Row="1" Margin="10,0" Text="{Binding MylistName, Mode=TwoWay}" Width="250" MaxLength="128" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock Text="公開設定:" VerticalAlignment="Center" Width="70" />
+                <RadioButton Content="公開">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Checked">
+                            <i:ChangePropertyAction TargetObject="{Binding}" PropertyName="IsPublic" Value="True" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </RadioButton>
+                <RadioButton Content="非公開" IsChecked="True" Margin="10,0,20,0">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Checked">
+                            <i:ChangePropertyAction TargetObject="{Binding}" PropertyName="IsPublic" Value="False" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </RadioButton>
+                <TextBlock Text="並び順:" VerticalAlignment="Center" Width="50" />
+                <ComboBox Width="150" Height="22" VerticalContentAlignment="Center" SelectedItem="{Binding SelectedSortKey, Mode=TwoWay}" ItemsSource="{Binding SortKeyItems}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Margin="10" HorizontalAlignment="Center">
+                <TextBlock Text="マイリストの説明（任意）" HorizontalAlignment="Center" />
+                <TextBox ScrollViewer.VerticalScrollBarVisibility="Auto" AcceptsReturn="True" MaxLength="256" Height="90" VerticalContentAlignment="Top"
+                         Margin="10,0" Text="{Binding MylistDescription}" Width="390" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="作成" Margin="10">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MylistName.Count}" Value="0">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Create" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button Content="キャンセル" Margin="10">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:WindowInteractionMessageAction>
+                                <l:DirectInteractionMessage>
+                                    <l:WindowActionMessage Action="Close" />
+                                </l:DirectInteractionMessage>
+                            </l:WindowInteractionMessageAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</metro:MetroWindow>

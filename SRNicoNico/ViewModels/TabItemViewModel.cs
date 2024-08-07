@@ -1,116 +1,105 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
+﻿using System.Windows.Input;
 using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
 using MetroRadiance.UI.Controls;
-using System.Windows.Input;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// タブの中に表示されるUIを持つViewModelが継承する
+    /// </summary>
     public class TabItemViewModel : ViewModel, ITabItem {
 
-        #region IsSelected変更通知プロパティ
-        private bool _IsSelected;
-
-        public bool IsSelected {
-            get { return _IsSelected; }
-            set {
-                if(_IsSelected == value)
-                    return;
-                _IsSelected = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region Name変更通知プロパティ
-        private string _Name;
-
-        public string Name {
+        private string? _Name;
+        /// <summary>
+        /// タブに表示する名前
+        /// </summary>
+        public string? Name {
             get { return _Name; }
-            set {
-                if(_Name == value)
+            set { 
+                if (_Name == value)
                     return;
                 _Name = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
-
-        #region Badge 変更通知プロパティ
 
         private int? _Badge;
-
         /// <summary>
-        /// バッジを取得します。
+        /// タブに表示するバッジ
         /// </summary>
-        public virtual int? Badge {
+        public int? Badge {
             get { return _Badge; }
-            protected set {
-                if(_Badge != value) {
-                    _Badge = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-        #endregion
-
-        #region Status変更通知プロパティ
-        private string _Status;
-
-        public virtual string Status {
-            get { return _Status; }
-            set {
-                if(_Status == value)
+            set { 
+                if (_Badge == value)
                     return;
-                _Status = value;
-                if(App.ViewModelRoot.MainContent.SelectedTab == this) {
-
-                    App.ViewModelRoot.Status = value;
-                }
+                _Badge = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
+        private bool _IsSelected;
+        /// <summary>
+        /// タブが選択されているかどうか
+        /// </summary>
+        public bool IsSelected {
+            get { return _IsSelected; }
+            set { 
+                if (_IsSelected == value)
+                    return;
+                _IsSelected = value;
+                RaisePropertyChanged();
+            }
+        }
 
-        #region IsActive変更通知プロパティ
         private bool _IsActive;
-
+        /// <summary>
+        /// 現在読込中かどうか
+        /// 基本的にプログレスバーなどを表示するフラグとして使う
+        /// </summary>
         public virtual bool IsActive {
             get { return _IsActive; }
-            set {
+            set { 
+                if (_IsActive == value)
+                    return;
                 _IsActive = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-
-        public TabItemViewModel(string name = "") {
-
-            Name = name;
+        private string _Status = string.Empty;
+        /// <summary>
+        /// ステータスバーに表示する文字列
+        /// </summary>
+        public string Status {
+            get { return _Status; }
+            set { 
+                if (_Status == value)
+                    return;
+                _Status = value;
+                RaisePropertyChanged();
+            }
         }
 
-        //キーイベントをハンドリングする時はオーバーライド
+        public TabItemViewModel(string tabName = "") {
+
+            Name = tabName;
+        }
+
+        /// <summary>
+        /// このタブを開いている時にキーボードを叩くと呼ばれる
+        /// </summary>
+        /// <param name="e">キーイベント</param>
         public virtual void KeyDown(KeyEventArgs e) { }
+        /// <summary>
+        /// このタブを開いている時にキーボードを叩くと呼ばれる
+        /// </summary>
+        /// <param name="e">キーイベント</param>
         public virtual void KeyUp(KeyEventArgs e) { }
 
-
-        //マウスイベントをハンドリングする時はオーバーライド
+        /// <summary>
+        /// このタブを開いている時にマウスのクリックなどをすると呼ばれる
+        /// </summary>
+        /// <param name="e">マウスイベント</param>
         public virtual void MouseDown(MouseButtonEventArgs e) { }
 
-        public virtual bool CanShowHelp() {
-
-            return false;
-        }
-        public virtual void ShowHelpView(InteractionMessenger Messenger) { }
     }
 }

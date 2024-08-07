@@ -1,15 +1,15 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
     "strict": true,
     "removeComments": true,
-    "sourceMap": false,
-    "target": "es5",
-    "module": "commonjs",
-    "lib": [ "dom", "es2015" ],
-    "moduleResolution": "node"
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "target": "ES2022",
+    "lib": [ "dom", "ES2022" ],
+    "moduleResolution": "Node"
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "wwwroot"
   ]
 }

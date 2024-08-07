@@ -1,21 +1,19 @@
-﻿using Livet.Messaging;
+﻿using SRNicoNico.Models;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// スタートページクラスのDataContext
+    /// </summary>
     public class StartViewModel : TabItemViewModel {
 
-        public double CurrentVersion {
-            get { return App.ViewModelRoot.CurrentVersion; }
-        }
+        /// <summary>
+        /// 現在のNicoNicoViewerのバージョン
+        /// </summary>
+        public double CurrentVersion { get; private set; }
 
-        public StartViewModel() : base("スタート") {
-        }
+        public StartViewModel(INicoNicoViewer vm) : base("スタート") {
 
-        public override bool CanShowHelp() {
-            return true;
-        }
-        public override void ShowHelpView(InteractionMessenger Messenger) {
-
-            Messenger.Raise(new TransitionMessage(typeof(Views.StartHelpView), this, TransitionMode.NewOrActive));
+            CurrentVersion = vm.CurrentVersion;
         }
     }
 }

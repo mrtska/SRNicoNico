@@ -1,192 +1,196 @@
-﻿using Livet;
-using Livet.Messaging;
-using SRNicoNico.Models.NicoNicoViewer;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows.Input;
+using Livet;
+using SRNicoNico.Models;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// WebViewクラスのDataContext
+    /// </summary>
     public class WebViewViewModel : TabItemViewModel {
 
-        #region WebViewTabs変更通知プロパティ
-        private ObservableSynchronizedCollection<WebViewContentViewModel> _WebViewTabs;
+        /// <summary>
+        /// WebViewのリスト
+        /// </summary>
+        public ObservableSynchronizedCollection<WebViewContentViewModel> WebViewItems { get; private set; }
 
-        public ObservableSynchronizedCollection<WebViewContentViewModel> WebViewTabs {
-            get { return _WebViewTabs; }
-            set {
-                if(_WebViewTabs == value)
+        private WebViewContentViewModel? _SelectedItem;
+        /// <summary>
+        /// 現在選択されているWebViewのページ
+        /// </summary>
+        public WebViewContentViewModel? SelectedItem {
+            get { return _SelectedItem; }
+            set { 
+                if (_SelectedItem == value)
                     return;
-                _WebViewTabs = value;
+                _SelectedItem = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        #region SelectedTab変更通知プロパティ
-        private WebViewContentViewModel _SelectedTab;
+        private readonly ISettings Settings;
+        private readonly INicoNicoViewer NicoNicoViewer;
 
-        public WebViewContentViewModel SelectedTab {
-            get { return _SelectedTab; }
-            set {
-                if(_SelectedTab == value)
-                    return;
-                _SelectedTab = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
 
-        public WebViewViewModel() : base("WebView") {
+        public WebViewViewModel(ISettings settings, INicoNicoViewer nicoNicoViewer) : base("WebView") {
 
-            WebViewTabs = new ObservableSynchronizedCollection<WebViewContentViewModel>();
+            Settings = settings;
+            NicoNicoViewer = nicoNicoViewer;
+            WebViewItems = new ObservableSynchronizedCollection<WebViewContentViewModel>();
         }
 
-        public void Initialize() {
+        /// <summary>
+        /// 初めてWebViewが表示された時に実行される
+        /// </summary>
+        public void Loaded() {
 
-            if(WebViewTabs.Count == 0) {
-
-                AddTab();
+            // 1つもWebViewを開いていない時は自動的に開く
+            if (WebViewItems.Count == 0) {
+                
+                AddNewTab();
             }
         }
 
-        public void AddTab() {
+        /// <summary>
+        /// 指定したURLでWebViewのタブを開く
+        /// </summary>
+        /// <param name="url">URL</param>
+        /// <param name="useViewer">リンクをNicoNicoViewerで開くか</param>
+        public void AddTab(string url, bool useViewer = false) {
 
-            AddTab(Settings.Instance.WebViewDefaultPage);
+            var tab = new WebViewContentViewModel(this, NicoNicoViewer, url, useViewer);
+
+            // リストに追加し、選択状態にする
+            WebViewItems.Add(tab);
+            CompositeDisposable.Add(tab);
+
+            SelectedItem = tab;
         }
 
-        //指定したURLでWebViewを開く
-        public void AddTab(string url, bool forceUseWebView = false) {
+        /// <summary>
+        /// 新しいタブを開く
+        /// </summary>
+        public void AddNewTab() {
 
-            var tab = new WebViewContentViewModel(this, url, forceUseWebView);
-            WebViewTabs.Add(tab);
-            SelectedTab = tab;
+            AddTab(Settings.DefaultWebViewPageUrl, true);
         }
 
+        /// <summary>
+        /// タブを閉じる
+        /// </summary>
+        /// <param name="vm">対象のタブのViewModel</param>
         public void RemoveTab(WebViewContentViewModel vm) {
 
-            if(WebViewTabs.Count == 1) {
+            // タブが一つしか無い時はそのタブをホームに戻す
+            if (WebViewItems.Count == 1) {
 
                 Home();
                 return;
             }
+            // WebViewを開放する
+            CompositeDisposable.Remove(vm);
             vm.Dispose();
 
-            WebViewTabs.Remove(vm);
-            SelectedTab = WebViewTabs.First();
-        }
+            WebViewItems.Remove(vm);
+            
+            // 選択されているタブを消した時はリストの最後のタブを選択する
+            if (SelectedItem == null) {
 
-        //左のタブに移動
-        public void PrevTab() {
-
-            var index = WebViewTabs.IndexOf(SelectedTab);
-
-            if(index == 0) {
-
-                SelectedTab = WebViewTabs[WebViewTabs.Count - 1];
-            } else {
-
-                SelectedTab = WebViewTabs[index - 1];
+                SelectedItem = WebViewItems.Last();
             }
         }
 
-        //右のタブに移動 一番右の場合は一番左のタブに移動
-        public void NextTab() {
+        /// <summary>
+        /// 設定されているホームに遷移する
+        /// </summary>
+        public void Home() {
 
-            var index = WebViewTabs.IndexOf(SelectedTab);
-
-            if(WebViewTabs.Count - 1 == index) {
-
-                SelectedTab = WebViewTabs[0];
-            } else {
-
-                SelectedTab = WebViewTabs[index + 1];
-            }
+            SelectedItem?.WebView.CoreWebView2.Navigate(Settings.DefaultWebViewPageUrl);
         }
 
-        //現在のタブを設定しているデフォルトページに移動する
-        public async void Home() {
-
-            await DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
-
-                SelectedTab.WebBrowser.Navigate(Settings.Instance.WebViewDefaultPage);
-            }));
-        }
+        /// <summary>
+        /// 現在選択されているWebViewを更新する
+        /// </summary>
         public void Refresh() {
 
-            SelectedTab?.WebBrowser.Refresh(true);
+            SelectedItem?.Refresh();
         }
 
         public override void KeyDown(KeyEventArgs e) {
 
-            if(e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control) && e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Shift)) {
+            if (e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control) && e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Shift)) {
 
-                if(e.Key == Key.Tab) {
+                // Ctrl+Shift+Tabのショートカット処理 左のタブに移動する
+                if (e.Key == Key.Tab) {
 
-                    PrevTab();
-                    //これをしないとFatalExecutionEngineErrorになる
+                    if (SelectedItem == null || WebViewItems.Count == 1) {
+                        return;
+                    }
+                    var index = WebViewItems.IndexOf(SelectedItem);
+
+                    SelectedItem = index == 0 ? WebViewItems[^1] : WebViewItems[index - 1];
                     e.Handled = true;
                 }
-            } else if(e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control)) {
+                return;
+            }
+            if (e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control)) {
 
-                switch(e.Key) {
+                switch (e.Key) {
+                    case Key.T:     // Ctrl+T 新しいタブを追加
 
-                    case Key.T: //新しいタブを追加
-
-                        AddTab(Settings.Instance.WebViewDefaultPage);
+                        AddTab(Settings.DefaultWebViewPageUrl);
                         e.Handled = true;
                         break;
-                    case Key.W: //現在のタブを消す
+                    case Key.W:   // Ctrl+W 現在のタブを消す
 
-                        RemoveTab(SelectedTab);
+                        if (SelectedItem != null) {
+
+                            RemoveTab(SelectedItem);
+                        }
                         e.Handled = true;
                         break;
-                    case Key.R: //現在のタブをリロード
+                    case Key.R:    // Ctrl+R 現在のタブをリロード
 
                         Refresh();
                         e.Handled = true;
                         break;
-                    case Key.Tab:   //次のタブに移動
+                    case Key.Tab:   // Ctrl+Tab 次のタブに移動
 
-                        NextTab();
+                        if (SelectedItem == null || WebViewItems.Count == 1) {
+                            return;
+                        }
+                        var index = WebViewItems.IndexOf(SelectedItem);
+
+                        SelectedItem = WebViewItems.Count - 1 == index ? WebViewItems[0] : WebViewItems[index + 1];
                         e.Handled = true;
                         break;
                 }
+                return;
+            }
+            switch (e.Key) {
 
-            } else {
-
-                switch(e.Key) {
-
-                    case Key.F5:
-                        Refresh();
-                        e.Handled = true;
-                        break;
-                    case Key.Home:
-                        Home();
-                        e.Handled = true;
-                        break;
-                }
+                case Key.F5:
+                    Refresh();
+                    e.Handled = true;
+                    break;
+                case Key.Home:
+                    Home();
+                    e.Handled = true;
+                    break;
             }
         }
 
         public override void MouseDown(MouseButtonEventArgs e) {
 
-            switch(e.ChangedButton) {
-                case MouseButton.XButton1:  //ホイールの左ボタン
-                    SelectedTab?.GoBack();
+            switch (e.ChangedButton) {
+                case MouseButton.XButton1:  // ホイールの左ボタン
+                    SelectedItem?.GoBack();
                     break;
-                case MouseButton.XButton2:  //ホイールの右ボタン
-                    SelectedTab?.GoForward();
+                case MouseButton.XButton2:  // ホイールの右ボタン
+                    SelectedItem?.GoForward();
                     break;
             }
-        }
-
-        public override bool CanShowHelp() {
-            return true;
-        }
-
-        public override void ShowHelpView(InteractionMessenger Messenger) {
-
-            Messenger.Raise(new TransitionMessage(typeof(Views.WebViewHelpView), this, TransitionMode.NewOrActive));
         }
     }
 }

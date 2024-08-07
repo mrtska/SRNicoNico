@@ -1,685 +1,232 @@
-﻿using Codeplex.Data;
-using Livet;
-using Livet.Messaging;
-using SRNicoNico.Models.NicoNicoViewer;
-using SRNicoNico.Models.NicoNicoWrapper;
-using SRNicoNico.Views.Controls;
-using System;
+﻿using System;
+using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
+using System.Net;
 using System.Threading.Tasks;
-using System.Timers;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using DynaJson;
+using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.Wpf;
+using SRNicoNico.Views.Controls;
 
 namespace SRNicoNico.ViewModels {
-    public class VideoHtml5Handler : NotificationObject, IObjectForScriptable, IDisposable {
+    public class VideoHtml5Handler : IDisposable {
 
-        [DllImport("urlmon.dll")]
-        [PreserveSig]
-        [return: MarshalAs(UnmanagedType.Error)]
-        static extern int CoInternetSetFeatureEnabled(int featureEntry, [MarshalAs(UnmanagedType.U4)] int dwFlags, bool fEnable);
+        /// <summary>
+        /// WebView
+        /// ライフタイムはこのクラスと同じ
+        /// </summary>
+        public WebView2? WebView { get; private set; }
 
-        public const int FEATURE_LOCALMACHINE_LOCKDOWN = 8;
-        public const int SET_FEATURE_ON_PROCESS = 0x00000002;
+        private bool Initialized = false;
 
-        #region WebBrowser変更通知プロパティ
-        private WebBrowser _WebBrowser;
-
-        public WebBrowser WebBrowser {
-            get { return _WebBrowser; }
-            set { 
-                if (_WebBrowser == value)
-                    return;
-                _WebBrowser = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region ContentControl変更通知プロパティ
-        private ContentControl _ContentControl = new ContentControl();
-
-        public ContentControl ContentControl {
-            get { return _ContentControl; }
-            set { 
-                if (_ContentControl == value)
-                    return;
-                _ContentControl = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region FullScreenContentControl変更通知プロパティ
-        private ContentControl _FullScreenContentControl = new ContentControl();
-
-        public ContentControl FullScreenContentControl {
-            get { return _FullScreenContentControl; }
-            set { 
-                if (_FullScreenContentControl == value)
-                    return;
-                _FullScreenContentControl = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region IsPlaying変更通知プロパティ
-        private bool _IsPlaying;
-        public bool IsPlaying {
-            get { return _IsPlaying; }
-            set { 
-                if (_IsPlaying == value)
-                    return;
-                _IsPlaying = value;
-                RaisePropertyChanged();
-                if(value) {
-
-                     Resume();
-                } else {
-
-                    Pause();
-                }
-            }
-        }
-        #endregion
-
-        #region IsFullScreen変更通知プロパティ
-        private bool _IsFullScreen = false;
-
-        public bool IsFullScreen {
-            get { return _IsFullScreen; }
-            set {
-                if (_IsFullScreen == value)
-                    return;
-                _IsFullScreen = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region CurrentTime変更通知プロパティ
-        private double _CurrentTime;
-
-        public double CurrentTime {
-            get { return _CurrentTime; }
-            set { 
-                if (_CurrentTime == value)
-                    return;
-                _CurrentTime = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region PlayedRange変更通知プロパティ
-        private ObservableSynchronizedCollection<TimeRange> _PlayedRange = new ObservableSynchronizedCollection<TimeRange>();
-
-        public ObservableSynchronizedCollection<TimeRange> PlayedRange {
-            get { return _PlayedRange; }
-            set {
-                if (_PlayedRange == value)
-                    return;
-                _PlayedRange = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region BufferedRange変更通知プロパティ
-        private ObservableSynchronizedCollection<TimeRange> _BufferedRange = new ObservableSynchronizedCollection<TimeRange>();
-
-        public ObservableSynchronizedCollection<TimeRange> BufferedRange {
-            get { return _BufferedRange; }
-            set {
-                if (_BufferedRange == value)
-                    return;
-                _BufferedRange = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region VolumeIcon変更通知プロパティ
-        private string _VolumeIcon;
-
-        public string VolumeIcon {
-            get { return _VolumeIcon; }
-            set { 
-                if (_VolumeIcon == value)
-                    return;
-                _VolumeIcon = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region IsMute変更通知プロパティ
-        public bool IsMute {
-            get { return Settings.Instance.IsMute; }
-            set {
-                Settings.Instance.IsMute = value;
-                ApplyVolume();
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region Volume変更通知プロパティ
-        private int _Volume = 0;
-
-        public int Volume {
-            get { return _Volume; }
-            set {
-                if (value > 100) {
-
-                    value = 100;
-                } else if (value < 0) {
-
-                    value = 0;
-                }
-                _Volume = value;
-                Settings.Instance.Volume = value;
-                RaisePropertyChanged();
-                ApplyVolume();
-            }
-        }
-        #endregion
-
-        #region IsRepeat変更通知プロパティ
-        private bool _IsRepeat;
-
-        public bool IsRepeat {
-            get { return _IsRepeat; }
-            set {
-                if (_IsRepeat == value)
-                    return;
-                _IsRepeat = value;
-                Settings.Instance.IsRepeat = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region CurrentVideoQuality変更通知プロパティ
-        private NicoNicoDmcVideoQuality _CurrentVideoQuality;
-
-        public NicoNicoDmcVideoQuality CurrentVideoQuality {
-            get { return _CurrentVideoQuality; }
-            set { 
-                if (_CurrentVideoQuality == value)
-                    return;
-                _CurrentVideoQuality = value;
-                RaisePropertyChanged();
-                ReestablishDmcSession();
-            }
-        }
-        #endregion
-
-        #region CurrentAudioQuality変更通知プロパティ
-        private NicoNicoDmcAudioQuality _CurrentAudioQuality;
-
-        public NicoNicoDmcAudioQuality CurrentAudioQuality {
-            get { return _CurrentAudioQuality; }
-            set { 
-                if (_CurrentAudioQuality == value)
-                    return;
-                _CurrentAudioQuality = value;
-                RaisePropertyChanged();
-                ReestablishDmcSession();
-            }
-        }
-        #endregion
-
-        #region PlayRate変更通知プロパティ
-        private double _PlayRate = 1.0D;
-
-        public double PlayRate {
-            get { return _PlayRate; }
-            set { 
-                if (_PlayRate == value)
-                    return;
-                _PlayRate = value;
-                RaisePropertyChanged();
-                InvokeScript("Video$SetRate", value);
-            }
-        }
-        #endregion
-
-        #region Resolution変更通知プロパティ
-        private string _Resolution;
-
-        public string Resolution {
-            get { return _Resolution; }
-            set {
-                if (_Resolution == value)
-                    return;
-                _Resolution = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region ShowFullScreenController変更通知プロパティ
-        private bool _ShowFullScreenController;
-
-        public bool ShowFullScreenController {
-            get { return _ShowFullScreenController; }
-            set { 
-                if (_ShowFullScreenController == value)
-                    return;
-                _ShowFullScreenController = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region ShowFullScreenCommentBar変更通知プロパティ
-        private bool _ShowFullScreenCommentBar;
-
-        public bool ShowFullScreenCommentBar {
-            get { return _ShowFullScreenCommentBar; }
-            set { 
-                if (_ShowFullScreenCommentBar == value)
-                    return;
-                _ShowFullScreenCommentBar = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        //新仕様動画で使う
-        private Timer DmcHeartBeatTimer;
-
-        private VideoViewModel Owner;
-        private NicoNicoWatchApi ApiData;
-        
-
-        private VideoCommentViewModel Comment;
+        private bool BrowserInitialized = false;
+        private object? CommentObject;
 
         public VideoHtml5Handler() {
 
+            WebView = new WebView2 { DefaultBackgroundColor = Color.Black };
         }
 
-        private async void ReestablishDmcSession() {
+        /// <summary>
+        /// 指定したViewModelでWebViewを初期化する
+        /// </summary>
+        /// <param name="vm">JavaScript環境に露出するViewModel</param>
+        /// <param name="contentUri">動画URL</param>
+        public async Task InitializeAsync(VideoViewModel vm, string contentUri, Cookie? dmsCookie) {
 
-            if (DmcHeartBeatTimer != null) {
-
-                // Timerが既に動いていた場合セッションを削除する
-                DmcHeartBeatTimer.Stop();
-                DmcHeartBeatTimer.Dispose();
-                await ApiData.DmcInfo.DeleteAsync();
-
-                // 再度Dmc用TokenとSignatureを取得する
-                //var video = new NicoNicoVideoWithPlaylistToken(ApiData.VideoId, ApiData.PlaylistToken);
-                //var str = await video.Initialize();
-                //if(string.IsNullOrEmpty(str)) {
-
-                //    return;
-                ///}
-                //var json = DynamicJson.Parse(str);
-                //ApiData.DmcInfo = new NicoNicoDmc(json.video.dmcInfo);
-
-                await EstablishDmcSession();
-                // セッションを張り直したのでWebBrowser側に伝える
-                InvokeScript("Video$Initialize", new object[] { ApiData.VideoUrl, CurrentTime, IsPlaying });
-                ApplyVolume();
+            if (WebView == null || Initialized) {
+                return;
             }
-        }
+            BrowserInitialized = false;
 
-        private async Task EstablishDmcSession() {
+            await WebView.EnsureCoreWebView2Async();
+            WebView.CoreWebView2.Settings.IsZoomControlEnabled = false;
+            WebView.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
+            WebView.CoreWebView2.SetVirtualHostNameToFolderMapping("www.nicovideo.jp", GetHtml5PlayerPath(), CoreWebView2HostResourceAccessKind.Allow);
+            WebView.Source = new Uri("https://www.nicovideo.jp/player.html");
+            WebView.CoreWebView2.AddHostObjectToScript("vm", vm);
 
-            // ハートビート開始
-            if (ApiData.DmcHeartbeatRequired) {
-
-                if (CurrentVideoQuality == null || CurrentAudioQuality == null) {
-
-                    throw new NullReferenceException("Qualityをnullには出来ません");
-                }
-
-                ApiData.VideoUrl = await ApiData.DmcInfo.CreateAsync(CurrentVideoQuality, CurrentAudioQuality);
-
-                DmcHeartBeatTimer = new Timer(ApiData.DmcInfo.GetHeartBeatLifeTime() / 3);
-                DmcHeartBeatTimer.Elapsed += async (state, e) => await ApiData.DmcInfo.HeartbeatAsync();
-                DmcHeartBeatTimer.Start();
-            }
-        }
-
-        internal async void Initialize(VideoViewModel vm, NicoNicoWatchApi api) {
-
-            Owner = vm ?? throw new ArgumentNullException(nameof(vm));
-            ApiData = api ?? throw new ArgumentNullException(nameof(api));
-            if (ApiData.DmcHeartbeatRequired) {
-
-                CurrentVideoQuality = ApiData.DmcInfo.Videos.First();
-                CurrentAudioQuality = ApiData.DmcInfo.Audios.First();
-                await EstablishDmcSession();
+            if (dmsCookie != null) {
+                var cookie = WebView.CoreWebView2.CookieManager
+                    .CreateCookie(dmsCookie.Name, dmsCookie.Value, dmsCookie.Domain, dmsCookie.Path);
+                cookie.Expires = dmsCookie.Expires;
+                cookie.IsSecure = dmsCookie.Secure;
+                cookie.IsHttpOnly = dmsCookie.HttpOnly;
+                WebView.CoreWebView2.CookieManager.AddOrUpdateCookie(cookie);
             }
 
-            IsRepeat = Settings.Instance.IsRepeat;
-
-            WebBrowser = new WebBrowser() { Focusable = false };
-
-            WebBrowser.PreviewKeyDown += (s, e) => {
-
-                Owner.KeyDown(e);
+            WebView.KeyDown += (o, e) => {
+                vm.KeyDown(e);
             };
-            CoInternetSetFeatureEnabled(FEATURE_LOCALMACHINE_LOCKDOWN, SET_FEATURE_ON_PROCESS, false);
 
-            if(IsFullScreen) {
+            WebView.CoreWebView2.WebMessageReceived += (o, e) => {
 
-                FullScreenContentControl.Content = WebBrowser;
-            } else {
+                var json = JsonObject.Parse(e.WebMessageAsJson);
+                var type = json.type as string;
 
-                ContentControl.Content = WebBrowser;
-            }
-            WebBrowser.ObjectForScripting = new ObjectForScripting(this);
-            WebBrowser.Navigate(new Uri(GetHtml5PlayerPath()));
-        }
+                switch (type) {
+                    case "initialized": // ブラウザ側の初期化が終わったので動画URLをブラウザに送信する
+                        WebView?.CoreWebView2.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setContent", value = new { contentUri, volume = vm.IsMuted ? 0 : vm.Volume, autoplay = vm.Settings.AutomaticPlay } }));
+                        SetVisibility(vm.CommentVisibility);
+                        BrowserInitialized = true;
+                        if (CommentObject != null) {
+                            WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "dispatchComment", value = CommentObject }));
+                            CommentObject = null;
+                        }
+                        break;
+                    case "clicked":
+                        if (vm.Settings.ClickOnPause) {
+                            vm.TogglePlay();
+                        }
+                        break;
+                    case "doubleclick":
+                        if (vm.Settings.DoubleClickToggleFullScreen) {
+                            vm.ToggleFullScreen();
+                        }
+                        break;
+                    case "info":
+                        vm.ActualVideoWidth = (int)json.value.width;
+                        vm.ActualVideoHeight = (int)json.value.height;
+                        vm.ActualVideoDuration = json.value.duration;
+                        break;
+                    case "loop":
+                        // 再生済みの位置やバッファ済みの位置をWebViewから取得する
+                        vm.PlayedRange.Clear();
+                        foreach (var played in json.value.played) {
 
-        public void Resume() {
+                            if (played == null) {
+                                continue;
+                            }
+                            vm.PlayedRange.Add(new TimeRange((float)(played.start / vm.ActualVideoDuration), (float)(played.end / vm.ActualVideoDuration)));
+                        }
+                        vm.BufferedRange.Clear();
+                        foreach (var buffered in json.value.buffered) {
 
-            InvokeScript("Video$Resume");
-        }
-        public void Pause() {
-
-            InvokeScript("Video$Pause");
-        }
-
-        internal void Seek(double pos) {
-
-            if (pos < 0) {
-
-                pos = 0;
-            } else if (pos > ApiData.Duration) {
-
-                pos = ApiData.Duration;
-            }
-            InvokeScript("Video$Seek", new object[] { pos });
-        }
-        private void SetVolumeIcon() {
-
-            if (IsMute) {
-
-                VolumeIcon = "Mute";
-                return;
-            }
-            if (Volume == 0) {
-
-                VolumeIcon = "s0";
-            } else if (Volume < 30) {
-
-                VolumeIcon = "s30";
-            } else if (Volume < 80) {
-
-                VolumeIcon = "s80";
-            } else if (Volume <= 100) {
-
-                VolumeIcon = "s100";
-            }
-        }
-
-        private void ApplyVolume() {
-
-            SetVolumeIcon();
-            if (IsMute) {
-
-                InvokeScript("Video$SetVolume", "0");
-            } else {
-
-                InvokeScript("Video$SetVolume", (Volume / 100.0).ToString());
-            }
-        }
-
-        public void ToggleFullscreen() {
-
-            if(IsFullScreen) {
-
-                ReturnToNormalScreen();
-            } else {
-
-                if (Settings.Instance.UseWindowMode ^ Keyboard.IsKeyDown(Key.LeftCtrl)) {
-
-                    EnterWindowFullScreen();
-                } else {
-
-                    EnterFullScreen();
+                            if (buffered == null) {
+                                continue;
+                            }
+                            vm.BufferedRange.Add(new TimeRange((float)(buffered.start / vm.ActualVideoDuration), (float)(buffered.end / vm.ActualVideoDuration)));
+                        }
+                        break;
+                    case "ended":
+                        if (vm.RepeatBehavior != RepeatBehavior.None) {
+                            vm.Resume();
+                        } else {
+                            if (vm.IsFullScreen) {
+                                vm.ToggleFullScreen();
+                            }
+                        }
+                        break;
+                    case "mousemove":
+                        vm.IsFullScreenPopupOpen = true;
+                        break;
+                    case "KeyS":
+                        vm.Restart();
+                        break;
+                    case "KeyR":
+                        vm.ToggleRepeat();
+                        break;
+                    case "KeyC":
+                        vm.ToggleComment();
+                        break;
+                    case "KeyF":
+                        vm.ToggleFullScreen();
+                        break;
+                    case "KeyM":
+                        vm.ToggleMute();
+                        break;
+                    case "Space":
+                        vm.TogglePlay();
+                        break;
                 }
-            }
-        }
-
-        public void EnterFullScreen() {
-
-            if(IsFullScreen) {
-
-                return;
-            }
-            IsFullScreen = true;
-            ContentControl.Content = null;
-            FullScreenContentControl.Content = WebBrowser;
-            App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.VideoFullScreen), Owner, TransitionMode.Normal));
-
-            Window.GetWindow(ContentControl).Visibility = Visibility.Hidden;
-
-        }
-        public void EnterWindowFullScreen() {
-
-            if (IsFullScreen) {
-
-                return;
-            }
-            IsFullScreen = true;
-            ContentControl.Content = null;
-            FullScreenContentControl.Content = WebBrowser;
-            // App.ViewModelRoot.Messenger.Raise(new TransitionMessage(typeof(Views.VideoWindowFullScreen), Owner, TransitionMode.UnKnown));
-            new Views.VideoWindowFullScreen() {
-
-                DataContext = Owner,
-                Visibility = Visibility.Visible
             };
+
+            Initialized = true;
         }
 
-        public void ReturnToNormalScreen() {
-
-            if (!IsFullScreen) {
-
-                return;
-            }
-            IsFullScreen = false;
-            FullScreenContentControl.Content = null;
-            ContentControl.Content = WebBrowser;
-            Window.GetWindow(ContentControl).Visibility = Visibility.Visible;
-            Window.GetWindow(FullScreenContentControl)?.Close();
+        public void SetContent(string contentUri, bool clearComment) {
+            WebView?.CoreWebView2.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setSrc", value = new { contentUri, clearComment } }));
         }
 
-        public void InvokeScript(string func, params object[] args) {
-
-            //読み込み前にボタンを押しても大丈夫なように メモリ解放されたあとに呼ばれないように
-            if (WebBrowser != null && WebBrowser.IsInitialized) {
-
-                if (ApiData.IsNeedPayment) {
-
-                    return;
-                }
-
-                try {
-
-                    if (args.Length == 0) {
-
-                        WebBrowser.Dispatcher.BeginInvoke((Action)(() => WebBrowser?.InvokeScript(func)));
-                    } else {
-
-                        WebBrowser.Dispatcher.BeginInvoke((Action)(() => WebBrowser?.InvokeScript(func, args)));
-                    }
-                } catch (Exception e) when (e is COMException || e is ObjectDisposedException) {
-
-                    Console.WriteLine("COMException：" + func);
-                    return;
-                }
+        public void DispatchComment(object obj) {
+            if (BrowserInitialized) {
+                WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "dispatchComment", value = obj }));
+            } else {
+                CommentObject = obj;
             }
         }
 
-        public void AttachComment(VideoCommentViewModel comment) {
+        public void PostComment(string threadId, int fork, int commentNumber) {
 
-            Comment = comment;
+            WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "postComment", value = new { threadId, fork, number = commentNumber }}));
         }
 
-        public void Invoked(string cmd, string args) {
+        public void Seek(double position) {
 
-            switch(cmd) {
-                case "ready": // ブラウザ側の準備が出来た
+            WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "seek", value = position }));
+        }
 
-                    if (IsWindows7() && ApiData.VideoUrl.Contains("master.m3u8")) {
+        public void SetVolume(float volume) {
 
-                        Owner.Status = "この動画はWindows 7では再生出来ません。";
-                        return;
-                    }
-                    InvokeScript("Video$Initialize", ApiData.VideoUrl, 0, Settings.Instance.AutoPlay || Owner.IsPlayList);
-                    Volume = Settings.Instance.Volume;
-                    // 再生速度をUIと同期
-                    InvokeScript("Video$SetRate", PlayRate);
-                    Owner.PostInitialize();
+            WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setVolume", value = volume }));
+        }
+
+        public void TogglePlay() {
+
+            WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "togglePlay" }));
+        }
+
+        public void SetVisibility(CommentVisibility visibility) {
+
+            switch (visibility) {
+                case CommentVisibility.Visible:
+                    WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setVisibility", value = "visible" }));
                     break;
-                case "widtheight":
-                    Resolution = args;
+                case CommentVisibility.Hidden:
+                    WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setVisibility", value = "hidden" }));
                     break;
-                case "playstate":
-                    IsPlaying = bool.Parse(args);
-                    break;
-                case "click":
-                    if (Settings.Instance.ClickOnPause) {
-
-                        IsPlaying ^= true;
-                    }
-                    break;
-                case "currenttime": {
-
-                        dynamic json = DynamicJson.Parse(args);
-                        CurrentTime = json.time;
-                        Comment?.CommentTick((int) json.vpos);
-
-                        if (json.played()) {
-
-                            PlayedRange.Clear();
-                            foreach (var play in json.played) {
-
-                                var time = new TimeRange() { StartTime = play.start, EndTime = play.end };
-                                var temp = ApiData.Duration / (time.EndTime - time.StartTime);
-                                var width = IsFullScreen ? FullScreenContentControl.ActualWidth : ContentControl.ActualWidth;
-
-                                time.Start = width / (ApiData.Duration / time.StartTime);
-                                time.Width = width / temp;
-                                PlayedRange.Add(time);
-                            }
-                        }
-                        if (json.buffered()) {
-
-                            BufferedRange.Clear();
-                            foreach (var buffer in json.buffered) {
-
-                                var time = new TimeRange() { StartTime = buffer.start, EndTime = buffer.end };
-                                var temp = ApiData.Duration / (time.EndTime - time.StartTime);
-                                var width = IsFullScreen ? FullScreenContentControl.ActualWidth : ContentControl.ActualWidth;
-
-                                time.Start = width / (ApiData.Duration / time.StartTime);
-                                time.Width = width / temp;
-                                BufferedRange.Add(time);
-                            }
-                        }
-                        break;
-                    }
-                case "mousewheel":
-                    if (!string.IsNullOrEmpty(args)) {
-
-                        var vol = double.Parse(args);
-
-                        if (vol >= 0) {
-
-                            Volume += 2;
-                        } else {
-
-                            Volume -= 2;
-                        }
-                    }
-                    break;
-                case "alldataloaded":
-                    if(ApiData.DmcHeartbeatRequired) {
-                        DmcHeartBeatTimer.Enabled = false;
-                    }
-                    break;
-                case "ended": {
-
-                        if (IsRepeat) {
-
-                            Seek(0);
-                            Resume();
-                        } else {
-
-                            if (IsFullScreen && !Owner.IsPlayList) {
-
-                                ReturnToNormalScreen();
-                            }
-                        }
-                        if (ApiData != null) {
-
-                            //現在再生位置を初期化する
-                            //WatchiApiInstance.RecordPlaybackPositionAsync(ApiData, 0);
-                        }
-                        Owner.VideoEnd();
-                        break;
-                    }
-                case "showcontroller": {
-
-                        ShowFullScreenController = true;
-                        ShowFullScreenCommentBar = true;
-                        break;
-                    }
-                case "hidecontroller": {
-
-                        if (!Settings.Instance.AlwaysShowSeekBar) {
-
-                            ShowFullScreenController = false;
-                        }
-                        if(!Owner.Comment.Post.IsFocused) {
-                            ShowFullScreenCommentBar = false;
-                        }
-                        break;
-                    }
-                default:
-                    Console.WriteLine("cmd: " + cmd + " args: " + args);
+                case CommentVisibility.OnlyAuthor:
+                    WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setVisibility", value = "onlyAuthor" }));
                     break;
             }
         }
 
-        private bool IsWindows7() {
-
-            var os = Environment.OSVersion;
-            if(os.Version.Major == 6 && os.Version.Minor == 1) {
-
-                return true;
-            }
-            return false;
+        public void SetRate(double value) {
+            WebView?.CoreWebView2?.PostWebMessageAsJson(JsonObject.Serialize(new { type = "setRate", value }));
         }
 
+        /// <summary>
+        /// 動画プレイヤーのパスを返す
+        /// </summary>
+        /// <returns>ファイルパス</returns>
         private string GetHtml5PlayerPath() {
-
-            var cur = NicoNicoUtil.CurrentDirectory;
-            return Path.Combine(cur, "Html/videohtml5.html");
+#if DEBUG
+            return Environment.GetEnvironmentVariable("SRNICONICO_HTML_PATH") ?? Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, "Html");
+#else
+            return Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, "Html");
+#endif
         }
 
         public void Dispose() {
 
-            WebBrowser?.Dispose();
-            WebBrowser = null;
-            DmcHeartBeatTimer?.Dispose();
-            DmcHeartBeatTimer = null;
+            WebView?.Dispose();
+            WebView = null;
+        }
+
+    }
+
+    /// <summary>
+    /// 時間のレンジを管理する構造体
+    /// </summary>
+    public class TimeRange {
+
+        public float Start { get; }
+        public float End { get; }
+
+        public TimeRange(float start, float end) {
+
+            Start = start;
+            End = end;
         }
     }
 }

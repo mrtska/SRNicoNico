@@ -1,81 +1,58 @@
-﻿using SRNicoNico.Models.NicoNicoViewer;
-using SRNicoNico.Models.NicoNicoWrapper;
-using SRNicoNico.ViewModels;
-using System.Text.RegularExpressions;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Navigation;
+using SRNicoNico.Models;
+using SRNicoNico.Models.NicoNicoWrapper;
+using SRNicoNico.ViewModels;
 
 namespace SRNicoNico.Views {
     public partial class VideoDescription : UserControl {
+
+        private VideoViewModel ViewModel => (VideoViewModel)DataContext;
+
         public VideoDescription() {
             InitializeComponent();
         }
-        private void Hyperlink_MouseDown(object sender, MouseButtonEventArgs e) {
 
-            var link = (Hyperlink)sender;
-            if (e.MiddleButton == MouseButtonState.Pressed && DataContext is VideoViewModel vm && link.NavigateUri != null) {
 
-                vm?.Html5Handler?.Pause();
-                NicoNicoOpener.Open(link.NavigateUri.OriginalString);
-            }
-        }
-        public void OpenHyperLink(object sender, RoutedEventArgs e) {
+        public void OpenHyperlink(object sender, RoutedEventArgs e) {
 
-            var link = (Hyperlink)sender;
-            var url = "";
+            var hyperlink = (Hyperlink)sender;
+            var url = hyperlink.NavigateUri.OriginalString;
 
-            if (link.NavigateUri != null) {
+            if (ViewModel.NicoNicoViewer.DetectUrlType(url) == NicoNicoUrlType.Video) {
 
-                url = link.NavigateUri.OriginalString;
+                ViewModel.NavigateTo(url[31..].Split('?')[0]);
             } else {
 
-                url = ((Run)link.Inlines.FirstInline).Text;
-            }
-            if (DataContext is VideoViewModel vm) {
-
-                if (url.StartsWith("#")) {
-
-                    var time = url.Substring(1);
-
-                    vm?.Html5Handler?.Seek(NicoNicoUtil.ConvertTime(time));
-                } else {
-
-                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftShift) || NicoNicoOpener.GetType(url) != NicoNicoUrlType.Video) {
-
-                        vm?.Html5Handler?.Pause();
-                        NicoNicoOpener.Open(url);
-                    } else {
-
-                        //URLを書き換えて再読込
-                        vm.Refresh(url);
-                    }
-                }
+                // 別のタブで開くので動画を一時停止する濫觴
+                ViewModel.Pause();
+                ViewModel.NicoNicoViewer.OpenUrl(hyperlink.NavigateUri.OriginalString);
             }
         }
 
-        // 動画用のツールチップを設定
-        private void Hyperlink_Loaded(object sender, RoutedEventArgs e) {
+        private void InitializeHyperlink(object sender, RoutedEventArgs e) {
 
-            var link = (Hyperlink)sender;
-            if(DataContext is VideoViewModel vm && link.NavigateUri != null) {
+            var hyperlink = (Hyperlink)sender;
 
-                var uri = link.NavigateUri.OriginalString;
+            hyperlink.ToolTip = new TextBlock { Text = hyperlink.NavigateUri?.OriginalString ?? "" };
+            hyperlink.ToolTipOpening += OnToolTipOpening;
+        }
 
-                if(NicoNicoOpener.GetType(uri) == NicoNicoUrlType.Video) {
+        private async void OnToolTipOpening(object sender, ToolTipEventArgs e) {
 
-                    //var id = Regex.Match(uri, "watch/(.+)").Groups[1].Value;
-                    //var newvm = new VideoPopupViewModel(id, vm.Model.ApiData.PlaylistToken);
-                    //var tip = new VideoPopup() {
-                    //    DataContext = newvm
-                    //};
+            var hyperlink = (Hyperlink)sender;
+            var url = hyperlink.NavigateUri?.OriginalString ?? "";
 
-                    link.ToolTip = uri;
-                } else {
+            if (ViewModel.NicoNicoViewer.DetectUrlType(url) == NicoNicoUrlType.Video) {
 
-                    link.ToolTip = uri;
+                // 動画情報をレイジーロードする
+                if (hyperlink.Tag == null) {
+
+                    hyperlink.Tag = await ViewModel.VideoService.WatchAsync(url[31..].Split('?')[0], true);
+                    hyperlink.ToolTip = new VideoToolTip { DataContext = ((WatchApiData)hyperlink.Tag).Video };
                 }
             }
         }

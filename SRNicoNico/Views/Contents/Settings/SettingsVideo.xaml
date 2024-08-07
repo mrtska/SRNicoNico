@@ -1,44 +1,93 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.SettingsVideo"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:v="clr-namespace:SRNicoNico.Views"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:b="clr-namespace:SRNicoNico.Views.Behavior"
+             xmlns:b="clr-namespace:SRNicoNico.Views.Behaviors"
              mc:Ignorable="d" 
-             d:DesignHeight="600"
-             d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance {x:Type vm:SettingsVideoViewModel}}">
-    <ScrollViewer>
-        <Grid Margin="10" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <StackPanel>
-                <TextBlock Text="動画設定" FontSize="20" />
-                <StackPanel Margin="5,0,0,0">
-                    <StackPanel HorizontalAlignment="Left" Margin="10,0,0,0">
-
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="カーソルキーでのシーク量 (秒)：" />
-                            <TextBox Text="{Binding Source={x:Static m:Settings.Instance},Path=VideoSeekAmount, UpdateSourceTrigger=PropertyChanged}" Width="60" MaxLength="3" ToolTip="1 ～ 200">
-                                <i:Interaction.Behaviors>
-                                    <b:TextBoxNumericOnlyBehavior />
-                                </i:Interaction.Behaviors>
-                            </TextBox>
-                        </StackPanel>
-                        <CheckBox Content="動画を自動的に再生する" ToolTip="連続再生には適用されません。" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AutoPlay}" />
-                        <CheckBox Content="フルスクリーン時、シークバーを常に表示する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=AlwaysShowSeekBar}" />
-                        <CheckBox Content="動画をクリックしたら一時停止/再生する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=ClickOnPause}" />
-                        <CheckBox IsEnabled="False" Content="レジューム再生を使用する" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=UseResumePlay}" />
-                        <CheckBox IsEnabled="False" Content="@ジャンプコマンドを無効にする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=DisableJumpCommand}" ToolTip="連続再生などで鬱陶しい場合は無効にしてください" />
-                        <CheckBox Content="ウィンドウフルスクリーンをデフォルトにする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=UseWindowMode}" />
-                    </StackPanel>
-                </StackPanel>
-            </StackPanel>
+             d:DataContext="{d:DesignInstance {x:Type vm:SettingsVideoViewModel}}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
+            <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" TextTrimming="CharacterEllipsis" FontSize="20" Margin="10,0" VerticalAlignment="Center" />
         </Grid>
-    </ScrollViewer>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto">
+            <StackPanel>
+                <HeaderedContentControl>
+                    <HeaderedContentControl.Header>
+                        <TextBlock Text="カーソルキーでのシーク量 (秒)" ToolTip="動画再生中に矢印キーを押した時にシークする秒数 (デフォルト: 5秒)" />
+                    </HeaderedContentControl.Header>
+                    <TextBox Text="{Binding VideoSeekAmount, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Margin="15,0,0,0" Width="60" HorizontalAlignment="Left">
+                        <i:Interaction.Behaviors>
+                            <b:TextBoxNumericOnlyBehavior />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                </HeaderedContentControl>
+                <HeaderedContentControl>
+                    <StackPanel>
+                        <CheckBox IsChecked="{Binding AutomaticPlay, Mode=TwoWay}" Content="動画を自動的に再生する" ToolTip="デフォルト: 有効" HorizontalAlignment="Left" />
+                        <CheckBox IsChecked="{Binding AlwaysShowSeekBar, Mode=TwoWay}" Content="フルスクリーン時にシークバーを常に表示する" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
+                        <CheckBox IsChecked="{Binding ClickOnPause, Mode=TwoWay}" Content="動画をクリックしたら一時停止/再生を切り替える" ToolTip="デフォルト: 有効" HorizontalAlignment="Left" />
+                        <CheckBox IsChecked="{Binding DoubleClickToggleFullScreen, Mode=TwoWay}" Content="動画をダブルクリックしたらフルスクリーンを切り替える" ToolTip="デフォルト: 有効" HorizontalAlignment="Left" />
+                        <CheckBox IsChecked="{Binding UseResumePlay, Mode=TwoWay}" Content="レジューム再生を使用する" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
+                        <CheckBox IsChecked="{Binding DisableJumpCommand, Mode=TwoWay}" Content="投稿者が指定しているジャンプコマンドを無効にする" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
+                        <CheckBox IsChecked="{Binding DisableABRepeat, Mode=TwoWay}" Content="ABリピート機能を無効にする" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
+                        <CheckBox IsChecked="{Binding DisableHls, Mode=TwoWay}" Content="動画をHLSでロードしない (一部の動画では強制的にHLSが使用されます)" ToolTip="デフォルト: 無効" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </HeaderedContentControl>
+                <HeaderedContentControl>
+                    <HeaderedContentControl.Header>
+                        <TextBlock Text="フルスクリーン時のシークバーの位置" ToolTip="デフォルト: 下" />
+                    </HeaderedContentControl.Header>
+                    <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                <Setter Property="FontSize" Value="18" />
+                                <Setter Property="Margin" Value="5,0,0,0" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <RadioButton Content="上" GroupName="PopupPlacement">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ChangePopupPlacement" MethodParameter="Top" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <RadioButton.Style>
+                                <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                    <Style.Triggers>
+                                        <DataTrigger  Binding="{Binding PopupPlacement}" Value="Top">
+                                            <Setter Property="IsChecked" Value="True" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RadioButton.Style>
+                        </RadioButton>
+                        <RadioButton Content="下" GroupName="PopupPlacement">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ChangePopupPlacement" MethodParameter="Bottom" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <RadioButton.Style>
+                                <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                    <Style.Triggers>
+                                        <DataTrigger  Binding="{Binding PopupPlacement}" Value="Bottom">
+                                            <Setter Property="IsChecked" Value="True" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RadioButton.Style>
+                        </RadioButton>
+                    </StackPanel>
+                </HeaderedContentControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

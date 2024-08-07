@@ -1,214 +1,175 @@
-﻿using SRNicoNico.Models.NicoNicoViewer;
-using System;
-using System.Runtime.InteropServices;
+﻿using System;
 using System.Text.RegularExpressions;
-using System.Windows.Controls;
-using System.Windows.Navigation;
+using Microsoft.Web.WebView2.Wpf;
+using SRNicoNico.Models;
 
 namespace SRNicoNico.ViewModels {
+    /// <summary>
+    /// WebViewContentクラスのDataContext
+    /// </summary>
     public class WebViewContentViewModel : TabItemViewModel {
 
-        #region WebBrowser変更通知プロパティ
-        private WebBrowser _WebBrowser;
-
-        public WebBrowser WebBrowser {
-            get { return _WebBrowser; }
+        private string? _CurrentUrl;
+        /// <summary>
+        /// 現在表示しているページのURL
+        /// </summary>
+        public string? CurrentUrl {
+            get { return _CurrentUrl; }
             set { 
-                if(_WebBrowser == value)
+                if (_CurrentUrl == value)
                     return;
-                _WebBrowser = value;
-                value.Navigating += WebViewNavigating;
-                value.Navigated += WebViewNavigated;
-                value.LoadCompleted += WebViewLoadCompleted;
-
-                CompositeDisposable.Add(value);
+                _CurrentUrl = value;
                 RaisePropertyChanged();
             }
         }
 
-        private void Value_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            throw new NotImplementedException();
-        }
-        #endregion
-
-        #region Url変更通知プロパティ
-        private string _Url;
-
-        public string Url {
-            get { return _Url; }
-            set {
-                if(_Url == value)
-                    return;
-                _Url = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region CanGoBack変更通知プロパティ
         private bool _CanGoBack;
-
+        /// <summary>
+        /// バックボタンが有効かどうか
+        /// </summary>
         public bool CanGoBack {
             get { return _CanGoBack; }
-            set {
-                if(_CanGoBack == value)
+            set { 
+                if (_CanGoBack == value)
                     return;
                 _CanGoBack = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        #region CanGoForward変更通知プロパティ
         private bool _CanGoForward;
-
+        /// <summary>
+        /// 進むボタンが有効かどうか
+        /// </summary>
         public bool CanGoForward {
             get { return _CanGoForward; }
-            set {
-                if(_CanGoForward == value)
+            set { 
+                if (_CanGoForward == value)
                     return;
                 _CanGoForward = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        #region OpenWithViewer変更通知プロパティ
         private bool _OpenWithViewer;
-
+        /// <summary>
+        /// 動画リンクをNicoNicoViewerで開くかどうか
+        /// </summary>
         public bool OpenWithViewer {
             get { return _OpenWithViewer; }
             set { 
-                if(_OpenWithViewer == value)
+                if (_OpenWithViewer == value)
                     return;
                 _OpenWithViewer = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion
 
-        private WebViewViewModel Owner { get; set; }
+        /// <summary>
+        /// WebViewの実装
+        /// </summary>
+        public WebView2 WebView { get; private set; }
 
-        public WebViewContentViewModel(WebViewViewModel vm, string url, bool forceUseWebView = false) {
+        private readonly WebViewViewModel Owner;
+        private readonly INicoNicoViewer NicoNicoViewer;
+
+        public WebViewContentViewModel(WebViewViewModel vm, INicoNicoViewer nicoNicoViewer, string initialUrl, bool useViewer) : base(initialUrl) {
             
-            OpenWithViewer = !forceUseWebView;
-            Url = url;
             Owner = vm;
+            NicoNicoViewer = nicoNicoViewer;
+            CurrentUrl = initialUrl;
+            OpenWithViewer = useViewer;
+
+            WebView = new WebView2 { Source = new Uri(initialUrl) };
+            Initialize();
         }
 
-        public WebViewContentViewModel() : base("WebView") {
-        }
+        /// <summary>
+        /// WebViewを初期化する
+        /// </summary>
+        private async void Initialize() {
+            
+            CompositeDisposable.Add(WebView);
 
-        //前に戻る
-        public void GoBack() {
+            // ページ遷移が始まった時に呼ばれる
+            WebView.NavigationStarting += (o, e) => {
 
-            if(WebBrowser.CanGoBack) {
+                // NicoNicoViewerで開く設定がONの時且つ開こうとしているURLが対応しているものだったら遷移を中断してNicoNicoViewerで開く
+                if (OpenWithViewer && NicoNicoViewer.CanOpenUrl(e.Uri)) {
 
-                WebBrowser.GoBack();
-            }
-        }
-
-        //次に進む
-        public void GoForward() {
-
-            if(WebBrowser.CanGoForward) {
-
-                WebBrowser.GoForward();
-            }
-        }
-
-        public void Load(string url) {
-
-            if(url.StartsWith("javascript:")) {
-
-                WebBrowser.InvokeScript("eval", url.Split(new char[] { ':' }, 2)[1]);
-                return;
-            }
-            var regex = new Regex(@"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+");
-
-            if(regex.Match(url).Success) {
-
-                WebBrowser.Navigate(url);
-            } else {
-
-                WebBrowser.Navigate("https://www.google.co.jp/search?q=" + url);
-            }
-        }
-
-        [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [Guid("6d5140c1-7436-11ce-8034-00aa006009fa")]
-        private interface IServiceProvider {
-            [return: MarshalAs(UnmanagedType.IUnknown)]
-            object QueryService(ref Guid guidService, ref Guid riid);
-        }
-        private bool isInitialized = false;
-        private void WebViewLoadCompleted(object sender, NavigationEventArgs e) {
-
-        }
-        private string PrevUrl = "";
-
-        //画面遷移する直前
-        private void WebViewNavigating(object sender, NavigatingCancelEventArgs e) {
-
-
-            if(e.Uri.OriginalString.StartsWith("javascript:")) {
-
-                WebBrowser.InvokeScript("eval", e.Uri.OriginalString.Split(new char[] { ':' }, 2)[1]);
-                e.Cancel = true;
-                return;
-            }
-
-            //Viewerで開けるURLはViewerで開く
-            if(NicoNicoOpener.GetType(e.Uri.OriginalString) != NicoNicoUrlType.Other && OpenWithViewer) {
-
-                //なぜかNavgatingイベントが２回呼ばれる箇所があるので対策
-                if(PrevUrl == e.Uri.OriginalString) {
-
+                    NicoNicoViewer.OpenUrl(e.Uri);
                     e.Cancel = true;
                     return;
                 }
 
-                PrevUrl = e.Uri.OriginalString;
-                e.Cancel = true;
-                NicoNicoOpener.Open(e.Uri.OriginalString);
+                CurrentUrl = e.Uri;
+                Name = CurrentUrl;
+            };
+
+            // ページ遷移が完了した時に呼ばれる
+            WebView.NavigationCompleted += (o, e) => {
+
+                CanGoBack = WebView.CanGoBack;
+                CanGoForward = WebView.CanGoForward;
+                Name = WebView.CoreWebView2.DocumentTitle;
+            };
+
+            await WebView.EnsureCoreWebView2Async();
+            // target=_blankなどのリンクやShift+Clickした時に呼ばれる
+            WebView.CoreWebView2.NewWindowRequested += (o, e) => {
+
+                e.Handled = true;
+                Owner.AddTab(e.Uri, OpenWithViewer);
+            };
+        }
+
+
+        /// <summary>
+        /// 前に戻る
+        /// </summary>
+        public void GoBack() {
+
+            if (WebView.CanGoBack) {
+
+                WebView.GoBack();
+            }
+        }
+
+        /// <summary>
+        /// 次に進む
+        /// </summary>
+        public void GoForward() {
+
+            if (WebView.CanGoForward) {
+
+                WebView.GoForward();
+            }
+        }
+
+        private readonly Regex UrlRegex = new Regex(@"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+");
+
+        /// <summary>
+        /// 指定されたURLをロードする
+        /// アドレスバーにURLを入力した時にも呼ばれる
+        /// </summary>
+        /// <param name="url">遷移したいURL</param>
+        public void Load(string url) {
+
+            if (UrlRegex.Match(url).Success) {
+
+                WebView.CoreWebView2.Navigate(url);
             } else {
 
-                IsActive = true;
-                Owner.Status = "読み込み中: " + e.Uri.OriginalString;
+                WebView.CoreWebView2.Navigate("https://www.google.co.jp/search?q=" + url);
             }
         }
 
-        //画面遷移時に
-        private void WebViewNavigated(object sender, NavigationEventArgs e) {
+        /// <summary>
+        /// WebViewを更新する
+        /// </summary>
+        public void Refresh() {
 
-            IsActive = false;
-            dynamic doc = WebBrowser.Document;
-
-            Name = doc.title;
-
-            if(Name.Length == 0) {
-
-                Name = WebBrowser.Source.OriginalString;
-            }
-
-            CanGoBack = WebBrowser.CanGoBack;
-            CanGoForward = WebBrowser.CanGoForward;
-            Url = WebBrowser.Source.OriginalString;
-            Owner.Status = "";
-
-            if(!isInitialized) {
-                isInitialized = true;
-                var serviceProvider = (IServiceProvider)WebBrowser.Document;
-                var serviceGuid = new Guid("0002DF05-0000-0000-C000-000000000046");
-                var iid = typeof(SHDocVw.IWebBrowser2).GUID;
-                var wbEvents = (SHDocVw.DWebBrowserEvents_Event)serviceProvider.QueryService(ref serviceGuid, ref iid);
-                wbEvents.NewWindow += OnNewWindow;
-            }
-        }
-
-        private void OnNewWindow(string url, int Flags, string TargetFrameName, ref object PostData, string Headers, ref bool Processed) {
-            Processed = true;
-            Owner.AddTab(url, true);
+            WebView.Reload();
         }
     }
 }

@@ -1,72 +1,45 @@
 ﻿<UserControl x:Class="SRNicoNico.Views.SettingsGeneral"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:m="clr-namespace:SRNicoNico.Models.NicoNicoViewer"
              xmlns:vm="clr-namespace:SRNicoNico.ViewModels"
-             xmlns:conv="clr-namespace:SRNicoNico.Views.Converter"
              mc:Ignorable="d" 
-             d:DesignHeight="600"
-             d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance {x:Type vm:SettingsGeneralViewModel}}">
-    <UserControl.Resources>
-        <conv:FontFamilyToLocalizedNameConverter x:Key="FontFamilyToNameConverter" />
-    </UserControl.Resources>
-    <ScrollViewer HorizontalScrollBarVisibility="Auto">
-        <Grid Margin="10" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+             d:DataContext="{d:DesignInstance {x:Type vm:SettingsGeneralViewModel}}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Background="{DynamicResource AlternationBackgroundBrushKey}">
+            <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" TextTrimming="CharacterEllipsis" FontSize="20" Margin="10,0" VerticalAlignment="Center" />
+        </Grid>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto">
             <StackPanel>
-                <TextBlock FontSize="20" Text="一般設定" />
-                <StackPanel Margin="5,0,0,0">
-                    <!--<TextBlock FontSize="18" Text="テーマ設定" />
+                <HeaderedContentControl>
+                    <HeaderedContentControl.Header>
+                        <TextBlock Text="アクセント設定" ToolTip="NicoNicoViewerのアクセントカラーを設定します (デフォルト: Orange)" />
+                    </HeaderedContentControl.Header>
                     <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
                         <StackPanel.Resources>
                             <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
-                                <EventSetter Event="Click" Handler="RadioButton_Click_Theme" />
-                                <Setter Property="FontSize" Value="18" />
-                                <Setter Property="Margin" Value="5,0,0,0" />
-                            </Style>
-                        </StackPanel.Resources>
-                        <RadioButton Content="Dark" Foreground="Gray" GroupName="Theme">
-                            <RadioButton.Style>
-                                <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
-                                    <Style.Triggers>
-                                        <DataTrigger  Binding="{Binding Source={x:Static m:Settings.Instance},Path=ThemeColor}" Value="Blue">
-                                            <Setter Property="IsChecked" Value="True" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </RadioButton.Style>
-                        </RadioButton>
-                        <RadioButton Content="Light" GroupName="Theme">
-                            <RadioButton.Style>
-                                <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
-                                    <Style.Triggers>
-                                        <DataTrigger  Binding="{Binding Source={x:Static m:Settings.Instance},Path=ThemeColor}" Value="Orange">
-                                            <Setter Property="IsChecked" Value="True" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </RadioButton.Style>
-                        </RadioButton>
-                    </StackPanel>-->
-                    <TextBlock FontSize="18" Text="アクセント設定" />
-                    <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
-                        <StackPanel.Resources>
-                            <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
-                                <EventSetter Event="Click" Handler="RadioButton_Click" />
                                 <Setter Property="FontSize" Value="18" />
                                 <Setter Property="Margin" Value="5,0,0,0" />
                             </Style>
                         </StackPanel.Resources>
                         <RadioButton Content="Blue" Foreground="#FF007ACC" GroupName="Accent">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ChangeAccent" MethodParameter="Blue" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <RadioButton.Style>
                                 <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
                                     <Style.Triggers>
-                                        <DataTrigger  Binding="{Binding Source={x:Static m:Settings.Instance},Path=ThemeColor}" Value="Blue">
+                                        <DataTrigger  Binding="{Binding AccentColor}" Value="Blue">
                                             <Setter Property="IsChecked" Value="True" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -74,10 +47,15 @@
                             </RadioButton.Style>
                         </RadioButton>
                         <RadioButton Content="Orange" Foreground="#FFCA5100" GroupName="Accent">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ChangeAccent" MethodParameter="Orange" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <RadioButton.Style>
                                 <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
                                     <Style.Triggers>
-                                        <DataTrigger  Binding="{Binding Source={x:Static m:Settings.Instance},Path=ThemeColor}" Value="Orange">
+                                        <DataTrigger  Binding="{Binding AccentColor}" Value="Orange">
                                             <Setter Property="IsChecked" Value="True" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -85,10 +63,15 @@
                             </RadioButton.Style>
                         </RadioButton>
                         <RadioButton Content="Purple" Foreground="#FF68217A" GroupName="Accent">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="ChangeAccent" MethodParameter="Purple" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <RadioButton.Style>
                                 <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
                                     <Style.Triggers>
-                                        <DataTrigger  Binding="{Binding Source={x:Static m:Settings.Instance},Path=ThemeColor}" Value="Purple">
+                                        <DataTrigger  Binding="{Binding AccentColor}" Value="Purple">
                                             <Setter Property="IsChecked" Value="True" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -96,25 +79,32 @@
                             </RadioButton.Style>
                         </RadioButton>
                     </StackPanel>
-                    <TextBlock FontSize="18" Text="フォントの設定" />
-                    <ComboBox  Margin="15,5" HorizontalAlignment="Left" Width="300" SelectedValue="{Binding Source={x:Static m:Settings.Instance},Path=UserSelectedFont,Mode=TwoWay}" ItemsSource="{x:Static Fonts.SystemFontFamilies}">
+                </HeaderedContentControl>
+                <HeaderedContentControl>
+                    <HeaderedContentControl.Header>
+                        <TextBlock Text="フォント設定" ToolTip="NicoNicoViewerで使われるフォントを設定します (デフォルト: Segoe UI)" />
+                    </HeaderedContentControl.Header>
+                    <ComboBox  Margin="15,5" HorizontalAlignment="Left" Width="300" SelectedItem="{Binding FontFamily,Mode=TwoWay}" ItemsSource="{x:Static Fonts.SystemFontFamilies}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Language="ja" Text="{Binding Converter={StaticResource FontFamilyToNameConverter}}" FontFamily="{Binding}" FontSize="16" />
+                                <TextBlock Language="ja" Text="{Binding Converter={StaticResource FontFamilyToLocalizedNameConverter}}" FontFamily="{Binding}" FontSize="16" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <TextBlock Text="ハイパーリンク設定" FontSize="18" Margin="0,10,0,0" />
-                    <StackPanel Margin="10">
-                        <CheckBox Content="動画説明文の@○○をTwitterのリンクにする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=EnableTwitterLink}" HorizontalAlignment="Left" />
-                        <CheckBox Content="動画説明文のURLをリンクにする" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=EnableUrlLink}" Margin="0,10,0,0" HorizontalAlignment="Left" />
-                    </StackPanel>
-                    <TextBlock Text="WebViewのデフォルトページ" FontSize="18" Margin="0,10,0,0"/>
-                    <TextBox Margin="10,0,0,0" Text="{Binding Source={x:Static m:Settings.Instance},Path=WebViewDefaultPage}" Width="300" HorizontalAlignment="Left" />
-                    <TextBlock Text="その他" FontSize="18" Margin="0,10,0,0" />
-                    <CheckBox Margin="10,0,0,0" Content="×ボタン押下時に確認ダイアログを出す" HorizontalAlignment="Left" IsChecked="{Binding Source={x:Static m:Settings.Instance},Path=ConfirmExit}" />
-                </StackPanel>
+                </HeaderedContentControl>
+                <HeaderedContentControl>
+                    <HeaderedContentControl.Header>
+                        <TextBlock Text="WebViewのデフォルトページURL" ToolTip="WebViewを開いた時に最初に開かえるWebページを指定します (デフォルト: https://www.nicovideo.jp/)" />
+                    </HeaderedContentControl.Header>
+                    <TextBox Text="{Binding DefaultWebViewPageUrl, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Margin="15,0,0,0" Width="300" HorizontalAlignment="Left" />
+                </HeaderedContentControl>
+                <HeaderedContentControl>
+                    <HeaderedContentControl.Header>
+                        <TextBlock Text="その他" />
+                    </HeaderedContentControl.Header>
+                    <CheckBox IsChecked="{Binding ShowExitConfirmDialog, Mode=TwoWay}" Content="×ボタン押下時に確認ダイアログを出す" ToolTip="デフォルト: 有効" HorizontalAlignment="Left" />
+                </HeaderedContentControl>
             </StackPanel>
-        </Grid>
-    </ScrollViewer>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

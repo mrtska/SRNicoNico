@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="SRNicoNico.Views.UserEntryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:w="clr-namespace:SRNicoNico.Models.NicoNicoWrapper"
+             xmlns:a="clr-namespace:SRNicoNico.Views.Actions"
+             d:DataContext="{d:DesignInstance Type=w:UserEntry}"
+             mc:Ignorable="d" 
+             d:DesignHeight="80" d:DesignWidth="600"
+             Background="Transparent">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type MenuItem}">
+            <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext}" />
+        </Style>
+    </UserControl.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="MouseDoubleClick">
+            <a:NicoNicoOpenAction Url="{Binding Id, StringFormat='https://www.nicovideo.jp/user/{0}'}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="フォローを解除する">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type MenuItem}}, Path=Tag}" MethodName="Unfollow" MethodParameter="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="WebViewで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <a:WebViewOpenAction Url="{Binding Id,StringFormat='https://www.nicovideo.jp/user/{0}'}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="ブラウザで開く">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:LaunchUriOrFileAction Path="{Binding Id,StringFormat='https://www.nicovideo.jp/user/{0}'}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="URLをクリップボードにコピー">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <a:CopyToClipBoardAction Text="{Binding Id,StringFormat='https://www.nicovideo.jp/user/{0}'}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Image Source="{Binding ThumbnailUrl}" Margin="5" Height="50" Width="50" />
+        <StackPanel Grid.Column="1" Margin="5,0,0,0">
+            <TextBlock FontSize="16" Text="{Binding NickName}" />
+            <TextBlock Text="{Binding StrippedDescription}" ToolTip="{Binding StrippedDescription}" Height="32" TextTrimming="WordEllipsis" TextWrapping="Wrap" Foreground="Gray" />
+        </StackPanel>
+    </Grid>
+</UserControl>

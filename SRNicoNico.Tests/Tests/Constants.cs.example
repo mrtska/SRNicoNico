@@ -1,0 +1,6 @@
+﻿namespace SRNicoNico.Tests {
+    public static class Constants {
+
+        public const string UserSession = "<user session token for testing>";
+    }
+}
