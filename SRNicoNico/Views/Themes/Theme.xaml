@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+
+    <ResourceDictionary.MergedDictionaries>
+
+        <ResourceDictionary Source="/SRNicoNico;component/Views/Themes/Theme/Dark.xaml" />
+        <ResourceDictionary Source="/SRNicoNico;component/Views/Themes/Accent/Orange.xaml" />
+
+        <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

@@ -1,9 +1,9 @@
 ﻿using System.Windows.Controls;
 
-namespace SRNicoNico.Views {
-    public partial class MainContent : UserControl {
-        public MainContent() {
-            InitializeComponent();
-        }
+namespace SRNicoNico.Views.Contents;
+
+public partial class MainContent : UserControl {
+    public MainContent() {
+        InitializeComponent();
     }
 }
